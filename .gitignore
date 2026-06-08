@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# heavy generated/dependency dirs — ignored at any depth (do not scan)
+node_modules/
+.next/
+out/

@@ -1,0 +1,27 @@
+# Render Blueprint — Web Service + Managed PostgreSQL
+# Docs: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: cyber-math
+    runtime: node
+    plan: starter
+    region: singapore
+    buildCommand: npm ci && npx prisma generate && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cyber-math-db
+          property: connectionString
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+
+databases:
+  - name: cyber-math-db
+    plan: basic-256mb
+    region: singapore
+    databaseName: cyber_math
+    postgresMajorVersion: "16"

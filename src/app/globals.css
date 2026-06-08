@@ -1,26 +1,287 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-orbitron);
+  --font-display: var(--font-orbitron);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* --- Cyber neon palette --- */
+  --color-neon-cyan: var(--neon-cyan);
+  --color-neon-magenta: var(--neon-magenta);
+  --color-neon-violet: var(--neon-violet);
+  --color-neon-lime: var(--neon-lime);
+  --color-neon-amber: var(--neon-amber);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/*
+ * Clean Sci-Fi (Light Cyber). A white / near-white research-lab surface with
+ * a fine blue grid texture. Neon hues are kept but darkened so they read with
+ * high contrast on white — graphs (JSXGraph black ink) and KaTeX stay crisp.
+ */
+:root,
+.dark {
+  /* Font stacks. The real webfonts (Geist / Orbitron) are loaded via a
+     <link> in the layout when the network is available; these stacks are
+     the always-present fallback so the build never depends on a fetch. */
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  --font-geist-mono: "Geist Mono", ui-monospace, "SFMono-Regular", "Menlo",
+    "Consolas", monospace;
+  --font-orbitron: "Orbitron", "Geist", ui-sans-serif, system-ui, sans-serif;
+
+  /* Accent hues, darkened for AA contrast on white surfaces. */
+  --neon-cyan: oklch(0.58 0.13 215);
+  --neon-magenta: oklch(0.55 0.22 350);
+  --neon-violet: oklch(0.52 0.2 290);
+  --neon-lime: oklch(0.55 0.15 150);
+  --neon-amber: oklch(0.6 0.13 70);
+
+  /* The faint blue used for the grid lines + panel borders. */
+  --grid-line: oklch(0.55 0.08 240 / 0.1);
+  --grid-line-strong: oklch(0.55 0.08 240 / 0.16);
+
+  --background: oklch(0.99 0.004 240);
+  --foreground: oklch(0.22 0.03 265);
+
+  --card: oklch(1 0 0 / 0.72);
+  --card-foreground: oklch(0.22 0.03 265);
+  --popover: oklch(1 0 0 / 0.92);
+  --popover-foreground: oklch(0.22 0.03 265);
+
+  --primary: var(--neon-cyan);
+  --primary-foreground: oklch(0.99 0.004 240);
+  --secondary: oklch(0.95 0.01 240);
+  --secondary-foreground: oklch(0.28 0.03 265);
+  --muted: oklch(0.96 0.008 240);
+  --muted-foreground: oklch(0.48 0.03 260);
+  --accent: var(--neon-magenta);
+  --accent-foreground: oklch(0.99 0.004 240);
+
+  --destructive: oklch(0.58 0.22 25);
+
+  --border: oklch(0.55 0.08 240 / 0.18);
+  --input: oklch(0.55 0.08 240 / 0.24);
+  --ring: var(--neon-cyan);
+
+  --chart-1: var(--neon-cyan);
+  --chart-2: var(--neon-magenta);
+  --chart-3: var(--neon-violet);
+  --chart-4: var(--neon-lime);
+  --chart-5: var(--neon-amber);
+
+  --radius: 0.625rem;
+
+  --sidebar: oklch(0.98 0.006 240);
+  --sidebar-foreground: oklch(0.22 0.03 265);
+  --sidebar-primary: var(--neon-cyan);
+  --sidebar-primary-foreground: oklch(0.99 0.004 240);
+  --sidebar-accent: oklch(0.95 0.01 240);
+  --sidebar-accent-foreground: oklch(0.28 0.03 265);
+  --sidebar-border: oklch(0.55 0.08 240 / 0.18);
+  --sidebar-ring: var(--neon-cyan);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    color-scheme: light;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* Clean-lab background: whisper-soft neon wash + fine blue grid lines. */
+    background-image:
+      radial-gradient(
+        ellipse 80% 55% at 50% -10%,
+        oklch(0.72 0.25 330 / 0.05),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 70% 50% at 100% 8%,
+        oklch(0.62 0.15 215 / 0.06),
+        transparent
+      ),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 44px 44px, 44px 44px;
+    background-attachment: fixed;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Frosted glass surface — translucent white over the grid (Glassmorphism). */
+  .glass {
+    background: linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.78),
+      oklch(1 0 0 / 0.6)
+    );
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    border: 1px solid oklch(0.58 0.1 215 / 0.22);
+    box-shadow: 0 1px 2px oklch(0.4 0.05 250 / 0.05);
+  }
+
+  .glass-hover {
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+  .glass-hover:hover {
+    border-color: oklch(0.58 0.13 215 / 0.5);
+    box-shadow:
+      0 0 0 1px oklch(0.58 0.13 215 / 0.25),
+      0 6px 20px oklch(0.4 0.05 250 / 0.08);
+    transform: translateY(-2px);
+  }
+}
+
+/* Glow is intentionally restrained on the light theme: a crisp ring rather
+   than a strong neon bloom. */
+@utility text-glow-* {
+  text-shadow: 0 0 calc(--value(integer) * 0.4px)
+    color-mix(in oklch, currentColor 30%, transparent);
+}
+
+@utility glow-cyan {
+  box-shadow:
+    0 0 0 1px oklch(0.58 0.13 215 / 0.3),
+    0 6px 18px oklch(0.58 0.13 215 / 0.1);
+}
+
+@utility glow-magenta {
+  box-shadow:
+    0 0 0 1px oklch(0.55 0.22 350 / 0.3),
+    0 6px 18px oklch(0.55 0.22 350 / 0.1);
+}
+
+/* KaTeX inherits the foreground colour cleanly (now near-black on white) */
+.katex {
+  color: inherit;
+}
+.katex-display {
+  margin: 0.6rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2rem 0;
+}
+
+/* ============================================================
+ * Print — LuaLaTeX 風の白黒テストプリント (@media print)
+ * 模試の答案用紙を、ネオン/ガラスを脱ぎ捨てた紙面として出力する。
+ * ============================================================ */
+@media print {
+  /* チェーン全体を白地・黒文字・セリフへ */
+  :root,
+  .dark {
+    --background: #ffffff;
+    --foreground: #000000;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: "Latin Modern Roman", "Georgia", "Times New Roman", serif;
+  }
+  body {
+    background-image: none !important;
+  }
+
+  /* サイト共通の装飾を全部隠す */
+  header,
+  footer,
+  nav,
+  .no-print {
+    display: none !important;
+  }
+
+  /* ガラス/ネオンの装飾を紙面で無効化 */
+  .glass,
+  .glass-hover {
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  [class*="glow-"],
+  [class*="text-glow-"] {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+  .print-sheet {
+    max-width: 100%;
+    margin: 0;
+    color: #000000;
+  }
+
+  /* 問題ごとに改ページをまたがせない */
+  .break-inside-avoid,
+  li {
+    break-inside: avoid;
+  }
+
+  /* KaTeX は黒で鮮明に */
+  .katex {
+    color: #000000 !important;
+  }
+
+  /* 解答欄の枠線を黒に */
+  .border-dashed {
+    border-color: #555 !important;
+  }
+
+  @page {
+    margin: 16mm 14mm;
+  }
 }

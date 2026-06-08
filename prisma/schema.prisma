@@ -1,0 +1,118 @@
+// Next-Gen Cyber Math — data model
+//
+// 本番(Render)は PostgreSQL。ローカル動作確認用に SQLite へ一時切替している。
+// SQLite は enum を未サポートのため、difficulty / type は String で保持する
+// （値は "A".."D_PLUS" / "INSIGHT".."SOLUTION"。src/lib/types.ts の型と一致）。
+// 本番へ戻すときは provider を "postgresql" に戻し、必要なら enum を再導入する。
+//
+// アプリ自体は src/data の静的データから動くため、DB が無くても動作する。
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  
+}
+
+model Problem {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  unit        String // 単元 (例: "三角関数", "図形と方程式")
+  /// 難易度。"A" | "B" | "C" | "D" | "D_PLUS"
+  difficulty  String
+  /// 問題文。KaTeX 記法を含む Markdown 互換テキスト。
+  statement   String
+  /// 問題の「美しさ」を一言で示すフック。一覧カードに表示。
+  tagline     String?
+  hasGraph    Boolean  @default(false)
+  /// JSXGraph の初期化パラメータ ({ graphKey } など)。
+  graphConfig Json?
+  /// 関連する授業 (Lesson) の slug。解説末尾の誘導 CTA に使う。
+  relatedLessonSlug String?
+  /// 概念タグ（知識のネットワーク化）。
+  tags        String[] @default([])
+  steps       ExplanationStep[]
+  dailyOn     DailyChallenge[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([unit])
+  @@index([difficulty])
+}
+
+model ExplanationStep {
+  id        String   @id @default(cuid())
+  problemId String
+  problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  /// ステップ種別。"INSIGHT" | "EXPERIMENT" | "HINT" | "SOLUTION"
+  type      String
+  /// 同一問題内での開示順 (0 始まり)。
+  order     Int
+  /// 見出し。
+  title     String
+  /// 本文。KaTeX を含む Markdown 互換テキスト。
+  body      String
+  /// このステップから関連授業へ (任意)。
+  relatedLessonSlug String?
+
+  @@unique([problemId, order])
+}
+
+/// Concept Lesson —「めっちゃわかりやすい授業」。
+/// content は KaTeX 対応 Markdown。JSXGraph ラボは @@lab:<graphKey>@@ で埋め込む。
+model Lesson {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  unit      String
+  summary   String?
+  /// 本文 (Markdown + KaTeX + @@lab 埋め込み)。
+  content   String
+  /// 授業 → 関連問題への逆リンク (slug 配列)。
+  relatedProblemSlugs String[]
+  /// 概念タグ。
+  tags      String[] @default([])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([unit])
+}
+
+/// サイバー模試の受験結果（匿名セッションごと）。
+/// 生成・採点はクライアント／静的データで行い、結果のみここに永続化する。
+model ExamAttempt {
+  id           String   @id @default(cuid())
+  /// 匿名セッション (localStorage の UUID)。
+  sessionId    String
+  createdAt    DateTime @default(now())
+  // --- 生成条件 ---
+  tags         String[] @default([])
+  difficulties String[] @default([])
+  problemSlugs String[]
+  timeLimitSec Int
+  // --- 結果 ---
+  wrongSlugs   String[] @default([])
+  score        Int
+  totalCount   Int
+  durationSec  Int
+  weakTags     String[] @default([])
+
+  @@index([sessionId])
+  @@index([createdAt])
+}
+
+model DailyChallenge {
+  id        String   @id @default(cuid())
+  /// 出題日 (00:00 UTC 正規化)。
+  date      DateTime
+  /// 「今日の3題」の枠 (1..3)。
+  slot      Int
+  problemId String
+  problem   Problem  @relation(fields: [problemId], references: [id])
+
+  @@unique([date, slot])
+  @@index([date])
+}
