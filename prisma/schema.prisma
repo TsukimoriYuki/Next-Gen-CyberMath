@@ -34,6 +34,15 @@ model Problem {
   relatedLessonSlug String?
   /// 概念タグ（知識のネットワーク化）。
   tags        String[] @default([])
+  // ---- 過去問道場メタ (任意) ----
+  /// 出題大学（オリジナル類題は「○○大（類題）」表記）。
+  university  String?
+  /// 偏差値帯 (50 | 55 | 60 | 65 | 70)。
+  deviation   Int?
+  /// 出題年度。
+  year        Int?
+  /// 問題の背景にある定石テーマ。
+  backgroundTag String?
   steps       ExplanationStep[]
   dailyOn     DailyChallenge[]
   createdAt   DateTime @default(now())

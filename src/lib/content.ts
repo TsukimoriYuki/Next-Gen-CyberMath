@@ -1,5 +1,6 @@
 import { PROBLEMS, PROBLEMS_BY_SLUG } from "@/data/problems";
 import { LESSONS, LESSONS_BY_SLUG } from "@/data/lessons";
+import { DOJO_PROBLEMS } from "@/data/dojo";
 import {
   UNIT_META,
   UNIT_META_BY_NAME,
@@ -7,6 +8,7 @@ import {
 } from "@/data/units-meta";
 import {
   DIFFICULTY_ORDER,
+  type Deviation,
   type Difficulty,
   type Lesson,
   type Problem,
@@ -275,6 +277,45 @@ export function getChallengeProblems(date: Date = new Date()): Problem[] {
     }
   }
   return picked.slice(0, 3);
+}
+
+// ---- 過去問道場 (Dojo) ------------------------------------------------
+
+const DOJO_BY_SLUG: Record<string, Problem> = Object.fromEntries(
+  DOJO_PROBLEMS.map((p) => [p.slug, p]),
+);
+
+/** 道場全問取得。 */
+export function getAllDojoProblems(): Problem[] {
+  return DOJO_PROBLEMS;
+}
+
+/** 偏差値帯 × 単元（複数）で絞り込み。どちらも省略で全件。 */
+export function filterDojoProblems({
+  deviationMin = 50,
+  deviationMax = 70,
+  units = [],
+}: {
+  deviationMin?: Deviation;
+  deviationMax?: Deviation;
+  units?: string[];
+}): Problem[] {
+  return DOJO_PROBLEMS.filter((p) => {
+    const dev = p.deviation ?? 60;
+    if (dev < deviationMin || dev > deviationMax) return false;
+    if (units.length > 0 && !units.includes(p.unit)) return false;
+    return true;
+  });
+}
+
+/** slug から道場問題を取得。 */
+export function getDojoProblem(slug: string): Problem | undefined {
+  return DOJO_BY_SLUG[slug];
+}
+
+/** 道場問題 slug 一覧（SSG 用）。 */
+export function getAllDojoSlugs(): string[] {
+  return DOJO_PROBLEMS.map((p) => p.slug);
 }
 
 export function formatDateJP(date: Date = new Date()): string {

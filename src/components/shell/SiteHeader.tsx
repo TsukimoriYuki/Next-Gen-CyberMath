@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sigma } from "lucide-react";
+import { Sigma, Swords } from "lucide-react";
 
 export function SiteHeader() {
   return (
@@ -49,6 +49,13 @@ export function SiteHeader() {
             className="rounded-md px-3 py-2 font-semibold text-neon-amber/90 transition-colors hover:bg-secondary/60 hover:text-neon-amber"
           >
             特訓
+          </Link>
+          <Link
+            href="/dojo"
+            className="inline-flex items-center gap-1 rounded-md px-3 py-2 font-semibold text-neon-amber/90 transition-colors hover:bg-secondary/60 hover:text-neon-amber"
+          >
+            <Swords className="h-3.5 w-3.5" />
+            道場
           </Link>
           <Link
             href="/#daily"

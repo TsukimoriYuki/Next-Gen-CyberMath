@@ -84,6 +84,24 @@ export interface ExplanationStep {
   relatedLessonSlug?: string;
 }
 
+/** 過去問道場の偏差値帯。 */
+export type Deviation = 50 | 55 | 60 | 65 | 70;
+
+/**
+ * 解法の多様性（代数・幾何・ベクトル…）。1 問に複数の解法を持たせ、
+ * 道場の解法切替タブで表示する。body は KaTeX + @@why + @@lab トークン可。
+ */
+export interface Approach {
+  /** 安定キー（タブ識別用）。 */
+  id: string;
+  /** タブのラベル（例: "代数", "幾何", "ベクトル", "複素数"）。 */
+  label: string;
+  /** ひとことの方針（タブ下の小見出し）。 */
+  tagline?: string;
+  /** 解法本文。 */
+  body: string;
+}
+
 export interface Problem {
   slug: string;
   title: string;
@@ -105,6 +123,18 @@ export interface Problem {
    * 完全に隠蔽し、模試生成での強制ブレンドと、履歴からの復習でのみ到達する。
    */
   isMockOnly?: boolean;
+
+  // ---- 過去問道場 (Dojo) メタ -----------------------------------------
+  /** 出題大学（オリジナル類題は「○○大（類題）」表記）。 */
+  university?: string;
+  /** 偏差値帯。道場のスライダー絞り込みに使う。 */
+  deviation?: Deviation;
+  /** 出題年度（類題は想定年度）。 */
+  year?: number;
+  /** 問題の背景にある定石テーマ（例: "解の配置", "確率漸化式"）。 */
+  backgroundTag?: string;
+  /** 解法の多様性。存在すれば道場で解法切替タブを表示する。 */
+  approaches?: Approach[];
 }
 
 /**
@@ -138,6 +168,21 @@ export interface UnitMeta {
 // ---- presentation metadata ---------------------------------------------
 
 export const DIFFICULTY_ORDER: Difficulty[] = ["A", "B", "C", "D", "D_PLUS"];
+
+// ---- 過去問道場 偏差値帯メタ -------------------------------------------
+
+export const DEVIATION_VALUES: Deviation[] = [50, 55, 60, 65, 70];
+
+export const DEVIATION_META: Record<
+  Deviation,
+  { label: string; name: string; accent: string }
+> = {
+  50: { label: "50", name: "基礎固め", accent: "var(--neon-lime)" },
+  55: { label: "55", name: "標準演習", accent: "var(--neon-cyan)" },
+  60: { label: "60", name: "実戦", accent: "var(--neon-violet)" },
+  65: { label: "65", name: "難関", accent: "var(--neon-amber)" },
+  70: { label: "70", name: "最難関・別格", accent: "var(--neon-magenta)" },
+};
 
 export const DIFFICULTY_META: Record<
   Difficulty,

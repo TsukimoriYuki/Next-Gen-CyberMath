@@ -1,5 +1,6 @@
 import type { Problem } from "@/lib/types";
 import { PROBLEM_TAGS } from "./problem-tags";
+import { DOJO_PROBLEMS } from "./dojo";
 import { numbersAndExpressions } from "./units/numbers-and-expressions";
 import { setsAndLogic } from "./units/sets-and-logic";
 import { quadraticFunctions } from "./units/quadratic-functions";
@@ -516,6 +517,8 @@ const RAW_PROBLEMS: Problem[] = [
   ...showcaseProblems,
   // 初見殺し（isMockOnly:true）。集約には含めるが content.ts の公開系から除外する。
   ...mockOnlyProblems,
+  // 過去問道場。通常導線にも表示可（isMockOnly なし）。
+  ...DOJO_PROBLEMS,
 ];
 
 // 概念タグをマージ（インライン tags ∪ problem-tags.ts のマップ、重複除去）。

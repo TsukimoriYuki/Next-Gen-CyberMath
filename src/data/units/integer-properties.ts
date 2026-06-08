@@ -712,4 +712,53 @@ $$\frac{(m+1)(m+2)\cdots(m+k)}{k!}=\frac{(m+k)!}{m!\,k!}=\binom{m+k}{k}.$$
       },
     ],
   },
+
+  // ============================== ガウス記号（拡張）==============================
+  {
+    slug: "legendre-factorial-exponent",
+    title: "【初見】階乗に含まれる素因数の指数（ルジャンドル）",
+    unit: "整数の性質",
+    difficulty: "D",
+    tagline: "ガウス記号の和が、素因数を数え上げる",
+    hasGraph: false,
+    isMockOnly: true,
+    tags: ["ガウス記号", "素因数分解", "ルジャンドルの定理"],
+    statement: r`$100!$ を素因数分解したときの、素因数 $3$ の指数を求めよ。また、$100!$ を $10$ 進法で表したとき、末尾に連続して並ぶ $0$ の個数を求めよ。`,
+    steps: [
+      {
+        type: "INSIGHT",
+        order: 0,
+        title: "着眼点 — 倍数を階層で数える",
+        body: r`$n!=1\cdot2\cdots n$ に含まれる素数 $p$ の指数は、**ルジャンドルの定理**
+$$\sum_{i\ge1}\left\lfloor\frac{n}{p^i}\right\rfloor=\left\lfloor\frac np\right\rfloor+\left\lfloor\frac n{p^2}\right\rfloor+\left\lfloor\frac n{p^3}\right\rfloor+\cdots$$
+で与えられる。$\left\lfloor n/p\right\rfloor$ は「$p$ の倍数の個数」、$\left\lfloor n/p^2\right\rfloor$ は「$p^2$ の倍数に**さらに 1 個**上乗せ」…と、$p$ を何重に含むかを階層で数える。`,
+      },
+      {
+        type: "EXPERIMENT",
+        order: 1,
+        title: "実験 — なぜ floor の和になるか",
+        body: r`小さく試す：$10!$ に含まれる $2$ の指数は $\left\lfloor\frac{10}{2}\right\rfloor+\left\lfloor\frac{10}{4}\right\rfloor+\left\lfloor\frac{10}{8}\right\rfloor=5+2+1=8$。$2$ の倍数 $2,4,6,8,10$ が各 $1$ 個、$4$ の倍数 $4,8$ がもう $1$ 個ずつ、$8$ がさらに $1$ 個——重複して数えるのではなく「層ごとに 1 個ずつ足す」のがガウス記号の和の意味。実際 $10!=3628800=2^8\cdot\cdots$ で一致する。`,
+      },
+      {
+        type: "HINT",
+        order: 2,
+        title: "ヒント — 末尾の 0 は 10=2·5 の個数",
+        body: r`末尾の $0$ の個数 $=10^k$ で割り切れる最大の $k=\min(v_2,v_5)$。$100!$ では $2$ の倍数のほうが $5$ の倍数より多いので $v_2>v_5$、よって答えは $v_5$。`,
+      },
+      {
+        type: "SOLUTION",
+        order: 3,
+        title: "厳密な解答",
+        body: r`**素因数 $3$ の指数。** ルジャンドルの定理より
+$$v_3(100!)=\left\lfloor\frac{100}{3}\right\rfloor+\left\lfloor\frac{100}{9}\right\rfloor+\left\lfloor\frac{100}{27}\right\rfloor+\left\lfloor\frac{100}{81}\right\rfloor=33+11+3+1=48.$$
+（$3^5=243>100$ なので以降は $0$。）よって $3$ の指数は $\mathbf{48}$。
+
+**末尾に並ぶ $0$ の個数。** 末尾の $0$ は因数 $10=2\cdot5$ の個数、すなわち $\min(v_2,v_5)$。
+$$v_5(100!)=\left\lfloor\frac{100}{5}\right\rfloor+\left\lfloor\frac{100}{25}\right\rfloor=20+4=24.$$
+（$5^3=125>100$。）$v_2(100!)=\left\lfloor\frac{100}{2}\right\rfloor+\left\lfloor\frac{100}{4}\right\rfloor+\cdots=50+25+12+6+3+1=97>24=v_5$。よって $\min(v_2,v_5)=v_5=24$。末尾に並ぶ $0$ は $\mathbf{24}$ 個。
+
+**メタ。** ルジャンドルの定理は「$n!$ の素因数 $p$ の指数 $=\sum\lfloor n/p^i\rfloor$」。ガウス記号 $\lfloor\cdot\rfloor$ が“$p^i$ の倍数を層ごとに数える”役を担う。末尾の $0$ が $v_5$ で決まるのは「$2$ は $5$ より豊富」という非対称性ゆえ——同様に「末尾の $0$ の直前の数字」なども、$2,5$ 以外の素因数を法とする合同で追える。`,
+      },
+    ],
+  },
 ];

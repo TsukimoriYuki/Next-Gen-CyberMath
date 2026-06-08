@@ -168,6 +168,38 @@
     box-shadow: 0 1px 2px oklch(0.4 0.05 250 / 0.05);
   }
 
+  /**
+   * 和紙風ガラス — 道場 (Dojo) 専用の温かみのある白磁 surface。
+   * .glass より黄みが強く、境界に薄い金 (amber) 色のリングを持つ。
+   */
+  .washi {
+    background: linear-gradient(
+      135deg,
+      oklch(1 0.008 80 / 0.88),
+      oklch(0.99 0.012 70 / 0.72)
+    );
+    backdrop-filter: blur(16px) saturate(130%);
+    -webkit-backdrop-filter: blur(16px) saturate(130%);
+    border: 1px solid oklch(0.65 0.08 70 / 0.28);
+    box-shadow:
+      0 1px 3px oklch(0.5 0.05 70 / 0.07),
+      inset 0 0 0 1px oklch(0.98 0.02 80 / 0.5);
+  }
+
+  .washi-hover {
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+  .washi-hover:hover {
+    border-color: oklch(0.65 0.12 70 / 0.55);
+    box-shadow:
+      0 0 0 1px oklch(0.65 0.12 70 / 0.28),
+      0 6px 24px oklch(0.5 0.07 70 / 0.1);
+    transform: translateY(-2px);
+  }
+
   .glass-hover {
     transition:
       border-color 0.25s ease,
