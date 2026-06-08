@@ -130,9 +130,9 @@ export function LogicSteps({
                       className="overflow-hidden"
                     >
                       <div className="space-y-4 px-4 pb-5">
-                        <div className="text-sm font-medium text-foreground/90">
+                        <MathText className="text-sm font-medium text-foreground/90">
                           {step.title}
-                        </div>
+                        </MathText>
                         <MathText className="text-sm text-foreground/85">
                           {step.body}
                         </MathText>

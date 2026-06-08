@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles, LineChart, Zap } from "lucide-react";
+import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart } from "lucide-react";
 import {
   getAllProblems,
   getChallengeProblems,
@@ -7,7 +7,6 @@ import {
 } from "@/lib/content";
 import { DIFFICULTY_META, DIFFICULTY_ORDER } from "@/lib/types";
 import { DailyTriple } from "@/components/daily/DailyTriple";
-import { ProblemCard } from "@/components/shell/ProblemCard";
 
 export default function HomePage() {
   const now = new Date();
@@ -43,28 +42,15 @@ export default function HomePage() {
               href="#daily"
               className="glow-magenta inline-flex items-center gap-2 rounded-xl bg-neon-magenta/15 px-5 py-3 text-sm font-semibold text-neon-magenta transition-colors hover:bg-neon-magenta/25"
             >
-              私からの挑戦へ
+              今日の挑戦へ
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/drill"
+              href="/dojo"
               className="inline-flex items-center gap-2 rounded-xl border border-neon-amber/40 bg-neon-amber/5 px-5 py-3 text-sm font-semibold text-neon-amber transition-colors hover:bg-neon-amber/15"
             >
-              <Zap className="h-4 w-4" />
-              計算特訓
-            </Link>
-            <Link
-              href="/mock/history"
-              className="inline-flex items-center gap-2 rounded-xl border border-neon-cyan/40 bg-neon-cyan/5 px-5 py-3 text-sm font-semibold text-neon-cyan transition-colors hover:bg-neon-cyan/15"
-            >
-              <LineChart className="h-4 w-4" />
-              マイページ
-            </Link>
-            <Link
-              href="/units"
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-neon-cyan/50 hover:text-neon-cyan"
-            >
-              単元から探す
+              <Swords className="h-4 w-4" />
+              道場へ入門
             </Link>
           </div>
         </div>
@@ -83,7 +69,7 @@ export default function HomePage() {
           {[...DIFFICULTY_ORDER].reverse().map((d, i) => {
             const meta = DIFFICULTY_META[d];
             const count = all.filter((p) => p.difficulty === d).length;
-            const width = 52 + i * 11; // narrow at top (D+), wide at base (A)
+            const width = 52 + i * 11;
             return (
               <div
                 key={d}
@@ -112,35 +98,115 @@ export default function HomePage() {
       </section>
 
       {/* Daily triple */}
-      <section className="mt-16">
+      <section className="mt-16" id="daily">
         <DailyTriple problems={daily} dateLabel={formatDateJP(now)} />
       </section>
 
-      {/* Full catalog */}
+      {/* Navigation panels */}
       <section className="mt-16">
-        <div className="flex items-end justify-between">
-          <div>
-            <h2 className="font-display text-xl font-bold tracking-wide">
-              すべての問題
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {all.length} 問を収録。難易度順に並んでいます。
-            </p>
-          </div>
+        <h2 className="font-display text-xl font-bold tracking-wide">
+          道場への扉
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          目的に合わせて入り口を選べ。
+        </p>
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+          {/* 道場 */}
+          <Link
+            href="/dojo"
+            className="washi washi-hover group block rounded-2xl p-6"
+          >
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-amber/10 text-neon-amber transition-transform group-hover:scale-105">
+                <Swords className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">
+                  過去問道場
+                </div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  大学入試の精選問題を、論理ステップで完全攻略する。
+                </div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-amber">
+                  入門する <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* サイバー模試 */}
+          <Link
+            href="/mock"
+            className="washi washi-hover group block rounded-2xl p-6"
+          >
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-magenta/10 text-neon-magenta transition-transform group-hover:scale-105">
+                <FileText className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">
+                  サイバー模試
+                </div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  タグ・難易度・時間を自在にカスタムした本番形式テスト。
+                </div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-magenta">
+                  受験する <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 計算特訓 */}
+          <Link
+            href="/drill"
+            className="washi washi-hover group block rounded-2xl p-6"
+          >
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-cyan/10 text-neon-cyan transition-transform group-hover:scale-105">
+                <Zap className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">
+                  計算特訓
+                </div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  速度と精度を鍛える反復計算ドリル。毎日の習慣に。
+                </div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-cyan">
+                  特訓開始 <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 弱点診断 */}
+          <Link
+            href="/mock/history"
+            className="washi washi-hover group block rounded-2xl p-6"
+          >
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-lime/10 text-neon-lime transition-transform group-hover:scale-105">
+                <LineChart className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">
+                  弱点診断
+                </div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  過去の模試結果から弱点タグを分析し、学習戦略を立てる。
+                </div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-lime">
+                  診断する <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {all
-            .slice()
-            .sort(
-              (a, b) =>
-                DIFFICULTY_ORDER.indexOf(a.difficulty) -
-                DIFFICULTY_ORDER.indexOf(b.difficulty),
-            )
-            .map((p) => (
-              <ProblemCard key={p.slug} problem={p} />
-            ))}
-        </div>
+        {/* 緊急ミッション — placeholder（非表示） */}
+        <div className="hidden" aria-hidden="true" data-slot="emergency-mission" />
       </section>
     </div>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sigma, Swords, LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
+import { Sigma, LogIn, LogOut, ShieldCheck, UserRound, LineChart } from "lucide-react";
 import { getSession } from "@/lib/auth";
 
 export async function SiteHeader() {
@@ -23,48 +23,13 @@ export async function SiteHeader() {
         </Link>
 
         <nav className="flex items-center gap-1 text-sm">
+          {/* マイページ */}
           <Link
-            href="/units"
-            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan"
+            href="/mock/history"
+            className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan"
           >
-            単元
-          </Link>
-          <Link
-            href="/lessons"
-            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-magenta"
-          >
-            授業
-          </Link>
-          <Link
-            href="/tags"
-            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan"
-          >
-            タグ
-          </Link>
-          <Link
-            href="/mock"
-            className="rounded-md px-3 py-2 font-semibold text-neon-magenta/90 transition-colors hover:bg-secondary/60 hover:text-neon-magenta"
-          >
-            模試
-          </Link>
-          <Link
-            href="/drill"
-            className="rounded-md px-3 py-2 font-semibold text-neon-amber/90 transition-colors hover:bg-secondary/60 hover:text-neon-amber"
-          >
-            特訓
-          </Link>
-          <Link
-            href="/dojo"
-            className="inline-flex items-center gap-1 rounded-md px-3 py-2 font-semibold text-neon-amber/90 transition-colors hover:bg-secondary/60 hover:text-neon-amber"
-          >
-            <Swords className="h-3.5 w-3.5" />
-            道場
-          </Link>
-          <Link
-            href="/#daily"
-            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan"
-          >
-            挑戦
+            <LineChart className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">マイページ</span>
           </Link>
 
           {/* 師範リンク（MENTOR のみ表示） */}
@@ -74,13 +39,13 @@ export async function SiteHeader() {
               className="inline-flex items-center gap-1 rounded-md px-3 py-2 font-semibold text-neon-amber transition-colors hover:bg-neon-amber/10"
             >
               <ShieldCheck className="h-3.5 w-3.5" />
-              師範
+              <span className="hidden sm:inline">師範</span>
             </Link>
           )}
 
           {/* ユーザー表示 / ログインボタン */}
           {session ? (
-            <div className="ml-2 flex items-center gap-2">
+            <div className="ml-1 flex items-center gap-2">
               <span className="hidden items-center gap-1 rounded-lg border border-border/60 bg-secondary/40 px-2.5 py-1.5 font-mono text-xs text-foreground/70 sm:inline-flex">
                 {session.role === "MENTOR" ? (
                   <ShieldCheck className="h-3 w-3 text-neon-amber" />

@@ -3,39 +3,63 @@ import { redirect } from "next/navigation";
 import { ShieldCheck, Users, BarChart3, BookOpen, Swords } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { getAllProblems } from "@/lib/content";
+import { prisma } from "@/lib/prisma";
 import { WeakTagStats } from "@/components/mentor/WeakTagStats";
 import { StudentRoster } from "@/components/mentor/StudentRoster";
 import { DailyChallengeEditor } from "@/components/mentor/DailyChallengeEditor";
 
 export const metadata: Metadata = { title: "師範ダッシュボード" };
-
-async function fetchStats() {
-  try {
-    const base = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
-    const res = await fetch(`${base}/api/mentor/stats`, { cache: "no-store" });
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
-}
-
-async function fetchStudents() {
-  try {
-    const base = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
-    const res = await fetch(`${base}/api/mentor/students`, { cache: "no-store" });
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
-}
+export const dynamic = "force-dynamic";
 
 export default async function MentorPage() {
   const session = await getSession();
   if (!session || session.role !== "MENTOR") redirect("/dojo");
 
-  const [statsData, studentsData] = await Promise.all([fetchStats(), fetchStudents()]);
+  // ─── 統計データをDBから直接取得 ───
+  const [studentCount, mentorCount, totalAttempts, allAttempts] = await Promise.all([
+    prisma.user.count({ where: { role: "STUDENT" } }),
+    prisma.user.count({ where: { role: "MENTOR" } }),
+    prisma.examAttempt.count(),
+    prisma.examAttempt.findMany({ select: { weakTags: true } }),
+  ]);
+
+  const tagCounts = new Map<string, number>();
+  for (const a of allAttempts) {
+    for (const tag of a.weakTags) {
+      tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+    }
+  }
+  const topTags = [...tagCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([tag, count]) => ({ tag, count }));
+
+  // ─── 門下生一覧 ───
+  const users = await prisma.user.findMany({
+    orderBy: { createdAt: "desc" },
+    include: {
+      attempts: {
+        select: { score: true, totalCount: true, createdAt: true, weakTags: true },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+      },
+    },
+  });
+
+  const students = users.map((u) => {
+    const latest = u.attempts[0] ?? null;
+    return {
+      id: u.id,
+      name: u.name,
+      role: u.role,
+      createdAt: u.createdAt.toISOString(),
+      lastLoginAt: u.lastLoginAt?.toISOString() ?? null,
+      attemptCount: u.attempts.length,
+      lastScore: latest ? Math.round((latest.score / Math.max(latest.totalCount, 1)) * 100) : null,
+      lastWeakTags: latest?.weakTags ?? [],
+      lastAttemptAt: latest?.createdAt?.toISOString() ?? null,
+    };
+  });
 
   const allProblems = getAllProblems().map((p) => ({
     slug: p.slug,
@@ -69,16 +93,12 @@ export default async function MentorPage() {
             <h2 className="font-display text-xl font-bold">A. 全体分析</h2>
           </div>
           <div className="glass rounded-2xl p-6">
-            {statsData?.ok ? (
-              <WeakTagStats
-                topTags={statsData.topTags}
-                totalAttempts={statsData.totalAttempts}
-                studentCount={statsData.studentCount}
-                mentorCount={statsData.mentorCount}
-              />
-            ) : (
-              <p className="text-sm text-muted-foreground">データの取得に失敗しました。</p>
-            )}
+            <WeakTagStats
+              topTags={topTags}
+              totalAttempts={totalAttempts}
+              studentCount={studentCount}
+              mentorCount={mentorCount}
+            />
           </div>
         </section>
 
@@ -89,11 +109,7 @@ export default async function MentorPage() {
             <h2 className="font-display text-xl font-bold">B. 門下生名簿</h2>
           </div>
           <div className="glass rounded-2xl p-6">
-            {studentsData?.ok ? (
-              <StudentRoster students={studentsData.students} />
-            ) : (
-              <p className="text-sm text-muted-foreground">データの取得に失敗しました。</p>
-            )}
+            <StudentRoster students={students} />
           </div>
         </section>
 

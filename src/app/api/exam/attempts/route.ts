@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/auth";
 
 // POST /api/exam/attempts — 模試結果を永続化する（匿名セッション）。
 // クライアントは localStorage にも保存するため、DB 失敗時も結果画面は動く。
@@ -22,6 +23,8 @@ export async function POST(request: Request) {
       return Response.json({ ok: false, error: "invalid payload" }, { status: 400 });
     }
 
+    const session = await getSession();
+
     const attempt = await prisma.examAttempt.create({
       data: {
         sessionId: String(sessionId),
@@ -34,6 +37,7 @@ export async function POST(request: Request) {
         totalCount,
         durationSec,
         weakTags,
+        userId: session?.sub ?? null,
       },
       select: { id: true },
     });
