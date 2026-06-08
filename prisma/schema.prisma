@@ -90,6 +90,22 @@ model Lesson {
   @@index([unit])
 }
 
+/// ユーザーアカウント。
+/// role は "MENTOR" | "STUDENT"。passcode は bcryptjs ハッシュ済み。
+model User {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  passcode    String
+  role        String   @default("STUDENT")
+  lastLoginAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  attempts    ExamAttempt[]
+
+  @@index([name])
+  @@index([role])
+}
+
 /// サイバー模試の受験結果（匿名セッションごと）。
 /// 生成・採点はクライアント／静的データで行い、結果のみここに永続化する。
 model ExamAttempt {
@@ -108,9 +124,13 @@ model ExamAttempt {
   totalCount   Int
   durationSec  Int
   weakTags     String[] @default([])
+  // --- ユーザー紐付け（オプショナル）---
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([sessionId])
   @@index([createdAt])
+  @@index([userId])
 }
 
 model DailyChallenge {

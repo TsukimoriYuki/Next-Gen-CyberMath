@@ -1,7 +1,10 @@
 import Link from "next/link";
-import { Sigma, Swords } from "lucide-react";
+import { Sigma, Swords, LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
+import { getSession } from "@/lib/auth";
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const session = await getSession();
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
@@ -63,6 +66,49 @@ export function SiteHeader() {
           >
             挑戦
           </Link>
+
+          {/* 師範リンク（MENTOR のみ表示） */}
+          {session?.role === "MENTOR" && (
+            <Link
+              href="/mentor"
+              className="inline-flex items-center gap-1 rounded-md px-3 py-2 font-semibold text-neon-amber transition-colors hover:bg-neon-amber/10"
+            >
+              <ShieldCheck className="h-3.5 w-3.5" />
+              師範
+            </Link>
+          )}
+
+          {/* ユーザー表示 / ログインボタン */}
+          {session ? (
+            <div className="ml-2 flex items-center gap-2">
+              <span className="hidden items-center gap-1 rounded-lg border border-border/60 bg-secondary/40 px-2.5 py-1.5 font-mono text-xs text-foreground/70 sm:inline-flex">
+                {session.role === "MENTOR" ? (
+                  <ShieldCheck className="h-3 w-3 text-neon-amber" />
+                ) : (
+                  <UserRound className="h-3 w-3 text-muted-foreground" />
+                )}
+                {session.name}
+              </span>
+              <form action="/api/auth/logout" method="POST">
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-1 rounded-lg border border-border/60 px-2.5 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-neon-magenta/40 hover:text-neon-magenta"
+                  aria-label="ログアウト"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">退室</span>
+                </button>
+              </form>
+            </div>
+          ) : (
+            <Link
+              href="/auth/login"
+              className="ml-2 inline-flex items-center gap-1 rounded-lg border border-neon-cyan/40 bg-neon-cyan/5 px-3 py-1.5 font-mono text-xs font-semibold text-neon-cyan transition-colors hover:bg-neon-cyan/15"
+            >
+              <LogIn className="h-3.5 w-3.5" />
+              入室
+            </Link>
+          )}
         </nav>
       </div>
     </header>
