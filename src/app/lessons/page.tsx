@@ -13,6 +13,7 @@ const ELITE_UNIT = "難問対策・解法戦略";
 const UNIT_ACCENT: Record<string, string> = {
   集合と命題: "var(--neon-violet)",
   場合の数と確率: "var(--neon-cyan)",
+  "式と証明": "var(--neon-magenta)",
 };
 
 export default function LessonsSkillTreePage() {

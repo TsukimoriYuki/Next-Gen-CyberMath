@@ -141,6 +141,11 @@ export interface Problem {
  * Concept Lesson —「めっちゃわかりやすい授業」。
  * content は KaTeX 対応の Markdown 文字列。JSXGraph ラボは
  * ```lab フェンスドコードブロックで埋め込む（先頭行に graphKey、続けて caption）。
+ *
+ * Rich Lesson 拡張フィールド（3段構成授業ビューア用）:
+ *   proof / application / practiceProblemSlug
+ * これら 3 フィールドが存在すると /lessons/[slug] が「真理 → 極意 → 実践」の
+ * 3 段 UI でレンダリングされる。content は概要 or 空文字でも可。
  */
 export interface Lesson {
   slug: string;
@@ -154,6 +159,13 @@ export interface Lesson {
   relatedProblemSlugs?: string[];
   /** 概念タグ。 */
   tags?: string[];
+  // ---- Rich Lesson 拡張フィールド ----------------------------------------
+  /** 【真理】厳密な証明 (Markdown/KaTeX)。 */
+  proof?: string;
+  /** 【極意】実戦での活かし方 (Markdown/KaTeX)。 */
+  application?: string;
+  /** 【実践】試し斬り用の道場問題の slug。 */
+  practiceProblemSlug?: string;
 }
 
 /** 単元レジストリのメタ情報（URL スラッグ・表示名・説明）。 */

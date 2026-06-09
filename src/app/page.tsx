@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart } from "lucide-react";
+import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layers } from "lucide-react";
 import {
   getAllProblems,
   getChallengeProblems,
@@ -115,7 +115,7 @@ export default function HomePage() {
           目的に合わせて入り口を選べ。
         </p>
 
-        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {/* 道場 */}
           <Link
             href="/dojo"
@@ -203,6 +203,52 @@ export default function HomePage() {
                 </div>
                 <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-lime">
                   診断する <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 授業スキルツリー */}
+          <Link
+            href="/lessons"
+            className="washi washi-hover group block rounded-2xl p-6"
+          >
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-magenta/10 text-neon-magenta transition-transform group-hover:scale-105">
+                <BookOpen className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">
+                  授業スキルツリー
+                </div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  概念のつながりをたどる。証明から極意まで 3 段構成で体得する。
+                </div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-magenta">
+                  受講する <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 単元一覧 */}
+          <Link
+            href="/units"
+            className="washi washi-hover group block rounded-2xl p-6"
+          >
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-violet/10 text-neon-violet transition-transform group-hover:scale-105">
+                <Layers className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">
+                  単元一覧
+                </div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  単元から問題を探す。カリキュラム順に体系的に攻略する。
+                </div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-violet">
+                  探索する <ArrowRight className="h-3.5 w-3.5" />
                 </div>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowLeft, Swords, Scroll, Target } from "lucide-react";
 import { getAllDojoProblems } from "@/lib/content";
 import { DojoExplorer } from "@/components/dojo/DojoExplorer";
@@ -11,7 +12,14 @@ export const metadata: Metadata = {
     "偏差値55〜70帯の良問20選。偏差値スライダー×単元絞り込みで良問をランダム出題。「なぜ？」ポップアップと複数解法で定石を深掘りする。",
 };
 
-export default function DojoPage() {
+export default async function DojoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ slug?: string }>;
+}) {
+  const { slug } = await searchParams;
+  if (slug) redirect(`/problems/${slug}`);
+
   const problems = getAllDojoProblems();
 
   return (
