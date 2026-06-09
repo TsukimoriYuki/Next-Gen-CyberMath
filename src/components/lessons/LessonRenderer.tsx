@@ -13,6 +13,52 @@ import type { GraphKey } from "@/lib/types";
 // We split on it and render <LabRenderer> between the Markdown segments.
 const LAB_TOKEN = /@@lab:([a-z0-9-]+)(?:\|[^@]*)?@@/g;
 
+// CommonMark の強調フランキング規則は、`**太字**` が CJK の文字・句読点に直接
+// 隣接すると認識に失敗し（例: `）**` の直後が `に` のような場合）、`**` が
+// そのまま表示されてしまう。micromark のパース後（mdast）に残った `**…**` を
+// 走査して strong ノードへ変換する小さな remark プラグインで補正する（依存なし）。
+// 正しく解釈済みの太字は既に strong ノード（子テキストに `**` を含まない）なので
+// 影響を受けず、数式（math/inlineMath）やコード（value のみで children を持たない）
+// にも触れない。
+interface MdNode {
+  type: string;
+  value?: string;
+  children?: MdNode[];
+}
+
+function splitBold(value: string): MdNode[] {
+  const out: MdNode[] = [];
+  const re = /\*\*([^*\n]+)\*\*/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(value)) !== null) {
+    if (m.index > last) out.push({ type: "text", value: value.slice(last, m.index) });
+    out.push({ type: "strong", children: [{ type: "text", value: m[1] }] });
+    last = m.index + m[0].length;
+  }
+  if (last < value.length) out.push({ type: "text", value: value.slice(last) });
+  return out;
+}
+
+function remarkCjkBold() {
+  return (tree: MdNode) => {
+    const walk = (node: MdNode) => {
+      if (!node.children) return;
+      const next: MdNode[] = [];
+      for (const child of node.children) {
+        if (child.type === "text" && child.value?.includes("**")) {
+          next.push(...splitBold(child.value));
+        } else {
+          walk(child);
+          next.push(child);
+        }
+      }
+      node.children = next;
+    };
+    walk(tree);
+  };
+}
+
 // @@why:key|label@@ → [label](#why-key) so the `a` component can render <WhyPopover>.
 const WHY_TOKEN = /@@why:([a-z0-9-]+)\|([^@]+)@@/g;
 
@@ -100,7 +146,7 @@ const mdComponents: Components = {
 function MarkdownBlock({ children }: { children: string }) {
   return (
     <Markdown
-      remarkPlugins={[remarkMath, remarkGfm]}
+      remarkPlugins={[remarkMath, remarkGfm, remarkCjkBold]}
       rehypePlugins={[rehypeKatex]}
       components={mdComponents}
     >
