@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sigma, LogIn, LogOut, ShieldCheck, UserRound, LineChart } from "lucide-react";
+import { Sigma, LogIn, LogOut, ShieldCheck, UserRound, LineChart, Home } from "lucide-react";
 import { getSession } from "@/lib/auth";
 
 export async function SiteHeader() {
@@ -23,6 +23,15 @@ export async function SiteHeader() {
         </Link>
 
         <nav className="flex items-center gap-1 text-sm">
+          {/* ホーム */}
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan"
+          >
+            <Home className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">ホーム</span>
+          </Link>
+
           {/* マイページ */}
           <Link
             href="/mock/history"

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { ShieldCheck, Users, BarChart3, BookOpen, Swords, Flame } from "lucide-react";
+import { ShieldCheck, Users, BarChart3, BookOpen, Swords, Flame, MessageSquare } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { getAllProblems } from "@/lib/content";
 import { prisma } from "@/lib/prisma";
@@ -8,6 +8,7 @@ import { WeakTagStats } from "@/components/mentor/WeakTagStats";
 import { StudentRoster } from "@/components/mentor/StudentRoster";
 import { DailyChallengeEditor } from "@/components/mentor/DailyChallengeEditor";
 import { EmergencyMissionEditor } from "@/components/mentor/EmergencyMissionEditor";
+import { MessageEditor } from "@/components/mentor/MessageEditor";
 
 export const metadata: Metadata = { title: "師範ダッシュボード" };
 export const dynamic = "force-dynamic";
@@ -141,6 +142,20 @@ export default async function MentorPage() {
               師範からのコメントは、最後の解答ステップを開いた瞬間にフェードインで登場します。
             </p>
             <EmergencyMissionEditor students={students} allProblems={allProblems} />
+          </div>
+        </section>
+        {/* ─── E. 通信司令室 ─── */}
+        <section>
+          <div className="mb-4 flex items-center gap-2">
+            <MessageSquare className="h-5 w-5 text-neon-violet" />
+            <h2 className="font-display text-xl font-bold">E. 通信司令室</h2>
+          </div>
+          <div className="glass rounded-2xl p-6">
+            <p className="mb-6 text-sm text-muted-foreground">
+              特定の門下生への DM、または全員への一斉通知を送信します。
+              メッセージはホーム画面のインボックスバナーに表示されます。
+            </p>
+            <MessageEditor students={students.filter((s) => s.role === "STUDENT")} />
           </div>
         </section>
       </div>

@@ -9,6 +9,7 @@ import {
 import { DIFFICULTY_META, DIFFICULTY_ORDER } from "@/lib/types";
 import { DailyTriple } from "@/components/daily/DailyTriple";
 import { EmergencyMissionPanel } from "@/components/mission/EmergencyMissionPanel";
+import { MessageBar } from "@/components/messages/MessageBar";
 
 export const dynamic = "force-dynamic";
 
@@ -258,6 +259,13 @@ export default function HomePage() {
         {/* 緊急ミッション — ログイン済みユーザーに未クリアミッションがある場合のみ表示 */}
         <Suspense fallback={null}>
           <EmergencyMissionPanel />
+        </Suspense>
+
+        {/* 師範からのメッセージ */}
+        <Suspense fallback={null}>
+          <div className="mt-5">
+            <MessageBar />
+          </div>
         </Suspense>
       </section>
     </div>

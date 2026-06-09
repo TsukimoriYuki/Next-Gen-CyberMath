@@ -102,6 +102,7 @@ model User {
   updatedAt   DateTime @updatedAt
   attempts    ExamAttempt[]
   missions    EmergencyMission[]
+  messages    Message[]          @relation("ReceivedMessages")
 
   @@index([name])
   @@index([role])
@@ -150,6 +151,19 @@ model EmergencyMission {
 
   @@index([userId])
   @@index([isCompleted])
+  @@index([createdAt])
+}
+
+/// 師範から生徒（または全員）へのメッセージ。
+/// receiverId が null のときは全員への一斉送信。
+model Message {
+  id         String   @id @default(cuid())
+  receiverId String?
+  receiver   User?    @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  content    String
+  createdAt  DateTime @default(now())
+
+  @@index([receiverId])
   @@index([createdAt])
 }
 
