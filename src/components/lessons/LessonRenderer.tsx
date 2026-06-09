@@ -20,6 +20,25 @@ function preprocessWhy(src: string): string {
   return src.replace(WHY_TOKEN, (_, key, label) => `[${label}](#why-${key})`);
 }
 
+// remark-math (v6) の `$$...$$` の扱いには 2 つの落とし穴がある:
+//   1. 同一行で開始し複数行に渡る `$$本文\n…\n本文$$` を「コードフェンス」と誤認し、
+//      開始行をメタ扱いしてバックスラッシュを削り、独立行の閉じ `$$` が無いため以降を
+//      丸ごと飲み込む。
+//   2. 単一行の `$$…$$` は inline math（displayMode:false）として描画されるため、
+//      中央寄せされず、`\tag` のような display 専用コマンドがエラーになる。
+// いずれも区切り `$$` を独立行に置けば flow（block）math = display mode となり解決する。
+// そこで全ての表示数式 `$$…$$` を独立行形式へ正規化する（旧 MathText の BlockMath と
+// 同じ挙動）。inline `$…$`（単一 $）はこの正規表現に一致しないため影響を受けない。
+const DISPLAY_MATH = /\$\$([\s\S]*?)\$\$/g;
+
+function normalizeDisplayMath(src: string): string {
+  return src.replace(DISPLAY_MATH, (_whole, inner: string) => `\n\n$$\n${inner.trim()}\n$$\n\n`);
+}
+
+function preprocess(src: string): string {
+  return preprocessWhy(normalizeDisplayMath(src));
+}
+
 const mdComponents: Components = {
   h2: ({ children }) => (
     <h2 className="mt-10 mb-3 font-display text-2xl font-bold tracking-wide text-foreground">
@@ -85,7 +104,7 @@ function MarkdownBlock({ children }: { children: string }) {
       rehypePlugins={[rehypeKatex]}
       components={mdComponents}
     >
-      {preprocessWhy(children)}
+      {preprocess(children)}
     </Markdown>
   );
 }
