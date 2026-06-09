@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { ShieldCheck, Users, BarChart3, BookOpen, Swords } from "lucide-react";
+import { ShieldCheck, Users, BarChart3, BookOpen, Swords, Flame } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { getAllProblems } from "@/lib/content";
 import { prisma } from "@/lib/prisma";
 import { WeakTagStats } from "@/components/mentor/WeakTagStats";
 import { StudentRoster } from "@/components/mentor/StudentRoster";
 import { DailyChallengeEditor } from "@/components/mentor/DailyChallengeEditor";
+import { EmergencyMissionEditor } from "@/components/mentor/EmergencyMissionEditor";
 
 export const metadata: Metadata = { title: "師範ダッシュボード" };
 export const dynamic = "force-dynamic";
@@ -124,6 +125,22 @@ export default async function MentorPage() {
               日付を選んで、その日の「挑戦状」3問を設定します。ホーム画面の「今日の挑戦」に反映されます。
             </p>
             <DailyChallengeEditor allProblems={allProblems} />
+          </div>
+        </section>
+
+        {/* ─── D. 緊急ミッション発令 ─── */}
+        <section>
+          <div className="mb-4 flex items-center gap-2">
+            <Flame className="h-5 w-5 text-neon-magenta" />
+            <h2 className="font-display text-xl font-bold">D. 緊急ミッション発令</h2>
+          </div>
+          <div className="glass rounded-2xl p-6">
+            <p className="mb-6 text-sm text-muted-foreground">
+              特定の門下生に「緊急ミッション」を発令します。
+              ホーム画面に警戒色のパネルが出現し、生徒はそのまま専用道場へ突入します。
+              師範からのコメントは、最後の解答ステップを開いた瞬間にフェードインで登場します。
+            </p>
+            <EmergencyMissionEditor students={students} allProblems={allProblems} />
           </div>
         </section>
       </div>

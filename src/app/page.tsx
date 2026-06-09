@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart } from "lucide-react";
 import {
   getAllProblems,
@@ -7,6 +8,9 @@ import {
 } from "@/lib/content";
 import { DIFFICULTY_META, DIFFICULTY_ORDER } from "@/lib/types";
 import { DailyTriple } from "@/components/daily/DailyTriple";
+import { EmergencyMissionPanel } from "@/components/mission/EmergencyMissionPanel";
+
+export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   const now = new Date();
@@ -205,8 +209,10 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* 緊急ミッション — placeholder（非表示） */}
-        <div className="hidden" aria-hidden="true" data-slot="emergency-mission" />
+        {/* 緊急ミッション — ログイン済みユーザーに未クリアミッションがある場合のみ表示 */}
+        <Suspense fallback={null}>
+          <EmergencyMissionPanel />
+        </Suspense>
       </section>
     </div>
   );

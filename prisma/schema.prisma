@@ -101,6 +101,7 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   attempts    ExamAttempt[]
+  missions    EmergencyMission[]
 
   @@index([name])
   @@index([role])
@@ -131,6 +132,25 @@ model ExamAttempt {
   @@index([sessionId])
   @@index([createdAt])
   @@index([userId])
+}
+
+/// 師範が特定の生徒に発令する「緊急ミッション」。
+/// problemSlug は静的データの slug を参照（DB Problem との FK は不要）。
+model EmergencyMission {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// 出題する問題の slug（静的データから参照）。
+  problemSlug String
+  /// 師範からの熱いメッセージ。
+  comment     String
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([isCompleted])
+  @@index([createdAt])
 }
 
 model DailyChallenge {

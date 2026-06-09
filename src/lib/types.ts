@@ -3,7 +3,7 @@
 
 export type Difficulty = "A" | "B" | "C" | "D" | "D_PLUS";
 
-export type StepType = "INSIGHT" | "EXPERIMENT" | "HINT" | "SOLUTION";
+export type StepType = "INSIGHT" | "EXPERIMENT" | "HINT" | "SOLUTION" | "GUIDANCE_ANALYSIS";
 
 /** Key into the interactive-lab registry (src/components/graph/LabRenderer). */
 export type GraphKey =
@@ -243,5 +243,10 @@ export const STEP_META: Record<
     label: "厳密な解答",
     hint: "論理を閉じる",
     accent: "var(--neon-magenta)",
+  },
+  GUIDANCE_ANALYSIS: {
+    label: "誘導の意図",
+    hint: "出題者のメタ視点から誘導構造を読む",
+    accent: "var(--neon-violet)",
   },
 };
