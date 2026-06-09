@@ -6,6 +6,7 @@ import { Lock, Unlock, Check, Lightbulb } from "lucide-react";
 import type { ExplanationStep } from "@/lib/types";
 import { STEP_META } from "@/lib/types";
 import { MathText } from "@/components/math/Math";
+import { LessonRenderer } from "@/components/lessons/LessonRenderer";
 import { LessonLink } from "@/components/scaffolding/LessonLink";
 import { useProgress } from "@/hooks/useProgress";
 import { cn } from "@/lib/utils";
@@ -152,9 +153,7 @@ export function LogicSteps({
                           <MathText className="text-sm font-medium text-foreground/90">
                             {step.title}
                           </MathText>
-                          <MathText className="text-sm text-foreground/85">
-                            {step.body}
-                          </MathText>
+                          <LessonRenderer content={step.body} />
                         </div>
                       </motion.div>
                     )}
@@ -241,9 +240,7 @@ export function LogicSteps({
                         <MathText className="text-sm font-medium text-foreground/90">
                           {step.title}
                         </MathText>
-                        <MathText className="text-sm text-foreground/85">
-                          {step.body}
-                        </MathText>
+                        <LessonRenderer content={step.body} />
                         {step.type === "EXPERIMENT" && labSlot}
                       </div>
                     </motion.div>
