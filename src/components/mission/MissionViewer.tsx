@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Flame, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Flame, ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
 import { MathText } from "@/components/math/Math";
 import { LogicSteps } from "@/components/scaffolding/LogicSteps";
 import { LabRenderer } from "@/components/graph/LabRenderer";
@@ -23,14 +23,24 @@ interface Props {
 export function MissionViewer({ problem, mission }: Props) {
   const [commentVisible, setCommentVisible] = useState(mission.isCompleted);
   const [completed, setCompleted] = useState(mission.isCompleted);
+  const [saveError, setSaveError] = useState(false);
   const completedRef = useRef(mission.isCompleted);
 
   const handleAllRevealed = useCallback(async () => {
     setCommentVisible(true);
     if (!completedRef.current) {
-      completedRef.current = true;
-      setCompleted(true);
-      await fetch(`/api/mission/${mission.id}`, { method: "PATCH" }).catch(() => {});
+      try {
+        const res = await fetch(`/api/mission/${mission.id}`, {
+          method: "PATCH",
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        completedRef.current = true;
+        setCompleted(true);
+        setSaveError(false);
+      } catch {
+        setSaveError(true);
+      }
     }
   }, [mission.id]);
 
@@ -66,7 +76,7 @@ export function MissionViewer({ problem, mission }: Props) {
         }}
       >
         <LogicSteps
-          slug={`mission-${mission.id}`}
+          slug={`ms-${mission.id.slice(0, 8)}`}
           steps={problem.steps}
           onAllRevealed={handleAllRevealed}
           labSlot={
@@ -124,6 +134,13 @@ export function MissionViewer({ problem, mission }: Props) {
                 style={{ color: "oklch(0.7 0.15 150)" }}>
                 <CheckCircle2 className="h-4 w-4" />
                 ミッション完了 — 記録済み
+              </div>
+            )}
+            {saveError && (
+              <div className="mt-5 flex items-center gap-2 font-mono text-xs"
+                style={{ color: "oklch(0.65 0.18 25)" }}>
+                <AlertCircle className="h-4 w-4" />
+                記録に失敗しました — 再度ステップを開いてください
               </div>
             )}
           </motion.div>

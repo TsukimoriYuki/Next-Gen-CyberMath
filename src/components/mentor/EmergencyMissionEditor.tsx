@@ -13,6 +13,7 @@ import {
   Clock,
 } from "lucide-react";
 import type { Problem } from "@/lib/types";
+import { difficultyColor } from "@/lib/utils";
 
 interface StudentRow {
   id: string;
@@ -32,17 +33,6 @@ interface MissionRow {
 interface Props {
   students: StudentRow[];
   allProblems: Pick<Problem, "slug" | "title" | "unit" | "difficulty" | "tags">[];
-}
-
-function diffColor(d: string): string {
-  const map: Record<string, string> = {
-    A: "var(--neon-lime)",
-    B: "var(--neon-cyan)",
-    C: "var(--neon-violet)",
-    D: "var(--neon-amber)",
-    D_PLUS: "var(--neon-magenta)",
-  };
-  return map[d] ?? "var(--muted-foreground)";
 }
 
 export function EmergencyMissionEditor({ students, allProblems }: Props) {
@@ -177,14 +167,14 @@ export function EmergencyMissionEditor({ students, allProblems }: Props) {
             <div
               className="mb-2 flex items-center justify-between rounded-xl border px-3 py-2.5 text-sm"
               style={{
-                borderColor: `color-mix(in oklch, ${diffColor(selectedProblem.difficulty)} 40%, transparent)`,
-                background: `color-mix(in oklch, ${diffColor(selectedProblem.difficulty)} 6%, transparent)`,
+                borderColor: `color-mix(in oklch, ${difficultyColor(selectedProblem.difficulty)} 40%, transparent)`,
+                background: `color-mix(in oklch, ${difficultyColor(selectedProblem.difficulty)} 6%, transparent)`,
               }}
             >
               <span>
                 <span
                   className="mr-2 font-mono text-xs font-bold"
-                  style={{ color: diffColor(selectedProblem.difficulty) }}
+                  style={{ color: difficultyColor(selectedProblem.difficulty) }}
                 >
                   {selectedProblem.difficulty}
                 </span>
@@ -218,7 +208,7 @@ export function EmergencyMissionEditor({ students, allProblems }: Props) {
                 onClick={() => { setProblemSlug(p.slug); setProblemQuery(""); }}
                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-secondary/60"
               >
-                <span className="shrink-0 font-mono text-xs font-bold" style={{ color: diffColor(p.difficulty) }}>
+                <span className="shrink-0 font-mono text-xs font-bold" style={{ color: difficultyColor(p.difficulty) }}>
                   {p.difficulty}
                 </span>
                 <span className="min-w-0 flex-1 truncate font-medium text-foreground">{p.title}</span>

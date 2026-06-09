@@ -4,18 +4,43 @@ import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layer
 import {
   getAllProblems,
   getChallengeProblems,
+  getProblem,
   formatDateJP,
 } from "@/lib/content";
-import { DIFFICULTY_META, DIFFICULTY_ORDER } from "@/lib/types";
+import { DIFFICULTY_META, DIFFICULTY_ORDER, type Problem } from "@/lib/types";
 import { DailyTriple } from "@/components/daily/DailyTriple";
 import { EmergencyMissionPanel } from "@/components/mission/EmergencyMissionPanel";
 import { MessageBar } from "@/components/messages/MessageBar";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export default function HomePage() {
+async function getDailyProblems(now: Date): Promise<Problem[]> {
+  // UTC midnight of today — must match how DailyChallengeEditor saves dates.
+  const todayUTC = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+  );
+  try {
+    const challenges = await prisma.dailyChallenge.findMany({
+      where: { date: todayUTC },
+      include: { problem: { select: { slug: true } } },
+      orderBy: { slot: "asc" },
+    });
+    if (challenges.length === 3) {
+      const problems = challenges
+        .map((c) => getProblem(c.problem.slug))
+        .filter((p): p is Problem => p !== undefined);
+      if (problems.length === 3) return problems;
+    }
+  } catch {
+    // DB unavailable — fall through to static fallback
+  }
+  return getChallengeProblems(now);
+}
+
+export default async function HomePage() {
   const now = new Date();
-  const daily = getChallengeProblems(now);
+  const daily = await getDailyProblems(now);
   const all = getAllProblems();
 
   return (

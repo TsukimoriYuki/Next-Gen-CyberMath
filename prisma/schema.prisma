@@ -13,7 +13,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  
+  // url は prisma.config.ts の @prisma/adapter-pg で供給されるため省略。
+  // Prisma 7 driver-adapter 構成では schema への url 記述は不要。
 }
 
 model Problem {
@@ -56,7 +57,7 @@ model ExplanationStep {
   id        String   @id @default(cuid())
   problemId String
   problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
-  /// ステップ種別。"INSIGHT" | "EXPERIMENT" | "HINT" | "SOLUTION"
+  /// ステップ種別。"INSIGHT" | "EXPERIMENT" | "HINT" | "SOLUTION" | "GUIDANCE_ANALYSIS"
   type      String
   /// 同一問題内での開示順 (0 始まり)。
   order     Int
@@ -100,9 +101,10 @@ model User {
   lastLoginAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  attempts    ExamAttempt[]
-  missions    EmergencyMission[]
-  messages    Message[]          @relation("ReceivedMessages")
+  attempts      ExamAttempt[]
+  missions      EmergencyMission[]
+  messages      Message[]          @relation("ReceivedMessages")
+  sentMessages  Message[]          @relation("SentMessages")
 
   @@index([name])
   @@index([role])
@@ -156,13 +158,18 @@ model EmergencyMission {
 
 /// 師範から生徒（または全員）へのメッセージ。
 /// receiverId が null のときは全員への一斉送信。
+/// senderId は送信者 User の id。MENTOR 専用 API で作成されるが、
+/// 複数師範対応・監査のためフィールドとして保持する。
 model Message {
   id         String   @id @default(cuid())
+  senderId   String?
+  sender     User?    @relation("SentMessages", fields: [senderId], references: [id], onDelete: SetNull)
   receiverId String?
   receiver   User?    @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
   content    String
   createdAt  DateTime @default(now())
 
+  @@index([senderId])
   @@index([receiverId])
   @@index([createdAt])
 }

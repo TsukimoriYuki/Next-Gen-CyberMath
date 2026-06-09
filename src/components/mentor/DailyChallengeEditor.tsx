@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { CalendarDays, Save, Loader2, CheckCircle2, XCircle, Search } from "lucide-react";
 import type { Problem } from "@/lib/types";
+import { difficultyColor } from "@/lib/utils";
 
 interface SlotEntry {
   slot: number;
@@ -15,17 +16,6 @@ interface DailyChallengeEditorProps {
 
 function today(): string {
   return new Date().toISOString().slice(0, 10);
-}
-
-function diffColor(d: string): string {
-  const map: Record<string, string> = {
-    A: "var(--neon-lime)",
-    B: "var(--neon-cyan)",
-    C: "var(--neon-violet)",
-    D: "var(--neon-amber)",
-    S: "var(--neon-magenta)",
-  };
-  return map[d] ?? "var(--muted-foreground)";
 }
 
 export function DailyChallengeEditor({ allProblems }: DailyChallengeEditorProps) {
@@ -146,14 +136,14 @@ export function DailyChallengeEditor({ allProblems }: DailyChallengeEditorProps)
                 <div
                   className="mb-3 flex items-center justify-between rounded-xl border px-3 py-2.5 text-sm"
                   style={{
-                    borderColor: `color-mix(in oklch, ${diffColor(selected.difficulty)} 40%, transparent)`,
-                    background: `color-mix(in oklch, ${diffColor(selected.difficulty)} 6%, transparent)`,
+                    borderColor: `color-mix(in oklch, ${difficultyColor(selected.difficulty)} 40%, transparent)`,
+                    background: `color-mix(in oklch, ${difficultyColor(selected.difficulty)} 6%, transparent)`,
                   }}
                 >
                   <div className="min-w-0">
                     <span
                       className="mr-2 font-mono text-xs font-bold"
-                      style={{ color: diffColor(selected.difficulty) }}
+                      style={{ color: difficultyColor(selected.difficulty) }}
                     >
                       {selected.difficulty}
                     </span>
@@ -212,7 +202,7 @@ export function DailyChallengeEditor({ allProblems }: DailyChallengeEditorProps)
                   >
                     <span
                       className="shrink-0 font-mono text-xs font-bold"
-                      style={{ color: diffColor(p.difficulty) }}
+                      style={{ color: difficultyColor(p.difficulty) }}
                     >
                       {p.difficulty}
                     </span>

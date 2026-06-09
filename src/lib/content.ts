@@ -234,20 +234,24 @@ export function getDailyTriple(date: Date = new Date()): Problem[] {
   // Walk with a day-dependent stride that is coprime-ish to n to spread picks.
   let idx = seed % n;
   const stride = 1 + (seed % Math.max(1, n - 1));
+  let iters = 0;
   while (picks.length < count) {
     if (!used.has(idx)) {
       used.add(idx);
       picks.push(pool[idx]);
     }
     idx = (idx + stride) % n;
-    // Guard against a stride that cycles; fall back to linear scan.
-    if (used.size < picks.length + 1 && picks.length < count) {
+    iters++;
+    // Guard: if we've stepped through all n indices without finding enough picks,
+    // the stride cycles through a subset that is already exhausted — fall back.
+    if (iters > n && picks.length < count) {
       for (let k = 0; k < n && picks.length < count; k++) {
         if (!used.has(k)) {
           used.add(k);
           picks.push(pool[k]);
         }
       }
+      break;
     }
   }
   return picks;

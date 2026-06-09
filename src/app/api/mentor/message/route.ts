@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   const receiverId: string | null = body.receiverId || null;
 
   const message = await prisma.message.create({
-    data: { receiverId, content: content.trim() },
+    data: { senderId: session.sub, receiverId, content: content.trim() },
   });
   return NextResponse.json(message, { status: 201 });
 }
@@ -28,7 +28,10 @@ export async function GET() {
   const messages = await prisma.message.findMany({
     orderBy: { createdAt: "desc" },
     take: 30,
-    include: { receiver: { select: { name: true } } },
+    include: {
+      sender: { select: { name: true } },
+      receiver: { select: { name: true } },
+    },
   });
   return NextResponse.json(messages);
 }
