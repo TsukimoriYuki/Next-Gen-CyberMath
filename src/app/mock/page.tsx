@@ -28,6 +28,7 @@ import {
   type Preset,
 } from "@/lib/exam-taxonomy";
 import { MathText } from "@/components/math/Math";
+import { LessonRenderer } from "@/components/lessons/LessonRenderer";
 import { DifficultyBadge } from "@/components/shell/DifficultyBadge";
 import { TagChip } from "@/components/shell/TagChip";
 import { MockTimer } from "@/components/mock/MockTimer";
@@ -545,7 +546,7 @@ export default function MockExamPage() {
                     厳密解を開く
                   </summary>
                   <div className="mt-3">
-                    <MathText className="text-sm text-foreground/85">{sol.body}</MathText>
+                    <LessonRenderer content={sol.body} />
                   </div>
                 </details>
               )}

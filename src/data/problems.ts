@@ -1,6 +1,7 @@
 import type { Problem } from "@/lib/types";
 import { PROBLEM_TAGS } from "./problem-tags";
 import { DOJO_PROBLEMS } from "./dojo";
+import { EXPANSION_PACK_3 } from "./expansion-pack-3";
 import { numbersAndExpressions } from "./units/numbers-and-expressions";
 import { setsAndLogic } from "./units/sets-and-logic";
 import { quadraticFunctions } from "./units/quadratic-functions";
@@ -519,6 +520,8 @@ const RAW_PROBLEMS: Problem[] = [
   ...mockOnlyProblems,
   // 過去問道場。通常導線にも表示可（isMockOnly なし）。
   ...DOJO_PROBLEMS,
+  // 拡張パック3：手薄領域の補強（複素数平面・数列・空間ベクトル・微積分・確率・三角関数）
+  ...EXPANSION_PACK_3,
 ];
 
 // 概念タグをマージ（インライン tags ∪ problem-tags.ts のマップ、重複除去）。

@@ -66,8 +66,17 @@ async function main() {
 
   // Seed Concept Lessons.
   for (const l of LESSONS) {
-    await prisma.lesson.create({
-      data: {
+    await prisma.lesson.upsert({
+      where: { slug: l.slug },
+      update: {
+        title: l.title,
+        unit: l.unit,
+        summary: l.summary ?? null,
+        content: l.content,
+        relatedProblemSlugs: l.relatedProblemSlugs ?? [],
+        tags: l.tags ?? [],
+      },
+      create: {
         slug: l.slug,
         title: l.title,
         unit: l.unit,

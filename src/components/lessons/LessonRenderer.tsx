@@ -6,11 +6,19 @@ import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 import type { Components } from "react-markdown";
 import { LabRenderer } from "@/components/graph/LabRenderer";
+import { WhyPopover } from "@/components/scaffolding/WhyPopover";
 import type { GraphKey } from "@/lib/types";
 
 // Lab embeds are authored as a line token: @@lab:<graphKey>@@  (optional |caption).
 // We split on it and render <LabRenderer> between the Markdown segments.
 const LAB_TOKEN = /@@lab:([a-z0-9-]+)(?:\|[^@]*)?@@/g;
+
+// @@why:key|label@@ → [label](#why-key) so the `a` component can render <WhyPopover>.
+const WHY_TOKEN = /@@why:([a-z0-9-]+)\|([^@]+)@@/g;
+
+function preprocessWhy(src: string): string {
+  return src.replace(WHY_TOKEN, (_, key, label) => `[${label}](#why-${key})`);
+}
 
 const mdComponents: Components = {
   h2: ({ children }) => (
@@ -47,14 +55,21 @@ const mdComponents: Components = {
   strong: ({ children }) => (
     <strong className="font-semibold text-neon-cyan">{children}</strong>
   ),
-  a: ({ children, href }) => (
-    <a
-      href={href}
-      className="text-neon-magenta underline decoration-neon-magenta/40 underline-offset-2 hover:decoration-neon-magenta"
-    >
-      {children}
-    </a>
-  ),
+  a: ({ children, href }) => {
+    if (href?.startsWith("#why-")) {
+      return (
+        <WhyPopover noteKey={href.slice(5)} label={String(children)} />
+      );
+    }
+    return (
+      <a
+        href={href}
+        className="text-neon-magenta underline decoration-neon-magenta/40 underline-offset-2 hover:decoration-neon-magenta"
+      >
+        {children}
+      </a>
+    );
+  },
   hr: () => <hr className="my-8 border-border/60" />,
   code: ({ children }) => (
     <code className="rounded bg-secondary/60 px-1.5 py-0.5 font-mono text-sm text-neon-lime">
@@ -70,7 +85,7 @@ function MarkdownBlock({ children }: { children: string }) {
       rehypePlugins={[rehypeKatex]}
       components={mdComponents}
     >
-      {children}
+      {preprocessWhy(children)}
     </Markdown>
   );
 }

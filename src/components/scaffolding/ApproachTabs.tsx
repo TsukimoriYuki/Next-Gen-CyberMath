@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import type { Approach } from "@/lib/types";
 import { MathText } from "@/components/math/Math";
+import { LessonRenderer } from "@/components/lessons/LessonRenderer";
 
 /**
  * 1 問に複数の解法がある場合にタブ切替で表示するコンポーネント。
@@ -58,7 +59,7 @@ export function ApproachTabs({ approaches }: { approaches: Approach[] }) {
               — {current.tagline}
             </p>
           )}
-          <MathText className="text-sm text-foreground/85">{current.body}</MathText>
+          <LessonRenderer content={current.body} />
         </motion.div>
       </AnimatePresence>
     </div>
