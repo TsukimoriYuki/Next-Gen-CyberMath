@@ -354,6 +354,101 @@ $$\lim_{n\to\infty}a_n=\frac13.$$
       },
     ],
   },
+  // ────── 授業「漸化式の本質」試し斬り問題 ──────────────────────────────────
+  {
+    slug: "recurrence-general-term",
+    title: "3項間漸化式と重根 ― 一般項の完全攻略",
+    unit: "数列",
+    difficulty: "D_PLUS",
+    tagline: "重根が現れたとき、解の形はどう変わるか",
+    hasGraph: false,
+    relatedLessonSlug: "recurrence-characteristic-equation",
+    tags: ["漸化式", "特性方程式", "重根", "一般項"],
+    backgroundTag: "重根漸化式",
+    statement: r`$a_1=0,\ a_2=2,\ a_{n+2}=4a_{n+1}-4a_n\ (n\geq1)$ で定まる数列の一般項 $a_n$ を求めよ。`,
+    steps: [
+      {
+        type: "INSIGHT",
+        order: 0,
+        title: "着眼点 ― 特性方程式を立て、重根の匂いを嗅げ",
+        body: r`3項間線形漸化式 $a_{n+2} = pa_{n+1} + qa_n$ を見た瞬間、**特性方程式 $x^2 - px - q = 0$** を立てるのが定石だ。
+
+今回は
+$$x^2 - 4x + 4 = 0.$$
+
+判別式 $D = 16 - 16 = 0$。**重根だ。** これが第一の分岐点。
+
+> **極意との接続：** 相異なる2根 $\alpha \neq \beta$ なら $a_n = A\alpha^n + B\beta^n$。しかし重根 $\alpha = \beta$ のときは **$a_n = (An+B)\alpha^n$** という別の形が必要になる。この「$n$」の出現こそが重根ケースの本質だ。`,
+      },
+      {
+        type: "EXPERIMENT",
+        order: 1,
+        title: "実験 ― なぜ重根のとき $n\cdot\alpha^n$ を加えるのか",
+        body: r`$a_n = C \cdot 2^n$（$n$ なし）だけでは初期条件を2つ同時に満たせない。
+
+$a_1 = 2C = 0 \Rightarrow C = 0$ となり、$a_2 = 4C = 0 \neq 2$ で矛盾する。
+
+2根が重なって「独立な解が1個だけ」になるためだ。そこで $n\cdot\alpha^n$ 型の解を**第2の独立解**として追加する：
+
+$$a_n = A\cdot 2^n + B\cdot n\cdot 2^n = (An+B)\cdot 2^n$$`,
+      },
+      {
+        type: "HINT",
+        order: 2,
+        title: "ヒント ― 初期条件を代入して連立",
+        body: r`$a_n = (An+B)\cdot 2^n$ に $n=1,\ 2$ を代入する。
+
+$$a_1 = (A+B)\cdot 2 = 0 \implies A+B=0$$
+$$a_2 = (2A+B)\cdot 4 = 2 \implies 2A+B=\frac{1}{2}$$
+
+2式の差から $A$ が決まる。`,
+      },
+      {
+        type: "SOLUTION",
+        order: 3,
+        title: "厳密な解答",
+        body: r`**特性方程式の設定：**
+
+$a_{n+2} = 4a_{n+1} - 4a_n$ の特性方程式は
+$$x^2 - 4x + 4 = (x-2)^2 = 0.$$
+重根 $x = 2$ を持つので、一般解は $a_n = (An+B)\cdot 2^n$。
+
+**初期条件から $A,\ B$ を決定：**
+
+$$\begin{cases} (A+B)\cdot 2 = 0 \\ (2A+B)\cdot 4 = 2 \end{cases} \implies \begin{cases} A+B=0 \\ 2A+B=\dfrac{1}{2} \end{cases}$$
+
+辺々引いて $A = \dfrac{1}{2}$、したがって $B = -\dfrac{1}{2}$。
+
+**一般項：**
+
+$$a_n = \left(\frac{n}{2}-\frac{1}{2}\right)\cdot 2^n = \frac{n-1}{2}\cdot 2^n = (n-1)\cdot 2^{n-1}$$
+
+**検証：**
+
+$a_1 = 0\cdot1 = 0$ ✓、$a_2 = 1\cdot2 = 2$ ✓。
+$a_3 = 4\cdot2 - 4\cdot0 = 8$、$(3-1)\cdot4 = 8$ ✓。
+
+$$\boxed{a_n = (n-1)\cdot 2^{n-1}}$$`,
+      },
+      {
+        type: "GUIDANCE_ANALYSIS",
+        order: 4,
+        title: "出題者のメタ視点 ― 重根が仕掛ける二重の罠",
+        body: r`この問題の設定には**2段階の罠**が隠れている。
+
+**罠1：「重根に気づけるか」**
+
+$4a_{n+1} - 4a_n$ という係数を見て特性方程式 $(x-2)^2 = 0$ の重根を即認識できるか。気づけなかった受験生は $a_n = A\cdot 2^n$ しか持てず、初期条件を満たせない矛盾に陥る。
+
+**罠2：「なぜ $n\cdot\alpha^n$ を加えるか」**
+
+重根の場合に $A\alpha^n + B\alpha^n = (A+B)\alpha^n$ として定数が1つに縮退することを、**自分の言葉で説明できるか**。記述式では「重根のため $(An+B)\cdot 2^n$ とおく」だけでなく、**1文添えて独立性を示した答案が満点**をとる。
+
+> **出題頻度のメタ知識：** 旧帝大では「重根 → $(n-1)\cdot 2^{n-1}$」型が10年に1回、「初項 $0$ → 比の扱いに注意」型が医学部頻出。係数が $4a_{n+1}-4a_n$ のように「同じ絶対値」を持つ形は重根のサインだ。`,
+      },
+    ],
+  },
+
   {
     slug: "three-term-recurrence",
     title: "隣接3項間漸化式（特性方程式）",

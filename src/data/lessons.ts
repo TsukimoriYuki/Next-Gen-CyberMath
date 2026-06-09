@@ -1,5 +1,6 @@
 import type { Lesson } from "@/lib/types";
 import { AM_GM_INEQUALITY_LESSON } from "./lessons/am-gm-inequality";
+import { RECURRENCE_LESSON } from "./lessons/recurrence-characteristic-equation";
 
 // Concept Lessons —「めっちゃわかりやすい授業」。
 // content は KaTeX 対応 Markdown。JSXGraph ラボは、行トークン
@@ -10,6 +11,7 @@ const r = String.raw;
 
 export const LESSONS: Lesson[] = [
   AM_GM_INEQUALITY_LESSON,
+  RECURRENCE_LESSON,
   {
     slug: "stars-and-bars",
     title: "重複組合せの魔法 ― ○と仕切り",
