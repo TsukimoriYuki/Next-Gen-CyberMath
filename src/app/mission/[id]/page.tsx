@@ -73,10 +73,7 @@ export default async function MissionPage({
         {/* Back link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm transition-colors"
-          style={{ color: "oklch(0.6 0.08 265)" }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "oklch(0.75 0.18 350)")}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "oklch(0.6 0.08 265)")}
+          className="inline-flex items-center gap-1.5 text-sm transition-colors [color:oklch(0.6_0.08_265)] hover:[color:oklch(0.75_0.18_350)]"
         >
           <ArrowLeft className="h-4 w-4" />
           ホームへ戻る

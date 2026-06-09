@@ -19,7 +19,7 @@ export function MessageEditor({ students }: { students: Student[] }) {
   const [messages, setMessages] = useState<SentMessage[]>([]);
 
   const loadMessages = useCallback(async () => {
-    const res = await fetch("/api/mentor/message");
+    const res = await fetch("/api/mentor/message", { credentials: "include" });
     if (res.ok) setMessages(await res.json());
   }, []);
 
@@ -33,6 +33,7 @@ export function MessageEditor({ students }: { students: Student[] }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ receiverId: receiverId || null, content }),
+        credentials: "include",
       });
       if (res.ok) {
         setContent("");

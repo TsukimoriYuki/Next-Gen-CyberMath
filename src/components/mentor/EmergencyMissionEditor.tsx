@@ -59,7 +59,7 @@ export function EmergencyMissionEditor({ students, allProblems }: Props) {
   const loadMissions = useCallback(async () => {
     setMissionsLoading(true);
     try {
-      const res = await fetch("/api/mentor/mission");
+      const res = await fetch("/api/mentor/mission", { credentials: "include" });
       const data = await res.json();
       if (data.ok) setMissions(data.missions);
     } catch {
@@ -101,6 +101,7 @@ export function EmergencyMissionEditor({ students, allProblems }: Props) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, problemSlug, comment }),
+        credentials: "include",
       });
       const data = await res.json();
       if (data.ok) {

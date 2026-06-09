@@ -41,7 +41,7 @@ export function DailyChallengeEditor({ allProblems }: DailyChallengeEditorProps)
     setFetching(true);
     setStatus("idle");
     try {
-      const res = await fetch(`/api/mentor/daily?date=${d}`);
+      const res = await fetch(`/api/mentor/daily?date=${d}`, { credentials: "include" });
       const data = await res.json();
       if (data.ok && Array.isArray(data.challenges)) {
         const next: [string, string, string] = ["", "", ""];
@@ -77,6 +77,7 @@ export function DailyChallengeEditor({ allProblems }: DailyChallengeEditorProps)
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date, slugs }),
+        credentials: "include",
       });
       const data = await res.json();
       if (data.ok) {
