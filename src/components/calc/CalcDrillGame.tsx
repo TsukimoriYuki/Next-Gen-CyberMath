@@ -6,22 +6,33 @@ import { Timer, CheckCircle, XCircle, RotateCcw, Zap, ChevronRight, Trophy, Targ
 import type { CalcDrillProblem, DrillCategory, DrillDifficulty } from "@/data/calc-drill";
 import { CALC_DRILL_PROBLEMS, DRILL_CATEGORIES } from "@/data/calc-drill";
 
-// KaTeX (動的 import でクライアント専用)
-import "katex/dist/katex.min.css";
 import katex from "katex";
 
-function KaTeX({ tex }: { tex: string }) {
-  const html = useMemo(() => {
-    try {
-      return katex.renderToString(tex.replace(/^\$|\$$/g, ""), {
-        throwOnError: false,
-        displayMode: tex.startsWith("$$"),
-      });
-    } catch {
-      return tex;
-    }
+// Mixed text + $...$ inline math renderer
+// e.g. "$(x+3)^2$ を展開せよ" → renders math part + plain text correctly
+function InlineMath({ tex }: { tex: string }) {
+  const parts = useMemo(() => {
+    const nodes: React.ReactNode[] = [];
+    // Split keeping $...$ delimiters
+    const segments = tex.split(/(\$[^$]+\$)/g);
+    segments.forEach((seg, i) => {
+      if (seg.startsWith("$") && seg.endsWith("$") && seg.length > 2) {
+        try {
+          const html = katex.renderToString(seg.slice(1, -1), {
+            throwOnError: false,
+            displayMode: false,
+          });
+          nodes.push(<span key={i} dangerouslySetInnerHTML={{ __html: html }} />);
+        } catch {
+          nodes.push(<span key={i}>{seg}</span>);
+        }
+      } else if (seg) {
+        nodes.push(<span key={i}>{seg}</span>);
+      }
+    });
+    return nodes;
   }, [tex]);
-  return <span dangerouslySetInnerHTML={{ __html: html }} />;
+  return <>{parts}</>;
 }
 
 const QUESTION_TIME = 30; // seconds per question
@@ -306,11 +317,11 @@ function QuestionScreen({
         style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}
       >
         <p className="text-lg font-bold text-white leading-relaxed">
-          <KaTeX tex={problem.question} />
+          <InlineMath tex={problem.question} />
         </p>
         {showHint && (
           <p className="mt-3 rounded-xl border border-yellow-500/25 bg-yellow-500/8 p-3 font-mono text-xs text-yellow-300/80">
-            💡 <KaTeX tex={problem.hint} />
+            💡 <InlineMath tex={problem.hint} />
           </p>
         )}
       </div>
@@ -337,7 +348,7 @@ function QuestionScreen({
               style={{ background: bg, border: `1px solid ${border}`, color }}
             >
               <span className="font-mono text-[10px] text-white/30 mr-2">{String.fromCharCode(65 + i)}.</span>
-              <KaTeX tex={opt} />
+              <InlineMath tex={opt} />
             </button>
           );
         })}
@@ -431,13 +442,17 @@ function ResultScreen({
                     <span className="font-mono text-[10px] text-white/25">{r.timeUsed}s</span>
                   </div>
                   <p className="text-sm text-white/70">
-                    <KaTeX tex={r.problem.question} />
+                    <InlineMath tex={r.problem.question} />
                   </p>
                   {!r.correct && (
-                    <p className="mt-1 text-xs text-emerald-400/80">
-                      正解: <KaTeX tex={r.problem.options[r.problem.correctIndex]} />
-                      <span className="ml-2 text-white/30">({r.problem.solution.replace(/\$.*?\$/g, "")})</span>
-                    </p>
+                    <>
+                      <p className="mt-1 text-xs text-emerald-400/80">
+                        正解: <InlineMath tex={r.problem.options[r.problem.correctIndex]} />
+                      </p>
+                      <p className="mt-0.5 text-xs text-white/30">
+                        <InlineMath tex={r.problem.solution} />
+                      </p>
+                    </>
                   )}
                 </div>
               </div>

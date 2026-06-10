@@ -179,12 +179,12 @@ function FlipCard({ card, isFlipped }: { card: VocabCard; isFlipped: boolean }) 
             {meta.label} · {card.pos} · {card.level}
           </span>
           <p
-            className="font-display text-4xl font-extrabold tracking-tight"
-            style={{ color: "#fff" }}
+            className="font-sans text-4xl font-bold"
+            style={{ color: "#fff", letterSpacing: "0.04em" }}
           >
             {card.word}
           </p>
-          <p className="font-mono text-sm text-white/35">{card.pronunciation}</p>
+          <p className="font-sans text-sm text-white/45">{card.pronunciation}</p>
           <p className="mt-4 font-mono text-xs text-white/25 animate-pulse">
             タップして意味を確認
           </p>
@@ -211,15 +211,15 @@ function FlipCard({ card, isFlipped }: { card: VocabCard; isFlipped: boolean }) 
           }}
         >
           <p
-            className="font-display text-2xl font-bold"
+            className="font-sans text-xl font-bold leading-snug"
             style={{ color: meta.accent }}
           >
             {card.meaning}
           </p>
-          <p className="mt-1 text-sm leading-relaxed text-white/80 italic">
+          <p className="mt-2 font-sans text-sm leading-relaxed text-white/80 italic">
             &ldquo;{card.example}&rdquo;
           </p>
-          <p className="text-xs leading-relaxed text-white/45">{card.exampleJa}</p>
+          <p className="mt-1 font-sans text-xs leading-relaxed text-white/45">{card.exampleJa}</p>
         </div>
       </div>
     </div>
@@ -389,7 +389,7 @@ function ResultScreen({
                   }}
                 >
                   <div className="min-w-0">
-                    <span className="font-mono text-sm font-bold text-white">
+                    <span className="font-sans text-sm font-bold text-white">
                       {c.word}
                     </span>
                     <span className="ml-2 font-mono text-[10px] text-white/40">
