@@ -34,7 +34,7 @@ export async function SiteHeader() {
 
           {/* マイページ */}
           <Link
-            href="/mock/history"
+            href="/mypage"
             className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan"
           >
             <LineChart className="h-3.5 w-3.5" />
