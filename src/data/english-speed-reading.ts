@@ -1,8 +1,10 @@
 import type { SpeedReadingProblem } from "@/lib/english-types";
 import { SPEED_READING_PACK_1 } from "./english-speed-reading-pack-1";
+import { SPEED_READING_PACK_2 } from "./english-speed-reading-pack-2";
 
 export const SPEED_READING_PROBLEMS: SpeedReadingProblem[] = [
   ...SPEED_READING_PACK_1,
+  ...SPEED_READING_PACK_2,
   // ────────────────────────────────────────────────────────────────────────
   // 問題 1: 共通テストレベル / AIと環境問題 / 約130語 / 60秒
   // ────────────────────────────────────────────────────────────────────────

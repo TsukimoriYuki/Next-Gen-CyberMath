@@ -1,6 +1,8 @@
 import type { MultiSourceProblem } from "@/lib/english-types";
+import { MULTI_SOURCE_PACK_1 } from "./english-multisource-pack-1";
 
 export const MULTI_SOURCE_PROBLEMS: MultiSourceProblem[] = [
+  ...MULTI_SOURCE_PACK_1,
   // ────────────────────────────────────────────────────────────────────────
   // 問題 1: 共通テストレベル / 海外大学サマープログラム / 3資料・3問
   // Source A: コース一覧表 / Source B: 割引・注意事項 / Source C: 学生メール
