@@ -75,3 +75,31 @@ export interface ComprehensionProblem {
   questions: ComprehensionQuestion[];
   tags: string[];
 }
+
+// ── Multi-Source (マルチソース情報照合) types ──────────────────────────────
+
+export type SourceType = "TEXT" | "TABLE" | "BULLETS";
+
+/** 資料ブロック（discriminated union で content の型を確定） */
+export type SourceBlock =
+  | { id: string; type: "TEXT";    title: string; content: string     }
+  | { id: string; type: "TABLE";   title: string; content: string[][] }
+  | { id: string; type: "BULLETS"; title: string; content: string[]   };
+
+export interface MultiSourceQuestion {
+  questionText: string;
+  options: string[];
+  correctAnswerIndex: number;
+  explanation: string;
+  /** 解説用クロスリファレンス（例: ["Source A", "Source C"]） */
+  crossReferences?: string[];
+}
+
+export interface MultiSourceProblem {
+  id: string;
+  title: string;
+  level: EnglishLevel;
+  sources: SourceBlock[];
+  questions: MultiSourceQuestion[];
+  tags: string[];
+}

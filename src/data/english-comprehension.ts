@@ -1,6 +1,8 @@
 import type { ComprehensionProblem } from "@/lib/english-types";
+import { COMPREHENSION_PACK_1 } from "./english-comprehension-pack-1";
 
 export const COMPREHENSION_PROBLEMS: ComprehensionProblem[] = [
+  ...COMPREHENSION_PACK_1,
   // ────────────────────────────────────────────────────────────────────────
   // 問題 1: 私立大学レベル / 言語とテクノロジー / 約190語
   // ────────────────────────────────────────────────────────────────────────

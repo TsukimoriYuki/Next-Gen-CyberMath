@@ -1,10 +1,48 @@
-import React from "react";
-import Link from "next/link";
-import { ChevronLeft, ArrowRight, AlignLeft, FileText } from "lucide-react";
-import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
-import { ENGLISH_LEVEL_META } from "@/lib/english-types";
+"use client";
 
-export default function ComprehensionListPage() {
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ChevronLeft, AlignLeft, Zap, Lock } from "lucide-react";
+import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
+import { ENGLISH_LEVEL_META, type EnglishLevel } from "@/lib/english-types";
+import React from "react";
+
+const LEVELS: { level: EnglishLevel; order: string; tagline: string }[] = [
+  {
+    level: "TEXTBOOK",
+    order: "01",
+    tagline: "教科書レベルの基礎文。精読と構文解析の訓練として。",
+  },
+  {
+    level: "COMMON_TEST",
+    order: "02",
+    tagline: "共通テスト形式。情報を正確かつ丁寧に読み取る。",
+  },
+  {
+    level: "PRIVATE_UNI",
+    order: "03",
+    tagline: "有名私大レベル。論説の構造と語彙を深く解析する。",
+  },
+  {
+    level: "NATIONAL_UNI",
+    order: "04",
+    tagline: "国公立二次・難関大。哲学・抽象論述を精読・解釈する。",
+  },
+];
+
+export default function ComprehensionPage() {
+  const router = useRouter();
+
+  const handleSelect = (level: EnglishLevel) => {
+    const pool = COMPREHENSION_PROBLEMS.filter((p) => p.level === level);
+    if (pool.length === 0) {
+      alert("該当レベルのデータが未実装です。別のレベルを選択してください。");
+      return;
+    }
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    router.push(`/english/comprehension/${pick.id}`);
+  };
+
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Ambient grid */}
@@ -38,7 +76,7 @@ export default function ComprehensionListPage() {
             }}
           >
             <AlignLeft className="h-3.5 w-3.5" />
-            Comprehension
+            Comprehension · Threat Level Select
           </div>
           <h1
             className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
@@ -53,95 +91,116 @@ export default function ComprehensionListPage() {
             精読長文
           </h1>
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/50">
-            本文を手元に置きながら設問に取り組む精読モード。
-            解答後は構文解析ビジュアライザで複文の SVOCM 構造を確認できる。
+            難易度（Threat Level）を選択すると、該当レベルの英文がランダムにアサインされる。
+            本文を手元に置きながら設問に取り組み、構文解析で複文を解体せよ。
           </p>
         </header>
 
-        {/* Problem list */}
-        <div className="grid gap-5 sm:grid-cols-2">
-          {COMPREHENSION_PROBLEMS.map((p) => {
-            const meta = ENGLISH_LEVEL_META[p.level];
+        {/* Level panels */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          {LEVELS.map(({ level, order, tagline }) => {
+            const meta = ENGLISH_LEVEL_META[level];
+            const count = COMPREHENSION_PROBLEMS.filter(
+              (p) => p.level === level
+            ).length;
+            const locked = count === 0;
+
             return (
-              <Link
-                key={p.id}
-                href={`/english/comprehension/${p.id}`}
-                className="group relative block overflow-hidden rounded-2xl transition-all duration-300
-                  hover:[border-color:color-mix(in_srgb,var(--card-accent)_40%,transparent)]
-                  hover:[background:color-mix(in_srgb,var(--card-accent)_5%,transparent)]"
+              <button
+                key={level}
+                type="button"
+                onClick={() => handleSelect(level)}
+                className={`group relative w-full overflow-hidden rounded-2xl text-left transition-all duration-300 focus:outline-none ${
+                  !locked
+                    ? "hover:[border-color:color-mix(in_srgb,var(--level-accent)_50%,transparent)] hover:[background:color-mix(in_srgb,var(--level-accent)_8%,transparent)]"
+                    : ""
+                }`}
                 style={{
-                  "--card-accent": meta.accent,
+                  "--level-accent": meta.accent,
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.08)",
+                  opacity: locked ? 0.52 : 1,
+                  cursor: locked ? "not-allowed" : "pointer",
                 } as React.CSSProperties}
               >
-                {/* Shimmer */}
-                <span
-                  className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
-                  style={{
-                    background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${meta.accent} 8%, transparent), transparent)`,
-                  }}
-                />
+                {/* Shimmer sweep (unlocked only) */}
+                {!locked && (
+                  <span
+                    className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+                    style={{
+                      background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${meta.accent} 8%, transparent), transparent)`,
+                    }}
+                  />
+                )}
 
                 <div className="relative p-6">
-                  {/* Level badge + question count */}
+                  {/* Level number + availability */}
                   <div className="mb-4 flex items-center justify-between">
-                    <span
-                      className="rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold"
-                      style={{
-                        background: `color-mix(in srgb, ${meta.accent} 14%, transparent)`,
-                        border: `1px solid color-mix(in srgb, ${meta.accent} 40%, transparent)`,
-                        color: meta.accent,
-                      }}
-                    >
-                      {meta.label}
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">
+                      LV.{order}
                     </span>
-                    <span className="font-mono text-xs text-white/30">
-                      {p.questions.length}問 · Split Pane
-                    </span>
+                    {locked ? (
+                      <span className="flex items-center gap-1 font-mono text-[10px] text-white/22">
+                        <Lock className="h-3 w-3" />
+                        CLASSIFIED
+                      </span>
+                    ) : (
+                      <span
+                        className="rounded-full px-2.5 py-0.5 font-mono text-[10px] font-semibold"
+                        style={{
+                          background: `color-mix(in srgb, ${meta.accent} 14%, transparent)`,
+                          border: `1px solid color-mix(in srgb, ${meta.accent} 35%, transparent)`,
+                          color: meta.accent,
+                        }}
+                      >
+                        {count}問収録
+                      </span>
+                    )}
                   </div>
 
-                  {/* Icon + title */}
-                  <div className="flex items-start gap-4">
-                    <div
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105"
-                      style={{
-                        background: `color-mix(in srgb, ${meta.accent} 12%, transparent)`,
-                        border: `1px solid color-mix(in srgb, ${meta.accent} 28%, transparent)`,
-                      }}
-                    >
-                      <FileText
-                        className="h-6 w-6"
-                        style={{ color: meta.accent }}
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h2 className="font-display text-base font-bold leading-snug text-white">
-                        {p.title}
-                      </h2>
-                      <p className="mt-1 font-mono text-xs text-white/35">
-                        {p.tags.join(" · ")}
-                      </p>
-                    </div>
-                  </div>
+                  {/* Level title */}
+                  <h2
+                    className="font-display text-2xl font-extrabold sm:text-3xl"
+                    style={{
+                      color: locked ? "rgba(255,255,255,0.2)" : meta.accent,
+                    }}
+                  >
+                    {meta.label}
+                  </h2>
+                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-white/28">
+                    {meta.name} · {meta.wordRange}
+                  </p>
+
+                  {/* Tagline */}
+                  <p className="mt-3 text-xs leading-relaxed text-white/50">
+                    {tagline}
+                  </p>
 
                   {/* CTA */}
                   <div
-                    className="mt-5 inline-flex items-center gap-1.5 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-2.5"
-                    style={{ color: meta.accent }}
+                    className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-3"
+                    style={{
+                      color: locked ? "rgba(255,255,255,0.2)" : meta.accent,
+                    }}
                   >
-                    精読する
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    {locked ? (
+                      "COMING SOON"
+                    ) : (
+                      <>
+                        <Zap className="h-3.5 w-3.5" />
+                        RANDOM MATCH
+                      </>
+                    )}
                   </div>
                 </div>
-              </Link>
+              </button>
             );
           })}
         </div>
 
         {/* Footer */}
         <p className="mt-12 text-center font-mono text-xs tracking-[0.2em] text-white/20 uppercase">
-          More passages coming soon
+          Select threat level · random mission assigned
         </p>
       </div>
     </div>
