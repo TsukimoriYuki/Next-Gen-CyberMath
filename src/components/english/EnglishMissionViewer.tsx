@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
+import { ShieldCheck, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import type {
   SpeedReadingProblem,
   ComprehensionProblem,
@@ -25,22 +25,28 @@ interface Props {
 
 export function EnglishMissionViewer({ mode, problem, mission }: Props) {
   const [completed, setCompleted] = useState(mission.isCompleted);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const completedRef = useRef(mission.isCompleted);
 
   const handleComplete = useCallback(async () => {
+    // completedRef を fetch 前に立てることでダブルクリックの二重送信を防ぐ
     if (completedRef.current) return;
+    completedRef.current = true;
+    setIsSubmitting(true);
     try {
       const res = await fetch(`/api/mission/${mission.id}`, {
         method: "PATCH",
         credentials: "include",
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      completedRef.current = true;
       setCompleted(true);
       setSaveError(false);
     } catch {
+      completedRef.current = false; // 失敗時はガードを戻してリトライ可能にする
       setSaveError(true);
+    } finally {
+      setIsSubmitting(false);
     }
   }, [mission.id]);
 
@@ -117,15 +123,20 @@ export function EnglishMissionViewer({ mode, problem, mission }: Props) {
           ) : (
             <button
               onClick={handleComplete}
-              className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-xs font-semibold transition-all hover:brightness-110"
+              disabled={isSubmitting}
+              className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-xs font-semibold transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
               style={{
                 background: "oklch(0.55 0.22 350 / 0.2)",
                 border: "1px solid oklch(0.55 0.22 350 / 0.45)",
                 color: "oklch(0.8 0.15 350)",
               }}
             >
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              ミッション完了とする
+              {isSubmitting ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <CheckCircle2 className="h-3.5 w-3.5" />
+              )}
+              {isSubmitting ? "送信中..." : "ミッション完了とする"}
             </button>
           )}
           {saveError && (

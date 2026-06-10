@@ -1,6 +1,8 @@
 import type { Problem } from "@/lib/types";
 import { PROBLEM_TAGS } from "./problem-tags";
 import { DOJO_PROBLEMS } from "./dojo";
+import { EXPANSION_PACK_1 } from "./expansion-pack-1";
+import { EXPANSION_PACK_2 } from "./expansion-pack-2";
 import { EXPANSION_PACK_3 } from "./expansion-pack-3";
 import { ABYSS_PACK_1 } from "./abyss-pack-1";
 import { ABYSS_PACK_2 } from "./abyss-pack-2";
@@ -522,6 +524,9 @@ const RAW_PROBLEMS: Problem[] = [
   ...mockOnlyProblems,
   // 過去問道場。通常導線にも表示可（isMockOnly なし）。
   ...DOJO_PROBLEMS,
+  // 拡張パック1・2：数学1A 良問集
+  ...EXPANSION_PACK_1,
+  ...EXPANSION_PACK_2,
   // 拡張パック3：手薄領域の補強（複素数平面・数列・空間ベクトル・微積分・確率・三角関数）
   ...EXPANSION_PACK_3,
   // 特異点プール（ABYSS）：超難問ランダムガチャ専用。通常導線から完全隠蔽。

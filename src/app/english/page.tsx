@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, Timer, BookOpen, Layers } from "lucide-react";
+import { ArrowRight, ChevronLeft, Timer, BookOpen, Layers, PenLine, CreditCard } from "lucide-react";
 
 export default function EnglishHomePage() {
   return (
@@ -294,6 +294,131 @@ export default function EnglishHomePage() {
               </div>
             </div>
           </Link>
+        </div>
+
+        {/* Secondary row — vocab & grammar */}
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
+
+          {/* ── 英単語フラッシュカード ─────────────────────── */}
+          <Link
+            href="/english/vocab"
+            className="group relative block overflow-hidden rounded-2xl transition-all duration-300"
+            style={{
+              background:
+                "linear-gradient(145deg, rgba(16,185,129,0.06) 0%, rgba(0,0,0,0.45) 100%)",
+              border: "1px solid rgba(16,185,129,0.18)",
+            }}
+          >
+            <span
+              className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, rgba(16,185,129,0.08), transparent)",
+              }}
+            />
+            <div className="relative p-6">
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
+                style={{
+                  background: "rgba(16,185,129,0.1)",
+                  border: "1px solid rgba(16,185,129,0.28)",
+                }}
+              >
+                <CreditCard className="h-6 w-6" style={{ color: "#10b981" }} />
+              </div>
+              <div className="mt-4">
+                <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/35">
+                  Mode 04
+                </div>
+                <h2
+                  className="mt-1 font-display text-xl font-extrabold"
+                  style={{
+                    background: "linear-gradient(135deg, #10b981, #6ee7b7)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  英単語フラッシュカード
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-white/45">
+                  頻出語彙 B1〜C1 をフリップカード形式で反復。知ってた / もう一度で定着を加速。
+                </p>
+              </div>
+              <div
+                className="mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-3"
+                style={{
+                  background: "rgba(16,185,129,0.08)",
+                  border: "1px solid rgba(16,185,129,0.28)",
+                  color: "#10b981",
+                }}
+              >
+                暗記開始
+                <ArrowRight className="h-3.5 w-3.5" />
+              </div>
+            </div>
+          </Link>
+
+          {/* ── 文法ドリル ─────────────────────────────────── */}
+          <Link
+            href="/english/grammar"
+            className="group relative block overflow-hidden rounded-2xl transition-all duration-300"
+            style={{
+              background:
+                "linear-gradient(145deg, rgba(167,139,250,0.07) 0%, rgba(0,0,0,0.45) 100%)",
+              border: "1px solid rgba(167,139,250,0.18)",
+            }}
+          >
+            <span
+              className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, rgba(167,139,250,0.08), transparent)",
+              }}
+            />
+            <div className="relative p-6">
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
+                style={{
+                  background: "rgba(167,139,250,0.1)",
+                  border: "1px solid rgba(167,139,250,0.28)",
+                }}
+              >
+                <PenLine className="h-6 w-6" style={{ color: "#a78bfa" }} />
+              </div>
+              <div className="mt-4">
+                <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/35">
+                  Mode 05
+                </div>
+                <h2
+                  className="mt-1 font-display text-xl font-extrabold"
+                  style={{
+                    background: "linear-gradient(135deg, #a78bfa, #c4b5fd)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  文法ドリル
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-white/45">
+                  仮定法・分詞構文・関係詞・倒置・強調構文。入試頻出5項目を4択で集中訓練。
+                </p>
+              </div>
+              <div
+                className="mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-3"
+                style={{
+                  background: "rgba(167,139,250,0.08)",
+                  border: "1px solid rgba(167,139,250,0.28)",
+                  color: "#a78bfa",
+                }}
+              >
+                ドリル開始
+                <ArrowRight className="h-3.5 w-3.5" />
+              </div>
+            </div>
+          </Link>
+
         </div>
       </div>
     </div>

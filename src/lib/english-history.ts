@@ -17,19 +17,47 @@ const HISTORY_EVENT = "cyber-os:english-history-changed";
 
 // ── Write / Read / Clear ──────────────────────────────────────────────────
 
+// Returns a Promise that resolves when the DB write completes (or rejects on failure).
+// localStorage is always saved regardless of the DB result.
 export function saveEnglishAttempt(
   att: Omit<EnglishAttempt, "id" | "completedAt">,
-): void {
-  if (typeof window === "undefined") return;
+): Promise<void> {
+  if (typeof window === "undefined") return Promise.resolve();
   const full: EnglishAttempt = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     completedAt: new Date().toISOString(),
     ...att,
   };
+  // ログイン中の場合は DB にもデュアルライト
+  const dbWrite = fetch("/api/english-attempts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      problemId: att.problemId,
+      mode: att.mode,
+      level: att.level,
+      score: att.score,
+      total: att.total,
+    }),
+  }).then((res) => {
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  });
   const list = readEnglishAttemptsLocal();
   list.unshift(full);
-  window.localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 50)));
+  const trimmed = list.slice(0, 50);
+  try {
+    window.localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+  } catch {
+    // QuotaExceededError — さらに削減してリトライ
+    try {
+      window.localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed.slice(0, 15)));
+    } catch {
+      // ストレージが完全に利用不可のため保存をスキップ
+    }
+  }
   window.dispatchEvent(new Event(HISTORY_EVENT));
+  return dbWrite;
 }
 
 export function readEnglishAttemptsLocal(): EnglishAttempt[] {

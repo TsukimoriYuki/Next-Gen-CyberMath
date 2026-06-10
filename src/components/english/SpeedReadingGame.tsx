@@ -2,22 +2,31 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Timer, CheckCircle, XCircle, RotateCcw, ChevronRight, Eye, EyeOff } from "lucide-react";
+import { Timer, CheckCircle, XCircle, RotateCcw, ChevronRight, Eye, EyeOff, Minus, Plus } from "lucide-react";
 import type { SpeedReadingProblem } from "@/lib/english-types";
 import { ENGLISH_LEVEL_META } from "@/lib/english-types";
 import { saveEnglishAttempt } from "@/lib/english-history";
 
-type Phase = "reading" | "answering" | "result";
+type Phase = "setup" | "reading" | "answering" | "result";
+
+const SPEED_PRESETS = [
+  { label: "ゆっくり +40%", mult: 1.4 },
+  { label: "標準",          mult: 1.0 },
+  { label: "高速 −20%",     mult: 0.8 },
+  { label: "超速 −40%",     mult: 0.6 },
+] as const;
 
 // ── Phase 1: Reading ──────────────────────────────────────────────────────
 function ReadingPhase({
   problem,
+  timeLimit,
   onFinish,
 }: {
   problem: SpeedReadingProblem;
+  timeLimit: number;
   onFinish: () => void;
 }) {
-  const [timeLeft, setTimeLeft] = useState(problem.timeLimit);
+  const [timeLeft, setTimeLeft] = useState(timeLimit);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -34,7 +43,7 @@ function ReadingPhase({
     return () => clearInterval(intervalRef.current!);
   }, [onFinish]);
 
-  const progress = (timeLeft / problem.timeLimit) * 100;
+  const progress = (timeLeft / timeLimit) * 100;
   const isUrgent = timeLeft <= 15;
   const levelMeta = ENGLISH_LEVEL_META[problem.level];
 
@@ -424,9 +433,14 @@ function ResultPhase({
 
 // ── Main exported component ───────────────────────────────────────────────
 export function SpeedReadingGame({ problem }: { problem: SpeedReadingProblem }) {
-  const [phase, setPhase] = useState<Phase>("reading");
+  const [phase, setPhase] = useState<Phase>("setup");
+  const [presetIdx, setPresetIdx] = useState(1); // 1 = 標準
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
+  const [dbSyncError, setDbSyncError] = useState(false);
 
+  const timeLimit = Math.round(problem.timeLimit * SPEED_PRESETS[presetIdx].mult);
+
+  const handleStart = useCallback(() => setPhase("reading"), []);
   const handleReadingFinish = useCallback(() => setPhase("answering"), []);
   const handleAnsweringFinish = useCallback((answers: number[]) => {
     setUserAnswers(answers);
@@ -440,40 +454,43 @@ export function SpeedReadingGame({ problem }: { problem: SpeedReadingProblem }) 
       level: problem.level,
       score,
       total: problem.questions.length,
-    });
+    }).catch(() => setDbSyncError(true));
   }, [problem]);
   const handleRetry = useCallback(() => {
     setUserAnswers([]);
-    setPhase("reading");
+    setDbSyncError(false);
+    setPhase("setup");
   }, []);
 
   const phaseLabel: Record<Phase, string> = {
+    setup: "Setup · 準備",
     reading: "Phase 1 · Reading",
     answering: "Phase 2 · Answering",
     result: "Phase 3 · Result",
   };
-  const phaseIdx: Record<Phase, number> = { reading: 0, answering: 1, result: 2 };
+  const phaseOrder: Phase[] = ["setup", "reading", "answering", "result"];
+  const phaseIdx = phaseOrder.indexOf(phase);
 
   return (
     <div className="mx-auto max-w-2xl">
       {/* Phase stepper */}
       <div className="mb-6 flex items-center gap-2">
-        {(["reading", "answering", "result"] as Phase[]).map((p, i) => (
+        {phaseOrder.map((p, i) => (
           <div key={p} className="flex items-center gap-2">
             <div
               className="flex h-6 w-6 items-center justify-center rounded-full font-mono text-[10px] font-bold transition-colors"
               style={{
-                background: phaseIdx[phase] >= i ? "rgba(16,185,129,0.25)" : "rgba(255,255,255,0.06)",
-                border: phaseIdx[phase] >= i ? "1px solid rgba(16,185,129,0.5)" : "1px solid rgba(255,255,255,0.1)",
-                color: phaseIdx[phase] >= i ? "#10b981" : "rgba(255,255,255,0.3)",
+                background: phaseIdx >= i ? "rgba(16,185,129,0.25)" : "rgba(255,255,255,0.06)",
+                border: phaseIdx >= i ? "1px solid rgba(16,185,129,0.5)" : "1px solid rgba(255,255,255,0.1)",
+                color: phaseIdx >= i ? "#10b981" : "rgba(255,255,255,0.3)",
               }}
             >
-              {i + 1}
+              {i}
             </div>
-            {i < 2 && (
+            {i < phaseOrder.length - 1 && (
               <div
-                className="h-px w-8 transition-colors"
-                style={{ background: phaseIdx[phase] > i ? "rgba(16,185,129,0.4)" : "rgba(255,255,255,0.1)" }}
+                className="h-px w-6 transition-colors"
+                style={{ background: phaseIdx > i ? "rgba(16,185,129,0.4)" : "rgba(255,255,255,0.1)" }}
               />
             )}
           </div>
@@ -481,10 +498,74 @@ export function SpeedReadingGame({ problem }: { problem: SpeedReadingProblem }) 
         <span className="ml-2 font-mono text-xs text-white/40">{phaseLabel[phase]}</span>
       </div>
 
+      {/* DB sync error indicator */}
+      {dbSyncError && (
+        <div className="mb-4 rounded-xl border border-yellow-500/30 bg-yellow-500/8 px-4 py-2 font-mono text-xs text-yellow-400/80">
+          ⚠ サーバーへの同期に失敗しました（ローカルには保存済み）
+        </div>
+      )}
+
       {/* Phase content */}
       <AnimatePresence mode="wait">
+        {phase === "setup" && (
+          <motion.div
+            key="setup"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col gap-5"
+          >
+            {/* Timer preset selector */}
+            <div
+              className="rounded-2xl p-5"
+              style={{
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.1)",
+              }}
+            >
+              <div className="mb-3 flex items-center gap-2">
+                <Timer className="h-4 w-4 text-emerald-400" />
+                <span className="font-mono text-xs text-white/50 uppercase tracking-wider">読解タイマー設定</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {SPEED_PRESETS.map((preset, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setPresetIdx(i)}
+                    className="rounded-xl px-3 py-2.5 text-center font-mono text-xs font-semibold transition-all"
+                    style={{
+                      background: presetIdx === i ? "rgba(16,185,129,0.18)" : "rgba(255,255,255,0.04)",
+                      border: presetIdx === i ? "1px solid rgba(16,185,129,0.45)" : "1px solid rgba(255,255,255,0.08)",
+                      color: presetIdx === i ? "#10b981" : "rgba(255,255,255,0.45)",
+                    }}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-3 text-center font-display text-2xl font-bold text-white/70">
+                制限時間：<span className="text-emerald-400">{Math.floor(timeLimit / 60)}:{String(timeLimit % 60).padStart(2, "0")}</span>
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleStart}
+              className="flex w-full items-center justify-center gap-3 rounded-2xl py-4 font-display text-base font-semibold transition-all"
+              style={{
+                background: "rgba(16,185,129,0.14)",
+                border: "1px solid rgba(16,185,129,0.4)",
+                color: "#10b981",
+              }}
+            >
+              スタート
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </motion.div>
+        )}
         {phase === "reading" && (
-          <ReadingPhase key="reading" problem={problem} onFinish={handleReadingFinish} />
+          <ReadingPhase key="reading" problem={problem} timeLimit={timeLimit} onFinish={handleReadingFinish} />
         )}
         {phase === "answering" && (
           <AnsweringPhase key="answering" problem={problem} onFinish={handleAnsweringFinish} />

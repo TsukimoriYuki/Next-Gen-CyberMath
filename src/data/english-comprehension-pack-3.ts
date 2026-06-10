@@ -657,4 +657,228 @@ C: either correct or incorrect（正しくも間違いでもない）
       },
     ],
   },
+
+  // ────────────────────────────────────────────────────────────────────────
+  // P3-6: 共通テスト / ソーシャルメディアと孤独感 / 約190語
+  // ────────────────────────────────────────────────────────────────────────
+  {
+    id: "social-media-loneliness",
+    title: "Social Media Use and the Paradox of Connected Isolation",
+    level: "COMMON_TEST",
+    tags: ["論説文", "テクノロジー・社会心理学", "共通テスト", "約190語"],
+    passage: `Social media platforms were originally designed to bring people together, enabling communication across vast geographical distances and helping individuals maintain relationships that might otherwise fade. However, a growing body of research suggests that heavy use of these platforms is associated with increased feelings of loneliness and social disconnection rather than the sense of belonging they promise.
+
+One explanation for this paradox lies in the nature of the interactions that social media facilitates. Unlike face-to-face conversations, which involve shared physical presence, body language, and immediate emotional feedback, online exchanges tend to be more performative and less spontaneous. Users frequently present carefully curated versions of their lives, leading their audience to make upward social comparisons — a psychological process in which people evaluate themselves negatively by comparing their ordinary lives to the highlight reels of others.
+
+Furthermore, the time spent scrolling through feeds may displace more meaningful offline activities. Researchers have found that passive consumption of social media content — simply viewing posts without actively engaging — shows the strongest link to negative wellbeing outcomes. Active participation, such as direct messaging or commenting, appears to carry far fewer of these risks.`,
+
+    questions: [
+      {
+        questionText:
+          "According to the passage, what is the main reason social media use can increase feelings of loneliness?",
+        options: [
+          "Social media platforms limit the total number of connections a user can maintain at once.",
+          "Online interactions tend to be performative and encourage unfavourable self-comparisons.",
+          "Social media creates too much geographical distance between users and their real friends.",
+          "Heavy users of social media quickly run out of interesting content to view.",
+        ],
+        correctAnswerIndex: 1,
+        explanation: `【正解の根拠】
+正解は B。第2段落が根拠です。
+
+本文の説明:
+"online exchanges tend to be more performative and less spontaneous"
+（オンラインのやり取りはより演技的で自発性が低い傾向がある）
+
+"Users frequently present carefully curated versions of their lives, leading their audience to make upward social comparisons — a psychological process in which people evaluate themselves negatively by comparing their ordinary lives to the highlight reels of others."
+（ユーザーは自分の生活の注意深く選別されたバージョンを提示することが多く、閲覧者に上方比較を行わせる。これは自分の普通の生活を他者のハイライト映像と比較することで自己評価を下げる心理的プロセスである。）
+
+→ B「オンラインのやり取りは演技的になりがちで、不利な自己比較を促す」が正確です。
+
+【引っかけ分析】
+・A「繋がれる人数の制限」: 本文に記述なし。むしろ「広大な地理的距離を越えてコミュニケーションを可能にする」と述べられています。
+・C「地理的距離を生み出す」: 逆です。SNSはむしろ地理的距離を縮めるために設計されたと述べられています。
+・D「コンテンツが尽きる」: 本文に記述なし。
+
+【語彙ポイント】
+・"performative"（演技的な・パフォーマンス的な）: 本来の感情ではなく、見せるために行動する性質。
+・"upward social comparison"（上方社会比較）: 自分より優れていると思う他者と自分を比較するプロセス。
+・"curated"（厳選された・編集された）: 美術館の学芸員（curator）から転じて、意図的に選んで提示するという意味。`,
+      },
+      {
+        questionText:
+          "What does the passage suggest about the difference between passive and active social media use?",
+        options: [
+          "Both passive and active use are equally harmful to mental wellbeing.",
+          "Passive use, such as browsing posts, is more harmful to wellbeing than actively engaging.",
+          "Active use is more time-consuming and therefore leads to greater feelings of isolation.",
+          "Passive use has no measurable effect on how people feel about themselves.",
+        ],
+        correctAnswerIndex: 1,
+        explanation: `【正解の根拠】
+正解は B。第3段落が根拠です。
+
+"Researchers have found that passive consumption of social media content — simply viewing posts without actively engaging — shows the strongest link to negative wellbeing outcomes."
+（研究者たちは、ソーシャルメディアコンテンツの受動的消費——積極的に関与せずにただ投稿を見るだけ——がネガティブなウェルビーイング結果と最も強く結びついていることを発見した。）
+
+"Active participation, such as direct messaging or commenting, appears to carry far fewer of these risks."
+（ダイレクトメッセージやコメントなどの積極的な参加は、これらのリスクをはるかに少なくもたらすようだ。）
+
+→ B「投稿を閲覧するような受動的利用は、積極的に関与するよりもウェルビーイングにより有害である」が正確です。
+
+【引っかけ分析】
+・A「どちらも等しく有害」: 本文は明確に passive > active の順でリスクが高いと述べています。
+・C「積極的利用が時間を多く消費するため孤立感が大きい」: 本文に記述なし。むしろ積極的利用はリスクが少ないと述べられています。
+・D「受動的利用は効果がない」: 「ネガティブな結果との最強の関連（strongest link）」があると述べられており、効果がないのとは逆です。
+
+【構文ポイント】
+"shows the strongest link to negative wellbeing outcomes"
+→ "link to"（〜との関連・繋がり）: "show a link to ..."（〜との関連を示す）は重要表現。`,
+      },
+      {
+        questionText:
+          "What is the 'paradox' referred to in the passage's title?",
+        options: [
+          "Social media was designed for global communication but limits users to one language.",
+          "Platforms built to connect people can make users feel more lonely and disconnected.",
+          "More followers on social media leads to lower self-esteem among young users.",
+          "Social media companies spend more on advertising than on improving user wellbeing.",
+        ],
+        correctAnswerIndex: 1,
+        explanation: `【正解の根拠】
+正解は B。第1段落全体が根拠です。
+
+逆説（paradox）の構造:
+前提: "Social media platforms were originally designed to bring people together"
+（SNSは本来、人々を繋げるために設計された）
+
+逆説的結果: "heavy use of these platforms is associated with increased feelings of loneliness and social disconnection rather than the sense of belonging they promise"
+（これらのプラットフォームの多用は、約束された帰属感ではなく、むしろ孤独感と社会的切断感の増大と関連している）
+
+→ 「繋がるために作られたのに、孤独を生む」という逆説
+→ B「人々を繋げるために作られたプラットフォームが、ユーザーをより孤独に切断された気持ちにさせる」が正確です。
+
+【タイトル読解: "Connected Isolation"】
+"Connected"（繋がっている）+ "Isolation"（孤立）= 矛盾した組み合わせ
+→ タイトル自体がすでに逆説を示しています。この逆説を解く鍵が本文全体です。
+
+【語彙ポイント】
+・"paradox"（逆説）: 一見矛盾しているが真実を含む主張。
+・"sense of belonging"（帰属感）: どこかに属しているという感覚。コミュニティへの所属感。
+・"disconnection"（切断・乖離）: 繋がりが断たれていること。`,
+      },
+    ],
+  },
+
+  // ────────────────────────────────────────────────────────────────────────
+  // P3-7: 共通テスト / 睡眠と記憶の定着 / 約185語
+  // ────────────────────────────────────────────────────────────────────────
+  {
+    id: "sleep-memory-consolidation",
+    title: "Sleep and Memory Consolidation: Why Rest Is Part of Learning",
+    level: "COMMON_TEST",
+    tags: ["論説文", "認知科学・睡眠研究", "共通テスト", "約185語"],
+    passage: `Students preparing for exams often sacrifice sleep in order to spend more time studying, operating under the assumption that more hours of wakefulness mean more information absorbed. However, research in cognitive science has consistently demonstrated that sleep plays an indispensable role in the process of memory consolidation — the mechanism by which newly acquired information is stabilised and integrated into long-term memory.
+
+During sleep, particularly during the slow-wave and rapid eye movement (REM) stages, the brain actively replays and reorganises the neural patterns formed during waking hours. This nocturnal processing strengthens the connections between neurons, transforming fragile short-term memories into durable long-term ones. Studies have shown that students who review material and then sleep perform significantly better on subsequent tests than those who study for an equal length of time without sleeping between study and testing.
+
+The practical implication is clear: sleep is not merely a period of rest but an active phase of learning. Treating sleep as dispensable — something to be traded away for extra study hours — is therefore counterproductive. A well-rested brain consolidates, connects, and recalls information far more efficiently than an exhausted one.`,
+
+    questions: [
+      {
+        questionText:
+          "What does the passage say happens to newly learned information during sleep?",
+        options: [
+          "It is permanently stored in the brain's prefrontal cortex for later retrieval.",
+          "It is lost unless the learner reviews it immediately upon waking.",
+          "It is replayed and reorganised, strengthening connections that form lasting memories.",
+          "It is transferred from the REM stage of sleep directly into conscious awareness.",
+        ],
+        correctAnswerIndex: 2,
+        explanation: `【正解の根拠】
+正解は C。第2段落が根拠です。
+
+"During sleep, particularly during the slow-wave and rapid eye movement (REM) stages, the brain actively replays and reorganises the neural patterns formed during waking hours."
+（睡眠中、特に徐波睡眠とレム睡眠の段階において、脳は覚醒時間中に形成された神経パターンを積極的に再生・再編成する。）
+
+"This nocturnal processing strengthens the connections between neurons, transforming fragile short-term memories into durable long-term ones."
+（この夜間の処理がニューロン間の接続を強化し、脆弱な短期記憶を耐久性のある長期記憶へと変換する。）
+
+→ C「記憶は再生・再編成され、永続的な記憶を形成する接続を強化する」が正確です。
+
+【引っかけ分析】
+・A「前頭前皮質に永久保存される」: 本文に脳の特定の部位への保存という記述はありません。
+・B「目覚めてすぐに復習しなければ失われる」: 本文に記述なし。むしろ睡眠が記憶を定着させると述べられています。
+・D「REMから直接意識へ転送される」: 本文に記述なし。
+
+【語彙ポイント】
+・"consolidation"（定着・強固化）: 固めて安定させること。記憶の文脈では「記憶の定着」。
+・"nocturnal"（夜間の）: "nocturne"（夜想曲）と同語源。nox（夜）のラテン語から。
+・"fragile"（脆弱な・もろい）↔ "durable"（耐久性のある・長続きする）: 対比的語彙。`,
+      },
+      {
+        questionText:
+          "According to the passage, what is the main problem with sacrificing sleep to study more?",
+        options: [
+          "It reduces the number of hours available for reviewing material the following day.",
+          "It makes the brain unable to form any new neural connections during studying.",
+          "It prevents the memory consolidation process that makes learning effective.",
+          "It causes students to forget all material studied in the final hours before an exam.",
+        ],
+        correctAnswerIndex: 2,
+        explanation: `【正解の根拠】
+正解は C。第1段落と第3段落の組み合わせが根拠です。
+
+第1段落: 睡眠が「記憶の定着（memory consolidation）」に不可欠（indispensable）な役割を果たすと述べられています。
+
+第3段落:
+"Treating sleep as dispensable — something to be traded away for extra study hours — is therefore counterproductive."
+（睡眠を不可欠でないもの——余分な勉強時間のために犠牲にできるもの——として扱うことは、したがって逆効果である。）
+
+"A well-rested brain consolidates, connects, and recalls information far more efficiently than an exhausted one."
+（十分に休んだ脳は、疲弊した脳よりもはるかに効率的に情報を定着させ、結びつけ、想起する。）
+
+→ 睡眠を削ることが逆効果な理由は「記憶の定着プロセスが失われるから」
+→ C「学習を効果的にする記憶の定着プロセスが妨げられる」が正確です。
+
+【引っかけ分析】
+・A「翌日の復習時間が減る」: 本文に記述なし。問題は「時間の量」ではなく「記憶の定着」です。
+・B「新しいニューロン接続を形成できなくなる」: 過剰表現。本文は「定着が妨げられる」と述べており、勉強中に接続が全くできないとは述べていません。
+・D「試験前の最後の数時間で学習した内容をすべて忘れる」: 本文に記述なし。
+
+【語彙ポイント】
+・"dispensable"（不可欠でない・省略可能な）↔ "indispensable"（不可欠な）: 第1段落の "indispensable" との対比に注意。
+・"counterproductive"（逆効果の）: counter-（反対）+ productive（生産的な）。意図した結果と逆の効果をもたらすこと。`,
+      },
+      {
+        questionText:
+          "What evidence does the passage provide to support the idea that sleep benefits learning?",
+        options: [
+          "Brain scans show that students who sleep more have physically larger hippocampi.",
+          "Students who sleep between studying and testing score better than those who do not.",
+          "Athletes who sleep eight or more hours perform better in competitions than those who sleep less.",
+          "Surveys indicate that top university students report sleeping longer than average students.",
+        ],
+        correctAnswerIndex: 1,
+        explanation: `【正解の根拠】
+正解は B。第2段落末文が直接の根拠です。
+
+"Studies have shown that students who review material and then sleep perform significantly better on subsequent tests than those who study for an equal length of time without sleeping between study and testing."
+
+（研究により、教材を復習して睡眠をとった学生は、学習とテストの間に睡眠をとらずに同じ時間学習した学生よりも、その後のテストで有意に成績が良いことが示されている。）
+
+→ B「勉強とテストの間に睡眠をとった学生は、そうでない学生より高得点を取る」が正確です。
+
+【引っかけ分析】
+・A「海馬が物理的に大きい」: 本文に記述なし。神経画像の脳スキャンやサイズについての言及はありません。
+・C「アスリートのパフォーマンス」: 本文は学習・記憶を扱っており、運動競技のパフォーマンスは論点外です。
+・D「優秀な学生の睡眠時間のアンケート」: 本文に記述なし。
+
+【重要表現】
+"perform significantly better ... than those who ..."
+→ 比較構文: "perform better than ..." で「〜より成績が良い」
+→ "significantly"（有意に）: 統計的に意味のある差であることを示す副詞（単なる「大幅に」より厳密な意味を持つ）。`,
+      },
+    ],
+  },
 ];

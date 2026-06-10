@@ -1,10 +1,35 @@
-import React from "react";
+"use client";
+
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { ChevronLeft, ArrowRight, Link2, Network } from "lucide-react";
+import { ChevronLeft, ArrowRight, Link2, Network, Tag } from "lucide-react";
 import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
 import { ENGLISH_LEVEL_META } from "@/lib/english-types";
 
+// Extract all unique topic tags (exclude level tags and word-count tags)
+const LEVEL_TAGS = new Set(["教科書", "共通テスト", "私大難関", "国公立二次"]);
+const WORD_COUNT_RE = /約\d+語/;
+
+function extractTopicTags(): string[] {
+  const tagSet = new Set<string>();
+  for (const p of MULTI_SOURCE_PROBLEMS) {
+    for (const t of p.tags) {
+      if (!LEVEL_TAGS.has(t) && !WORD_COUNT_RE.test(t)) tagSet.add(t);
+    }
+  }
+  return Array.from(tagSet).sort();
+}
+
+const ALL_TOPIC_TAGS = extractTopicTags();
+
 export default function MultiSourceListPage() {
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+
+  const filtered = useMemo(() => {
+    if (!activeTag) return MULTI_SOURCE_PROBLEMS;
+    return MULTI_SOURCE_PROBLEMS.filter((p) => p.tags.includes(activeTag));
+  }, [activeTag]);
+
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Ambient grid */}
@@ -28,7 +53,7 @@ export default function MultiSourceListPage() {
         </Link>
 
         {/* Header */}
-        <header className="mt-8 mb-12">
+        <header className="mt-8 mb-8">
           <div
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-xs uppercase tracking-[0.25em] mb-4"
             style={{
@@ -58,9 +83,51 @@ export default function MultiSourceListPage() {
           </p>
         </header>
 
+        {/* Tag filter */}
+        <div className="mb-6">
+          <div className="mb-2 flex items-center gap-2">
+            <Tag className="h-3.5 w-3.5 text-white/30" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">
+              タグで絞り込む
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setActiveTag(null)}
+              className="rounded-full px-3 py-1 font-mono text-[11px] font-semibold transition-all duration-200"
+              style={{
+                background: !activeTag ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.04)",
+                border: `1px solid ${!activeTag ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.1)"}`,
+                color: !activeTag ? "#fff" : "rgba(255,255,255,0.35)",
+              }}
+            >
+              すべて ({MULTI_SOURCE_PROBLEMS.length})
+            </button>
+            {ALL_TOPIC_TAGS.map((tag) => {
+              const cnt = MULTI_SOURCE_PROBLEMS.filter((p) => p.tags.includes(tag)).length;
+              const active = activeTag === tag;
+              return (
+                <button
+                  key={tag}
+                  onClick={() => setActiveTag(active ? null : tag)}
+                  className="rounded-full px-3 py-1 font-mono text-[11px] font-semibold transition-all duration-200"
+                  style={{
+                    background: active ? "rgba(139,92,246,0.18)" : "rgba(255,255,255,0.04)",
+                    border: `1px solid ${active ? "rgba(139,92,246,0.5)" : "rgba(255,255,255,0.1)"}`,
+                    color: active ? "#c4b5fd" : "rgba(255,255,255,0.35)",
+                  }}
+                >
+                  {tag}
+                  <span className="ml-1 opacity-60">({cnt})</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Problem list */}
         <div className="grid gap-5 sm:grid-cols-2">
-          {MULTI_SOURCE_PROBLEMS.map((p) => {
+          {filtered.map((p) => {
             const meta = ENGLISH_LEVEL_META[p.level];
             const sourceTypeLabel = p.sources.map((s) => s.type).join(" · ");
 
@@ -119,7 +186,7 @@ export default function MultiSourceListPage() {
                         {p.title}
                       </h2>
                       <p className="mt-1 font-mono text-xs text-white/35">
-                        {sourceTypeLabel} · {p.tags.filter((t) => t !== "共通テスト").join(" · ")}
+                        {sourceTypeLabel} · {p.tags.filter((t) => !LEVEL_TAGS.has(t) && !WORD_COUNT_RE.test(t)).slice(0, 3).join(" · ")}
                       </p>
                     </div>
                   </div>
@@ -137,6 +204,12 @@ export default function MultiSourceListPage() {
             );
           })}
         </div>
+
+        {filtered.length === 0 && (
+          <p className="mt-8 text-center font-mono text-sm text-white/30">
+            該当する問題が見つかりません — タグ絞り込みを変更してください
+          </p>
+        )}
 
         {/* Footer */}
         <p className="mt-12 text-center font-mono text-xs tracking-[0.2em] text-white/20 uppercase">

@@ -45,6 +45,7 @@ import {
 } from "@/lib/english-history";
 import { ENGLISH_LEVEL_META } from "@/lib/english-types";
 import { AIOracle } from "@/components/dashboard/AIOracle";
+import { LearningCalendar } from "@/components/dashboard/LearningCalendar";
 
 type Subject = "MATH" | "ENGLISH";
 
@@ -147,6 +148,16 @@ export default function MyPage() {
         <div className="mb-8">
           <AIOracle />
         </div>
+
+        {/* Learning Calendar */}
+        {mounted && (
+          <div className="mb-8">
+            <LearningCalendar
+              mathAttempts={attempts}
+              englishAttempts={englishAttempts}
+            />
+          </div>
+        )}
 
         {/* Subject tabs */}
         <div

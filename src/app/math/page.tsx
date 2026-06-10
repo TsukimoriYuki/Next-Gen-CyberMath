@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layers, Skull } from "lucide-react";
+import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layers, Skull, Target } from "lucide-react";
 import {
   getAllProblems,
   getChallengeProblems,
@@ -184,6 +184,22 @@ export default async function MathHomePage() {
                 <div className="mt-1 text-sm text-muted-foreground">速度と精度を鍛える反復計算ドリル。毎日の習慣に。</div>
                 <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-cyan">
                   特訓開始 <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 計算ドリル 4択 */}
+          <Link href="/calc-drill" className="washi washi-hover group block rounded-2xl p-6">
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-cyan/10 text-neon-cyan transition-transform group-hover:scale-105">
+                <Target className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">計算ドリル</div>
+                <div className="mt-1 text-sm text-muted-foreground">展開・因数分解・対数・三角関数を30秒4択で高速演習。</div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-cyan">
+                  ドリル開始 <ArrowRight className="h-3.5 w-3.5" />
                 </div>
               </div>
             </div>

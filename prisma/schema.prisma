@@ -101,10 +101,11 @@ model User {
   lastLoginAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  attempts      ExamAttempt[]
-  missions      EmergencyMission[]
-  messages      Message[]          @relation("ReceivedMessages")
-  sentMessages  Message[]          @relation("SentMessages")
+  attempts         ExamAttempt[]
+  englishAttempts  EnglishAttempt[]
+  missions         EmergencyMission[]
+  messages         Message[]          @relation("ReceivedMessages")
+  sentMessages     Message[]          @relation("SentMessages")
 
   @@index([name])
   @@index([role])
@@ -171,6 +172,26 @@ model Message {
 
   @@index([senderId])
   @@index([receiverId])
+  @@index([createdAt])
+}
+
+/// 英語学習の受験結果（速読・精読・マルチソース）。
+/// ログイン済み生徒が問題を解いたとき、クライアントから POST される。
+model EnglishAttempt {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problemId String
+  /// "speed-reading" | "comprehension" | "multi-source"
+  mode      String
+  /// "TEXTBOOK" | "COMMON_TEST" | "PRIVATE_UNI" | "NATIONAL_UNI"
+  level     String
+  score     Int
+  total     Int
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([mode])
   @@index([createdAt])
 }
 

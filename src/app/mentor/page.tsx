@@ -42,12 +42,28 @@ export default async function MentorPage({
   const subject = tab === "english" ? "english" : "math";
 
   // ─── DB 統計 ───────────────────────────────────────────────────
-  const [studentCount, mentorCount, totalAttempts, allAttempts] = await Promise.all([
+  const [r0, r1, r2, r3, r4, r5] = await Promise.allSettled([
     prisma.user.count({ where: { role: "STUDENT" } }),
     prisma.user.count({ where: { role: "MENTOR" } }),
     prisma.examAttempt.count(),
     prisma.examAttempt.findMany({ select: { weakTags: true } }),
+    // groupBy で全レコードを DB 側で集計（take 上限なし）
+    prisma.englishAttempt.groupBy({
+      by: ["userId", "mode"],
+      _sum: { score: true, total: true },
+      _count: { id: true },
+    }),
+    prisma.user.findMany({
+      where: { englishAttempts: { some: {} } },
+      select: { id: true, name: true },
+    }),
   ]);
+  const studentCount    = r0.status === "fulfilled" ? r0.value : 0;
+  const mentorCount     = r1.status === "fulfilled" ? r1.value : 0;
+  const totalAttempts   = r2.status === "fulfilled" ? r2.value : 0;
+  const allAttempts     = r3.status === "fulfilled" ? r3.value : [];
+  const englishGrouped  = r4.status === "fulfilled" ? r4.value : [];
+  const englishUserList = r5.status === "fulfilled" ? r5.value : [];
 
   const tagCounts = new Map<string, number>();
   for (const a of allAttempts) {
@@ -88,6 +104,61 @@ export default async function MentorPage({
       lastAttemptAt: latest?.createdAt?.toISOString() ?? null,
     };
   });
+
+  // ─── 英語学習 集計（groupBy ベース、件数上限なし）────────────
+  const userNameMap = new Map(englishUserList.map((u) => [u.id, u.name]));
+
+  type EnglishStudentStat = {
+    id: string; name: string;
+    speedReading:  { count: number; avgAccuracy: number | null };
+    comprehension: { count: number; avgAccuracy: number | null };
+    multiSource:   { count: number };
+  };
+  const englishByUser = new Map<string, {
+    sr: { count: number; totalScore: number; totalQ: number };
+    cp: { count: number; totalScore: number; totalQ: number };
+    ms: { count: number };
+  }>();
+  for (const row of englishGrouped) {
+    if (!englishByUser.has(row.userId)) {
+      englishByUser.set(row.userId, {
+        sr: { count: 0, totalScore: 0, totalQ: 0 },
+        cp: { count: 0, totalScore: 0, totalQ: 0 },
+        ms: { count: 0 },
+      });
+    }
+    const d = englishByUser.get(row.userId)!;
+    const cnt = row._count.id;
+    const scoreSum = row._sum.score ?? 0;
+    const totalSum = row._sum.total ?? 0;
+    if (row.mode === "speed-reading") { d.sr.count += cnt; d.sr.totalScore += scoreSum; d.sr.totalQ += totalSum; }
+    if (row.mode === "comprehension") { d.cp.count += cnt; d.cp.totalScore += scoreSum; d.cp.totalQ += totalSum; }
+    if (row.mode === "multi-source")  { d.ms.count += cnt; }
+  }
+  const englishStudentStats: EnglishStudentStat[] = Array.from(englishByUser.entries()).map(([id, d]) => ({
+    id,
+    name: userNameMap.get(id) ?? id,
+    speedReading:  { count: d.sr.count, avgAccuracy: d.sr.totalQ > 0 ? Math.round((d.sr.totalScore / d.sr.totalQ) * 100) : null },
+    comprehension: { count: d.cp.count, avgAccuracy: d.cp.totalQ > 0 ? Math.round((d.cp.totalScore / d.cp.totalQ) * 100) : null },
+    multiSource:   { count: d.ms.count },
+  }));
+
+  // 全体集計
+  let srTotalScore = 0, srTotalQ = 0, cpTotalScore = 0, cpTotalQ = 0, msCount = 0;
+  let totalEnglishAttempts = 0;
+  for (const row of englishGrouped) {
+    const cnt = row._count.id;
+    totalEnglishAttempts += cnt;
+    if (row.mode === "speed-reading") { srTotalScore += row._sum.score ?? 0; srTotalQ += row._sum.total ?? 0; }
+    if (row.mode === "comprehension") { cpTotalScore += row._sum.score ?? 0; cpTotalQ += row._sum.total ?? 0; }
+    if (row.mode === "multi-source")  { msCount += cnt; }
+  }
+  const englishGlobal = {
+    srAvgAccuracy: srTotalQ > 0 ? Math.round((srTotalScore / srTotalQ) * 100) : null,
+    cpAvgAccuracy: cpTotalQ > 0 ? Math.round((cpTotalScore / cpTotalQ) * 100) : null,
+    msCount,
+    totalAttempts: totalEnglishAttempts,
+  };
 
   // ─── Math 問題一覧（tier付き） ─────────────────────────────────
   const allProblems = getAllProblems().map((p) => ({
@@ -245,37 +316,21 @@ export default async function MentorPage({
          ══════════════════════════════════════════════════════ */}
       {subject === "english" && (
         <div className="space-y-10">
-          {/* English analytics placeholder */}
+          {/* English analytics — 実データ表示 */}
           <section>
             <div className="mb-4 flex items-center gap-2">
               <Activity className="h-5 w-5" style={{ color: "#10b981" }} />
               <h2 className="font-display text-xl font-bold">A. 英語学習分析（門下生）</h2>
             </div>
-            <div className="glass rounded-2xl p-6">
-              <div
-                className="mb-5 flex items-start gap-3 rounded-xl px-4 py-3"
-                style={{
-                  background: "rgba(16,185,129,0.07)",
-                  border: "1px solid rgba(16,185,129,0.2)",
-                }}
-              >
-                <Activity className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "#10b981" }} />
-                <div>
-                  <p className="font-mono text-xs font-semibold uppercase tracking-widest" style={{ color: "#10b981" }}>
-                    DATA COLLECTION IN PROGRESS
-                  </p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">
-                    英語学習履歴の自動収集機能は実装予定です。門下生のEnglish学習データがここに集計されます。
-                  </p>
-                </div>
-              </div>
+            <div className="glass rounded-2xl p-6 space-y-5">
 
-              {/* Stat placeholder cards */}
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {/* 全体サマリーカード */}
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {[
-                  { label: "速読 平均WPM",      icon: Zap,        accent: "#10b981" },
-                  { label: "精読 平均正答率",    icon: BookMarked, accent: "#22d3ee" },
-                  { label: "マルチソース 完了数", icon: Network,    accent: "#a78bfa" },
+                  { label: "総挑戦数",        value: String(englishGlobal.totalAttempts),                          accent: "#10b981", icon: Activity   },
+                  { label: "速読 平均正答率",  value: englishGlobal.srAvgAccuracy != null ? `${englishGlobal.srAvgAccuracy}%` : "--", accent: "#10b981", icon: Zap        },
+                  { label: "精読 平均正答率",  value: englishGlobal.cpAvgAccuracy != null ? `${englishGlobal.cpAvgAccuracy}%` : "--", accent: "#22d3ee", icon: BookMarked  },
+                  { label: "マルチソース 完了", value: String(englishGlobal.msCount),                               accent: "#a78bfa", icon: Network     },
                 ].map((c) => {
                   const Icon = c.icon;
                   return (
@@ -283,57 +338,78 @@ export default async function MentorPage({
                       key={c.label}
                       className="rounded-xl p-4"
                       style={{
-                        background: `color-mix(in srgb, ${c.accent} 7%, transparent)`,
-                        border: `1px solid color-mix(in srgb, ${c.accent} 22%, transparent)`,
+                        background: `color-mix(in srgb, ${c.accent} 8%, transparent)`,
+                        border: `1px solid color-mix(in srgb, ${c.accent} 25%, transparent)`,
                       }}
                     >
                       <div className="mb-2 flex items-center gap-1.5">
                         <Icon className="h-3.5 w-3.5" style={{ color: c.accent }} />
-                        <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                          {c.label}
-                        </span>
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{c.label}</span>
                       </div>
                       <p className="font-display text-2xl font-extrabold" style={{ color: c.accent }}>
-                        --
-                      </p>
-                      <p className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50">
-                        coming soon
+                        {c.value}
                       </p>
                     </div>
                   );
                 })}
               </div>
 
-              {/* English problem count summary */}
+              {/* 生徒別内訳テーブル */}
+              {englishStudentStats.length === 0 ? (
+                <p className="text-center font-mono text-xs text-muted-foreground py-4">
+                  まだ英語学習データがありません（生徒がログイン状態で問題を解くと集計されます）
+                </p>
+              ) : (
+                <div className="overflow-x-auto rounded-xl" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr style={{ background: "rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                        {["生徒名", "速読 回数", "速読 正答率", "精読 回数", "精読 正答率", "マルチ 完了"].map((h) => (
+                          <th key={h} className="px-4 py-2.5 text-left font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {englishStudentStats.map((s) => (
+                        <tr key={s.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                          <td className="px-4 py-2.5 font-mono text-xs font-semibold text-white">{s.name}</td>
+                          <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">{s.speedReading.count}</td>
+                          <td className="px-4 py-2.5 font-mono text-xs" style={{ color: "#10b981" }}>
+                            {s.speedReading.avgAccuracy != null ? `${s.speedReading.avgAccuracy}%` : "--"}
+                          </td>
+                          <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">{s.comprehension.count}</td>
+                          <td className="px-4 py-2.5 font-mono text-xs" style={{ color: "#22d3ee" }}>
+                            {s.comprehension.avgAccuracy != null ? `${s.comprehension.avgAccuracy}%` : "--"}
+                          </td>
+                          <td className="px-4 py-2.5 font-mono text-xs" style={{ color: "#a78bfa" }}>{s.multiSource.count}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* 収録問題数 */}
               <div
-                className="mt-5 rounded-xl p-4"
+                className="rounded-xl p-4"
                 style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
               >
-                <p className="mb-2 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                  収録問題数
-                </p>
-                <div className="flex flex-wrap gap-4 text-sm">
-                  <span className="flex items-center gap-1.5">
-                    <Zap className="h-3.5 w-3.5" style={{ color: "#10b981" }} />
-                    <span className="font-mono text-xs text-muted-foreground">速読長文</span>
-                    <span className="font-display font-bold" style={{ color: "#10b981" }}>
-                      {SPEED_READING_PROBLEMS.length}問
-                    </span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <BookOpen className="h-3.5 w-3.5" style={{ color: "#22d3ee" }} />
-                    <span className="font-mono text-xs text-muted-foreground">精読長文</span>
-                    <span className="font-display font-bold" style={{ color: "#22d3ee" }}>
-                      {COMPREHENSION_PROBLEMS.length}問
-                    </span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Network className="h-3.5 w-3.5" style={{ color: "#a78bfa" }} />
-                    <span className="font-mono text-xs text-muted-foreground">マルチソース</span>
-                    <span className="font-display font-bold" style={{ color: "#a78bfa" }}>
-                      {MULTI_SOURCE_PROBLEMS.length}問
-                    </span>
-                  </span>
+                <p className="mb-2 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">収録問題数</p>
+                <div className="flex flex-wrap gap-4">
+                  {[
+                    { label: "速読長文",      count: SPEED_READING_PROBLEMS.length,  accent: "#10b981", icon: Zap      },
+                    { label: "精読長文",      count: COMPREHENSION_PROBLEMS.length,  accent: "#22d3ee", icon: BookOpen  },
+                    { label: "マルチソース",  count: MULTI_SOURCE_PROBLEMS.length,   accent: "#a78bfa", icon: Network   },
+                  ].map((c) => {
+                    const Icon = c.icon;
+                    return (
+                      <span key={c.label} className="flex items-center gap-1.5">
+                        <Icon className="h-3.5 w-3.5" style={{ color: c.accent }} />
+                        <span className="font-mono text-xs text-muted-foreground">{c.label}</span>
+                        <span className="font-display font-bold" style={{ color: c.accent }}>{c.count}問</span>
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             </div>

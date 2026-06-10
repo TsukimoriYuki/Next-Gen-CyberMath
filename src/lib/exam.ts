@@ -316,7 +316,17 @@ export function saveAttemptLocal(
   };
   const list = readAttemptsLocal();
   list.unshift(full);
-  window.localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 30)));
+  const trimmed = list.slice(0, 30);
+  try {
+    window.localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+  } catch {
+    // QuotaExceededError — さらに削減してリトライ
+    try {
+      window.localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed.slice(0, 10)));
+    } catch {
+      // ストレージが完全に利用不可のため保存をスキップ
+    }
+  }
   window.dispatchEvent(new Event(HISTORY_EVENT));
 }
 
