@@ -105,7 +105,7 @@ $(1,1,1) \to (1,1,2) \to (1,2,5) \to (1,5,13) \to \cdots$`,
     difficulty: "EX",
     tier: "ABYSS",
     hasGraph: false,
-    tagline: "「無限の先で $\\sqrt{2n}$ に収束する」— 解析的無限降下",
+    tagline: "「無限の先で √(2n) に収束する」— 解析的無限降下",
     tags: ["数列", "漸近解析", "漸化式", "競技数学"],
     statement: r`数列 $\{a_n\}$ を次で定める。
 

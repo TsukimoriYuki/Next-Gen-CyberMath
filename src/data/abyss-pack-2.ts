@@ -94,7 +94,7 @@ $$
     difficulty: "EX",
     tier: "ABYSS",
     hasGraph: false,
-    tagline: "「$x$ を $y+1$ にずらすだけで、素数の力が顕現する」",
+    tagline: "「x を y+1 にずらすだけで、素数の力が顕現する」",
     tags: ["多項式", "既約性", "アイゼンシュタイン", "整数論", "競技数学"],
     statement: r`$p$ を素数とする。円分多項式
 

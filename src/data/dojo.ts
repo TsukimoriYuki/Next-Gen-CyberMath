@@ -169,7 +169,7 @@ $$M(0,\,-\tfrac12)=\tfrac12\;(\text{最小値}),\quad (a,b)=\left(0,\,-\tfrac12\
   // ---------------------------------------------------------------- #3
   {
     slug: "dojo-pi-lower-bound",
-    title: "円周率 $\\pi > 3.05$ の証明",
+    title: "円周率 π > 3.05 の証明",
     unit: "図形と計量",
     difficulty: "D",
     tagline: "正多角形の余弦定理が無理数を捕まえる",
@@ -553,7 +553,7 @@ $$\sin(\alpha+\beta)=\cos\alpha\sin\beta+\sin\alpha\cos\beta=\sin\alpha\cos\beta
       {
         id: "solve-z",
         label: "逆像法（$z$ を $w$ で表す）",
-        tagline: "$w$ の条件を $z$ の条件に翻訳してから幾何で読む",
+        tagline: "w の条件を z の条件に翻訳してから幾何で読む",
         body: r`$$w(z-i)=z+i\implies z(w-1)=i(w+1)\implies z=\frac{i(w+1)}{w-1}\quad(w\neq1).$$
 
 (1) $z=t\in\mathbb R$ の条件は $\bar z=z$、すなわち $z$ が実数 $\Leftrightarrow$ $\mathrm{Im}(z)=0$。
