@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layers } from "lucide-react";
+import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layers, Skull } from "lucide-react";
 import {
   getAllProblems,
   getChallengeProblems,
@@ -277,6 +277,61 @@ export default async function HomePage() {
                   探索する <ArrowRight className="h-3.5 w-3.5" />
                 </div>
               </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* 特異点 - Singularity - パネル */}
+        <div className="mt-5">
+          <Link
+            href="/abyss"
+            className="group relative block overflow-hidden rounded-2xl transition-all duration-300"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(168,85,247,0.08) 0%, rgba(0,0,0,0.6) 50%, rgba(234,179,8,0.06) 100%)",
+              border: "1px solid rgba(168,85,247,0.25)",
+              boxShadow: "0 0 40px rgba(168,85,247,0.06)",
+            }}
+          >
+            {/* Shimmer on hover */}
+            <span
+              className="pointer-events-none absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.12) 50%, transparent 100%)",
+              }}
+            />
+            <div className="relative flex items-center gap-5 px-6 py-5">
+              <span
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
+                style={{
+                  background: "rgba(168,85,247,0.12)",
+                  border: "1px solid rgba(168,85,247,0.3)",
+                  color: "#a855f7",
+                }}
+              >
+                <Skull className="h-6 w-6" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span
+                    className="font-display text-lg font-bold bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(135deg, #a855f7, #eab308)",
+                    }}
+                  >
+                    特異点 — Singularity
+                  </span>
+                  <span className="rounded-full border border-purple-700/40 bg-purple-900/20 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-purple-500">
+                    Phase 4
+                  </span>
+                </div>
+                <div className="mt-0.5 text-sm text-gray-500">
+                  深淵の超難問をランダム召喚。解けるなら、挑め。
+                </div>
+              </div>
+              <ArrowRight className="h-4 w-4 shrink-0 text-purple-600 transition-transform group-hover:translate-x-1" />
             </div>
           </Link>
         </div>

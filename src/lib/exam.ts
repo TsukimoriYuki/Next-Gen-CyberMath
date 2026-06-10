@@ -43,13 +43,15 @@ export function generateExam(cfg: ExamConfig): Problem[] {
 // 「10分でD難度10問」のような破綻設定は、予算が足りず構造的に起きない。
 // ============================================================
 
-/** 各難易度の想定消費時間（分）。D+ は未指定のため 35 分で見積もる。 */
+/** 各難易度の想定消費時間（分）。D+ は未指定のため 35 分で見積もる。EX/OLYMPIAD は模試対象外のため 0。 */
 export const DIFFICULTY_COST_MIN: Record<Difficulty, number> = {
   A: 3,
   B: 6,
   C: 15,
   D: 25,
   D_PLUS: 35,
+  EX: 0,
+  OLYMPIAD: 0,
 };
 
 /**
@@ -58,9 +60,9 @@ export const DIFFICULTY_COST_MIN: Record<Difficulty, number> = {
  * 短時間ほど A/B 偏重、長時間ほど C/D/D+ が解禁される。
  */
 const SHARE_ANCHORS: { t: number; share: Record<Difficulty, number> }[] = [
-  { t: 15, share: { A: 0.5, B: 0.4, C: 0.1, D: 0, D_PLUS: 0 } },
-  { t: 50, share: { A: 0.2, B: 0.35, C: 0.3, D: 0.15, D_PLUS: 0 } },
-  { t: 120, share: { A: 0.05, B: 0.2, C: 0.3, D: 0.3, D_PLUS: 0.15 } },
+  { t: 15, share: { A: 0.5, B: 0.4, C: 0.1, D: 0, D_PLUS: 0, EX: 0, OLYMPIAD: 0 } },
+  { t: 50, share: { A: 0.2, B: 0.35, C: 0.3, D: 0.15, D_PLUS: 0, EX: 0, OLYMPIAD: 0 } },
+  { t: 120, share: { A: 0.05, B: 0.2, C: 0.3, D: 0.3, D_PLUS: 0.15, EX: 0, OLYMPIAD: 0 } },
 ];
 
 function shareForTime(tMin: number): Record<Difficulty, number> {

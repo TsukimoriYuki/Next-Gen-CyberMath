@@ -1,7 +1,10 @@
 // Domain types — mirror the Prisma schema so the app can run from the
 // static dataset (src/data) or from the database interchangeably.
 
-export type Difficulty = "A" | "B" | "C" | "D" | "D_PLUS";
+export type Difficulty = "A" | "B" | "C" | "D" | "D_PLUS" | "EX" | "OLYMPIAD";
+
+/** 問題のティア。ABYSS は特異点ガチャ専用の隠しプール。 */
+export type Tier = "STANDARD" | "ABYSS";
 
 export type StepType = "INSIGHT" | "EXPERIMENT" | "HINT" | "SOLUTION" | "GUIDANCE_ANALYSIS";
 
@@ -123,6 +126,11 @@ export interface Problem {
    * 完全に隠蔽し、模試生成での強制ブレンドと、履歴からの復習でのみ到達する。
    */
   isMockOnly?: boolean;
+  /**
+   * 特異点プール。ABYSS の問題は通常の検索・一覧から完全に隠蔽し、
+   * /abyss ガチャからのみ到達できる。
+   */
+  tier?: Tier;
 
   // ---- 過去問道場 (Dojo) メタ -----------------------------------------
   /** 出題大学（オリジナル類題は「○○大（類題）」表記）。 */
@@ -179,7 +187,7 @@ export interface UnitMeta {
 
 // ---- presentation metadata ---------------------------------------------
 
-export const DIFFICULTY_ORDER: Difficulty[] = ["A", "B", "C", "D", "D_PLUS"];
+export const DIFFICULTY_ORDER: Difficulty[] = ["A", "B", "C", "D", "D_PLUS", "EX", "OLYMPIAD"];
 
 // ---- 過去問道場 偏差値帯メタ -------------------------------------------
 
@@ -229,6 +237,18 @@ export const DIFFICULTY_META: Record<
     name: "超難問・美の領域",
     className: "border-neon-magenta/50 text-neon-magenta",
     accent: "var(--neon-magenta)",
+  },
+  EX: {
+    label: "EX",
+    name: "競技数学・特異点",
+    className: "border-purple-500/60 text-purple-400",
+    accent: "#a855f7",
+  },
+  OLYMPIAD: {
+    label: "∞",
+    name: "数学オリンピック・深淵",
+    className: "border-yellow-500/60 text-yellow-400",
+    accent: "#eab308",
   },
 };
 

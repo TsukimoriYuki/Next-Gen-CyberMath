@@ -2,6 +2,8 @@ import type { Problem } from "@/lib/types";
 import { PROBLEM_TAGS } from "./problem-tags";
 import { DOJO_PROBLEMS } from "./dojo";
 import { EXPANSION_PACK_3 } from "./expansion-pack-3";
+import { ABYSS_PACK_1 } from "./abyss-pack-1";
+import { ABYSS_PACK_2 } from "./abyss-pack-2";
 import { numbersAndExpressions } from "./units/numbers-and-expressions";
 import { setsAndLogic } from "./units/sets-and-logic";
 import { quadraticFunctions } from "./units/quadratic-functions";
@@ -522,6 +524,9 @@ const RAW_PROBLEMS: Problem[] = [
   ...DOJO_PROBLEMS,
   // 拡張パック3：手薄領域の補強（複素数平面・数列・空間ベクトル・微積分・確率・三角関数）
   ...EXPANSION_PACK_3,
+  // 特異点プール（ABYSS）：超難問ランダムガチャ専用。通常導線から完全隠蔽。
+  ...ABYSS_PACK_1,
+  ...ABYSS_PACK_2,
 ];
 
 // 概念タグをマージ（インライン tags ∪ problem-tags.ts のマップ、重複除去）。
