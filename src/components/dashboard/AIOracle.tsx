@@ -89,10 +89,17 @@ export function AIOracle() {
     setStatus("loading");
     try {
       const stats = buildStats();
+      const meRes = await fetch("/api/auth/me");
+      const meJson = meRes.ok ? await meRes.json() : {};
+      const userName: string =
+        typeof meJson?.name === "string" && meJson.name.trim()
+          ? meJson.name.trim()
+          : "生徒";
+
       const res = await fetch("/api/oracle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ stats }),
+        body: JSON.stringify({ stats, userName }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const result: OracleResponse = await res.json();

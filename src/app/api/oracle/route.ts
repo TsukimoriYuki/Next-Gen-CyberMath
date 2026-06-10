@@ -11,16 +11,19 @@ interface OraclePayload {
 
 // ── System prompt ─────────────────────────────────────────────────────────
 
-const SYSTEM_INSTRUCTION =
-  "あなたはCYBER OSの冷徹だが優秀なAI教官です。生徒である光紀（Koki）の成績データを分析し、次に挑戦すべき科目や難易度を判断して、サイバーパンクな口調で光紀に向けて50文字以内の端的な指令を与えてください。出力は必ず以下のJSONのみとすること（マークダウン・コードフェンス一切不可）：{\"message\":\"指令テキスト（光紀への呼びかけを含む）\",\"taskName\":\"推奨ミッション名\",\"taskUrl\":\"遷移先URL\"}";
+function buildSystemInstruction(name: string) {
+  return `あなたはCYBER OSの冷徹だが優秀なAI教官です。生徒である${name}の成績データを分析し、次に挑戦すべき科目や難易度を判断して、サイバーパンクな口調で${name}に向けて50文字以内の端的な指令を与えてください。出力は必ず以下のJSONのみとすること（マークダウン・コードフェンス一切不可）：{"message":"指令テキスト（${name}への呼びかけを含む）","taskName":"推奨ミッション名","taskUrl":"遷移先URL"}`;
+}
 
 // ── Fallback ──────────────────────────────────────────────────────────────
 
-const FALLBACK: OraclePayload = {
-  message: "光紀、まず基礎から叩き直せ。弱点を潰すことが最速の近道だ。",
-  taskName: "数学模試チャレンジ",
-  taskUrl: "/mock",
-};
+function buildFallback(name: string): OraclePayload {
+  return {
+    message: `${name}、まず基礎から叩き直せ。弱点を潰すことが最速の近道だ。`,
+    taskName: "数学模試チャレンジ",
+    taskUrl: "/mock",
+  };
+}
 
 // ── JSON parser (strips markdown fences if Gemini wraps the output) ───────
 
@@ -44,18 +47,23 @@ function parseResponse(text: string): OraclePayload {
 
 export async function POST(req: NextRequest) {
   const apiKey = process.env.GEMINI_API_KEY;
+
+  const body = await req.json().catch(() => ({}));
+  const stats: unknown = body?.stats ?? {};
+  const userName: string =
+    typeof body?.userName === "string" && body.userName.trim()
+      ? body.userName.trim()
+      : "生徒";
+
   if (!apiKey) {
-    return NextResponse.json(FALLBACK);
+    return NextResponse.json(buildFallback(userName));
   }
 
   try {
-    const body = await req.json();
-    const stats: unknown = body?.stats ?? {};
-
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
-      systemInstruction: SYSTEM_INSTRUCTION,
+      systemInstruction: buildSystemInstruction(userName),
     });
 
     const prompt =
@@ -73,6 +81,6 @@ export async function POST(req: NextRequest) {
     const payload = parseResponse(result.response.text());
     return NextResponse.json(payload);
   } catch {
-    return NextResponse.json(FALLBACK);
+    return NextResponse.json(buildFallback(userName));
   }
 }
