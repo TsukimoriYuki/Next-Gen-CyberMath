@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Timer, CheckCircle, XCircle, RotateCcw, ChevronRight, Eye, EyeOff } from "lucide-react";
 import type { SpeedReadingProblem } from "@/lib/english-types";
 import { ENGLISH_LEVEL_META } from "@/lib/english-types";
+import { saveEnglishAttempt } from "@/lib/english-history";
 
 type Phase = "reading" | "answering" | "result";
 
@@ -430,7 +431,17 @@ export function SpeedReadingGame({ problem }: { problem: SpeedReadingProblem }) 
   const handleAnsweringFinish = useCallback((answers: number[]) => {
     setUserAnswers(answers);
     setPhase("result");
-  }, []);
+    const score = answers.filter(
+      (a, i) => a === problem.questions[i].correctAnswerIndex,
+    ).length;
+    saveEnglishAttempt({
+      problemId: problem.id,
+      mode: "speed-reading",
+      level: problem.level,
+      score,
+      total: problem.questions.length,
+    });
+  }, [problem]);
   const handleRetry = useCallback(() => {
     setUserAnswers([]);
     setPhase("reading");

@@ -11,6 +11,7 @@ import {
   Layers,
 } from "lucide-react";
 import type { MultiSourceProblem, SourceBlock } from "@/lib/english-types";
+import { saveEnglishAttempt } from "@/lib/english-history";
 
 // ── Source color palette (A=cyan, B=amber, C=violet, D=emerald …) ─────────
 
@@ -193,6 +194,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
     problem.questions.map(() => null)
   );
   const [submitted, setSubmitted] = useState(false);
+  const [mobileTab, setMobileTab] = useState<"sources" | "questions">("sources");
 
   const answeredCount = selected.filter((s) => s !== null).length;
   const allAnswered = answeredCount === problem.questions.length;
@@ -210,6 +212,20 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
     setSubmitted(false);
   };
 
+  const handleSubmit = () => {
+    const score = problem.questions.filter(
+      (q, i) => selected[i] === q.correctAnswerIndex,
+    ).length;
+    saveEnglishAttempt({
+      problemId: problem.id,
+      mode: "multi-source",
+      level: problem.level,
+      score,
+      total: problem.questions.length,
+    });
+    setSubmitted(true);
+  };
+
   const perfect = score === problem.questions.length;
   const passing = score >= Math.ceil(problem.questions.length / 2);
   const scoreColor = perfect ? "#34d399" : passing ? "#fbbf24" : "#f43f5e";
@@ -217,13 +233,39 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
   const scoreBorder= perfect ? "rgba(52,211,153,0.3)"  : passing ? "rgba(251,191,36,0.3)"  : "rgba(244,63,94,0.3)";
 
   return (
-    <div
-      className="grid md:grid-cols-2 rounded-2xl overflow-hidden"
-      style={{ border: "1px solid rgba(255,255,255,0.1)" }}
-    >
+    <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+      {/* ── Mobile tab switcher (hidden on md+) ─────────────────────────── */}
+      <div
+        className="flex md:hidden"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+      >
+        <button
+          onClick={() => setMobileTab("sources")}
+          className="flex-1 py-3 font-mono text-xs font-semibold transition-colors"
+          style={{
+            background: mobileTab === "sources" ? "rgba(34,211,238,0.1)" : "rgba(0,0,0,0.4)",
+            color: mobileTab === "sources" ? "#22d3ee" : "rgba(255,255,255,0.35)",
+            borderRight: "1px solid rgba(255,255,255,0.08)",
+          }}
+        >
+          資料
+        </button>
+        <button
+          onClick={() => setMobileTab("questions")}
+          className="flex-1 py-3 font-mono text-xs font-semibold transition-colors"
+          style={{
+            background: mobileTab === "questions" ? "rgba(34,211,238,0.1)" : "rgba(0,0,0,0.4)",
+            color: mobileTab === "questions" ? "#22d3ee" : "rgba(255,255,255,0.35)",
+          }}
+        >
+          設問
+        </button>
+      </div>
+
+      <div className="grid md:grid-cols-2">
       {/* ── Left pane: Sources ──────────────────────────────────────────── */}
       <div
-        className="md:h-[80vh] overflow-y-auto border-b md:border-b-0 md:border-r p-4 md:p-5 space-y-4"
+        className={`${mobileTab === "sources" ? "" : "hidden"} md:block h-[65vh] md:h-[80vh] overflow-y-auto border-b md:border-b-0 md:border-r p-4 md:p-5 space-y-4`}
         style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "rgba(255,255,255,0.012)",
@@ -243,7 +285,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
 
       {/* ── Right pane: Questions ────────────────────────────────────────── */}
       <div
-        className="md:h-[80vh] overflow-y-auto p-5 md:p-6"
+        className={`${mobileTab === "questions" ? "" : "hidden"} md:block h-[65vh] md:h-[80vh] overflow-y-auto p-5 md:p-6`}
         style={{ background: "rgba(0,0,0,0.35)" }}
       >
         {/* Score summary */}
@@ -410,7 +452,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
               {answeredCount} / {problem.questions.length} 問 回答済み
             </p>
             <button
-              onClick={() => setSubmitted(true)}
+              onClick={handleSubmit}
               disabled={!allAnswered}
               className="w-full rounded-xl py-3 font-mono text-sm font-semibold transition-all duration-300"
               style={{
@@ -428,6 +470,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
             </button>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

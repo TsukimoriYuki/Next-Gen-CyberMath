@@ -11,6 +11,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import type { ComprehensionProblem, SyntaxRole, SyntaxBlock } from "@/lib/english-types";
+import { saveEnglishAttempt } from "@/lib/english-history";
 
 // ── Syntax role color palette ─────────────────────────────────────────────
 
@@ -116,6 +117,7 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
   );
   const [submitted, setSubmitted] = useState(false);
   const [showSyntax, setShowSyntax] = useState<Record<number, boolean>>({});
+  const [mobileTab, setMobileTab] = useState<"passage" | "questions">("passage");
 
   const answeredCount = selected.filter((s) => s !== null).length;
   const allAnswered = answeredCount === problem.questions.length;
@@ -132,6 +134,20 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
     setSelected(problem.questions.map(() => null));
     setSubmitted(false);
     setShowSyntax({});
+  };
+
+  const handleSubmit = () => {
+    const score = problem.questions.filter(
+      (q, i) => selected[i] === q.correctAnswerIndex,
+    ).length;
+    saveEnglishAttempt({
+      problemId: problem.id,
+      mode: "comprehension",
+      level: problem.level,
+      score,
+      total: problem.questions.length,
+    });
+    setSubmitted(true);
   };
 
   const toggleSyntax = (i: number) => {
@@ -154,13 +170,39 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
     : "rgba(244,63,94,0.3)";
 
   return (
-    <div
-      className="grid md:grid-cols-2 rounded-2xl overflow-hidden"
-      style={{ border: "1px solid rgba(255,255,255,0.1)" }}
-    >
+    <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+      {/* ── Mobile tab switcher (hidden on md+) ─────────────────────────── */}
+      <div
+        className="flex md:hidden"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+      >
+        <button
+          onClick={() => setMobileTab("passage")}
+          className="flex-1 py-3 font-mono text-xs font-semibold transition-colors"
+          style={{
+            background: mobileTab === "passage" ? "rgba(34,211,238,0.1)" : "rgba(0,0,0,0.4)",
+            color: mobileTab === "passage" ? "#22d3ee" : "rgba(255,255,255,0.35)",
+            borderRight: "1px solid rgba(255,255,255,0.08)",
+          }}
+        >
+          本文
+        </button>
+        <button
+          onClick={() => setMobileTab("questions")}
+          className="flex-1 py-3 font-mono text-xs font-semibold transition-colors"
+          style={{
+            background: mobileTab === "questions" ? "rgba(34,211,238,0.1)" : "rgba(0,0,0,0.4)",
+            color: mobileTab === "questions" ? "#22d3ee" : "rgba(255,255,255,0.35)",
+          }}
+        >
+          設問
+        </button>
+      </div>
+
+      <div className="grid md:grid-cols-2">
       {/* ── Left pane: Passage ──────────────────────────────────────────── */}
       <div
-        className="md:h-[72vh] overflow-y-auto border-b md:border-b-0 md:border-r p-6 md:p-8"
+        className={`${mobileTab === "passage" ? "" : "hidden"} md:block h-[65vh] md:h-[72vh] overflow-y-auto border-b md:border-b-0 md:border-r p-6 md:p-8`}
         style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "rgba(255,255,255,0.015)",
@@ -190,7 +232,7 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
 
       {/* ── Right pane: Questions ────────────────────────────────────────── */}
       <div
-        className="md:h-[72vh] overflow-y-auto p-6 md:p-8"
+        className={`${mobileTab === "questions" ? "" : "hidden"} md:block h-[65vh] md:h-[72vh] overflow-y-auto p-6 md:p-8`}
         style={{ background: "rgba(0,0,0,0.35)" }}
       >
         {/* Score summary (after submission) */}
@@ -370,7 +412,7 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
               {answeredCount} / {problem.questions.length} 問 回答済み
             </p>
             <button
-              onClick={() => setSubmitted(true)}
+              onClick={handleSubmit}
               disabled={!allAnswered}
               className="w-full rounded-xl py-3 font-mono text-sm font-semibold transition-all duration-300"
               style={{
@@ -386,6 +428,7 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
             </button>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

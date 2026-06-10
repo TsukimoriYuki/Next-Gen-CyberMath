@@ -5,11 +5,11 @@ import { SiteHeader } from "@/components/shell/SiteHeader";
 
 export const metadata: Metadata = {
   title: {
-    default: "Next-Gen Cyber Math",
-    template: "%s | Cyber Math",
+    default: "CYBER OS",
+    template: "%s | CYBER OS",
   },
   description:
-    "数学の美しさと真の理解を追求する、高校数学の次世代学習プラットフォーム。",
+    "数学と英語のデュアルコアを備えた、高校生のための次世代総合学習プラットフォーム。",
 };
 
 export default function RootLayout({
@@ -41,7 +41,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <footer className="border-t border-border/60 py-6 text-center text-xs text-muted-foreground">
           <p>
-            Next-Gen Cyber Math · 数学の美しさと真の理解 ·{" "}
+            CYBER OS · 数学 × 英語 デュアルコア学習プラットフォーム ·{" "}
             <span className="font-mono text-neon-cyan/80">MVP build</span>
           </p>
         </footer>

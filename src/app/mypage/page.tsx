@@ -35,6 +35,15 @@ import { ScoreTrendChart } from "@/components/mock/history/ScoreTrendChart";
 import { UnitRadarChart } from "@/components/mock/history/UnitRadarChart";
 import { WeakTagPanel } from "@/components/mock/history/WeakTagPanel";
 import { AttemptList } from "@/components/mock/history/AttemptList";
+import {
+  subscribeEnglishAttempts,
+  getEnglishAttemptsSnapshot,
+  getEnglishAttemptsServerSnapshot,
+  clearEnglishAttemptsLocal,
+  computeEnglishStats,
+  type EnglishAttempt,
+} from "@/lib/english-history";
+import { ENGLISH_LEVEL_META } from "@/lib/english-types";
 
 type Subject = "MATH" | "ENGLISH";
 
@@ -60,10 +69,26 @@ export default function MyPage() {
   const weak    = useMemo(() => weakTagRanking(attempts, 8), [attempts]);
   const lessons = useMemo(() => recommendedLessons(weak, 4), [weak]);
 
+  const englishAttempts = useSyncExternalStore(
+    subscribeEnglishAttempts,
+    getEnglishAttemptsSnapshot,
+    getEnglishAttemptsServerSnapshot,
+  );
+  const englishStats = useMemo(
+    () => computeEnglishStats(englishAttempts),
+    [englishAttempts],
+  );
+
   const clearHistory = () => {
     if (typeof window === "undefined") return;
     if (!window.confirm("模試の履歴をすべて削除します。よろしいですか？")) return;
     clearAttemptsLocal();
+  };
+
+  const clearEnglishHistory = () => {
+    if (typeof window === "undefined") return;
+    if (!window.confirm("英語学習履歴をすべて削除します。よろしいですか？")) return;
+    clearEnglishAttemptsLocal();
   };
 
   return (
@@ -228,37 +253,52 @@ export default function MyPage() {
         {/* ─── ENGLISH tab ─── */}
         {subject === "ENGLISH" && (
           <div className="space-y-6">
-            {/* Status banner */}
-            <div
-              className="flex items-center gap-3 rounded-2xl px-6 py-4"
-              style={{
-                background: "rgba(16,185,129,0.07)",
-                border: "1px solid rgba(16,185,129,0.22)",
-              }}
-            >
-              <Activity className="h-5 w-5 shrink-0" style={{ color: "#10b981" }} />
-              <div>
-                <p
-                  className="font-mono text-xs font-semibold uppercase tracking-widest"
-                  style={{ color: "#10b981" }}
-                >
-                  DATA COLLECTION IN PROGRESS
-                </p>
-                <p className="mt-0.5 text-xs text-white/40">
-                  英語学習履歴の自動記録機能は実装予定です。現在は各モードに挑戦して感覚をつかんでください。
-                </p>
-              </div>
-            </div>
-
-            {/* Placeholder stat cards */}
+            {/* ── Stat cards ─────────────────────────────────────────────── */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[
-                { label: "速読 平均クリアタイム", value: "--", unit: "s",   icon: Timer,      accent: "#10b981" },
-                { label: "速読 WPM",              value: "--", unit: "wpm", icon: TrendingUp, accent: "#facc15" },
-                { label: "長文読解 正答率",        value: "--", unit: "%",   icon: BookMarked, accent: "#22d3ee" },
-                { label: "マルチソース 完了数",     value: "--", unit: "問",  icon: Network,    accent: "#a78bfa" },
-              ].map((c) => {
+              {(
+                [
+                  {
+                    label: "速読 挑戦数",
+                    value: mounted ? englishStats.speedReading.count : null,
+                    unit: "回",
+                    icon: Zap,
+                    accent: "#10b981",
+                  },
+                  {
+                    label: "速読 正答率",
+                    value: mounted && englishStats.speedReading.count > 0
+                      ? englishStats.speedReading.avgAccuracy
+                      : null,
+                    unit: "%",
+                    icon: TrendingUp,
+                    accent: "#10b981",
+                  },
+                  {
+                    label: "精読 正答率",
+                    value: mounted && englishStats.comprehension.count > 0
+                      ? englishStats.comprehension.avgAccuracy
+                      : null,
+                    unit: "%",
+                    icon: BookMarked,
+                    accent: "#22d3ee",
+                  },
+                  {
+                    label: "マルチソース 完了",
+                    value: mounted ? englishStats.multiSource.count : null,
+                    unit: "問",
+                    icon: Network,
+                    accent: "#a78bfa",
+                  },
+                ] as {
+                  label: string;
+                  value: number | null;
+                  unit: string;
+                  icon: React.ElementType;
+                  accent: string;
+                }[]
+              ).map((c) => {
                 const Icon = c.icon;
+                const hasValue = c.value !== null && c.value > 0;
                 return (
                   <div
                     key={c.label}
@@ -274,45 +314,168 @@ export default function MyPage() {
                         {c.label}
                       </span>
                     </div>
-                    <div className="font-display text-2xl font-extrabold" style={{ color: c.accent }}>
-                      {c.value}
-                      {c.unit && (
-                        <span className="ml-0.5 text-sm font-bold text-white/30">{c.unit}</span>
+                    <div
+                      className="font-display text-2xl font-extrabold"
+                      style={{ color: hasValue ? c.accent : "rgba(255,255,255,0.18)" }}
+                    >
+                      {c.value !== null ? c.value : "--"}
+                      {hasValue && (
+                        <span className="ml-0.5 text-sm font-bold text-white/30">
+                          {c.unit}
+                        </span>
                       )}
                     </div>
-                    <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-white/20">
-                      coming soon
-                    </p>
+                    {!hasValue && (
+                      <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-white/18">
+                        no data yet
+                      </p>
+                    )}
                   </div>
                 );
               })}
             </div>
 
-            {/* Mode entry cards */}
+            {/* ── Recent attempts list ───────────────────────────────────── */}
+            {mounted && englishAttempts.length > 0 ? (
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{ border: "1px solid rgba(255,255,255,0.08)" }}
+              >
+                {/* Header */}
+                <div
+                  className="flex items-center justify-between px-5 py-3"
+                  style={{
+                    background: "rgba(255,255,255,0.03)",
+                    borderBottom: "1px solid rgba(255,255,255,0.07)",
+                  }}
+                >
+                  <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/35">
+                    最近の挑戦 · {englishAttempts.length} 件
+                  </span>
+                  <button
+                    type="button"
+                    onClick={clearEnglishHistory}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/30 transition-colors hover:text-red-400"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                    履歴を削除
+                  </button>
+                </div>
+
+                {/* Rows */}
+                <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                  {englishAttempts.slice(0, 10).map((a: EnglishAttempt) => {
+                    const pct = Math.round((a.score / a.total) * 100);
+                    const scoreColor =
+                      pct === 100 ? "#34d399" : pct >= 60 ? "#fbbf24" : "#f43f5e";
+                    const modeMeta = {
+                      "speed-reading": { label: "速読",  accent: "#10b981" },
+                      "comprehension": { label: "精読",  accent: "#22d3ee" },
+                      "multi-source":  { label: "照合",  accent: "#a78bfa" },
+                    }[a.mode];
+                    const levelMeta = ENGLISH_LEVEL_META[a.level];
+                    return (
+                      <div
+                        key={a.id}
+                        className="flex items-center justify-between px-5 py-3 text-sm"
+                        style={{ background: "rgba(0,0,0,0.2)" }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span
+                            className="shrink-0 rounded-md px-2 py-0.5 font-mono text-[10px] font-semibold"
+                            style={{
+                              background: `color-mix(in srgb, ${modeMeta.accent} 14%, transparent)`,
+                              border: `1px solid color-mix(in srgb, ${modeMeta.accent} 35%, transparent)`,
+                              color: modeMeta.accent,
+                            }}
+                          >
+                            {modeMeta.label}
+                          </span>
+                          <span
+                            className="font-mono text-[11px]"
+                            style={{ color: levelMeta.accent }}
+                          >
+                            {levelMeta.label}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span
+                            className="font-display text-sm font-bold tabular-nums"
+                            style={{ color: scoreColor }}
+                          >
+                            {a.score}/{a.total}
+                            <span className="ml-1 text-xs font-normal text-white/35">
+                              ({pct}%)
+                            </span>
+                          </span>
+                          <span className="font-mono text-[11px] text-white/25 tabular-nums">
+                            {new Date(a.completedAt).toLocaleDateString("ja-JP", {
+                              month: "short",
+                              day: "numeric",
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              mounted && (
+                <div
+                  className="rounded-2xl p-8 text-center"
+                  style={{
+                    background: "rgba(255,255,255,0.025)",
+                    border: "1px solid rgba(16,185,129,0.15)",
+                  }}
+                >
+                  <Activity
+                    className="mx-auto mb-3 h-8 w-8"
+                    style={{ color: "rgba(16,185,129,0.5)" }}
+                  />
+                  <p className="mb-1 font-display text-base font-bold text-white/70">
+                    まだ記録がありません
+                  </p>
+                  <p className="text-xs text-white/35">
+                    下のモードに挑戦して答え合わせをすると、ここに成長の軌跡が刻まれます。
+                  </p>
+                </div>
+              )
+            )}
+
+            {/* ── Mode entry cards ───────────────────────────────────────── */}
             <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                {
-                  href: "/english/speed-reading",
-                  label: "速読長文",
-                  desc: "制限時間内に英文を読み切り、記憶だけで設問に答える速読トレーニング",
-                  icon: Zap,
-                  accent: "#10b981",
-                },
-                {
-                  href: "/english/comprehension",
-                  label: "精読長文",
-                  desc: "構文解析（SVOMC）と詳細解説で英文を深く読み解く精読トレーニング",
-                  icon: BookMarked,
-                  accent: "#22d3ee",
-                },
-                {
-                  href: "/english/multi-source",
-                  label: "マルチソース",
-                  desc: "表・本文・箇条書きを横断照合して条件に合う選択肢を絞り込む",
-                  icon: Network,
-                  accent: "#a78bfa",
-                },
-              ].map((m) => {
+              {(
+                [
+                  {
+                    href: "/english/speed-reading",
+                    label: "速読長文",
+                    desc: "制限時間内に英文を読み切り、記憶だけで設問に答える速読トレーニング",
+                    icon: Zap,
+                    accent: "#10b981",
+                  },
+                  {
+                    href: "/english/comprehension",
+                    label: "精読長文",
+                    desc: "構文解析（SVOMC）と詳細解説で英文を深く読み解く精読トレーニング",
+                    icon: BookMarked,
+                    accent: "#22d3ee",
+                  },
+                  {
+                    href: "/english/multi-source",
+                    label: "マルチソース",
+                    desc: "表・本文・箇条書きを横断照合して条件に合う選択肢を絞り込む",
+                    icon: Network,
+                    accent: "#a78bfa",
+                  },
+                ] as {
+                  href: string;
+                  label: string;
+                  desc: string;
+                  icon: React.ElementType;
+                  accent: string;
+                }[]
+              ).map((m) => {
                 const Icon = m.icon;
                 return (
                   <Link
@@ -331,7 +494,7 @@ export default function MyPage() {
                     <p className="font-display font-bold text-white">{m.label}</p>
                     <p className="mt-1 text-xs leading-relaxed text-white/40">{m.desc}</p>
                     <p
-                      className="mt-3 font-mono text-xs font-semibold transition-all duration-200 group-hover:gap-2"
+                      className="mt-3 font-mono text-xs font-semibold"
                       style={{ color: m.accent }}
                     >
                       挑戦する →

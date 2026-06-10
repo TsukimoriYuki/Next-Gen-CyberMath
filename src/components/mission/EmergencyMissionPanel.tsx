@@ -3,6 +3,18 @@ import { Flame, ArrowRight } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getProblem } from "@/lib/content";
+import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
+import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
+import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
+
+function resolveTitle(slug: string): string | undefined {
+  if (!slug.startsWith("english/")) return getProblem(slug)?.title;
+  const [, mode, id] = slug.split("/");
+  if (mode === "speed-reading") return SPEED_READING_PROBLEMS.find((p) => p.id === id)?.title;
+  if (mode === "comprehension") return COMPREHENSION_PROBLEMS.find((p) => p.id === id)?.title;
+  if (mode === "multi-source") return MULTI_SOURCE_PROBLEMS.find((p) => p.id === id)?.title;
+  return undefined;
+}
 
 export async function EmergencyMissionPanel() {
   const session = await getSession();
@@ -17,7 +29,7 @@ export async function EmergencyMissionPanel() {
   if (missions.length === 0) return null;
 
   const primary = missions[0];
-  const primaryProblem = getProblem(primary.problemSlug);
+  const primaryTitle = resolveTitle(primary.problemSlug);
   const rest = missions.slice(1);
 
   return (
@@ -67,17 +79,8 @@ export async function EmergencyMissionPanel() {
             className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl"
             style={{ color: "oklch(0.35 0.18 350)" }}
           >
-            {primaryProblem?.title ?? primary.problemSlug}
+            {primaryTitle ?? primary.problemSlug}
           </h2>
-
-          {primaryProblem && (
-            <p className="mt-1 font-mono text-sm text-muted-foreground">
-              {primaryProblem.unit}
-              {primaryProblem.university && (
-                <span className="ml-3 text-xs opacity-70">{primaryProblem.university}</span>
-              )}
-            </p>
-          )}
 
           <Link
             href={`/mission/${primary.id}`}
@@ -103,7 +106,7 @@ export async function EmergencyMissionPanel() {
                 その他の未クリアミッション
               </p>
               {rest.map((m) => {
-                const p = getProblem(m.problemSlug);
+                const title = resolveTitle(m.problemSlug);
                 return (
                   <Link
                     key={m.id}
@@ -116,7 +119,7 @@ export async function EmergencyMissionPanel() {
                     }}
                   >
                     <span className="font-semibold">
-                      {p?.title ?? m.problemSlug}
+                      {title ?? m.problemSlug}
                     </span>
                     <ArrowRight className="h-3.5 w-3.5 shrink-0 opacity-60" />
                   </Link>
