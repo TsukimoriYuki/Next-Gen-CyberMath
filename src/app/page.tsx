@@ -1,353 +1,228 @@
 import Link from "next/link";
-import { Suspense } from "react";
-import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layers, Skull } from "lucide-react";
-import {
-  getAllProblems,
-  getChallengeProblems,
-  getProblem,
-  formatDateJP,
-} from "@/lib/content";
-import { DIFFICULTY_META, DIFFICULTY_ORDER, type Problem } from "@/lib/types";
-import { DailyTriple } from "@/components/daily/DailyTriple";
-import { EmergencyMissionPanel } from "@/components/mission/EmergencyMissionPanel";
-import { MessageBar } from "@/components/messages/MessageBar";
-import { prisma } from "@/lib/prisma";
+import { ArrowRight } from "lucide-react";
 
-export const dynamic = "force-dynamic";
-
-async function getDailyProblems(now: Date): Promise<Problem[]> {
-  // UTC midnight of today — must match how DailyChallengeEditor saves dates.
-  const todayUTC = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
-  );
-  try {
-    const challenges = await prisma.dailyChallenge.findMany({
-      where: { date: todayUTC },
-      include: { problem: { select: { slug: true } } },
-      orderBy: { slot: "asc" },
-    });
-    if (challenges.length === 3) {
-      const problems = challenges
-        .map((c) => getProblem(c.problem.slug))
-        .filter((p): p is Problem => p !== undefined);
-      if (problems.length === 3) return problems;
-    }
-  } catch {
-    // DB unavailable — fall through to static fallback
-  }
-  return getChallengeProblems(now);
-}
-
-export default async function HomePage() {
-  const now = new Date();
-  const daily = await getDailyProblems(now);
-  const all = getAllProblems();
-
+export default function PortalPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-      {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl">
-        <div className="glass rounded-3xl px-6 py-14 sm:px-12 sm:py-20">
-          <div className="inline-flex items-center gap-2 rounded-full border border-neon-cyan/30 bg-neon-cyan/5 px-3 py-1 text-xs font-mono uppercase tracking-[0.2em] text-neon-cyan">
-            <Sparkles className="h-3.5 w-3.5" />
-            高校数学 · 次世代学習プラットフォーム
-          </div>
+    <div className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center bg-black px-4 py-16 overflow-hidden">
 
-          <h1 className="mt-6 max-w-3xl font-display text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
-            数学の<span className="text-neon-cyan text-glow-12">美しさ</span>と
-            <br className="hidden sm:block" />
-            真の<span className="text-neon-magenta text-glow-12">理解</span>を、
-            極限まで。
-          </h1>
+      {/* Ambient grid lines */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
 
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            動くグラフで実験し、論理を一段ずつ自分の手で開く。基礎{" "}
-            <span className="font-mono text-neon-lime">A</span> から、発想に感動のある超難問{" "}
-            <span className="font-mono text-neon-magenta">D+</span>{" "}
-            まで攻略する、サイバー学習体験。
-          </p>
+      {/* Radial glow center */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(20,20,40,0.8) 0%, transparent 70%)",
+        }}
+      />
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="#daily"
-              className="glow-magenta inline-flex items-center gap-2 rounded-xl bg-neon-magenta/15 px-5 py-3 text-sm font-semibold text-neon-magenta transition-colors hover:bg-neon-magenta/25"
-            >
-              今日の挑戦へ
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/dojo"
-              className="inline-flex items-center gap-2 rounded-xl border border-neon-amber/40 bg-neon-amber/5 px-5 py-3 text-sm font-semibold text-neon-amber transition-colors hover:bg-neon-amber/15"
-            >
-              <Swords className="h-4 w-4" />
-              道場へ入門
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Difficulty pyramid */}
-      <section className="mt-16">
-        <h2 className="font-display text-xl font-bold tracking-wide">
-          難易度ピラミッド
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          A から D+ へ。上に行くほど、解法そのものが美しくなる。
+      {/* Header label */}
+      <div className="relative mb-12 text-center">
+        <p className="font-mono text-xs uppercase tracking-[0.35em] text-white/30">
+          Next-Gen · Education Platform
         </p>
-
-        <div className="mt-6 flex flex-col items-center gap-2">
-          {[...DIFFICULTY_ORDER].reverse().map((d, i) => {
-            const meta = DIFFICULTY_META[d];
-            const count = all.filter((p) => p.difficulty === d).length;
-            const width = 52 + i * 11;
-            return (
-              <div
-                key={d}
-                className="glass glass-hover flex items-center justify-between rounded-xl px-5 py-3"
-                style={{
-                  width: `${width}%`,
-                  borderColor: `color-mix(in oklch, ${meta.accent} 35%, transparent)`,
-                }}
-              >
-                <span
-                  className="font-display text-lg font-bold"
-                  style={{ color: meta.accent }}
-                >
-                  {meta.label}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {meta.name}
-                </span>
-                <span className="font-mono text-xs text-muted-foreground">
-                  {count} 問
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Daily triple */}
-      <section className="mt-16" id="daily">
-        <DailyTriple problems={daily} dateLabel={formatDateJP(now)} />
-      </section>
-
-      {/* Navigation panels */}
-      <section className="mt-16">
-        <h2 className="font-display text-xl font-bold tracking-wide">
-          道場への扉
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          目的に合わせて入り口を選べ。
+        <h1 className="mt-3 font-display text-5xl font-extrabold tracking-tight text-white sm:text-7xl">
+          C Y B E R
+        </h1>
+        <p className="mt-1 font-mono text-sm tracking-[0.5em] text-white/40 uppercase">
+          Choose your subject
         </p>
+      </div>
 
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {/* 道場 */}
-          <Link
-            href="/dojo"
-            className="washi washi-hover group block rounded-2xl p-6"
-          >
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-amber/10 text-neon-amber transition-transform group-hover:scale-105">
-                <Swords className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">
-                  過去問道場
-                </div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  大学入試の精選問題を、論理ステップで完全攻略する。
-                </div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-amber">
-                  入門する <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
+      {/* Two subject panels */}
+      <div className="relative w-full max-w-4xl">
+        <div className="grid gap-5 sm:grid-cols-2">
 
-          {/* サイバー模試 */}
+          {/* ── CYBER MATH ───────────────────────────────── */}
           <Link
-            href="/mock"
-            className="washi washi-hover group block rounded-2xl p-6"
-          >
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-magenta/10 text-neon-magenta transition-transform group-hover:scale-105">
-                <FileText className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">
-                  サイバー模試
-                </div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  タグ・難易度・時間を自在にカスタムした本番形式テスト。
-                </div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-magenta">
-                  受験する <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* 計算特訓 */}
-          <Link
-            href="/drill"
-            className="washi washi-hover group block rounded-2xl p-6"
-          >
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-cyan/10 text-neon-cyan transition-transform group-hover:scale-105">
-                <Zap className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">
-                  計算特訓
-                </div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  速度と精度を鍛える反復計算ドリル。毎日の習慣に。
-                </div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-cyan">
-                  特訓開始 <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* 弱点診断 */}
-          <Link
-            href="/mock/history"
-            className="washi washi-hover group block rounded-2xl p-6"
-          >
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-lime/10 text-neon-lime transition-transform group-hover:scale-105">
-                <LineChart className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">
-                  弱点診断
-                </div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  過去の模試結果から弱点タグを分析し、学習戦略を立てる。
-                </div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-lime">
-                  診断する <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* 授業スキルツリー */}
-          <Link
-            href="/lessons"
-            className="washi washi-hover group block rounded-2xl p-6"
-          >
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-magenta/10 text-neon-magenta transition-transform group-hover:scale-105">
-                <BookOpen className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">
-                  授業スキルツリー
-                </div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  概念のつながりをたどる。証明から極意まで 3 段構成で体得する。
-                </div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-magenta">
-                  受講する <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* 単元一覧 */}
-          <Link
-            href="/units"
-            className="washi washi-hover group block rounded-2xl p-6"
-          >
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-violet/10 text-neon-violet transition-transform group-hover:scale-105">
-                <Layers className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">
-                  単元一覧
-                </div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  単元から問題を探す。カリキュラム順に体系的に攻略する。
-                </div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-violet">
-                  探索する <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-
-        {/* 特異点 - Singularity - パネル */}
-        <div className="mt-5">
-          <Link
-            href="/abyss"
-            className="group relative block overflow-hidden rounded-2xl transition-all duration-300"
+            href="/math"
+            className="group relative block overflow-hidden rounded-3xl transition-all duration-500"
             style={{
               background:
-                "linear-gradient(135deg, rgba(168,85,247,0.08) 0%, rgba(0,0,0,0.6) 50%, rgba(234,179,8,0.06) 100%)",
-              border: "1px solid rgba(168,85,247,0.25)",
-              boxShadow: "0 0 40px rgba(168,85,247,0.06)",
+                "linear-gradient(145deg, rgba(0,210,255,0.06) 0%, rgba(0,0,0,0.5) 50%, rgba(255,0,170,0.05) 100%)",
+              border: "1px solid rgba(0,210,255,0.2)",
+              boxShadow: "0 0 0 0 rgba(0,210,255,0)",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.boxShadow =
+                "0 0 60px rgba(0,210,255,0.18), 0 0 120px rgba(255,0,170,0.08)";
+              (e.currentTarget as HTMLElement).style.borderColor =
+                "rgba(0,210,255,0.5)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.boxShadow =
+                "0 0 0 0 rgba(0,210,255,0)";
+              (e.currentTarget as HTMLElement).style.borderColor =
+                "rgba(0,210,255,0.2)";
             }}
           >
-            {/* Shimmer on hover */}
+            {/* Shimmer sweep */}
             <span
-              className="pointer-events-none absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
+              className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
               style={{
                 background:
-                  "linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.12) 50%, transparent 100%)",
+                  "linear-gradient(90deg, transparent, rgba(0,210,255,0.08), transparent)",
               }}
             />
-            <div className="relative flex items-center gap-5 px-6 py-5">
-              <span
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
+
+            <div className="relative flex flex-col items-center gap-6 px-8 py-14 text-center">
+              {/* Icon */}
+              <div
+                className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-bold transition-transform duration-300 group-hover:scale-110"
                 style={{
-                  background: "rgba(168,85,247,0.12)",
-                  border: "1px solid rgba(168,85,247,0.3)",
-                  color: "#a855f7",
+                  background:
+                    "linear-gradient(135deg, rgba(0,210,255,0.15), rgba(255,0,170,0.1))",
+                  border: "1px solid rgba(0,210,255,0.3)",
+                  color: "#00d2ff",
+                  fontFamily: "var(--font-display, 'Orbitron', sans-serif)",
+                  textShadow: "0 0 20px rgba(0,210,255,0.6)",
                 }}
               >
-                <Skull className="h-6 w-6" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span
-                    className="font-display text-lg font-bold bg-clip-text text-transparent"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(135deg, #a855f7, #eab308)",
-                    }}
-                  >
-                    特異点 — Singularity
-                  </span>
-                  <span className="rounded-full border border-purple-700/40 bg-purple-900/20 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-purple-500">
-                    Phase 4
-                  </span>
-                </div>
-                <div className="mt-0.5 text-sm text-gray-500">
-                  深淵の超難問をランダム召喚。解けるなら、挑め。
-                </div>
+                Σ
               </div>
-              <ArrowRight className="h-4 w-4 shrink-0 text-purple-600 transition-transform group-hover:translate-x-1" />
+
+              {/* Label */}
+              <div>
+                <div className="font-mono text-xs uppercase tracking-[0.3em] text-white/40">
+                  Subject 01
+                </div>
+                <h2
+                  className="mt-2 font-display text-4xl font-extrabold tracking-tight"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #00d2ff 0%, #ffffff 50%, #ff00aa 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  MATH
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-white/50">
+                  数学の美しさと真の理解を追求する。
+                  <br />
+                  基礎 A から深淵 OLYMPIAD まで。
+                </p>
+              </div>
+
+              {/* CTA */}
+              <div
+                className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-sm font-semibold transition-all duration-300 group-hover:gap-3"
+                style={{
+                  background: "rgba(0,210,255,0.1)",
+                  border: "1px solid rgba(0,210,255,0.35)",
+                  color: "#00d2ff",
+                }}
+              >
+                入室する
+                <ArrowRight className="h-4 w-4" />
+              </div>
+            </div>
+          </Link>
+
+          {/* ── CYBER ENGLISH ────────────────────────────── */}
+          <Link
+            href="/english"
+            className="group relative block overflow-hidden rounded-3xl transition-all duration-500"
+            style={{
+              background:
+                "linear-gradient(145deg, rgba(16,185,129,0.06) 0%, rgba(0,0,0,0.5) 50%, rgba(250,204,21,0.05) 100%)",
+              border: "1px solid rgba(16,185,129,0.2)",
+              boxShadow: "0 0 0 0 rgba(16,185,129,0)",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.boxShadow =
+                "0 0 60px rgba(16,185,129,0.18), 0 0 120px rgba(250,204,21,0.08)";
+              (e.currentTarget as HTMLElement).style.borderColor =
+                "rgba(16,185,129,0.5)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.boxShadow =
+                "0 0 0 0 rgba(16,185,129,0)";
+              (e.currentTarget as HTMLElement).style.borderColor =
+                "rgba(16,185,129,0.2)";
+            }}
+          >
+            {/* Shimmer sweep */}
+            <span
+              className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, rgba(16,185,129,0.08), transparent)",
+              }}
+            />
+
+            <div className="relative flex flex-col items-center gap-6 px-8 py-14 text-center">
+              {/* Icon */}
+              <div
+                className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-bold transition-transform duration-300 group-hover:scale-110"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(250,204,21,0.1))",
+                  border: "1px solid rgba(16,185,129,0.3)",
+                  color: "#10b981",
+                  fontFamily: "var(--font-display, 'Orbitron', sans-serif)",
+                  textShadow: "0 0 20px rgba(16,185,129,0.6)",
+                  fontSize: "1.8rem",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                En
+              </div>
+
+              {/* Label */}
+              <div>
+                <div className="font-mono text-xs uppercase tracking-[0.3em] text-white/40">
+                  Subject 02
+                </div>
+                <h2
+                  className="mt-2 font-display text-4xl font-extrabold tracking-tight"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #10b981 0%, #ffffff 50%, #facc15 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  ENGLISH
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-white/50">
+                  速読から精読まで、英語力を解体して再構築。
+                  <br />
+                  Reading · Grammar · Comprehension
+                </p>
+              </div>
+
+              {/* CTA */}
+              <div
+                className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-sm font-semibold transition-all duration-300 group-hover:gap-3"
+                style={{
+                  background: "rgba(16,185,129,0.1)",
+                  border: "1px solid rgba(16,185,129,0.35)",
+                  color: "#10b981",
+                }}
+              >
+                入室する
+                <ArrowRight className="h-4 w-4" />
+              </div>
             </div>
           </Link>
         </div>
 
-        {/* 緊急ミッション — ログイン済みユーザーに未クリアミッションがある場合のみ表示 */}
-        <Suspense fallback={null}>
-          <EmergencyMissionPanel />
-        </Suspense>
-
-        {/* 師範からのメッセージ */}
-        <Suspense fallback={null}>
-          <div className="mt-5">
-            <MessageBar />
-          </div>
-        </Suspense>
-      </section>
+        {/* Bottom tagline */}
+        <p className="mt-10 text-center font-mono text-xs tracking-[0.2em] text-white/20 uppercase">
+          Select a subject · start the session · exceed your limits
+        </p>
+      </div>
     </div>
   );
 }
