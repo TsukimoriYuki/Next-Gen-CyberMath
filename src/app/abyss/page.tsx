@@ -267,13 +267,6 @@ export default function AbyssPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="mt-8 space-y-6"
-              style={{
-                // Override theme CSS variables so LessonRenderer / LogicSteps
-                // render readable text against the black Abyss background.
-                "--foreground": "oklch(0.92 0.01 240)",
-                "--muted-foreground": "oklch(0.65 0.02 260)",
-                "--border": "oklch(0.40 0.06 240 / 0.35)",
-              } as React.CSSProperties}
             >
               {/* Problem card */}
               <div
@@ -331,8 +324,15 @@ export default function AbyssPage() {
                   }}
                 />
 
-                {/* Statement */}
-                <div>
+                {/* Statement — override CSS vars here only so LessonRenderer
+                    renders light text against the dark Abyss card background.
+                    LogicSteps below is NOT affected and keeps dark text on glass. */}
+                <div
+                  style={{
+                    "--foreground": "oklch(0.92 0.01 240)",
+                    "--muted-foreground": "oklch(0.68 0.02 260)",
+                  } as React.CSSProperties}
+                >
                   <LessonRenderer content={problem.statement} />
                 </div>
               </div>
