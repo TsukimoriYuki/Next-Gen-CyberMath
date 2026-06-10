@@ -44,25 +44,14 @@ export default function PortalPage() {
           {/* ── CYBER MATH ───────────────────────────────── */}
           <Link
             href="/math"
-            className="group relative block overflow-hidden rounded-3xl transition-all duration-500"
+            className="group relative block overflow-hidden rounded-3xl transition-all duration-500 hover:[box-shadow:var(--math-hover-shadow)] hover:[border-color:rgba(0,210,255,0.5)]"
             style={{
               background:
                 "linear-gradient(145deg, rgba(0,210,255,0.06) 0%, rgba(0,0,0,0.5) 50%, rgba(255,0,170,0.05) 100%)",
               border: "1px solid rgba(0,210,255,0.2)",
               boxShadow: "0 0 0 0 rgba(0,210,255,0)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow =
-                "0 0 60px rgba(0,210,255,0.18), 0 0 120px rgba(255,0,170,0.08)";
-              (e.currentTarget as HTMLElement).style.borderColor =
-                "rgba(0,210,255,0.5)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow =
-                "0 0 0 0 rgba(0,210,255,0)";
-              (e.currentTarget as HTMLElement).style.borderColor =
-                "rgba(0,210,255,0.2)";
-            }}
+              "--math-hover-shadow": "0 0 60px rgba(0,210,255,0.18), 0 0 120px rgba(255,0,170,0.08)",
+            } as React.CSSProperties}
           >
             {/* Shimmer sweep */}
             <span
@@ -131,25 +120,14 @@ export default function PortalPage() {
           {/* ── CYBER ENGLISH ────────────────────────────── */}
           <Link
             href="/english"
-            className="group relative block overflow-hidden rounded-3xl transition-all duration-500"
+            className="group relative block overflow-hidden rounded-3xl transition-all duration-500 hover:[box-shadow:var(--en-hover-shadow)] hover:[border-color:rgba(16,185,129,0.5)]"
             style={{
               background:
                 "linear-gradient(145deg, rgba(16,185,129,0.06) 0%, rgba(0,0,0,0.5) 50%, rgba(250,204,21,0.05) 100%)",
               border: "1px solid rgba(16,185,129,0.2)",
               boxShadow: "0 0 0 0 rgba(16,185,129,0)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow =
-                "0 0 60px rgba(16,185,129,0.18), 0 0 120px rgba(250,204,21,0.08)";
-              (e.currentTarget as HTMLElement).style.borderColor =
-                "rgba(16,185,129,0.5)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow =
-                "0 0 0 0 rgba(16,185,129,0)";
-              (e.currentTarget as HTMLElement).style.borderColor =
-                "rgba(16,185,129,0.2)";
-            }}
+              "--en-hover-shadow": "0 0 60px rgba(16,185,129,0.18), 0 0 120px rgba(250,204,21,0.08)",
+            } as React.CSSProperties}
           >
             {/* Shimmer sweep */}
             <span

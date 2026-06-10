@@ -64,23 +64,12 @@ export default function SpeedReadingListPage() {
               <Link
                 key={p.id}
                 href={`/english/speed-reading/${p.id}`}
-                className="group relative block overflow-hidden rounded-2xl transition-all duration-300"
+                className="group relative block overflow-hidden rounded-2xl transition-all duration-300 hover:[border-color:color-mix(in_srgb,var(--card-accent)_40%,transparent)] hover:[background:color-mix(in_srgb,var(--card-accent)_5%,transparent)]"
                 style={{
+                  "--card-accent": meta.accent,
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.08)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor =
-                    `color-mix(in srgb, ${meta.accent} 40%, transparent)`;
-                  (e.currentTarget as HTMLElement).style.background =
-                    `color-mix(in srgb, ${meta.accent} 5%, transparent)`;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor =
-                    "rgba(255,255,255,0.08)";
-                  (e.currentTarget as HTMLElement).style.background =
-                    "rgba(255,255,255,0.03)";
-                }}
+                } as React.CSSProperties}
               >
                 {/* Shimmer */}
                 <span
