@@ -44,6 +44,7 @@ import {
   type EnglishAttempt,
 } from "@/lib/english-history";
 import { ENGLISH_LEVEL_META } from "@/lib/english-types";
+import { AIOracle } from "@/components/dashboard/AIOracle";
 
 type Subject = "MATH" | "ENGLISH";
 
@@ -141,6 +142,11 @@ export default function MyPage() {
             MATH と ENGLISH の学習データを統合表示します
           </p>
         </header>
+
+        {/* AI Oracle */}
+        <div className="mb-8">
+          <AIOracle />
+        </div>
 
         {/* Subject tabs */}
         <div
