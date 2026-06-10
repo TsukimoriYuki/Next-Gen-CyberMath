@@ -43,3 +43,35 @@ export interface SpeedReadingProblem {
   /** 問題の概要タグ（語数・テーマ等） */
   tags?: string[];
 }
+
+// ── Comprehension (精読) types ────────────────────────────────────────────
+
+/** 構文役割ラベル */
+export type SyntaxRole = "S" | "V" | "O" | "C" | "M" | "NONE";
+
+/** 1文をSVOCMに分解した1ブロック */
+export interface SyntaxBlock {
+  text: string;
+  role: SyntaxRole;
+  translation?: string;
+}
+
+/** 精読設問1件 */
+export interface ComprehensionQuestion {
+  questionText: string;
+  options: string[];
+  correctAnswerIndex: number;
+  explanation: string;
+  /** 本文中の複文をSVOCMに分解した構文解析（任意） */
+  syntaxAnalysis?: SyntaxBlock[];
+}
+
+/** 精読問題1件 */
+export interface ComprehensionProblem {
+  id: string;
+  title: string;
+  level: EnglishLevel;
+  passage: string;
+  questions: ComprehensionQuestion[];
+  tags: string[];
+}
