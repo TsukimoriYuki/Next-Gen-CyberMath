@@ -102,7 +102,7 @@ export default async function DojoPage({
         ))}
       </div>
 
-      {/* ---- 私立文系 HACK MODE ---- */}
+      {/* ---- 私立文系 HACK MODE（数学） ---- */}
       <section
         className="mt-10 rounded-2xl overflow-hidden"
         style={{
@@ -111,21 +111,30 @@ export default async function DojoPage({
         }}
       >
         <div
-          className="flex items-center gap-2 px-5 py-3"
+          className="flex items-center justify-between px-5 py-3"
           style={{
             background: "rgba(232,121,249,0.06)",
             borderBottom: "1px solid rgba(232,121,249,0.12)",
           }}
         >
-          <span
-            className="font-mono text-xs font-bold uppercase tracking-[0.2em]"
+          <div className="flex items-center gap-2">
+            <span
+              className="font-mono text-xs font-bold uppercase tracking-[0.2em]"
+              style={{ color: "#e879f9" }}
+            >
+              ▸ 私立文系 HACK MODE
+            </span>
+            <span className="font-mono text-[10px] text-muted-foreground ml-1">
+              志望校群別・数学対策問題
+            </span>
+          </div>
+          <Link
+            href="/english/dojo"
+            className="font-mono text-[10px] transition-colors hover:opacity-80"
             style={{ color: "#e879f9" }}
           >
-            ▸ 私立文系 HACK MODE
-          </span>
-          <span className="font-mono text-[10px] text-white/35 ml-1">
-            志望校群別・出題傾向タグで絞り込み
-          </span>
+            英語版 →
+          </Link>
         </div>
         <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-4">
           {(Object.keys(UNIVERSITY_GROUP_META) as UniversityGroup[]).map((key) => {
@@ -135,8 +144,8 @@ export default async function DojoPage({
                 key={key}
                 className="rounded-xl p-3"
                 style={{
-                  background: `color-mix(in srgb, ${m.accent} 5%, transparent)`,
-                  border: `1px solid color-mix(in srgb, ${m.accent} 22%, transparent)`,
+                  background: `color-mix(in srgb, ${m.accent} 8%, transparent)`,
+                  border: `1px solid color-mix(in srgb, ${m.accent} 28%, transparent)`,
                 }}
               >
                 <div
@@ -145,10 +154,10 @@ export default async function DojoPage({
                 >
                   {m.label}
                 </div>
-                <div className="mt-0.5 font-mono text-[9px] text-white/50">
+                <div className="mt-0.5 font-mono text-[9px] text-muted-foreground">
                   {m.deviationRange}
                 </div>
-                <div className="mt-1 font-mono text-[10px] text-white/35 leading-snug">
+                <div className="mt-1 font-mono text-[10px] text-muted-foreground leading-snug">
                   {m.description}
                 </div>
               </div>
@@ -156,9 +165,10 @@ export default async function DojoPage({
           })}
         </div>
         <div className="px-5 pb-4">
-          <p className="font-mono text-[11px] text-white/30 leading-relaxed">
-            下の探索エリアで <span style={{ color: "#e879f9" }}>tags: 私立文系</span> を入力すると，
-            各大学群の対策問題を絞り込める。英語問題は英語ドジョー（速読・精読・文法）から。
+          <p className="font-mono text-[11px] text-muted-foreground leading-relaxed">
+            下の探索エリアで{" "}
+            <span style={{ color: "#e879f9" }}>tags: 私立文系</span>{" "}
+            を検索すると，各大学群の対策問題を絞り込める。
           </p>
         </div>
       </section>

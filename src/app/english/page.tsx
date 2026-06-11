@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, Timer, BookOpen, Layers, PenLine, CreditCard } from "lucide-react";
+import { ArrowRight, ChevronLeft, Timer, BookOpen, Layers, PenLine, CreditCard, Swords } from "lucide-react";
 
 export default function EnglishHomePage() {
   return (
@@ -295,6 +295,79 @@ export default function EnglishHomePage() {
             </div>
           </Link>
         </div>
+
+        {/* ── 私立文系 過去問道場（フルワイド） ─────────────────────────────── */}
+        <Link
+          href="/english/dojo"
+          className="group relative mt-6 block overflow-hidden rounded-2xl transition-all duration-300"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(232,121,249,0.10) 0%, rgba(245,158,11,0.06) 50%, rgba(0,0,0,0.5) 100%)",
+            border: "1px solid rgba(232,121,249,0.28)",
+          }}
+        >
+          {/* Shimmer */}
+          <span
+            className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, rgba(232,121,249,0.10), transparent)",
+            }}
+          />
+          {/* Glow dot */}
+          <span
+            className="pointer-events-none absolute top-4 right-5 h-2 w-2 rounded-full animate-pulse"
+            style={{ background: "#e879f9", boxShadow: "0 0 8px #e879f9" }}
+          />
+
+          <div className="relative flex items-center gap-6 p-6 sm:p-7">
+            <div
+              className="flex h-14 w-14 items-center justify-center rounded-xl shrink-0 transition-transform duration-300 group-hover:scale-110"
+              style={{
+                background: "rgba(232,121,249,0.12)",
+                border: "1px solid rgba(232,121,249,0.35)",
+              }}
+            >
+              <Swords className="h-7 w-7" style={{ color: "#e879f9" }} />
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/35">
+                Mode 06 — Private University
+              </div>
+              <h2
+                className="mt-1 font-display text-2xl font-extrabold"
+                style={{
+                  background: "linear-gradient(135deg, #e879f9, #f59e0b)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                私立文系 過去問道場
+              </h2>
+              <p className="font-mono text-xs tracking-[0.12em]" style={{ color: "rgba(232,121,249,0.6)" }}>
+                MARCH · 関関同立 · 日東駒専 · 産近甲龍
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-white/50">
+                志望校群別の英語過去問を速読・精読・文法の3科目で一括攻略。
+                大学群ごとの傾向を把握し、最短で合格ラインを超える。
+              </p>
+            </div>
+
+            <div
+              className="shrink-0 hidden sm:flex items-center gap-1.5 rounded-lg px-4 py-2 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-2.5"
+              style={{
+                background: "rgba(232,121,249,0.10)",
+                border: "1px solid rgba(232,121,249,0.32)",
+                color: "#e879f9",
+              }}
+            >
+              道場へ入る
+              <ArrowRight className="h-3.5 w-3.5" />
+            </div>
+          </div>
+        </Link>
 
         {/* Secondary row — vocab & grammar */}
         <div className="mt-6 grid gap-6 md:grid-cols-2">
