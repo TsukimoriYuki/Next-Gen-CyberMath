@@ -47,6 +47,7 @@ import { ENGLISH_LEVEL_META } from "@/lib/english-types";
 import { AIOracle } from "@/components/dashboard/AIOracle";
 import { LearningCalendar } from "@/components/dashboard/LearningCalendar";
 import { ReviewQueuePanel } from "@/components/review/ReviewQueuePanel";
+import { CommonTestReviewSummary } from "@/components/common-test/CommonTestReviewSummary";
 
 type Subject = "MATH" | "ENGLISH";
 
@@ -145,8 +146,19 @@ export default function MyPage() {
           </p>
         </header>
 
-        {/* Review Queue */}
+        {/* Math Review Queue */}
         <ReviewQueuePanel />
+
+        {/* Common Test Review Queue */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+              COMMON TEST REVIEW QUEUE
+            </span>
+            <div className="flex-1 h-px bg-white/[0.05]" />
+          </div>
+          <CommonTestReviewSummary />
+        </div>
 
         {/* AI Oracle */}
         <div className="mb-8">

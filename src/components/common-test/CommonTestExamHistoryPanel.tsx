@@ -1,0 +1,228 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Trophy, Clock, AlertTriangle, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  getCommonTestExamHistory,
+  clearCommonTestExamHistory,
+  type CommonTestExamHistoryItem,
+} from "@/lib/common-test-exam-history";
+
+const EXAM_LABELS: Record<string, { label: string; color: string; glowRgb: string }> = {
+  "math-1a-70": { label: "数IA 70min", color: "#00d2ff", glowRgb: "0,210,255" },
+  "math-2bc-70": { label: "数IIB 70min", color: "#a855f7", glowRgb: "168,85,247" },
+  "english-reading-80": { label: "英語R 80min", color: "#10b981", glowRgb: "16,185,129" },
+};
+
+function formatDuration(sec: number): string {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function formatDate(iso: string): string {
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+export function CommonTestExamHistoryPanel() {
+  const [history, setHistory] = useState<CommonTestExamHistoryItem[]>([]);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [confirmClear, setConfirmClear] = useState(false);
+
+  useEffect(() => {
+    setHistory(getCommonTestExamHistory());
+  }, []);
+
+  function handleClear() {
+    if (confirmClear) {
+      clearCommonTestExamHistory();
+      setHistory([]);
+      setConfirmClear(false);
+    } else {
+      setConfirmClear(true);
+    }
+  }
+
+  if (history.length === 0) {
+    return (
+      <div
+        className="rounded-2xl p-8 text-center"
+        style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
+      >
+        <div className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/25 mb-2">
+          EXAM SIMULATOR HISTORY
+        </div>
+        <p className="font-mono text-xs text-white/20">
+          まだ模擬試験を受験していません。
+        </p>
+        <p className="font-mono text-[10px] text-white/15 mt-1">
+          試験を受験すると、ここに結果が表示されます。
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="font-mono text-[9px] font-bold uppercase tracking-[0.22em] text-white/35">
+          EXAM SIMULATOR HISTORY — {history.length}件
+        </div>
+        <button
+          type="button"
+          onClick={handleClear}
+          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[9px] transition-all hover:opacity-80"
+          style={{
+            background: confirmClear ? "rgba(239,68,68,0.10)" : "rgba(255,255,255,0.04)",
+            border: confirmClear ? "1px solid rgba(239,68,68,0.30)" : "1px solid rgba(255,255,255,0.10)",
+            color: confirmClear ? "#ef4444" : "rgba(255,255,255,0.30)",
+          }}
+        >
+          <Trash2 className="h-3 w-3" />
+          {confirmClear ? "本当に削除する" : "履歴を削除"}
+        </button>
+      </div>
+
+      {/* History items */}
+      {history.map((item) => {
+        const examInfo = EXAM_LABELS[item.examId] ?? { label: item.examId, color: "#ffffff", glowRgb: "255,255,255" };
+        const isExpanded = expandedId === item.id;
+        const overTime = item.actualDurationSec > item.examLimitSec;
+
+        return (
+          <div
+            key={item.id}
+            className="rounded-2xl overflow-hidden"
+            style={{ border: `1px solid rgba(${examInfo.glowRgb},0.18)` }}
+          >
+            {/* Summary row */}
+            <button
+              type="button"
+              onClick={() => setExpandedId(isExpanded ? null : item.id)}
+              className="w-full flex items-center gap-4 px-5 py-4 text-left transition-all hover:opacity-90"
+              style={{ background: `rgba(${examInfo.glowRgb},0.05)` }}
+            >
+              {/* Label */}
+              <div
+                className="shrink-0 rounded-lg px-2.5 py-1 font-mono text-[9px] font-bold"
+                style={{
+                  background: `rgba(${examInfo.glowRgb},0.12)`,
+                  border: `1px solid rgba(${examInfo.glowRgb},0.30)`,
+                  color: examInfo.color,
+                }}
+              >
+                {examInfo.label}
+              </div>
+
+              {/* Date */}
+              <div className="flex-1 min-w-0">
+                <div className="font-mono text-[10px] text-white/50">{formatDate(item.finishedAt)}</div>
+              </div>
+
+              {/* Scores */}
+              <div className="hidden sm:flex items-center gap-4">
+                <div className="text-center">
+                  <div className="font-mono text-[8px] text-amber-400/60 uppercase tracking-wider">時間内</div>
+                  <div className="font-mono text-sm font-extrabold text-amber-400">{item.timeLimitScorePct}%</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-mono text-[8px] text-cyan-400/60 uppercase tracking-wider">全問</div>
+                  <div className="font-mono text-sm font-extrabold text-cyan-400">{item.unlimitedScorePct}%</div>
+                </div>
+              </div>
+
+              {/* Duration */}
+              <div className="flex items-center gap-1 font-mono text-[9px]" style={{ color: overTime ? "#f97316" : "rgba(255,255,255,0.35)" }}>
+                <Clock className="h-3 w-3" />
+                {formatDuration(item.actualDurationSec)}
+                {overTime && <span className="text-orange-400">(延長)</span>}
+              </div>
+
+              {/* Expand icon */}
+              <div className="text-white/25">
+                {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </div>
+            </button>
+
+            {/* Expanded details */}
+            {isExpanded && (
+              <div
+                className="px-5 pb-5 pt-3 space-y-4"
+                style={{ background: "rgba(0,0,0,0.25)", borderTop: "1px solid rgba(255,255,255,0.05)" }}
+              >
+                {/* Score bars */}
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { label: "TIME-LIMIT SCORE", pct: item.timeLimitScorePct, correct: item.timeLimitCorrect, color: "#fbbf24", glow: "251,191,36" },
+                    { label: "UNLIMITED SCORE", pct: item.unlimitedScorePct, correct: item.unlimitedCorrect, color: "#22d3ee", glow: "34,211,238" },
+                  ].map((s) => (
+                    <div key={s.label} className="rounded-xl p-3" style={{ background: `rgba(${s.glow},0.06)`, border: `1px solid rgba(${s.glow},0.18)` }}>
+                      <div className="font-mono text-[8px] uppercase tracking-[0.15em] mb-2" style={{ color: `rgba(${s.glow},0.7)` }}>
+                        {s.label}
+                      </div>
+                      <div className="font-mono text-2xl font-extrabold" style={{ color: s.color }}>
+                        {s.correct} <span className="text-sm text-white/30">/ {item.totalQuestions}</span>
+                      </div>
+                      <div className="mt-2 h-1 rounded-full overflow-hidden bg-white/[0.08]">
+                        <div className="h-full rounded-full" style={{ width: `${s.pct}%`, background: `rgba(${s.glow},0.8)` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Section results */}
+                <div className="space-y-1.5">
+                  <div className="font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-white/25 mb-2">
+                    SECTION BREAKDOWN
+                  </div>
+                  {item.sectionResults.map((sr) => {
+                    const acc = sr.answeredCount > 0 ? Math.round((sr.correctCount / sr.answeredCount) * 100) : 0;
+                    const accColor = acc >= 80 ? "#22c55e" : acc >= 60 ? "#fbbf24" : "#ef4444";
+                    return (
+                      <div key={sr.sectionId} className="flex items-center gap-3">
+                        <span className="font-mono text-[9px] text-white/35 w-10 shrink-0">第{sr.sectionNumber}問</span>
+                        <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-white/[0.06]">
+                          <div className="h-full rounded-full" style={{ width: `${acc}%`, background: accColor }} />
+                        </div>
+                        <span className="font-mono text-[9px] font-bold w-12 text-right" style={{ color: accColor }}>
+                          {sr.answeredCount > 0 ? `${acc}%` : "—"}
+                        </span>
+                        <span className="font-mono text-[8px] text-white/25 w-14 text-right">
+                          {sr.correctCount}/{sr.answeredCount}/{sr.totalQuestions}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Unanswered + weak tags */}
+                <div className="flex flex-wrap gap-3 items-center">
+                  {item.unansweredCount > 0 && (
+                    <div
+                      className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-mono text-[9px]"
+                      style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.22)", color: "#ef4444" }}
+                    >
+                      <AlertTriangle className="h-3 w-3" />
+                      未回答 {item.unansweredCount}問
+                    </div>
+                  )}
+                  {item.weakSkillTags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-lg px-2 py-1 font-mono text-[8px]"
+                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.40)" }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}

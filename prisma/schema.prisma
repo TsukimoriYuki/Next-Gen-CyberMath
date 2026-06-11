@@ -196,30 +196,47 @@ model EnglishAttempt {
   @@index([createdAt])
 }
 
-/// 間隔反復復習キュー。間違えた問題を翌日・3日後・7日後・14日後に再出題する。
+/// 間隔反復復習キュー。数学・英語・共通テストドリル問題を横断管理する。
 model ReviewItem {
-  id             String    @id @default(cuid())
-  userId         String
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  problemSlug    String
-  /// "math" | "english"
-  subject        String    @default("math")
-  /// "mock" | "drill" | "exam" | "manual"
-  source         String    @default("mock")
-  /// "ACTIVE" | "MASTERED"
-  status         String    @default("ACTIVE")
-  /// SRS レベル。正解で +1、不正解で 0 にリセット。4以上で MASTERED。
-  level          Int       @default(0)
-  wrongCount     Int       @default(1)
-  correctStreak  Int       @default(0)
-  nextReviewAt   DateTime
-  lastReviewedAt DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, problemSlug])
-  @@index([userId, nextReviewAt])
+  /// "common-test-drill" | "math-problem" | "english-problem"
+  itemType        String
+  /// 問題ID。math-problem の場合は problemSlug、common-test-drill は questionId。
+  itemId          String
+  /// 科目ID。"math-1a" | "math-2bc" | "english-reading" | "math" | "english"
+  subjectId       String?
+  /// 共通テスト大問ID（"section-1" など）
+  sectionId       String?
+  /// 表示用タイトル
+  title           String?
+  /// "common-test-drill" | "mock" | "drill" | "manual"
+  source          String
+
+  /// "ACTIVE" | "MASTERED"
+  status          String    @default("ACTIVE")
+  /// SRS レベル。正解で +1、不正解で 0 にリセット。4 以上で MASTERED。
+  level           Int       @default(0)
+  wrongCount      Int       @default(1)
+  correctStreak   Int       @default(0)
+
+  /// "wrong" | "guessed-correct" | "dangerous-misconception" | "overtime"
+  reasonFlags     String[]
+  skillTags       String[]
+
+  nextReviewAt    DateTime
+  lastReviewedAt  DateTime?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([userId, itemType, itemId])
   @@index([userId, status])
+  @@index([userId, nextReviewAt])
+  @@index([userId, subjectId])
+  @@index([userId, sectionId])
 }
 
 model DailyChallenge {

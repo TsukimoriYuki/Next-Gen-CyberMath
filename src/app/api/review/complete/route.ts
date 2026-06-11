@@ -1,19 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
-
-// SRS スケジュール: level → 次回復習までの日数
-const REVIEW_DAYS: Record<number, number> = { 0: 1, 1: 3, 2: 7, 3: 14 };
-const MASTERED_THRESHOLD = 4;
-
-function calcNextReviewAt(level: number): Date {
-  const days = REVIEW_DAYS[level] ?? 14;
-  const next = new Date();
-  next.setDate(next.getDate() + days);
-  return next;
-}
+import { getNextReviewDate, getNextLevelAfterReview } from "@/lib/review-schedule";
 
 // POST /api/review/complete
-// Body: { problemSlug: string, isCorrect: boolean }
+// Body: { reviewItemId: string, isCorrect: boolean }
 export async function POST(request: Request) {
   const session = await getSession();
   if (!session) {
@@ -22,46 +12,37 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { problemSlug, isCorrect } = body ?? {};
+    const { reviewItemId, isCorrect } = body ?? {};
 
-    if (!problemSlug || typeof isCorrect !== "boolean") {
+    if (!reviewItemId || typeof isCorrect !== "boolean") {
       return Response.json({ ok: false, error: "invalid payload" }, { status: 400 });
     }
 
     const existing = await prisma.reviewItem.findUnique({
-      where: { userId_problemSlug: { userId: session.sub, problemSlug } },
+      where: { id: reviewItemId },
     });
 
     if (!existing) {
       return Response.json({ ok: false, error: "not found" }, { status: 404 });
     }
 
-    let newLevel: number;
-    let newStatus: string;
-    let newCorrectStreak: number;
-    let newWrongCount: number;
-
-    if (isCorrect) {
-      newLevel = existing.level + 1;
-      newCorrectStreak = existing.correctStreak + 1;
-      newWrongCount = existing.wrongCount;
-      newStatus = newLevel >= MASTERED_THRESHOLD ? "MASTERED" : "ACTIVE";
-    } else {
-      newLevel = 0;
-      newCorrectStreak = 0;
-      newWrongCount = existing.wrongCount + 1;
-      newStatus = "ACTIVE";
+    // 他人のアイテムは更新不可
+    if (existing.userId !== session.sub) {
+      return Response.json({ ok: false, error: "forbidden" }, { status: 403 });
     }
+
+    const { nextLevel, status } = getNextLevelAfterReview(existing.level, isCorrect);
+    const now = new Date();
 
     const updated = await prisma.reviewItem.update({
       where: { id: existing.id },
       data: {
-        level: newLevel,
-        status: newStatus,
-        correctStreak: newCorrectStreak,
-        wrongCount: newWrongCount,
-        nextReviewAt: newStatus === "MASTERED" ? new Date() : calcNextReviewAt(newLevel),
-        lastReviewedAt: new Date(),
+        level: nextLevel,
+        status,
+        correctStreak: isCorrect ? existing.correctStreak + 1 : 0,
+        wrongCount: isCorrect ? existing.wrongCount : existing.wrongCount + 1,
+        nextReviewAt: status === "MASTERED" ? now : getNextReviewDate(nextLevel, now),
+        lastReviewedAt: now,
       },
       select: {
         id: true,
@@ -70,10 +51,26 @@ export async function POST(request: Request) {
         correctStreak: true,
         wrongCount: true,
         nextReviewAt: true,
+        lastReviewedAt: true,
       },
     });
 
-    return Response.json({ ok: true, item: updated });
+    const message =
+      status === "MASTERED"
+        ? "MASTERED — 完全習得！この問題は復習キューから卒業します。"
+        : isCorrect
+        ? `正解！次回は ${updated.nextReviewAt.toLocaleDateString("ja-JP")} に復習します。`
+        : `不正解。明日また復習します。`;
+
+    return Response.json({
+      ok: true,
+      item: {
+        ...updated,
+        nextReviewAt: updated.nextReviewAt.toISOString(),
+        lastReviewedAt: updated.lastReviewedAt?.toISOString() ?? null,
+      },
+      message,
+    });
   } catch (e) {
     console.error("review/complete failed:", e);
     return Response.json({ ok: false, error: "db error" }, { status: 500 });

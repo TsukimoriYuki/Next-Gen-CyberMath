@@ -55,13 +55,20 @@ export async function POST(request: Request) {
         (wrongSlugs as string[]).map((slug) =>
           prisma.reviewItem.upsert({
             where: {
-              userId_problemSlug: { userId: session.sub, problemSlug: slug },
+              userId_itemType_itemId: {
+                userId: session.sub,
+                itemType: "math-problem",
+                itemId: slug,
+              },
             },
             create: {
               userId: session.sub,
-              problemSlug: slug,
-              subject: "math",
+              itemType: "math-problem",
+              itemId: slug,
+              subjectId: "math",
               source: "mock",
+              reasonFlags: ["wrong"],
+              skillTags: [],
               nextReviewAt: tomorrow,
             },
             update: {
@@ -70,6 +77,7 @@ export async function POST(request: Request) {
               correctStreak: 0,
               nextReviewAt: tomorrow,
               status: "ACTIVE",
+              reasonFlags: ["wrong"],
             },
           })
         )

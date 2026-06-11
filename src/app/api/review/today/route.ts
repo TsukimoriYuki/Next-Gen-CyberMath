@@ -3,7 +3,7 @@ import { getSession } from "@/lib/auth";
 import { getProblem } from "@/lib/content";
 
 // GET /api/review/today
-// ログイン中ユーザーの本日期限の復習アイテムを最大10件返す。
+// ログイン中ユーザーの今日期限の復習アイテムを最大20件返す。
 export async function GET() {
   const session = await getSession();
   if (!session) {
@@ -18,24 +18,43 @@ export async function GET() {
         nextReviewAt: { lte: new Date() },
       },
       orderBy: { nextReviewAt: "asc" },
-      take: 10,
+      take: 20,
     });
 
     const enriched = items.map((item) => {
-      const problem = getProblem(item.problemSlug);
+      // math-problem は静的データからタイトルを補完
+      let displayTitle = item.title ?? item.itemId;
+      let unit: string | null = null;
+      let difficulty: string | null = null;
+      let tagline: string | null = null;
+
+      if (item.itemType === "math-problem") {
+        const problem = getProblem(item.itemId);
+        displayTitle = problem?.title ?? item.title ?? item.itemId;
+        unit = problem?.unit ?? null;
+        difficulty = problem?.difficulty ?? null;
+        tagline = problem?.tagline ?? null;
+      }
+
       return {
         id: item.id,
-        problemSlug: item.problemSlug,
-        subject: item.subject,
+        itemType: item.itemType,
+        itemId: item.itemId,
+        subjectId: item.subjectId,
+        sectionId: item.sectionId,
+        title: displayTitle,
         source: item.source,
         level: item.level,
         wrongCount: item.wrongCount,
         correctStreak: item.correctStreak,
+        reasonFlags: item.reasonFlags,
+        skillTags: item.skillTags,
         nextReviewAt: item.nextReviewAt.toISOString(),
-        title: problem?.title ?? item.problemSlug,
-        unit: problem?.unit ?? "—",
-        difficulty: problem?.difficulty ?? "—",
-        tagline: problem?.tagline ?? null,
+        lastReviewedAt: item.lastReviewedAt?.toISOString() ?? null,
+        // math-problem 専用フィールド
+        unit,
+        difficulty,
+        tagline,
       };
     });
 
