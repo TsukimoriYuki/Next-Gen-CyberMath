@@ -45,6 +45,16 @@ export interface CommonTestDrillQuestion {
   estimatedMinutes: number;
   difficulty: "BASIC" | "STANDARD" | "HARD";
   skillTags: CommonTestSkillTag[];
+  /** 個別配点（未設定の場合は大問配点を均等割り） */
+  questionScore?: number;
+  /** 「問1」「問2」などの設問ラベル */
+  subQuestionLabel?: string;
+  /** マークシート欄ラベル（例: "[ ア ]"） */
+  marksheetLabel?: string;
+  /** 出題形式の様式（例: "会話文" "資料読み取り"） */
+  sourceStyle?: string;
+  /** 資料の種類（例: "poster" "email" "graph"） */
+  stimulusType?: string;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -100,6 +110,64 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
   },
 
   {
+    id: "ct-m1a-s1-q3",
+    subjectId: "math-1a",
+    sectionId: "section-1",
+    title: "命題 — 必要条件と十分条件",
+    context:
+      "太郎さんと花子さんが、実数 $x$ についての2つの条件 $p$ : $x^2 = 4$ と $q$ : $x = 2$ の関係について話している。\n\n太郎：$x = 2$ なら $x^2 = 4$ は必ず成り立つよね。\n花子：でも $x^2 = 4$ だからといって $x = 2$ とは限らないよ。$x = -2$ の場合もあるから。",
+    statement:
+      "2人の会話をもとに考えると、条件 $p$ : $x^2 = 4$ は、条件 $q$ : $x = 2$ であるための何にあたるか。最も適切なものを選べ。",
+    type: "single-choice",
+    options: [
+      "必要条件であるが、十分条件ではない",
+      "十分条件であるが、必要条件ではない",
+      "必要十分条件である",
+      "必要条件でも十分条件でもない",
+    ],
+    correctAnswer: "必要条件であるが、十分条件ではない",
+    explanation:
+      "$q \\Rightarrow p$（$x = 2$ ならば $x^2 = 4$）は真なので、$p$ は $q$ であるための必要条件。一方 $p \\Rightarrow q$（$x^2 = 4$ ならば $x = 2$）は $x = -2$ が反例となり偽なので、$p$ は $q$ の十分条件ではない。よって「必要条件であるが、十分条件ではない」が正しい。",
+    strategy:
+      "「$p$ は $q$ であるための◯◯条件」と問われたら、矢印を2本書く：$q \\Rightarrow p$ が真なら $p$ は必要条件、$p \\Rightarrow q$ が真なら $p$ は十分条件。会話文に反例（$x = -2$）のヒントが含まれていることが多いので、誘導を素直に使う。2分以内。",
+    trapExplanation:
+      "「必要」と「十分」の向きを逆に覚えていると正反対の選択肢を選んでしまう。「ならば矢印の先（結論側）が必要条件」と機械的に確認すること。主語が $p$ か $q$ かの読み違いにも注意。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["会話文", "条件整理", "誘導読解"],
+    sourceStyle: "会話文",
+  },
+
+  {
+    id: "ct-m1a-s1-q4",
+    subjectId: "math-1a",
+    sectionId: "section-1",
+    title: "図形と計量 — 仰角から木の高さを求める",
+    context:
+      "図書委員会の活動で、校庭にある木の高さを測ることになった。巻き尺と角度測定器を使い、木の根もとと同じ高さの地点から先端を見上げる角度（仰角）を2か所で測定した。",
+    statement:
+      "地点 $A$ から木の先端を見上げると仰角は $30°$ であった。$A$ から木に向かってまっすぐ $20$ m 近づいた地点 $B$ では、仰角は $45°$ であった。木の高さを求めよ。ただし、目の高さは考えないものとする。",
+    type: "single-choice",
+    options: [
+      "$10(\\sqrt{3}+1)$ m",
+      "$10(\\sqrt{3}-1)$ m",
+      "$20(\\sqrt{3}-1)$ m",
+      "$\\dfrac{20\\sqrt{3}}{3}$ m",
+    ],
+    correctAnswer: "$10(\\sqrt{3}+1)$ m",
+    explanation:
+      "木の高さを $h$ とする。地点 $B$ では仰角 $45°$ なので、$B$ から木までの距離は $h$。地点 $A$ では仰角 $30°$ なので、$A$ から木までの距離は $\\dfrac{h}{\\tan 30°} = \\sqrt{3}\\,h$。$A$ と $B$ の距離が $20$ m だから $\\sqrt{3}\\,h - h = 20$。よって $h = \\dfrac{20}{\\sqrt{3}-1} = \\dfrac{20(\\sqrt{3}+1)}{(\\sqrt{3}-1)(\\sqrt{3}+1)} = \\dfrac{20(\\sqrt{3}+1)}{2} = 10(\\sqrt{3}+1)$ m。",
+    strategy:
+      "仰角の問題は必ず直角三角形の図を描く。$45°$ なら「距離 = 高さ」、$30°$ なら「距離 = $\\sqrt{3} \\times$ 高さ」と即座に変換し、2地点の距離の差で方程式を立てる。分母の有理化まで含めて4分以内が目標。",
+    trapExplanation:
+      "$\\tan 30° = \\dfrac{1}{\\sqrt{3}}$ と $\\tan 60° = \\sqrt{3}$ を取り違えると距離の式が逆になる。また、有理化のときに分母 $(\\sqrt{3}-1)(\\sqrt{3}+1) = 2$ を $3-1=2$ と正しく処理できているか確認すること。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理", "数式変形"],
+    sourceStyle: "日常場面",
+  },
+
+  {
     id: "ct-m1a-s2-q1",
     subjectId: "math-1a",
     sectionId: "section-2",
@@ -142,6 +210,61 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
   },
 
   {
+    id: "ct-m1a-s2-q3",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "データの分析 — 箱ひげ図から確実に言えること",
+    context:
+      "ある高校の1年生40人が受けた数学のテスト（100点満点）の得点を箱ひげ図にまとめたところ、次の値が読み取れた。\n\n最小値: 35点 ／ 第1四分位数: 48点 ／ 中央値: 56点 ／ 第3四分位数: 70点 ／ 最大値: 92点",
+    statement:
+      "この箱ひげ図から確実に正しいと言えるものを、次のうちから一つ選べ。",
+    type: "single-choice",
+    options: [
+      "平均点は56点である",
+      "四分位範囲は22点である",
+      "半数以上の生徒が60点以上である",
+      "最高点と最低点の差は50点である",
+    ],
+    correctAnswer: "四分位範囲は22点である",
+    explanation:
+      "四分位範囲 = 第3四分位数 − 第1四分位数 = $70 - 48 = 22$ 点。これは確実に正しい。「平均点は56点」は誤り（56点は中央値であり、平均値は箱ひげ図からは分からない）。「半数以上が60点以上」も誤り（中央値が56点なので、半数の生徒は56点以下）。「最高点と最低点の差」（範囲）は $92 - 35 = 57$ 点であり、50点ではない。",
+    strategy:
+      "箱ひげ図の問題は「確実に言えること」と「言えそうで言えないこと」の区別が核心。平均値・各データの個数・分布の形は箱ひげ図からは原則分からない。四分位範囲・範囲・中央値の位置だけが確実に読み取れる。各選択肢を1つずつ検証して3分以内。",
+    trapExplanation:
+      "中央値と平均値の混同が最頻出のワナ。箱の真ん中の線は「中央値」であって平均値ではない。また「範囲（レンジ）」と「四分位範囲」の取り違えにも注意。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["データ読み取り", "選択肢消去", "条件整理"],
+    stimulusType: "boxplot",
+  },
+
+  {
+    id: "ct-m1a-s2-q4",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — グラフの平行移動",
+    statement:
+      "放物線 $y = x^2 - 2x + 3$ を、$x$ 軸方向に $2$、$y$ 軸方向に $-1$ だけ平行移動して得られる放物線の方程式を求めよ。",
+    type: "single-choice",
+    options: [
+      "$y = x^2 - 6x + 10$",
+      "$y = x^2 - 6x + 8$",
+      "$y = x^2 + 2x + 2$",
+      "$y = x^2 - 2x + 2$",
+    ],
+    correctAnswer: "$y = x^2 - 6x + 10$",
+    explanation:
+      "$y = x^2 - 2x + 3 = (x-1)^2 + 2$ より頂点は $(1,\\ 2)$。$x$ 軸方向に $2$、$y$ 軸方向に $-1$ 移動すると頂点は $(3,\\ 1)$ になる。よって $y = (x-3)^2 + 1 = x^2 - 6x + 9 + 1 = x^2 - 6x + 10$。",
+    strategy:
+      "平行移動は「頂点の移動」で処理するのが最速：①平方完成して頂点を出す ②頂点を移動する ③頂点形式から展開する。公式（$x$ を $x-p$ に置き換える）でも解けるが、符号ミスが起きやすいので頂点方式を推奨。3分以内。",
+    trapExplanation:
+      "置き換え公式を使う場合、$x$ 軸方向に $+2$ の移動は「$x$ を $x-2$ に置き換える」こと。$x+2$ を代入してしまう符号の取り違えが最も多い誤り。頂点の移動で検算すると確実。",
+    estimatedMinutes: 3,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "計算処理"],
+  },
+
+  {
     id: "ct-m1a-s3-q1",
     subjectId: "math-1a",
     sectionId: "section-3",
@@ -160,6 +283,72 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
     estimatedMinutes: 4,
     difficulty: "STANDARD",
     skillTags: ["誘導読解", "数式変形"],
+  },
+
+  {
+    id: "ct-m1a-s3-q2",
+    subjectId: "math-1a",
+    sectionId: "section-3",
+    title: "図形の性質 — 方べきの定理と接線",
+    statement:
+      "円の外部の点 $P$ から円に2本の直線を引く。1本は円と2点 $A$, $B$ で交わり、$PA = 4$、$PB = 9$ である（$A$ は $P$ に近い方の交点）。もう1本は円と点 $T$ で接している。接線の長さ $PT$ を求めよ。",
+    type: "single-choice",
+    options: ["$6$", "$\\sqrt{13}$", "$\\dfrac{13}{2}$", "$13$"],
+    correctAnswer: "$6$",
+    explanation:
+      "方べきの定理より、円外の点 $P$ から引いた割線と接線について $PT^2 = PA \\times PB$ が成り立つ。$PT^2 = 4 \\times 9 = 36$ なので $PT = 6$。",
+    strategy:
+      "「円外の点から接線と割線」と読んだ瞬間に方べきの定理 $PT^2 = PA \\times PB$ を適用する。数値が $4 \\times 9 = 36 = 6^2$ のようにきれいになるのが共通テストの特徴なので、平方数にならなければ計算ミスを疑う。2分以内。",
+    trapExplanation:
+      "$PT^2 = PA \\times AB$ のように、$P$ からの距離ではなく弦の長さ $AB$ を掛けてしまう誤りが多い。方べきの定理は「$P$ から各交点までの距離の積」であることを確認。$PT = \\sqrt{36}$ の後、$36$ をそのまま答えにしないこと。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "計算処理"],
+  },
+
+  {
+    id: "ct-m1a-s3-q3",
+    subjectId: "math-1a",
+    sectionId: "section-3",
+    title: "図形の性質 — 円に内接する四角形",
+    statement:
+      "四角形 $ABCD$ は円に内接しており、$\\angle BAD = 75°$ である。このとき $\\angle BCD$ の大きさを求めよ。",
+    type: "single-choice",
+    options: ["$75°$", "$95°$", "$105°$", "$115°$"],
+    correctAnswer: "$105°$",
+    explanation:
+      "円に内接する四角形では、向かい合う内角の和は $180°$ になる。$\\angle BAD + \\angle BCD = 180°$ より $\\angle BCD = 180° - 75° = 105°$。",
+    strategy:
+      "「円に内接する四角形」と読んだら反射的に「対角の和 $= 180°$」。この性質は単独でも問われるが、本番では後続の設問（円周角や接弦定理との組合せ）の入り口になることが多い。30秒〜1分で確実に取る。",
+    trapExplanation:
+      "「隣り合う角」と「向かい合う角」の取り違えに注意。$\\angle BAD$ の対角は $\\angle BCD$（頂点 $A$ と $C$ が向かい合う）。図を描かずに記号だけで処理すると対応を誤りやすい。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+
+  {
+    id: "ct-m1a-s3-q4",
+    subjectId: "math-1a",
+    sectionId: "section-3",
+    title: "図形の性質 — 内心と角の大きさ",
+    context:
+      "太郎さんと花子さんが、三角形の内心の性質について話している。\n\n太郎：内心は3つの内角の二等分線が交わる点だったよね。\n花子：ということは、内心 $I$ と2つの頂点を結んでできる角は、もとの三角形の角で表せそうだね。",
+    statement:
+      "三角形 $ABC$ において $\\angle A = 80°$ とし、内心を $I$ とする。このとき $\\angle BIC$ の大きさを求めよ。",
+    type: "single-choice",
+    options: ["$100°$", "$115°$", "$130°$", "$140°$"],
+    correctAnswer: "$130°$",
+    explanation:
+      "$\\angle B + \\angle C = 180° - 80° = 100°$。$I$ は内心なので $BI$, $CI$ はそれぞれ $\\angle B$, $\\angle C$ の二等分線。三角形 $IBC$ の内角の和より $\\angle BIC = 180° - \\dfrac{\\angle B + \\angle C}{2} = 180° - 50° = 130°$。一般に $\\angle BIC = 90° + \\dfrac{\\angle A}{2}$ が成り立つ（$90° + 40° = 130°$）。",
+    strategy:
+      "内心の角の問題は公式 $\\angle BIC = 90° + \\dfrac{\\angle A}{2}$ を覚えておくと一瞬で解ける。覚えていなくても「二等分線 → 三角形 $IBC$ の内角の和」から1分で導出できる。会話文の誘導はこの導出の流れを示している。3分以内。",
+    trapExplanation:
+      "外心と内心の混同が最大のワナ。外心なら中心角の関係（$\\angle BOC = 2\\angle A = 160°$）になる。「内角の二等分線の交点 = 内心」「辺の垂直二等分線の交点 = 外心」を確認してから手を動かすこと。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["会話文", "誘導読解", "条件整理"],
+    sourceStyle: "会話文",
   },
 
   {
@@ -186,6 +375,80 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
     estimatedMinutes: 2,
     difficulty: "BASIC",
     skillTags: ["条件整理", "計算処理"],
+  },
+
+  {
+    id: "ct-m1a-s4-q2",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "場合の数 — 委員会の選び方",
+    context:
+      "文化祭の実行委員を、男子4人、女子3人の合計7人の候補者から3人選ぶことになった。",
+    statement:
+      "選ばれた3人の中に女子が少なくとも1人含まれる選び方は何通りあるか。",
+    type: "single-choice",
+    options: ["$18$ 通り", "$30$ 通り", "$31$ 通り", "$35$ 通り"],
+    correctAnswer: "$31$ 通り",
+    explanation:
+      "全体から「女子が1人も含まれない（全員男子）」場合を引く余事象の考え方を使う。全体は $_7\\mathrm{C}_3 = 35$ 通り。全員男子になるのは $_4\\mathrm{C}_3 = 4$ 通り。よって $35 - 4 = 31$ 通り。",
+    strategy:
+      "「少なくとも1人」と読んだら余事象（全体 − 1人も含まれない場合）を最初に検討する。直接数える（女子1人・2人・3人で場合分け）と $_3\\mathrm{C}_1 {}_4\\mathrm{C}_2 + {}_3\\mathrm{C}_2 {}_4\\mathrm{C}_1 + {}_3\\mathrm{C}_3 = 18 + 12 + 1 = 31$ で検算もできる。3分以内。",
+    trapExplanation:
+      "全体の $35$ 通り（選択肢にある）をそのまま答えにしないこと。また、場合分けで直接数えるとき $_3\\mathrm{C}_1 \\times {}_4\\mathrm{C}_2$ の組合せの掛け算を足し算と混同する誤りも多い。",
+    estimatedMinutes: 3,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理", "選択肢消去"],
+    sourceStyle: "日常場面",
+  },
+
+  {
+    id: "ct-m1a-s4-q3",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 反復試行",
+    statement:
+      "1個のさいころを4回投げるとき、3の倍数の目（3または6）がちょうど2回出る確率を求めよ。",
+    type: "single-choice",
+    options: [
+      "$\\dfrac{8}{27}$",
+      "$\\dfrac{4}{27}$",
+      "$\\dfrac{8}{81}$",
+      "$\\dfrac{1}{9}$",
+    ],
+    correctAnswer: "$\\dfrac{8}{27}$",
+    explanation:
+      "3の倍数の目が出る確率は $\\dfrac{2}{6} = \\dfrac{1}{3}$、出ない確率は $\\dfrac{2}{3}$。4回中ちょうど2回出る確率は、反復試行の公式より $_4\\mathrm{C}_2 \\left(\\dfrac{1}{3}\\right)^2 \\left(\\dfrac{2}{3}\\right)^2 = 6 \\times \\dfrac{1}{9} \\times \\dfrac{4}{9} = \\dfrac{24}{81} = \\dfrac{8}{27}$。",
+    strategy:
+      "反復試行は「回数の選び方 $\\times$ 成功確率のべき $\\times$ 失敗確率のべき」の3点セット。まず1回あたりの確率（ここでは $\\dfrac{1}{3}$）を確定してから公式に乗せる。約分（$\\dfrac{24}{81} = \\dfrac{8}{27}$）まで丁寧に。3分以内。",
+    trapExplanation:
+      "係数 $_4\\mathrm{C}_2 = 6$ の掛け忘れが最頻出（その場合 $\\dfrac{4}{81}$ になり、選択肢の $\\dfrac{8}{81}$ や $\\dfrac{4}{27}$ と紛らわしい）。また「3の倍数」を「3の目だけ」（確率 $\\dfrac{1}{6}$）と誤読しないこと。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["計算処理", "条件整理"],
+  },
+
+  {
+    id: "ct-m1a-s4-q4",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — くじ引きの期待値",
+    context:
+      "生徒会のバザーで、次のようなくじを企画している。\n\nくじは全部で10本。そのうち1等（賞品券500円分）が1本、2等（賞品券100円分）が3本、残り6本ははずれ（賞品券なし）である。",
+    statement:
+      "このくじを1本引くとき、もらえる賞品券の金額の期待値を求めよ。",
+    type: "single-choice",
+    options: ["$50$ 円", "$60$ 円", "$80$ 円", "$100$ 円"],
+    correctAnswer: "$80$ 円",
+    explanation:
+      "期待値 $=$（金額 $\\times$ 確率）の総和。$500 \\times \\dfrac{1}{10} + 100 \\times \\dfrac{3}{10} + 0 \\times \\dfrac{6}{10} = 50 + 30 + 0 = 80$ 円。",
+    strategy:
+      "期待値は「表を作る」のが確実：金額の行と確率の行を並べ、積を足す。はずれ（金額0）も表に含めると確率の合計が1になっているか検算できる。2分以内。",
+    trapExplanation:
+      "確率を「本数」のまま掛けて10で割り忘れる、あるいは1等と2等の本数（1本と3本）を取り違える誤りが多い。確率の合計 $\\dfrac{1}{10} + \\dfrac{3}{10} + \\dfrac{6}{10} = 1$ の確認を習慣にすること。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["データ読み取り", "計算処理"],
+    sourceStyle: "日常場面",
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -219,6 +482,53 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
   },
 
   {
+    id: "ct-m2bc-s1-q2",
+    subjectId: "math-2bc",
+    sectionId: "section-1",
+    title: "図形と方程式 — 円と直線が接する条件",
+    statement:
+      "円 $x^2 + y^2 = 25$ と直線 $3x + 4y = k$（$k > 0$）が接するとき、定数 $k$ の値を求めよ。",
+    type: "single-choice",
+    options: ["$5$", "$20$", "$25$", "$30$"],
+    correctAnswer: "$25$",
+    explanation:
+      "円の中心は原点 $(0,0)$、半径は $5$。直線 $3x + 4y - k = 0$ と原点の距離は $\\dfrac{|{-k}|}{\\sqrt{3^2+4^2}} = \\dfrac{k}{5}$（$k>0$）。接する条件は「中心と直線の距離 $=$ 半径」なので $\\dfrac{k}{5} = 5$、よって $k = 25$。",
+    strategy:
+      "円と直線の位置関係は「中心からの距離 $d$ と半径 $r$ の比較」で処理するのが最速（判別式より計算が軽い）。点と直線の距離の公式 $d = \\dfrac{|ax_0+by_0+c|}{\\sqrt{a^2+b^2}}$ を即座に使えるようにしておく。$3, 4, 5$ の組はよく出る。3分以内。",
+    trapExplanation:
+      "$\\sqrt{3^2+4^2} = 5$ を計算せずに $d = \\dfrac{k}{7}$（$3+4$）とする誤り、また「距離 $=$ 半径の2乗」と混同して $k = 5 \\times 25$ とする誤りに注意。接する条件は $d = r$（2乗しない）。",
+    estimatedMinutes: 3,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "計算処理"],
+  },
+
+  {
+    id: "ct-m2bc-s1-q3",
+    subjectId: "math-2bc",
+    sectionId: "section-1",
+    title: "三角関数 — 加法定理による値の計算",
+    statement:
+      "$\\sin 75°$ の値を求めよ。",
+    type: "single-choice",
+    options: [
+      "$\\dfrac{\\sqrt{6}+\\sqrt{2}}{4}$",
+      "$\\dfrac{\\sqrt{6}-\\sqrt{2}}{4}$",
+      "$\\dfrac{\\sqrt{3}+1}{2}$",
+      "$\\dfrac{\\sqrt{2}+1}{2}$",
+    ],
+    correctAnswer: "$\\dfrac{\\sqrt{6}+\\sqrt{2}}{4}$",
+    explanation:
+      "$75° = 45° + 30°$ と分解して加法定理を使う。$\\sin 75° = \\sin(45°+30°) = \\sin 45° \\cos 30° + \\cos 45° \\sin 30° = \\dfrac{\\sqrt{2}}{2} \\cdot \\dfrac{\\sqrt{3}}{2} + \\dfrac{\\sqrt{2}}{2} \\cdot \\dfrac{1}{2} = \\dfrac{\\sqrt{6}}{4} + \\dfrac{\\sqrt{2}}{4} = \\dfrac{\\sqrt{6}+\\sqrt{2}}{4}$。",
+    strategy:
+      "$75°$, $105°$, $15°$ などの角は「$30°$, $45°$, $60°$ の和か差」に分解するのが定石。加法定理の符号（$\\sin$ の和は $+$）を確実に。$75°$ は第1象限なので答えは正、かつ $\\sin 60° \\approx 0.87$ より大きいはず、という見積もりで検算できる。2分以内。",
+    trapExplanation:
+      "$\\sin 75°$ と $\\sin 15° = \\dfrac{\\sqrt{6}-\\sqrt{2}}{4}$ の取り違えが典型（加法定理の符号ミスで起こる）。$\\sin 75° > \\sin 45° \\approx 0.71$ なので、$\\dfrac{\\sqrt{6}-\\sqrt{2}}{4} \\approx 0.26$ は明らかに小さすぎると気づけるはず。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "計算処理"],
+  },
+
+  {
     id: "ct-m2bc-s2-q1",
     subjectId: "math-2bc",
     sectionId: "section-2",
@@ -235,6 +545,48 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
     trapExplanation:
       "係数 3 を $x^3$ に残したまま（$3x^3/3$ を $x^3$ にしない）計算する誤り。不定積分で各項の係数を忘れずに割ること。",
     estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+
+  {
+    id: "ct-m2bc-s2-q2",
+    subjectId: "math-2bc",
+    sectionId: "section-2",
+    title: "対数 — 対数方程式と真数条件",
+    statement:
+      "方程式 $\\log_2 (x-1) + \\log_2 (x+1) = 3$ を解け。",
+    type: "single-choice",
+    options: ["$x = 3$", "$x = \\pm 3$", "$x = 9$", "$x = \\sqrt{7}$"],
+    correctAnswer: "$x = 3$",
+    explanation:
+      "真数条件より $x - 1 > 0$ かつ $x + 1 > 0$、すなわち $x > 1$。対数の和は積の対数なので $\\log_2 (x-1)(x+1) = 3$、つまり $x^2 - 1 = 2^3 = 8$。$x^2 = 9$ より $x = \\pm 3$ だが、真数条件 $x > 1$ を満たすのは $x = 3$ のみ。",
+    strategy:
+      "対数方程式は「①真数条件を先に書く → ②対数をまとめる → ③指数の形に直す → ④真数条件で解を選別」の4ステップを固定化する。①を最初にやっておくと最後の選別を忘れない。3分以内。",
+    trapExplanation:
+      "$x = \\pm 3$ をそのまま答えにするのが最頻出の誤り（選択肢にも用意されている）。$x = -3$ では真数 $x - 1 = -4 < 0$ となり対数が定義できない。真数条件の確認は対数方程式の必須手順。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["数式変形", "条件整理"],
+  },
+
+  {
+    id: "ct-m2bc-s2-q3",
+    subjectId: "math-2bc",
+    sectionId: "section-2",
+    title: "微分 — 3次関数の極大値",
+    statement:
+      "関数 $f(x) = x^3 - 3x + 1$ の極大値を求めよ。",
+    type: "single-choice",
+    options: ["$3$", "$1$", "$-1$", "$2$"],
+    correctAnswer: "$3$",
+    explanation:
+      "$f'(x) = 3x^2 - 3 = 3(x-1)(x+1)$。$f'(x) = 0$ となるのは $x = \\pm 1$。増減表を書くと、$x < -1$ で増加、$-1 < x < 1$ で減少、$x > 1$ で増加。よって $x = -1$ で極大となり、極大値は $f(-1) = (-1)^3 - 3(-1) + 1 = -1 + 3 + 1 = 3$。",
+    strategy:
+      "3次関数の極値は「微分 → 因数分解 → 増減表」の流れを機械的に。$x^3$ の係数が正なら「先に極大、後に極小」（増減が増→減→増）なので、小さい方の解 $x = -1$ が極大と即断できる。3分以内。",
+    trapExplanation:
+      "極大値を与える $x$（$=-1$）と極大値そのもの（$f(-1) = 3$）の混同に注意。また $f(-1)$ の計算で $(-1)^3 = -1$ と $-3 \\times (-1) = +3$ の符号処理を慎重に。$x = 1$（極小）に代入すると $f(1) = -1$ で、これも選択肢に並んでいる。",
+    estimatedMinutes: 3,
     difficulty: "BASIC",
     skillTags: ["計算処理", "数式変形"],
   },
@@ -261,6 +613,51 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
   },
 
   {
+    id: "ct-m2bc-s3-q2",
+    subjectId: "math-2bc",
+    sectionId: "section-3",
+    title: "数列 — 等差数列の一般項と第10項",
+    context:
+      "太郎さんは、文化祭の看板を飾る電飾の個数を段ごとに増やしていく計画を立てている。各段の電飾の個数は等差数列になるように並べる。",
+    statement:
+      "等差数列 $\\{a_n\\}$ において $a_3 = 7$、$a_7 = 19$ であるとき、$a_{10}$ の値を求めよ。",
+    type: "single-choice",
+    options: ["$22$", "$25$", "$28$", "$31$"],
+    correctAnswer: "$28$",
+    explanation:
+      "公差を $d$ とすると $a_7 - a_3 = 4d = 19 - 7 = 12$ より $d = 3$。$a_3 = a_1 + 2d = 7$ から $a_1 = 7 - 6 = 1$。よって $a_{10} = a_1 + 9d = 1 + 27 = 28$。または $a_{10} = a_7 + 3d = 19 + 9 = 28$ と直接求めてもよい。",
+    strategy:
+      "2つの項の値が与えられたら「項数の差 $\\times$ 公差 $=$ 値の差」で公差を即求める（$a_7 - a_3 = 4d$）。初項に戻らず $a_{10} = a_7 + 3d$ と進む方が速くてミスも少ない。3分以内。",
+    trapExplanation:
+      "$a_7 - a_3$ の項数差を $7 - 3 = 4$ ではなく $7$ や $3$ と数え違える誤り、$a_{10} = a_7 + 3d$ を $a_{10} = a_7 + 4d$ とする「植木算」型のずれに注意。",
+    estimatedMinutes: 3,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+    sourceStyle: "日常場面",
+  },
+
+  {
+    id: "ct-m2bc-s3-q3",
+    subjectId: "math-2bc",
+    sectionId: "section-3",
+    title: "数列 — Σの計算",
+    statement:
+      "$\\displaystyle\\sum_{k=1}^{10} (2k + 1)$ の値を求めよ。",
+    type: "single-choice",
+    options: ["$100$", "$110$", "$120$", "$130$"],
+    correctAnswer: "$120$",
+    explanation:
+      "$\\displaystyle\\sum_{k=1}^{10} (2k+1) = 2\\sum_{k=1}^{10} k + \\sum_{k=1}^{10} 1 = 2 \\times \\dfrac{10 \\times 11}{2} + 10 = 110 + 10 = 120$。",
+    strategy:
+      "$\\Sigma$ は線形性で分解して公式 $\\sum k = \\dfrac{n(n+1)}{2}$ に帰着させるのが基本。定数項の $\\sum 1 = n$ を忘れないこと。等差数列の和の公式（初項3、末項21、項数10 → $\\dfrac{10(3+21)}{2} = 120$）でも検算できる。2分以内。",
+    trapExplanation:
+      "定数 $1$ の和を $1$ とする（$n$ 倍し忘れる）誤りが最頻出で、その場合 $111$ になり選択肢の $110$ と紛らわしい。また $\\sum k$ の公式の $n$ に $10$ 以外を入れないよう、上端の値を確認すること。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["計算処理", "数式変形"],
+  },
+
+  {
     id: "ct-m2bc-s4-q1",
     subjectId: "math-2bc",
     sectionId: "section-4",
@@ -279,6 +676,59 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
     estimatedMinutes: 2,
     difficulty: "BASIC",
     skillTags: ["計算処理", "データ読み取り"],
+  },
+
+  {
+    id: "ct-m2bc-s4-q2",
+    subjectId: "math-2bc",
+    sectionId: "section-4",
+    title: "統計的推測 — 母平均の95%信頼区間",
+    context:
+      "ある工場で製造される飲料1本あたりの内容量を調べるため、無作為に100本を抽出したところ、標本平均は500.0 mLであった。母標準偏差は10.0 mLであることが分かっている。\n\n標準正規分布において P(-1.96 ≦ Z ≦ 1.96) = 0.95 とする。",
+    statement:
+      "母平均 $m$ に対する信頼度95%の信頼区間を求めよ。",
+    type: "single-choice",
+    options: [
+      "$498.04 \\leqq m \\leqq 501.96$",
+      "$499.80 \\leqq m \\leqq 500.20$",
+      "$490.00 \\leqq m \\leqq 510.00$",
+      "$498.00 \\leqq m \\leqq 502.00$",
+    ],
+    correctAnswer: "$498.04 \\leqq m \\leqq 501.96$",
+    explanation:
+      "標本平均の標準偏差（標準誤差）は $\\dfrac{\\sigma}{\\sqrt{n}} = \\dfrac{10.0}{\\sqrt{100}} = 1.0$。信頼度95%の信頼区間は $\\bar{x} \\pm 1.96 \\times \\dfrac{\\sigma}{\\sqrt{n}} = 500.0 \\pm 1.96 \\times 1.0$。よって $498.04 \\leqq m \\leqq 501.96$。",
+    strategy:
+      "信頼区間は公式 $\\bar{x} \\pm 1.96 \\cdot \\dfrac{\\sigma}{\\sqrt{n}}$ に値を当てはめるだけ。まず $\\dfrac{\\sigma}{\\sqrt{n}}$ を計算してから $1.96$ 倍する2段階で処理するとミスが減る。$\\sqrt{100} = 10$ のようにきれいな値になるのが共通テストの典型。4分以内。",
+    trapExplanation:
+      "$\\sqrt{n}$ で割り忘れて $500 \\pm 19.6$ とする誤りが最頻出。「標本平均のばらつきは元のばらつきより小さい（$\\sqrt{n}$ 分の1）」というイメージを持っておくと気づける。母標準偏差と標本平均の値の取り違えにも注意。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["データ読み取り", "計算処理", "条件整理"],
+    stimulusType: "survey",
+  },
+
+  {
+    id: "ct-m2bc-s4-q3",
+    subjectId: "math-2bc",
+    sectionId: "section-4",
+    title: "統計的推測 — 正規分布と確率",
+    context:
+      "ある高校の3年生の模試の得点 $X$ は、平均50点、標準偏差10点の正規分布 $N(50,\\ 10^2)$ に従うとみなせる。\n\n標準正規分布表（抜粋）: P(0 ≦ Z ≦ 1) = 0.3413 ／ P(0 ≦ Z ≦ 2) = 0.4772",
+    statement:
+      "得点が70点以上である生徒の割合はおよそ何%か。最も近いものを選べ。",
+    type: "single-choice",
+    options: ["約 $2.3$ %", "約 $4.6$ %", "約 $15.9$ %", "約 $47.7$ %"],
+    correctAnswer: "約 $2.3$ %",
+    explanation:
+      "標準化すると $Z = \\dfrac{X - 50}{10}$ なので、$X \\geqq 70$ は $Z \\geqq 2$ に対応する。$P(Z \\geqq 2) = 0.5 - P(0 \\leqq Z \\leqq 2) = 0.5 - 0.4772 = 0.0228$。よって約2.3%。",
+    strategy:
+      "正規分布の問題は「標準化 → 表の値 → 0.5 から引く（または足す）」の3手順。求める範囲が右すそ（$Z \\geqq 2$）なのか中央部なのかを図を描いて確認してから表を引く。表の値 $0.4772$ は「0からZまで」の面積であることに注意。3分以内。",
+    trapExplanation:
+      "表の値 $0.4772$ をそのまま答えとする誤り（選択肢に用意されている）が典型。表は「中心から $Z$ まで」の確率なので、すその確率は $0.5$ から引く必要がある。$Z = 1$ と $Z = 2$ の取り違え（その場合 約15.9%）にも注意。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["データ読み取り", "計算処理"],
+    stimulusType: "table",
   },
 
   {
@@ -303,9 +753,135 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
   },
 
   {
-    id: "ct-m2bc-s6-q1",
+    id: "ct-m2bc-s5-q2",
+    subjectId: "math-2bc",
+    sectionId: "section-5",
+    title: "ベクトル — 内分点の位置ベクトル",
+    statement:
+      "三角形 $OAB$ において、$\\overrightarrow{OA} = \\vec{a}$、$\\overrightarrow{OB} = \\vec{b}$ とする。辺 $AB$ を $2:1$ に内分する点を $P$ とするとき、$\\overrightarrow{OP}$ を $\\vec{a}$、$\\vec{b}$ で表せ。",
+    type: "single-choice",
+    options: [
+      "$\\dfrac{1}{3}\\vec{a} + \\dfrac{2}{3}\\vec{b}$",
+      "$\\dfrac{2}{3}\\vec{a} + \\dfrac{1}{3}\\vec{b}$",
+      "$\\dfrac{1}{2}\\vec{a} + \\dfrac{1}{2}\\vec{b}$",
+      "$2\\vec{a} + \\vec{b}$",
+    ],
+    correctAnswer: "$\\dfrac{1}{3}\\vec{a} + \\dfrac{2}{3}\\vec{b}$",
+    explanation:
+      "$AB$ を $m:n$ に内分する点の位置ベクトルは $\\dfrac{n\\vec{a} + m\\vec{b}}{m+n}$。$2:1$ の内分なので $\\overrightarrow{OP} = \\dfrac{1 \\cdot \\vec{a} + 2 \\cdot \\vec{b}}{2+1} = \\dfrac{1}{3}\\vec{a} + \\dfrac{2}{3}\\vec{b}$。$P$ は $B$ 寄り（$A$ から3分の2進んだ点）なので $\\vec{b}$ の係数が大きくなることと整合する。",
+    strategy:
+      "内分点の公式は「比とベクトルがたすき掛け」（$m:n$ なら $n\\vec{a} + m\\vec{b}$）。暗記が不安なら「$2:1$ の内分点は $B$ 寄り → $\\vec{b}$ の係数が大」という図のイメージで検算する習慣をつける。係数の和が1になることも必ず確認。2分以内。",
+    trapExplanation:
+      "比の順序を逆にして $\\dfrac{2}{3}\\vec{a} + \\dfrac{1}{3}\\vec{b}$ とするのが最頻出の誤り（選択肢に用意されている）。「$2:1$ に内分」は $A$ 側から $2$、$B$ 側から $1$ の比。図を描いて $P$ がどちらに寄るかを見れば防げる。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "条件整理"],
+  },
+
+  {
+    id: "ct-m2bc-s5-q3",
+    subjectId: "math-2bc",
+    sectionId: "section-5",
+    title: "ベクトル — 垂直条件",
+    statement:
+      "$\\vec{a} = (1,\\ 2)$、$\\vec{b} = (x,\\ -3)$ について、$\\vec{a} \\perp \\vec{b}$ であるとき、$x$ の値を求めよ。",
+    type: "single-choice",
+    options: ["$6$", "$-6$", "$\\dfrac{3}{2}$", "$-\\dfrac{3}{2}$"],
+    correctAnswer: "$6$",
+    explanation:
+      "垂直条件は内積が $0$：$\\vec{a} \\cdot \\vec{b} = 1 \\times x + 2 \\times (-3) = x - 6 = 0$。よって $x = 6$。",
+    strategy:
+      "「垂直 → 内積 $= 0$」「平行 → 成分が比例」の対応を即座に使い分ける。内積の計算は成分の積の和だけなので、1分で確実に得点する問題。検算は $\\vec{b} = (6, -3)$ と $\\vec{a} = (1,2)$ の内積 $6 - 6 = 0$ で一瞬。",
+    trapExplanation:
+      "平行条件（$1 \\times (-3) - 2x = 0$ より $x = -\\dfrac{3}{2}$）と混同する誤りが典型で、選択肢にも並んでいる。「垂直は内積ゼロ」を確認してから式を立てること。",
+    estimatedMinutes: 1,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+
+  {
+    id: "ct-m2bc-s6-q2",
     subjectId: "math-2bc",
     sectionId: "section-6",
+    title: "平面上の曲線 — 楕円の焦点",
+    statement:
+      "楕円 $\\dfrac{x^2}{9} + \\dfrac{y^2}{4} = 1$ の焦点の座標を求めよ。",
+    type: "single-choice",
+    options: [
+      "$(\\pm\\sqrt{5},\\ 0)$",
+      "$(\\pm\\sqrt{13},\\ 0)$",
+      "$(0,\\ \\pm\\sqrt{5})$",
+      "$(\\pm 3,\\ 0)$",
+    ],
+    correctAnswer: "$(\\pm\\sqrt{5},\\ 0)$",
+    explanation:
+      "$a^2 = 9$、$b^2 = 4$ で $a^2 > b^2$ なので、焦点は $x$ 軸上にある。$c^2 = a^2 - b^2 = 9 - 4 = 5$ より $c = \\sqrt{5}$。よって焦点は $(\\pm\\sqrt{5},\\ 0)$。",
+    strategy:
+      "楕円の焦点は「大きい分母の軸の上」にあり、$c^2 = a^2 - b^2$（引き算）。双曲線の $c^2 = a^2 + b^2$（足し算）との対比で覚える。分母の大小を見て焦点の軸を判定 → $c$ を計算、の2手で3分以内。",
+    trapExplanation:
+      "双曲線の公式と混同して $c^2 = 9 + 4 = 13$ とする誤り（選択肢の $\\sqrt{13}$）が最頻出。また、分母の大小を確認せずに焦点を $y$ 軸上としないこと。頂点 $(\\pm 3, 0)$ と焦点の混同にも注意。",
+    estimatedMinutes: 3,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "条件整理"],
+  },
+
+  {
+    id: "ct-m2bc-s6-q3",
+    subjectId: "math-2bc",
+    sectionId: "section-6",
+    title: "平面上の曲線 — 媒介変数表示の曲線",
+    statement:
+      "媒介変数 $\\theta$ を用いて $x = 3\\cos\\theta$、$y = 2\\sin\\theta$ と表される点 $(x,\\ y)$ が描く曲線の方程式を求めよ。",
+    type: "single-choice",
+    options: [
+      "$\\dfrac{x^2}{9} + \\dfrac{y^2}{4} = 1$",
+      "$\\dfrac{x^2}{4} + \\dfrac{y^2}{9} = 1$",
+      "$x^2 + y^2 = 6$",
+      "$\\dfrac{x^2}{9} - \\dfrac{y^2}{4} = 1$",
+    ],
+    correctAnswer: "$\\dfrac{x^2}{9} + \\dfrac{y^2}{4} = 1$",
+    explanation:
+      "$\\cos\\theta = \\dfrac{x}{3}$、$\\sin\\theta = \\dfrac{y}{2}$ と解いて、$\\sin^2\\theta + \\cos^2\\theta = 1$ に代入すると $\\dfrac{x^2}{9} + \\dfrac{y^2}{4} = 1$。これは長軸が $x$ 軸方向の楕円である。",
+    strategy:
+      "三角関数の媒介変数表示は「$\\cos\\theta$ と $\\sin\\theta$ について解いて、2乗の和 $= 1$ に放り込む」が定石。$x$ の係数が $\\cos$ 側、$y$ の係数が $\\sin$ 側という対応を崩さないこと。2分以内。",
+    trapExplanation:
+      "分母の $9$ と $4$ を逆にする誤り（$x = 3\\cos\\theta$ なら $x^2$ の分母は $3^2 = 9$）。また、$+$ と $-$ を取り違えて双曲線にしないこと。媒介変数消去の符号は $\\sin^2 + \\cos^2 = 1$ なので必ず $+$。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "計算処理"],
+  },
+
+  {
+    id: "ct-m2bc-s6-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-6",
+    title: "平面上の曲線 — 双曲線の漸近線",
+    statement:
+      "双曲線 $\\dfrac{x^2}{4} - \\dfrac{y^2}{9} = 1$ の漸近線の方程式を求めよ。",
+    type: "single-choice",
+    options: [
+      "$y = \\pm\\dfrac{3}{2}x$",
+      "$y = \\pm\\dfrac{2}{3}x$",
+      "$y = \\pm\\dfrac{9}{4}x$",
+      "$y = \\pm\\dfrac{4}{9}x$",
+    ],
+    correctAnswer: "$y = \\pm\\dfrac{3}{2}x$",
+    explanation:
+      "双曲線 $\\dfrac{x^2}{a^2} - \\dfrac{y^2}{b^2} = 1$ の漸近線は $y = \\pm\\dfrac{b}{a}x$。$a = 2$、$b = 3$ なので漸近線は $y = \\pm\\dfrac{3}{2}x$。",
+    strategy:
+      "漸近線は「右辺の $1$ を $0$ に置き換えた式 $\\dfrac{x^2}{4} - \\dfrac{y^2}{9} = 0$ を解く」と導出でき、公式を忘れても対応できる。$\\dfrac{y^2}{9} = \\dfrac{x^2}{4}$ から $y = \\pm\\dfrac{3}{2}x$。3分以内。",
+    trapExplanation:
+      "$\\dfrac{b}{a}$ と $\\dfrac{a}{b}$ の取り違え（$y = \\pm\\dfrac{2}{3}x$）が最頻出。「$y = $ の式だから分子が $y$ 側の $b$」と覚えるか、$1$ を $0$ にする導出で確認する。分母の2乗 $\\dfrac{9}{4}$ のまま答えにしないこと。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["数式変形", "条件整理"],
+  },
+
+  {
+    // 注: idは復習キュー互換のため変更しない（第6問分割前のID）
+    id: "ct-m2bc-s6-q1",
+    subjectId: "math-2bc",
+    sectionId: "section-7",
     title: "複素数平面 — 複素数のべき乗",
     statement:
       "$z = 1 + i$ のとき、$z^4$ を求めよ。（$i$ は虚数単位）",
@@ -320,6 +896,53 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
       "$(1+i)^4$ を展開するとき、$(1+i)^2 = 2 + 2i$ と計算する誤り（$i^2 = -1$ を忘れて $i^2 = 1$ と扱う）が頻出。$i^2 = -1$ を必ず意識すること。",
     estimatedMinutes: 2,
     difficulty: "BASIC",
+    skillTags: ["数式変形", "計算処理"],
+  },
+
+  {
+    id: "ct-m2bc-s7-q2",
+    subjectId: "math-2bc",
+    sectionId: "section-7",
+    title: "複素数平面 — 絶対値と偏角",
+    statement:
+      "複素数 $z = 1 + \\sqrt{3}\\,i$ の絶対値 $|z|$ と偏角 $\\arg z$（$0 \\leqq \\arg z < 2\\pi$）を求めよ。",
+    type: "single-choice",
+    options: [
+      "$|z| = 2$, $\\arg z = \\dfrac{\\pi}{3}$",
+      "$|z| = \\sqrt{3}$, $\\arg z = \\dfrac{\\pi}{3}$",
+      "$|z| = 2$, $\\arg z = \\dfrac{\\pi}{6}$",
+      "$|z| = 4$, $\\arg z = \\dfrac{\\pi}{3}$",
+    ],
+    correctAnswer: "$|z| = 2$, $\\arg z = \\dfrac{\\pi}{3}$",
+    explanation:
+      "$|z| = \\sqrt{1^2 + (\\sqrt{3})^2} = \\sqrt{1+3} = 2$。偏角は $\\cos\\theta = \\dfrac{1}{2}$、$\\sin\\theta = \\dfrac{\\sqrt{3}}{2}$ を満たす角なので $\\theta = \\dfrac{\\pi}{3}$。よって $z = 2\\left(\\cos\\dfrac{\\pi}{3} + i\\sin\\dfrac{\\pi}{3}\\right)$。",
+    strategy:
+      "極形式への変換は「①絶対値（2乗和のルート）②偏角（実部・虚部の比から特別角を判定）」の2手順。$1 : \\sqrt{3} : 2$ の比を見たら $60°$（$\\dfrac{\\pi}{3}$）と即断できるようにしておく。ド・モアブルを使う問題の前提になるので確実に。2分以内。",
+    trapExplanation:
+      "$|z|^2 = 4$ と $|z| = 2$ の混同（選択肢の $4$）、および偏角 $\\dfrac{\\pi}{3}$ と $\\dfrac{\\pi}{6}$ の取り違えに注意。実部と虚部のどちらが $\\sqrt{3}$ かで角が変わる：虚部が $\\sqrt{3}$ なら $60°$、実部が $\\sqrt{3}$ なら $30°$。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "計算処理"],
+  },
+
+  {
+    id: "ct-m2bc-s7-q3",
+    subjectId: "math-2bc",
+    sectionId: "section-7",
+    title: "複素数平面 — 原点中心の回転",
+    statement:
+      "複素数平面上で、点 $z = 1 + i$ を原点を中心に $\\dfrac{\\pi}{2}$ だけ回転した点を表す複素数を求めよ。",
+    type: "single-choice",
+    options: ["$-1 + i$", "$1 - i$", "$-1 - i$", "$1 + i$"],
+    correctAnswer: "$-1 + i$",
+    explanation:
+      "原点中心に $\\dfrac{\\pi}{2}$ 回転することは、$\\cos\\dfrac{\\pi}{2} + i\\sin\\dfrac{\\pi}{2} = i$ を掛けることに対応する。$i(1+i) = i + i^2 = -1 + i$。図形的には、第1象限の点 $(1,1)$ が第2象限の点 $(-1,1)$ に移ることと一致する。",
+    strategy:
+      "「原点中心の $\\theta$ 回転 $=$ $(\\cos\\theta + i\\sin\\theta)$ を掛ける」は複素数平面の最重要操作。特に $\\dfrac{\\pi}{2}$ 回転は「$i$ を掛けるだけ」と覚える。計算後は図を描いて象限が合っているか10秒で検算する。2分以内。",
+    trapExplanation:
+      "$i(1+i) = i + i^2$ で $i^2 = -1$ の処理を忘れて $1 + i$ のままにする誤り、回転方向（反時計回りが正）を逆にして $1 - i$ とする誤りが典型。回転前後で原点からの距離（絶対値）が変わらないことも確認材料になる。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
     skillTags: ["数式変形", "計算処理"],
   },
 
@@ -363,6 +986,71 @@ Note: Participants under age 16 must be accompanied by an adult guardian during 
   },
 
   {
+    id: "ct-eng-s1-q2",
+    subjectId: "english-reading",
+    sectionId: "section-1",
+    title: "案内文読解 — 締切と提出方法の特定",
+    passage: `Hillside High School Cafeteria — New Menu Trial
+
+From May 12 to May 23, the cafeteria will offer three new lunch items: vegetable curry, chicken rice bowl, and tofu salad.
+
+We want your opinion! After trying a new item, please fill out a feedback card. Cards are available next to the cash register. Completed cards should be placed in the red box by the cafeteria entrance no later than May 26.
+
+Students who submit a feedback card will receive a free drink coupon, which can be used until the end of June.`,
+    statement:
+      "What should students do to receive a free drink coupon?",
+    type: "single-choice",
+    options: [
+      "Buy all three new lunch items by May 23",
+      "Put a completed feedback card in the red box by May 26",
+      "Hand a feedback card to the cashier by May 23",
+      "Use a drink coupon before the end of May",
+    ],
+    correctAnswer: "Put a completed feedback card in the red box by May 26",
+    explanation:
+      "本文に \"Completed cards should be placed in the red box by the cafeteria entrance no later than May 26\" とあり、その直後に \"Students who submit a feedback card will receive a free drink coupon\" とある。つまりクーポンの条件は「5月26日までに赤い箱にカードを入れること」。3品すべて買う必要はなく、提出先はレジ係ではなく赤い箱。クーポンの使用期限は6月末である。",
+    strategy:
+      "設問の \"to receive a free drink coupon\" を先に読み、本文から「クーポン」の語を探してその前後の条件文だけを精読する。日付が複数出てくる案内文では「何の締切か」をメモしながら読むと混同しない。2分以内。",
+    trapExplanation:
+      "日付のすり替えに注意：May 23 は新メニューの提供終了日、May 26 はカード提出の締切。\"by May 23\" を含む選択肢は期間の混同を狙ったワナ。また提出先（red box）と入手場所（next to the cash register）の取り違えも狙われている。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["英語スキャニング", "条件整理"],
+    stimulusType: "notice",
+  },
+
+  {
+    id: "ct-eng-s1-q3",
+    subjectId: "english-reading",
+    sectionId: "section-1",
+    title: "ポスター読解 — 入館可能時刻の計算",
+    passage: `Riverside Science Museum — Spring Schedule
+
+Opening hours: 9:30 a.m. – 5:30 p.m. (Tuesday to Sunday)
+Closed on Mondays
+
+Please note:
+- Last admission is 60 minutes before closing time.
+- The planetarium show (40 minutes) starts at 11:00 a.m., 1:00 p.m., and 3:00 p.m.
+- Visitors with a student ID receive a 20% discount on admission.`,
+    statement:
+      "According to the poster, what is the latest time visitors can enter the museum?",
+    type: "single-choice",
+    options: ["4:30 p.m.", "5:00 p.m.", "5:30 p.m.", "4:50 p.m."],
+    correctAnswer: "4:30 p.m.",
+    explanation:
+      "閉館時刻は5:30 p.m.で、\"Last admission is 60 minutes before closing time\" とあるので、最終入館時刻は閉館の60分前、つまり4:30 p.m.である。",
+    strategy:
+      "\"last admission\"（最終入館）のような掲示物特有の表現は頻出。設問が時刻を問うていたら、本文の時刻をそのまま答えにせず「計算が必要か」を必ず確認する。ここでは 5:30 − 60分 の一手間が問われている。1分30秒以内。",
+    trapExplanation:
+      "閉館時刻の 5:30 p.m. をそのまま選ぶのが最頻出の誤り。また \"60 minutes\" を「30分」と思い込んで 5:00 p.m. を選ばないこと。プラネタリウムの上映時間（40分）は最終入館と無関係なダミー情報。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["英語スキャニング", "データ読み取り"],
+    stimulusType: "poster",
+  },
+
+  {
     id: "ct-eng-s2-q1",
     subjectId: "english-reading",
     sectionId: "section-2",
@@ -389,6 +1077,72 @@ I tried online learning last semester. Honestly, it did not suit me. I found it 
     estimatedMinutes: 4,
     difficulty: "STANDARD",
     skillTags: ["要旨把握", "英語スキャニング", "選択肢消去"],
+  },
+
+  {
+    id: "ct-eng-s2-q2",
+    subjectId: "english-reading",
+    sectionId: "section-2",
+    title: "レビュー比較 — 2人の共通意見の特定",
+    passage: `Customer Reviews — "Starlight" Wireless Earphones
+
+★★★★☆ Posted by Kenta_M
+I have used these earphones for two months. The sound quality is clear, and the battery lasts more than eight hours, which is perfect for my long commute. My only complaint is the carrying case — it is too large for my pocket.
+
+★★★☆☆ Posted by Aoi_S
+The battery life is impressive; I only charge them twice a week. However, I was disappointed with the touch controls, which often do not respond. The sound is acceptable but not as rich as I expected for the price.`,
+    statement:
+      "What do both reviewers say about the earphones?",
+    type: "single-choice",
+    options: [
+      "The battery lasts a long time",
+      "The sound quality is excellent",
+      "The carrying case is inconvenient",
+      "The touch controls are unreliable",
+    ],
+    correctAnswer: "The battery lasts a long time",
+    explanation:
+      "Kentaは \"the battery lasts more than eight hours\"、Aoiは \"The battery life is impressive\" と、2人ともバッテリーの持ちを高く評価している。音質はKentaが \"clear\" と肯定する一方、Aoiは \"not as rich as I expected\" と不満。ケースへの不満はKentaのみ、タッチ操作への不満はAoiのみ。",
+    strategy:
+      "「両者に共通する内容」を問う問題は、各レビューの評価ポイントを「+/−」つきでメモしながら読む（例: Kenta: 音+ 電池+ ケース− / Aoi: 電池+ 操作− 音±）。メモが揃えば共通項は機械的に見つかる。3分以内。",
+    trapExplanation:
+      "片方しか述べていない内容（ケース、タッチ操作）を「どこかで読んだ」記憶だけで選ばないこと。また音質はKentaが褒めてAoiが物足りないと述べる「評価が割れた」項目で、共通点と真逆のワナ。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["情報照合", "要旨把握", "選択肢消去"],
+    stimulusType: "review",
+  },
+
+  {
+    id: "ct-eng-s2-q3",
+    subjectId: "english-reading",
+    sectionId: "section-2",
+    title: "ブログ読解 — 事実と意見の区別",
+    passage: `My First School Festival — Posted by Hana, October 20
+
+Last weekend, our school held its annual festival. My class ran a small cafe, and we served about 300 cups of tea and coffee over two days. I think our handmade decorations were the best part of the cafe.
+
+On the second day, the drama club performed a 30-minute play in the gym. In my opinion, the main actor's performance was more impressive than any professional play I have seen. The festival ended with a fireworks display that lasted fifteen minutes.`,
+    statement:
+      "Which of the following is a fact stated in the blog, rather than an opinion?",
+    type: "single-choice",
+    options: [
+      "The class cafe served about 300 cups of drinks",
+      "The handmade decorations were the best part of the cafe",
+      "The main actor was better than any professional",
+      "The fireworks were the most exciting event",
+    ],
+    correctAnswer: "The class cafe served about 300 cups of drinks",
+    explanation:
+      "「約300杯提供した」は数値で確認できる事実の記述。一方、装飾が \"the best part\"、俳優が \"more impressive than any professional\" という記述はそれぞれ \"I think\" \"In my opinion\" に導かれた筆者の意見である。「花火が最も盛り上がった」という記述はそもそも本文にない（15分間続いたという事実のみ）。",
+    strategy:
+      "fact / opinion 問題は \"I think\" \"In my opinion\" \"the best\" \"more ... than\" などの主観マーカーを本文に印をつけながら読む。数値・日付・出来事の記述が fact、評価・比較・感想が opinion。マーカーを見つければ消去法で素早く解ける。3分以内。",
+    trapExplanation:
+      "本文に書かれていない内容（花火が最も盛り上がった）を「ありそうだから」と選ばないこと。また \"the best part\" のような最上級表現は、内容が魅力的でも意見であって事実ではない。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["要旨把握", "選択肢消去", "英語スキャニング"],
+    stimulusType: "blog",
   },
 
   {
@@ -422,6 +1176,72 @@ Urban farming — growing food within city environments — is gaining popularit
   },
 
   {
+    id: "ct-eng-s3-q2",
+    subjectId: "english-reading",
+    sectionId: "section-3",
+    title: "記事読解 — 研究結果の正確な把握",
+    passage: `Sleep and Learning: What Recent Research Tells Us
+
+Many students stay up late before exams, believing that extra study hours lead to better results. However, recent research suggests the opposite may be true. In one study, students who slept at least seven hours before a test scored, on average, 10% higher than those who slept fewer than five hours.
+
+Researchers explain that the brain organizes and stores new information during sleep. Without enough rest, much of what students review at night may simply not be retained. This does not mean that studying is unimportant — rather, the findings suggest that combining regular study with sufficient sleep is more effective than sacrificing sleep for extra review.`,
+    statement:
+      "What does the research described in the article suggest?",
+    type: "single-choice",
+    options: [
+      "Studying late at night guarantees higher test scores",
+      "Students who sleep enough tend to perform better on tests",
+      "Studying is less important than sleeping",
+      "Five hours of sleep is enough for most students",
+    ],
+    correctAnswer: "Students who sleep enough tend to perform better on tests",
+    explanation:
+      "本文は「7時間以上眠った生徒は5時間未満の生徒より平均10%高得点だった」という研究結果を紹介し、睡眠中に脳が情報を整理・定着させると説明している。最終段落で「学習が不要なのではなく、学習と十分な睡眠の組合せが効果的」と述べているので、「勉強より睡眠が大事」（選択肢3）は言い過ぎ。徹夜の有効性（選択肢1）は本文の主張と正反対。",
+    strategy:
+      "研究紹介型の記事は「研究結果の数値」と「研究者の解釈」を分けて読む。設問が \"suggest\" を使うときは、本文の表現より強い断定（guarantee, always など）を含む選択肢を疑う。\"This does not mean...\" の譲歩部分は選択肢のワナの種になりやすいので必ず読む。4分以内。",
+    trapExplanation:
+      "\"This does not mean that studying is unimportant\" を読み飛ばすと「勉強より睡眠」型の選択肢に引っかかる。また \"guarantees\"（保証する）は本文の \"suggests\"（示唆する）より強すぎる表現で、典型的な言い過ぎ選択肢。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["要旨把握", "選択肢消去"],
+    stimulusType: "article",
+  },
+
+  {
+    id: "ct-eng-s3-q3",
+    subjectId: "english-reading",
+    sectionId: "section-3",
+    title: "記事読解 — 段落の役割の把握",
+    passage: `School Uniforms: A Continuing Debate
+
+School uniforms have a long history in Japan, and the debate about them continues today. Supporters argue that uniforms save time in the morning, reduce pressure to buy fashionable clothes, and create a sense of community among students.
+
+On the other hand, opponents point out that uniforms can be expensive, may be uncomfortable in extreme weather, and limit students' freedom of expression. Some schools have responded by introducing more flexible rules, such as allowing students to choose between several uniform styles.
+
+Whether a school keeps, changes, or removes its uniform policy, what matters most is that students, parents, and teachers discuss the issue together.`,
+    statement:
+      "What is the role of the final paragraph?",
+    type: "single-choice",
+    options: [
+      "To argue that uniforms should be removed",
+      "To emphasize the importance of discussion among those involved",
+      "To list additional advantages of uniforms",
+      "To explain the history of school uniforms in detail",
+    ],
+    correctAnswer: "To emphasize the importance of discussion among those involved",
+    explanation:
+      "最終段落は \"what matters most is that students, parents, and teachers discuss the issue together\" と述べており、制服の存廃そのものよりも関係者の話し合いの重要性を強調して記事を締めくくっている。賛成・反対のどちらかに立つ結論ではない。",
+    strategy:
+      "段落の役割を問う問題は、その段落の最初と最後の文だけ精読すれば判断できることが多い。本文全体が「賛成 → 反対 → まとめ」という両論併記の構造であることを掴めば、最終段落が一方の肩を持つ選択肢は消去できる。3分以内。",
+    trapExplanation:
+      "本文中盤の \"opponents point out...\" の印象に引きずられて「制服廃止を主張」を選ばないこと。両論併記型の記事の結論は中立になるのが普通。最終段落に書かれていない「歴史の詳述」「追加の利点」も本文との照合で即消去できる。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["要旨把握", "選択肢消去", "英語スキャニング"],
+    stimulusType: "article",
+  },
+
+  {
     id: "ct-eng-s4-q1",
     subjectId: "english-reading",
     sectionId: "section-4",
@@ -448,6 +1268,68 @@ Urban farming — growing food within city environments — is gaining popularit
     estimatedMinutes: 3,
     difficulty: "BASIC",
     skillTags: ["図表読解", "データ読み取り", "時間配分"],
+  },
+
+  {
+    id: "ct-eng-s4-q2",
+    subjectId: "english-reading",
+    sectionId: "section-4",
+    title: "資料読み取り — 増加幅が最大の項目",
+    context: `Recycling Rates at Midori City (percentage of waste recycled)
+
+| Material  | 2018 | 2024 |
+|-----------|------|------|
+| Paper     |  58% |  66% |
+| Plastic   |  22% |  41% |
+| Glass     |  70% |  74% |
+| Metal     |  62% |  75% |`,
+    statement:
+      "According to the table, which material showed the largest increase in its recycling rate between 2018 and 2024?",
+    type: "single-choice",
+    options: ["Paper", "Plastic", "Glass", "Metal"],
+    correctAnswer: "Plastic",
+    explanation:
+      "増加幅（ポイント差）は Paper: 66−58 = 8、Plastic: 41−22 = 19、Glass: 74−70 = 4、Metal: 75−62 = 13。最大の増加は Plastic の19ポイント。2024年時点の率が最も高いのは Metal（75%）だが、問われているのは「増加幅」である。",
+    strategy:
+      "表問題は計算する前に「何を比べるのか」（最終値か、変化量か、割合か）を設問から確定する。ここでは increase なので各行の引き算を4回するだけ。暗算しやすいよう、差をメモ欄に書き出して最大値を選ぶ。2分以内。",
+    trapExplanation:
+      "「2024年に最も高い」Metal や Glass を選ぶのが典型的な誤り。increase（変化量）と highest（最終値）の読み分けが全て。また、Plastic は率自体が最も低いので「低いから違う」と直感で除外しないこと。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["図表読解", "データ読み取り"],
+    stimulusType: "table",
+  },
+
+  {
+    id: "ct-eng-s4-q3",
+    subjectId: "english-reading",
+    sectionId: "section-4",
+    title: "レポート推敲 — 結論文の選択",
+    passage: `Student Report Draft — "Bicycle Use Among Our Students"
+
+Our group surveyed 120 students about how they come to school. We found that 45% come by bicycle, 30% walk, and 25% use the bus or train. Of the students who cycle, almost 60% said they would ride more often if the school provided a covered bicycle parking area.
+
+Based on these results, [  X  ]`,
+    statement:
+      "Which sentence best completes the report at [ X ]?",
+    type: "single-choice",
+    options: [
+      "we recommend that the school consider building covered bicycle parking.",
+      "we conclude that most students dislike riding bicycles.",
+      "we suggest that bus services should be reduced.",
+      "we found that walking is the most popular way to come to school.",
+    ],
+    correctAnswer: "we recommend that the school consider building covered bicycle parking.",
+    explanation:
+      "調査結果は「自転車通学が45%で最多」「自転車通学者の約60%が屋根付き駐輪場があればもっと利用したい」というもの。この流れを受ける結論として自然なのは駐輪場の提案。「自転車が嫌い」はデータと矛盾し、「徒歩が最多」は45% > 30%に反する。バス削減はデータから導けない飛躍。",
+    strategy:
+      "レポート完成問題は「直前のデータ → 結論」の論理接続だけを見る。\"Based on these results\" とあるので、数値が支持しない選択肢は機械的に消去できる。データ（45%, 30%, 60%）と各選択肢を1対1で照合する。3分以内。",
+    trapExplanation:
+      "数値の照合をせずに常識で選ぶと「徒歩が最多」のような事実誤認の選択肢を見逃さず消去できない。30%（徒歩）と45%（自転車）の大小、60%は「自転車通学者のうちの」割合である点（全体の60%ではない）に注意。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["レポート完成", "データ読み取り", "選択肢消去"],
+    stimulusType: "report",
   },
 
   {
@@ -493,6 +1375,79 @@ Location: Community Center`,
   },
 
   {
+    id: "ct-eng-s5-q2",
+    subjectId: "english-reading",
+    sectionId: "section-5",
+    title: "メール照合 — 両者の都合が合う日時",
+    passage: `[Email 1 — From: Risa  To: Megumi  Subject: Practice for the speech contest]
+Hi Megumi,
+Could you help me practice for the English speech contest next week? I am free on Tuesday and Thursday after 4 p.m., and any time on Saturday morning. The library meeting rooms are available until 6 p.m. on weekdays.
+
+[Email 2 — From: Megumi  To: Risa  Subject: Re: Practice for the speech contest]
+Hi Risa,
+Of course! I have piano lessons every Tuesday, and on Saturday I need to leave home before 11 a.m. for a family event. Thursday works for me, but I have a club meeting until 4:30 p.m.`,
+    statement:
+      "When can Risa and Megumi most likely practice together?",
+    type: "single-choice",
+    options: [
+      "Tuesday at 4:30 p.m.",
+      "Thursday at 5:00 p.m.",
+      "Saturday at 11:30 a.m.",
+      "Thursday at 4:00 p.m.",
+    ],
+    correctAnswer: "Thursday at 5:00 p.m.",
+    explanation:
+      "Risaの都合は「火・木の16時以降、土曜午前」。Megumiは「火曜はピアノで不可、土曜は11時前に家を出る、木曜は16時30分まで部活」。両者が揃うのは木曜の16時30分以降で、図書館は平日18時まで使える。よって Thursday at 5:00 p.m. が適切。木曜16時はMegumiの部活中、土曜11時30分はMegumiが外出済み。",
+    strategy:
+      "日程調整問題は、人物ごとに「可/不可」の表を作るのが最速：曜日を列に、2人の条件を行に書き、両方◯の枠だけ残す。最後に施設の制約（図書館は18時まで）でダブルチェックする。4分以内。",
+    trapExplanation:
+      "Thursday at 4:00 p.m. はRisaの条件（16時以降）だけ見ると正しそうだが、Megumiの \"club meeting until 4:30 p.m.\" を見落とすと引っかかる。2通目のメールの条件を1通目に上書きして照合するのがこの形式の核心。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["情報照合", "条件整理", "時系列整理"],
+    stimulusType: "email",
+  },
+
+  {
+    id: "ct-eng-s5-q3",
+    subjectId: "english-reading",
+    sectionId: "section-5",
+    title: "求人照合 — 条件を満たすアルバイト",
+    passage: `Part-Time Job Listings — Summer
+
+Job A — Bookstore Assistant
+Hours: Weekdays 5 p.m. – 8 p.m. / Requirement: age 16+
+Pay: 1,050 yen per hour / Note: experience preferred
+
+Job B — Ice Cream Shop Staff
+Hours: Weekends 10 a.m. – 4 p.m. / Requirement: age 18+
+Pay: 1,200 yen per hour / Note: no experience needed
+
+Job C — Library Helper
+Hours: Weekends 9 a.m. – 1 p.m. / Requirement: age 16+
+Pay: 1,000 yen per hour / Note: no experience needed
+
+Job D — Convenience Store Staff
+Hours: Weekdays 10 p.m. – 6 a.m. / Requirement: age 18+
+Pay: 1,400 yen per hour / Note: night shift`,
+    statement:
+      "Sora is a 17-year-old high school student who has never had a part-time job. Sora has classes on weekdays until 6 p.m. Which job can Sora apply for?",
+    type: "single-choice",
+    options: ["Job A", "Job B", "Job C", "Job D"],
+    correctAnswer: "Job C",
+    explanation:
+      "Soraの条件は「17歳・未経験・平日は18時まで授業」。Job Aは平日17時開始で授業と重なり不可（経験者優遇も不利）。Job BとJob Dは18歳以上の条件を満たさない。Job Cは週末勤務・16歳以上・未経験可で、すべての条件に合う。",
+    strategy:
+      "求人照合は応募者の条件（年齢・経験・時間帯）を先にリスト化し、最も絞り込める条件から各求人を消していく。ここでは年齢（17歳）でBとDが即消え、平日の授業でAが消える。残ったCを念のため全条件で確認。3分以内。",
+    trapExplanation:
+      "時給の高さ（Job D の1,400円）に目を奪われて年齢制限を見落とすのが典型。また Job A は「17時〜」だけ見ると可能に見えるが、「平日18時まで授業」との重なりに気づく必要がある。数値条件は1つずつ淡々と照合すること。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["情報照合", "条件整理", "英語スキャニング"],
+    stimulusType: "listing",
+  },
+
+  {
     id: "ct-eng-s6-q1",
     subjectId: "english-reading",
     sectionId: "section-6",
@@ -521,6 +1476,66 @@ Location: Community Center`,
   },
 
   {
+    id: "ct-eng-s6-q2",
+    subjectId: "english-reading",
+    sectionId: "section-6",
+    title: "物語読解 — 心情の変化を追う",
+    passage: `Ren had trained for the city marathon relay for almost a year, and he was chosen to run the final section. On the day of the race, however, his team was in fifth place when he received the sash. Frustrated, he started too fast and felt his legs grow heavy after only two kilometers.
+
+Then he remembered his coach's words: "Run your own race, not someone else's." He slowed down, found his usual rhythm, and began passing runners one by one. His team finished third — not first, but when his teammates ran toward him with smiles, Ren realized that what he had gained was worth more than a medal.`,
+    statement:
+      "How did Ren's feelings change during the race?",
+    type: "single-choice",
+    options: [
+      "From frustration to a sense of fulfillment",
+      "From confidence to deep disappointment",
+      "From boredom to excitement",
+      "From fear to anger at his teammates",
+    ],
+    correctAnswer: "From frustration to a sense of fulfillment",
+    explanation:
+      "レース序盤のRenは \"Frustrated\" と明記されており、焦りから飛ばしすぎて失速する。コーチの言葉を思い出して立て直し、最後は \"what he had gained was worth more than a medal\"（メダル以上のものを得た）と感じている。つまり「いら立ち → 充実感」の変化。チームメイトへの怒りや失望で終わる描写はない。",
+    strategy:
+      "心情変化の問題は「最初の感情」と「最後の感情」を表す形容詞・描写をそれぞれ本文から拾い、選択肢の \"From A to B\" と照合する。転機（ここではコーチの言葉の回想）にマークをつけると変化の流れが整理できる。4分以内。",
+    trapExplanation:
+      "「3位でフィニッシュ＝目標未達＝失望」と推測で選ばないこと。本文は \"worth more than a medal\" と肯定的に締めている。結果（順位）と心情は別物として、心情は本文の表現だけから判断する。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["要旨把握", "時系列整理"],
+    stimulusType: "story",
+  },
+
+  {
+    id: "ct-eng-s6-q3",
+    subjectId: "english-reading",
+    sectionId: "section-6",
+    title: "物語読解 — 出来事の順序整理",
+    passage: `When Yuna moved to a new town in April, she did not know anyone at her school. In May, her homeroom teacher suggested she join a club, so she visited the photography club, where a second-year student named Kana showed her how to use the darkroom.
+
+During summer vacation, the two traveled to a lake to take pictures of the sunrise. In September, one of Yuna's photographs from that trip won a prize in the city photo contest, and Kana was the first person she told.`,
+    statement:
+      "Which of the following shows the correct order of events?",
+    type: "single-choice",
+    options: [
+      "Moving to a new town → joining the club → the lake trip → winning a prize",
+      "Joining the club → moving to a new town → winning a prize → the lake trip",
+      "Moving to a new town → the lake trip → joining the club → winning a prize",
+      "The lake trip → joining the club → moving to a new town → winning a prize",
+    ],
+    correctAnswer: "Moving to a new town → joining the club → the lake trip → winning a prize",
+    explanation:
+      "本文の時系列は、4月に引っ越し（moved in April）→ 5月に写真部を訪ねる（In May）→ 夏休みに湖へ撮影旅行（During summer vacation）→ 9月にコンテスト入賞（In September）。月や季節を表す語がそのまま順序の根拠になる。",
+    strategy:
+      "出来事の順序問題は、本文中の時を表す語（April, In May, During summer vacation, In September）に印をつけ、出来事と対応させたミニ年表を作る。物語の叙述順と時系列が一致しているかも確認する（回想が挟まる文章では一致しない）。3分以内。",
+    trapExplanation:
+      "この文章は叙述順 = 時系列だが、選択肢は順序を入れ替えて作られている。1つ目の出来事と最後の出来事だけ確認して中間を流すと、湖旅行と入賞の順序（夏 → 9月）のような近接ペアで誤る。時の語句を全部拾うこと。",
+    estimatedMinutes: 3,
+    difficulty: "BASIC",
+    skillTags: ["時系列整理", "英語スキャニング"],
+    stimulusType: "story",
+  },
+
+  {
     id: "ct-eng-s7-q1",
     subjectId: "english-reading",
     sectionId: "section-7",
@@ -546,6 +1561,66 @@ Location: Community Center`,
     estimatedMinutes: 4,
     difficulty: "STANDARD",
     skillTags: ["要旨把握", "選択肢消去", "英語スキャニング"],
+  },
+
+  {
+    id: "ct-eng-s7-q2",
+    subjectId: "english-reading",
+    sectionId: "section-7",
+    title: "論説文 — 筆者が同意する内容の推論",
+    passage: `Every year, a huge amount of food is thrown away while it is still safe to eat. Supermarkets often remove products from their shelves days before the expiration date, and consumers frequently buy more than they can finish. Some people argue that food waste is unavoidable in a modern economy, but evidence from several cities shows otherwise.
+
+In these cities, stores donate unsold food to community kitchens, and apps connect restaurants with customers who buy leftover meals at a discount. Within three years, food waste in one such city fell by nearly 30%. Reducing food waste does not require new technology so much as new habits — and habits can be changed.`,
+    statement:
+      "Which statement would the author most likely agree with?",
+    type: "single-choice",
+    options: [
+      "Food waste can be reduced through changes in everyday behavior",
+      "Food waste is an unavoidable part of modern life",
+      "Only advanced technology can solve the food waste problem",
+      "Supermarkets should remove products earlier to keep food safe",
+    ],
+    correctAnswer: "Food waste can be reduced through changes in everyday behavior",
+    explanation:
+      "筆者は「食品廃棄は避けられない」という意見を紹介した上で \"evidence from several cities shows otherwise\"（複数の都市の事例がそうではないと示している）と反論し、最終文で \"Reducing food waste does not require new technology so much as new habits\" と述べている。つまり「習慣の変化で削減できる」が筆者の立場。",
+    strategy:
+      "「筆者が同意しそうな文」を選ぶ問題は、本文中の譲歩（Some people argue...）と反論（but...）の構造を掴むことが核心。筆者の主張は通常、譲歩の後の but 以降と最終文に現れる。各選択肢を本文の該当箇所と1対1で照合する。4分以内。",
+    trapExplanation:
+      "\"Some people argue that food waste is unavoidable\" は筆者が反論するために紹介した他者の意見であり、筆者の主張ではない。譲歩部分をそのまま選択肢にしたワナは論説文の定番。また本文は \"does not require new technology so much as...\" と技術偏重を否定している。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["要旨把握", "選択肢消去"],
+    stimulusType: "essay",
+  },
+
+  {
+    id: "ct-eng-s7-q3",
+    subjectId: "english-reading",
+    sectionId: "section-7",
+    title: "論説文 — 主張と根拠の対応",
+    passage: `Public libraries are sometimes described as outdated in the age of the internet, yet they are serving more people than ever. According to a national survey, library visits increased by 12% over the past five years.
+
+The reason is that libraries have changed their role. They now offer free computer access for job seekers, reading programs for young children, and quiet study spaces for students. For people who cannot afford home internet or private tutoring, these services are not a luxury but a necessity. Far from being outdated, the public library has become one of the few places where everyone, regardless of income, has equal access to information.`,
+    statement:
+      "Which evidence does the author use to support the claim that libraries are NOT outdated?",
+    type: "single-choice",
+    options: [
+      "Library visits have increased and libraries now provide a wider range of services",
+      "Most people now prefer e-books to paper books",
+      "Libraries have reduced their opening hours to save money",
+      "Private tutoring has become cheaper than before",
+    ],
+    correctAnswer: "Library visits have increased and libraries now provide a wider range of services",
+    explanation:
+      "筆者は「図書館は時代遅れではない」という主張の根拠として、①来館者数が5年間で12%増加したという調査結果、②求職者向けPC、子ども向け読書プログラム、学習スペースなど役割の拡大、の2点を挙げている。電子書籍の好み・開館時間の短縮・家庭教師の価格は本文に記述がない。",
+    strategy:
+      "主張と根拠の問題では、設問の NOT outdated に対応する本文の表現（Far from being outdated）を起点に、その前にある数値・事例を根拠として拾う。NOTが大文字の設問は読み落とし防止のサイン。本文にない選択肢は即消去。4分以内。",
+    trapExplanation:
+      "選択肢の中で本文に登場する語（e-books, tutoring など）が含まれていても、本文の使われ方と異なれば誤り。\"private tutoring\" は「それを買えない人にとって図書館が必需品」という文脈で登場しており、価格の変化は述べられていない。",
+    estimatedMinutes: 4,
+    difficulty: "HARD",
+    skillTags: ["要旨把握", "情報照合", "選択肢消去"],
+    stimulusType: "essay",
   },
 
   {
@@ -583,6 +1658,78 @@ Recent visitor observations:
     estimatedMinutes: 3,
     difficulty: "BASIC",
     skillTags: ["レポート完成", "情報照合", "英語スキャニング"],
+  },
+
+  {
+    id: "ct-eng-s8-q2",
+    subjectId: "english-reading",
+    sectionId: "section-8",
+    title: "複数資料統合 — グラフと記事からノートを完成させる",
+    passage: `[Source 1 — Article Excerpt]
+A recent survey of 500 high school students examined how they use their smartphones on school days. Watching videos was the most common activity, followed by messaging friends. Although many adults assume that games dominate teenagers' screen time, gaming ranked only third, and studying with learning apps came fourth.
+
+[Source 2 — Survey Results (average minutes per day)]
+Watching videos: 85
+Messaging: 60
+Games: 45
+Learning apps: 30`,
+    context: `Study Notes — Smartphone Use Among High School Students
+
+Survey size: 500 students
+Most common activity: watching videos (85 min/day)
+Second: messaging (60 min/day)
+Point to remember: adults often assume [ B ] takes up the most time, but it actually ranked third.`,
+    statement:
+      "According to the sources, what should fill blank [ B ] in the study notes?",
+    type: "single-choice",
+    options: ["gaming", "messaging", "watching videos", "using learning apps"],
+    correctAnswer: "gaming",
+    explanation:
+      "Source 1 に \"many adults assume that games dominate teenagers' screen time, but gaming ranked only third\" とある。ノートの \"adults often assume [ B ] takes up the most time, but it actually ranked third\" はこの文の言い換えなので、[ B ] には gaming が入る。Source 2 の数値（Games: 45分で3番目）とも整合する。",
+    strategy:
+      "ノート完成問題は、空欄の前後の語句（assume / ranked third）を本文から探して対応箇所を特定する。2つの資料がある場合、文章（Source 1）で見つけた答えを数値（Source 2）で裏取りすると確実。3分以内。",
+    trapExplanation:
+      "「最も時間が長い」activity（watching videos）を機械的に選ぶのが典型的な誤り。空欄は「大人がそう思い込んでいるが実際は3位」という文脈であり、実際の1位ではなく思い込みの対象を問うている。文脈を読まず数値だけ照合すると引っかかる。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["レポート完成", "情報照合", "データ読み取り"],
+    stimulusType: "multi-source",
+  },
+
+  {
+    id: "ct-eng-s8-q3",
+    subjectId: "english-reading",
+    sectionId: "section-8",
+    title: "複数資料統合 — レポートの結論を完成させる",
+    passage: `[Source 1 — Local News Report]
+About 80 volunteers joined the spring cleanup at Aoba Beach last Sunday. In three hours, they collected 120 bags of trash. Plastic bottles and food packaging made up the largest share of the waste collected.
+
+[Source 2 — Volunteer Survey Comments]
+"I was surprised that most of the trash was everyday plastic items, not things left by beach visitors." — participant, age 17
+"We need garbage bins near the beach entrance. People want to throw trash away properly, but there is no place to do it." — participant, age 45`,
+    context: `Student Report Draft — "What the Beach Cleanup Taught Us"
+
+The cleanup collected 120 bags of trash in three hours, and plastic items made up the largest share. Participants' comments suggest that the problem is not simply visitors' bad manners. Therefore, in addition to holding cleanups, [ C ]`,
+    statement:
+      "Which sentence best completes the report at [ C ]?",
+    type: "single-choice",
+    options: [
+      "installing garbage bins near the beach entrance could help reduce litter.",
+      "the beach should be closed to visitors during the spring.",
+      "volunteers should collect trash every day instead of once a season.",
+      "plastic products should be banned from all shops in the city.",
+    ],
+    correctAnswer: "installing garbage bins near the beach entrance could help reduce litter.",
+    explanation:
+      "Source 2 の45歳の参加者が「入口付近にゴミ箱が必要。捨てたくても場所がない」と指摘しており、レポートの \"the problem is not simply visitors' bad manners. Therefore...\" という流れに自然につながる結論はゴミ箱の設置。ビーチ閉鎖・毎日の清掃・プラスチック全面禁止は資料中に根拠がなく、提案として飛躍している。",
+    strategy:
+      "複数資料の結論完成は「資料に根拠がある提案か」だけで判定する。\"Therefore\" の直前の文（マナーだけの問題ではない）と矛盾しない選択肢を探す。極端な対策（閉鎖・全面禁止）は資料の裏付けがない限り誤り。4分以内。",
+    trapExplanation:
+      "もっともらしい環境対策でも、資料に言及がなければ選べない。「プラスチックが多かった→プラスチック禁止」は一見論理的だが、資料は『捨てる場所がない』ことを問題にしており、飛躍がある。資料との対応を一つずつ確認すること。",
+    estimatedMinutes: 4,
+    difficulty: "HARD",
+    skillTags: ["レポート完成", "情報照合", "要旨把握"],
+    stimulusType: "multi-source",
   },
 ];
 

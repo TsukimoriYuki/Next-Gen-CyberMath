@@ -13,6 +13,12 @@ export interface CommonTestExamPreset {
   sectionIds: string[];
   theme: CommonTestTheme;
   icon: string;
+  /** 必答大問（選択制プリセットのみ） */
+  requiredSectionIds?: string[];
+  /** 選択候補の大問（選択制プリセットのみ） */
+  optionalSectionIds?: string[];
+  /** 選択候補から選ぶ題数（選択制プリセットのみ） */
+  optionalSelectCount?: number;
 }
 
 export const COMMON_TEST_EXAM_PRESETS: CommonTestExamPreset[] = [
@@ -23,7 +29,7 @@ export const COMMON_TEST_EXAM_PRESETS: CommonTestExamPreset[] = [
     shortTitle: "数IA 70min",
     examLimitSec: 4200, // 70 * 60
     description:
-      "数学Iおよび数学Aから大問4問（第1〜第4問）を出題。集合・命題・データ・図形の性質・確率の全範囲を網羅した本番形式模擬試験。",
+      "数学Iおよび数学Aから大問4問（第1〜第4問・全問必答）を出題。集合・命題・データ・図形の性質・確率の全範囲を網羅した本番形式模擬試験。",
     sectionIds: ["section-1", "section-2", "section-3", "section-4"],
     icon: "数IA",
     theme: {
@@ -36,12 +42,23 @@ export const COMMON_TEST_EXAM_PRESETS: CommonTestExamPreset[] = [
     id: "math-2bc-70",
     subjectId: "math-2bc",
     title: "数学II・B・C — 70分模擬試験",
-    shortTitle: "数IIB 70min",
+    shortTitle: "数IIBC 70min",
     examLimitSec: 4200,
     description:
-      "三角関数・積分・数列・統計的推測・ベクトル・複素数平面から全6大問（第1〜第6問）を出題。処理速度と誘導読解力の総合試験。",
-    sectionIds: ["section-1", "section-2", "section-3", "section-4", "section-5", "section-6"],
-    icon: "数IIB",
+      "第1問〜第3問（図形と方程式・三角関数、指数対数・微積分、数列）は必答。第4問〜第7問（統計的な推測・ベクトル・平面上の曲線・複素数平面）から3題を選択して解答する本番形式。",
+    sectionIds: [
+      "section-1",
+      "section-2",
+      "section-3",
+      "section-4",
+      "section-5",
+      "section-6",
+      "section-7",
+    ],
+    requiredSectionIds: ["section-1", "section-2", "section-3"],
+    optionalSectionIds: ["section-4", "section-5", "section-6", "section-7"],
+    optionalSelectCount: 3,
+    icon: "数IIBC",
     theme: {
       primary: "#a855f7",
       secondary: "#06b6d4",

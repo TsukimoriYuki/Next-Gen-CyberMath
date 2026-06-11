@@ -1,6 +1,7 @@
 "use client";
 
-import { Flag, Send, Clock, AlertTriangle } from "lucide-react";
+// 試験中ヘッダー — 本番の試験画面に近い紙面風デザイン
+import { Send, Clock, AlertTriangle } from "lucide-react";
 import type { CommonTestExamPreset } from "@/data/common-test-exams";
 
 interface Props {
@@ -32,45 +33,31 @@ export function CommonTestExamHeader({
   const isOvertime = phase === "overtime";
   const progressPct = Math.min(100, Math.round((elapsedSec / preset.examLimitSec) * 100));
 
-  const timerColor = isOvertime
-    ? "#ef4444"
-    : remainingSec < 300
-    ? "#f97316"
-    : `rgba(${preset.theme.glowRgb},1)`;
+  const timerColor = isOvertime ? "#dc2626" : remainingSec < 300 ? "#ea580c" : "#111827";
 
   return (
     <header
       className="sticky top-0 z-40 w-full"
-      style={{
-        background: "rgba(0,0,0,0.90)",
-        borderBottom: `1px solid rgba(${preset.theme.glowRgb},0.15)`,
-        backdropFilter: "blur(12px)",
-      }}
+      style={{ background: "#ffffff", borderBottom: "1px solid #d1d5db" }}
     >
       {/* Progress bar */}
-      <div className="h-0.5 w-full" style={{ background: "rgba(255,255,255,0.06)" }}>
+      <div className="h-1 w-full" style={{ background: "#e5e7eb" }}>
         <div
           className="h-full transition-all duration-1000"
           style={{
             width: `${progressPct}%`,
-            background: isOvertime
-              ? "rgba(239,68,68,0.7)"
-              : `linear-gradient(90deg, rgba(${preset.theme.glowRgb},0.5), rgba(${preset.theme.glowRgb},1))`,
+            background: isOvertime ? "#dc2626" : "#6b7280",
           }}
         />
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-3 sm:gap-5">
+      <div className="mx-auto max-w-6xl px-4 py-2.5 flex items-center gap-3 sm:gap-5">
         {/* Subject badge */}
         <div
-          className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-[0.15em]"
-          style={{
-            background: `rgba(${preset.theme.glowRgb},0.10)`,
-            border: `1px solid rgba(${preset.theme.glowRgb},0.28)`,
-            color: preset.theme.primary,
-          }}
+          className="hidden sm:flex shrink-0 items-center rounded px-3 py-1.5 text-xs font-bold"
+          style={{ border: "1px solid #9ca3af", color: "#374151", background: "#f9fafb" }}
         >
-          {preset.icon}
+          {preset.shortTitle}
         </div>
 
         {/* Timer */}
@@ -82,25 +69,25 @@ export function CommonTestExamHeader({
           )}
           <div className="flex flex-col leading-none">
             <span
-              className="font-mono text-lg font-extrabold tabular-nums"
+              className="font-mono text-lg font-bold tabular-nums"
               style={{ color: timerColor }}
             >
               {isOvertime ? "+" : ""}
               {isOvertime ? formatTime(elapsedSec - preset.examLimitSec) : formatTime(remainingSec)}
             </span>
-            <span className="font-mono text-[8px] text-white/25 uppercase tracking-wider">
-              {isOvertime ? "overtime" : "remaining"}
+            <span className="text-[10px]" style={{ color: "#6b7280" }}>
+              {isOvertime ? "時間超過" : "残り時間"}
             </span>
           </div>
         </div>
 
-        {/* OVERTIME badge */}
+        {/* Overtime badge */}
         {isOvertime && (
           <div
-            className="shrink-0 rounded-full px-2 py-0.5 font-mono text-[8px] font-bold uppercase tracking-[0.15em] animate-pulse"
-            style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.40)", color: "#ef4444" }}
+            className="shrink-0 rounded px-2 py-0.5 text-[10px] font-bold"
+            style={{ background: "#fef2f2", border: "1px solid #fca5a5", color: "#dc2626" }}
           >
-            OVERTIME
+            時間超過中
           </div>
         )}
 
@@ -108,20 +95,19 @@ export function CommonTestExamHeader({
         <div className="flex-1" />
 
         {/* Question position */}
-        <div className="flex items-center gap-1 font-mono text-[10px] text-white/35">
-          <span className="font-bold text-white/60">{currentIdx + 1}</span>
+        <div className="flex items-center gap-1 text-xs" style={{ color: "#6b7280" }}>
+          <span className="font-bold" style={{ color: "#111827" }}>{currentIdx + 1}</span>
           <span>/</span>
           <span>{totalQuestions}</span>
         </div>
 
-        {/* Unanswered warning */}
+        {/* Unanswered count */}
         {unansweredCount > 0 && (
           <div
-            className="hidden sm:flex items-center gap-1 rounded-lg px-2 py-1 font-mono text-[9px]"
-            style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.22)", color: "#fbbf24" }}
+            className="hidden sm:flex items-center rounded px-2 py-1 text-[11px]"
+            style={{ background: "#fffbeb", border: "1px solid #fcd34d", color: "#92400e" }}
           >
-            <Flag className="h-3 w-3" />
-            未回答 {unansweredCount}
+            未解答 {unansweredCount}
           </div>
         )}
 
@@ -129,19 +115,14 @@ export function CommonTestExamHeader({
         <button
           type="button"
           onClick={onFinish}
-          className="flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.15em] transition-all hover:opacity-90 active:scale-[0.97]"
+          className="flex shrink-0 items-center gap-1.5 rounded px-4 py-2 text-xs font-bold transition-all hover:opacity-85 active:scale-[0.97]"
           style={{
-            background: isOvertime
-              ? "rgba(239,68,68,0.18)"
-              : `rgba(${preset.theme.glowRgb},0.15)`,
-            border: isOvertime
-              ? "1px solid rgba(239,68,68,0.40)"
-              : `1px solid rgba(${preset.theme.glowRgb},0.38)`,
-            color: isOvertime ? "#ef4444" : preset.theme.primary,
+            background: isOvertime ? "#dc2626" : "#111827",
+            color: "#ffffff",
           }}
         >
           <Send className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">提出する</span>
+          <span className="hidden sm:inline">解答を提出する</span>
           <span className="sm:hidden">提出</span>
         </button>
       </div>

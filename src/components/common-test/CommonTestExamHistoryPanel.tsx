@@ -155,15 +155,31 @@ export function CommonTestExamHistoryPanel() {
                 {/* Score bars */}
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { label: "TIME-LIMIT SCORE", pct: item.timeLimitScorePct, correct: item.timeLimitCorrect, color: "#fbbf24", glow: "251,191,36" },
-                    { label: "UNLIMITED SCORE", pct: item.unlimitedScorePct, correct: item.unlimitedCorrect, color: "#22d3ee", glow: "34,211,238" },
+                    {
+                      label: "時間内スコア",
+                      pct: item.timeLimitScorePct,
+                      value: item.timeLimitScore ?? item.timeLimitCorrect,
+                      total: item.maxScore ?? item.totalQuestions,
+                      unit: item.maxScore != null ? "点" : "問",
+                      color: "#fbbf24",
+                      glow: "251,191,36",
+                    },
+                    {
+                      label: "無制限スコア",
+                      pct: item.unlimitedScorePct,
+                      value: item.unlimitedScore ?? item.unlimitedCorrect,
+                      total: item.maxScore ?? item.totalQuestions,
+                      unit: item.maxScore != null ? "点" : "問",
+                      color: "#22d3ee",
+                      glow: "34,211,238",
+                    },
                   ].map((s) => (
                     <div key={s.label} className="rounded-xl p-3" style={{ background: `rgba(${s.glow},0.06)`, border: `1px solid rgba(${s.glow},0.18)` }}>
                       <div className="font-mono text-[8px] uppercase tracking-[0.15em] mb-2" style={{ color: `rgba(${s.glow},0.7)` }}>
                         {s.label}
                       </div>
                       <div className="font-mono text-2xl font-extrabold" style={{ color: s.color }}>
-                        {s.correct} <span className="text-sm text-white/30">/ {item.totalQuestions}</span>
+                        {s.value} <span className="text-sm text-white/30">/ {s.total}{s.unit}</span>
                       </div>
                       <div className="mt-2 h-1 rounded-full overflow-hidden bg-white/[0.08]">
                         <div className="h-full rounded-full" style={{ width: `${s.pct}%`, background: `rgba(${s.glow},0.8)` }} />

@@ -69,6 +69,8 @@ export interface DailyMission {
   recommendedMinutes: number;
   accent: string;
   difficulty: MissionDifficulty;
+  /** 実在する大問別ドリルページへのリンク */
+  href: string;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -91,7 +93,7 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
     targetScoreDefault: 80,
     estimatedScoreMock: 64,
     description:
-      "数と式・2次関数・データの分析を必答とし、図形の性質または場合の数と確率を選択する。論理的読解力と計算の正確性が問われる。",
+      "数と式・2次関数・データの分析・図形の性質・場合の数と確率の全4大問を解答する。論理的読解力と計算の正確性が問われる。",
     sections: [
       {
         number: 1,
@@ -110,10 +112,9 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
       {
         number: 3,
         title: "図形の性質",
-        topics: ["メネラウスの定理", "チェバの定理", "円の性質", "空間図形"],
+        topics: ["メネラウスの定理", "方べきの定理", "円の性質", "内心・外心"],
         recommendedMinutes: 15,
         maxScore: 20,
-        isElective: true,
       },
       {
         number: 4,
@@ -121,7 +122,6 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
         topics: ["条件付き確率", "反復試行", "組合せの数え上げ", "期待値"],
         recommendedMinutes: 15,
         maxScore: 20,
-        isElective: true,
       },
     ],
     scoreRoutes: [
@@ -161,52 +161,59 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
     targetScoreDefault: 75,
     estimatedScoreMock: 57,
     description:
-      "図形・三角・指数・積分を必答とし、数列・統計・ベクトル・複素数の中から選択する。誘導の読解と処理速度が鍵。",
+      "第1問〜第3問（図形と方程式・三角関数、指数対数・微積分、数列）は必答。第4問〜第7問（統計・ベクトル・曲線・複素数平面）から3題を選択する。誘導の読解と処理速度が鍵。",
     sections: [
       {
         number: 1,
         title: "図形と方程式・三角関数",
         topics: ["円と直線", "軌跡", "加法定理", "合成"],
-        recommendedMinutes: 18,
-        maxScore: 30,
+        recommendedMinutes: 11,
+        maxScore: 15,
       },
       {
         number: 2,
         title: "指数・対数・微分・積分",
         topics: ["指数方程式", "対数の計算", "微分・接線", "面積計算"],
-        recommendedMinutes: 20,
-        maxScore: 30,
+        recommendedMinutes: 12,
+        maxScore: 15,
       },
       {
         number: 3,
         title: "数列",
         topics: ["等差・等比数列", "漸化式", "数列の和", "数学的帰納法"],
-        recommendedMinutes: 16,
-        maxScore: 20,
-        isElective: true,
+        recommendedMinutes: 15,
+        maxScore: 22,
       },
       {
         number: 4,
         title: "統計的な推測",
         topics: ["正規分布", "母平均の推定", "仮説検定", "二項分布"],
-        recommendedMinutes: 16,
-        maxScore: 20,
+        recommendedMinutes: 10,
+        maxScore: 16,
         isElective: true,
       },
       {
         number: 5,
         title: "ベクトル",
         topics: ["内積", "位置ベクトル", "直線と平面の方程式", "空間ベクトル"],
-        recommendedMinutes: 16,
-        maxScore: 20,
+        recommendedMinutes: 10,
+        maxScore: 16,
         isElective: true,
       },
       {
         number: 6,
-        title: "平面上の曲線・複素数平面",
-        topics: ["楕円・双曲線", "極座標", "複素数の乗除", "ド・モアブル"],
-        recommendedMinutes: 16,
-        maxScore: 20,
+        title: "平面上の曲線",
+        topics: ["楕円・双曲線", "放物線", "媒介変数表示", "極座標"],
+        recommendedMinutes: 10,
+        maxScore: 16,
+        isElective: true,
+      },
+      {
+        number: 7,
+        title: "複素数平面",
+        topics: ["複素数の乗除", "ド・モアブル", "回転", "絶対値と偏角"],
+        recommendedMinutes: 10,
+        maxScore: 16,
         isElective: true,
       },
     ],
@@ -350,6 +357,7 @@ export const DAILY_MISSIONS: DailyMission[] = [
     recommendedMinutes: 10,
     accent: "#00d2ff",
     difficulty: "SPRINT",
+    href: "/common-test/math-1a/section-2",
   },
   {
     id: "mission-math2bc-seq",
@@ -360,6 +368,7 @@ export const DAILY_MISSIONS: DailyMission[] = [
     recommendedMinutes: 20,
     accent: "#a855f7",
     difficulty: "STANDARD",
+    href: "/common-test/math-2bc/section-3",
   },
   {
     id: "mission-eng-q5",
@@ -370,6 +379,7 @@ export const DAILY_MISSIONS: DailyMission[] = [
     recommendedMinutes: 12,
     accent: "#10b981",
     difficulty: "SPRINT",
+    href: "/common-test/english-reading/section-5",
   },
 ];
 

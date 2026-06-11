@@ -1,5 +1,6 @@
 "use client";
 
+// 解答状況ナビゲーター — 紙面風（マークシートの確認欄に近いトーン）
 import type { CommonTestExamPreset } from "@/data/common-test-exams";
 import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 
@@ -17,7 +18,6 @@ interface Props {
 }
 
 export function CommonTestExamNavigator({
-  preset,
   questions,
   currentIdx,
   navStates,
@@ -37,37 +37,37 @@ export function CommonTestExamNavigator({
 
   return (
     <div
-      className="rounded-2xl p-4 space-y-4"
-      style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
+      className="rounded-lg p-4 space-y-4"
+      style={{ background: "#ffffff", border: "1px solid #d1d5db" }}
     >
-      <div className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">
-        NAVIGATOR
+      <div className="text-xs font-bold" style={{ color: "#374151" }}>
+        解答状況
       </div>
 
       {/* Legend */}
-      <div className="grid grid-cols-2 gap-1.5">
+      <div className="grid grid-cols-3 gap-1.5">
         {[
-          { color: "rgba(255,255,255,0.15)", border: "rgba(255,255,255,0.18)", label: "未回答" },
-          { color: "rgba(34,197,94,0.25)", border: "rgba(34,197,94,0.45)", label: "回答済" },
-          { color: "rgba(251,191,36,0.25)", border: "rgba(251,191,36,0.45)", label: "要見直し" },
+          { bg: "#ffffff", border: "#9ca3af", label: "未解答" },
+          { bg: "#374151", border: "#374151", label: "解答済" },
+          { bg: "#fef3c7", border: "#f59e0b", label: "見直し" },
         ].map((l) => (
           <div key={l.label} className="flex items-center gap-1.5">
             <div
               className="h-3 w-3 rounded-sm shrink-0"
-              style={{ background: l.color, border: `1px solid ${l.border}` }}
+              style={{ background: l.bg, border: `1px solid ${l.border}` }}
             />
-            <span className="font-mono text-[8px] text-white/30">{l.label}</span>
+            <span className="text-[10px]" style={{ color: "#6b7280" }}>{l.label}</span>
           </div>
         ))}
       </div>
 
-      <div className="h-px bg-white/[0.06]" />
+      <div className="h-px" style={{ background: "#e5e7eb" }} />
 
       {/* Section groups */}
-      <div className="space-y-4">
+      <div className="space-y-3.5">
         {sectionGroups.map((group) => (
           <div key={group.sectionId}>
-            <div className="font-mono text-[8px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: `rgba(${preset.theme.glowRgb},0.7)` }}>
+            <div className="text-[11px] font-bold mb-1.5" style={{ color: "#374151" }}>
               第{group.sectionNum}問
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -77,29 +77,24 @@ export function CommonTestExamNavigator({
                 const answered = ns?.answered ?? false;
                 const flagged = ns?.flagged ?? false;
 
-                let bg: string;
-                let border: string;
-                let color: string;
+                let bg = "#ffffff";
+                let border = "#9ca3af";
+                let color = "#374151";
+                if (answered) {
+                  bg = "#374151";
+                  border = "#374151";
+                  color = "#ffffff";
+                }
+                if (flagged && !answered) {
+                  bg = "#fef3c7";
+                  border = "#f59e0b";
+                  color = "#92400e";
+                }
+                if (flagged && answered) {
+                  border = "#f59e0b";
+                }
                 if (isCurrent) {
-                  bg = `rgba(${preset.theme.glowRgb},0.25)`;
-                  border = `rgba(${preset.theme.glowRgb},0.7)`;
-                  color = preset.theme.primary;
-                } else if (answered && flagged) {
-                  bg = "rgba(34,197,94,0.15)";
-                  border = "rgba(251,191,36,0.55)";
-                  color = "#fbbf24";
-                } else if (answered) {
-                  bg = "rgba(34,197,94,0.20)";
-                  border = "rgba(34,197,94,0.50)";
-                  color = "#22c55e";
-                } else if (flagged) {
-                  bg = "rgba(251,191,36,0.12)";
-                  border = "rgba(251,191,36,0.40)";
-                  color = "#fbbf24";
-                } else {
-                  bg = "rgba(255,255,255,0.04)";
-                  border = "rgba(255,255,255,0.14)";
-                  color = "rgba(255,255,255,0.45)";
+                  border = "#2563eb";
                 }
 
                 return (
@@ -107,14 +102,18 @@ export function CommonTestExamNavigator({
                     key={qi}
                     type="button"
                     onClick={() => onNavigate(qi)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg font-mono text-[10px] font-bold transition-all hover:opacity-80 active:scale-95 relative"
-                    style={{ background: bg, border: `1px solid ${border}`, color }}
+                    className="flex h-8 w-8 items-center justify-center rounded text-xs font-bold transition-all hover:opacity-75 active:scale-95 relative"
+                    style={{
+                      background: bg,
+                      border: `${isCurrent ? 2 : 1}px solid ${border}`,
+                      color,
+                    }}
                   >
                     {qi + 1}
                     {flagged && (
                       <span
                         className="absolute -top-1 -right-1 h-2 w-2 rounded-full"
-                        style={{ background: "#fbbf24" }}
+                        style={{ background: "#f59e0b" }}
                       />
                     )}
                   </button>
@@ -126,30 +125,18 @@ export function CommonTestExamNavigator({
       </div>
 
       {/* Stats */}
-      <div className="h-px bg-white/[0.06]" />
+      <div className="h-px" style={{ background: "#e5e7eb" }} />
       <div className="grid grid-cols-3 gap-1 text-center">
         {[
-          {
-            value: navStates.filter((s) => s.answered).length,
-            label: "回答",
-            color: "#22c55e",
-          },
-          {
-            value: navStates.filter((s) => !s.answered).length,
-            label: "未回答",
-            color: "rgba(255,255,255,0.35)",
-          },
-          {
-            value: navStates.filter((s) => s.flagged).length,
-            label: "見直し",
-            color: "#fbbf24",
-          },
+          { value: navStates.filter((s) => s.answered).length, label: "解答" },
+          { value: navStates.filter((s) => !s.answered).length, label: "未解答" },
+          { value: navStates.filter((s) => s.flagged).length, label: "見直し" },
         ].map((stat) => (
           <div key={stat.label}>
-            <div className="font-mono text-sm font-extrabold" style={{ color: stat.color }}>
+            <div className="font-mono text-sm font-bold" style={{ color: "#111827" }}>
               {stat.value}
             </div>
-            <div className="font-mono text-[8px] text-white/25">{stat.label}</div>
+            <div className="text-[10px]" style={{ color: "#9ca3af" }}>{stat.label}</div>
           </div>
         ))}
       </div>

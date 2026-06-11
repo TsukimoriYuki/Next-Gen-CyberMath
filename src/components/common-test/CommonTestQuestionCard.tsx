@@ -106,7 +106,6 @@ export function CommonTestQuestionCard({
 // ── Math layout ───────────────────────────────────────────────────────────
 function MathQuestionBody({
   question,
-  theme,
   children,
 }: {
   question: CommonTestDrillQuestion;
@@ -115,26 +114,28 @@ function MathQuestionBody({
 }) {
   return (
     <div className="space-y-4">
+      {/* 問題本文 — 紙面風（白背景・黒文字） */}
       <div
-        className="rounded-2xl p-5 sm:p-6"
+        className="rounded-lg p-5 sm:p-6"
         style={{
-          background: "rgba(255,255,255,0.03)",
-          border: `1px solid rgba(${theme.glowRgb},0.15)`,
+          background: "#ffffff",
+          border: "1px solid #d1d5db",
+          color: "#1f2937",
         }}
       >
         {question.context && (
           <div
-            className="mb-4 rounded-lg p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+            className="mb-4 rounded p-3.5 text-sm leading-[1.9] whitespace-pre-wrap"
             style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              color: "rgba(255,255,255,0.60)",
+              background: "#fafafa",
+              border: "1px solid #e5e7eb",
+              color: "#374151",
             }}
           >
-            {question.context}
+            <MathText className="text-sm leading-[1.9]">{question.context}</MathText>
           </div>
         )}
-        <MathText className="text-[15px] leading-loose text-white/90">
+        <MathText className="text-[15px] leading-loose" >
           {question.statement}
         </MathText>
       </div>

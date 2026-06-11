@@ -1,6 +1,7 @@
 // Server Component — 今日の特命ミッションカード
+import Link from "next/link";
 import type { DailyMission } from "@/data/common-test";
-import { ArrowRight, Zap, Target, Timer } from "lucide-react";
+import { ArrowRight, Timer } from "lucide-react";
 
 const DIFFICULTY_META: Record<
   DailyMission["difficulty"],
@@ -15,8 +16,9 @@ export function CommonTestMissionCard({ mission, index }: { mission: DailyMissio
   const diff = DIFFICULTY_META[mission.difficulty];
 
   return (
-    <div
-      className="relative flex flex-col gap-3 rounded-2xl p-5 overflow-hidden"
+    <Link
+      href={mission.href}
+      className="group relative flex flex-col gap-3 rounded-2xl p-5 overflow-hidden transition-all hover:opacity-90"
       style={{
         background: `linear-gradient(145deg, rgba(${hexToRgb(mission.accent)},0.07) 0%, rgba(0,0,0,0.5) 100%)`,
         border: `1px solid rgba(${hexToRgb(mission.accent)},0.22)`,
@@ -75,14 +77,18 @@ export function CommonTestMissionCard({ mission, index }: { mission: DailyMissio
           推奨 {mission.recommendedMinutes} min
         </div>
         <span
-          className="flex items-center gap-1 font-mono text-[9px] font-semibold"
-          style={{ color: `rgba(${hexToRgb(mission.accent)},0.8)` }}
+          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider transition-all group-hover:opacity-80"
+          style={{
+            background: `rgba(${hexToRgb(mission.accent)},0.14)`,
+            border: `1px solid rgba(${hexToRgb(mission.accent)},0.35)`,
+            color: mission.accent,
+          }}
         >
-          MISSION START
+          START DRILL
           <ArrowRight className="h-3 w-3" />
         </span>
       </div>
-    </div>
+    </Link>
   );
 }
 

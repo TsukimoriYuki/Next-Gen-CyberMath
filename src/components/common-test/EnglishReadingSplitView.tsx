@@ -7,32 +7,31 @@ interface Props {
   children: React.ReactNode;
 }
 
-export function EnglishReadingSplitView({ question, theme, children }: Props) {
+// 問題本文は紙面風（白背景・黒文字）。ページ全体のCYBERトーンとは分離する。
+export function EnglishReadingSplitView({ question, children }: Props) {
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
       {/* ── Left: passage / context ──────────────────────────────────────── */}
       <div className="w-full lg:w-[55%] lg:sticky lg:top-6">
         <div
-          className="rounded-2xl p-5 sm:p-6"
+          className="rounded-lg p-5 sm:p-6"
           style={{
-            background: "rgba(255,255,255,0.025)",
-            border: `1px solid rgba(${theme.glowRgb},0.13)`,
+            background: "#ffffff",
+            border: "1px solid #d1d5db",
+            color: "#1f2937",
           }}
         >
           {question.context && (
             <>
-              <div
-                className="mb-3 font-mono text-[9px] font-bold uppercase tracking-[0.2em]"
-                style={{ color: `rgba(${theme.glowRgb},0.7)` }}
-              >
-                ◈ RESOURCE / TABLE
+              <div className="mb-3 text-xs font-bold" style={{ color: "#6b7280" }}>
+                資料
               </div>
               <div
-                className="mb-5 overflow-x-auto rounded-lg p-3 font-mono text-xs leading-relaxed whitespace-pre"
+                className="mb-5 overflow-x-auto rounded p-3.5 font-mono text-xs leading-relaxed whitespace-pre"
                 style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  color: "rgba(255,255,255,0.65)",
+                  background: "#fafafa",
+                  border: "1px solid #e5e7eb",
+                  color: "#374151",
                 }}
               >
                 {question.context}
@@ -42,11 +41,8 @@ export function EnglishReadingSplitView({ question, theme, children }: Props) {
 
           {question.passage && (
             <>
-              <div
-                className="mb-3 font-mono text-[9px] font-bold uppercase tracking-[0.2em]"
-                style={{ color: `rgba(${theme.glowRgb},0.7)` }}
-              >
-                ◈ PASSAGE
+              <div className="mb-3 text-xs font-bold" style={{ color: "#6b7280" }}>
+                本文
               </div>
               <PassageText text={question.passage} />
             </>
@@ -57,19 +53,17 @@ export function EnglishReadingSplitView({ question, theme, children }: Props) {
       {/* ── Right: statement + answer panel ──────────────────────────────── */}
       <div className="w-full lg:flex-1 space-y-4">
         <div
-          className="rounded-2xl p-5 sm:p-6"
+          className="rounded-lg p-5 sm:p-6"
           style={{
-            background: "rgba(255,255,255,0.03)",
-            border: `1px solid rgba(${theme.glowRgb},0.15)`,
+            background: "#ffffff",
+            border: "1px solid #d1d5db",
+            color: "#1f2937",
           }}
         >
-          <div
-            className="mb-2 font-mono text-[9px] font-bold uppercase tracking-[0.2em]"
-            style={{ color: `rgba(${theme.glowRgb},0.7)` }}
-          >
-            ◈ QUESTION
+          <div className="mb-2 text-xs font-bold" style={{ color: "#6b7280" }}>
+            設問
           </div>
-          <p className="text-[15px] leading-relaxed text-white/90">
+          <p className="text-[15px] leading-relaxed" style={{ color: "#111827" }}>
             {question.statement}
           </p>
         </div>
@@ -88,7 +82,7 @@ function PassageText({ text }: { text: string }) {
         const lines = para.split("\n");
         if (lines.length === 1) {
           return (
-            <p key={i} className="text-sm leading-relaxed text-white/75">
+            <p key={i} className="text-[15px] leading-[1.9]" style={{ color: "#1f2937" }}>
               {para}
             </p>
           );
@@ -102,9 +96,10 @@ function PassageText({ text }: { text: string }) {
                   key={j}
                   className={
                     isHeading
-                      ? "font-mono text-[11px] font-bold text-white/60"
-                      : "text-sm leading-relaxed text-white/75"
+                      ? "text-[13px] font-bold"
+                      : "text-[15px] leading-[1.9]"
                   }
+                  style={{ color: isHeading ? "#4b5563" : "#1f2937" }}
                 >
                   {line}
                 </p>

@@ -161,7 +161,7 @@ export function CommonTestAnswerPanel({
             color: theme.primary,
           }}
         >
-          {isLastQuestion ? "FINISH DRILL" : "NEXT QUESTION"}
+          {isLastQuestion ? "演習を終了する" : "次の問題へ"}
           <ChevronRight className="h-4 w-4" />
         </button>
       )}
@@ -354,7 +354,7 @@ function ExplanationPanel({
             className="font-mono text-xs font-bold uppercase tracking-wider"
             style={{ color: isCorrect ? "#22c55e" : "#ef4444" }}
           >
-            {isCorrect ? "CORRECT —— 正解" : "INCORRECT —— 不正解"}
+            {isCorrect ? "正解" : "不正解"}
           </div>
           {!isCorrect && (
             <div className="mt-0.5 font-mono text-[10px] text-white/50">
@@ -369,7 +369,7 @@ function ExplanationPanel({
 
       <ExplainBlock
         icon={<Target className="h-4 w-4" />}
-        label="ANALYSIS"
+        label="解説"
         labelColor={theme.primary}
         glowRgb={theme.glowRgb}
       >
@@ -384,7 +384,7 @@ function ExplanationPanel({
 
       <ExplainBlock
         icon={<Zap className="h-4 w-4" />}
-        label="EXAM STRATEGY"
+        label="本番での考え方"
         labelColor="#fbbf24"
         glowRgb="251,191,36"
       >
@@ -396,7 +396,7 @@ function ExplanationPanel({
       {question.trapExplanation && (
         <ExplainBlock
           icon={<AlertTriangle className="h-4 w-4" />}
-          label="TRAP DETECTED"
+          label="注意点"
           labelColor="#f97316"
           glowRgb="249,115,22"
         >

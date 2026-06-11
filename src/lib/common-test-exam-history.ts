@@ -22,6 +22,16 @@ export interface CommonTestExamSectionResult {
   totalQuestions: number;
   answeredCount: number;
   correctCount: number;
+  /** 大問タイトル（Phase 5.6以降の記録のみ） */
+  sectionTitle?: string;
+  /** 大問配点（配点ベース採点時のみ） */
+  maxScore?: number;
+  /** 全問換算の獲得点（配点ベース採点時のみ） */
+  earnedScore?: number;
+  /** 時間内回答での獲得点（配点ベース採点時のみ） */
+  timeLimitEarnedScore?: number;
+  /** 時間内に正解した問題数（配点ベース採点時のみ） */
+  timeLimitCorrectCount?: number;
 }
 
 export interface CommonTestExamHistoryItem {
@@ -41,6 +51,15 @@ export interface CommonTestExamHistoryItem {
   sectionResults: CommonTestExamSectionResult[];
   answers: CommonTestExamAnswerRecord[];
   weakSkillTags: string[];
+  /** ── 配点ベース採点（Phase 5.6以降の記録のみ。旧履歴には存在しない） ── */
+  /** 受験した大問の配点合計 */
+  maxScore?: number;
+  /** 時間内回答での得点 */
+  timeLimitScore?: number;
+  /** 全問換算の得点 */
+  unlimitedScore?: number;
+  /** 選択制試験で実際に解答した大問ID（必答含む） */
+  selectedSectionIds?: string[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────

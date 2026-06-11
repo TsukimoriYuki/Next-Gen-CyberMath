@@ -35,19 +35,19 @@ function buildReviewCandidates(
     if (!ans.selectedAnswer) {
       // Unanswered
       reasonFlags = ["unanswered"];
-      quadrantLabel = "TIME LOSS";
+      quadrantLabel = "未解答";
       quadrantColor = "#6b7280";
     } else if (!ans.isCorrect && ans.confidence === "confident") {
       reasonFlags = ["wrong", "confident"];
-      quadrantLabel = "DANGEROUS";
+      quadrantLabel = "思い込みミス";
       quadrantColor = "#ef4444";
     } else if (!ans.isCorrect) {
       reasonFlags = ["wrong"];
-      quadrantLabel = "REVIEW REQUIRED";
+      quadrantLabel = "要復習";
       quadrantColor = "#f97316";
     } else if (ans.isCorrect && ans.confidence === "guessed") {
       reasonFlags = ["guessed_correct"];
-      quadrantLabel = "LUCKY HIT";
+      quadrantLabel = "まぐれ正解";
       quadrantColor = "#fbbf24";
     } else {
       continue; // Correct + confident — skip
@@ -79,7 +79,16 @@ export function CommonTestExamResultPanel({
   preset,
   questionTitlesMap,
 }: ExamResultPanelProps) {
-  const gap = historyItem.unlimitedCorrect - historyItem.timeLimitCorrect;
+  // 配点ベースのスコアがあればそれを優先、なければ問題数ベース
+  const hasPoints =
+    historyItem.maxScore != null &&
+    historyItem.timeLimitScore != null &&
+    historyItem.unlimitedScore != null;
+  const timeLimitValue = hasPoints ? historyItem.timeLimitScore! : historyItem.timeLimitCorrect;
+  const unlimitedValue = hasPoints ? historyItem.unlimitedScore! : historyItem.unlimitedCorrect;
+  const totalValue = hasPoints ? historyItem.maxScore! : historyItem.totalQuestions;
+  const unitLabel = hasPoints ? "点" : "問";
+  const gap = unlimitedValue - timeLimitValue;
   const finishedOnTime = historyItem.actualDurationSec <= historyItem.examLimitSec;
   const reviewCandidates = buildReviewCandidates(historyItem, questionTitlesMap);
 
@@ -134,25 +143,27 @@ export function CommonTestExamResultPanel({
           <div className="grid gap-4 sm:grid-cols-3">
             {/* Time-limit score */}
             <ScoreCard
-              label="TIME-LIMIT SCORE"
-              sublabel="時間内正答"
-              value={historyItem.timeLimitCorrect}
-              total={historyItem.totalQuestions}
+              label="時間内スコア"
+              sublabel={hasPoints ? "100点換算" : "時間内正答"}
+              value={timeLimitValue}
+              total={totalValue}
+              unit={unitLabel}
               pct={historyItem.timeLimitScorePct}
               color="#fbbf24"
               glowRgb="251,191,36"
-              description="本番の実力スコア"
+              description="本番と同じ条件での得点"
             />
             {/* Unlimited score */}
             <ScoreCard
-              label="UNLIMITED SCORE"
-              sublabel="全問正答"
-              value={historyItem.unlimitedCorrect}
-              total={historyItem.totalQuestions}
+              label="無制限スコア"
+              sublabel={hasPoints ? "100点換算" : "全問正答"}
+              value={unlimitedValue}
+              total={totalValue}
+              unit={unitLabel}
               pct={historyItem.unlimitedScorePct}
               color="#22d3ee"
               glowRgb="34,211,238"
-              description="知識の上限スコア"
+              description="時間をかければ取れる得点"
             />
             {/* Gap */}
             <div
@@ -163,7 +174,7 @@ export function CommonTestExamResultPanel({
               }}
             >
               <div className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-white/45">
-                SCORE GAP
+                スコア差
               </div>
               <div
                 className="font-display text-5xl font-extrabold"
@@ -173,8 +184,8 @@ export function CommonTestExamResultPanel({
               </div>
               <div className="font-mono text-[10px] text-white/45 leading-relaxed">
                 {gap > 0
-                  ? `時間内に回答できれば${gap}問多く正解できた。時間管理が課題。`
-                  : "時間内に全問カバーできた。理想的な時間管理。"}
+                  ? `時間内に解き切れていれば、あと${gap}${unitLabel}上積みできました。理解はできているので、処理速度と時間配分が次の課題です。`
+                  : "時間内のスコアと無制限スコアが一致しています。理想的な時間配分です。"}
               </div>
             </div>
           </div>
@@ -189,13 +200,13 @@ export function CommonTestExamResultPanel({
           >
             {/* Table header */}
             <div
-              className="grid grid-cols-5 gap-2 px-4 py-2.5 font-mono text-[8px] font-bold uppercase tracking-[0.15em] text-white/30"
+              className="grid grid-cols-6 gap-2 px-4 py-2.5 font-mono text-[8px] font-bold uppercase tracking-[0.15em] text-white/30"
               style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
             >
-              <div>大問</div>
-              <div className="text-center">出題数</div>
-              <div className="text-center">回答</div>
+              <div className="col-span-2">大問</div>
+              <div className="text-center">解答/出題</div>
               <div className="text-center">正答</div>
+              <div className="text-center">得点/配点</div>
               <div className="text-center">正答率</div>
             </div>
             {historyItem.sectionResults.map((sr, idx) => {
@@ -208,18 +219,27 @@ export function CommonTestExamResultPanel({
               return (
                 <div
                   key={sr.sectionId}
-                  className="grid grid-cols-5 gap-2 px-4 py-3 items-center"
+                  className="grid grid-cols-6 gap-2 px-4 py-3 items-center"
                   style={{
                     background: idx % 2 === 0 ? "rgba(255,255,255,0.01)" : "transparent",
                     borderBottom: "1px solid rgba(255,255,255,0.04)",
                   }}
                 >
-                  <div className="font-mono text-[10px] font-bold" style={{ color: preset.theme.primary }}>
-                    第{sr.sectionNumber}問
+                  <div className="col-span-2 min-w-0">
+                    <div className="font-mono text-[10px] font-bold" style={{ color: preset.theme.primary }}>
+                      第{sr.sectionNumber}問
+                    </div>
+                    {sr.sectionTitle && (
+                      <div className="font-mono text-[9px] text-white/35 truncate">{sr.sectionTitle}</div>
+                    )}
                   </div>
-                  <div className="text-center font-mono text-[11px] text-white/55">{sr.totalQuestions}</div>
-                  <div className="text-center font-mono text-[11px] text-white/55">{sr.answeredCount}</div>
+                  <div className="text-center font-mono text-[11px] text-white/55">
+                    {sr.answeredCount}/{sr.totalQuestions}
+                  </div>
                   <div className="text-center font-mono text-[11px] text-white/80 font-bold">{sr.correctCount}</div>
+                  <div className="text-center font-mono text-[11px] font-bold text-white/80">
+                    {sr.maxScore != null ? `${sr.earnedScore ?? 0}/${sr.maxScore}` : "—"}
+                  </div>
                   <div className="text-center font-mono text-[11px] font-bold" style={{ color: accuracyColor }}>
                     {sr.answeredCount > 0 ? `${accuracy}%` : "—"}
                   </div>
@@ -355,6 +375,7 @@ function ScoreCard({
   sublabel,
   value,
   total,
+  unit,
   pct,
   color,
   glowRgb,
@@ -364,6 +385,7 @@ function ScoreCard({
   sublabel: string;
   value: number;
   total: number;
+  unit: string;
   pct: number;
   color: string;
   glowRgb: string;
@@ -384,7 +406,7 @@ function ScoreCard({
         <span className="font-display text-5xl font-extrabold" style={{ color }}>
           {value}
         </span>
-        <span className="font-mono text-sm text-white/35 mb-1">/ {total}</span>
+        <span className="font-mono text-sm text-white/35 mb-1">/ {total}{unit}</span>
       </div>
       {/* Progress bar */}
       <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>

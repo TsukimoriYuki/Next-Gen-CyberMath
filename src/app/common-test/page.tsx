@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Lock, Cpu, History, Zap } from "lucide-react";
 import { COMMON_TEST_SUBJECTS, DAILY_MISSIONS, LOCKED_FEATURES } from "@/data/common-test";
-import { CommonTestStatusPanel } from "@/components/common-test/CommonTestStatusPanel";
+import { CommonTestTargetScorePanel } from "@/components/common-test/CommonTestTargetScorePanel";
 import { CommonTestMissionCard } from "@/components/common-test/CommonTestMissionCard";
 import { CommonTestSubjectCard } from "@/components/common-test/CommonTestSubjectCard";
 import { CommonTestAnalyticsSummary } from "@/components/common-test/CommonTestAnalyticsSummary";
@@ -93,7 +93,7 @@ export default function CommonTestPage() {
         {/* ══ STATUS PANEL ════════════════════════════════════════════════════ */}
         <section className="mt-10">
           <SectionLabel>◈ SYSTEM STATUS — Score Tracker</SectionLabel>
-          <CommonTestStatusPanel />
+          <CommonTestTargetScorePanel />
         </section>
 
         {/* ══ TODAY'S MISSIONS ════════════════════════════════════════════════ */}
@@ -235,7 +235,7 @@ export default function CommonTestPage() {
 
         {/* Footer label */}
         <p className="mt-16 text-center font-mono text-[10px] tracking-[0.2em] text-white/15 uppercase">
-          CYBER OS · Common Test Command Center · Phase 5
+          CYBER OS · Common Test Command Center · Phase 5.6
         </p>
       </div>
     </div>
