@@ -46,6 +46,7 @@ import {
 import { ENGLISH_LEVEL_META } from "@/lib/english-types";
 import { AIOracle } from "@/components/dashboard/AIOracle";
 import { LearningCalendar } from "@/components/dashboard/LearningCalendar";
+import { ReviewQueuePanel } from "@/components/review/ReviewQueuePanel";
 
 type Subject = "MATH" | "ENGLISH";
 
@@ -143,6 +144,9 @@ export default function MyPage() {
             MATH と ENGLISH の学習データを統合表示します
           </p>
         </header>
+
+        {/* Review Queue */}
+        <ReviewQueuePanel />
 
         {/* AI Oracle */}
         <div className="mb-8">
