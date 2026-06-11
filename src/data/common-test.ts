@@ -398,16 +398,4 @@ export const LOCKED_FEATURES: LockedFeature[] = [
     description: "本番と同一形式・時間配分で全大問を通しで解く。採点・タイム計測・弱点自動解析付き。",
     icon: "🖥️",
   },
-  {
-    id: "ai-strategy",
-    title: "AI作戦会議",
-    description: "模試データと演習履歴から個人の弱点を特定し、残り期間を逆算した最適プランを生成する。",
-    icon: "🧠",
-  },
-  {
-    id: "review-sync",
-    title: "復習キュー連携",
-    description: "間違えた大問の問題をSRS（間隔反復）キューに自動登録。CYBER OS全体で復習を管理する。",
-    icon: "♻️",
-  },
 ];
