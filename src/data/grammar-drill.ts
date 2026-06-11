@@ -254,4 +254,104 @@ export const GRAMMAR_QUESTIONS: GrammarQuestion[] = [
     correctIndex: 0,
     explanation: `【what節が主語】"What I want is ..." = 「私が欲しいのは…だ」。"What + 主語 + 動詞" が名詞節として文の主語になる。"That I truly want is not money" は文法的に不完全（that節は主語になれるが "want" の目的語が欠ける）。`,
   },
+
+  // ── 仮定法（追加）────────────────────────────────────────────────────────
+  {
+    id: "g026",
+    topic: "conditional",
+    sentence: "It is time the government ___ decisive action on climate change.",
+    blank: "take (It is time + 仮定法)",
+    options: ["took", "takes", "has taken", "will take"],
+    correctIndex: 0,
+    explanation: `【It is time + 仮定法過去】"It is time (that) + 主語 + 過去形" は「そろそろ〜すべき時だ（なのにまだしていない）」という批判・促しの表現。現在の状況について述べているが動詞は過去形 took を使う。現在形 takes や未来形 will take は誤り。`,
+  },
+  {
+    id: "g027",
+    topic: "conditional",
+    sentence: "Without your financial support, the project ___ have collapsed years ago.",
+    blank: "would (過去の仮定)",
+    options: ["would", "will", "should", "could have"],
+    correctIndex: 0,
+    explanation: `【Without + 仮定法過去完了】"Without ..." は "If it had not been for ..." の言い換え。主節は "would have + 過去分詞" で過去の非現実的な帰結を表す。"would have collapsed" が完成形。"would" だけでは後続の "have collapsed" と合わせて正しい仮定法過去完了を作る。`,
+  },
+  {
+    id: "g028",
+    topic: "conditional",
+    sentence: "Suppose you ___ the chance to relive one day of your life, which day would you choose?",
+    blank: "had (Suppose + 仮定法)",
+    options: ["had", "have", "would have", "were to have"],
+    correctIndex: 0,
+    explanation: `【Suppose + 仮定法過去】"Suppose (that) + 主語 + 過去形" は "If + 主語 + 過去形" と同義で「もし〜なら」を表す。後続の主節 "would you choose" から仮定法過去の文脈であるとわかる。"have" は直説法現在で「Suppose you have ...」は現実の状況を仮定するが、主節の "would" と対応しない。`,
+  },
+
+  // ── 分詞構文（追加）──────────────────────────────────────────────────────
+  {
+    id: "g029",
+    topic: "participle",
+    sentence: "___ in a rural village, she had little access to advanced educational resources.",
+    blank: "grow up (分詞構文・理由)",
+    options: ["Having grown up", "Growing up", "Grown up", "To grow up"],
+    correctIndex: 0,
+    explanation: `【完了分詞構文 Having + 過去分詞】主節の動詞 "had" より前に起きた出来事（農村で育った＝過去）を表すため、完了分詞構文 "Having grown up" が正解。"Growing up" は主節と同時進行の場合に使う。分詞構文の時制差に注意。`,
+  },
+  {
+    id: "g030",
+    topic: "participle",
+    sentence: "The new regulations, ___ effective immediately, require all firms to disclose their carbon footprint.",
+    blank: "take (being + 過去分詞 または 現在分詞)",
+    options: ["taking effect", "taken effect", "being taken effect", "to take effect"],
+    correctIndex: 0,
+    explanation: `【分詞構文（付帯状況）】主語 "The new regulations" と動詞の関係は「効力を発する（regulations take effect）」という能動関係。よって現在分詞 "taking effect" が正解。"Taken effect" は受動の過去分詞だが "take effect" は自動詞句のため受動形にはならない。`,
+  },
+
+  // ── 関係詞（追加）────────────────────────────────────────────────────────
+  {
+    id: "g031",
+    topic: "relative",
+    sentence: "This is the city ___ I spent most of my childhood.",
+    blank: "前置詞 + 関係代名詞 または 関係副詞",
+    options: ["where", "which", "in that", "at which"],
+    correctIndex: 0,
+    explanation: `【関係副詞 where】先行詞 "the city"（場所）を受ける関係副詞 "where" が最もシンプルで正しい選択。"in which" も正解だが選択肢にない。"which" だけでは前置詞が欠ける（"spent ... in the city" → in が必要）。"in that" は関係詞節には使えない。`,
+  },
+  {
+    id: "g032",
+    topic: "relative",
+    sentence: "The report concluded that economic inequality, ___ has widened considerably, poses a systemic risk.",
+    blank: "which (継続用法)",
+    options: ["which", "that", "what", "as"],
+    correctIndex: 0,
+    explanation: `【関係代名詞の継続用法】コンマに挟まれた非制限用法（継続用法）では "that" は使えず "which" を使う。先行詞は "economic inequality"（物・概念）。"what" は先行詞を持たない。"as" は "as is often the case" など特定の慣用表現でのみ使う。`,
+  },
+
+  // ── 倒置（追加）──────────────────────────────────────────────────────────
+  {
+    id: "g033",
+    topic: "inversion",
+    sentence: "___ the researchers realise the full implications of their discovery.",
+    blank: "Only then (倒置)",
+    options: ["Only then did", "Only then were", "Only then have", "Only then"],
+    correctIndex: 0,
+    explanation: `【Only then + 倒置】否定・制限の副詞表現 "Only then" が文頭に来ると倒置が起きる。文の時制は過去（"realise" → realised が文脈上の動詞）なので助動詞 did を使う。"Only then did the researchers realise ..." が正解形。"Only then" だけでは倒置がなく文法的に不完全。`,
+  },
+  {
+    id: "g034",
+    topic: "inversion",
+    sentence: "Rarely ___ such a profound impact on public opinion in such a short time.",
+    blank: "has a single speech had (倒置)",
+    options: ["has a single speech had", "a single speech has had", "did a single speech have", "a single speech had"],
+    correctIndex: 0,
+    explanation: `【Rarely + 倒置】"Rarely" は否定的な意味を持つ副詞で文頭に置くと倒置が生じる。現在完了 "has had" が使われているため、倒置形は "has + 主語 + 過去分詞"。よって "has a single speech had" が正しい語順。"did ... have" は過去形の倒置で現在完了とは対応しない。`,
+  },
+
+  // ── 強調構文（追加）──────────────────────────────────────────────────────
+  {
+    id: "g035",
+    topic: "cleft",
+    sentence: "It was ___ that the decisive battle took place, not in the south.",
+    blank: "in the north (強調構文・場所)",
+    options: ["in the north", "in north", "the north", "at the north"],
+    correctIndex: 0,
+    explanation: `【強調構文で場所の副詞句を強調】"It is/was + 強調要素 + that ..." 構文。強調されているのは場所を表す副詞句 "in the north"（北で）。"the north" だけでは副詞句としての前置詞が欠ける。"at the north" は一般的でない（地域・方向には in を使う）。`,
+  },
 ];
