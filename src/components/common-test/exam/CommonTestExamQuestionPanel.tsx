@@ -6,6 +6,8 @@ import { Flag } from "lucide-react";
 import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import type { CommonTestTheme } from "@/data/common-test";
 import type { CommonTestConfidence } from "@/lib/common-test-history";
+import { isCommonTestMarkSheetQuestion } from "@/lib/common-test-answer-normalize";
+import { MarkSheetAnswerInput } from "@/components/common-test/MarkSheetAnswerInput";
 
 interface Props {
   question: CommonTestDrillQuestion;
@@ -44,6 +46,7 @@ export function CommonTestExamQuestionPanel({
   onSetConfidence,
 }: Props) {
   const isMath = question.subjectId !== "english-reading";
+  const usesMarkSheet = isCommonTestMarkSheetQuestion(question);
   const sectionNum = parseInt(question.sectionId.replace("section-", ""), 10);
 
   return (
@@ -108,8 +111,13 @@ export function CommonTestExamQuestionPanel({
       </div>
 
       {/* Answer options */}
-      {question.type === "blank-number" ? (
-        <BlankNumberInput value={selectedAnswer ?? ""} onChange={onAnswer} />
+      {usesMarkSheet ? (
+        <MarkSheetAnswerInput
+          question={question}
+          value={selectedAnswer ?? ""}
+          onChange={onAnswer}
+          helperText="本番演習中は、入力した内容がそのまま答案として保存されます。"
+        />
       ) : (
         <div className="space-y-2">
           {(question.options ?? []).map((opt, idx) => {

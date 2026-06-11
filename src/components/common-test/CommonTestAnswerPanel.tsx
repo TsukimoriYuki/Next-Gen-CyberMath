@@ -6,6 +6,12 @@ import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import type { CommonTestTheme } from "@/data/common-test";
 import type { CommonTestConfidence } from "@/lib/common-test-history";
 import {
+  getCommonTestAnswerFormat,
+  isCommonTestAnswerCorrect,
+  isCommonTestMarkSheetQuestion,
+} from "@/lib/common-test-answer-normalize";
+import { MarkSheetAnswerInput } from "./MarkSheetAnswerInput";
+import {
   CheckCircle2,
   XCircle,
   ChevronRight,
@@ -34,7 +40,9 @@ export function CommonTestAnswerPanel({
   theme,
 }: Props) {
   const isMath = question.subjectId !== "english-reading";
-  const isBlankNumber = question.type === "blank-number";
+  const answerFormat = getCommonTestAnswerFormat(question);
+  const usesMarkSheet = isCommonTestMarkSheetQuestion(question);
+  const [draftAnswer, setDraftAnswer] = useState(selectedAnswer ?? "");
   const [selectedConfidence, setSelectedConfidence] =
     useState<CommonTestConfidence | null>(null);
 
@@ -43,25 +51,37 @@ export function CommonTestAnswerPanel({
     if (!isRevealed) setSelectedConfidence(null);
   }, [isRevealed]);
 
+  useEffect(() => {
+    setDraftAnswer(selectedAnswer ?? "");
+  }, [question.id, selectedAnswer]);
+
   return (
     <div className="space-y-4">
       {/* ── Options ──────────────────────────────────────────────────── */}
-      {isBlankNumber ? (
-        <BlankNumberInput
+      {usesMarkSheet ? (
+        <MarkSheetAnswerInput
           question={question}
-          isRevealed={isRevealed}
-          onSelect={onSelect}
-          theme={theme}
+          value={draftAnswer}
+          disabled={isRevealed}
+          onChange={setDraftAnswer}
+          onSubmit={onSelect}
+          submitLabel="CHECK"
+          helperText={
+            answerFormat === "digits"
+              ? "共通テストの空欄を意識して、左から順に数字を入れてください。"
+              : "数字や記号はそのまま入力できます。全角数字でも採点時に半角として扱います。"
+          }
         />
       ) : (
         <div className="grid gap-2 sm:grid-cols-2">
           {(question.options ?? []).map((opt, idx) => {
             const label = String.fromCharCode(65 + idx);
             const isSelected = selectedAnswer === opt;
-            const isCorrect =
-              opt === question.correctAnswer ||
-              (Array.isArray(question.correctAnswer) &&
-                question.correctAnswer.includes(opt));
+            const isCorrect = isCommonTestAnswerCorrect(
+              opt,
+              question.correctAnswer,
+              "choice"
+            );
 
             let borderColor = `rgba(${theme.glowRgb},0.15)`;
             let bgColor = "rgba(255,255,255,0.03)";
@@ -325,11 +345,14 @@ function ExplanationPanel({
   theme: CommonTestTheme;
   isMath: boolean;
 }) {
+  const answerFormat = getCommonTestAnswerFormat(question);
   const isCorrect =
     selectedAnswer !== null &&
-    (Array.isArray(question.correctAnswer)
-      ? question.correctAnswer.includes(selectedAnswer)
-      : question.correctAnswer === selectedAnswer);
+    isCommonTestAnswerCorrect(
+      selectedAnswer,
+      question.correctAnswer,
+      answerFormat
+    );
 
   return (
     <div className="space-y-3">

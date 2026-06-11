@@ -12,6 +12,15 @@ export type CommonTestQuestionType =
   | "mark-combination"
   | "information-match";
 
+export type CommonTestAnswerFormat = "choice" | "number" | "digits" | "text";
+
+export interface CommonTestDigitSlot {
+  label: string;
+  length: number;
+  allowNegative?: boolean;
+  allowDecimal?: boolean;
+}
+
 export type CommonTestSkillTag =
   | "誘導読解"
   | "条件整理"
@@ -39,6 +48,9 @@ export interface CommonTestDrillQuestion {
   type: CommonTestQuestionType;
   options?: string[];
   correctAnswer: string | string[];
+  markLabels?: string[];
+  answerFormat?: CommonTestAnswerFormat;
+  digitSlots?: CommonTestDigitSlot[];
   explanation: string;
   strategy: string;
   trapExplanation?: string;
@@ -77,6 +89,8 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
     type: "single-choice",
     options: ["7", "8", "9", "10"],
     correctAnswer: "9",
+    markLabels: ["ア"],
+    answerFormat: "number",
     explanation:
       "$A = \\{2, 4, 6, 8, 10\\}$（2の倍数）、$B = \\{3, 6, 9\\}$（3の倍数）。よって $A \\cap B = \\{6\\}$（2かつ3の倍数、すなわち6の倍数）。$\\overline{A \\cap B}$ は全体集合から $A \\cap B$ を除いた集合なので、$n(\\overline{A \\cap B}) = 10 - 1 = 9$。",
     strategy:
@@ -98,6 +112,8 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
     type: "single-choice",
     options: ["6", "7", "8", "10"],
     correctAnswer: "8",
+    answerFormat: "digits",
+    digitSlots: [{ label: "ア", length: 1 }],
     explanation:
       "円の中心 $O$ から弦 $PQ$ への垂線の足を $M$ とすると、$OM = 3$、$OP = 5$（半径）。直角三角形 $OMP$ において、$PM = \\sqrt{OP^2 - OM^2} = \\sqrt{25 - 9} = \\sqrt{16} = 4$。よって $PQ = 2PM = 8$。",
     strategy:
@@ -176,7 +192,9 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
       "5 人の小テストの点数が 4, 8, 10, 6, 12 であるとき、この得点の分散を求めよ。",
     type: "single-choice",
     options: ["6.4", "7.0", "8.0", "9.6"],
-    correctAnswer: "8.0",
+    correctAnswer: "8",
+    markLabels: ["ア"],
+    answerFormat: "number",
     explanation:
       "平均 $\\bar{x} = (4+8+10+6+12)/5 = 40/5 = 8$。偏差の2乗の合計：$(4-8)^2 + (8-8)^2 + (10-8)^2 + (6-8)^2 + (12-8)^2 = 16+0+4+4+16 = 40$。分散 $= 40/5 = 8$。",
     strategy:
@@ -388,7 +406,9 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
       "選ばれた3人の中に女子が少なくとも1人含まれる選び方は何通りあるか。",
     type: "single-choice",
     options: ["$18$ 通り", "$30$ 通り", "$31$ 通り", "$35$ 通り"],
-    correctAnswer: "$31$ 通り",
+    correctAnswer: "31",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
     explanation:
       "全体から「女子が1人も含まれない（全員男子）」場合を引く余事象の考え方を使う。全体は $_7\\mathrm{C}_3 = 35$ 通り。全員男子になるのは $_4\\mathrm{C}_3 = 4$ 通り。よって $35 - 4 = 31$ 通り。",
     strategy:
@@ -601,6 +621,8 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
     type: "single-choice",
     options: ["10", "16", "22", "28"],
     correctAnswer: "10",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
     explanation:
       "$a_2 = 3 \\cdot 2 - 2 = 4$。$a_3 = 3 \\cdot 4 - 2 = 10$。一般項を求めるなら：$a_{n+1} - 1 = 3(a_n - 1)$ と変形して公比 3 の等比数列に帰着。$b_n = a_n - 1$ とおくと $b_1 = 1$、$b_n = 3^{n-1}$、$a_n = 3^{n-1} + 1$。$a_3 = 9 + 1 = 10$。",
     strategy:
@@ -741,6 +763,8 @@ export const COMMON_TEST_DRILL_QUESTIONS: CommonTestDrillQuestion[] = [
     type: "single-choice",
     options: ["-3", "-1", "1", "3"],
     correctAnswer: "-3",
+    markLabels: ["ア"],
+    answerFormat: "number",
     explanation:
       "$\\vec{a} \\cdot \\vec{b} = 2 \\cdot 1 + (-1) \\cdot 3 + 2 \\cdot (-1) = 2 - 3 - 2 = -3$。",
     strategy:

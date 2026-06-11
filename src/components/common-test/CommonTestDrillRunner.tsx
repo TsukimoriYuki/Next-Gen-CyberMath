@@ -14,6 +14,10 @@ import { CommonTestQuestionCard } from "./CommonTestQuestionCard";
 import { CommonTestAnswerPanel } from "./CommonTestAnswerPanel";
 import { CommonTestResultPanel } from "./CommonTestResultPanel";
 import { type AnswerEntry } from "./common-test-drill-types";
+import {
+  getCommonTestAnswerFormat,
+  isCommonTestAnswerCorrect,
+} from "@/lib/common-test-answer-normalize";
 import { Play, Zap } from "lucide-react";
 
 export type { AnswerEntry };
@@ -87,9 +91,11 @@ export function CommonTestDrillRunner({
       if (phase !== "running") return;
       const timeSpent = Math.floor((Date.now() - questionStartRef.current) / 1000);
       const currentQ = questions[currentIdx];
-      const correct = Array.isArray(currentQ.correctAnswer)
-        ? currentQ.correctAnswer.includes(answer)
-        : currentQ.correctAnswer === answer;
+      const correct = isCommonTestAnswerCorrect(
+        answer,
+        currentQ.correctAnswer,
+        getCommonTestAnswerFormat(currentQ)
+      );
 
       setPendingAnswer({ answer, isCorrect: correct, timeSpentSec: timeSpent });
       setPhase("revealed");

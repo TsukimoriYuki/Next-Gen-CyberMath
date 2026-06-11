@@ -17,6 +17,11 @@ import {
   type CommonTestExamAnswerRecord,
   type CommonTestExamSectionResult,
 } from "@/lib/common-test-exam-history";
+import {
+  getCommonTestAnswerFormat,
+  isCommonTestAnswerCorrect,
+  normalizeCommonTestAnswer,
+} from "@/lib/common-test-answer-normalize";
 import { CommonTestExamHeader } from "./CommonTestExamHeader";
 import { CommonTestExamNavigator } from "./CommonTestExamNavigator";
 import type { QuestionNavState } from "./CommonTestExamNavigator";
@@ -38,7 +43,7 @@ interface Props {
 }
 
 function isRealAnswer(v: string | null | undefined): v is string {
-  return v !== null && v !== undefined && v !== "";
+  return v !== null && v !== undefined && normalizeCommonTestAnswer(v) !== "";
 }
 
 export function CommonTestExamRunner({ preset, questions }: Props) {
@@ -124,7 +129,7 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
     (answer: string) => {
       const qId = activeQuestions[currentIdx]?.id;
       if (!qId) return;
-      const effectiveAnswer = answer === "" ? null : answer;
+      const effectiveAnswer = normalizeCommonTestAnswer(answer) === "" ? null : answer;
       const now = elapsedSecRef.current;
       setQuestionStates((prev) => ({
         ...prev,
@@ -191,9 +196,11 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
       const selected = isRealAnswer(qs.selectedAnswer) ? qs.selectedAnswer : null;
       const isCorrect =
         selected !== null &&
-        (Array.isArray(q.correctAnswer)
-          ? q.correctAnswer.includes(selected)
-          : selected === q.correctAnswer);
+        isCommonTestAnswerCorrect(
+          selected,
+          q.correctAnswer,
+          getCommonTestAnswerFormat(q)
+        );
 
       return {
         questionId: q.id,
