@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Cpu, History, Zap, Brain, RefreshCw, CalendarDays } from "lucide-react";
+import { ArrowLeft, Cpu, History, Zap, Brain, RefreshCw, CalendarDays, ShieldAlert } from "lucide-react";
 import { COMMON_TEST_SUBJECTS, DAILY_MISSIONS } from "@/data/common-test";
 import { CommonTestTargetScorePanel } from "@/components/common-test/CommonTestTargetScorePanel";
 import { CommonTestMissionCard } from "@/components/common-test/CommonTestMissionCard";
@@ -8,6 +8,7 @@ import { CommonTestSubjectCard } from "@/components/common-test/CommonTestSubjec
 import { CommonTestAnalyticsSummary } from "@/components/common-test/CommonTestAnalyticsSummary";
 import { CommonTestReviewSummary } from "@/components/common-test/CommonTestReviewSummary";
 import { CommonTestDailyPlaylistPanel } from "@/components/common-test/CommonTestDailyPlaylistPanel";
+import { CommonTestWeaknessBossPanel } from "@/components/common-test/CommonTestWeaknessBossPanel";
 
 export const metadata: Metadata = {
   title: "COMMON TEST COMMAND CENTER",
@@ -107,6 +108,18 @@ export default function CommonTestPage() {
             <div className="flex-1 h-px bg-white/[0.06]" />
           </div>
           <CommonTestDailyPlaylistPanel showFullLink={true} />
+        </section>
+
+        {/* ══ WEAKNESS BOSS ═══════════════════════════════════════════════════ */}
+        <section className="mt-10">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">
+              <ShieldAlert className="inline h-3.5 w-3.5 mr-1.5 align-middle" />
+              WEAKNESS BOSS — 弱点攻略システム
+            </span>
+            <div className="flex-1 h-px bg-white/[0.06]" />
+          </div>
+          <CommonTestWeaknessBossPanel compact={true} showFullLink={false} />
         </section>
 
         {/* ══ TODAY'S MISSIONS ════════════════════════════════════════════════ */}
@@ -295,7 +308,7 @@ export default function CommonTestPage() {
 
         {/* Footer label */}
         <p className="mt-16 text-center font-mono text-[10px] tracking-[0.2em] text-white/15 uppercase">
-          CYBER OS · Common Test Command Center · Phase 8 Ready
+          CYBER OS · Common Test Command Center · Phase 9 Ready
         </p>
       </div>
     </div>
