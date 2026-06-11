@@ -6,6 +6,7 @@ import type { CommonTestExamHistoryItem, CommonTestExamAnswerRecord } from "@/li
 import type { CommonTestExamPreset } from "@/data/common-test-exams";
 import { ReviewQueueRegistrar } from "@/components/common-test/ReviewQueueRegistrar";
 import type { ReviewCandidate } from "@/components/common-test/ReviewQueueRegistrar";
+import { CommonTestAiStrategyPanel } from "@/components/common-test/ai/CommonTestAiStrategyPanel";
 
 interface Props {
   historyItem: CommonTestExamHistoryItem;
@@ -306,6 +307,12 @@ export function CommonTestExamResultPanel({
             </div>
           </section>
         )}
+
+        {/* ── AI作戦会議 ──────────────────────────────────────────────────── */}
+        <section>
+          <SectionLabel color={preset.theme.primary}>◈ AI STRATEGY — AI作戦会議</SectionLabel>
+          <CommonTestAiStrategyPanel examHistoryItem={historyItem} theme={preset.theme} />
+        </section>
 
         {/* ── Review queue ────────────────────────────────────────────────── */}
         {reviewCandidates.length > 0 && (

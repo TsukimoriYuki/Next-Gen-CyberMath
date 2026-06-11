@@ -103,3 +103,29 @@ export function clearCommonTestExamHistory(): void {
     localStorage.removeItem(EXAM_HISTORY_KEY);
   } catch {}
 }
+
+/**
+ * 教科ごとの「最新の本番演習スコア（0〜100）」を返す。
+ * 履歴は新しい順に保存されているため、各 subjectId で最初に見つかったものが最新。
+ * スコアは原則 inTimeScore（時間内得点）。配点が無い旧履歴は時間内/全問の正答率(%)にフォールバック。
+ */
+export function getLatestCommonTestExamScores(): Record<string, number> {
+  const history = [...readRaw()].sort((a, b) => {
+    const bt = Date.parse(b.finishedAt || b.startedAt);
+    const at = Date.parse(a.finishedAt || a.startedAt);
+    return (Number.isFinite(bt) ? bt : 0) - (Number.isFinite(at) ? at : 0);
+  });
+  const result: Record<string, number> = {};
+  for (const item of history) {
+    if (item.subjectId in result) continue; // 既に最新を取得済み
+    const score =
+      item.timeLimitScore ??
+      item.unlimitedScore ??
+      item.timeLimitScorePct ??
+      item.unlimitedScorePct;
+    if (typeof score === "number" && Number.isFinite(score)) {
+      result[item.subjectId] = Math.round(score);
+    }
+  }
+  return result;
+}

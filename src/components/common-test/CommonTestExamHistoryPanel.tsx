@@ -7,6 +7,8 @@ import {
   clearCommonTestExamHistory,
   type CommonTestExamHistoryItem,
 } from "@/lib/common-test-exam-history";
+import { CommonTestAiStrategyPanel } from "@/components/common-test/ai/CommonTestAiStrategyPanel";
+import type { CommonTestTheme } from "@/data/common-test";
 
 const EXAM_LABELS: Record<string, { label: string; color: string; glowRgb: string }> = {
   "math-1a-70": { label: "数IA 70min", color: "#00d2ff", glowRgb: "0,210,255" },
@@ -234,6 +236,18 @@ export function CommonTestExamHistoryPanel() {
                     </span>
                   ))}
                 </div>
+
+                {/* AI作戦会議（展開時のみマウント。APIはボタン押下後にのみ呼ばれる） */}
+                <CommonTestAiStrategyPanel
+                  examHistoryItem={item}
+                  theme={
+                    {
+                      primary: examInfo.color,
+                      secondary: examInfo.color,
+                      glowRgb: examInfo.glowRgb,
+                    } satisfies CommonTestTheme
+                  }
+                />
               </div>
             )}
           </div>

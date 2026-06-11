@@ -13,16 +13,24 @@ import {
   normalizeTargetScore,
   type CommonTestTargetScores,
 } from "@/lib/common-test-targets";
+import { getLatestCommonTestExamScores } from "@/lib/common-test-exam-history";
 
 export function CommonTestTargetScorePanel() {
   const [targets, setTargets] = useState<CommonTestTargetScores>({});
+  const [latestScores, setLatestScores] = useState<Record<string, number>>({});
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<"saved" | "error" | null>(null);
 
   useEffect(() => {
     setTargets(getCommonTestTargetScores());
+    setLatestScores(getLatestCommonTestExamScores());
   }, []);
+
+  // 推定スコア: 本番演習履歴があればその最新スコア、無ければ初期推定値(mock)
+  const estimateOf = (id: CommonTestSubjectId, mock: number) =>
+    latestScores[id] ?? mock;
+  const hasLatest = (id: CommonTestSubjectId) => id in latestScores;
 
   useEffect(() => {
     if (!feedback) return;
@@ -66,10 +74,11 @@ export function CommonTestTargetScorePanel() {
     0
   );
   const totalEstimate = COMMON_TEST_SUBJECTS.reduce(
-    (sum, s) => sum + s.estimatedScoreMock,
+    (sum, s) => sum + estimateOf(s.id, s.estimatedScoreMock),
     0
   );
   const totalGap = totalTarget - totalEstimate;
+  const anyLatest = COMMON_TEST_SUBJECTS.some((s) => hasLatest(s.id));
 
   return (
     <div
@@ -100,7 +109,7 @@ export function CommonTestTargetScorePanel() {
             className="font-mono text-[10px] font-bold"
             style={{ color: totalGap <= 30 ? "#34d399" : "#f59e0b" }}
           >
-            合計目標 {totalTarget}点 ／ 推定 {totalEstimate}点
+            合計目標 {totalTarget}点 ／ {anyLatest ? "最新スコア" : "推定"} {totalEstimate}点
           </span>
           {editing ? (
             <div className="flex items-center gap-1.5">
@@ -153,26 +162,47 @@ export function CommonTestTargetScorePanel() {
       <div className="grid grid-cols-1 gap-0 sm:grid-cols-3 sm:divide-x divide-white/5">
         {COMMON_TEST_SUBJECTS.map((subject) => {
           const { theme, shortTitle, title, estimatedScoreMock } = subject;
+          const estimate = estimateOf(subject.id, estimatedScoreMock);
+          const isLatest = hasLatest(subject.id);
           const target = targetOf(subject.id, subject.targetScoreDefault);
           const pct =
             target > 0
-              ? Math.min(100, Math.round((estimatedScoreMock / target) * 100))
+              ? Math.min(100, Math.round((estimate / target) * 100))
               : 100;
-          const gap = target - estimatedScoreMock;
+          const gap = target - estimate;
 
           return (
             <div key={subject.id} className="px-5 py-4">
               {/* Subject label */}
-              <div className="flex items-baseline justify-between mb-3">
+              <div className="flex items-baseline justify-between mb-1.5">
                 <span className="font-display text-sm font-extrabold" style={{ color: theme.primary }}>
                   {shortTitle}
                 </span>
                 <span className="font-mono text-[10px] text-white/35">{title}</span>
               </div>
 
+              {/* 推定スコアの出所バッジ */}
+              <div className="mb-2">
+                {isLatest ? (
+                  <span
+                    className="inline-block rounded px-1.5 py-0.5 font-mono text-[8px] font-bold"
+                    style={{ background: `rgba(${theme.glowRgb},0.12)`, color: theme.primary }}
+                  >
+                    最新演習スコア反映済み
+                  </span>
+                ) : (
+                  <span
+                    className="inline-block rounded px-1.5 py-0.5 font-mono text-[8px]"
+                    style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.35)" }}
+                  >
+                    演習履歴なし（初期推定値）
+                  </span>
+                )}
+              </div>
+
               {/* Score row */}
               <div className="flex items-baseline gap-2 mb-2">
-                <span className="font-mono text-xl font-bold text-white">{estimatedScoreMock}</span>
+                <span className="font-mono text-xl font-bold text-white">{estimate}</span>
                 <span className="font-mono text-xs text-white/35">／</span>
                 {editing ? (
                   <input
