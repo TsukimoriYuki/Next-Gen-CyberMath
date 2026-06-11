@@ -43,7 +43,7 @@ export default function CommonTestReviewPage() {
             style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.22)", color: "#f97316" }}
           >
             <Layers className="h-3.5 w-3.5" />
-            MEMORY REPAIR SYSTEM
+            復習キューシステム
           </div>
 
           <h1

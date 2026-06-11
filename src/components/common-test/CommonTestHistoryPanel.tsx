@@ -71,27 +71,31 @@ export function CommonTestHistoryPanel() {
   if (history.length === 0) {
     return (
       <div
-        className="rounded-2xl p-10 text-center"
+        className="rounded-2xl px-6 py-10 text-center"
         style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
       >
-        <div className="font-mono text-3xl text-white/10 mb-4">📋</div>
-        <div className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-white/30">
-          NO DRILL HISTORY
-        </div>
-        <p className="mt-2 font-mono text-[10px] text-white/20">
-          大問別ドリルを演習すると、ここに結果が記録されます。
+        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-white/30 mb-2">
+          大問別ドリルの履歴はありません
         </p>
-        <Link
-          href="/common-test"
-          className="mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 font-mono text-xs font-bold uppercase tracking-wider transition-all hover:opacity-90"
-          style={{
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.12)",
-            color: "rgba(255,255,255,0.60)",
-          }}
-        >
-          COMMAND CENTER へ
-        </Link>
+        <p className="font-mono text-[11px] leading-relaxed text-white/20">
+          大問別演習を解くと、ここに正答率・弱点タグが記録されます。
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/common-test/math-1a"
+            className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-all hover:opacity-90"
+            style={{ background: "rgba(96,165,250,0.10)", border: "1px solid rgba(96,165,250,0.25)", color: "#60a5fa" }}
+          >
+            数学IA →
+          </Link>
+          <Link
+            href="/common-test/english-reading"
+            className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-all hover:opacity-90"
+            style={{ background: "rgba(52,211,153,0.10)", border: "1px solid rgba(52,211,153,0.25)", color: "#34d399" }}
+          >
+            英語R →
+          </Link>
+        </div>
       </div>
     );
   }

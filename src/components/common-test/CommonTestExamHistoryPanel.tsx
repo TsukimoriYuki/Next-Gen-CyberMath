@@ -49,18 +49,22 @@ export function CommonTestExamHistoryPanel() {
   if (history.length === 0) {
     return (
       <div
-        className="rounded-2xl p-8 text-center"
+        className="rounded-2xl px-6 py-10 text-center"
         style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
       >
-        <div className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/25 mb-2">
-          EXAM SIMULATOR HISTORY
-        </div>
-        <p className="font-mono text-xs text-white/20">
-          まだ模擬試験を受験していません。
+        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-white/25 mb-2">
+          本番演習の履歴はありません
         </p>
-        <p className="font-mono text-[10px] text-white/15 mt-1">
-          試験を受験すると、ここに結果が表示されます。
+        <p className="font-mono text-[11px] leading-relaxed text-white/20">
+          本番演習を1回受けると、AI作戦会議・弱点分析・今日の学習メニューがより正確になります。
         </p>
+        <a
+          href="/common-test/simulator"
+          className="mt-6 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-all hover:opacity-90"
+          style={{ background: "rgba(251,191,36,0.10)", border: "1px solid rgba(251,191,36,0.28)", color: "#fbbf24" }}
+        >
+          本番演習を受ける →
+        </a>
       </div>
     );
   }

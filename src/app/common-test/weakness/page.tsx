@@ -118,7 +118,7 @@ export default function CommonTestWeaknessPage() {
 
         {/* Footer */}
         <p className="mt-16 text-center font-mono text-[10px] tracking-[0.2em] text-white/12 uppercase">
-          CYBER OS · Common Test Command Center · Weakness Boss
+          CYBER OS · Common Test Command Center · Phase 10
         </p>
       </div>
     </div>

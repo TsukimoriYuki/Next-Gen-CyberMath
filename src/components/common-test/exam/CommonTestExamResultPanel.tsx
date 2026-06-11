@@ -201,13 +201,13 @@ export function CommonTestExamResultPanel({
           >
             {/* Table header */}
             <div
-              className="grid grid-cols-6 gap-2 px-4 py-2.5 font-mono text-[8px] font-bold uppercase tracking-[0.15em] text-white/30"
+              className="grid grid-cols-4 sm:grid-cols-6 gap-2 px-4 py-2.5 font-mono text-[8px] font-bold uppercase tracking-[0.15em] text-white/30"
               style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
             >
               <div className="col-span-2">大問</div>
-              <div className="text-center">解答/出題</div>
+              <div className="hidden sm:block text-center">解答/出題</div>
               <div className="text-center">正答</div>
-              <div className="text-center">得点/配点</div>
+              <div className="hidden sm:block text-center">得点/配点</div>
               <div className="text-center">正答率</div>
             </div>
             {historyItem.sectionResults.map((sr, idx) => {
@@ -220,7 +220,7 @@ export function CommonTestExamResultPanel({
               return (
                 <div
                   key={sr.sectionId}
-                  className="grid grid-cols-6 gap-2 px-4 py-3 items-center"
+                  className="grid grid-cols-4 sm:grid-cols-6 gap-2 px-4 py-3 items-center"
                   style={{
                     background: idx % 2 === 0 ? "rgba(255,255,255,0.01)" : "transparent",
                     borderBottom: "1px solid rgba(255,255,255,0.04)",
@@ -234,11 +234,11 @@ export function CommonTestExamResultPanel({
                       <div className="font-mono text-[9px] text-white/35 truncate">{sr.sectionTitle}</div>
                     )}
                   </div>
-                  <div className="text-center font-mono text-[11px] text-white/55">
+                  <div className="hidden sm:block text-center font-mono text-[11px] text-white/55">
                     {sr.answeredCount}/{sr.totalQuestions}
                   </div>
                   <div className="text-center font-mono text-[11px] text-white/80 font-bold">{sr.correctCount}</div>
-                  <div className="text-center font-mono text-[11px] font-bold text-white/80">
+                  <div className="hidden sm:block text-center font-mono text-[11px] font-bold text-white/80">
                     {sr.maxScore != null ? `${sr.earnedScore ?? 0}/${sr.maxScore}` : "—"}
                   </div>
                   <div className="text-center font-mono text-[11px] font-bold" style={{ color: accuracyColor }}>

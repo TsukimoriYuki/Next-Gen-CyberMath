@@ -126,7 +126,7 @@ export default function CommonTestPage() {
         <section className="mt-12">
           <SectionLabel>⚡ TODAY'S SPECIAL MISSION</SectionLabel>
           <p className="mb-4 font-mono text-[10px] text-white/35">
-            今日の特命ミッション — 各科目から1問、集中して撃破せよ。
+            今日のおすすめ演習 — 各科目から1問ずつ、集中して取り組みましょう。
           </p>
           <div className="grid gap-4 sm:grid-cols-3">
             {DAILY_MISSIONS.map((m, i) => (
@@ -308,7 +308,7 @@ export default function CommonTestPage() {
 
         {/* Footer label */}
         <p className="mt-16 text-center font-mono text-[10px] tracking-[0.2em] text-white/15 uppercase">
-          CYBER OS · Common Test Command Center · Phase 9 Ready
+          CYBER OS · Common Test Command Center · Phase 10
         </p>
       </div>
     </div>

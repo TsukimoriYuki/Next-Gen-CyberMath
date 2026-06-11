@@ -135,14 +135,14 @@ export function CommonTestReviewQueue() {
           ログインが必要です
         </div>
         <p className="font-mono text-[11px] text-white/30 mb-6">
-          復習キューはログインユーザーのみ利用できます。
+          ログインすると、間違えた問題を復習キューに保存し、間隔反復で繰り返し確認できます。
         </p>
         <Link
-          href="/api/auth/login"
+          href="/auth/login"
           className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-mono text-xs font-bold uppercase tracking-wider transition-all hover:opacity-90"
-          style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.70)" }}
+          style={{ background: "rgba(249,115,22,0.10)", border: "1px solid rgba(249,115,22,0.28)", color: "#f97316" }}
         >
-          ログインページへ
+          ログインして復習キューを使う →
         </Link>
       </div>
     );
@@ -296,23 +296,33 @@ export function CommonTestReviewQueue() {
       {/* Empty state */}
       {allItems.length === 0 && (
         <div
-          className="rounded-2xl p-10 text-center"
+          className="rounded-2xl px-6 py-10 text-center"
           style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
-          <div className="font-mono text-3xl text-white/10 mb-4">🎯</div>
-          <div className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-white/25">
-            NO ITEMS IN QUEUE
+          <div className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-white/25 mb-2">
+            復習キューは空です
           </div>
-          <p className="mt-2 font-mono text-[10px] text-white/20">
-            ドリル演習後に「復習キューに追加」すると、ここに表示されます。
+          <p className="font-mono text-[11px] leading-relaxed text-white/20">
+            本番演習や大問別ドリルで間違えた問題を復習キューに追加すると、ここに表示されます。
+            <br />
+            まずは本番演習を1回受けてみましょう。
           </p>
-          <Link
-            href="/common-test"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 font-mono text-xs font-bold uppercase tracking-wider transition-all hover:opacity-90"
-            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.55)" }}
-          >
-            COMMAND CENTER へ
-          </Link>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/common-test/simulator"
+              className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-all hover:opacity-90"
+              style={{ background: "rgba(251,191,36,0.10)", border: "1px solid rgba(251,191,36,0.28)", color: "#fbbf24" }}
+            >
+              本番演習を受ける →
+            </Link>
+            <Link
+              href="/common-test"
+              className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-all hover:opacity-90"
+              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.55)" }}
+            >
+              司令室に戻る
+            </Link>
+          </div>
         </div>
       )}
     </div>

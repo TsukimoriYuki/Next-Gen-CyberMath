@@ -93,7 +93,7 @@ export function CommonTestTargetScorePanel() {
         <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
           ◈ System Status — Score Tracker
         </span>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
           {feedback === "saved" && (
             <span className="flex items-center gap-1 font-mono text-[10px] font-bold text-emerald-400">
               <Check className="h-3 w-3" />
@@ -109,7 +109,7 @@ export function CommonTestTargetScorePanel() {
             className="font-mono text-[10px] font-bold"
             style={{ color: totalGap <= 30 ? "#34d399" : "#f59e0b" }}
           >
-            合計目標 {totalTarget}点 ／ {anyLatest ? "最新スコア" : "推定"} {totalEstimate}点
+            目標 {totalTarget}点 ／ {anyLatest ? "最新" : "推定"} {totalEstimate}点
           </span>
           {editing ? (
             <div className="flex items-center gap-1.5">

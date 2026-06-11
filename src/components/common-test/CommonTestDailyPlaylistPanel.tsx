@@ -316,29 +316,29 @@ export function CommonTestDailyPlaylistPanel({ showFullLink = true }: Props) {
     >
       {/* ── ヘッダー ── */}
       <div
-        className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 sm:px-5"
+        className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 sm:px-5"
         style={{
           background: "rgba(251,191,36,0.04)",
           borderBottom: "1px solid rgba(251,191,36,0.12)",
         }}
       >
-        <div className="flex items-center gap-2">
-          <CalendarDays className="h-4 w-4 text-amber-400" />
+        <div className="flex min-w-0 items-center gap-2">
+          <CalendarDays className="h-4 w-4 shrink-0 text-amber-400" />
           <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400">
-            TODAY&apos;S PLAYLIST
+            今日の学習メニュー
           </span>
-          <span className="font-mono text-[10px] text-white/25">
+          <span className="hidden font-mono text-[10px] text-white/25 sm:inline">
             {playlist.date}
           </span>
         </div>
 
         {/* モード切替 */}
-        <div className="flex items-center gap-1">
+        <div className="ml-auto flex items-center gap-1">
           {(["short", "standard", "intensive"] as const).map((m) => (
             <button
               key={m}
               onClick={() => handleModeChange(m)}
-              className="rounded-md px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-wider transition-all"
+              className="rounded-md px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider transition-all"
               style={
                 mode === m
                   ? {

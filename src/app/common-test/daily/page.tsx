@@ -75,8 +75,59 @@ export default function CommonTestDailyPage() {
         {/* Main playlist panel */}
         <CommonTestDailyPlaylistPanel showFullLink={false} />
 
-        {/* Quick nav */}
+        {/* Learning loop */}
         <section className="mt-10">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
+              学習ループ
+            </span>
+            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+          </div>
+
+          <div
+            className="rounded-2xl p-5"
+            style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.07)",
+            }}
+          >
+            <p className="mb-4 font-mono text-[10px] text-white/35">
+              このサイクルを繰り返すと、共通テストの得点が着実に上がります。
+            </p>
+            <ol className="space-y-2">
+              {[
+                { step: 1, label: "本番演習を受ける", href: "/common-test/simulator", color: "#fbbf24" },
+                { step: 2, label: "AI作戦会議で結果を確認する", href: "/common-test/history", color: "#22d3ee" },
+                { step: 3, label: "弱点攻略で優先課題を確認する", href: "/common-test/weakness", color: "#ef4444" },
+                { step: 4, label: "今日の学習メニューを進める", href: "/common-test/daily", color: "#fbbf24" },
+                { step: 5, label: "復習キューで定着させる", href: "/common-test/review", color: "#f97316" },
+              ].map(({ step, label, href, color }) => (
+                <li key={step}>
+                  <a
+                    href={href}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all hover:opacity-80"
+                    style={{
+                      background: "rgba(255,255,255,0.03)",
+                      border: "1px solid rgba(255,255,255,0.07)",
+                    }}
+                  >
+                    <span
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-mono text-[10px] font-bold"
+                      style={{ background: `${color}1a`, border: `1px solid ${color}50`, color }}
+                    >
+                      {step}
+                    </span>
+                    <span className="font-mono text-[11px] text-white/65">{label}</span>
+                    <span className="ml-auto font-mono text-[10px] text-white/20">→</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* Quick nav */}
+        <section className="mt-8">
           <div className="mb-4 flex items-center gap-3">
             <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
               関連ページ
@@ -88,33 +139,33 @@ export default function CommonTestDailyPage() {
             <QuickLink
               href="/common-test/simulator"
               icon={<Zap className="h-4 w-4 text-amber-400" />}
-              label="EXAM SIMULATOR"
-              sub="本番形式演習"
-              color="rgba(251,191,36,0.18)"
-              border="rgba(251,191,36,0.25)"
+              label="本番演習"
+              sub="EXAM SIMULATOR"
+              color="rgba(251,191,36,0.12)"
+              border="rgba(251,191,36,0.22)"
             />
             <QuickLink
               href="/common-test/history"
               icon={<History className="h-4 w-4 text-cyan-400" />}
-              label="演習履歴 / AI分析"
-              sub="AI作戦会議"
-              color="rgba(34,211,238,0.12)"
-              border="rgba(34,211,238,0.22)"
+              label="AI作戦会議"
+              sub="演習履歴・分析"
+              color="rgba(34,211,238,0.10)"
+              border="rgba(34,211,238,0.20)"
             />
             <QuickLink
               href="/common-test/review"
               icon={<Layers className="h-4 w-4 text-orange-400" />}
               label="復習キュー"
               sub="間隔反復演習"
-              color="rgba(249,115,22,0.12)"
-              border="rgba(249,115,22,0.22)"
+              color="rgba(249,115,22,0.10)"
+              border="rgba(249,115,22,0.20)"
             />
           </div>
         </section>
 
         {/* Footer */}
         <p className="mt-16 text-center font-mono text-[10px] tracking-[0.2em] text-white/12 uppercase">
-          CYBER OS · Common Test Command Center · Daily Playlist
+          CYBER OS · Common Test Command Center · Phase 10
         </p>
       </div>
     </div>
