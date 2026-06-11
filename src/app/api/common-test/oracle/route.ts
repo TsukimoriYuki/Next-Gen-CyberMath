@@ -27,6 +27,18 @@ const rateMap = new Map<string, RateEntry>();
 const RATE_LIMIT = 20;
 const RATE_WINDOW = 3_600_000;
 
+// Gemini呼び出しのタイムアウト（ミリ秒）。超過したらrule-based fallbackへ。
+const GEMINI_TIMEOUT_MS = 12_000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error("gemini timeout")), ms)
+    ),
+  ]);
+}
+
 function cleanupRateMap() {
   const now = Date.now();
   for (const [ip, entry] of rateMap) {
@@ -99,8 +111,11 @@ export async function POST(req: NextRequest) {
       generationConfig: { responseMimeType: "application/json" },
     });
 
-    const result = await model.generateContent(
-      buildCommonTestOracleUserPrompt(input)
+    // 本番でGeminiの応答が遅延・ハングしてもリクエストを止めないようタイムアウトを設ける。
+    // 超過時は throw → catch でrule-based fallbackに切り替わる。
+    const result = await withTimeout(
+      model.generateContent(buildCommonTestOracleUserPrompt(input)),
+      GEMINI_TIMEOUT_MS
     );
     const fallback = buildRuleBasedAnalysis(input);
     const analysis = normalizeCommonTestAiAnalysisFromText({
