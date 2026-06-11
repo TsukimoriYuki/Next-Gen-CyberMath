@@ -27,7 +27,7 @@ import type { CommonTestTheme } from "@/data/common-test";
 import type { CommonTestAiAnalysisResult } from "@/lib/common-test-ai-analysis";
 import { buildCommonTestAiAnalysisInput } from "@/lib/common-test-ai-analysis";
 import {
-  getCommonTestAiAnalysis,
+  getCommonTestAiAnalysisEntry,
   saveCommonTestAiAnalysis,
 } from "@/lib/common-test-ai-cache";
 import { getCommonTestTargetScore } from "@/lib/common-test-targets";
@@ -54,13 +54,16 @@ export function CommonTestAiStrategyPanel({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [source, setSource] = useState<"gemini" | "rule" | null>(null);
+  const [cachedAt, setCachedAt] = useState<string | null>(null);
 
   // 既存のキャッシュがあれば初期表示に使う
   useEffect(() => {
-    const cached = getCommonTestAiAnalysis(examHistoryItem.id);
+    const cached = getCommonTestAiAnalysisEntry(examHistoryItem.id);
     if (cached) {
-      setAnalysis(cached);
+      setAnalysis(cached.analysis);
       setFromCache(true);
+      setSource(cached.source ?? null);
+      setCachedAt(cached.savedAt ?? null);
     }
   }, [examHistoryItem.id]);
 
@@ -96,18 +99,30 @@ export function CommonTestAiStrategyPanel({
         );
         return;
       }
+      const nextSource = data.source === "gemini" ? "gemini" : "rule";
       setAnalysis(data.analysis as CommonTestAiAnalysisResult);
-      setSource(data.source === "gemini" ? "gemini" : "rule");
+      setSource(nextSource);
       setFromCache(false);
-      saveCommonTestAiAnalysis(examHistoryItem.id, data.analysis);
+      setCachedAt(new Date().toISOString());
+      saveCommonTestAiAnalysis(examHistoryItem.id, data.analysis, nextSource);
     } catch {
-      setError("通信に失敗しました。ネットワークを確認して再度お試しください。");
+      setError("通信がうまくいきませんでした。少し時間をおいてから、もう一度お試しください。");
     } finally {
       setLoading(false);
     }
   }, [examHistoryItem, resolvedTarget]);
 
   const glow = theme.glowRgb;
+  const sourceLabel =
+    source === "gemini" ? "Gemini分析" : source === "rule" ? "簡易分析" : null;
+  const cachedLabel = cachedAt
+    ? `${new Date(cachedAt).toLocaleString("ja-JP", {
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })}保存`
+    : "保存済み";
 
   // ── 未生成・未キャッシュ：起動ボタン ─────────────────────────────────
   if (!analysis) {
@@ -130,8 +145,8 @@ export function CommonTestAiStrategyPanel({
             <div className="font-display text-base font-extrabold text-white">
               AI作戦会議
             </div>
-            <p className="font-mono text-[10px] text-white/45 leading-relaxed mt-0.5">
-              今回の結果をもとに、得点分析・時間配分・次にやるべき3つの行動を提案します。
+            <p className="text-[13px] text-white/55 leading-relaxed mt-1">
+              今回の結果から、得点分析・時間配分・次にやるべき3つの行動を整理します。
             </p>
           </div>
         </div>
@@ -142,7 +157,7 @@ export function CommonTestAiStrategyPanel({
           type="button"
           onClick={runAnalysis}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 rounded-xl py-3 font-mono text-[11px] font-bold uppercase tracking-[0.15em] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
           style={{
             background: `linear-gradient(135deg, rgba(${glow},0.30), rgba(${glow},0.15))`,
             border: `1px solid rgba(${glow},0.50)`,
@@ -152,7 +167,7 @@ export function CommonTestAiStrategyPanel({
           {loading ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              分析中…
+              分析しています…
             </>
           ) : (
             <>
@@ -175,37 +190,49 @@ export function CommonTestAiStrategyPanel({
       }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5 min-w-0">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2.5">
           <Sparkles className="h-4 w-4 shrink-0" style={{ color: theme.primary }} />
           <span className="font-display text-base font-extrabold text-white">
             AI作戦会議
           </span>
           {fromCache && (
             <span className="rounded px-1.5 py-0.5 font-mono text-[8px] text-white/40" style={{ background: "rgba(255,255,255,0.06)" }}>
-              保存済み
+              {cachedLabel}
             </span>
           )}
-          {source === "rule" && (
-            <span className="rounded px-1.5 py-0.5 font-mono text-[8px] text-amber-400/70" style={{ background: "rgba(251,191,36,0.10)" }}>
-              簡易分析
+          {sourceLabel && (
+            <span
+              className="rounded px-1.5 py-0.5 font-mono text-[8px]"
+              style={{
+                background:
+                  source === "gemini"
+                    ? "rgba(34,211,238,0.10)"
+                    : "rgba(251,191,36,0.10)",
+                color:
+                  source === "gemini"
+                    ? "rgba(103,232,249,0.75)"
+                    : "rgba(251,191,36,0.75)",
+              }}
+            >
+              {sourceLabel}
             </span>
           )}
-          {source === "gemini" && (
-            <span className="rounded px-1.5 py-0.5 font-mono text-[8px] text-cyan-300/70" style={{ background: "rgba(34,211,238,0.10)" }}>
-              Gemini分析
-            </span>
-          )}
+          </div>
+          <p className="mt-1 text-[12px] leading-relaxed text-white/45">
+            今回の結果に合わせて、次に伸ばす場所を3つに絞ります。
+          </p>
         </div>
         <button
           type="button"
           onClick={runAnalysis}
           disabled={loading}
-          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-mono text-[9px] transition-all hover:opacity-80 disabled:opacity-50"
-          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.55)" }}
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2 font-mono text-[10px] font-bold transition-all hover:opacity-80 disabled:opacity-50 sm:w-auto"
+          style={{ background: `rgba(${glow},0.10)`, border: `1px solid rgba(${glow},0.28)`, color: theme.primary }}
         >
           {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
-          再生成
+          もう一度分析
         </button>
       </div>
 
@@ -216,7 +243,7 @@ export function CommonTestAiStrategyPanel({
         className="rounded-xl p-4"
         style={{ background: "rgba(255,255,255,0.04)", border: `1px solid rgba(${glow},0.18)` }}
       >
-        <p className="text-sm leading-relaxed text-white/85">{analysis.summary}</p>
+        <p className="text-sm leading-7 text-white/85">{analysis.summary}</p>
       </div>
 
       {/* スコア診断・時間診断 */}
@@ -270,7 +297,10 @@ export function CommonTestAiStrategyPanel({
             <ListChecks className="inline h-3 w-3 mr-1" />
             次にやるべき3つ
           </PanelLabel>
-          <div className="space-y-2">
+          <div
+            className="space-y-2 rounded-xl p-2"
+            style={{ background: `rgba(${glow},0.055)`, border: `1px solid rgba(${glow},0.18)` }}
+          >
             {analysis.nextThreeActions.map((a, i) => {
               const inner = (
                 <>
@@ -281,18 +311,23 @@ export function CommonTestAiStrategyPanel({
                     {i + 1}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[13px] font-bold text-white/90">{a.title}</div>
-                    <p className="text-[12px] leading-relaxed text-white/55 mt-0.5">{a.reason}</p>
+                    <div className="text-sm font-bold leading-relaxed text-white/90">{a.title}</div>
+                    <p className="text-[12px] leading-6 text-white/60 mt-0.5">{a.reason}</p>
                   </div>
-                  {a.href && <ChevronRight className="h-4 w-4 shrink-0 text-white/30 self-center" />}
+                  {a.href && (
+                    <div className="flex shrink-0 items-center gap-1 self-center font-mono text-[9px] text-white/35">
+                      開く
+                      <ChevronRight className="h-4 w-4" />
+                    </div>
+                  )}
                 </>
               );
               return a.href ? (
                 <Link
                   key={i}
                   href={a.href}
-                  className="flex items-start gap-3 rounded-xl p-3 transition-all hover:opacity-85"
-                  style={{ background: `rgba(${glow},0.08)`, border: `1px solid rgba(${glow},0.22)` }}
+                  className="flex items-start gap-3 rounded-xl p-3.5 transition-all hover:opacity-85"
+                  style={{ background: `rgba(${glow},0.10)`, border: `1px solid rgba(${glow},0.24)` }}
                 >
                   {inner}
                 </Link>
@@ -312,7 +347,7 @@ export function CommonTestAiStrategyPanel({
 
       {/* 復習キュー・目標点 */}
       <div className="grid gap-3 sm:grid-cols-2">
-        <AdviceCard icon={<RefreshCcwDot className="h-3.5 w-3.5" />} label="復習キューの使い方" color="#34d399">
+        <AdviceCard icon={<RefreshCcwDot className="h-3.5 w-3.5" />} label="復習キュー" color="#34d399">
           {analysis.reviewQueueAdvice}
         </AdviceCard>
         <AdviceCard icon={<Target className="h-3.5 w-3.5" />} label="目標点までの道筋" color="#60a5fa">
@@ -371,10 +406,10 @@ function ErrorNote({ message }: { message: string }) {
   return (
     <div
       className="flex items-start gap-2 rounded-xl p-3 mb-3"
-      style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.22)" }}
+      style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.22)" }}
     >
-      <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-red-400 mt-0.5" />
-      <p className="font-mono text-[10px] text-red-400/80 leading-relaxed">{message}</p>
+      <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-300 mt-0.5" />
+      <p className="text-[12px] text-amber-100/80 leading-relaxed">{message}</p>
     </div>
   );
 }
