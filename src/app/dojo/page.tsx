@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { ArrowLeft, Swords, Scroll, Target } from "lucide-react";
 import { getAllDojoProblems } from "@/lib/content";
 import { DojoExplorer } from "@/components/dojo/DojoExplorer";
-import { DEVIATION_VALUES, DEVIATION_META } from "@/lib/types";
+import { DEVIATION_VALUES, DEVIATION_META, UNIVERSITY_GROUP_META } from "@/lib/types";
+import type { UniversityGroup } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "過去問道場",
@@ -100,6 +101,67 @@ export default async function DojoPage({
           </div>
         ))}
       </div>
+
+      {/* ---- 私立文系 HACK MODE ---- */}
+      <section
+        className="mt-10 rounded-2xl overflow-hidden"
+        style={{
+          background: "rgba(232,121,249,0.03)",
+          border: "1px solid rgba(232,121,249,0.18)",
+        }}
+      >
+        <div
+          className="flex items-center gap-2 px-5 py-3"
+          style={{
+            background: "rgba(232,121,249,0.06)",
+            borderBottom: "1px solid rgba(232,121,249,0.12)",
+          }}
+        >
+          <span
+            className="font-mono text-xs font-bold uppercase tracking-[0.2em]"
+            style={{ color: "#e879f9" }}
+          >
+            ▸ 私立文系 HACK MODE
+          </span>
+          <span className="font-mono text-[10px] text-white/35 ml-1">
+            志望校群別・出題傾向タグで絞り込み
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-4">
+          {(Object.keys(UNIVERSITY_GROUP_META) as UniversityGroup[]).map((key) => {
+            const m = UNIVERSITY_GROUP_META[key];
+            return (
+              <div
+                key={key}
+                className="rounded-xl p-3"
+                style={{
+                  background: `color-mix(in srgb, ${m.accent} 5%, transparent)`,
+                  border: `1px solid color-mix(in srgb, ${m.accent} 22%, transparent)`,
+                }}
+              >
+                <div
+                  className="font-display text-base font-extrabold"
+                  style={{ color: m.accent }}
+                >
+                  {m.label}
+                </div>
+                <div className="mt-0.5 font-mono text-[9px] text-white/50">
+                  {m.deviationRange}
+                </div>
+                <div className="mt-1 font-mono text-[10px] text-white/35 leading-snug">
+                  {m.description}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="px-5 pb-4">
+          <p className="font-mono text-[11px] text-white/30 leading-relaxed">
+            下の探索エリアで <span style={{ color: "#e879f9" }}>tags: 私立文系</span> を入力すると，
+            各大学群の対策問題を絞り込める。英語問題は英語ドジョー（速読・精読・文法）から。
+          </p>
+        </div>
+      </section>
 
       {/* ---- インタラクティブ探索エリア ---- */}
       <div className="mt-10">

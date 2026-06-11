@@ -6,6 +6,7 @@ import { EXPANSION_PACK_2 } from "./expansion-pack-2";
 import { EXPANSION_PACK_3 } from "./expansion-pack-3";
 import { ABYSS_PACK_1 } from "./abyss-pack-1";
 import { ABYSS_PACK_2 } from "./abyss-pack-2";
+import { PRIVATE_MATH_PACK_1 } from "./private-math-pack-1";
 import { numbersAndExpressions } from "./units/numbers-and-expressions";
 import { setsAndLogic } from "./units/sets-and-logic";
 import { quadraticFunctions } from "./units/quadratic-functions";
@@ -529,6 +530,8 @@ const RAW_PROBLEMS: Problem[] = [
   ...EXPANSION_PACK_2,
   // 拡張パック3：手薄領域の補強（複素数平面・数列・空間ベクトル・微積分・確率・三角関数）
   ...EXPANSION_PACK_3,
+  // 私立文系特化パック：日東駒専・産近甲龍・MARCH・関関同立 対策問題。
+  ...PRIVATE_MATH_PACK_1,
   // 特異点プール（ABYSS）：超難問ランダムガチャ専用。通常導線から完全隠蔽。
   ...ABYSS_PACK_1,
   ...ABYSS_PACK_2,

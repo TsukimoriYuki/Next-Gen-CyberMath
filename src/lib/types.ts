@@ -90,6 +90,19 @@ export interface ExplanationStep {
 /** 過去問道場の偏差値帯。 */
 export type Deviation = 50 | 55 | 60 | 65 | 70;
 
+/** 私立文系大学群タグ。過去問道場の絞り込みに使う。 */
+export type UniversityGroup = "NITTOMASEN" | "SANKINKORYU" | "MARCH" | "KANKANDORITSU";
+
+export const UNIVERSITY_GROUP_META: Record<
+  UniversityGroup,
+  { label: string; accent: string; deviationRange: string; description: string }
+> = {
+  NITTOMASEN:    { label: "日東駒専", accent: "#22d3ee", deviationRange: "偏差値 45〜55", description: "日本大・東洋大・駒澤大・専修大" },
+  SANKINKORYU:   { label: "産近甲龍", accent: "#10b981", deviationRange: "偏差値 45〜55", description: "京都産業大・近畿大・甲南大・龍谷大" },
+  MARCH:         { label: "MARCH",   accent: "#f59e0b", deviationRange: "偏差値 55〜65", description: "明治・青山学院・立教・中央・法政" },
+  KANKANDORITSU: { label: "関関同立", accent: "#e879f9", deviationRange: "偏差値 57〜67", description: "関西・関西学院・同志社・立命館" },
+};
+
 /**
  * 解法の多様性（代数・幾何・ベクトル…）。1 問に複数の解法を持たせ、
  * 道場の解法切替タブで表示する。body は KaTeX + @@why + @@lab トークン可。
@@ -143,6 +156,8 @@ export interface Problem {
   backgroundTag?: string;
   /** 解法の多様性。存在すれば道場で解法切替タブを表示する。 */
   approaches?: Approach[];
+  /** 私立文系大学群タグ。道場・検索の絞り込みに使う。 */
+  universityGroup?: UniversityGroup;
 }
 
 /**

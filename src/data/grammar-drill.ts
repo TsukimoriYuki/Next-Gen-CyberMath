@@ -1,8 +1,10 @@
 export interface GrammarQuestion {
   id: string;
-  topic: "conditional" | "participle" | "relative" | "inversion" | "cleft";
+  topic:
+    | "conditional" | "participle" | "relative" | "inversion" | "cleft"
+    | "paragraph_order" | "error_id" | "phrasal_verb" | "idiom" | "conversation" | "preposition";
   sentence: string;
-  blank: string; // the label/hint shown in the blank position
+  blank: string;
   options: [string, string, string, string];
   correctIndex: 0 | 1 | 2 | 3;
   explanation: string;
@@ -12,11 +14,17 @@ export const GRAMMAR_TOPICS: Record<
   GrammarQuestion["topic"],
   { label: string; labelJa: string; accent: string }
 > = {
-  conditional: { label: "Conditionals", labelJa: "仮定法", accent: "#f59e0b" },
-  participle:  { label: "Participial", labelJa: "分詞構文", accent: "#10b981" },
-  relative:    { label: "Relative",    labelJa: "関係詞",   accent: "#00d2ff" },
-  inversion:   { label: "Inversion",   labelJa: "倒置",     accent: "#a78bfa" },
-  cleft:       { label: "Cleft",       labelJa: "強調構文", accent: "#f43f5e" },
+  conditional:    { label: "Conditionals",   labelJa: "仮定法",   accent: "#f59e0b" },
+  participle:     { label: "Participial",    labelJa: "分詞構文", accent: "#10b981" },
+  relative:       { label: "Relative",       labelJa: "関係詞",   accent: "#00d2ff" },
+  inversion:      { label: "Inversion",      labelJa: "倒置",     accent: "#a78bfa" },
+  cleft:          { label: "Cleft",          labelJa: "強調構文", accent: "#f43f5e" },
+  paragraph_order:{ label: "Para-Order",     labelJa: "段落整序", accent: "#e879f9" },
+  error_id:       { label: "Error-ID",       labelJa: "誤り指摘", accent: "#fb923c" },
+  phrasal_verb:   { label: "Phrasal Verb",   labelJa: "句動詞",   accent: "#34d399" },
+  idiom:          { label: "Idiom",          labelJa: "イディオム",accent: "#60a5fa" },
+  conversation:   { label: "Conversation",   labelJa: "会話表現", accent: "#c084fc" },
+  preposition:    { label: "Preposition",    labelJa: "前置詞",   accent: "#94a3b8" },
 };
 
 export const GRAMMAR_QUESTIONS: GrammarQuestion[] = [
@@ -353,5 +361,106 @@ export const GRAMMAR_QUESTIONS: GrammarQuestion[] = [
     options: ["in the north", "in north", "the north", "at the north"],
     correctIndex: 0,
     explanation: `【強調構文で場所の副詞句を強調】"It is/was + 強調要素 + that ..." 構文。強調されているのは場所を表す副詞句 "in the north"（北で）。"the north" だけでは副詞句としての前置詞が欠ける。"at the north" は一般的でない（地域・方向には in を使う）。`,
+  },
+
+  // ── MARCH / 関関同立 対策（g036–g040）────────────────────────────────────
+  {
+    id: "g036",
+    topic: "paragraph_order",
+    sentence: `次の（ア）〜（エ）を意味が通るように並べ替えたとき，3番目にくるものを選べ。
+（ア）However, critics point out that not all cultural practices deserve preservation simply because they are old.
+（イ）Traditional customs and festivals form the backbone of cultural identity in many societies.
+（ウ）The key, therefore, lies in distinguishing between traditions that enrich communal life and those that perpetuate harm.
+（エ）Some rituals, they argue, reflect outdated beliefs that conflict with contemporary values of equality and human rights.`,
+    blank: "3番目の文（段落整序）",
+    options: ["（ア）", "（イ）", "（ウ）", "（エ）"],
+    correctIndex: 3,
+    explanation: `【段落整序】論理の流れを追う。（イ）伝統の重要性を提示（導入）→（ア）However で批判的視点を導入（転換）→（エ）具体的な批判内容（旧来の信念・平等との対立）を補足（展開）→（ウ）therefore で結論を提示（締め）。順序は イ→ア→エ→ウ で，3番目は（エ）。`,
+  },
+  {
+    id: "g037",
+    topic: "error_id",
+    sentence: `次の文の下線部（ア）〜（エ）のうち，文法的に誤っているものを1つ選べ。
+The data (ア)collected from over three thousand (イ)participants suggests that regular exercise (ウ)not only improves physical health (エ)but also mental well-being.`,
+    blank: "誤り指摘（並列構造）",
+    options: ["（ア）collected", "（イ）participants", "（ウ）not only improves", "（エ）but also mental well-being"],
+    correctIndex: 3,
+    explanation: `【並列構造の対応】"not only A but also B" では A と B が文法的に対応する形でなければならない。"not only improves physical health" に対し，"but also mental well-being" では動詞が欠けており，"improves" を補うか "but also improves mental well-being" と書く必要がある。名詞句だけでは並列が崩れる。`,
+  },
+  {
+    id: "g038",
+    topic: "conditional",
+    sentence: "If she had listened to the doctor's advice back then, she ___ in much better health today.",
+    blank: "混合仮定法（if 節＝過去完了，主節＝現在）",
+    options: ["would be", "would have been", "will be", "had been"],
+    correctIndex: 0,
+    explanation: `【混合仮定法 (Mixed Conditional)】if 節が「過去の非現実」（had listened：過去完了）で，主節が「現在への影響」を表す場合，主節は "would + 動詞原形" を使う。"today" が現在を指しているため "would have been"（過去の帰結）は不正解。`,
+  },
+  {
+    id: "g039",
+    topic: "inversion",
+    sentence: "___ the complexity of the issue that even the most experienced negotiators struggled to reach an agreement.",
+    blank: "Such/So ... that の倒置",
+    options: ["Such was", "So was", "Such had been", "So it was"],
+    correctIndex: 0,
+    explanation: `【Such + 倒置 + that】"Such was + 名詞句 + that ..." = 「〜があまりにも…だったので」の強調倒置。"The complexity was such that ..." の倒置形。"So" は形容詞・副詞を強調する（So + adj. + be + S）のに対し，名詞（complexity）と対応するのは "Such"。`,
+  },
+  {
+    id: "g040",
+    topic: "participle",
+    sentence: "___, the research team presented its preliminary findings at the international conference.",
+    blank: "独立分詞構文（主語が異なる）",
+    options: ["The data analyzed", "Having analyzed the data", "The data having been analyzed", "Analyzed the data"],
+    correctIndex: 2,
+    explanation: `【独立分詞構文（完了受動）】主節の主語は "the research team" だが，分詞の意味上の主語は "the data"（≠主節の主語）なので，独立分詞構文 "The data having been analyzed" が正解。"Having analyzed the data" では主語がチームと同一とみなされ「チームが分析した後で」という能動の意味になる。`,
+  },
+
+  // ── 日東駒専 / 産近甲龍 対策（g041–g045）───────────────────────────────
+  {
+    id: "g041",
+    topic: "phrasal_verb",
+    sentence: "The new manager quickly ___ with the members of the team and created a positive working environment.",
+    blank: "句動詞（get ___）",
+    options: ["got along", "got away", "got over", "got through"],
+    correctIndex: 0,
+    explanation: `【句動詞 get along (with)】"get along (with ~)" = 「〜と仲良くやっていく」。"get away" = 「逃げる」，"get over" = 「〜を乗り越える」，"get through" = 「〜を終える・通り抜ける」。文脈（チームとの良好な関係を構築した）から got along が正解。`,
+  },
+  {
+    id: "g042",
+    topic: "idiom",
+    sentence: "The politician's speech was so vague that it didn't really ___ — nobody understood what he was actually proposing.",
+    blank: "イディオム（意味が伝わる）",
+    options: ["hit home", "hit the road", "hit the nail on the head", "hit rock bottom"],
+    correctIndex: 0,
+    explanation: `【hit home】"hit home" = 「（言葉・事実が）心に刺さる，ぴんとくる」。"didn't hit home" = 「誰にもぴんとこなかった」。"hit the road" = 「出発する」，"hit the nail on the head" = 「核心を突く」（意味が逆），"hit rock bottom" = 「どん底に落ちる」。`,
+  },
+  {
+    id: "g043",
+    topic: "conversation",
+    sentence: `次の会話の空欄に入る最も適切なものを選べ。
+A: I'm sorry I missed your presentation yesterday. Was it well received?
+B: ___ The audience seemed really engaged throughout.`,
+    blank: "会話表現（高評価の返答）",
+    options: ["Couldn't be better!", "I'm afraid not.", "It was touch and go.", "Far from it."],
+    correctIndex: 0,
+    explanation: `【Couldn't be better】"Couldn't be better" = 「これ以上ないくらい最高だった」。"I'm afraid not" = 「残念ながらそうではない」，"It was touch and go" = 「一か八かだった」，"Far from it" = 「むしろ逆だ」。続く文（聴衆が熱心だった）から最も自然な返答は Couldn't be better。`,
+  },
+  {
+    id: "g044",
+    topic: "preposition",
+    sentence: "He is well known ___ his contributions to renewable energy research.",
+    blank: "前置詞（be known ___）",
+    options: ["for", "as", "by", "with"],
+    correctIndex: 0,
+    explanation: `【be known for】"be known for ~" = 「〜で知られている」（理由・業績が続く）。"be known as ~" = 「〜として知られている」（肩書き・役割が続く）。"contributions to ..." という業績を理由として示しているので for が正解。`,
+  },
+  {
+    id: "g045",
+    topic: "conditional",
+    sentence: "I would rather you ___ anyone about what I told you just now.",
+    blank: "would rather + 仮定法過去",
+    options: ["didn't tell", "don't tell", "wouldn't tell", "haven't told"],
+    correctIndex: 0,
+    explanation: `【would rather + 仮定法過去】"would rather + 主語 + 動詞の過去形" = 「〜に…してほしくない（むしろ〜してほしい）」という願望。"I would rather you didn't tell ..." = 「誰にも話してほしくない」。"don't tell" は直説法現在で，"would rather" の後の従属節では使えない。`,
   },
 ];

@@ -6,6 +6,7 @@ import { COMPREHENSION_PACK_4 } from "./english-comprehension-pack-4";
 import { COMPREHENSION_PACK_5 } from "./english-comprehension-pack-5";
 import { COMPREHENSION_PACK_6 } from "./english-comprehension-pack-6";
 import { COMPREHENSION_PACK_7 } from "./english-comprehension-pack-7";
+import { COMPREHENSION_PRIVATE_PACK_1 } from "./english-comprehension-private-pack-1";
 
 export const COMPREHENSION_PROBLEMS: ComprehensionProblem[] = [
   ...COMPREHENSION_PACK_1,
@@ -15,6 +16,7 @@ export const COMPREHENSION_PROBLEMS: ComprehensionProblem[] = [
   ...COMPREHENSION_PACK_5,
   ...COMPREHENSION_PACK_6,
   ...COMPREHENSION_PACK_7,
+  ...COMPREHENSION_PRIVATE_PACK_1,
   // ────────────────────────────────────────────────────────────────────────
   // 問題 1: 私立大学レベル / 言語とテクノロジー / 約190語
   // ────────────────────────────────────────────────────────────────────────

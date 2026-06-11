@@ -1,4 +1,5 @@
 // ── CYBER English — domain types ─────────────────────────────────────────
+import type { UniversityGroup } from "@/lib/types";
 
 /** 速読長文の難易度レベル */
 export type EnglishLevel =
@@ -42,6 +43,8 @@ export interface SpeedReadingProblem {
   questions: SpeedReadingQuestion[];
   /** 問題の概要タグ（語数・テーマ等） */
   tags?: string[];
+  /** 私立文系大学群タグ */
+  universityGroup?: UniversityGroup;
 }
 
 // ── Comprehension (精読) types ────────────────────────────────────────────
@@ -74,6 +77,8 @@ export interface ComprehensionProblem {
   passage: string;
   questions: ComprehensionQuestion[];
   tags: string[];
+  /** 私立文系大学群タグ */
+  universityGroup?: UniversityGroup;
 }
 
 // ── Multi-Source (マルチソース情報照合) types ──────────────────────────────

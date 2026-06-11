@@ -6,6 +6,7 @@ import { SPEED_READING_PACK_4 } from "./english-speed-reading-pack-4";
 import { SPEED_READING_PACK_5 } from "./english-speed-reading-pack-5";
 import { SPEED_READING_PACK_6 } from "./english-speed-reading-pack-6";
 import { SPEED_READING_PACK_7 } from "./english-speed-reading-pack-7";
+import { SPEED_READING_PRIVATE_PACK_1 } from "./english-speed-reading-private-pack-1";
 
 export const SPEED_READING_PROBLEMS: SpeedReadingProblem[] = [
   ...SPEED_READING_PACK_1,
@@ -15,6 +16,7 @@ export const SPEED_READING_PROBLEMS: SpeedReadingProblem[] = [
   ...SPEED_READING_PACK_5,
   ...SPEED_READING_PACK_6,
   ...SPEED_READING_PACK_7,
+  ...SPEED_READING_PRIVATE_PACK_1,
   // ────────────────────────────────────────────────────────────────────────
   // 問題 1: 共通テストレベル / AIと環境問題 / 約130語 / 60秒
   // ────────────────────────────────────────────────────────────────────────
