@@ -10,8 +10,19 @@ export const metadata: Metadata = {
   description: "共通テスト本番形式70/80分模擬試験。時間内スコア・時間外スコアの二重評価で本番対応力を測定する。",
 };
 
+const SUBJECT_ORDER: Record<string, number> = {
+  "math-1a": 0,
+  "math-2bc": 1,
+  "english-reading": 2,
+};
+
 export default function SimulatorIndexPage() {
-  const presets = getAllCommonTestExamPresets();
+  const presets = [...getAllCommonTestExamPresets()].sort((a, b) => {
+    const sa = SUBJECT_ORDER[a.subjectId] ?? 9;
+    const sb = SUBJECT_ORDER[b.subjectId] ?? 9;
+    if (sa !== sb) return sa - sb;
+    return a.id.localeCompare(b.id);
+  });
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
@@ -125,16 +136,30 @@ function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
         border: `1px solid rgba(${preset.theme.glowRgb},0.22)`,
       }}
     >
-      {/* Icon */}
-      <div
-        className="flex h-12 w-12 items-center justify-center rounded-xl font-mono text-sm font-extrabold"
-        style={{
-          background: `rgba(${preset.theme.glowRgb},0.12)`,
-          border: `1px solid rgba(${preset.theme.glowRgb},0.30)`,
-          color: preset.theme.primary,
-        }}
-      >
-        {preset.icon}
+      {/* Icon + round badge */}
+      <div className="flex items-center justify-between">
+        <div
+          className="flex h-12 w-12 items-center justify-center rounded-xl font-mono text-sm font-extrabold"
+          style={{
+            background: `rgba(${preset.theme.glowRgb},0.12)`,
+            border: `1px solid rgba(${preset.theme.glowRgb},0.30)`,
+            color: preset.theme.primary,
+          }}
+        >
+          {preset.icon}
+        </div>
+        {preset.roundLabel && (
+          <span
+            className="rounded-full px-2.5 py-1 font-mono text-[10px] font-bold"
+            style={{
+              background: `rgba(${preset.theme.glowRgb},0.10)`,
+              border: `1px solid rgba(${preset.theme.glowRgb},0.28)`,
+              color: preset.theme.primary,
+            }}
+          >
+            {preset.roundLabel}
+          </span>
+        )}
       </div>
 
       {/* Title */}

@@ -621,7 +621,9 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
           skillTags: q.skillTags,
           difficultyStage: q.difficultyStage,
           dependsOnPrevious: q.dependsOnPrevious,
-          answerFormat: q.answerFormat,
+          // 解答形式は解決済みの値を渡す（choice 問題は answerFormat 未設定でも
+          // "choice" になるよう正規化し、結果画面の解答形式別分析を正確にする）
+          answerFormat: getCommonTestAnswerFormat(q),
         },
       ])
     );

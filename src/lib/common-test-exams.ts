@@ -4,6 +4,7 @@ import { COMMON_TEST_DRILL_QUESTIONS } from "@/data/common-test-drills";
 import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import { getCommonTestExamPreset } from "@/data/common-test-exams";
 import type { CommonTestExamPreset } from "@/data/common-test-exams";
+import { getCommonTestExamVariantSet } from "@/data/common-test-exam-sets";
 import { COMMON_TEST_SUBJECTS_MAP } from "@/data/common-test";
 
 type ExamFlowPatch = Partial<CommonTestDrillQuestion>;
@@ -814,6 +815,12 @@ function limitMathIaExamQuestions(questions: CommonTestDrillQuestion[]): CommonT
 }
 
 export function getCommonTestExamQuestions(examId: string): CommonTestDrillQuestion[] {
+  // 第2回・第3回（variant セット）は、専用に作問済みの問題をそのまま返す。
+  // 各問に shared 設定・difficultyStage・dependsOnPrevious を作問時点で埋めてあるため、
+  // addExamFlowMetadata（第1回用のセクションパッチ）は通さない。
+  const variant = getCommonTestExamVariantSet(examId);
+  if (variant) return variant;
+
   const preset = getCommonTestExamPreset(examId);
   if (!preset) return [];
   let questions = COMMON_TEST_DRILL_QUESTIONS.filter(
