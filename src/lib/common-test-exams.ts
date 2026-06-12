@@ -650,7 +650,7 @@ const COMMON_TEST_EXAM_QUESTION_PATCHES: Record<string, ExamFlowPatch> = {
   "ct-m2bc-s5-q2": {
     subQuestionIndex: 2,
     difficultyStage: "standard",
-    dependsOnPrevious: true,
+    dependsOnPrevious: false,
   },
   "ct-m2bc-s5-q3": {
     title: "ベクトル — 内分点をさらに半分にする",
@@ -713,8 +713,8 @@ const COMMON_TEST_EXAM_QUESTION_PATCHES: Record<string, ExamFlowPatch> = {
     dependsOnPrevious: true,
   },
   "ct-eng-s5-q4": {
-    subQuestionIndex: 1,
-    difficultyStage: "standard",
+    subQuestionIndex: 4,
+    difficultyStage: "guided",
   },
   "ct-eng-s5-q5": {
     title: "Information Match - Festival Volunteer Tasks",
@@ -738,13 +738,13 @@ Yui has a camera and is free after lunch.`,
       "同じ資料を使う2問目なので、前問で確認したタスク表にKenの条件を重ねる。時間を先に見るとTask Bだけが残る。",
     trapExplanation:
       "Task Aは9:00開始なので一部は参加できそうに見えるが、終了が11:00で、Kenの「before 10:00」と合わない。条件はすべて満たす必要がある。",
-    subQuestionIndex: 2,
-    difficultyStage: "guided",
+    subQuestionIndex: 5,
+    difficultyStage: "advanced",
     dependsOnPrevious: true,
   },
   "ct-eng-s8-q4": {
-    subQuestionIndex: 1,
-    difficultyStage: "standard",
+    subQuestionIndex: 4,
+    difficultyStage: "guided",
   },
   "ct-eng-s8-q5": {
     title: "Report Completion - Bicycle Parking Evidence",
@@ -776,8 +776,8 @@ The survey shows that the most common reason students avoid riding bicycles is n
       "前問の結論を支える根拠を探す問題。資料1の最大割合と資料2の具体的な場所をセットで確認する。",
     trapExplanation:
       "数字だけ、または場所だけでは結論の根拠として不十分。2つの資料を同時に使っている選択肢を選ぶ。",
-    subQuestionIndex: 2,
-    difficultyStage: "guided",
+    subQuestionIndex: 5,
+    difficultyStage: "advanced",
     dependsOnPrevious: true,
   },
 };
