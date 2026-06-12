@@ -614,7 +614,16 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
       );
     }
     const questionTitlesMap = new Map(
-      activeQuestions.map((q) => [q.id, { title: q.title, skillTags: q.skillTags }])
+      activeQuestions.map((q) => [
+        q.id,
+        {
+          title: q.title,
+          skillTags: q.skillTags,
+          difficultyStage: q.difficultyStage,
+          dependsOnPrevious: q.dependsOnPrevious,
+          answerFormat: q.answerFormat,
+        },
+      ])
     );
     return (
       <CommonTestExamResultPanel
