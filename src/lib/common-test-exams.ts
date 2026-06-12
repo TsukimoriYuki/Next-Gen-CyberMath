@@ -251,7 +251,7 @@ const COMMON_TEST_EXAM_QUESTION_PATCHES: Record<string, ExamFlowPatch> = {
       "3時間までの上昇だけを見て、4時間でも上がると思い込むのが典型的な誤り。最後のデータまで確認すること。",
     subQuestionIndex: 2,
     difficultyStage: "standard",
-    dependsOnPrevious: true,
+    dependsOnPrevious: false,
     estimatedMinutes: 3,
     difficulty: "STANDARD",
     skillTags: ["データ読み取り", "選択肢消去"],
@@ -265,7 +265,7 @@ const COMMON_TEST_EXAM_QUESTION_PATCHES: Record<string, ExamFlowPatch> = {
     answerFormat: "digits",
     digitSlots: [{ label: "アイ", length: 2 }],
     explanation:
-      "モデルは $f(x)=-3(x-3)^2+67$ で、頂点は $(3,67)$ である。係数が負なので放物線は上に凸ではなく下に開く。$x=3$ は範囲 $0\\leqq x\\leqq4$ に含まれるため、最大値は67である。これは小問2で読み取った『3時間付近で高い』という傾向とも合っている。",
+      "モデルは $f(x)=-3(x-3)^2+67$ で、頂点は $(3,67)$ である。係数が負なのでグラフは下向きに開く。$x=3$ は範囲 $0\\leqq x\\leqq4$ に含まれるため、最大値は67である。これは小問2で読み取った『3時間付近で高い』という傾向とも合っている。",
     strategy:
       "二次関数モデルは、まず頂点を見る。展開せずに頂点形式のまま、開き方と定義域を確認する。",
     trapExplanation:
@@ -421,7 +421,7 @@ const COMMON_TEST_EXAM_QUESTION_PATCHES: Record<string, ExamFlowPatch> = {
       "奇数3枚と偶数3枚を選ぶだけで終わると、順序を落としてしまう。今回は順に取り出すので、それぞれ $3\\times2$ 通りで数える。",
     subQuestionIndex: 2,
     difficultyStage: "standard",
-    dependsOnPrevious: true,
+    dependsOnPrevious: false,
     estimatedMinutes: 3,
     difficulty: "STANDARD",
     skillTags: ["条件整理", "計算処理"],
