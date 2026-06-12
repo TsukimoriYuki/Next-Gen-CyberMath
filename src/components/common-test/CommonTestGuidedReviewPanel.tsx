@@ -10,9 +10,12 @@ import {
   ChevronUp,
   Lightbulb,
   ListChecks,
+  PlusCircle,
   Target,
 } from "lucide-react";
 import type { CommonTestGuidedReviewItem } from "@/lib/common-test-guided-review";
+import { canGenerateCommonTestVariant } from "@/lib/common-test-variant-generator";
+import { CommonTestVariantPracticePanel } from "@/components/common-test/CommonTestVariantPracticePanel";
 
 interface Props {
   items: CommonTestGuidedReviewItem[];
@@ -40,10 +43,12 @@ export function CommonTestGuidedReviewPanel({
   const firstId = initialQuestionId ?? orderedItems[0]?.questionId ?? null;
   const [openId, setOpenId] = useState<string | null>(firstId);
   const [revealedCounts, setRevealedCounts] = useState<Record<string, number>>({});
+  const [variantPracticeId, setVariantPracticeId] = useState<string | null>(null);
 
   useEffect(() => {
     setOpenId(initialQuestionId ?? orderedItems[0]?.questionId ?? null);
     setRevealedCounts({});
+    setVariantPracticeId(null);
   }, [initialQuestionId, orderedItems]);
 
   if (orderedItems.length === 0) return null;
@@ -92,6 +97,8 @@ export function CommonTestGuidedReviewPanel({
           const revealed = revealedCounts[item.questionId] ?? 1;
           const stepsToShow = item.steps.slice(0, revealed);
           const canRevealMore = revealed < item.steps.length;
+          const canPracticeVariant = canGenerateCommonTestVariant(item);
+          const isVariantPracticeOpen = variantPracticeId === item.questionId;
           const status = getStatus(item);
 
           return (
@@ -216,6 +223,25 @@ export function CommonTestGuidedReviewPanel({
                           次のヒントを開く
                         </button>
                       )}
+                      {canPracticeVariant && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setVariantPracticeId((current) =>
+                              current === item.questionId ? null : item.questionId
+                            )
+                          }
+                          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 font-mono text-[10px] font-bold transition-all hover:opacity-85"
+                          style={{
+                            background: "rgba(34,197,94,0.08)",
+                            border: "1px solid rgba(34,197,94,0.24)",
+                            color: "#86efac",
+                          }}
+                        >
+                          <PlusCircle className="h-3.5 w-3.5" />
+                          この型の類題を解く
+                        </button>
+                      )}
                       <Link
                         href={item.nextHref}
                         className="rounded-lg px-3 py-2 font-mono text-[10px] font-bold transition-all hover:opacity-85"
@@ -229,6 +255,14 @@ export function CommonTestGuidedReviewPanel({
                       </Link>
                     </div>
                   </div>
+
+                  {canPracticeVariant && isVariantPracticeOpen && (
+                    <CommonTestVariantPracticePanel
+                      sourceItem={item}
+                      theme={theme}
+                      onClose={() => setVariantPracticeId(null)}
+                    />
+                  )}
                 </div>
               )}
             </div>
