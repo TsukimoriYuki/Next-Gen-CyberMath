@@ -1,0 +1,105 @@
+import Link from "next/link";
+import { ArrowRight, ChevronLeft, Clock } from "lucide-react";
+import { COURSE_LEVEL_META, type CourseLevel, type CourseSubject, type CourseUnit } from "@/types/course";
+import { CourseBodyRenderer } from "./CourseBodyRenderer";
+
+const LEVELS: CourseLevel[] = ["beginner", "standard", "advanced"];
+
+export function CourseUnitPageView({
+  subject,
+  unit,
+}: {
+  subject: CourseSubject;
+  unit: CourseUnit;
+}) {
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
+        <div className="mb-6 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+          <Link href="/courses" className="inline-flex items-center gap-1 hover:text-blue-600">
+            <ChevronLeft className="h-3.5 w-3.5" />
+            講座集トップ
+          </Link>
+          <span>/</span>
+          <Link href={`/courses/${subject.subjectId}`} className="hover:text-blue-600">
+            {subject.subjectName}
+          </Link>
+          <span>/</span>
+          <span className="font-bold text-slate-900">{unit.unitTitle}</span>
+        </div>
+
+        <header className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">
+            Unit
+          </p>
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            {unit.unitTitle}
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
+            {unit.unitDescription}
+          </p>
+        </header>
+
+        <div className="space-y-8">
+          {LEVELS.map((level) => {
+            const meta = COURSE_LEVEL_META[level];
+            const lessons = unit.lessons.filter((lesson) => lesson.level === level);
+
+            return (
+              <section key={level} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div className="mb-4 flex flex-wrap items-center gap-2">
+                  <span
+                    className="h-2.5 w-2.5 rounded-full"
+                    style={{ background: meta.dot }}
+                  />
+                  <h2 className="text-lg font-extrabold" style={{ color: meta.color }}>
+                    {meta.label}
+                  </h2>
+                  <span className="text-xs text-slate-500">{meta.sublabel}</span>
+                  <span className="ml-auto rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-500">
+                    {lessons.length}講座
+                  </span>
+                </div>
+
+                {lessons.length === 0 ? (
+                  <p className="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
+                    このレベルの講座本文は準備中です。講座データを追加すると、ここにカードが表示されます。
+                  </p>
+                ) : (
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {lessons.map((lesson) => (
+                      <Link
+                        key={lesson.lessonId}
+                        href={`/courses/${subject.subjectId}/${unit.unitId}/${lesson.lessonId}`}
+                        className="rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-blue-200 hover:bg-blue-50"
+                      >
+                        <h3 className="text-base font-extrabold text-slate-950">
+                          {lesson.lessonTitle}
+                        </h3>
+                        <CourseBodyRenderer
+                          body={lesson.lessonDescription}
+                          className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600"
+                        />
+                        <div className="mt-4 flex items-center justify-between gap-3 text-xs text-slate-500">
+                          <span className="inline-flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            約{lesson.estimatedMinutes}分
+                          </span>
+                          <span className="inline-flex items-center gap-1 font-bold text-blue-600">
+                            詳細へ
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </section>
+            );
+          })}
+        </div>
+      </main>
+    </div>
+  );
+}
+

@@ -1,6 +1,6 @@
-// 講座ブロックレンダラー — Phase 20.0
+// 講座ブロックレンダラー — Phase 20.1.5
 // LessonBlock の kind に応じて適切なUIを描画する。
-// diagram / stepByStep / comparisonTable は専用コンポーネント、それ以外はデフォルトカード。
+// title も CourseBodyRenderer に通し、$...$ がそのまま表示される問題を避ける。
 
 import type { LessonBlock } from "@/types/course";
 import { LESSON_BLOCK_META } from "@/types/course";
@@ -8,6 +8,15 @@ import { CourseBodyRenderer } from "./CourseBodyRenderer";
 import { CourseDiagramBlock } from "./CourseDiagramBlock";
 import { CourseStepBlock } from "./CourseStepBlock";
 import { CourseComparisonTable } from "./CourseComparisonTable";
+
+function BlockTitle({ title, className }: { title: string; className?: string }) {
+  return (
+    <CourseBodyRenderer
+      body={title}
+      className={className ?? "text-xs font-bold text-slate-800"}
+    />
+  );
+}
 
 export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
   const meta = LESSON_BLOCK_META[block.kind];
@@ -17,11 +26,11 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
     if (!block.diagramType) return null;
     return (
       <div className="rounded-xl border border-sky-200 bg-sky-50 p-3">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-sky-100 px-2 py-0.5 text-[10px] font-bold text-sky-700">
             {meta.label}
           </span>
-          <span className="text-xs font-bold text-slate-800">{block.title}</span>
+          <BlockTitle title={block.title} />
         </div>
         {block.body.trim() && (
           <CourseBodyRenderer body={block.body} className="mb-2 text-xs leading-relaxed text-slate-600" />
@@ -35,11 +44,11 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
   if (block.kind === "stepByStep") {
     return (
       <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-        <div className="mb-3 flex items-center gap-2">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
             {meta.label}
           </span>
-          <span className="text-xs font-bold text-slate-800">{block.title}</span>
+          <BlockTitle title={block.title} />
         </div>
         {block.body.trim() && (
           <CourseBodyRenderer body={block.body} className="mb-3 text-xs leading-relaxed text-slate-600" />
@@ -53,11 +62,11 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
   if (block.kind === "comparisonTable") {
     return (
       <div className="rounded-xl border border-violet-200 bg-violet-50/40 p-3">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-bold text-violet-700">
             {meta.label}
           </span>
-          <span className="text-xs font-bold text-slate-800">{block.title}</span>
+          <BlockTitle title={block.title} />
         </div>
         {block.body.trim() && (
           <CourseBodyRenderer body={block.body} className="mb-2 text-xs leading-relaxed text-slate-600" />
@@ -76,14 +85,14 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
       className="rounded-xl border p-3"
       style={{ borderColor: `${meta.color}33`, background: meta.bg }}
     >
-      <div className="mb-1.5 flex items-center gap-2">
+      <div className="mb-1.5 flex flex-wrap items-center gap-2">
         <span
           className="rounded-full px-2 py-0.5 text-[10px] font-bold"
           style={{ background: `${meta.color}1a`, color: meta.color }}
         >
           {meta.label}
         </span>
-        <span className="text-xs font-bold text-slate-800">{block.title}</span>
+        <BlockTitle title={block.title} />
       </div>
 
       {/* 強調公式（formula ブロックの formula フィールド） */}
@@ -113,3 +122,4 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
     </div>
   );
 }
+
