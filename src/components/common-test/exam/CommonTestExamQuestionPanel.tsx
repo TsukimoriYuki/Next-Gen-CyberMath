@@ -46,6 +46,7 @@ export function CommonTestExamQuestionPanel({
   onSetConfidence,
 }: Props) {
   const isMath = question.subjectId !== "english-reading";
+  const isEnglishReading = question.subjectId === "english-reading";
   const usesMarkSheet = isCommonTestMarkSheetQuestion(question);
   const sectionNum = parseInt(question.sectionId.replace("section-", ""), 10);
 
@@ -122,7 +123,7 @@ export function CommonTestExamQuestionPanel({
           helperText="本番演習中は、入力した内容がそのまま答案として保存されます。"
         />
       ) : (
-        <div className="space-y-2">
+        <div className={isEnglishReading ? "space-y-3" : "space-y-2"}>
           {(question.options ?? []).map((opt, idx) => {
             const isSelected = selectedAnswer === opt;
 
@@ -131,7 +132,7 @@ export function CommonTestExamQuestionPanel({
                 key={opt}
                 type="button"
                 onClick={() => onAnswer(opt)}
-                className="w-full flex items-start gap-3 rounded p-3 text-left transition-all duration-100 hover:opacity-85 active:scale-[0.995]"
+                className="flex w-full min-w-0 items-start gap-3 rounded p-3 text-left transition-all duration-100 hover:opacity-85 active:scale-[0.995]"
                 style={{
                   background: isSelected ? "#eff6ff" : "#ffffff",
                   border: isSelected ? "2px solid #2563eb" : "1px solid #d1d5db",
@@ -144,7 +145,9 @@ export function CommonTestExamQuestionPanel({
                   {circledNumber(idx)}
                 </span>
                 <span
-                  className="flex-1 text-[15px] leading-relaxed"
+                  className={`min-w-0 flex-1 whitespace-normal break-words text-[15px] leading-relaxed ${
+                    isEnglishReading ? "sm:text-base sm:leading-7" : ""
+                  }`}
                   style={{ color: "#1f2937", fontWeight: isSelected ? 600 : 400 }}
                 >
                   {isMath ? <RenderMath text={opt} /> : opt}

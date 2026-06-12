@@ -37,8 +37,7 @@ export function CommonTestExamHeader({
 
   return (
     <header
-      className="sticky top-16 z-40 w-full"
-      style={{ background: "#ffffff", borderBottom: "1px solid #d1d5db" }}
+      className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur"
     >
       {/* Progress bar */}
       <div className="h-1 w-full" style={{ background: "#e5e7eb" }}>
