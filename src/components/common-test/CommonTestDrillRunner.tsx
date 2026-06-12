@@ -1,24 +1,25 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { ArrowLeft, ClipboardCheck, Play } from "lucide-react";
 import type { CommonTestTheme } from "@/data/common-test";
+import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import {
-  type CommonTestConfidence,
-  type CommonTestAnswerRecord,
-  type CommonTestDrillHistoryItem,
   buildHistoryItem,
   saveCommonTestDrillHistory,
+  type CommonTestAnswerRecord,
+  type CommonTestConfidence,
+  type CommonTestDrillHistoryItem,
 } from "@/lib/common-test-history";
-import { CommonTestQuestionCard } from "./CommonTestQuestionCard";
-import { CommonTestAnswerPanel } from "./CommonTestAnswerPanel";
-import { CommonTestResultPanel } from "./CommonTestResultPanel";
-import { type AnswerEntry } from "./common-test-drill-types";
 import {
   getCommonTestAnswerFormat,
   isCommonTestAnswerCorrect,
 } from "@/lib/common-test-answer-normalize";
-import { Play, Zap } from "lucide-react";
+import { CommonTestAnswerPanel } from "./CommonTestAnswerPanel";
+import { CommonTestQuestionCard } from "./CommonTestQuestionCard";
+import { CommonTestResultPanel } from "./CommonTestResultPanel";
+import { type AnswerEntry } from "./common-test-drill-types";
 
 export type { AnswerEntry };
 
@@ -63,10 +64,9 @@ export function CommonTestDrillRunner({
   const [questionElapsed, setQuestionElapsed] = useState(0);
   const [totalElapsed, setTotalElapsed] = useState(0);
 
-  const sessionStartRef = useRef<number>(0);
-  const questionStartRef = useRef<number>(0);
+  const sessionStartRef = useRef(0);
+  const questionStartRef = useRef(0);
 
-  // ── Timer ─────────────────────────────────────────────────────────────
   useEffect(() => {
     if (phase !== "running") return;
     const id = setInterval(() => {
@@ -77,7 +77,6 @@ export function CommonTestDrillRunner({
     return () => clearInterval(id);
   }, [phase]);
 
-  // ── Start drill ───────────────────────────────────────────────────────
   const handleStart = useCallback(() => {
     const now = Date.now();
     sessionStartRef.current = now;
@@ -85,7 +84,6 @@ export function CommonTestDrillRunner({
     setPhase("running");
   }, []);
 
-  // ── Answer selected ───────────────────────────────────────────────────
   const handleSelect = useCallback(
     (answer: string) => {
       if (phase !== "running") return;
@@ -94,16 +92,14 @@ export function CommonTestDrillRunner({
       const correct = isCommonTestAnswerCorrect(
         answer,
         currentQ.correctAnswer,
-        getCommonTestAnswerFormat(currentQ)
+        getCommonTestAnswerFormat(currentQ),
       );
-
       setPendingAnswer({ answer, isCorrect: correct, timeSpentSec: timeSpent });
       setPhase("revealed");
     },
-    [phase, questions, currentIdx]
+    [currentIdx, phase, questions],
   );
 
-  // ── Next question or finish (receives confidence from AnswerPanel) ────
   const handleNext = useCallback(
     (confidence: CommonTestConfidence) => {
       if (!pendingAnswer) return;
@@ -117,25 +113,23 @@ export function CommonTestDrillRunner({
         confidence,
         skillTags: currentQ.skillTags,
       };
-
       const updatedAnswers = [...completedAnswers, newEntry];
       setCompletedAnswers(updatedAnswers);
 
       if (currentIdx + 1 >= questions.length) {
         const finishTime = Date.now();
         const elapsed = Math.floor((finishTime - sessionStartRef.current) / 1000);
-
-        const historyAnswers: CommonTestAnswerRecord[] = updatedAnswers.map((a) => {
-          const q = questions.find((q) => q.id === a.questionId);
+        const historyAnswers: CommonTestAnswerRecord[] = updatedAnswers.map((entry) => {
+          const q = questions.find((candidate) => candidate.id === entry.questionId);
           return {
-            questionId: a.questionId,
-            selectedAnswer: a.selectedAnswer,
+            questionId: entry.questionId,
+            selectedAnswer: entry.selectedAnswer,
             correctAnswer: q?.correctAnswer ?? "",
-            isCorrect: a.isCorrect,
-            timeSpentSec: a.timeSpentSec,
+            isCorrect: entry.isCorrect,
+            timeSpentSec: entry.timeSpentSec,
             estimatedMinutes: q?.estimatedMinutes ?? 0,
-            confidence: a.confidence,
-            skillTags: a.skillTags,
+            confidence: entry.confidence,
+            skillTags: entry.skillTags,
           };
         });
 
@@ -147,30 +141,28 @@ export function CommonTestDrillRunner({
           answers: historyAnswers,
         });
 
-        console.log("[CYBER OS] Drill Result:", JSON.stringify(historyItem, null, 2));
-
         try {
           saveCommonTestDrillHistory(historyItem);
         } catch {
-          // quota / private mode — silently ignore
+          // localStorage quota / private mode は結果表示を止めない
         }
 
         setTotalElapsed(elapsed);
         setDrillResult({ answers: updatedAnswers, totalElapsedSec: elapsed, historyItem });
         setPhase("finished");
-      } else {
-        const now = Date.now();
-        questionStartRef.current = now;
-        setCurrentIdx((prev) => prev + 1);
-        setPendingAnswer(null);
-        setQuestionElapsed(0);
-        setPhase("running");
+        return;
       }
+
+      const now = Date.now();
+      questionStartRef.current = now;
+      setCurrentIdx((prev) => prev + 1);
+      setPendingAnswer(null);
+      setQuestionElapsed(0);
+      setPhase("running");
     },
-    [pendingAnswer, completedAnswers, currentIdx, questions, subjectId, sectionId]
+    [completedAnswers, currentIdx, pendingAnswer, questions, sectionId, subjectId],
   );
 
-  // ── Retry ─────────────────────────────────────────────────────────────
   const handleRetry = useCallback(() => {
     setPhase("intro");
     setCurrentIdx(0);
@@ -183,111 +175,67 @@ export function CommonTestDrillRunner({
 
   const currentQ = questions[currentIdx];
 
-  // ── No questions ──────────────────────────────────────────────────────
   if (questions.length === 0) {
     return (
-      <div
-        className="rounded-2xl p-8 text-center"
-        style={{
-          background: "rgba(255,255,255,0.03)",
-          border: "1px solid rgba(255,255,255,0.08)",
-        }}
-      >
-        <div className="font-mono text-xs text-white/40 uppercase tracking-[0.2em]">
-          この大問の問題は現在準備中です
-        </div>
-        <p className="mt-2 font-mono text-[10px] text-white/25">
-          今後のアップデートで追加予定
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <h2 className="text-lg font-extrabold text-slate-950">この大問の問題は準備中です</h2>
+        <p className="mt-2 text-sm text-slate-600">
+          ほかの大問を選ぶか、後ほど追加される問題を確認してください。
         </p>
+        <Link
+          href={subjectRoute}
+          className="mt-5 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-100"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          大問一覧に戻る
+        </Link>
       </div>
     );
   }
 
-  // ── Intro screen ──────────────────────────────────────────────────────
   if (phase === "intro") {
     return (
-      <div
-        className="rounded-2xl p-6 sm:p-8 space-y-5"
-        style={{
-          background: `linear-gradient(135deg, rgba(${theme.glowRgb},0.06) 0%, rgba(0,0,0,0.5) 100%)`,
-          border: `1px solid rgba(${theme.glowRgb},0.22)`,
-        }}
-      >
-        <div className="text-center space-y-2">
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em]"
-            style={{
-              background: `rgba(${theme.glowRgb},0.08)`,
-              border: `1px solid rgba(${theme.glowRgb},0.22)`,
-              color: theme.primary,
-            }}
-          >
-            <Zap className="h-3 w-3" />
-            DRILL READY
-          </div>
-          <h2 className="font-display text-2xl font-extrabold text-white">
-            第{sectionNumber}問 — {sectionTitle}
-          </h2>
-          <p className="font-mono text-sm text-white/45">
-            {questions.length}問 ／ 推奨時間 {recommendedMinutes}分
-          </p>
-        </div>
-
-        <div className="grid grid-cols-3 gap-3 text-center">
-          {[
-            { label: "問題数", value: `${questions.length} 問` },
-            { label: "推奨時間", value: `${recommendedMinutes}分` },
-            { label: "難易度", value: questions[0]?.difficulty ?? "—" },
-          ].map(({ label, value }) => (
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
             <div
-              key={label}
-              className="rounded-xl p-3"
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
-              }}
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold"
+              style={{ background: `rgba(${theme.glowRgb},0.10)`, color: theme.primary }}
             >
-              <div className="font-mono text-[9px] text-white/35 uppercase tracking-wider">
-                {label}
-              </div>
-              <div
-                className="mt-1 font-mono text-sm font-bold"
-                style={{ color: theme.primary }}
-              >
-                {value}
-              </div>
+              <ClipboardCheck className="h-3.5 w-3.5" />
+              練習前の確認
             </div>
-          ))}
+            <h2 className="mt-4 text-2xl font-extrabold text-slate-950">
+              第{sectionNumber}問 - {sectionTitle}
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {questions.length}問を順に解きます。解答後に正誤・解説・よくあるミスを確認できます。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 sm:w-72">
+            <Stat label="問題数" value={`${questions.length}問`} />
+            <Stat label="目安" value={`${recommendedMinutes}分`} />
+            <Stat label="形式" value="即時確認" />
+          </div>
         </div>
 
-        <div
-          className="rounded-xl p-3 font-mono text-[10px] leading-relaxed text-white/45"
-          style={{
-            background: "rgba(255,255,255,0.02)",
-            border: "1px solid rgba(255,255,255,0.06)",
-          }}
-        >
-          ◎ 解答後に自信度を記録できます。自信×正誤の分析で弱点を精密に特定します。
+        <div className="mt-6 rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-blue-900">
+          自信度も一緒に記録すると、復習キューと弱点分析で「本当に見直すべき問題」を見つけやすくなります。
         </div>
 
         <button
           type="button"
           onClick={handleStart}
-          className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 font-mono text-sm font-bold uppercase tracking-wider transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-          style={{
-            background: `linear-gradient(135deg, rgba(${theme.glowRgb},0.25), rgba(${theme.glowRgb},0.12))`,
-            border: `1px solid rgba(${theme.glowRgb},0.50)`,
-            color: theme.primary,
-          }}
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-blue-700 active:scale-[0.99] sm:w-auto"
         >
           <Play className="h-4 w-4" />
-          START DRILL
+          練習を始める
         </button>
       </div>
     );
   }
 
-  // ── Finished screen ───────────────────────────────────────────────────
   if (phase === "finished" && drillResult) {
     return (
       <CommonTestResultPanel
@@ -296,31 +244,53 @@ export function CommonTestDrillRunner({
         historyItem={drillResult.historyItem}
         totalElapsedSec={drillResult.totalElapsedSec}
         theme={theme}
-        sectionTitle={`第${sectionNumber}問 — ${sectionTitle}`}
+        sectionTitle={`第${sectionNumber}問 - ${sectionTitle}`}
         subjectRoute={subjectRoute}
         onRetry={handleRetry}
       />
     );
   }
 
-  // ── Running / Revealed ────────────────────────────────────────────────
   return (
-    <CommonTestQuestionCard
-      question={currentQ}
-      theme={theme}
-      questionNumber={currentIdx + 1}
-      totalQuestions={questions.length}
-      elapsed={questionElapsed}
-    >
-      <CommonTestAnswerPanel
+    <div className="space-y-4">
+      <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
+        <span>経過 {formatTime(totalElapsed)}</span>
+        <span>
+          {currentIdx + 1} / {questions.length}問
+        </span>
+      </div>
+      <CommonTestQuestionCard
         question={currentQ}
-        selectedAnswer={pendingAnswer?.answer ?? null}
-        isRevealed={phase === "revealed"}
-        onSelect={handleSelect}
-        onNext={handleNext}
-        isLastQuestion={currentIdx + 1 >= questions.length}
         theme={theme}
-      />
-    </CommonTestQuestionCard>
+        questionNumber={currentIdx + 1}
+        totalQuestions={questions.length}
+        elapsed={questionElapsed}
+      >
+        <CommonTestAnswerPanel
+          question={currentQ}
+          selectedAnswer={pendingAnswer?.answer ?? null}
+          isRevealed={phase === "revealed"}
+          onSelect={handleSelect}
+          onNext={handleNext}
+          isLastQuestion={currentIdx + 1 >= questions.length}
+          theme={theme}
+        />
+      </CommonTestQuestionCard>
+    </div>
   );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-center">
+      <div className="text-xs font-semibold text-slate-500">{label}</div>
+      <div className="mt-1 text-sm font-extrabold text-slate-950">{value}</div>
+    </div>
+  );
+}
+
+function formatTime(sec: number): string {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
 }

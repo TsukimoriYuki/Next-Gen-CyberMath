@@ -1,7 +1,11 @@
-// Server Component — 大問別ドリルパネルグリッド
+// Server Component - 大問別ドリルカード一覧
 import Link from "next/link";
-import type { CommonTestSection, CommonTestTheme, CommonTestSubjectId } from "@/data/common-test";
-import { Timer, ChevronRight } from "lucide-react";
+import { ChevronRight, Timer } from "lucide-react";
+import type {
+  CommonTestSection,
+  CommonTestSubjectId,
+  CommonTestTheme,
+} from "@/data/common-test";
 
 interface Props {
   sections: CommonTestSection[];
@@ -11,9 +15,14 @@ interface Props {
 
 export function CommonTestSectionGrid({ sections, theme, subjectId }: Props) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      {sections.map((sec) => (
-        <SectionCard key={sec.number} section={sec} theme={theme} subjectId={subjectId} />
+    <div className="grid gap-4 sm:grid-cols-2">
+      {sections.map((section) => (
+        <SectionCard
+          key={section.number}
+          section={section}
+          theme={theme}
+          subjectId={subjectId}
+        />
       ))}
     </div>
   );
@@ -31,78 +40,58 @@ function SectionCard({
   const drillHref = `/common-test/${subjectId}/section-${section.number}`;
 
   return (
-    <div
-      className="relative flex flex-col gap-3 rounded-xl p-4 overflow-hidden"
-      style={{
-        background: `linear-gradient(145deg, rgba(${theme.glowRgb},0.05) 0%, rgba(0,0,0,0.4) 100%)`,
-        border: `1px solid rgba(${theme.glowRgb},0.16)`,
-      }}
-    >
-      {/* Number + elective badge */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span
-            className="font-mono text-xs font-bold"
-            style={{ color: theme.primary }}
-          >
-            第{section.number}問
-          </span>
-          {section.isElective && (
+    <article className="flex min-h-[230px] flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
             <span
-              className="rounded px-1.5 py-0.5 font-mono text-[8px] font-bold uppercase"
+              className="rounded-full px-3 py-1 text-xs font-extrabold"
               style={{
-                background: "rgba(251,191,36,0.10)",
-                border: "1px solid rgba(251,191,36,0.25)",
-                color: "#fbbf24",
+                background: `rgba(${theme.glowRgb},0.10)`,
+                color: theme.primary,
               }}
             >
-              選択
+              第{section.number}問
             </span>
-          )}
+            {section.isElective && (
+              <span className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700 ring-1 ring-amber-200">
+                選択問題
+              </span>
+            )}
+          </div>
+          <h3 className="mt-3 text-base font-extrabold leading-snug text-slate-950">
+            {section.title}
+          </h3>
         </div>
-        <div className="flex items-center gap-1 font-mono text-[9px] text-white/30">
-          <Timer className="h-3 w-3" />
-          {section.recommendedMinutes}min
-          <span className="ml-1 text-white/20">／</span>
-          <span style={{ color: `rgba(${theme.glowRgb},0.7)` }}>{section.maxScore}点</span>
+        <div className="flex shrink-0 items-center gap-1 rounded-lg bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-200">
+          <Timer className="h-3.5 w-3.5" />
+          {section.recommendedMinutes}分
         </div>
       </div>
 
-      {/* Title */}
-      <h3 className="font-display text-sm font-bold text-white leading-snug">
-        {section.title}
-      </h3>
-
-      {/* Topics */}
-      <div className="flex flex-wrap gap-1.5 flex-1">
-        {section.topics.map((t) => (
+      <div className="mt-4 flex flex-wrap gap-2">
+        {section.topics.map((topic) => (
           <span
-            key={t}
-            className="rounded px-1.5 py-0.5 font-mono text-[9px]"
-            style={{
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              color: "rgba(255,255,255,0.50)",
-            }}
+            key={topic}
+            className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600"
           >
-            {t}
+            {topic}
           </span>
         ))}
       </div>
 
-      {/* DRILL START — now a real link */}
-      <Link
-        href={drillHref}
-        className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-lg py-2 font-mono text-[11px] font-bold uppercase tracking-wider transition-all duration-200 hover:opacity-80"
-        style={{
-          background: `rgba(${theme.glowRgb},0.12)`,
-          border: `1px solid rgba(${theme.glowRgb},0.35)`,
-          color: theme.primary,
-        }}
-      >
-        DRILL START
-        <ChevronRight className="h-3.5 w-3.5 ml-auto" />
-      </Link>
-    </div>
+      <div className="mt-auto flex items-end justify-between gap-3 pt-5">
+        <div className="text-xs text-slate-500">
+          配点 <span className="font-bold text-slate-900">{section.maxScore}</span> 点
+        </div>
+        <Link
+          href={drillHref}
+          className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700"
+        >
+          この大問を練習する
+          <ChevronRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </article>
   );
 }

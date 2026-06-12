@@ -42,7 +42,7 @@ function sanitizeSlotValue(raw: string, slot: CommonTestDigitSlot): string {
   const normalized = normalizeCommonTestAnswer(raw);
   let allowed = normalized.replace(
     slot.allowNegative ? /[^0-9.-]/g : /[^0-9.]/g,
-    ""
+    "",
   );
 
   if (!slot.allowDecimal) {
@@ -106,18 +106,16 @@ export function MarkSheetAnswerInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-lg border border-gray-300 bg-white p-4 text-gray-950 shadow-sm sm:p-5"
+      className="rounded-2xl border border-slate-300 bg-white p-4 text-slate-950 shadow-sm sm:p-5"
     >
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-gray-200 pb-2">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
         <div>
-          <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-gray-500">
-            Mark Sheet
-          </div>
-          <div className="mt-1 text-sm font-bold text-gray-900">
-            解答欄に記入してください
+          <div className="text-xs font-extrabold text-slate-900">マークシート式解答</div>
+          <div className="mt-1 text-xs text-slate-500">
+            解答欄に合わせて入力してください。
           </div>
         </div>
-        <div className="rounded border border-gray-300 px-2.5 py-1 text-[11px] font-bold text-gray-600">
+        <div className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold text-slate-600">
           {answerFormat === "digits"
             ? "桁別入力"
             : answerFormat === "text"
@@ -127,14 +125,16 @@ export function MarkSheetAnswerInput({
       </div>
 
       {helperText && (
-        <p className="mb-3 text-xs leading-relaxed text-gray-600">{helperText}</p>
+        <p className="mb-4 rounded-xl border border-blue-100 bg-blue-50 p-3 text-xs leading-6 text-blue-900">
+          {helperText}
+        </p>
       )}
 
       {isDigits ? (
         <div className="flex flex-wrap gap-3">
           {slots.map((slot, index) => (
             <label key={`${slot.label}-${index}`} className="block">
-              <span className="mb-1 block text-center text-xs font-bold text-gray-700">
+              <span className="mb-1.5 block text-center text-xs font-bold text-slate-700">
                 [{slot.label}]
               </span>
               <input
@@ -144,7 +144,7 @@ export function MarkSheetAnswerInput({
                 maxLength={slot.allowNegative ? slot.length + 1 : slot.length}
                 disabled={disabled}
                 onChange={(e) => updateDigit(index, e.target.value)}
-                className="h-12 w-20 rounded border-2 border-gray-400 bg-white px-2 text-center font-mono text-xl font-bold text-gray-950 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100 disabled:bg-gray-100 disabled:text-gray-500"
+                className="h-12 w-20 rounded-xl border-2 border-slate-300 bg-white px-2 text-center font-mono text-xl font-bold text-slate-950 outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100 disabled:bg-slate-100 disabled:text-slate-500"
                 aria-label={`${slot.label}の解答欄`}
               />
             </label>
@@ -152,7 +152,7 @@ export function MarkSheetAnswerInput({
         </div>
       ) : (
         <label htmlFor={id} className="block">
-          <span className="mb-1.5 block text-xs font-bold text-gray-700">
+          <span className="mb-1.5 block text-xs font-bold text-slate-700">
             解答
           </span>
           <input
@@ -164,7 +164,7 @@ export function MarkSheetAnswerInput({
             onChange={(e) => onChange(e.target.value)}
             placeholder={answerFormat === "text" ? "短い答え" : "数値"}
             autoComplete="off"
-            className="h-12 w-full max-w-sm rounded border-2 border-gray-400 bg-white px-4 font-mono text-xl font-bold text-gray-950 outline-none transition placeholder:text-gray-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 disabled:bg-gray-100 disabled:text-gray-500"
+            className="h-12 w-full max-w-sm rounded-xl border-2 border-slate-300 bg-white px-4 font-mono text-xl font-bold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100 disabled:bg-slate-100 disabled:text-slate-500"
           />
         </label>
       )}
@@ -173,7 +173,7 @@ export function MarkSheetAnswerInput({
         <button
           type="submit"
           disabled={disabled || !normalizeCommonTestAnswer(value)}
-          className="mt-4 w-full rounded bg-gray-950 px-4 py-3 text-sm font-bold text-white transition hover:bg-gray-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:w-auto"
+          className="mt-4 w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 sm:w-auto"
         >
           {submitLabel}
         </button>

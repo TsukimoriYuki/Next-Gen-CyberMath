@@ -1,9 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import katex from "katex";
-import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  ChevronRight,
+  Lightbulb,
+  Target,
+  XCircle,
+} from "lucide-react";
 import type { CommonTestTheme } from "@/data/common-test";
+import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import type { CommonTestConfidence } from "@/lib/common-test-history";
 import {
   getCommonTestAnswerFormat,
@@ -11,14 +19,6 @@ import {
   isCommonTestMarkSheetQuestion,
 } from "@/lib/common-test-answer-normalize";
 import { MarkSheetAnswerInput } from "./MarkSheetAnswerInput";
-import {
-  CheckCircle2,
-  XCircle,
-  ChevronRight,
-  Target,
-  Zap,
-  AlertTriangle,
-} from "lucide-react";
 
 interface Props {
   question: CommonTestDrillQuestion;
@@ -46,7 +46,6 @@ export function CommonTestAnswerPanel({
   const [selectedConfidence, setSelectedConfidence] =
     useState<CommonTestConfidence | null>(null);
 
-  // Reset confidence each time a new question starts
   useEffect(() => {
     if (!isRevealed) setSelectedConfidence(null);
   }, [isRevealed]);
@@ -57,7 +56,6 @@ export function CommonTestAnswerPanel({
 
   return (
     <div className="space-y-4">
-      {/* ── Options ──────────────────────────────────────────────────── */}
       {usesMarkSheet ? (
         <MarkSheetAnswerInput
           question={question}
@@ -65,85 +63,41 @@ export function CommonTestAnswerPanel({
           disabled={isRevealed}
           onChange={setDraftAnswer}
           onSubmit={onSelect}
-          submitLabel="CHECK"
+          submitLabel="解答を確認する"
           helperText={
             answerFormat === "digits"
-              ? "共通テストの空欄を意識して、左から順に数字を入れてください。"
-              : "数字や記号はそのまま入力できます。全角数字でも採点時に半角として扱います。"
+              ? "空欄のラベルに合わせて、左から順に数字を入力してください。"
+              : "数値や短い語句をそのまま入力してください。"
           }
         />
       ) : (
-        <div className="grid gap-2 sm:grid-cols-2">
-          {(question.options ?? []).map((opt, idx) => {
-            const label = String.fromCharCode(65 + idx);
-            const isSelected = selectedAnswer === opt;
-            const isCorrect = isCommonTestAnswerCorrect(
-              opt,
-              question.correctAnswer,
-              "choice"
-            );
+        <div className="grid gap-3 sm:grid-cols-2">
+          {(question.options ?? []).map((option, index) => {
+            const label = String.fromCharCode(65 + index);
+            const isSelected = selectedAnswer === option;
+            const isCorrect = isCommonTestAnswerCorrect(option, question.correctAnswer, "choice");
 
-            let borderColor = `rgba(${theme.glowRgb},0.15)`;
-            let bgColor = "rgba(255,255,255,0.03)";
-            let textColor = "rgba(255,255,255,0.70)";
-            let labelColor = `rgba(${theme.glowRgb},0.6)`;
-
-            if (isRevealed) {
-              if (isCorrect) {
-                borderColor = "rgba(34,197,94,0.50)";
-                bgColor = "rgba(34,197,94,0.08)";
-                textColor = "rgba(255,255,255,0.90)";
-                labelColor = "#22c55e";
-              } else if (isSelected && !isCorrect) {
-                borderColor = "rgba(239,68,68,0.50)";
-                bgColor = "rgba(239,68,68,0.08)";
-                textColor = "rgba(255,255,255,0.90)";
-                labelColor = "#ef4444";
-              }
-            } else if (isSelected) {
-              borderColor = `rgba(${theme.glowRgb},0.60)`;
-              bgColor = `rgba(${theme.glowRgb},0.08)`;
-              textColor = "rgba(255,255,255,0.95)";
-              labelColor = theme.primary;
-            }
+            const stateClass = getChoiceStateClass({ isRevealed, isSelected, isCorrect });
 
             return (
               <button
-                key={opt}
+                key={option}
                 type="button"
                 disabled={isRevealed}
-                onClick={() => onSelect(opt)}
-                className="flex items-start gap-3 rounded-xl p-3 text-left transition-all duration-200 disabled:cursor-default"
-                style={{
-                  background: bgColor,
-                  border: `1px solid ${borderColor}`,
-                }}
+                onClick={() => onSelect(option)}
+                className={`flex items-start gap-3 rounded-2xl border p-4 text-left shadow-sm transition disabled:cursor-default ${stateClass}`}
               >
-                <span
-                  className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-[11px] font-extrabold"
-                  style={{
-                    background:
-                      isRevealed && isCorrect
-                        ? "rgba(34,197,94,0.15)"
-                        : isRevealed && isSelected
-                        ? "rgba(239,68,68,0.15)"
-                        : `rgba(${theme.glowRgb},0.08)`,
-                    color: labelColor,
-                  }}
-                >
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-extrabold ring-1 ring-inset ring-slate-200">
                   {label}
                 </span>
-                <span
-                  className="flex-1 text-sm leading-snug"
-                  style={{ color: textColor }}
-                >
-                  {isMath ? <RenderMath text={opt} /> : opt}
+                <span className="min-w-0 flex-1 text-sm leading-6">
+                  {isMath ? <RenderMath text={option} /> : option}
                 </span>
                 {isRevealed && isCorrect && (
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-green-400 mt-0.5" />
+                  <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-600" />
                 )}
                 {isRevealed && isSelected && !isCorrect && (
-                  <XCircle className="h-4 w-4 shrink-0 text-red-400 mt-0.5" />
+                  <XCircle className="mt-1 h-4 w-4 shrink-0 text-rose-600" />
                 )}
               </button>
             );
@@ -151,84 +105,81 @@ export function CommonTestAnswerPanel({
         </div>
       )}
 
-      {/* ── Explanation ─────────────────────────────────────────────── */}
       {isRevealed && (
-        <ExplanationPanel
-          question={question}
-          selectedAnswer={selectedAnswer}
-          theme={theme}
-          isMath={isMath}
-        />
-      )}
-
-      {/* ── Confidence picker ────────────────────────────────────────── */}
-      {isRevealed && (
-        <ConfidencePicker
-          selected={selectedConfidence}
-          onSelect={setSelectedConfidence}
-        />
-      )}
-
-      {/* ── Next button ─────────────────────────────────────────────── */}
-      {isRevealed && (
-        <button
-          type="button"
-          onClick={() => onNext(selectedConfidence ?? "unsure")}
-          className="w-full flex items-center justify-center gap-2 rounded-xl py-3 font-mono text-sm font-bold uppercase tracking-wider transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-          style={{
-            background: `linear-gradient(135deg, rgba(${theme.glowRgb},0.20), rgba(${theme.glowRgb},0.10))`,
-            border: `1px solid rgba(${theme.glowRgb},0.40)`,
-            color: theme.primary,
-          }}
-        >
-          {isLastQuestion ? "演習を終了する" : "次の問題へ"}
-          <ChevronRight className="h-4 w-4" />
-        </button>
+        <>
+          <ExplanationPanel
+            question={question}
+            selectedAnswer={selectedAnswer}
+            isMath={isMath}
+          />
+          <ConfidencePicker
+            selected={selectedConfidence}
+            onSelect={setSelectedConfidence}
+          />
+          <button
+            type="button"
+            onClick={() => onNext(selectedConfidence ?? "unsure")}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-700 active:scale-[0.99] sm:w-auto"
+          >
+            {isLastQuestion ? "結果を見る" : "次の問題へ"}
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </>
       )}
     </div>
   );
 }
 
-// ── Confidence picker ─────────────────────────────────────────────────────
+function getChoiceStateClass({
+  isRevealed,
+  isSelected,
+  isCorrect,
+}: {
+  isRevealed: boolean;
+  isSelected: boolean;
+  isCorrect: boolean;
+}) {
+  if (isRevealed && isCorrect) {
+    return "border-emerald-200 bg-emerald-50 text-emerald-950";
+  }
+  if (isRevealed && isSelected && !isCorrect) {
+    return "border-rose-200 bg-rose-50 text-rose-950";
+  }
+  if (isSelected) {
+    return "border-blue-300 bg-blue-50 text-blue-950";
+  }
+  return "border-slate-200 bg-white text-slate-800 hover:border-blue-200 hover:bg-blue-50/60";
+}
+
 const CONFIDENCE_OPTIONS: {
   value: CommonTestConfidence;
   label: string;
   sub: string;
-  color: string;
-  bg: string;
-  border: string;
+  className: string;
 }[] = [
   {
     value: "confident",
     label: "自信あり",
-    sub: "CONFIDENT",
-    color: "#22c55e",
-    bg: "rgba(34,197,94,0.08)",
-    border: "rgba(34,197,94,0.30)",
+    sub: "根拠を持って選べた",
+    className: "border-emerald-200 bg-emerald-50 text-emerald-700",
   },
   {
     value: "unsure",
     label: "少し不安",
-    sub: "UNSURE",
-    color: "#fbbf24",
-    bg: "rgba(251,191,36,0.08)",
-    border: "rgba(251,191,36,0.30)",
+    sub: "見直しで固めたい",
+    className: "border-amber-200 bg-amber-50 text-amber-700",
   },
   {
     value: "guessed",
-    label: "勘で選んだ",
-    sub: "GUESSED",
-    color: "#f97316",
-    bg: "rgba(249,115,22,0.08)",
-    border: "rgba(249,115,22,0.30)",
+    label: "勘で解答",
+    sub: "根拠が弱い",
+    className: "border-orange-200 bg-orange-50 text-orange-700",
   },
   {
     value: "blank",
     label: "わからない",
-    sub: "BLANK",
-    color: "rgba(255,255,255,0.35)",
-    bg: "rgba(255,255,255,0.04)",
-    border: "rgba(255,255,255,0.12)",
+    sub: "復習優先",
+    className: "border-slate-200 bg-slate-50 text-slate-600",
   },
 ];
 
@@ -240,151 +191,66 @@ function ConfidencePicker({
   onSelect: (v: CommonTestConfidence) => void;
 }) {
   return (
-    <div
-      className="rounded-xl p-3 space-y-2"
-      style={{
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.08)",
-      }}
-    >
-      <div className="font-mono text-[9px] font-bold uppercase tracking-[0.22em] text-white/35">
-        ◈ CONFIDENCE — この問題への自信度は？（任意）
-      </div>
-      <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
-        {CONFIDENCE_OPTIONS.map((opt) => {
-          const isActive = selected === opt.value;
+    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="text-sm font-extrabold text-slate-950">手応えを記録</div>
+      <p className="mt-1 text-xs leading-5 text-slate-500">
+        復習キューと弱点分析で、優先度を決めるために使います。
+      </p>
+      <div className="mt-3 grid gap-2 sm:grid-cols-4">
+        {CONFIDENCE_OPTIONS.map((option) => {
+          const active = selected === option.value;
           return (
             <button
-              key={opt.value}
+              key={option.value}
               type="button"
-              onClick={() => onSelect(opt.value)}
-              className="flex flex-col items-center gap-0.5 rounded-lg py-2 px-1 font-mono text-[10px] font-bold transition-all duration-150"
-              style={{
-                background: isActive ? opt.bg : "rgba(255,255,255,0.03)",
-                border: `1px solid ${isActive ? opt.border : "rgba(255,255,255,0.07)"}`,
-                color: isActive ? opt.color : "rgba(255,255,255,0.35)",
-                outline: isActive ? `1px solid ${opt.border}` : "none",
-                outlineOffset: "1px",
-              }}
+              onClick={() => onSelect(option.value)}
+              className={`rounded-xl border p-3 text-left transition ${
+                active ? option.className : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-white"
+              }`}
             >
-              <span className="text-[9px] uppercase tracking-wider">{opt.sub}</span>
-              <span className="text-[11px]">{opt.label}</span>
+              <div className="text-sm font-bold">{option.label}</div>
+              <div className="mt-1 text-xs opacity-80">{option.sub}</div>
             </button>
           );
         })}
       </div>
-      {selected === null && (
-        <p className="font-mono text-[9px] text-white/20 text-center">
-          未選択の場合は「少し不安」として記録されます
-        </p>
-      )}
-    </div>
+    </section>
   );
 }
 
-// ── Blank number input ────────────────────────────────────────────────────
-function BlankNumberInput({
-  question,
-  isRevealed,
-  onSelect,
-  theme,
-}: {
-  question: CommonTestDrillQuestion;
-  isRevealed: boolean;
-  onSelect: (answer: string) => void;
-  theme: CommonTestTheme;
-}) {
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const value = (
-      form.elements.namedItem("answer") as HTMLInputElement
-    ).value.trim();
-    if (value) onSelect(value);
-  }
-
-  if (isRevealed) return null;
-
-  return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
-      <input
-        name="answer"
-        type="text"
-        placeholder="解答を入力..."
-        autoComplete="off"
-        className="flex-1 rounded-xl px-4 py-3 font-mono text-sm text-white placeholder:text-white/25 outline-none"
-        style={{
-          background: "rgba(255,255,255,0.05)",
-          border: `1px solid rgba(${theme.glowRgb},0.25)`,
-        }}
-      />
-      <button
-        type="submit"
-        className="rounded-xl px-5 py-3 font-mono text-sm font-bold uppercase tracking-wider transition-all"
-        style={{
-          background: `rgba(${theme.glowRgb},0.15)`,
-          border: `1px solid rgba(${theme.glowRgb},0.40)`,
-          color: theme.primary,
-        }}
-      >
-        CHECK
-      </button>
-    </form>
-  );
-}
-
-// ── Explanation (3-part) ──────────────────────────────────────────────────
 function ExplanationPanel({
   question,
   selectedAnswer,
-  theme,
   isMath,
 }: {
   question: CommonTestDrillQuestion;
   selectedAnswer: string | null;
-  theme: CommonTestTheme;
   isMath: boolean;
 }) {
   const answerFormat = getCommonTestAnswerFormat(question);
   const isCorrect =
     selectedAnswer !== null &&
-    isCommonTestAnswerCorrect(
-      selectedAnswer,
-      question.correctAnswer,
-      answerFormat
-    );
+    isCommonTestAnswerCorrect(selectedAnswer, question.correctAnswer, answerFormat);
 
   return (
-    <div className="space-y-3">
+    <section className="space-y-3">
       <div
-        className="flex items-center gap-3 rounded-xl px-4 py-3"
-        style={{
-          background: isCorrect
-            ? "rgba(34,197,94,0.08)"
-            : "rgba(239,68,68,0.08)",
-          border: `1px solid ${
-            isCorrect ? "rgba(34,197,94,0.30)" : "rgba(239,68,68,0.30)"
-          }`,
-        }}
+        className={`flex items-start gap-3 rounded-2xl border p-4 shadow-sm ${
+          isCorrect
+            ? "border-emerald-200 bg-emerald-50 text-emerald-900"
+            : "border-rose-200 bg-rose-50 text-rose-900"
+        }`}
       >
         {isCorrect ? (
-          <CheckCircle2 className="h-5 w-5 shrink-0 text-green-400" />
+          <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
         ) : (
-          <XCircle className="h-5 w-5 shrink-0 text-red-400" />
+          <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-600" />
         )}
         <div>
-          <div
-            className="font-mono text-xs font-bold uppercase tracking-wider"
-            style={{ color: isCorrect ? "#22c55e" : "#ef4444" }}
-          >
-            {isCorrect ? "正解" : "不正解"}
-          </div>
+          <div className="font-extrabold">{isCorrect ? "正解です" : "見直しましょう"}</div>
           {!isCorrect && (
-            <div className="mt-0.5 font-mono text-[10px] text-white/50">
-              正解:{" "}
-              <span className="text-white/80">
-                {question.correctAnswer as string}
-              </span>
+            <div className="mt-1 text-sm">
+              正答: <span className="font-bold">{question.correctAnswer}</span>
             </div>
           )}
         </div>
@@ -393,70 +259,50 @@ function ExplanationPanel({
       <ExplainBlock
         icon={<Target className="h-4 w-4" />}
         label="解説"
-        labelColor={theme.primary}
-        glowRgb={theme.glowRgb}
+        colorClass="text-blue-700"
       >
         {isMath ? (
           <RenderMath text={question.explanation} block />
         ) : (
-          <p className="text-sm leading-relaxed text-white/75">
-            {question.explanation}
-          </p>
+          <p className="text-sm leading-7 text-slate-700">{question.explanation}</p>
         )}
       </ExplainBlock>
 
       <ExplainBlock
-        icon={<Zap className="h-4 w-4" />}
-        label="本番での考え方"
-        labelColor="#fbbf24"
-        glowRgb="251,191,36"
+        icon={<Lightbulb className="h-4 w-4" />}
+        label="解き方"
+        colorClass="text-violet-700"
       >
-        <p className="text-sm leading-relaxed text-white/75">
-          {question.strategy}
-        </p>
+        <p className="text-sm leading-7 text-slate-700">{question.strategy}</p>
       </ExplainBlock>
 
       {question.trapExplanation && (
         <ExplainBlock
           icon={<AlertTriangle className="h-4 w-4" />}
-          label="注意点"
-          labelColor="#f97316"
-          glowRgb="249,115,22"
+          label="よくあるミス"
+          colorClass="text-amber-700"
         >
-          <p className="text-sm leading-relaxed text-white/70">
-            {question.trapExplanation}
-          </p>
+          <p className="text-sm leading-7 text-slate-700">{question.trapExplanation}</p>
         </ExplainBlock>
       )}
-    </div>
+    </section>
   );
 }
 
 function ExplainBlock({
   icon,
   label,
-  labelColor,
-  glowRgb,
+  colorClass,
   children,
 }: {
   icon: React.ReactNode;
   label: string;
-  labelColor: string;
-  glowRgb: string;
+  colorClass: string;
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className="rounded-xl p-4 space-y-2"
-      style={{
-        background: `rgba(${glowRgb},0.04)`,
-        border: `1px solid rgba(${glowRgb},0.18)`,
-      }}
-    >
-      <div
-        className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em]"
-        style={{ color: labelColor }}
-      >
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className={`mb-2 flex items-center gap-2 text-sm font-extrabold ${colorClass}`}>
         {icon}
         {label}
       </div>
@@ -465,26 +311,19 @@ function ExplainBlock({
   );
 }
 
-// ── Inline KaTeX renderer ─────────────────────────────────────────────────
 export function RenderMath({ text, block }: { text: string; block?: boolean }) {
   if (!block) {
     const parts = text.split(/(\$[^$]+\$)/g);
     return (
       <>
         {parts.map((part, i) => {
-          if (
-            part.startsWith("$") &&
-            part.endsWith("$") &&
-            part.length > 2
-          ) {
+          if (part.startsWith("$") && part.endsWith("$") && part.length > 2) {
             try {
               const html = katex.renderToString(part.slice(1, -1), {
                 throwOnError: false,
                 displayMode: false,
               });
-              return (
-                <span key={i} dangerouslySetInnerHTML={{ __html: html }} />
-              );
+              return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />;
             } catch {
               return <span key={i}>{part}</span>;
             }
@@ -495,43 +334,23 @@ export function RenderMath({ text, block }: { text: string; block?: boolean }) {
     );
   }
 
-  const segments = text.split(/(\$\$[\s\S]+?\$\$|\$[^$]+\$)/g);
+  const segments = text.split(/(\$[^$]+\$)/g);
   return (
-    <div className="space-y-2 text-sm leading-relaxed text-white/75">
-      {segments.map((seg, i) => {
-        if (seg.startsWith("$$") && seg.endsWith("$$")) {
+    <div className="space-y-2 text-sm leading-7 text-slate-700">
+      {segments.map((segment, i) => {
+        if (segment.startsWith("$") && segment.endsWith("$") && segment.length > 2) {
           try {
-            const html = katex.renderToString(seg.slice(2, -2).trim(), {
-              throwOnError: false,
-              displayMode: true,
-            });
-            return (
-              <div
-                key={i}
-                className="overflow-x-auto py-1"
-                dangerouslySetInnerHTML={{ __html: html }}
-              />
-            );
-          } catch {
-            return <span key={i}>{seg}</span>;
-          }
-        }
-        if (seg.startsWith("$") && seg.endsWith("$") && seg.length > 2) {
-          try {
-            const html = katex.renderToString(seg.slice(1, -1), {
+            const html = katex.renderToString(segment.slice(1, -1), {
               throwOnError: false,
               displayMode: false,
             });
-            return (
-              <span key={i} dangerouslySetInnerHTML={{ __html: html }} />
-            );
+            return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />;
           } catch {
-            return <span key={i}>{seg}</span>;
+            return <span key={i}>{segment}</span>;
           }
         }
-        const trimmed = seg.trim();
-        if (!trimmed) return null;
-        return <span key={i}>{seg}</span>;
+        if (!segment.trim()) return null;
+        return <span key={i}>{segment}</span>;
       })}
     </div>
   );

@@ -1,6 +1,13 @@
-// Server Component — 科目別ページの共通レイアウト
+// Server Component - 科目別ページの共通レイアウト
 import Link from "next/link";
-import { ArrowLeft, Clock, Target, AlertTriangle, ChevronRight, Zap } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  Clock,
+  ClipboardList,
+  LineChart,
+  Target,
+} from "lucide-react";
 import type { CommonTestSubject } from "@/data/common-test";
 import { CommonTestSectionGrid } from "./CommonTestSectionGrid";
 import { getCommonTestExamQuestions } from "@/lib/common-test-exams";
@@ -10,264 +17,221 @@ interface Props {
 }
 
 export function CommonTestSubjectPage({ subject }: Props) {
-  const { theme, title, examMinutes, targetScoreDefault, estimatedScoreMock, description, sections, scoreRoutes } = subject;
+  const {
+    theme,
+    title,
+    examMinutes,
+    targetScoreDefault,
+    estimatedScoreMock,
+    description,
+    sections,
+    scoreRoutes,
+  } = subject;
+  const gap = targetScoreDefault - estimatedScoreMock;
 
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
-
-      {/* Ambient grid */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `linear-gradient(rgba(${theme.glowRgb},0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(${theme.glowRgb},0.025) 1px, transparent 1px)`,
-          backgroundSize: "60px 60px",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute -top-60 -right-60 h-[500px] w-[500px] rounded-full"
-        style={{ background: `radial-gradient(circle, rgba(${theme.glowRgb},0.08) 0%, transparent 70%)` }}
-      />
-
-      <div className="relative mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
-
-        {/* Back */}
+    <main className="min-h-screen bg-slate-50 text-slate-900">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
         <Link
           href="/common-test"
-          className="inline-flex items-center gap-1.5 font-mono text-xs transition-colors"
-          style={{ color: `rgba(${theme.glowRgb},0.7)` }}
+          className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-sm transition hover:border-blue-200 hover:text-blue-700"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          COMMAND CENTER へ戻る
+          共通テスト対策室に戻る
         </Link>
 
-        {/* ── Subject Header ─────────────────────────────────────────────── */}
-        <header className="mt-8">
-          <div className="flex flex-wrap items-center gap-3">
-            <div
-              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-xs uppercase tracking-[0.25em]"
-              style={{ background: `rgba(${theme.glowRgb},0.08)`, border: `1px solid rgba(${theme.glowRgb},0.25)`, color: theme.primary }}
-            >
-              COMMON TEST
-            </div>
-            <div
-              className="flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-[10px]"
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.55)" }}
-            >
-              <Clock className="h-3 w-3" />
-              {examMinutes} min
-            </div>
-            <div
-              className="flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-[10px]"
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.55)" }}
-            >
-              <Target className="h-3 w-3" />
+        <header className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge icon={<BookOpen className="h-3.5 w-3.5" />} color={theme.primary}>
+              科目別対策
+            </Badge>
+            <Badge icon={<Clock className="h-3.5 w-3.5" />}>
+              本番 {examMinutes}分
+            </Badge>
+            <Badge icon={<Target className="h-3.5 w-3.5" />}>
               目標 {targetScoreDefault}点
-            </div>
+            </Badge>
           </div>
 
-          <h1
-            className="mt-5 font-display text-5xl font-extrabold tracking-tight sm:text-6xl"
-            style={{
-              background: `linear-gradient(135deg, ${theme.primary} 0%, #ffffff 55%, ${theme.secondary} 100%)`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            {title}
-          </h1>
-
-          <p className="mt-4 max-w-2xl font-mono text-sm leading-relaxed text-white/50">
-            {description}
-          </p>
-
-          {/* Score status bar */}
-          <div
-            className="mt-6 flex items-center gap-4 rounded-xl p-4"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
+          <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_280px] lg:items-end">
             <div>
-              <div className="font-mono text-[9px] text-white/35 uppercase tracking-wider">現在の推定スコア</div>
-              <div className="font-mono text-2xl font-bold text-white">{estimatedScoreMock}</div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Common Test Subject
+              </p>
+              <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
+                {title}
+              </h1>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600">
+                {description}
+              </p>
             </div>
-            <div className="flex-1">
-              <div className="flex justify-between mb-1 font-mono text-[9px] text-white/30">
-                <span>0</span>
-                <span>{targetScoreDefault}点（目標）</span>
-                <span>100</span>
+
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
+                <span>現在の目安</span>
+                <span>目標との差</span>
               </div>
-              <div className="h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+              <div className="mt-2 flex items-end justify-between">
+                <div className="text-3xl font-extrabold text-slate-950">
+                  {estimatedScoreMock}
+                  <span className="ml-1 text-sm font-semibold text-slate-500">点</span>
+                </div>
                 <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${Math.min(100, Math.round((estimatedScoreMock / 100) * 100))}%`,
-                    background: `linear-gradient(90deg, rgba(${theme.glowRgb},0.7), rgba(${theme.glowRgb},1))`,
-                    boxShadow: `0 0 8px rgba(${theme.glowRgb},0.6)`,
-                  }}
+                  className={`text-2xl font-extrabold ${
+                    gap > 0 ? "text-amber-600" : "text-emerald-600"
+                  }`}
+                >
+                  {gap > 0 ? `+${gap}` : gap}
+                </div>
+              </div>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
+                <div
+                  className="h-full rounded-full bg-blue-600"
+                  style={{ width: `${Math.min(100, estimatedScoreMock)}%` }}
                 />
               </div>
-            </div>
-            <div>
-              <div className="font-mono text-[9px] text-white/35 uppercase tracking-wider">目標まで</div>
-              <div className="font-mono text-2xl font-bold" style={{ color: theme.primary }}>
-                +{targetScoreDefault - estimatedScoreMock}
-              </div>
+              <p className="mt-2 text-xs leading-5 text-slate-500">
+                大問別ドリルと本番演習の結果を見ながら、次に伸ばす大問を決めます。
+              </p>
             </div>
           </div>
         </header>
 
-        {/* ── 大問別ドリルパネル ────────────────────────────────────────────── */}
-        <section className="mt-12">
-          <SectionHeader color={theme.primary}>大問別ドリルパネル</SectionHeader>
-          <p className="mb-4 font-mono text-[10px] text-white/35">
-            各大問のテーマを確認し、弱点単元を重点的に演習する。
-          </p>
+        <section className="mt-8">
+          <SectionTitle
+            icon={<ClipboardList className="h-5 w-5" />}
+            title="大問別ドリル"
+            description="大問ごとに出題テーマを確認し、短い演習で弱点を絞り込みます。"
+          />
           <CommonTestSectionGrid sections={sections} theme={theme} subjectId={subject.id} />
         </section>
 
-        {/* ── 得点別攻略ルート ──────────────────────────────────────────────── */}
-        <section className="mt-12">
-          <SectionHeader color={theme.primary}>得点別攻略ルート</SectionHeader>
-          <div className="grid gap-3 sm:grid-cols-3">
-            {scoreRoutes.map((route) => (
-              <div
-                key={route.targetScore}
-                className="rounded-xl p-4"
-                style={{
-                  background: `linear-gradient(145deg, rgba(${hexToRgb(route.accent)},0.06) 0%, rgba(0,0,0,0.4) 100%)`,
-                  border: `1px solid rgba(${hexToRgb(route.accent)},0.22)`,
-                }}
-              >
+        <section className="mt-8 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+          <ExamSimulatorCard subject={subject} />
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <SectionTitle
+              compact
+              icon={<LineChart className="h-5 w-5" />}
+              title="得点帯別の進め方"
+              description="目標点に合わせて、練習する大問の優先順位を調整します。"
+            />
+            <div className="mt-4 space-y-3">
+              {scoreRoutes.map((route) => (
                 <div
-                  className="font-display text-lg font-extrabold"
-                  style={{ color: route.accent }}
+                  key={route.targetScore}
+                  className="rounded-xl border border-slate-200 bg-slate-50 p-4"
                 >
-                  {route.label}
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="font-bold text-slate-900">{route.label}</div>
+                    <div
+                      className="rounded-full px-2.5 py-1 text-xs font-bold"
+                      style={{
+                        background: `rgba(${hexToRgb(route.accent)},0.12)`,
+                        color: route.accent,
+                      }}
+                    >
+                      {route.targetScore}点
+                    </div>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {route.strategy}
+                  </p>
                 </div>
-                <div
-                  className="mt-0.5 font-mono text-[10px] font-bold"
-                  style={{ color: `rgba(${hexToRgb(route.accent)},0.6)` }}
-                >
-                  TARGET: {route.targetScore}点
-                </div>
-                <p className="mt-2 font-mono text-[10px] leading-relaxed text-white/50">
-                  {route.strategy}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── 本番再現 EXAM SIMULATOR（UNLOCKED）──────────────────────────── */}
-        <section className="mt-12">
-          <SectionHeader color={theme.primary}>本番再現 EXAM SIMULATOR</SectionHeader>
-          <ExamSimulatorCard subject={subject} /></section>
-
-        {/* ── WEAKNESS BOSS SYSTEM（COMING SOON）──────────────────────────── */}
-        <section className="mt-8">
-          <div
-            className="flex items-center gap-4 rounded-2xl p-5"
-            style={{
-              background: "linear-gradient(135deg, rgba(244,63,94,0.05) 0%, rgba(0,0,0,0.4) 100%)",
-              border: "1px solid rgba(244,63,94,0.15)",
-            }}
-          >
-            <AlertTriangle className="h-8 w-8 shrink-0 text-rose-500/40" />
-            <div>
-              <div className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-rose-400/60">
-                WEAKNESS BOSS SYSTEM — COMING SOON
-              </div>
-              <p className="mt-1 font-mono text-[10px] leading-relaxed text-white/35">
-                大問別の正答率データから「弱点特異点」を自動検出し、
-                そのボス問題を集中出題する個別強化システム。本番対策の最終兵器として実装予定。
-              </p>
+              ))}
             </div>
           </div>
         </section>
-
       </div>
+    </main>
+  );
+}
+
+function Badge({
+  children,
+  icon,
+  color = "#2563eb",
+}: {
+  children: React.ReactNode;
+  icon: React.ReactNode;
+  color?: string;
+}) {
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold"
+      style={{
+        borderColor: `rgba(${hexToRgb(color)},0.22)`,
+        background: `rgba(${hexToRgb(color)},0.08)`,
+        color,
+      }}
+    >
+      {icon}
+      {children}
+    </span>
+  );
+}
+
+function SectionTitle({
+  icon,
+  title,
+  description,
+  compact = false,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  compact?: boolean;
+}) {
+  return (
+    <div className={compact ? "" : "mb-4"}>
+      <div className="flex items-center gap-2 text-slate-950">
+        <span className="text-blue-600">{icon}</span>
+        <h2 className="text-lg font-extrabold tracking-tight">{title}</h2>
+      </div>
+      <p className="mt-1 text-sm leading-6 text-slate-600">{description}</p>
     </div>
   );
 }
 
-// ── 共通セクションヘッダー ───────────────────────────────────────────────
-function SectionHeader({ children, color }: { children: React.ReactNode; color: string }) {
+function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
+  const examId =
+    subject.id === "math-1a"
+      ? "math-1a-70"
+      : subject.id === "math-2bc"
+        ? "math-2bc-70"
+        : "english-reading-80";
+  const questions = getCommonTestExamQuestions(examId);
+  const sectionCount = new Set(questions.map((q) => q.sectionId)).size;
+
   return (
-    <div className="flex items-center gap-3 mb-5">
-      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em]" style={{ color }}>
-        ▸ {children}
-      </span>
-      <div className="flex-1 h-px" style={{ background: `rgba(${hexToRgbFromCss(color)},0.2)` }} />
-    </div>
+    <Link
+      href={`/common-test/simulator/${examId}`}
+      className="group rounded-2xl border border-blue-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md"
+    >
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-sm font-extrabold text-blue-700">
+          {subject.examMinutes}分
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">
+            Exam Simulator
+          </p>
+          <h2 className="mt-1 text-xl font-extrabold text-slate-950">
+            本番演習で力試し
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-600">
+            {sectionCount}大問・{questions.length}問を本番形式で解き、時間内スコアと弱点を確認します。
+          </p>
+        </div>
+        <span className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition group-hover:bg-blue-700">
+          開始する
+        </span>
+      </div>
+    </Link>
   );
 }
 
 function hexToRgb(hex: string): string {
   const m = hex.match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
-  if (!m) return "255,255,255";
+  if (!m) return "37,99,235";
   return `${parseInt(m[1], 16)},${parseInt(m[2], 16)},${parseInt(m[3], 16)}`;
-}
-
-function hexToRgbFromCss(color: string): string {
-  return hexToRgb(color);
-}
-
-// ── Exam Simulator Card (unlocked) ──────────────────────────────────────
-function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
-  const examId = `${subject.id === "math-1a" ? "math-1a-70" : subject.id === "math-2bc" ? "math-2bc-70" : "english-reading-80"}`;
-  const questions = getCommonTestExamQuestions(examId);
-  const sectionCount = new Set(questions.map((q) => q.sectionId)).size;
-  const { theme, examMinutes } = subject;
-
-  return (
-    <Link
-      href={`/common-test/simulator/${examId}`}
-      className="group flex items-center gap-5 rounded-2xl p-5 transition-all hover:opacity-90"
-      style={{
-        background: `linear-gradient(135deg, rgba(${theme.glowRgb},0.08) 0%, rgba(0,0,0,0.4) 100%)`,
-        border: `1px solid rgba(${theme.glowRgb},0.28)`,
-        boxShadow: `0 0 30px rgba(${theme.glowRgb},0.06)`,
-      }}
-    >
-      <div
-        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-extrabold"
-        style={{
-          background: `rgba(${theme.glowRgb},0.14)`,
-          border: `1px solid rgba(${theme.glowRgb},0.35)`,
-          color: theme.primary,
-        }}
-      >
-        {examMinutes}m
-      </div>
-
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <div className="font-display text-base font-extrabold text-white">
-            [{examMinutes}分] EXAM SIMULATOR
-          </div>
-          <div
-            className="rounded-full px-2 py-0.5 font-mono text-[8px] font-bold uppercase tracking-wider"
-            style={{ background: `rgba(${theme.glowRgb},0.14)`, border: `1px solid rgba(${theme.glowRgb},0.30)`, color: theme.primary }}
-          >
-            NEW
-          </div>
-        </div>
-        <p className="font-mono text-[10px] text-white/45 leading-relaxed">
-          {sectionCount}大問 · {questions.length}問 · 本番形式通し試験。時間内スコアと時間外スコアで実力を二重評価。
-        </p>
-      </div>
-
-      <div
-        className="shrink-0 flex items-center gap-1.5 rounded-xl px-4 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-all group-hover:opacity-80"
-        style={{
-          background: `rgba(${theme.glowRgb},0.16)`,
-          border: `1px solid rgba(${theme.glowRgb},0.38)`,
-          color: theme.primary,
-        }}
-      >
-        <Zap className="h-3.5 w-3.5" />
-        開始
-      </div>
-    </Link>
-  );
 }
