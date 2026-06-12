@@ -1,5 +1,70 @@
 # Phase 20 申し送り事項
 
+---
+
+## Phase 20.0 完了内容（2026-06-13）
+
+### 追加した講座ブロック型（`src/types/course.ts`）
+
+| 型名 | 用途 |
+|---|---|
+| `diagram` | SVG 概念図ブロック。`diagramType` フィールドで種類を指定 |
+| `stepByStep` | 手順分解ブロック。`steps: StepItem[]` で番号付きステップを表示 |
+| `comparisonTable` | 比較表ブロック。`columns` + `rows: TableRow[]` で表を生成 |
+| `checkpoint` | 軽量チェックポイント（練習問題より短い確認） |
+
+### 追加したオプションフィールド（`LessonBlock`）
+
+```typescript
+diagramType?: DiagramType   // "parabola-basic" | "vertex-axis" | ...
+caption?: string            // 図解・公式のキャプション
+steps?: StepItem[]          // stepByStep 用ステップリスト
+columns?: string[]          // comparisonTable の列ヘッダー
+rows?: TableRow[]           // comparisonTable の行データ
+formula?: string            // formula ブロックの強調公式
+emphasis?: string           // コールアウトテキスト
+```
+
+### 実装済み図解タイプ（`CourseDiagramBlock.tsx`）
+
+| diagramType | 内容 |
+|---|---|
+| `parabola-basic` | y=x² の基本形・開き方 |
+| `vertex-axis` | 頂点と軸の対称軸 |
+| `completing-square-shift` | 平方完成による移動イメージ |
+| `domain-max-min` | 定義域つき最大最小 |
+| `axis-position-cases` | 軸が定義域の左・中・右の3ケース横並び |
+| `case-split-flow` | 場合分けフローチャート |
+
+### 新規コンポーネント
+
+```
+src/components/courses/
+├── CourseBodyRenderer.tsx      — $...$ KaTeX + **bold** + リストを server component でレンダリング
+├── CourseDiagramBlock.tsx      — SVG 概念図ディスパッチャー + 6種の図解
+├── CourseStepBlock.tsx         — 手順分解カード（ステップ番号バッジ付き）
+├── CourseComparisonTable.tsx   — 比較表（KaTeX セル対応）
+└── CourseLessonBlockRenderer.tsx — ブロック種別に応じた描画ルーター
+```
+
+### 二次関数講座に追加したブロック
+
+| 講座 | 追加ブロック |
+|---|---|
+| `quadratic-what-is`（初学者） | `diagram: parabola-basic` |
+| `quadratic-completing-square`（初学者） | `diagram: completing-square-shift` + `stepByStep`（4ステップ） |
+| `quadratic-max-min-basic`（初学者） | `diagram: vertex-axis` |
+| `quadratic-max-min-domain`（中級者） | `diagram: axis-position-cases` + `comparisonTable`（3ケース） |
+| `quadratic-case-analysis`（中級者） | `diagram: case-split-flow` |
+| `quadratic-exam-standard`（上級者） | `comparisonTable`（頻出3パターン比較） |
+
+### 数式レンダリング改善
+
+- 講座ブロック本文・確認問題・目標・説明文がすべて `CourseBodyRenderer` でレンダリングされ、`$...$` が KaTeX に変換されるようになった（Phase 19 では raw text だった）
+
+---
+
+
 ## 概要
 
 Phase 20 では、数学IA「二次関数」の講座本文を本格的に作成します。

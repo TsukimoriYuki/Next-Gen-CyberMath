@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, ChevronLeft, Clock, Target } from "lucide-react";
 import { getCourseUnit } from "@/data/course-curriculum";
-import { COURSE_LEVEL_META, LESSON_BLOCK_META, type CourseLevel, type CourseLesson } from "@/types/course";
+import { COURSE_LEVEL_META, type CourseLevel, type CourseLesson } from "@/types/course";
+import { CourseLessonBlockRenderer } from "@/components/courses/CourseLessonBlockRenderer";
+import { CourseBodyRenderer } from "@/components/courses/CourseBodyRenderer";
 
 export const metadata: Metadata = {
   title: "二次関数 講座",
@@ -190,7 +192,10 @@ function LessonCard({
               </span>
               <h3 className="text-base font-extrabold text-slate-900">{lesson.lessonTitle}</h3>
             </div>
-            <p className="mt-1 text-xs leading-relaxed text-slate-500">{lesson.lessonDescription}</p>
+            <CourseBodyRenderer
+              body={lesson.lessonDescription}
+              className="mt-1 text-xs leading-relaxed text-slate-500"
+            />
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] text-slate-500">
@@ -211,7 +216,7 @@ function LessonCard({
               {lesson.goals.map((goal, i) => (
                 <li key={i} className="flex items-start gap-1.5 text-xs text-slate-600">
                   <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
-                  {goal}
+                  <CourseBodyRenderer body={goal} className="flex-1 text-xs text-slate-600" />
                 </li>
               ))}
             </ul>
@@ -220,29 +225,9 @@ function LessonCard({
 
         {/* レッスンブロック */}
         <div className="space-y-3">
-          {lesson.lessonBlocks.map((block, i) => {
-            const bm = LESSON_BLOCK_META[block.kind];
-            return (
-              <div
-                key={i}
-                className="rounded-xl border p-3"
-                style={{ borderColor: `${bm.color}33`, background: bm.bg }}
-              >
-                <div className="mb-1.5 flex items-center gap-2">
-                  <span
-                    className="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                    style={{ background: `${bm.color}1a`, color: bm.color }}
-                  >
-                    {bm.label}
-                  </span>
-                  <span className="text-xs font-bold text-slate-800">{block.title}</span>
-                </div>
-                <p className="whitespace-pre-line text-xs leading-relaxed text-slate-600">
-                  {block.body}
-                </p>
-              </div>
-            );
-          })}
+          {lesson.lessonBlocks.map((block, i) => (
+            <CourseLessonBlockRenderer key={i} block={block} />
+          ))}
         </div>
 
         {/* 確認問題 */}
@@ -250,18 +235,22 @@ function LessonCard({
           <div className="mt-4 space-y-2">
             <h4 className="text-xs font-bold text-slate-700">確認問題</h4>
             {lesson.checkQuestions.map((q, i) => (
-              <div
-                key={i}
-                className="rounded-xl border border-rose-200 bg-rose-50 p-3"
-              >
-                <p className="text-xs font-bold text-slate-800">{q.question}</p>
+              <div key={i} className="rounded-xl border border-rose-200 bg-rose-50 p-3">
+                <CourseBodyRenderer
+                  body={q.question}
+                  className="text-xs font-bold text-slate-800"
+                />
                 <details className="mt-2">
                   <summary className="cursor-pointer text-[11px] font-semibold text-rose-600 hover:text-rose-700">
                     答えを見る
                   </summary>
-                  <p className="mt-1.5 whitespace-pre-line text-xs text-slate-600">{q.answer}</p>
+                  <div className="mt-1.5">
+                    <CourseBodyRenderer body={q.answer} className="text-xs text-slate-600" />
+                  </div>
                   {q.hint && (
-                    <p className="mt-1 text-[11px] text-slate-400">ヒント: {q.hint}</p>
+                    <p className="mt-1 text-[11px] text-slate-400">
+                      ヒント: {q.hint}
+                    </p>
                   )}
                 </details>
               </div>

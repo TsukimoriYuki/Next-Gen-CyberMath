@@ -30,6 +30,13 @@ const QUADRATIC_BEGINNER: CourseLesson[] = [
         body: "$a>0$ のとき放物線は上に開き、$a<0$ のとき下に開きます。$|a|$ が大きいほど細く（急峻に）なり、小さいほど平たく（なだらかに）なります。まず $y=x^2$、$y=2x^2$、$y=\\frac{1}{2}x^2$ を比べて確認しましょう。",
       },
       {
+        kind: "diagram",
+        title: "放物線の基本形",
+        body: "下の図は $y=x^2$（$a=1>0$）の放物線です。頂点が原点 $(0,0)$ にあり、上に向かって開いています。",
+        diagramType: "parabola-basic",
+        caption: "y=x² の基本形。a>0 のとき下に凸（上に開く）、頂点が最小値の場所。",
+      },
+      {
         kind: "workedExample",
         title: "例：$y=x^2$ と $y=-x^2$ を比べる",
         body: "$y=x^2$ は下に凸（上に開く）、$y=-x^2$ は上に凸（下に開く）です。$x=0$ で頂点は $(0,0)$ です。$a$ の符号だけ変えると、グラフが $x$ 軸に対して折り返した形になります。",
@@ -81,6 +88,42 @@ const QUADRATIC_BEGINNER: CourseLesson[] = [
         body: "$y=ax^2+bx+c=a\\left(x+\\frac{b}{2a}\\right)^2-\\frac{b^2-4ac}{4a}$\n\n頂点は $\\left(-\\frac{b}{2a},\\ -\\frac{b^2-4ac}{4a}\\right)$。ただし公式を暗記するより、**手順を理解して毎回実行する**ほうが確実です。",
       },
       {
+        kind: "diagram",
+        title: "平方完成でグラフはどう動くか",
+        body: "平方完成すると $y=ax^2+bx+c$ が $y=a(x-p)^2+q$ の形になり、頂点が $(0,0)$ から $(p,q)$ へ移動することがわかります。",
+        diagramType: "completing-square-shift",
+        caption: "y=x²（灰色）→ y=(x-2)²-3（青）。右に2、下に3 移動した例。",
+      },
+      {
+        kind: "stepByStep",
+        title: "平方完成の4ステップ（$y=2x^2-8x+3$ の例）",
+        body: "",
+        steps: [
+          {
+            step: 1,
+            label: "$a \\neq 1$ なら先に $a$ でくくる",
+            body: "$y=2x^2-8x+3 \\Rightarrow y=2(x^2-4x)+3$",
+            annotation: "$a=1$ のときはこのステップをスキップしてよい",
+          },
+          {
+            step: 2,
+            label: "$x$ の係数の「半分の 2 乗」を計算する",
+            body: "括弧内の $x$ の係数は $-4$。半分は $-2$、その 2 乗は $4$。",
+          },
+          {
+            step: 3,
+            label: "括弧の中で「足して引く」",
+            body: "$y=2(x^2-4x+4-4)+3$\n\n$a$ を括弧の外に出すとき: $2 \\times 4 = 8$ を引く。$y=2(x^2-4x+4)-8+3$",
+            annotation: "符号ミスが最多。$a \\times$ 足した数を外に出すことを確認する",
+          },
+          {
+            step: 4,
+            label: "$(x-p)^2$ の形にまとめて頂点を読む",
+            body: "$y=2(x-2)^2-5$ → 頂点 $(2,-5)$、軸 $x=2$",
+          },
+        ],
+      },
+      {
         kind: "workedExample",
         title: "例：$y=x^2-4x+1$ を平方完成する",
         body: "$y=x^2-4x+1=(x^2-4x+4)-4+1=(x-2)^2-3$\n\n手順：$x$ の係数 $-4$ の半分 $-2$ の 2 乗 $4$ を**足して引く**。頂点 $(2,-3)$、軸 $x=2$。",
@@ -130,6 +173,13 @@ const QUADRATIC_BEGINNER: CourseLesson[] = [
         kind: "concept",
         title: "頂点＝最小値（または最大値）の場所",
         body: "$a>0$ の放物線（下に凸）は頂点で**最小値**をとり、最大値はない（$+\\infty$）。$a<0$（上に凸）は頂点で**最大値**をとり、最小値はない（$-\\infty$）。",
+      },
+      {
+        kind: "diagram",
+        title: "頂点が最小値の場所",
+        body: "定義域が全実数のとき、頂点の $y$ 座標が最大値または最小値になります。",
+        diagramType: "vertex-axis",
+        caption: "y=(x-2)²-1。頂点(2,-1)が最小値 -1 の場所。軸 x=2 は対称軸。",
       },
       {
         kind: "workedExample",
@@ -189,6 +239,31 @@ const QUADRATIC_STANDARD: CourseLesson[] = [
         kind: "strategy",
         title: "3ケースの場合分け",
         body: "頂点の軸 $x=p$ と定義域 $[a,b]$ の位置関係で3つに分けます。\n\n1. **軸が左端より外（$p<a$）**：定義域内で単調増加 → 最小は $x=a$、最大は $x=b$\n2. **軸が定義域内（$a\\leq p\\leq b$）**：頂点が最小（または最大）\n3. **軸が右端より外（$p>b$）**：定義域内で単調減少 → 最小は $x=b$、最大は $x=a$",
+      },
+      {
+        kind: "diagram",
+        title: "軸の位置と最大・最小（3ケースの概念図）",
+        body: "",
+        diagramType: "axis-position-cases",
+        caption: "a>0（下に凸）のとき。軸が定義域の左・内・右で最小値の場所が変わる。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "3ケースの最小値まとめ（$a>0$ のとき）",
+        body: "",
+        columns: ["ケース", "軸の位置", "最小値（$a>0$）", "最大値（$a>0$）"],
+        rows: [
+          {
+            cells: ["ケース1", "軸が左外 $p<a$", "左端 $x=a$ で $f(a)$", "右端 $x=b$ で $f(b)$"],
+          },
+          {
+            cells: ["ケース2", "軸が内側 $a\\leq p\\leq b$", "頂点 $x=p$ で $q$", "軸から遠い端点"],
+            highlight: true,
+          },
+          {
+            cells: ["ケース3", "軸が右外 $p>b$", "右端 $x=b$ で $f(b)$", "左端 $x=a$ で $f(a)$"],
+          },
+        ],
       },
       {
         kind: "workedExample",
@@ -281,6 +356,13 @@ const QUADRATIC_STANDARD: CourseLesson[] = [
         kind: "strategy",
         title: "場合分けが必要な3つのパターン",
         body: "1. 軸の位置が定義域に対して変化する\n2. 二次方程式 $ax^2+bx+c=0$ の判別式 $D$ の正負\n3. 最大・最小が端点か頂点かで変わる\n\n「何が変わると何が変わるか」を意識することが重要。",
+      },
+      {
+        kind: "diagram",
+        title: "場合分けの流れ（フローチャート）",
+        body: "軸の位置を確認してから場合を分ける手順を整理しよう。",
+        diagramType: "case-split-flow",
+        caption: "a>0（下に凸）のときの最小値を求めるフロー。最大値は軸から遠い端点で求める。",
       },
       {
         kind: "commonMistake",
@@ -429,6 +511,24 @@ const QUADRATIC_ADVANCED: CourseLesson[] = [
         kind: "strategy",
         title: "頻出組み合わせパターン",
         body: "**パターン1：グラフと直線の交点**\n$y=x^2-2x$ と $y=ax+b$ の交点 → $x^2-(2+a)x-b=0$ の判別式を使う\n\n**パターン2：解の配置**\n$f(x)=0$ の解が特定の範囲にある条件 → $f(a)>0$、$f(b)>0$、頂点の $y<0$ などの連立条件\n\n**パターン3：最大最小の最大最小**\n$t$ を動かすときの最小値 $m(t)$ のさらなる最大を求める",
+      },
+      {
+        kind: "comparisonTable",
+        title: "頻出3パターンの比較",
+        body: "",
+        columns: ["パターン", "見分け方", "主な手法"],
+        rows: [
+          {
+            cells: ["グラフと直線", "「交点の個数」「共有点をもつ条件」", "判別式 $D\\geq0$ を立てる"],
+          },
+          {
+            cells: ["解の配置", "「$0<x<2$ に実数解」など", "端点の値・軸の位置・判別式の3条件"],
+            highlight: true,
+          },
+          {
+            cells: ["最大最小の最大最小", "$m(t)$ のさらなる最大・最小", "場合分けして $m(t)$ を求め再び最大化"],
+          },
+        ],
       },
       {
         kind: "workedExample",
