@@ -10,73 +10,61 @@ export const metadata: Metadata = {
 
 export default function CommonTestReviewPage() {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Grid */}
+    <div className="relative min-h-screen bg-slate-50 text-slate-900">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(249,115,22,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(249,115,22,0.018) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+            "linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
+          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
         }}
       />
-      <div
-        className="pointer-events-none absolute -top-60 right-0 h-[500px] w-[500px] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%)" }}
-      />
 
-      <div className="relative mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
+      <div className="relative mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
 
         {/* Back */}
         <Link
           href="/common-test"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-orange-400/50 transition-colors hover:text-orange-400/80"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-800"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          COMMAND CENTER へ戻る
+          <ArrowLeft className="h-4 w-4" />
+          対策室へ戻る
         </Link>
 
         {/* Header */}
-        <header className="mt-8 mb-10">
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] mb-4"
-            style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.22)", color: "#f97316" }}
-          >
-            <Layers className="h-3.5 w-3.5" />
-            復習キューシステム
+        <header className="mt-8 mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3.5 py-1.5">
+            <Layers className="h-4 w-4 text-orange-600" />
+            <span className="text-xs font-semibold text-orange-700">復習キュー</span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-orange-400">
+              Review Queue
+            </span>
           </div>
 
-          <h1
-            className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
-            style={{
-              background: "linear-gradient(135deg, #f97316 0%, #ffffff 50%, #fbbf24 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
+          <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
             復習キュー
           </h1>
 
-          <p className="mt-3 max-w-xl font-mono text-sm text-white/40">
-            REVIEW QUEUE — 間隔反復で弱点を完全習得する。正解なら次の間隔へ、不正解なら翌日にリセット。
+          <p className="mt-3 max-w-xl text-sm text-slate-600">
+            間隔反復で弱点を定着させます。正解なら次の間隔へ、間違えたら翌日にリセットして復習します。
           </p>
 
-          <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3 max-w-lg">
+          <div className="mt-5 grid max-w-lg grid-cols-1 gap-2 sm:grid-cols-3">
             {[
-              { label: "初回 → 翌日", color: "#f97316" },
-              { label: "1回目 → 3日後", color: "#fbbf24" },
-              { label: "2回目 → 7日後", color: "#22c55e" },
-              { label: "3回目 → 14日後", color: "#38bdf8" },
-              { label: "4回目 → MASTERED", color: "#a78bfa" },
+              { label: "初回 → 翌日", color: "#ea580c" },
+              { label: "1回目 → 3日後", color: "#d97706" },
+              { label: "2回目 → 7日後", color: "#059669" },
+              { label: "3回目 → 14日後", color: "#2563eb" },
+              { label: "4回目 → 克服済み", color: "#7c3aed" },
             ].map((s) => (
               <div
                 key={s.label}
-                className="flex items-center gap-2 rounded-lg px-3 py-2"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2"
               >
                 <div className="h-2 w-2 rounded-full" style={{ background: s.color }} />
-                <span className="font-mono text-[9px] text-white/40">{s.label}</span>
+                <span className="text-[11px] text-slate-600">{s.label}</span>
               </div>
             ))}
           </div>

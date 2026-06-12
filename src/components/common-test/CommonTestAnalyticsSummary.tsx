@@ -98,10 +98,10 @@ function computeAnalytics(history: CommonTestDrillHistoryItem[]): Analytics {
 }
 
 const GRADE_COLORS: Record<string, string> = {
-  S: "#facc15",
-  A: "#22c55e",
-  B: "#38bdf8",
-  C: "#fb923c",
+  S: "#ca8a04",
+  A: "#059669",
+  B: "#2563eb",
+  C: "#ea580c",
 };
 
 export function CommonTestAnalyticsSummary() {
@@ -116,34 +116,29 @@ export function CommonTestAnalyticsSummary() {
 
   if (analytics.drillCount === 0) {
     return (
-      <div
-        className="rounded-2xl p-5 text-center"
-        style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
-      >
-        <div className="font-mono text-[10px] text-white/25 uppercase tracking-wider">
-          ANALYTICS — 演習すると分析が表示されます
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+        <div className="text-xs text-slate-400">
+          演習すると、ここに分析が表示されます
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className="rounded-2xl p-5 space-y-4"
-      style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
-    >
+    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">
-          <BarChart2 className="h-4 w-4" />
-          ANALYTICS SUMMARY
+        <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+          <BarChart2 className="h-4 w-4 text-blue-600" />
+          演習データ分析
+          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-400">Analytics</span>
         </div>
         {/* Mini grade strip */}
         <div className="flex gap-1">
           {analytics.recentGrades.map((g, i) => (
             <span
               key={i}
-              className="font-mono text-[10px] font-extrabold"
-              style={{ color: GRADE_COLORS[g] ?? "#ffffff" }}
+              className="font-mono text-[11px] font-extrabold"
+              style={{ color: GRADE_COLORS[g] ?? "#475569" }}
             >
               {g}
             </span>
@@ -191,16 +186,13 @@ export function CommonTestAnalyticsSummary() {
       </div>
 
       {analytics.recommendedReview && (
-        <div
-          className="flex items-start gap-3 rounded-xl p-3"
-          style={{ background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.18)" }}
-        >
-          <Flame className="h-4 w-4 shrink-0 text-orange-400 mt-0.5" />
+        <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3">
+          <Flame className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
           <div>
-            <div className="font-mono text-[9px] font-bold uppercase tracking-wider text-orange-400 mb-0.5">
-              TODAY&apos;S RECOMMENDED REVIEW
+            <div className="mb-0.5 text-[11px] font-bold text-amber-700">
+              今日のおすすめ復習
             </div>
-            <p className="font-mono text-[10px] text-white/60">{analytics.recommendedReview}</p>
+            <p className="text-xs text-slate-600">{analytics.recommendedReview}</p>
           </div>
         </div>
       )}
@@ -222,16 +214,13 @@ function AnalyticCard({
   small?: boolean;
 }) {
   return (
-    <div
-      className="rounded-xl p-3 space-y-1"
-      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-    >
-      <div className="flex items-center gap-1.5 font-mono text-[9px] text-white/30">
+    <div className="space-y-1 rounded-xl border border-slate-200 bg-slate-50 p-3">
+      <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
         <span style={{ color }}>{icon}</span>
         {label}
       </div>
       <div
-        className={`font-mono font-bold leading-tight ${small ? "text-[11px]" : "text-lg"}`}
+        className={`font-bold leading-tight ${small ? "text-xs" : "font-mono text-lg"}`}
         style={{ color }}
       >
         {value}

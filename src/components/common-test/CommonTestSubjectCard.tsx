@@ -10,75 +10,49 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
   return (
     <Link
       href={route}
-      className="group relative flex flex-col overflow-hidden rounded-2xl transition-all duration-300"
-      style={{
-        background: `linear-gradient(145deg, rgba(${theme.glowRgb},0.07) 0%, rgba(0,0,0,0.55) 100%)`,
-        border: `1px solid rgba(${theme.glowRgb},0.20)`,
-      }}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:border-slate-300 hover:shadow-md"
     >
-      {/* Shimmer */}
-      <span
-        className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
-        style={{ background: `linear-gradient(90deg, transparent, rgba(${theme.glowRgb},0.09), transparent)` }}
-      />
+      {/* Subject accent bar */}
+      <span className="h-1 w-full" style={{ background: theme.primary }} />
 
-      <div className="relative flex flex-col gap-3 p-5 flex-1">
+      <div className="flex flex-1 flex-col gap-3 p-5">
         {/* Header row */}
         <div className="flex items-start justify-between">
           <div>
-            <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-white/35">
+            <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-400">
               {sections.length}大問構成
             </div>
-            <h2
-              className="mt-0.5 font-display text-2xl font-extrabold"
-              style={{ color: theme.primary, textShadow: `0 0 18px rgba(${theme.glowRgb},0.5)` }}
-            >
+            <h2 className="mt-1 flex items-center gap-2 font-display text-2xl font-extrabold text-slate-900">
+              <span className="inline-block h-3 w-3 rounded-full" style={{ background: theme.primary }} />
               {shortTitle}
             </h2>
           </div>
-          <div
-            className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 font-mono text-[10px] shrink-0"
-            style={{
-              background: `rgba(${theme.glowRgb},0.10)`,
-              border: `1px solid rgba(${theme.glowRgb},0.25)`,
-              color: theme.primary,
-            }}
-          >
+          <div className="flex shrink-0 items-center gap-1 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[11px] font-medium text-slate-600 ring-1 ring-slate-200">
             <Clock className="h-3 w-3" />
-            {examMinutes}min
+            {examMinutes}分
           </div>
         </div>
 
         {/* Description */}
-        <p className="font-mono text-[10px] leading-relaxed text-white/45 flex-1">
+        <p className="flex-1 text-xs leading-relaxed text-slate-500">
           {description.length > 80 ? description.slice(0, 80) + "…" : description}
         </p>
 
         {/* Score progress */}
         <div>
-          <div className="flex justify-between mb-1">
-            <span className="font-mono text-[9px] text-white/35">推定 {estimatedScoreMock} → 目標 {targetScoreDefault}点</span>
-            <span className="font-mono text-[9px]" style={{ color: theme.primary }}>{pct}%</span>
+          <div className="mb-1 flex justify-between text-[10px]">
+            <span className="text-slate-500">推定 {estimatedScoreMock} → 目標 {targetScoreDefault}点</span>
+            <span className="font-bold" style={{ color: theme.primary }}>{pct}%</span>
           </div>
-          <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.07)" }}>
-            <div
-              className="h-full rounded-full"
-              style={{
-                width: `${pct}%`,
-                background: `rgba(${theme.glowRgb},0.85)`,
-                boxShadow: `0 0 6px rgba(${theme.glowRgb},0.6)`,
-              }}
-            />
+          <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
+            <div className="h-full rounded-full" style={{ width: `${pct}%`, background: theme.primary }} />
           </div>
         </div>
 
         {/* CTA */}
-        <div
-          className="inline-flex items-center gap-1.5 font-mono text-[10px] font-semibold transition-all duration-200 group-hover:gap-2.5"
-          style={{ color: theme.primary }}
-        >
-          SIMULATION READY
-          <ArrowRight className="h-3 w-3" />
+        <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 transition-all duration-200 group-hover:gap-2.5">
+          演習を始める
+          <ArrowRight className="h-3.5 w-3.5" />
         </div>
       </div>
     </Link>

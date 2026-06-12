@@ -57,36 +57,26 @@ export function CommonTestGuidedReviewPanel({
   const unresolvedCount = orderedItems.filter((item) => item.isCorrect !== true).length;
 
   return (
-    <div
-      className={`rounded-2xl ${compact ? "p-4" : "p-5 sm:p-6"} space-y-4`}
-      style={{
-        background: `rgba(${theme.glowRgb},0.045)`,
-        border: `1px solid rgba(${theme.glowRgb},0.18)`,
-      }}
-    >
+    <div className={`rounded-2xl border border-slate-200 bg-white shadow-sm ${compact ? "p-4" : "p-5 sm:p-6"} space-y-4`}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <div
-            className="inline-flex items-center gap-2 rounded-full px-3 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.18em]"
-            style={{
-              background: `rgba(${theme.glowRgb},0.10)`,
-              border: `1px solid rgba(${theme.glowRgb},0.24)`,
-              color: theme.primary,
-            }}
+            className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold"
+            style={{ background: `${theme.primary}14`, color: theme.primary }}
           >
             <Lightbulb className="h-3.5 w-3.5" />
             段階復習
           </div>
-          <h3 className="font-mono text-sm font-extrabold text-white/80">{title}</h3>
-          <p className="max-w-2xl font-mono text-[10px] leading-relaxed text-white/38">
+          <h3 className="text-sm font-extrabold text-slate-900">{title}</h3>
+          <p className="max-w-2xl text-xs leading-relaxed text-slate-500">
             {description}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <MiniBadge label="対象" value={`${orderedItems.length}問`} color={theme.primary} />
-          {wrongCount > 0 && <MiniBadge label="不正解" value={`${wrongCount}問`} color="#ef4444" />}
+          {wrongCount > 0 && <MiniBadge label="不正解" value={`${wrongCount}問`} color="#e11d48" />}
           {unresolvedCount > wrongCount && (
-            <MiniBadge label="要確認" value={`${unresolvedCount - wrongCount}問`} color="#f97316" />
+            <MiniBadge label="要確認" value={`${unresolvedCount - wrongCount}問`} color="#ea580c" />
           )}
         </div>
       </div>
@@ -104,22 +94,19 @@ export function CommonTestGuidedReviewPanel({
           return (
             <div
               key={`${item.examId ?? "drill"}:${item.questionId}`}
-              className="overflow-hidden rounded-xl"
-              style={{
-                background: "rgba(0,0,0,0.22)",
-                border: `1px solid ${isOpen ? `rgba(${theme.glowRgb},0.30)` : "rgba(255,255,255,0.07)"}`,
-              }}
+              className="overflow-hidden rounded-xl border bg-white"
+              style={{ borderColor: isOpen ? `${theme.primary}40` : "#e2e8f0" }}
             >
               <button
                 type="button"
                 onClick={() => setOpenId(isOpen ? null : item.questionId)}
-                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-all hover:bg-white/[0.02]"
+                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50"
               >
                 <div
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-mono text-[10px] font-extrabold"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-mono text-[11px] font-extrabold"
                   style={{
-                    background: `${status.color}18`,
-                    border: `1px solid ${status.color}35`,
+                    background: `${status.color}14`,
+                    border: `1px solid ${status.color}33`,
                     color: status.color,
                   }}
                 >
@@ -128,43 +115,40 @@ export function CommonTestGuidedReviewPanel({
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span
-                      className="rounded px-1.5 py-0.5 font-mono text-[8px] font-bold"
+                      className="rounded px-1.5 py-0.5 text-[10px] font-bold"
                       style={{ color: status.color, background: `${status.color}14` }}
                     >
                       {status.label}
                     </span>
                     {item.difficultyStage && (
-                      <span className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono text-[8px] text-white/35">
+                      <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">
                         {formatStage(item.difficultyStage)}
                         {item.dependsOnPrevious ? "・前問利用" : ""}
                       </span>
                     )}
-                    <span className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono text-[8px] text-white/35">
+                    <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">
                       {formatAnswerFormat(item.answerFormat)}
                     </span>
                   </div>
-                  <div className="mt-1 truncate font-mono text-[11px] font-bold text-white/72">
+                  <div className="mt-1 truncate text-[13px] font-bold text-slate-800">
                     {item.title}
                   </div>
                 </div>
                 {isOpen ? (
-                  <ChevronUp className="h-4 w-4 shrink-0 text-white/30" />
+                  <ChevronUp className="h-4 w-4 shrink-0 text-slate-400" />
                 ) : (
-                  <ChevronDown className="h-4 w-4 shrink-0 text-white/30" />
+                  <ChevronDown className="h-4 w-4 shrink-0 text-slate-400" />
                 )}
               </button>
 
               {isOpen && (
-                <div className="space-y-4 px-4 pb-4 pt-1">
-                  <div
-                    className="rounded-lg p-3 space-y-3"
-                    style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-                  >
-                    <div className="font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-white/28">
+                <div className="space-y-4 border-t border-slate-100 px-4 pb-4 pt-3">
+                  <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div className="text-[11px] font-bold text-slate-400">
                       問題の確認
                     </div>
                     <QuestionMaterial item={item} />
-                    <div className="font-mono text-[12px] leading-relaxed text-white/74">
+                    <div className="text-[13px] leading-relaxed text-slate-700">
                       <RenderMath text={item.statement} />
                     </div>
                     <AnswerLine item={item} />
@@ -180,11 +164,11 @@ export function CommonTestGuidedReviewPanel({
                           border: `1px solid ${getStepColor(step.kind).border}`,
                         }}
                       >
-                        <div className="mb-1.5 flex items-center gap-2 font-mono text-[10px] font-extrabold" style={{ color: getStepColor(step.kind).text }}>
+                        <div className="mb-1.5 flex items-center gap-2 text-xs font-extrabold" style={{ color: getStepColor(step.kind).text }}>
                           {getStepIcon(step.kind)}
                           {step.label}
                         </div>
-                        <div className="font-mono text-[11px] leading-relaxed text-white/66">
+                        <div className="text-xs leading-relaxed text-slate-700">
                           <RenderMath text={step.body} />
                         </div>
                       </div>
@@ -196,8 +180,7 @@ export function CommonTestGuidedReviewPanel({
                       {item.skillTags.slice(0, 5).map((tag) => (
                         <span
                           key={tag}
-                          className="rounded px-1.5 py-0.5 font-mono text-[8px]"
-                          style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.38)" }}
+                          className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500"
                         >
                           {tag}
                         </span>
@@ -213,12 +196,8 @@ export function CommonTestGuidedReviewPanel({
                               [item.questionId]: Math.min(item.steps.length, revealed + 1),
                             }))
                           }
-                          className="rounded-lg px-3 py-2 font-mono text-[10px] font-bold transition-all hover:opacity-85"
-                          style={{
-                            background: `rgba(${theme.glowRgb},0.13)`,
-                            border: `1px solid rgba(${theme.glowRgb},0.32)`,
-                            color: theme.primary,
-                          }}
+                          className="rounded-lg px-3 py-2 text-xs font-bold text-white transition-opacity hover:opacity-90"
+                          style={{ background: theme.primary }}
                         >
                           次のヒントを開く
                         </button>
@@ -231,12 +210,7 @@ export function CommonTestGuidedReviewPanel({
                               current === item.questionId ? null : item.questionId
                             )
                           }
-                          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 font-mono text-[10px] font-bold transition-all hover:opacity-85"
-                          style={{
-                            background: "rgba(34,197,94,0.08)",
-                            border: "1px solid rgba(34,197,94,0.24)",
-                            color: "#86efac",
-                          }}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700 transition-colors hover:bg-emerald-100"
                         >
                           <PlusCircle className="h-3.5 w-3.5" />
                           この型の類題を解く
@@ -244,12 +218,7 @@ export function CommonTestGuidedReviewPanel({
                       )}
                       <Link
                         href={item.nextHref}
-                        className="rounded-lg px-3 py-2 font-mono text-[10px] font-bold transition-all hover:opacity-85"
-                        style={{
-                          background: "rgba(255,255,255,0.05)",
-                          border: "1px solid rgba(255,255,255,0.10)",
-                          color: "rgba(255,255,255,0.62)",
-                        }}
+                        className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 transition-colors hover:border-slate-300"
                       >
                         関連演習へ
                       </Link>
@@ -279,25 +248,25 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
   }
 
   return (
-    <div className="space-y-2 rounded-lg bg-white/[0.03] p-3">
+    <div className="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
       {(item.examContext || item.examPassage || item.context || item.passage) && (
-        <div className="whitespace-pre-wrap font-mono text-[10px] leading-relaxed text-white/45">
+        <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-600">
           <RenderMath text={item.examContext ?? item.examPassage ?? item.context ?? item.passage ?? ""} />
         </div>
       )}
       {item.sharedData && (
-        <div className="overflow-x-auto rounded border border-white/[0.08]">
+        <div className="overflow-x-auto rounded border border-slate-200">
           {item.sharedData.title && (
-            <div className="border-b border-white/[0.08] px-2 py-1.5 font-mono text-[9px] font-bold text-white/45">
+            <div className="border-b border-slate-200 bg-slate-50 px-2 py-1.5 text-[11px] font-bold text-slate-600">
               <RenderMath text={item.sharedData.title} />
             </div>
           )}
           {item.sharedData.headers?.length ? (
-            <table className="min-w-full text-left font-mono text-[9px] text-white/45">
+            <table className="min-w-full text-left text-[11px] text-slate-600">
               <thead>
                 <tr>
                   {item.sharedData.headers.map((header) => (
-                    <th key={header} className="border-b border-white/[0.08] px-2 py-1.5">
+                    <th key={header} className="border-b border-slate-200 bg-slate-50 px-2 py-1.5 font-bold">
                       <RenderMath text={header} />
                     </th>
                   ))}
@@ -307,7 +276,7 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
                 {(item.sharedData.rows ?? []).map((row, rowIndex) => (
                   <tr key={rowIndex}>
                     {row.map((cell, cellIndex) => (
-                      <td key={`${rowIndex}-${cellIndex}`} className="border-b border-white/[0.05] px-2 py-1.5">
+                      <td key={`${rowIndex}-${cellIndex}`} className="border-b border-slate-100 px-2 py-1.5">
                         <RenderMath text={cell} />
                       </td>
                     ))}
@@ -317,7 +286,7 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
             </table>
           ) : null}
           {item.sharedData.notes?.length ? (
-            <div className="space-y-1 px-2 py-1.5 font-mono text-[9px] text-white/35">
+            <div className="space-y-1 px-2 py-1.5 text-[11px] text-slate-500">
               {item.sharedData.notes.map((note) => (
                 <p key={note}>
                   <RenderMath text={note} />
@@ -328,7 +297,7 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
         </div>
       )}
       {item.sharedStem && (
-        <div className="rounded bg-white/[0.04] px-2 py-1.5 font-mono text-[10px] leading-relaxed text-white/45">
+        <div className="rounded bg-slate-100 px-2 py-1.5 text-xs leading-relaxed text-slate-600">
           <RenderMath text={item.sharedStem} />
         </div>
       )}
@@ -339,19 +308,19 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
 function AnswerLine({ item }: { item: CommonTestGuidedReviewItem }) {
   return (
     <div className="grid gap-2 sm:grid-cols-2">
-      <div className="rounded-lg bg-white/[0.035] p-3">
-        <div className="font-mono text-[8px] font-bold uppercase tracking-[0.14em] text-white/28">
+      <div className="rounded-lg border border-slate-200 bg-white p-3">
+        <div className="text-[10px] font-bold text-slate-400">
           あなたの解答
         </div>
-        <div className="mt-1 font-mono text-[11px] font-bold text-white/65">
+        <div className="mt-1 text-xs font-bold text-slate-700">
           {item.userAnswerText ? <RenderMath text={item.userAnswerText} /> : "未解答または未記録"}
         </div>
       </div>
-      <div className="rounded-lg bg-emerald-400/[0.06] p-3">
-        <div className="font-mono text-[8px] font-bold uppercase tracking-[0.14em] text-emerald-300/70">
+      <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+        <div className="text-[10px] font-bold text-emerald-600">
           正答
         </div>
-        <div className="mt-1 font-mono text-[11px] font-bold text-emerald-200/85">
+        <div className="mt-1 text-xs font-bold text-emerald-700">
           <RenderMath text={item.correctAnswerText} />
         </div>
       </div>
@@ -361,25 +330,25 @@ function AnswerLine({ item }: { item: CommonTestGuidedReviewItem }) {
 
 function MiniBadge({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="rounded-lg px-3 py-2 text-right" style={{ background: `${color}12`, border: `1px solid ${color}30` }}>
-      <div className="font-mono text-[8px] text-white/32">{label}</div>
+    <div className="rounded-lg px-3 py-2 text-right" style={{ background: `${color}12`, border: `1px solid ${color}33` }}>
+      <div className="text-[10px] text-slate-400">{label}</div>
       <div className="font-mono text-sm font-extrabold" style={{ color }}>{value}</div>
     </div>
   );
 }
 
 function getStatus(item: CommonTestGuidedReviewItem): { label: string; color: string } {
-  if (item.isCorrect === true) return { label: "正解", color: "#22c55e" };
-  if (item.userAnswerText) return { label: "不正解", color: "#ef4444" };
-  if (item.isCorrect === false) return { label: "未解答", color: "#f97316" };
-  return { label: "復習", color: "#fbbf24" };
+  if (item.isCorrect === true) return { label: "正解", color: "#059669" };
+  if (item.userAnswerText) return { label: "不正解", color: "#e11d48" };
+  if (item.isCorrect === false) return { label: "未解答", color: "#ea580c" };
+  return { label: "復習", color: "#d97706" };
 }
 
 function getStepColor(kind: string): { bg: string; border: string; text: string } {
-  if (kind === "explanation") return { bg: "rgba(34,197,94,0.055)", border: "rgba(34,197,94,0.18)", text: "#86efac" };
-  if (kind === "trap") return { bg: "rgba(239,68,68,0.055)", border: "rgba(239,68,68,0.18)", text: "#fca5a5" };
-  if (kind === "strategy") return { bg: "rgba(59,130,246,0.055)", border: "rgba(59,130,246,0.18)", text: "#93c5fd" };
-  return { bg: "rgba(251,191,36,0.055)", border: "rgba(251,191,36,0.18)", text: "#fde68a" };
+  if (kind === "explanation") return { bg: "#f0fdf4", border: "#bbf7d0", text: "#059669" };
+  if (kind === "trap") return { bg: "#fff1f2", border: "#fecdd3", text: "#e11d48" };
+  if (kind === "strategy") return { bg: "#eff6ff", border: "#bfdbfe", text: "#2563eb" };
+  return { bg: "#fffbeb", border: "#fde68a", text: "#d97706" };
 }
 
 function getStepIcon(kind: string) {

@@ -4,71 +4,51 @@ import { ArrowLeft, CalendarDays, History, Layers, Zap } from "lucide-react";
 import { CommonTestDailyPlaylistPanel } from "@/components/common-test/CommonTestDailyPlaylistPanel";
 
 export const metadata: Metadata = {
-  title: "今日の学習メニュー — COMMON TEST COMMAND CENTER",
+  title: "今日の学習メニュー — 共通テスト対策室",
   description:
     "共通テスト対策の今日の学習プレイリスト。履歴・目標点・復習キューをもとにルールベースで今日やるべきタスクを表示します。",
 };
 
 export default function CommonTestDailyPage() {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Ambient grid */}
+    <div className="relative min-h-screen bg-slate-50 text-slate-900">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(251,191,36,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(251,191,36,0.015) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-      {/* Radial glow */}
-      <div
-        className="pointer-events-none absolute -top-60 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(251,191,36,0.06) 0%, transparent 70%)",
+            "linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
+          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
         }}
       />
 
-      <div className="relative mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <div className="relative mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
         {/* Back */}
         <Link
           href="/common-test"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-amber-400/50 transition-colors hover:text-amber-400/80"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-800"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          COMMAND CENTER へ戻る
+          <ArrowLeft className="h-4 w-4" />
+          対策室へ戻る
         </Link>
 
         {/* Header */}
         <header className="mt-8 mb-8">
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] mb-4"
-            style={{
-              background: "rgba(251,191,36,0.08)",
-              border: "1px solid rgba(251,191,36,0.22)",
-              color: "#fbbf24",
-            }}
-          >
-            <CalendarDays className="h-3.5 w-3.5" />
-            DAILY STUDY PLAYLIST
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5">
+            <CalendarDays className="h-4 w-4 text-blue-600" />
+            <span className="text-xs font-semibold text-blue-700">今日の学習メニュー</span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-blue-400">
+              Daily Plan
+            </span>
           </div>
 
-          <h1
-            className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
-            style={{
-              background:
-                "linear-gradient(135deg, #fbbf24 0%, #ffffff 50%, #22d3ee 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            今日の学習メニュー
+          <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            今日やること
           </h1>
 
-          <p className="mt-3 font-mono text-sm text-white/40">
-            TODAY&apos;S STUDY PLAYLIST — 履歴・目標点・復習キューをもとに今日やるべきタスクを表示
+          <p className="mt-3 text-sm text-slate-600">
+            演習履歴・目標点・復習キューをもとに、今日取り組むべきタスクを自動で組み立てます。
           </p>
         </header>
 
@@ -78,47 +58,35 @@ export default function CommonTestDailyPage() {
         {/* Learning loop */}
         <section className="mt-10">
           <div className="mb-4 flex items-center gap-3">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
-              学習ループ
-            </span>
-            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+            <h2 className="text-sm font-bold text-slate-900">学習ループ</h2>
+            <div className="h-px flex-1 bg-slate-200" />
           </div>
 
-          <div
-            className="rounded-2xl p-5"
-            style={{
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(255,255,255,0.07)",
-            }}
-          >
-            <p className="mb-4 font-mono text-[10px] text-white/35">
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <p className="mb-4 text-xs text-slate-500">
               このサイクルを繰り返すと、共通テストの得点が着実に上がります。
             </p>
             <ol className="space-y-2">
               {[
-                { step: 1, label: "本番演習を受ける", href: "/common-test/simulator", color: "#fbbf24" },
-                { step: 2, label: "AI作戦会議で結果を確認する", href: "/common-test/history", color: "#22d3ee" },
-                { step: 3, label: "弱点攻略で優先課題を確認する", href: "/common-test/weakness", color: "#ef4444" },
-                { step: 4, label: "今日の学習メニューを進める", href: "/common-test/daily", color: "#fbbf24" },
-                { step: 5, label: "復習キューで定着させる", href: "/common-test/review", color: "#f97316" },
+                { step: 1, label: "本番演習を受ける", href: "/common-test/simulator", color: "#2563eb" },
+                { step: 2, label: "AI作戦会議で結果を確認する", href: "/common-test/history", color: "#0891b2" },
+                { step: 3, label: "弱点攻略で優先課題を確認する", href: "/common-test/weakness", color: "#e11d48" },
+                { step: 4, label: "今日の学習メニューを進める", href: "/common-test/daily", color: "#2563eb" },
+                { step: 5, label: "復習キューで定着させる", href: "/common-test/review", color: "#ea580c" },
               ].map(({ step, label, href, color }) => (
                 <li key={step}>
                   <a
                     href={href}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all hover:opacity-80"
-                    style={{
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid rgba(255,255,255,0.07)",
-                    }}
+                    className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 transition-colors hover:border-slate-300 hover:bg-white"
                   >
                     <span
-                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-mono text-[10px] font-bold"
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-mono text-[11px] font-bold"
                       style={{ background: `${color}1a`, border: `1px solid ${color}50`, color }}
                     >
                       {step}
                     </span>
-                    <span className="font-mono text-[11px] text-white/65">{label}</span>
-                    <span className="ml-auto font-mono text-[10px] text-white/20">→</span>
+                    <span className="text-[13px] text-slate-700">{label}</span>
+                    <span className="ml-auto text-slate-300">→</span>
                   </a>
                 </li>
               ))}
@@ -129,43 +97,35 @@ export default function CommonTestDailyPage() {
         {/* Quick nav */}
         <section className="mt-8">
           <div className="mb-4 flex items-center gap-3">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
-              関連ページ
-            </span>
-            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+            <h2 className="text-sm font-bold text-slate-900">関連ページ</h2>
+            <div className="h-px flex-1 bg-slate-200" />
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">
             <QuickLink
               href="/common-test/simulator"
-              icon={<Zap className="h-4 w-4 text-amber-400" />}
+              icon={<Zap className="h-4 w-4 text-blue-600" />}
               label="本番演習"
-              sub="EXAM SIMULATOR"
-              color="rgba(251,191,36,0.12)"
-              border="rgba(251,191,36,0.22)"
+              sub="模擬試験"
             />
             <QuickLink
               href="/common-test/history"
-              icon={<History className="h-4 w-4 text-cyan-400" />}
+              icon={<History className="h-4 w-4 text-cyan-600" />}
               label="AI作戦会議"
               sub="演習履歴・分析"
-              color="rgba(34,211,238,0.10)"
-              border="rgba(34,211,238,0.20)"
             />
             <QuickLink
               href="/common-test/review"
-              icon={<Layers className="h-4 w-4 text-orange-400" />}
+              icon={<Layers className="h-4 w-4 text-orange-600" />}
               label="復習キュー"
               sub="間隔反復演習"
-              color="rgba(249,115,22,0.10)"
-              border="rgba(249,115,22,0.20)"
             />
           </div>
         </section>
 
         {/* Footer */}
-        <p className="mt-16 text-center font-mono text-[10px] tracking-[0.2em] text-white/12 uppercase">
-          CYBER OS · Common Test Command Center · Phase 10
+        <p className="mt-16 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
+          CYBER OS · 共通テスト対策室
         </p>
       </div>
     </div>
@@ -177,30 +137,25 @@ function QuickLink({
   icon,
   label,
   sub,
-  color,
-  border,
 }: {
   href: string;
   icon: React.ReactNode;
   label: string;
   sub: string;
-  color: string;
-  border: string;
 }) {
   return (
     <Link
       href={href}
-      className="group flex items-center gap-3 rounded-xl p-4 transition-all hover:opacity-80"
-      style={{ background: color, border: `1px solid ${border}` }}
+      className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-slate-300 hover:shadow-md"
     >
       <div>{icon}</div>
       <div className="min-w-0">
-        <div className="font-mono text-[10px] font-bold text-white/80 truncate">
+        <div className="truncate text-xs font-bold text-slate-900">
           {label}
         </div>
-        <div className="font-mono text-[9px] text-white/35">{sub}</div>
+        <div className="text-[11px] text-slate-400">{sub}</div>
       </div>
-      <div className="ml-auto font-mono text-[10px] text-white/25 transition-all group-hover:text-white/50">
+      <div className="ml-auto text-slate-300 transition-colors group-hover:text-slate-500">
         →
       </div>
     </Link>

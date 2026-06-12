@@ -100,20 +100,12 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
   const allAdded = addedCount === candidates.length;
 
   return (
-    <div
-      className="rounded-2xl p-5 space-y-4"
-      style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
-    >
+    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       {/* Section header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span
-            className="font-mono text-[10px] font-bold uppercase tracking-[0.22em]"
-            style={{ color: theme.primary }}
-          >
-            ▸ REVIEW QUEUE CANDIDATES
-          </span>
-          <div className="flex-1 h-px" style={{ background: `rgba(${theme.glowRgb},0.18)` }} />
+        <div className="flex flex-1 items-center gap-3">
+          <h3 className="text-sm font-bold text-slate-900">復習キュー候補</h3>
+          <div className="h-px flex-1 bg-slate-200" />
         </div>
 
         {isLoggedIn && !allAdded && (
@@ -121,12 +113,8 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
             type="button"
             onClick={handleAddAll}
             disabled={addingAll}
-            className="shrink-0 flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-all disabled:opacity-50"
-            style={{
-              background: `rgba(${theme.glowRgb},0.12)`,
-              border: `1px solid rgba(${theme.glowRgb},0.30)`,
-              color: theme.primary,
-            }}
+            className="flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+            style={{ background: theme.primary }}
           >
             {addingAll ? (
               <Loader2 className="h-3 w-3 animate-spin" />
@@ -140,12 +128,9 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
 
       {/* Not logged in */}
       {isLoggedIn === false && (
-        <div
-          className="flex items-center gap-3 rounded-xl p-3"
-          style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
-        >
-          <LogIn className="h-4 w-4 text-white/40 shrink-0" />
-          <p className="font-mono text-[10px] text-white/45">
+        <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+          <LogIn className="h-4 w-4 shrink-0 text-slate-400" />
+          <p className="text-xs text-slate-500">
             ログインすると復習キューに保存できます。次回セッション以降も弱点を追跡できます。
           </p>
         </div>
@@ -153,12 +138,9 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
 
       {/* All added success */}
       {allAdded && (
-        <div
-          className="flex items-center gap-2 rounded-xl p-3"
-          style={{ background: "rgba(34,197,94,0.07)", border: "1px solid rgba(34,197,94,0.22)" }}
-        >
-          <CheckCircle2 className="h-4 w-4 text-green-400 shrink-0" />
-          <span className="font-mono text-[10px] text-green-400 font-bold">
+        <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+          <span className="text-xs font-bold text-emerald-700">
             {addedCount}件を復習キューに追加しました — 明日以降復習できます
           </span>
         </div>
@@ -175,68 +157,50 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
           return (
             <div
               key={c.questionId}
-              className="flex items-center gap-3 rounded-xl p-3"
-              style={{
-                background: isAdded
-                  ? "rgba(34,197,94,0.05)"
-                  : "rgba(255,255,255,0.02)",
-                border: `1px solid ${isAdded ? "rgba(34,197,94,0.18)" : "rgba(255,255,255,0.07)"}`,
-              }}
+              className="flex items-center gap-3 rounded-xl border bg-white p-3"
+              style={{ borderColor: isAdded ? "#a7f3d0" : "#e2e8f0", background: isAdded ? "#f0fdf4" : "#ffffff" }}
             >
               {/* Quadrant badge */}
-              <div
-                className="shrink-0 w-1.5 h-10 rounded-full"
-                style={{ background: c.quadrantColor }}
-              />
+              <div className="h-10 w-1.5 shrink-0 rounded-full" style={{ background: c.quadrantColor }} />
 
-              <div className="flex-1 min-w-0 space-y-1">
-                <div className="font-mono text-[10px] font-bold text-white/70 truncate">
+              <div className="min-w-0 flex-1 space-y-1">
+                <div className="truncate text-xs font-bold text-slate-700">
                   {c.title}
                 </div>
-                <div className="flex flex-wrap gap-1 items-center">
+                <div className="flex flex-wrap items-center gap-1">
                   <span
-                    className="rounded px-1.5 py-0.5 font-mono text-[8px] font-bold uppercase"
-                    style={{ color: c.quadrantColor, background: `${c.quadrantColor}15`, border: `1px solid ${c.quadrantColor}30` }}
+                    className="rounded px-1.5 py-0.5 text-[10px] font-bold"
+                    style={{ color: c.quadrantColor, background: `${c.quadrantColor}15` }}
                   >
                     {c.quadrantLabel}
                   </span>
                   {c.skillTags.slice(0, 3).map((t) => (
-                    <span
-                      key={t}
-                      className="rounded px-1 py-px font-mono text-[8px]"
-                      style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.35)" }}
-                    >
+                    <span key={t} className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">
                       {t}
                     </span>
                   ))}
                 </div>
-                <div className="font-mono text-[8px] text-white/25">推奨復習日：明日</div>
+                <div className="text-[10px] text-slate-400">推奨復習日：明日</div>
               </div>
 
               {/* Action */}
               {isLoggedIn && (
                 <div className="shrink-0">
                   {isAdded ? (
-                    <div
-                      className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 font-mono text-[9px] font-bold"
-                      style={{ background: "rgba(34,197,94,0.10)", color: "#22c55e", border: "1px solid rgba(34,197,94,0.25)" }}
-                    >
+                    <div className="flex items-center gap-1 rounded-lg bg-emerald-50 px-2.5 py-1.5 text-[11px] font-bold text-emerald-700">
                       <CheckCircle2 className="h-3 w-3" />
-                      ADDED
+                      追加済み
                     </div>
                   ) : isError ? (
                     <div className="flex flex-col items-end gap-1">
-                      <div
-                        className="flex items-center gap-1 rounded-lg px-2 py-1.5 font-mono text-[8px]"
-                        style={{ background: "rgba(239,68,68,0.10)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.25)" }}
-                      >
+                      <div className="flex items-center gap-1 rounded-lg bg-rose-50 px-2 py-1.5 text-[10px] text-rose-600">
                         <AlertCircle className="h-3 w-3" />
                         {st.errorMsg}
                       </div>
                       <button
                         type="button"
                         onClick={() => addOne(c)}
-                        className="font-mono text-[8px] text-white/30 hover:text-white/60"
+                        className="text-[10px] text-slate-400 hover:text-slate-600"
                       >
                         再試行
                       </button>
@@ -246,12 +210,8 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
                       type="button"
                       onClick={() => addOne(c)}
                       disabled={isLoading}
-                      className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider transition-all disabled:opacity-50"
-                      style={{
-                        background: `rgba(${theme.glowRgb},0.10)`,
-                        border: `1px solid rgba(${theme.glowRgb},0.28)`,
-                        color: theme.primary,
-                      }}
+                      className="flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-bold transition-opacity hover:opacity-80 disabled:opacity-50"
+                      style={{ background: `${theme.primary}12`, borderColor: `${theme.primary}40`, color: theme.primary }}
                     >
                       {isLoading ? (
                         <Loader2 className="h-3 w-3 animate-spin" />

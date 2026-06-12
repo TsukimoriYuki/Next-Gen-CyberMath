@@ -40,10 +40,7 @@ export function CommonTestVariantPracticePanel({
 
   if (!question || !validation?.ok) {
     return (
-      <div
-        className="rounded-xl p-4 font-mono text-[10px] leading-relaxed text-white/45"
-        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
-      >
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-500">
         この問題では、まだ安全に生成できる類題テンプレートがありません。
       </div>
     );
@@ -66,42 +63,29 @@ export function CommonTestVariantPracticePanel({
   }
 
   return (
-    <div
-      className="rounded-2xl p-4 sm:p-5 space-y-4"
-      style={{
-        background: `rgba(${theme.glowRgb},0.055)`,
-        border: `1px solid rgba(${theme.glowRgb},0.22)`,
-      }}
-    >
+    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div
-            className="inline-flex rounded-full px-3 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.18em]"
-            style={{
-              background: `rgba(${theme.glowRgb},0.12)`,
-              border: `1px solid rgba(${theme.glowRgb},0.30)`,
-              color: theme.primary,
-            }}
+            className="inline-flex rounded-full px-3 py-1 text-[11px] font-bold"
+            style={{ background: `${theme.primary}14`, color: theme.primary }}
           >
             テンプレート類題
           </div>
-          <h4 className="mt-2 font-mono text-[12px] font-extrabold text-white/82">
+          <h4 className="mt-2 text-sm font-extrabold text-slate-900">
             {question.title}
           </h4>
-          <p className="mt-1 font-mono text-[10px] leading-relaxed text-white/38">
+          <p className="mt-1 text-xs leading-relaxed text-slate-500">
             元の問題と同じ解法パターンで、数値だけを変えた検証済み類題です。
           </p>
         </div>
-        <div className="rounded-lg bg-white/[0.04] px-2.5 py-1.5 font-mono text-[9px] text-white/38">
+        <div className="rounded-lg bg-slate-100 px-2.5 py-1.5 font-mono text-[11px] text-slate-500">
           #{variantIndex + 1}
         </div>
       </div>
 
-      <div
-        className="rounded-xl p-4 space-y-4"
-        style={{ background: "rgba(0,0,0,0.20)", border: "1px solid rgba(255,255,255,0.08)" }}
-      >
-        <div className="font-mono text-[12px] leading-relaxed text-white/76">
+      <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className="text-[13px] leading-relaxed text-slate-800">
           <RenderMath text={question.statement} />
         </div>
 
@@ -115,15 +99,15 @@ export function CommonTestVariantPracticePanel({
                   type="button"
                   disabled={submitted}
                   onClick={() => setAnswer(option)}
-                  className="flex w-full items-start gap-3 rounded-lg p-3 text-left transition-all hover:opacity-85 disabled:cursor-default"
+                  className="flex w-full items-start gap-3 rounded-lg border bg-white p-3 text-left transition-colors hover:border-slate-300 disabled:cursor-default"
                   style={{
-                    background: selected ? `rgba(${theme.glowRgb},0.13)` : "rgba(255,255,255,0.035)",
-                    border: selected ? `1px solid rgba(${theme.glowRgb},0.44)` : "1px solid rgba(255,255,255,0.09)",
-                    color: selected ? theme.primary : "rgba(255,255,255,0.70)",
+                    background: selected ? `${theme.primary}10` : "#ffffff",
+                    borderColor: selected ? `${theme.primary}66` : "#e2e8f0",
+                    color: selected ? theme.primary : "#334155",
                   }}
                 >
-                  <span className="font-mono text-[11px] font-bold">{index + 1}</span>
-                  <span className="font-mono text-[11px] leading-relaxed">
+                  <span className="font-mono text-xs font-bold">{index + 1}</span>
+                  <span className="text-xs leading-relaxed">
                     <RenderMath text={option} />
                   </span>
                 </button>
@@ -147,20 +131,15 @@ export function CommonTestVariantPracticePanel({
             type="button"
             disabled={!normalizeCommonTestAnswer(answer)}
             onClick={handleSubmit}
-            className="rounded-lg px-4 py-2.5 font-mono text-[10px] font-bold transition-all hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
-            style={{
-              background: `rgba(${theme.glowRgb},0.16)`,
-              border: `1px solid rgba(${theme.glowRgb},0.38)`,
-              color: theme.primary,
-            }}
+            className="rounded-lg px-4 py-2.5 text-xs font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+            style={{ background: theme.primary }}
           >
             判定する
           </button>
           <button
             type="button"
             onClick={handleNextVariant}
-            className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2.5 font-mono text-[10px] font-bold text-white/55 transition-all hover:bg-white/[0.05]"
-            style={{ border: "1px solid rgba(255,255,255,0.10)" }}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-600 transition-colors hover:border-slate-300"
           >
             <RefreshCw className="h-3.5 w-3.5" />
             もう1問生成
@@ -169,8 +148,7 @@ export function CommonTestVariantPracticePanel({
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2.5 font-mono text-[10px] font-bold text-white/38 transition-all hover:bg-white/[0.05]"
-              style={{ border: "1px solid rgba(255,255,255,0.10)" }}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-500 transition-colors hover:border-slate-300"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               元の復習に戻る
@@ -181,15 +159,15 @@ export function CommonTestVariantPracticePanel({
 
       {submitted && (
         <div
-          className="rounded-xl p-4 space-y-3"
+          className="space-y-3 rounded-xl border p-4"
           style={{
-            background: isCorrect ? "rgba(34,197,94,0.07)" : "rgba(239,68,68,0.07)",
-            border: isCorrect ? "1px solid rgba(34,197,94,0.22)" : "1px solid rgba(239,68,68,0.22)",
+            background: isCorrect ? "#f0fdf4" : "#fff1f2",
+            borderColor: isCorrect ? "#bbf7d0" : "#fecdd3",
           }}
         >
           <div
-            className="flex items-center gap-2 font-mono text-[11px] font-extrabold"
-            style={{ color: isCorrect ? "#86efac" : "#fca5a5" }}
+            className="flex items-center gap-2 text-xs font-extrabold"
+            style={{ color: isCorrect ? "#059669" : "#e11d48" }}
           >
             {isCorrect ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
             {isCorrect ? "正解です" : "もう一度確認しましょう"}
@@ -209,11 +187,11 @@ export function CommonTestVariantPracticePanel({
 
 function AnswerBox({ label, value, good }: { label: string; value: string; good?: boolean }) {
   return (
-    <div className="rounded-lg bg-white/[0.035] p-3">
-      <div className="font-mono text-[8px] font-bold uppercase tracking-[0.14em] text-white/28">
+    <div className={`rounded-lg border p-3 ${good ? "border-emerald-200 bg-emerald-50" : "border-slate-200 bg-white"}`}>
+      <div className={`text-[10px] font-bold ${good ? "text-emerald-600" : "text-slate-400"}`}>
         {label}
       </div>
-      <div className={`mt-1 font-mono text-[12px] font-bold ${good ? "text-emerald-200/85" : "text-white/68"}`}>
+      <div className={`mt-1 text-[13px] font-bold ${good ? "text-emerald-700" : "text-slate-700"}`}>
         <RenderMath text={value} />
       </div>
     </div>
@@ -222,9 +200,9 @@ function AnswerBox({ label, value, good }: { label: string; value: string; good?
 
 function ReviewBlock({ label, text }: { label: string; text: string }) {
   return (
-    <div className="rounded-lg bg-white/[0.035] p-3">
-      <div className="mb-1 font-mono text-[9px] font-bold text-white/36">{label}</div>
-      <div className="font-mono text-[10px] leading-relaxed text-white/62">
+    <div className="rounded-lg border border-slate-200 bg-white p-3">
+      <div className="mb-1 text-[11px] font-bold text-slate-500">{label}</div>
+      <div className="text-xs leading-relaxed text-slate-600">
         <RenderMath text={text} />
       </div>
     </div>

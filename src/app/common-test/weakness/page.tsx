@@ -4,72 +4,51 @@ import { ArrowLeft, ShieldAlert, History, Layers, CalendarDays } from "lucide-re
 import { CommonTestWeaknessBossPanel } from "@/components/common-test/CommonTestWeaknessBossPanel";
 
 export const metadata: Metadata = {
-  title: "弱点攻略システム — COMMON TEST COMMAND CENTER",
+  title: "弱点攻略 — 共通テスト対策室",
   description:
-    "共通テスト対策の弱点ボス一覧。演習履歴・目標点差・時間超過をもとにルールベースで弱点を自動検出し、克服条件と次のアクションを提示します。",
+    "共通テスト対策の弱点一覧。演習履歴・目標点差・時間超過をもとにルールベースで弱点を自動検出し、克服条件と次のアクションを提示します。",
 };
 
 export default function CommonTestWeaknessPage() {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Ambient grid */}
+    <div className="relative min-h-screen bg-slate-50 text-slate-900">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(239,68,68,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(239,68,68,0.012) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-      {/* Radial glow — red tint for weakness theme */}
-      <div
-        className="pointer-events-none absolute -top-60 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)",
+            "linear-gradient(rgba(225,29,72,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(225,29,72,0.035) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
+          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
         }}
       />
 
-      <div className="relative mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <div className="relative mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
         {/* Back */}
         <Link
           href="/common-test"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-red-400/50 transition-colors hover:text-red-400/80"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-800"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          COMMAND CENTER へ戻る
+          <ArrowLeft className="h-4 w-4" />
+          対策室へ戻る
         </Link>
 
         {/* Header */}
         <header className="mt-8 mb-8">
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] mb-4"
-            style={{
-              background: "rgba(239,68,68,0.08)",
-              border: "1px solid rgba(239,68,68,0.22)",
-              color: "#ef4444",
-            }}
-          >
-            <ShieldAlert className="h-3.5 w-3.5" />
-            WEAKNESS BOSS SYSTEM
+          <div className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3.5 py-1.5">
+            <ShieldAlert className="h-4 w-4 text-rose-600" />
+            <span className="text-xs font-semibold text-rose-700">弱点攻略</span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-rose-400">
+              Weakness
+            </span>
           </div>
 
-          <h1
-            className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
-            style={{
-              background:
-                "linear-gradient(135deg, #ef4444 0%, #ffffff 45%, #f97316 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
+          <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
             弱点攻略
-            <br />
-            システム
           </h1>
 
-          <p className="mt-3 font-mono text-sm text-white/40">
-            WEAKNESS BOSS — 演習履歴・目標点差・時間超過から弱点を自動検出し、克服プランを提示
+          <p className="mt-3 text-sm text-slate-600">
+            演習履歴・目標点差・時間超過から弱点を自動で見つけ、克服プランと次のアクションを提示します。
           </p>
         </header>
 
@@ -79,46 +58,35 @@ export default function CommonTestWeaknessPage() {
         {/* Quick nav */}
         <section className="mt-10">
           <div className="mb-4 flex items-center gap-3">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
-              関連ページ
-            </span>
-            <div
-              className="flex-1 h-px"
-              style={{ background: "rgba(255,255,255,0.06)" }}
-            />
+            <h2 className="text-sm font-bold text-slate-900">関連ページ</h2>
+            <div className="h-px flex-1 bg-slate-200" />
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">
             <QuickLink
               href="/common-test/daily"
-              icon={<CalendarDays className="h-4 w-4 text-amber-400" />}
+              icon={<CalendarDays className="h-4 w-4 text-blue-600" />}
               label="今日の学習メニュー"
-              sub="Daily Playlist"
-              color="rgba(251,191,36,0.10)"
-              border="rgba(251,191,36,0.22)"
+              sub="Daily Plan"
             />
             <QuickLink
               href="/common-test/history"
-              icon={<History className="h-4 w-4 text-cyan-400" />}
+              icon={<History className="h-4 w-4 text-cyan-600" />}
               label="演習履歴 / AI分析"
               sub="AI作戦会議"
-              color="rgba(34,211,238,0.10)"
-              border="rgba(34,211,238,0.22)"
             />
             <QuickLink
               href="/common-test/review"
-              icon={<Layers className="h-4 w-4 text-orange-400" />}
+              icon={<Layers className="h-4 w-4 text-orange-600" />}
               label="復習キュー"
               sub="間隔反復演習"
-              color="rgba(249,115,22,0.10)"
-              border="rgba(249,115,22,0.22)"
             />
           </div>
         </section>
 
         {/* Footer */}
-        <p className="mt-16 text-center font-mono text-[10px] tracking-[0.2em] text-white/12 uppercase">
-          CYBER OS · Common Test Command Center · Phase 10
+        <p className="mt-16 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
+          CYBER OS · 共通テスト対策室
         </p>
       </div>
     </div>
@@ -130,30 +98,25 @@ function QuickLink({
   icon,
   label,
   sub,
-  color,
-  border,
 }: {
   href: string;
   icon: React.ReactNode;
   label: string;
   sub: string;
-  color: string;
-  border: string;
 }) {
   return (
     <Link
       href={href}
-      className="group flex items-center gap-3 rounded-xl p-4 transition-all hover:opacity-80"
-      style={{ background: color, border: `1px solid ${border}` }}
+      className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-slate-300 hover:shadow-md"
     >
       <div>{icon}</div>
       <div className="min-w-0">
-        <div className="font-mono text-[10px] font-bold text-white/80 truncate">
+        <div className="truncate text-xs font-bold text-slate-900">
           {label}
         </div>
-        <div className="font-mono text-[9px] text-white/35">{sub}</div>
+        <div className="text-[11px] text-slate-400">{sub}</div>
       </div>
-      <div className="ml-auto font-mono text-[10px] text-white/25 transition-all group-hover:text-white/50">
+      <div className="ml-auto text-slate-300 transition-colors group-hover:text-slate-500">
         →
       </div>
     </Link>

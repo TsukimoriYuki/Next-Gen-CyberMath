@@ -11,46 +11,39 @@ export const metadata: Metadata = {
 
 export default function CommonTestHistoryPage() {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Grid */}
+    <div className="relative min-h-screen bg-slate-50 text-slate-900">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(56,189,248,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.02) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+            "linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
+          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
         }}
       />
 
-      <div className="relative mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <div className="relative mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
         {/* Back */}
         <Link
           href="/common-test"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-cyan-400/60 transition-colors hover:text-cyan-400"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-800"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          COMMAND CENTER へ戻る
+          <ArrowLeft className="h-4 w-4" />
+          対策室へ戻る
         </Link>
 
         {/* Header */}
         <header className="mt-8 mb-8">
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] bg-cyan-400/08 border border-cyan-400/20 text-cyan-400 mb-4"
-            style={{ background: "rgba(56,189,248,0.08)", border: "1px solid rgba(56,189,248,0.20)", color: "#38bdf8" }}>
-            COMMON TEST
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5">
+            <span className="text-xs font-semibold text-blue-700">演習履歴</span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-blue-400">History</span>
           </div>
-          <h1
-            className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
-            style={{
-              background: "linear-gradient(135deg, #38bdf8 0%, #ffffff 55%, #a78bfa 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
+          <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
             演習履歴
           </h1>
-          <p className="mt-3 font-mono text-sm text-white/40">
-            DRILL HISTORY — 自信度×正誤マトリクスによる弱点分析
+          <p className="mt-3 text-sm text-slate-600">
+            自信度×正誤マトリクスで、つまずきの傾向を可視化します。
           </p>
         </header>
 
@@ -58,11 +51,10 @@ export default function CommonTestHistoryPage() {
 
         {/* ── Exam Simulator 履歴 ─────────────────────────────────────────── */}
         <section className="mt-12">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">
-              ◉ EXAM SIMULATOR 履歴
-            </span>
-            <div className="flex-1 h-px bg-white/[0.06]" />
+          <div className="mb-6 flex items-center gap-3">
+            <h2 className="text-sm font-bold text-slate-900">本番演習の履歴</h2>
+            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-400">Exam History</span>
+            <div className="h-px flex-1 bg-slate-200" />
           </div>
           <CommonTestExamHistoryPanel />
         </section>

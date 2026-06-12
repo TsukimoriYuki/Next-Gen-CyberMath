@@ -41,44 +41,44 @@ interface TypeConfig {
 const TYPE_CONFIG: Record<CommonTestDailyTaskType, TypeConfig> = {
   review: {
     label: "復習",
-    color: "#f97316",
-    bg: "rgba(249,115,22,0.10)",
-    border: "rgba(249,115,22,0.28)",
+    color: "#ea580c",
+    bg: "#fff7ed",
+    border: "#fed7aa",
     Icon: RefreshCw,
   },
   drill: {
     label: "演習",
-    color: "#38bdf8",
-    bg: "rgba(56,189,248,0.10)",
-    border: "rgba(56,189,248,0.28)",
+    color: "#2563eb",
+    bg: "#eff6ff",
+    border: "#bfdbfe",
     Icon: BookOpen,
   },
   exam: {
     label: "模試",
-    color: "#fbbf24",
-    bg: "rgba(251,191,36,0.10)",
-    border: "rgba(251,191,36,0.28)",
+    color: "#d97706",
+    bg: "#fffbeb",
+    border: "#fde68a",
     Icon: Zap,
   },
   analysis: {
     label: "分析",
-    color: "#22d3ee",
-    bg: "rgba(34,211,238,0.10)",
-    border: "rgba(34,211,238,0.28)",
+    color: "#0891b2",
+    bg: "#ecfeff",
+    border: "#a5f3fc",
     Icon: Brain,
   },
   "mark-sheet": {
     label: "記述",
-    color: "#a78bfa",
-    bg: "rgba(167,139,250,0.10)",
-    border: "rgba(167,139,250,0.28)",
+    color: "#7c3aed",
+    bg: "#f5f3ff",
+    border: "#ddd6fe",
     Icon: FileText,
   },
   target: {
     label: "目標",
-    color: "#22c55e",
-    bg: "rgba(34,197,94,0.10)",
-    border: "rgba(34,197,94,0.28)",
+    color: "#059669",
+    bg: "#ecfdf5",
+    border: "#a7f3d0",
     Icon: Target,
   },
 };
@@ -89,9 +89,9 @@ const PRIORITY_BADGE: Record<
 > = {
   high: {
     label: "優先",
-    color: "#ef4444",
-    bg: "rgba(239,68,68,0.12)",
-    border: "rgba(239,68,68,0.30)",
+    color: "#e11d48",
+    bg: "#fff1f2",
+    border: "#fecdd3",
   },
   medium: null,
   low: null,
@@ -117,19 +117,10 @@ function TaskRow({
   const priorityBadge = PRIORITY_BADGE[task.priority];
 
   return (
-    <div
-      className="px-4 py-3 sm:px-5 sm:py-4"
-      style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
-    >
+    <div className="border-b border-slate-100 px-4 py-3 last:border-b-0 sm:px-5 sm:py-4">
       <div className="flex items-start gap-3">
         {/* 番号 */}
-        <div
-          className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-[9px] font-bold"
-          style={{
-            background: "rgba(255,255,255,0.06)",
-            color: "rgba(255,255,255,0.35)",
-          }}
-        >
+        <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 font-mono text-[9px] font-bold text-slate-500">
           {index + 1}
         </div>
 
@@ -145,12 +136,12 @@ function TaskRow({
         <div className="min-w-0 flex-1">
           {/* タイトル行 */}
           <div className="mb-0.5 flex flex-wrap items-center gap-1.5">
-            <span className="font-display text-sm font-bold text-white">
+            <span className="text-sm font-bold text-slate-900">
               {task.title}
             </span>
             {priorityBadge && (
               <span
-                className="rounded-full px-1.5 py-0.5 font-mono text-[8px] font-bold"
+                className="rounded-full px-1.5 py-0.5 text-[10px] font-bold"
                 style={{
                   background: priorityBadge.bg,
                   border: `1px solid ${priorityBadge.border}`,
@@ -161,7 +152,7 @@ function TaskRow({
               </span>
             )}
             <span
-              className="rounded px-1.5 py-0.5 font-mono text-[8px] font-bold uppercase tracking-wider"
+              className="rounded px-1.5 py-0.5 text-[10px] font-bold"
               style={{
                 background: cfg.bg,
                 border: `1px solid ${cfg.border}`,
@@ -173,25 +164,25 @@ function TaskRow({
           </div>
 
           {/* 説明 */}
-          <p className="font-mono text-[10px] leading-relaxed text-white/45">
+          <p className="text-xs leading-relaxed text-slate-600">
             {task.description}
           </p>
 
           {/* 理由（淡い） */}
-          <p className="mt-1 font-mono text-[9px] leading-relaxed text-white/25">
+          <p className="mt-1 text-[11px] leading-relaxed text-slate-400">
             ⓘ {task.reason}
           </p>
         </div>
 
         {/* 時間 + 開始ボタン（縦並び） */}
         <div className="flex shrink-0 flex-col items-end gap-2">
-          <div className="flex items-center gap-1 font-mono text-[10px] text-white/30">
+          <div className="flex items-center gap-1 text-[11px] text-slate-400">
             <Clock className="h-3 w-3" />
             {task.estimatedMinutes}分
           </div>
           <Link
             href={task.href}
-            className="rounded-lg px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider transition-all hover:opacity-80"
+            className="rounded-lg px-3 py-1.5 text-[11px] font-bold transition-opacity hover:opacity-80"
             style={{
               background: cfg.bg,
               border: `1px solid ${cfg.border}`,
@@ -210,25 +201,11 @@ function TaskRow({
 
 function PlaylistSkeleton() {
   return (
-    <div
-      className="animate-pulse rounded-2xl overflow-hidden"
-      style={{
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(251,191,36,0.12)",
-        minHeight: 200,
-      }}
-    >
-      <div
-        className="h-10 w-full"
-        style={{ background: "rgba(255,255,255,0.03)" }}
-      />
+    <div className="animate-pulse overflow-hidden rounded-2xl border border-slate-200 bg-white" style={{ minHeight: 200 }}>
+      <div className="h-10 w-full bg-slate-100" />
       <div className="space-y-3 p-5">
         {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="h-16 rounded-xl"
-            style={{ background: "rgba(255,255,255,0.03)" }}
-          />
+          <div key={i} className="h-16 rounded-xl bg-slate-100" />
         ))}
       </div>
     </div>
@@ -307,27 +284,15 @@ export function CommonTestDailyPlaylistPanel({ showFullLink = true }: Props) {
   if (!playlist) return <PlaylistSkeleton />;
 
   return (
-    <div
-      className="overflow-hidden rounded-2xl"
-      style={{
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(251,191,36,0.18)",
-      }}
-    >
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       {/* ── ヘッダー ── */}
-      <div
-        className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 sm:px-5"
-        style={{
-          background: "rgba(251,191,36,0.04)",
-          borderBottom: "1px solid rgba(251,191,36,0.12)",
-        }}
-      >
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-slate-200 bg-slate-50 px-4 py-3 sm:px-5">
         <div className="flex min-w-0 items-center gap-2">
-          <CalendarDays className="h-4 w-4 shrink-0 text-amber-400" />
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400">
+          <CalendarDays className="h-4 w-4 shrink-0 text-blue-600" />
+          <span className="text-sm font-bold text-slate-900">
             今日の学習メニュー
           </span>
-          <span className="hidden font-mono text-[10px] text-white/25 sm:inline">
+          <span className="hidden font-mono text-[10px] text-slate-400 sm:inline">
             {playlist.date}
           </span>
         </div>
@@ -338,20 +303,11 @@ export function CommonTestDailyPlaylistPanel({ showFullLink = true }: Props) {
             <button
               key={m}
               onClick={() => handleModeChange(m)}
-              className="rounded-md px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider transition-all"
-              style={
+              className={`rounded-md px-2.5 py-1.5 text-[11px] font-bold transition-colors ${
                 mode === m
-                  ? {
-                      background: "rgba(251,191,36,0.18)",
-                      border: "1px solid rgba(251,191,36,0.40)",
-                      color: "#fbbf24",
-                    }
-                  : {
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.10)",
-                      color: "rgba(255,255,255,0.35)",
-                    }
-              }
+                  ? "bg-blue-600 text-white"
+                  : "border border-slate-200 bg-white text-slate-500 hover:border-slate-300"
+              }`}
             >
               {MODE_LABELS[m]}
             </button>
@@ -360,18 +316,15 @@ export function CommonTestDailyPlaylistPanel({ showFullLink = true }: Props) {
       </div>
 
       {/* ── サマリー ── */}
-      <div
-        className="px-4 py-3 sm:px-5"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
-      >
-        <p className="font-mono text-[11px] leading-relaxed text-white/55">
+      <div className="border-b border-slate-100 px-4 py-3 sm:px-5">
+        <p className="text-xs leading-relaxed text-slate-600">
           {playlist.summary}
         </p>
       </div>
 
       {/* ── タスク一覧 ── */}
       {playlist.tasks.length === 0 ? (
-        <div className="px-5 py-8 text-center font-mono text-[10px] text-white/25">
+        <div className="px-5 py-8 text-center text-xs text-slate-400">
           演習データがありません — まず大問別演習か本番演習を受けてください。
         </div>
       ) : (
@@ -383,24 +336,20 @@ export function CommonTestDailyPlaylistPanel({ showFullLink = true }: Props) {
       )}
 
       {/* ── フッター ── */}
-      <div
-        className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 sm:px-5"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-      >
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 bg-slate-50 px-4 py-3 sm:px-5">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-white/30">
+          <span className="text-xs text-slate-500">
             推定{" "}
-            <span className="font-bold text-white/50">
+            <span className="font-bold text-slate-700">
               {playlist.totalMinutes}分
             </span>
           </span>
 
           {/* 未ログイン通知 */}
           {isLoggedIn === false && (
-            <div className="flex items-center gap-1.5 rounded-lg px-2.5 py-1"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <LogIn className="h-3 w-3 text-white/25" />
-              <span className="font-mono text-[9px] text-white/30">
+            <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1">
+              <LogIn className="h-3 w-3 text-slate-400" />
+              <span className="text-[11px] text-slate-500">
                 ログインで復習キュー連携
               </span>
             </div>
@@ -411,12 +360,7 @@ export function CommonTestDailyPlaylistPanel({ showFullLink = true }: Props) {
           {/* 再計算 */}
           <button
             onClick={() => setCalcKey((k) => k + 1)}
-            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider transition-all hover:opacity-80"
-            style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.10)",
-              color: "rgba(255,255,255,0.40)",
-            }}
+            className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-bold text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-700"
           >
             <RotateCcw className="h-3 w-3" />
             再計算
@@ -426,12 +370,7 @@ export function CommonTestDailyPlaylistPanel({ showFullLink = true }: Props) {
           {showFullLink && (
             <Link
               href="/common-test/daily"
-              className="flex items-center gap-1 rounded-lg px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider transition-all hover:opacity-80"
-              style={{
-                background: "rgba(251,191,36,0.10)",
-                border: "1px solid rgba(251,191,36,0.28)",
-                color: "#fbbf24",
-              }}
+              className="flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-bold text-white transition-colors hover:bg-blue-700"
             >
               詳細
               <ChevronRight className="h-3 w-3" />

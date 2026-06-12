@@ -6,14 +6,21 @@ import type { CommonTestExamPreset } from "@/data/common-test-exams";
 import { getCommonTestExamQuestions } from "@/lib/common-test-exams";
 
 export const metadata: Metadata = {
-  title: "EXAM SIMULATOR — COMMON TEST COMMAND CENTER",
-  description: "共通テスト本番形式70/80分模擬試験。時間内スコア・時間外スコアの二重評価で本番対応力を測定する。",
+  title: "本番演習 — 共通テスト対策室",
+  description:
+    "共通テスト本番形式70/80分模擬試験。時間内スコア・時間外スコアの二重評価で本番対応力を測定する。",
 };
 
 const SUBJECT_ORDER: Record<string, number> = {
   "math-1a": 0,
   "math-2bc": 1,
   "english-reading": 2,
+};
+
+const SUBJECT_NAMES: Record<string, string> = {
+  "math-1a": "数学IA",
+  "math-2bc": "数学II・B・C",
+  "english-reading": "英語リーディング",
 };
 
 export default function SimulatorIndexPage() {
@@ -24,99 +31,102 @@ export default function SimulatorIndexPage() {
     return a.id.localeCompare(b.id);
   });
 
+  // 科目ごとにグループ化
+  const grouped = presets.reduce<Record<string, CommonTestExamPreset[]>>((acc, p) => {
+    (acc[p.subjectId] ??= []).push(p);
+    return acc;
+  }, {});
+  const subjectIds = Object.keys(grouped).sort(
+    (a, b) => (SUBJECT_ORDER[a] ?? 9) - (SUBJECT_ORDER[b] ?? 9),
+  );
+
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Grid */}
+    <div className="relative min-h-screen bg-slate-50 text-slate-900">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(251,191,36,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.015) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+            "linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
+          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 420px)",
         }}
       />
-      <div
-        className="pointer-events-none absolute -top-60 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(251,191,36,0.06) 0%, transparent 70%)" }}
-      />
 
-      <div className="relative mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
+      <div className="relative mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
         {/* Back */}
         <Link
           href="/common-test"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-amber-400/50 transition-colors hover:text-amber-400/80"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-800"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          COMMAND CENTER へ戻る
+          <ArrowLeft className="h-4 w-4" />
+          対策室へ戻る
         </Link>
 
         {/* Header */}
-        <header className="mt-8 mb-10">
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] mb-4"
-            style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.22)", color: "#fbbf24" }}
-          >
-            <Zap className="h-3.5 w-3.5" />
-            EXAM SIMULATOR
+        <header className="mt-8 mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5">
+            <Zap className="h-4 w-4 text-blue-600" />
+            <span className="text-xs font-semibold text-blue-700">本番演習</span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-blue-400">
+              Exam Simulator
+            </span>
           </div>
 
-          <h1
-            className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
-            style={{
-              background: "linear-gradient(135deg, #fbbf24 0%, #ffffff 50%, #22d3ee 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            本番再現
-            <br />
-            模擬試験
+          <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            本番形式の模擬試験
           </h1>
 
-          <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed text-white/40">
-            本番と同じ時間制限で全大問を通しで解く。
-            時間内スコアと時間外スコアを二重評価し、本番対応力の現在地を測定する。
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-600">
+            本番と同じ時間制限で全大問を通しで解きます。各科目に第1〜第3回を用意しました。
           </p>
 
           {/* Dual score explanation */}
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-lg">
-            <div
-              className="rounded-xl p-4"
-              style={{ background: "rgba(251,191,36,0.06)", border: "1px solid rgba(251,191,36,0.18)" }}
-            >
-              <div className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-amber-400/70 mb-1">
-                TIME-LIMIT SCORE
+          <div className="mt-6 grid max-w-lg grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="mb-1 flex items-center gap-1.5">
+                <span className="text-xs font-bold text-slate-900">時間内スコア</span>
+                <span className="font-mono text-[9px] uppercase tracking-wider text-slate-400">Time-limit</span>
               </div>
-              <div className="font-mono text-xs text-white/55 leading-relaxed">
-                時間内に回答した問題の正答数。これが本番の実力。
+              <div className="text-xs leading-relaxed text-slate-500">
+                時間内に回答した問題の正答数。これが本番の実力です。
               </div>
             </div>
-            <div
-              className="rounded-xl p-4"
-              style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.18)" }}
-            >
-              <div className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-cyan-400/70 mb-1">
-                UNLIMITED SCORE
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="mb-1 flex items-center gap-1.5">
+                <span className="text-xs font-bold text-slate-900">時間外スコア</span>
+                <span className="font-mono text-[9px] uppercase tracking-wider text-slate-400">Unlimited</span>
               </div>
-              <div className="font-mono text-xs text-white/55 leading-relaxed">
-                時間を気にせず全問回答した場合の正答数。知識の上限を示す。
+              <div className="text-xs leading-relaxed text-slate-500">
+                時間を気にせず全問回答した場合の正答数。知識の上限を示します。
               </div>
             </div>
           </div>
         </header>
 
-        {/* Exam preset cards */}
-        <section>
-          <div className="grid gap-5 sm:grid-cols-3">
-            {presets.map((preset) => (
-              <ExamPresetCard key={preset.id} preset={preset} />
-            ))}
-          </div>
-        </section>
+        {/* Exam preset cards — 科目ごと */}
+        {subjectIds.map((subjectId) => (
+          <section key={subjectId} className="mb-8">
+            <div className="mb-4 flex items-center gap-3">
+              <h2 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                <span
+                  className="inline-block h-3 w-3 rounded-full"
+                  style={{ background: grouped[subjectId][0]?.theme.primary }}
+                />
+                {SUBJECT_NAMES[subjectId] ?? subjectId}
+              </h2>
+              <div className="h-px flex-1 bg-slate-200" />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {grouped[subjectId].map((preset) => (
+                <ExamPresetCard key={preset.id} preset={preset} />
+              ))}
+            </div>
+          </section>
+        ))}
 
-        <footer className="mt-16 text-center font-mono text-[10px] tracking-[0.2em] text-white/15 uppercase">
-          CYBER OS · Exam Simulator · Phase 5
+        <footer className="mt-12 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
+          CYBER OS · 本番演習
         </footer>
       </div>
     </div>
@@ -129,33 +139,23 @@ function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
   const sectionCount = new Set(questions.map((q) => q.sectionId)).size;
 
   return (
-    <div
-      className="relative flex flex-col gap-4 rounded-2xl p-5 transition-all duration-300"
-      style={{
-        background: `linear-gradient(145deg, rgba(${preset.theme.glowRgb},0.06) 0%, rgba(0,0,0,0.5) 100%)`,
-        border: `1px solid rgba(${preset.theme.glowRgb},0.22)`,
-      }}
-    >
+    <div className="relative flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
       {/* Icon + round badge */}
       <div className="flex items-center justify-between">
         <div
-          className="flex h-12 w-12 items-center justify-center rounded-xl font-mono text-sm font-extrabold"
+          className="flex h-11 w-11 items-center justify-center rounded-xl border font-mono text-xs font-extrabold"
           style={{
-            background: `rgba(${preset.theme.glowRgb},0.12)`,
-            border: `1px solid rgba(${preset.theme.glowRgb},0.30)`,
+            background: `${preset.theme.primary}12`,
             color: preset.theme.primary,
+            borderColor: `${preset.theme.primary}33`,
           }}
         >
           {preset.icon}
         </div>
         {preset.roundLabel && (
           <span
-            className="rounded-full px-2.5 py-1 font-mono text-[10px] font-bold"
-            style={{
-              background: `rgba(${preset.theme.glowRgb},0.10)`,
-              border: `1px solid rgba(${preset.theme.glowRgb},0.28)`,
-              color: preset.theme.primary,
-            }}
+            className="rounded-full px-2.5 py-1 text-[11px] font-bold"
+            style={{ background: `${preset.theme.primary}12`, color: preset.theme.primary }}
           >
             {preset.roundLabel}
           </span>
@@ -164,63 +164,46 @@ function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
 
       {/* Title */}
       <div>
-        <div className="font-display text-base font-extrabold text-white leading-tight">
+        <div className="text-base font-extrabold leading-tight text-slate-900">
           {preset.subjectId === "math-1a"
             ? "数学IA"
             : preset.subjectId === "math-2bc"
             ? "数学II・B・C"
             : "英語リーディング"}
         </div>
-        <div className="mt-0.5 font-mono text-[10px]" style={{ color: preset.theme.primary }}>
+        <div className="mt-0.5 text-[11px] font-medium text-slate-500">
           {preset.shortTitle}
         </div>
       </div>
 
       {/* Stats */}
-      <div className="flex gap-3 flex-wrap">
-        <StatPill icon={<Clock className="h-3 w-3" />} label={`${minutes}分`} color={preset.theme.primary} />
-        <StatPill icon={<BookOpen className="h-3 w-3" />} label={`${sectionCount}大問`} color={preset.theme.primary} />
-        <StatPill icon={<Zap className="h-3 w-3" />} label={`${questions.length}問`} color={preset.theme.primary} />
+      <div className="flex flex-wrap gap-2">
+        <StatPill icon={<Clock className="h-3 w-3" />} label={`${minutes}分`} />
+        <StatPill icon={<BookOpen className="h-3 w-3" />} label={`${sectionCount}大問`} />
+        <StatPill icon={<Zap className="h-3 w-3" />} label={`${questions.length}問`} />
       </div>
 
       {/* Description */}
-      <p className="font-mono text-[10px] leading-relaxed text-white/40 flex-1">
+      <p className="flex-1 text-[11px] leading-relaxed text-slate-500">
         {preset.description}
       </p>
 
       {/* Start button */}
       <Link
         href={`/common-test/simulator/${preset.id}`}
-        className="mt-auto flex items-center justify-center gap-2 rounded-xl py-3 font-mono text-xs font-bold uppercase tracking-[0.15em] transition-all hover:opacity-90 active:scale-[0.98]"
-        style={{
-          background: `linear-gradient(135deg, rgba(${preset.theme.glowRgb},0.25), rgba(${preset.theme.glowRgb},0.12))`,
-          border: `1px solid rgba(${preset.theme.glowRgb},0.40)`,
-          color: preset.theme.primary,
-          boxShadow: `0 0 20px rgba(${preset.theme.glowRgb},0.12)`,
-        }}
+        className="mt-auto flex items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-xs font-bold text-white transition-colors hover:bg-blue-700 active:scale-[0.98]"
       >
         <Zap className="h-3.5 w-3.5" />
-        試験を開始
+        試験を始める
       </Link>
     </div>
   );
 }
 
-function StatPill({
-  icon,
-  label,
-  color,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  color: string;
-}) {
+function StatPill({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <div
-      className="flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[9px]"
-      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", color: "rgba(255,255,255,0.45)" }}
-    >
-      <span style={{ color }}>{icon}</span>
+    <div className="flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-1 text-[10px] text-slate-600 ring-1 ring-slate-200">
+      <span className="text-slate-400">{icon}</span>
       {label}
     </div>
   );

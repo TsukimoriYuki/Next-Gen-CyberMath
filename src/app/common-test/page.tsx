@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Cpu, History, Zap, Brain, RefreshCw, CalendarDays, ShieldAlert } from "lucide-react";
+import { ArrowLeft, History, Zap, Brain, RefreshCw, CalendarDays, ShieldAlert, BookOpen, GraduationCap } from "lucide-react";
 import { COMMON_TEST_SUBJECTS, DAILY_MISSIONS } from "@/data/common-test";
 import { CommonTestTargetScorePanel } from "@/components/common-test/CommonTestTargetScorePanel";
 import { CommonTestMissionCard } from "@/components/common-test/CommonTestMissionCard";
@@ -11,122 +11,80 @@ import { CommonTestDailyPlaylistPanel } from "@/components/common-test/CommonTes
 import { CommonTestWeaknessBossPanel } from "@/components/common-test/CommonTestWeaknessBossPanel";
 
 export const metadata: Metadata = {
-  title: "COMMON TEST COMMAND CENTER",
+  title: "共通テスト対策室",
   description:
-    "共通テスト戦術司令室。数学IA・数学II/B/C・英語Rを統合管理し、弱点特定から本番再現まで一貫して攻略する。",
+    "数学IA・数学II/B/C・英語リーディングを一元管理する共通テスト対策ダッシュボード。大問別演習・弱点分析・本番演習・AI作戦会議を一画面から。",
 };
 
 export default function CommonTestPage() {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
-
-      {/* Ambient grid */}
+    <div className="relative min-h-screen bg-slate-50 text-slate-900">
+      {/* Subtle academic grid — cyber accent, very faint */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(251,191,36,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.02) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+            "linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 480px)",
+          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 480px)",
         }}
       />
-      {/* Radial glows */}
-      <div
-        className="pointer-events-none absolute -top-80 left-1/2 -translate-x-1/2 h-[600px] w-[600px] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(251,191,36,0.07) 0%, transparent 70%)" }}
-      />
-      <div
-        className="pointer-events-none absolute -bottom-60 -right-60 h-96 w-96 rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(34,211,238,0.06) 0%, transparent 70%)" }}
-      />
 
-      <div className="relative mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
+      <div className="relative mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
 
         {/* Back */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-white/35 transition-colors hover:text-white/65"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-800"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
+          <ArrowLeft className="h-4 w-4" />
           ポータルへ戻る
         </Link>
 
         {/* ══ HERO ═══════════════════════════════════════════════════════════ */}
-        <header className="mt-10 text-center">
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2 font-mono text-[11px] uppercase tracking-[0.3em]"
-            style={{
-              background: "rgba(251,191,36,0.08)",
-              border: "1px solid rgba(251,191,36,0.28)",
-              color: "#fbbf24",
-            }}
-          >
-            <Cpu className="h-3.5 w-3.5" />
-            COMMON TEST COMMAND CENTER
+        <header className="mt-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5">
+            <GraduationCap className="h-4 w-4 text-blue-600" />
+            <span className="text-xs font-semibold text-blue-700">共通テスト対策室</span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-blue-400">
+              Command Center
+            </span>
           </div>
 
-          <h1
-            className="mt-5 font-display text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl"
-            style={{
-              background: "linear-gradient(135deg, #fbbf24 0%, #ffffff 45%, #22d3ee 85%, #a855f7 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              lineHeight: 1.1,
-            }}
-          >
-            共通テスト
-            <br />
-            戦術司令室
+          <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            学習ダッシュボード
           </h1>
 
-          <p className="mt-5 mx-auto max-w-xl font-mono text-sm leading-relaxed text-white/45">
-            数学IA・数学II/B/C・英語リーディングを一元管理する。
-            <br />
-            大問別演習 → 弱点検出 → 本番再現 → 目標突破。
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600">
+            数学IA・数学II/B/C・英語リーディングを一元管理。
+            大問別演習で弱点を特定し、本番演習で実戦力を測り、目標点まで一直線に伸ばします。
           </p>
-
-          {/* Scan line decoration */}
-          <div
-            className="mx-auto mt-8 h-px max-w-sm"
-            style={{ background: "linear-gradient(90deg, transparent, rgba(251,191,36,0.4), rgba(34,211,238,0.4), transparent)" }}
-          />
         </header>
 
-        {/* ══ STATUS PANEL ════════════════════════════════════════════════════ */}
-        <section className="mt-10">
-          <SectionLabel>◈ SYSTEM STATUS — Score Tracker</SectionLabel>
+        {/* ══ SCORE TRACKER ═══════════════════════════════════════════════════ */}
+        <section className="mt-8">
+          <SectionLabel ja="目標点トラッカー" en="Score Tracker" />
           <CommonTestTargetScorePanel />
         </section>
 
         {/* ══ DAILY PLAYLIST ══════════════════════════════════════════════════ */}
-        <section className="mt-10">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">
-              <CalendarDays className="inline h-3.5 w-3.5 mr-1.5 align-middle" />
-              TODAY&apos;S STUDY PLAYLIST — 今日の学習メニュー
-            </span>
-            <div className="flex-1 h-px bg-white/[0.06]" />
-          </div>
+        <section className="mt-8">
+          <SectionLabel ja="今日の学習メニュー" en="Today's Study Plan" icon={<CalendarDays className="h-4 w-4 text-blue-600" />} />
           <CommonTestDailyPlaylistPanel showFullLink={true} />
         </section>
 
-        {/* ══ WEAKNESS BOSS ═══════════════════════════════════════════════════ */}
-        <section className="mt-10">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">
-              <ShieldAlert className="inline h-3.5 w-3.5 mr-1.5 align-middle" />
-              WEAKNESS BOSS — 弱点攻略システム
-            </span>
-            <div className="flex-1 h-px bg-white/[0.06]" />
-          </div>
+        {/* ══ WEAKNESS ════════════════════════════════════════════════════════ */}
+        <section className="mt-8">
+          <SectionLabel ja="弱点攻略" en="Weakness Focus" icon={<ShieldAlert className="h-4 w-4 text-rose-600" />} />
           <CommonTestWeaknessBossPanel compact={true} showFullLink={false} />
         </section>
 
         {/* ══ TODAY'S MISSIONS ════════════════════════════════════════════════ */}
-        <section className="mt-12">
-          <SectionLabel>⚡ TODAY'S SPECIAL MISSION</SectionLabel>
-          <p className="mb-4 font-mono text-[10px] text-white/35">
-            今日のおすすめ演習 — 各科目から1問ずつ、集中して取り組みましょう。
+        <section className="mt-10">
+          <SectionLabel ja="今日のおすすめ演習" en="Daily Pick" icon={<Zap className="h-4 w-4 text-blue-600" />} />
+          <p className="-mt-2 mb-4 text-xs text-slate-500">
+            各科目から1問ずつ。短時間で集中して取り組みましょう。
           </p>
           <div className="grid gap-4 sm:grid-cols-3">
             {DAILY_MISSIONS.map((m, i) => (
@@ -136,38 +94,33 @@ export default function CommonTestPage() {
         </section>
 
         {/* ══ ANALYTICS SUMMARY ══════════════════════════════════════════════ */}
-        <section className="mt-12">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">
-              ◉ ANALYTICS — 演習データ分析
-            </span>
-            <div className="flex-1 h-px bg-white/[0.06]" />
-            <Link
-              href="/common-test/history"
-              className="shrink-0 flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[10px] transition-all hover:opacity-80"
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.10)",
-                color: "rgba(255,255,255,0.45)",
-              }}
-            >
-              <History className="h-3 w-3" />
-              演習履歴
-            </Link>
-          </div>
+        <section className="mt-10">
+          <SectionLabel
+            ja="演習データ分析"
+            en="Analytics"
+            right={
+              <Link
+                href="/common-test/history"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-900"
+              >
+                <History className="h-3.5 w-3.5" />
+                演習履歴
+              </Link>
+            }
+          />
           <CommonTestAnalyticsSummary />
         </section>
 
         {/* ══ REVIEW QUEUE SUMMARY ════════════════════════════════════════════ */}
-        <section className="mt-6">
+        <section className="mt-5">
           <CommonTestReviewSummary />
         </section>
 
         {/* ══ SUBJECT ACCESS BOARD ════════════════════════════════════════════ */}
-        <section className="mt-12">
-          <SectionLabel>▸ SUBJECT ACCESS BOARD</SectionLabel>
-          <p className="mb-4 font-mono text-[10px] text-white/35">
-            科目を選択して大問別演習・得点ルート・シミュレーションへ進む。
+        <section className="mt-10">
+          <SectionLabel ja="科目を選ぶ" en="Subjects" icon={<BookOpen className="h-4 w-4 text-blue-600" />} />
+          <p className="-mt-2 mb-4 text-xs text-slate-500">
+            科目を選んで、大問別演習・得点ルート・本番演習へ進みます。
           </p>
           <div className="grid gap-4 sm:grid-cols-3">
             {COMMON_TEST_SUBJECTS.map((s) => (
@@ -177,90 +130,57 @@ export default function CommonTestPage() {
         </section>
 
         {/* ══ EXAM SIMULATOR ══════════════════════════════════════════════════ */}
-        <section className="mt-12">
-          <SectionLabel>⚡ EXAM SIMULATOR — 本番再現模擬試験</SectionLabel>
-          <p className="mb-4 font-mono text-[10px] text-white/35">
-            70分/80分の本番形式で全大問を通し実施。時間内スコアと時間外スコアを二重評価する。
-          </p>
+        <section className="mt-10">
+          <SectionLabel ja="本番演習" en="Exam Simulator" icon={<Zap className="h-4 w-4 text-blue-600" />} />
           <Link
             href="/common-test/simulator"
-            className="group flex items-center gap-4 rounded-2xl p-5 transition-all hover:opacity-90"
-            style={{
-              background: "linear-gradient(135deg, rgba(251,191,36,0.07) 0%, rgba(34,211,238,0.05) 100%)",
-              border: "1px solid rgba(251,191,36,0.25)",
-              boxShadow: "0 0 30px rgba(251,191,36,0.06)",
-            }}
+            className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-blue-300 hover:shadow-md"
           >
-            <div
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-              style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.30)" }}
-            >
-              <Zap className="h-5 w-5 text-amber-400" />
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 ring-1 ring-blue-100">
+              <Zap className="h-5 w-5 text-blue-600" />
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="font-display text-base font-extrabold text-white">
-                  EXAM SIMULATOR
-                </span>
-                <span
-                  className="rounded-full px-2 py-0.5 font-mono text-[8px] font-bold uppercase tracking-wider"
-                  style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.28)", color: "#fbbf24" }}
-                >
-                  NEW
+            <div className="min-w-0 flex-1">
+              <div className="mb-0.5 flex items-center gap-2">
+                <span className="text-base font-bold text-slate-900">本番形式の模擬試験</span>
+                <span className="rounded-full bg-blue-50 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-blue-600">
+                  New
                 </span>
               </div>
-              <p className="font-mono text-[10px] text-white/40">
-                数IA 70分 · 数IIB 70分 · 英語R 80分 — 3科目の本番形式模擬試験
+              <p className="text-xs text-slate-500">
+                数IA 70分・数IIBC 70分・英語R 80分。各科目に第1〜第3回を用意しています。
               </p>
             </div>
-            <div
-              className="shrink-0 rounded-xl px-4 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-all group-hover:opacity-80"
-              style={{ background: "rgba(251,191,36,0.14)", border: "1px solid rgba(251,191,36,0.35)", color: "#fbbf24" }}
-            >
+            <span className="shrink-0 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-colors group-hover:bg-blue-700">
               開く →
-            </div>
+            </span>
           </Link>
         </section>
 
         {/* ══ AI TOOLS ════════════════════════════════════════════════════════ */}
-        <section className="mt-12">
-          <SectionLabel>🧠 AI TOOLS — 分析・復習支援</SectionLabel>
+        <section className="mt-10">
+          <SectionLabel ja="分析・復習支援" en="AI Tools" icon={<Brain className="h-4 w-4 text-violet-600" />} />
           <div className="grid gap-4 sm:grid-cols-2">
 
             {/* AI作戦会議 */}
             <Link
               href="/common-test/history"
-              className="group flex flex-col gap-3 rounded-2xl p-5 transition-all hover:opacity-90"
-              style={{
-                background: "linear-gradient(135deg, rgba(34,211,238,0.07) 0%, rgba(168,85,247,0.05) 100%)",
-                border: "1px solid rgba(34,211,238,0.22)",
-                boxShadow: "0 0 24px rgba(34,211,238,0.05)",
-              }}
+              className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-violet-300 hover:shadow-md"
             >
               <div className="flex items-center justify-between">
-                <div
-                  className="flex h-10 w-10 items-center justify-center rounded-xl"
-                  style={{ background: "rgba(34,211,238,0.12)", border: "1px solid rgba(34,211,238,0.28)" }}
-                >
-                  <Brain className="h-5 w-5 text-cyan-400" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 ring-1 ring-violet-100">
+                  <Brain className="h-5 w-5 text-violet-600" />
                 </div>
-                <span
-                  className="rounded-full px-2 py-0.5 font-mono text-[8px] font-bold uppercase tracking-wider"
-                  style={{ background: "rgba(34,211,238,0.10)", border: "1px solid rgba(34,211,238,0.25)", color: "#22d3ee" }}
-                >
-                  ACTIVE
+                <span className="rounded-full bg-violet-50 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-violet-600">
+                  Active
                 </span>
               </div>
               <div>
-                <div className="font-display text-sm font-bold text-white">AI作戦会議</div>
-                <p className="mt-1 font-mono text-[10px] leading-relaxed text-white/45">
+                <div className="text-sm font-bold text-slate-900">AI作戦会議</div>
+                <p className="mt-1 text-xs leading-relaxed text-slate-500">
                   本番演習の結果から、時間配分・弱点・次にやるべき演習を分析します。
                 </p>
               </div>
-              <div
-                className="mt-auto rounded-lg py-1.5 text-center font-mono text-[9px] font-bold uppercase tracking-wider transition-all group-hover:opacity-80"
-                style={{ background: "rgba(34,211,238,0.10)", border: "1px solid rgba(34,211,238,0.22)", color: "#22d3ee" }}
-              >
+              <div className="mt-auto rounded-lg bg-violet-50 py-2 text-center text-xs font-bold text-violet-700 transition-colors group-hover:bg-violet-100">
                 履歴から分析を開く →
               </div>
             </Link>
@@ -268,37 +188,23 @@ export default function CommonTestPage() {
             {/* 復習キュー */}
             <Link
               href="/common-test/review"
-              className="group flex flex-col gap-3 rounded-2xl p-5 transition-all hover:opacity-90"
-              style={{
-                background: "linear-gradient(135deg, rgba(16,185,129,0.07) 0%, rgba(34,211,238,0.04) 100%)",
-                border: "1px solid rgba(16,185,129,0.22)",
-                boxShadow: "0 0 24px rgba(16,185,129,0.05)",
-              }}
+              className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-emerald-300 hover:shadow-md"
             >
               <div className="flex items-center justify-between">
-                <div
-                  className="flex h-10 w-10 items-center justify-center rounded-xl"
-                  style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.28)" }}
-                >
-                  <RefreshCw className="h-5 w-5 text-emerald-400" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 ring-1 ring-emerald-100">
+                  <RefreshCw className="h-5 w-5 text-emerald-600" />
                 </div>
-                <span
-                  className="rounded-full px-2 py-0.5 font-mono text-[8px] font-bold uppercase tracking-wider"
-                  style={{ background: "rgba(16,185,129,0.10)", border: "1px solid rgba(16,185,129,0.25)", color: "#10b981" }}
-                >
-                  ACTIVE
+                <span className="rounded-full bg-emerald-50 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-emerald-600">
+                  Active
                 </span>
               </div>
               <div>
-                <div className="font-display text-sm font-bold text-white">復習キュー</div>
-                <p className="mt-1 font-mono text-[10px] leading-relaxed text-white/45">
+                <div className="text-sm font-bold text-slate-900">復習キュー</div>
+                <p className="mt-1 text-xs leading-relaxed text-slate-500">
                   間違えた問題や再確認したい問題を、復習タイミングに合わせて確認します。
                 </p>
               </div>
-              <div
-                className="mt-auto rounded-lg py-1.5 text-center font-mono text-[9px] font-bold uppercase tracking-wider transition-all group-hover:opacity-80"
-                style={{ background: "rgba(16,185,129,0.10)", border: "1px solid rgba(16,185,129,0.22)", color: "#10b981" }}
-              >
+              <div className="mt-auto rounded-lg bg-emerald-50 py-2 text-center text-xs font-bold text-emerald-700 transition-colors group-hover:bg-emerald-100">
                 今日の復習を見る →
               </div>
             </Link>
@@ -307,21 +213,38 @@ export default function CommonTestPage() {
         </section>
 
         {/* Footer label */}
-        <p className="mt-16 text-center font-mono text-[10px] tracking-[0.2em] text-white/15 uppercase">
-          CYBER OS · Common Test Command Center · Phase 10
+        <p className="mt-16 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
+          CYBER OS · 共通テスト対策室
         </p>
       </div>
     </div>
   );
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({
+  ja,
+  en,
+  icon,
+  right,
+}: {
+  ja: string;
+  en?: string;
+  icon?: React.ReactNode;
+  right?: React.ReactNode;
+}) {
   return (
     <div className="mb-4 flex items-center gap-3">
-      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">
-        {children}
-      </span>
-      <div className="flex-1 h-px bg-white/6" />
+      <div className="flex items-center gap-2">
+        {icon}
+        <h2 className="text-sm font-bold text-slate-900">{ja}</h2>
+        {en && (
+          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-400">
+            {en}
+          </span>
+        )}
+      </div>
+      <div className="h-px flex-1 bg-slate-200" />
+      {right}
     </div>
   );
 }

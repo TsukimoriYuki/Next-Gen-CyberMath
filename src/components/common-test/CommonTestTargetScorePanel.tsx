@@ -81,33 +81,30 @@ export function CommonTestTargetScorePanel() {
   const anyLatest = COMMON_TEST_SUBJECTS.some((s) => hasLatest(s.id));
 
   return (
-    <div
-      className="rounded-2xl overflow-hidden"
-      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
-    >
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       {/* Panel header */}
-      <div
-        className="flex flex-wrap items-center justify-between gap-2 px-5 py-3"
-        style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
-      >
-        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
-          ◈ System Status — Score Tracker
-        </span>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-5 py-3">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-bold text-slate-900">目標点トラッカー</span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-400">
+            Score Tracker
+          </span>
+        </div>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
           {feedback === "saved" && (
-            <span className="flex items-center gap-1 font-mono text-[10px] font-bold text-emerald-400">
-              <Check className="h-3 w-3" />
+            <span className="flex items-center gap-1 text-xs font-bold text-emerald-600">
+              <Check className="h-3.5 w-3.5" />
               目標点を保存しました
             </span>
           )}
           {feedback === "error" && (
-            <span className="font-mono text-[10px] font-bold text-red-400">
+            <span className="text-xs font-bold text-rose-600">
               0〜100の数値を入力してください
             </span>
           )}
           <span
-            className="font-mono text-[10px] font-bold"
-            style={{ color: totalGap <= 30 ? "#34d399" : "#f59e0b" }}
+            className="text-xs font-bold"
+            style={{ color: totalGap <= 30 ? "#059669" : "#d97706" }}
           >
             目標 {totalTarget}点 ／ {anyLatest ? "最新" : "推定"} {totalEstimate}点
           </span>
@@ -116,27 +113,17 @@ export function CommonTestTargetScorePanel() {
               <button
                 type="button"
                 onClick={handleSave}
-                className="flex items-center gap-1 rounded-lg px-2.5 py-1 font-mono text-[9px] font-bold transition-all hover:opacity-80"
-                style={{
-                  background: "rgba(52,211,153,0.12)",
-                  border: "1px solid rgba(52,211,153,0.35)",
-                  color: "#34d399",
-                }}
+                className="flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-emerald-700"
               >
-                <Check className="h-3 w-3" />
+                <Check className="h-3.5 w-3.5" />
                 保存
               </button>
               <button
                 type="button"
                 onClick={() => setEditing(false)}
-                className="flex items-center gap-1 rounded-lg px-2.5 py-1 font-mono text-[9px] transition-all hover:opacity-80"
-                style={{
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  color: "rgba(255,255,255,0.45)",
-                }}
+                className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50"
               >
-                <X className="h-3 w-3" />
+                <X className="h-3.5 w-3.5" />
                 取消
               </button>
             </div>
@@ -144,14 +131,9 @@ export function CommonTestTargetScorePanel() {
             <button
               type="button"
               onClick={startEdit}
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1 font-mono text-[9px] transition-all hover:opacity-80"
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                color: "rgba(255,255,255,0.45)",
-              }}
+              className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-blue-300 hover:text-blue-600"
             >
-              <Pencil className="h-3 w-3" />
+              <Pencil className="h-3.5 w-3.5" />
               目標点を設定
             </button>
           )}
@@ -159,7 +141,7 @@ export function CommonTestTargetScorePanel() {
       </div>
 
       {/* Subject status grid */}
-      <div className="grid grid-cols-1 gap-0 sm:grid-cols-3 sm:divide-x divide-white/5">
+      <div className="grid grid-cols-1 gap-0 divide-slate-200 sm:grid-cols-3 sm:divide-x">
         {COMMON_TEST_SUBJECTS.map((subject) => {
           const { theme, shortTitle, title, estimatedScoreMock } = subject;
           const estimate = estimateOf(subject.id, estimatedScoreMock);
@@ -174,36 +156,31 @@ export function CommonTestTargetScorePanel() {
           return (
             <div key={subject.id} className="px-5 py-4">
               {/* Subject label */}
-              <div className="flex items-baseline justify-between mb-1.5">
-                <span className="font-display text-sm font-extrabold" style={{ color: theme.primary }}>
+              <div className="mb-1.5 flex items-baseline justify-between">
+                <span className="flex items-center gap-1.5 text-sm font-extrabold text-slate-900">
+                  <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: theme.primary }} />
                   {shortTitle}
                 </span>
-                <span className="font-mono text-[10px] text-white/35">{title}</span>
+                <span className="text-[10px] text-slate-400">{title}</span>
               </div>
 
               {/* 推定スコアの出所バッジ */}
               <div className="mb-2">
                 {isLatest ? (
-                  <span
-                    className="inline-block rounded px-1.5 py-0.5 font-mono text-[8px] font-bold"
-                    style={{ background: `rgba(${theme.glowRgb},0.12)`, color: theme.primary }}
-                  >
+                  <span className="inline-block rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
                     最新演習スコア反映済み
                   </span>
                 ) : (
-                  <span
-                    className="inline-block rounded px-1.5 py-0.5 font-mono text-[8px]"
-                    style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.35)" }}
-                  >
+                  <span className="inline-block rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-400">
                     演習履歴なし（初期推定値）
                   </span>
                 )}
               </div>
 
               {/* Score row */}
-              <div className="flex items-baseline gap-2 mb-2">
-                <span className="font-mono text-xl font-bold text-white">{estimate}</span>
-                <span className="font-mono text-xs text-white/35">／</span>
+              <div className="mb-2 flex items-baseline gap-2">
+                <span className="font-mono text-xl font-bold text-slate-900">{estimate}</span>
+                <span className="text-xs text-slate-400">／</span>
                 {editing ? (
                   <input
                     type="number"
@@ -213,21 +190,17 @@ export function CommonTestTargetScorePanel() {
                     onChange={(e) =>
                       setDraft((prev) => ({ ...prev, [subject.id]: e.target.value }))
                     }
-                    className="w-16 rounded-md px-2 py-0.5 font-mono text-sm font-semibold text-white outline-none"
-                    style={{
-                      background: "rgba(255,255,255,0.06)",
-                      border: `1px solid rgba(${theme.glowRgb},0.45)`,
-                    }}
+                    className="w-16 rounded-md border border-blue-300 bg-white px-2 py-0.5 font-mono text-sm font-semibold text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     aria-label={`${title}の目標点`}
                   />
                 ) : (
-                  <span className="font-mono text-sm font-semibold text-white/55">{target}</span>
+                  <span className="font-mono text-sm font-semibold text-slate-500">{target}</span>
                 )}
-                <span className="font-mono text-[10px] text-white/35">点</span>
+                <span className="text-[10px] text-slate-400">点</span>
                 <span
-                  className="ml-auto font-mono text-[10px] font-bold"
+                  className="ml-auto text-[11px] font-bold"
                   style={{
-                    color: gap <= 0 ? "#34d399" : gap <= 10 ? "#34d399" : gap <= 20 ? "#60a5fa" : "#f59e0b",
+                    color: gap <= 0 ? "#059669" : gap <= 10 ? "#059669" : gap <= 20 ? "#2563eb" : "#d97706",
                   }}
                 >
                   {gap <= 0 ? "目標達成圏" : `あと ${gap}点`}
@@ -235,21 +208,14 @@ export function CommonTestTargetScorePanel() {
               </div>
 
               {/* Progress bar */}
-              <div
-                className="h-1.5 rounded-full overflow-hidden"
-                style={{ background: "rgba(255,255,255,0.08)" }}
-              >
+              <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
                 <div
                   className="h-full rounded-full transition-all"
-                  style={{
-                    width: `${pct}%`,
-                    background: `linear-gradient(90deg, rgba(${theme.glowRgb},0.7), rgba(${theme.glowRgb},1))`,
-                    boxShadow: `0 0 8px rgba(${theme.glowRgb},0.6)`,
-                  }}
+                  style={{ width: `${pct}%`, background: theme.primary }}
                 />
               </div>
 
-              <div className="mt-1 font-mono text-[9px] text-white/25 text-right">
+              <div className="mt-1 text-right font-mono text-[9px] text-slate-300">
                 {pct}% of target
               </div>
             </div>

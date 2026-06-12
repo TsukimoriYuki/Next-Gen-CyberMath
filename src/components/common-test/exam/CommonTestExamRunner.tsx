@@ -340,15 +340,13 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
   if (phase === "intro") {
     if (questions.length === 0) {
       return (
-        <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
-          <div className="text-center space-y-3">
-            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">
-              EXAM SIMULATOR
-            </div>
-            <p className="font-mono text-sm text-white/50">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 p-6 text-slate-900">
+          <div className="space-y-3 text-center">
+            <div className="text-xs font-bold text-slate-400">本番演習</div>
+            <p className="text-sm text-slate-600">
               この試験プリセットには問題が登録されていません。
             </p>
-            <Link href="/common-test/simulator" className="inline-flex items-center gap-1.5 font-mono text-xs text-white/40 hover:text-white/70 transition-colors">
+            <Link href="/common-test/simulator" className="inline-flex items-center gap-1.5 text-xs text-slate-500 transition-colors hover:text-slate-800">
               <ArrowLeft className="h-3.5 w-3.5" />
               試験選択に戻る
             </Link>
@@ -375,61 +373,43 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
     ).length;
 
     return (
-      <div className="relative min-h-screen bg-black text-white overflow-hidden flex flex-col items-center justify-center px-4 py-12">
+      <div className="relative flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 py-12 text-slate-900">
         <div
           className="pointer-events-none absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(${preset.theme.glowRgb},0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(${preset.theme.glowRgb},0.018) 1px, transparent 1px)`,
-            backgroundSize: "60px 60px",
+            backgroundImage: `linear-gradient(rgba(${preset.theme.glowRgb},0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(${preset.theme.glowRgb},0.04) 1px, transparent 1px)`,
+            backgroundSize: "64px 64px",
+            maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 360px)",
+            WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 360px)",
           }}
-        />
-        <div
-          className="pointer-events-none absolute -top-60 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full"
-          style={{ background: `radial-gradient(circle, rgba(${preset.theme.glowRgb},0.07) 0%, transparent 70%)` }}
         />
 
         <div className="relative w-full max-w-xl space-y-6">
           {/* Back */}
           <Link
             href="/common-test/simulator"
-            className="inline-flex items-center gap-1.5 font-mono text-xs transition-colors"
-            style={{ color: `rgba(${preset.theme.glowRgb},0.6)` }}
+            className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-800"
           >
-            <ArrowLeft className="h-3.5 w-3.5" />
+            <ArrowLeft className="h-4 w-4" />
             試験選択に戻る
           </Link>
 
           {/* Exam card */}
-          <div
-            className="rounded-3xl p-6 sm:p-8 space-y-6"
-            style={{
-              background: `linear-gradient(145deg, rgba(${preset.theme.glowRgb},0.06) 0%, rgba(0,0,0,0.6) 100%)`,
-              border: `1px solid rgba(${preset.theme.glowRgb},0.25)`,
-              boxShadow: `0 0 60px rgba(${preset.theme.glowRgb},0.08)`,
-            }}
-          >
+          <div className="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
             {/* Badge */}
             <div
-              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em]"
-              style={{ background: `rgba(${preset.theme.glowRgb},0.10)`, border: `1px solid rgba(${preset.theme.glowRgb},0.28)`, color: preset.theme.primary }}
+              className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5"
+              style={{ background: `${preset.theme.primary}10`, borderColor: `${preset.theme.primary}33`, color: preset.theme.primary }}
             >
               <Zap className="h-3.5 w-3.5" />
-              EXAM SIMULATOR
+              <span className="text-xs font-semibold">本番演習</span>
             </div>
 
-            <h1
-              className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl"
-              style={{
-                background: `linear-gradient(135deg, ${preset.theme.primary} 0%, #ffffff 55%, ${preset.theme.secondary} 100%)`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
+            <h1 className="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               {preset.title}
             </h1>
 
-            <p className="font-mono text-sm leading-relaxed text-white/45">
+            <p className="text-sm leading-relaxed text-slate-600">
               {preset.description}
             </p>
 
@@ -446,14 +426,13 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
               ].map((s) => (
                 <div
                   key={s.label}
-                  className="rounded-xl p-3 text-center"
-                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}
+                  className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-center"
                 >
-                  <div className="flex justify-center mb-1.5" style={{ color: preset.theme.primary }}>
+                  <div className="mb-1.5 flex justify-center" style={{ color: preset.theme.primary }}>
                     {s.icon}
                   </div>
-                  <div className="font-mono text-sm font-extrabold text-white">{s.value}</div>
-                  <div className="font-mono text-[8px] text-white/30 uppercase tracking-wider mt-0.5">
+                  <div className="font-mono text-sm font-extrabold text-slate-900">{s.value}</div>
+                  <div className="mt-0.5 text-[10px] text-slate-400">
                     {s.label}
                   </div>
                 </div>
@@ -462,17 +441,14 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
 
             {/* 選択問題ピッカー（数IIBC のみ） */}
             {isSelective && (
-              <div
-                className="rounded-xl p-4 space-y-3"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-              >
+              <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center justify-between">
-                  <div className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-white/35">
+                  <div className="text-xs font-bold text-slate-600">
                     選択問題 — 第4問〜第7問から{selectCount}題を選ぶ
                   </div>
                   <div
-                    className="font-mono text-[10px] font-bold"
-                    style={{ color: canStart ? "#34d399" : "#fbbf24" }}
+                    className="font-mono text-xs font-bold"
+                    style={{ color: canStart ? "#059669" : "#d97706" }}
                   >
                     {selectedOptional.length} / {selectCount}
                   </div>
@@ -483,12 +459,7 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
                   {requiredInfos.map((info) => (
                     <span
                       key={info.sectionId}
-                      className="rounded-lg px-2.5 py-1.5 font-mono text-[10px]"
-                      style={{
-                        background: "rgba(255,255,255,0.05)",
-                        border: "1px solid rgba(255,255,255,0.12)",
-                        color: "rgba(255,255,255,0.55)",
-                      }}
+                      className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] text-slate-600"
                     >
                       第{info.sectionNumber}問 {info.title}（必答・{info.maxScore}点）
                     </span>
@@ -506,35 +477,29 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
                         type="button"
                         onClick={() => toggleOptionalSection(info.sectionId)}
                         disabled={isFull}
-                        className="flex items-center gap-2.5 rounded-xl p-3 text-left transition-all hover:opacity-90 disabled:opacity-35 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2.5 rounded-xl border bg-white p-3 text-left transition-all hover:border-slate-300 disabled:cursor-not-allowed disabled:opacity-40"
                         style={{
-                          background: isOn
-                            ? `rgba(${preset.theme.glowRgb},0.12)`
-                            : "rgba(255,255,255,0.03)",
-                          border: isOn
-                            ? `1px solid rgba(${preset.theme.glowRgb},0.55)`
-                            : "1px solid rgba(255,255,255,0.10)",
+                          background: isOn ? `${preset.theme.primary}0f` : "#ffffff",
+                          borderColor: isOn ? `${preset.theme.primary}66` : "#e2e8f0",
                         }}
                       >
                         <div
-                          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
+                          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border"
                           style={{
-                            background: isOn ? `rgba(${preset.theme.glowRgb},0.3)` : "rgba(255,255,255,0.06)",
-                            border: isOn
-                              ? `1px solid rgba(${preset.theme.glowRgb},0.7)`
-                              : "1px solid rgba(255,255,255,0.15)",
+                            background: isOn ? `${preset.theme.primary}22` : "#f1f5f9",
+                            borderColor: isOn ? `${preset.theme.primary}99` : "#cbd5e1",
                           }}
                         >
                           {isOn && <CheckCircle2 className="h-3.5 w-3.5" style={{ color: preset.theme.primary }} />}
                         </div>
                         <div className="min-w-0">
                           <div
-                            className="font-mono text-[11px] font-bold"
-                            style={{ color: isOn ? preset.theme.primary : "rgba(255,255,255,0.70)" }}
+                            className="text-xs font-bold"
+                            style={{ color: isOn ? preset.theme.primary : "#334155" }}
                           >
                             第{info.sectionNumber}問 {info.title}
                           </div>
-                          <div className="font-mono text-[9px] text-white/35">
+                          <div className="text-[11px] text-slate-400">
                             {info.maxScore}点 · {info.questionCount}問
                           </div>
                         </div>
@@ -546,36 +511,30 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
             )}
 
             {/* Dual score explanation */}
-            <div
-              className="rounded-xl p-4 space-y-2"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-            >
-              <div className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-white/35 mb-3">
+            <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div className="mb-3 text-xs font-bold text-slate-500">
                 採点方式（100点満点・大問配点 × 正答率）
               </div>
               <div className="space-y-2">
                 <div className="flex items-start gap-2">
-                  <div className="h-2 w-2 mt-1.5 rounded-full shrink-0" style={{ background: "#fbbf24" }} />
-                  <div className="font-mono text-[10px] text-white/55 leading-relaxed">
-                    <span className="text-amber-400 font-bold">時間内スコア</span> — 制限時間内に解答した分の得点（本番の実力）
+                  <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full" style={{ background: "#2563eb" }} />
+                  <div className="text-xs leading-relaxed text-slate-600">
+                    <span className="font-bold text-blue-600">時間内スコア</span> — 制限時間内に解答した分の得点（本番の実力）
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <div className="h-2 w-2 mt-1.5 rounded-full shrink-0" style={{ background: "#22d3ee" }} />
-                  <div className="font-mono text-[10px] text-white/55 leading-relaxed">
-                    <span className="text-cyan-400 font-bold">無制限スコア</span> — 時間超過分も含めた得点（知識の上限）
+                  <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full" style={{ background: "#0891b2" }} />
+                  <div className="text-xs leading-relaxed text-slate-600">
+                    <span className="font-bold text-cyan-600">時間外スコア</span> — 時間超過分も含めた得点（知識の上限）
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Notes */}
-            <div
-              className="flex items-start gap-3 rounded-xl p-4"
-              style={{ background: "rgba(251,191,36,0.06)", border: "1px solid rgba(251,191,36,0.18)" }}
-            >
-              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400/70 mt-0.5" />
-              <div className="font-mono text-[10px] text-white/45 leading-relaxed">
+            <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+              <div className="text-xs leading-relaxed text-slate-600">
                 試験中は問題を自由に行き来できます。制限時間が過ぎた後も解答を続けられますが、
                 時間内スコアには反映されません。試験画面は本番に近い紙面表示に切り替わります。
               </div>
@@ -586,13 +545,8 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
               type="button"
               onClick={startExam}
               disabled={!canStart}
-              className="w-full flex items-center justify-center gap-2 rounded-2xl py-4 font-mono text-sm font-extrabold uppercase tracking-[0.2em] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed"
-              style={{
-                background: `linear-gradient(135deg, rgba(${preset.theme.glowRgb},0.30), rgba(${preset.theme.glowRgb},0.15))`,
-                border: `1px solid rgba(${preset.theme.glowRgb},0.50)`,
-                color: preset.theme.primary,
-                boxShadow: `0 0 30px rgba(${preset.theme.glowRgb},0.18)`,
-              }}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-extrabold text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+              style={{ background: preset.theme.primary }}
             >
               <Zap className="h-4 w-4" />
               {canStart
@@ -609,8 +563,8 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
   if (phase === "finished") {
     if (!historyItem) {
       return (
-        <div className="min-h-screen bg-black text-white flex items-center justify-center">
-          <p className="font-mono text-sm text-white/40">結果を読み込んでいます…</p>
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-900">
+          <p className="text-sm text-slate-500">結果を読み込んでいます…</p>
         </div>
       );
     }
