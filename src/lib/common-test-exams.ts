@@ -11,37 +11,58 @@ type ExamFlowPatch = Partial<CommonTestDrillQuestion>;
 const COMMON_TEST_EXAM_SECTION_FLOW: Record<string, ExamFlowPatch> = {
   "math-1a:section-1": {
     examContext:
-      "第1問は、集合・命題・図形量を短時間で処理する構成です。前半で定義や基本公式を確認し、後半では会話文や日常場面から必要な条件を読み取ります。",
+      "第1問は、校庭で木の高さを測る場面を考える。木の根もとを $O$、木の先端を $T$ とし、地面は水平、木は地面に垂直に立っているものとする。地点 $B$ は $O$ から12 m離れた地点で、地点 $A$ は $B$ からさらに木と反対側へ12 m離れた地点である。",
     sharedStem:
-      "必要な記号の意味を先に確認し、選択肢を見る前に式や図の骨格を作ってから答えを選びなさい。",
+      "まず $\\tan \\theta = \\dfrac{高さ}{水平距離}$ の関係を確認する。小問1、2で求めた高さを使い、小問3、4では条件を変えたときの距離や判断へ進む。",
+    sharedData: {
+      title: "三角比の表",
+      headers: ["角度", "$30°$", "$45°$", "$60°$"],
+      rows: [["$\\tan$", "$\\dfrac{1}{\\sqrt{3}}$", "1", "$\\sqrt{3}$"]],
+      notes: ["目の高さは考えない。距離はすべて水平距離とする。"],
+    },
   },
   "math-1a:section-2": {
     examContext:
-      "第2問は、二次関数とデータの分析を組み合わせて、式・表・要約値を読み取る力をみます。後半では前半と同じ読み取り手順を使って、判断理由まで確認します。",
+      "第2問は、あるクラスの小テスト結果と学習時間の関係を考える。5人の学習時間 $x$ 時間と得点 $y$ 点は下の表の通りである。さらに、得点の変化を表す簡単なモデルとして $f(x)=-3(x-3)^2+67$ を考える。",
     sharedStem:
-      "数値をそのまま見るのではなく、平均・散らばり・端点・頂点のどれを使う問題かを見分けなさい。",
+      "前半で表から代表値と傾向を読み取り、後半で二次関数モデルを使う。モデルは観測範囲の傾向を説明するための近似であり、範囲外へそのまま広げてよいとは限らない。",
     sharedData: {
-      title: "資料：小テスト結果の読み取りで注意する量",
-      headers: ["量", "見るポイント"],
+      title: "学習時間と小テスト得点",
+      headers: ["生徒", "A", "B", "C", "D", "E"],
       rows: [
-        ["平均・分散", "偏差を2乗して合計し、データ数で割る"],
-        ["四分位範囲", "問題文で指定された四分位数の定義を優先する"],
-        ["二次関数の最小値", "頂点が定義域に入るかを最初に確認する"],
+        ["学習時間 $x$（時間）", "0", "1", "2", "3", "4"],
+        ["得点 $y$（点）", "40", "55", "64", "67", "64"],
       ],
-      notes: ["後半の設問では、前の小問で確認した読み取り方を別の資料へ適用する。"],
+      notes: ["モデル $f(x)=-3(x-3)^2+67$ は、0時間から4時間までの範囲で得点の傾向を見るために使う。"],
     },
   },
   "math-1a:section-3": {
     examContext:
-      "第3問は、同じ図形設定を描き直しながら、角・比・円の性質を順に確認する構成です。図に分かっている長さや角を追記してから解き進めます。",
+      "第3問は、円の外部の点 $P$ から2本の割線と1本の接線を引く図形を考える。1本目の割線は円と近い方から $A,B$ で交わり、$PA=3$、$PB=12$ である。2本目の割線は円と近い方から $C,D$ で交わり、$PC=4$ である。接線の接点を $T$ とする。",
     sharedStem:
-      "図形問題では、結論を急がず、使える定理の条件がそろっているかを図上で確認しなさい。",
+      "同じ点 $P$ から引いた割線どうしでは $PA\\cdot PB=PC\\cdot PD$ が成り立つ。接線については $PT^2=PA\\cdot PB$ を使う。前の小問で求めた積を後半でも使う。",
+    sharedData: {
+      title: "与えられた長さ",
+      headers: ["線分", "$PA$", "$PB$", "$PC$", "$PD$", "$PT$"],
+      rows: [["長さ", "3", "12", "4", "?", "?"]],
+      notes: ["$A,C$ はそれぞれ点 $P$ に近い方の交点である。"],
+    },
   },
   "math-1a:section-4": {
     examContext:
-      "第4問は、場合の数と確率について、全体から不要な場合を除く考え方と、条件が分かった後の状態を作り直す考え方を扱います。",
+      "第4問は、1から6までの数字が1つずつ書かれた6枚のカードを使う。カードを2枚、順に取り出し、取り出したカードは戻さない。1枚目の数を $a$、2枚目の数を $b$ とする。",
     sharedStem:
-      "少なくとも1つ、戻さない、条件が分かっている、という語に印を付けてから数え上げなさい。",
+      "順に取り出すので、基本の全事象は順序を区別して数える。小問1、2で場合の数を数え、小問3で確率、小問4で期待値へ進む。",
+    sharedData: {
+      title: "ゲームの条件",
+      headers: ["条件", "内容"],
+      rows: [
+        ["カード", "1, 2, 3, 4, 5, 6"],
+        ["取り出し方", "2枚を順に取り出し、戻さない"],
+        ["賞金", "$a+b$ が偶数なら100円、奇数なら0円"],
+      ],
+      notes: ["偶数の和になるのは、2枚の数がどちらも奇数、またはどちらも偶数の場合である。"],
+    },
   },
   "math-2bc:section-3": {
     examContext:
@@ -101,6 +122,355 @@ const COMMON_TEST_EXAM_SECTION_FLOW: Record<string, ExamFlowPatch> = {
 };
 
 const COMMON_TEST_EXAM_QUESTION_PATCHES: Record<string, ExamFlowPatch> = {
+  "ct-m1a-s1-q1": {
+    title: "測量と三角比 — 表の確認",
+    statement:
+      "三角比の表から、$\\tan 45°$ の値を求めよ。",
+    options: ["0", "1", "$\\dfrac{1}{\\sqrt{3}}$", "$\\sqrt{3}$"],
+    correctAnswer: "1",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "共通資料の三角比の表を見ると、$45°$ の行に対応する $\\tan$ の値は1である。この値は、地点 $B$ から木を見たときの高さと水平距離の関係を調べる小問2で使う。",
+    strategy:
+      "最初の小問は表の確認である。表から必要な値だけを拾い、次の小問でどの比に入れるかを意識しておく。",
+    trapExplanation:
+      "$\\tan 30°$ や $\\tan 60°$ と取り違えやすい。角度の列を確認してから値を読むこと。",
+    subQuestionIndex: 1,
+    difficultyStage: "basic",
+    estimatedMinutes: 1,
+    difficulty: "BASIC",
+    skillTags: ["データ読み取り", "計算処理"],
+  },
+  "ct-m1a-s1-q2": {
+    title: "測量と三角比 — 木の高さ",
+    statement:
+      "地点 $B$ から木の先端 $T$ を見上げた仰角は $45°$ である。$BO=12$ m のとき、木の高さ $OT$ を求めよ。",
+    options: ["8", "10", "12", "24"],
+    correctAnswer: "12",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "共通設定より、$\\tan 45°=\\dfrac{OT}{BO}$ である。小問1より $\\tan 45°=1$、また $BO=12$ なので、$1=\\dfrac{OT}{12}$。よって $OT=12$ m である。",
+    strategy:
+      "高さを求めるときは、先に $\\tan \\theta=\\dfrac{高さ}{水平距離}$ を書く。小問1で確認した $\\tan 45°=1$ をそのまま代入すればよい。",
+    trapExplanation:
+      "$45°$ では高さと水平距離が等しくなる。$12$ を2倍したり半分にしたりする必要はない。",
+    subQuestionIndex: 2,
+    difficultyStage: "standard",
+    dependsOnPrevious: true,
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  "ct-m1a-s1-q3": {
+    title: "測量と三角比 — 前問の高さを使う",
+    statement:
+      "小問2で求めた高さを用いる。木の先端 $T$ の仰角が $30°$ になる地点 $C$ を、木の根もと $O$ から一直線上にとる。このとき、$CO$ の長さを求めよ。",
+    options: [
+      "$12\\sqrt{3}$ m",
+      "$\\dfrac{12}{\\sqrt{3}}$ m",
+      "$24$ m",
+      "$6\\sqrt{3}$ m",
+    ],
+    correctAnswer: "$12\\sqrt{3}$ m",
+    explanation:
+      "小問2より木の高さは $OT=12$ m。仰角が $30°$ なので、$\\tan 30°=\\dfrac{OT}{CO}$。共通資料から $\\tan 30°=\\dfrac{1}{\\sqrt{3}}$ であるから、$\\dfrac{1}{\\sqrt{3}}=\\dfrac{12}{CO}$。よって $CO=12\\sqrt{3}$ m である。",
+    strategy:
+      "前問で求めた高さ $12$ m を使い回す。新しく高さを置き直すより、$\\tan 30°=12/CO$ とすぐ式にする方が速い。",
+    trapExplanation:
+      "$\\tan 30°$ を $\\sqrt{3}$ と覚え違えると、距離が $12/\\sqrt{3}$ m になってしまう。表の値を確認してから式を立てること。",
+    subQuestionIndex: 3,
+    difficultyStage: "guided",
+    dependsOnPrevious: true,
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["誘導読解", "数式変形", "計算処理"],
+  },
+  "ct-m1a-s1-q4": {
+    title: "測量と三角比 — 条件変更の判断",
+    statement:
+      "地点 $A$ は $O$ から24 m離れている。小問2で求めた木の高さを用いるとき、地点 $A$ から見た仰角について正しいものを選べ。",
+    options: [
+      "仰角は $30°$ より小さい",
+      "仰角はちょうど $30°$ である",
+      "仰角は $45°$ より大きい",
+      "高さが分からないので判断できない",
+    ],
+    correctAnswer: "仰角は $30°$ より小さい",
+    explanation:
+      "小問2より高さは12 m。地点 $A$ では $\\tan \\theta=\\dfrac{12}{24}=\\dfrac{1}{2}$ である。共通資料より $\\tan 30°=\\dfrac{1}{\\sqrt{3}}$ で、これは約0.577である。$\\dfrac{1}{2}$ はそれより小さいので、仰角は $30°$ より小さい。",
+    strategy:
+      "条件変更の判断では、角度そのものを無理に求めず、$\\tan$ の値を比較する。前問までの高さ12 mを使えば、$12/24$ だけで判断できる。",
+    trapExplanation:
+      "地点 $A$ が遠くなるほど仰角は小さくなる。距離が大きいのに角度が大きくなる選択肢は図の感覚とも合わない。",
+    subQuestionIndex: 4,
+    difficultyStage: "advanced",
+    dependsOnPrevious: true,
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "選択肢消去", "誘導読解"],
+  },
+  "ct-m1a-s2-q1": {
+    title: "データとモデル — 平均の読み取り",
+    statement:
+      "共通資料の5人の得点について、平均点を求めよ。",
+    options: ["56", "58", "60", "62"],
+    correctAnswer: "58",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "得点は $40,55,64,67,64$ である。合計は $40+55+64+67+64=290$、人数は5人なので、平均は $290\\div5=58$ 点である。この平均は、後の小問で表全体の傾向を見る基準になる。",
+    strategy:
+      "表の値を横に足し、人数で割る。平均の計算では、表のどの行を使うかを先に確認する。",
+    trapExplanation:
+      "学習時間の行を混ぜて計算しないこと。平均を求める対象は得点 $y$ の行である。",
+    subQuestionIndex: 1,
+    difficultyStage: "basic",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["データ読み取り", "計算処理"],
+  },
+  "ct-m1a-s2-q2": {
+    title: "データとモデル — 散布図の傾向",
+    statement:
+      "共通資料の表から読み取れる、学習時間と得点の関係として最も適切なものを選べ。",
+    options: [
+      "0時間から3時間までは得点が上がり、4時間では少し下がっている",
+      "学習時間が長いほど、得点は常に同じ割合で上がっている",
+      "学習時間が長いほど、得点は常に下がっている",
+      "学習時間と得点にはまったく関係がないと断定できる",
+    ],
+    correctAnswer:
+      "0時間から3時間までは得点が上がり、4時間では少し下がっている",
+    explanation:
+      "表では、学習時間が0,1,2,3時間のとき得点は $40,55,64,67$ と上がる。一方、4時間では64点に下がっている。したがって、少なくともこの5人のデータでは、3時間付近まで上昇し、その後は少し下がる傾向が読み取れる。",
+    strategy:
+      "散布図や表の解釈では、値の並びを順に追う。『常に』や『まったく』のような強い表現は、表のすべての値と合うかを確認してから選ぶ。",
+    trapExplanation:
+      "3時間までの上昇だけを見て、4時間でも上がると思い込むのが典型的な誤り。最後のデータまで確認すること。",
+    subQuestionIndex: 2,
+    difficultyStage: "standard",
+    dependsOnPrevious: true,
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["データ読み取り", "選択肢消去"],
+  },
+  "ct-m1a-s2-q3": {
+    title: "データとモデル — 二次関数の最大値",
+    statement:
+      "モデル $f(x)=-3(x-3)^2+67$ を用いる。このモデルで、$0\\leqq x\\leqq4$ における最大値を求めよ。",
+    options: ["64", "67", "70", "76"],
+    correctAnswer: "67",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "モデルは $f(x)=-3(x-3)^2+67$ で、頂点は $(3,67)$ である。係数が負なので放物線は上に凸ではなく下に開く。$x=3$ は範囲 $0\\leqq x\\leqq4$ に含まれるため、最大値は67である。これは小問2で読み取った『3時間付近で高い』という傾向とも合っている。",
+    strategy:
+      "二次関数モデルは、まず頂点を見る。展開せずに頂点形式のまま、開き方と定義域を確認する。",
+    trapExplanation:
+      "得点表の最大値67と一致するが、理由はモデルの頂点にある。端点 $x=4$ の値64だけを見て最大値としないこと。",
+    subQuestionIndex: 3,
+    difficultyStage: "guided",
+    dependsOnPrevious: true,
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["数式変形", "データ読み取り", "誘導読解"],
+  },
+  "ct-m1a-s2-q4": {
+    title: "データとモデル — モデルの限界",
+    statement:
+      "小問3のモデルを使って学習時間と得点を考えるとき、最も適切な判断を選べ。",
+    options: [
+      "0時間から4時間の範囲では傾向を見る参考になるが、範囲外までそのまま正しいとは限らない",
+      "学習時間を増やせば、何時間でも得点は必ず上がり続ける",
+      "4時間の得点が下がっているので、学習は常に逆効果である",
+      "平均点が58点なので、全員の得点は58点に近いと断定できる",
+    ],
+    correctAnswer:
+      "0時間から4時間の範囲では傾向を見る参考になるが、範囲外までそのまま正しいとは限らない",
+    explanation:
+      "共通資料のモデルは、表にある0時間から4時間のデータの傾向を見るための近似である。小問3で最大が3時間付近にあることは分かるが、5時間、6時間と範囲外へ広げたときにも同じモデルが必ず正しいとはいえない。",
+    strategy:
+      "モデルの解釈では、計算結果だけでなく、どの範囲のデータから作ったモデルかを確認する。極端な断定を含む選択肢は、資料の根拠があるかを疑う。",
+    trapExplanation:
+      "二次関数で計算できるからといって、現実のすべてを表すわけではない。観測範囲外の予測は、追加データなしに断定しない。",
+    subQuestionIndex: 4,
+    difficultyStage: "advanced",
+    dependsOnPrevious: true,
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["誘導読解", "選択肢消去", "データ読み取り"],
+  },
+  "ct-m1a-s3-q1": {
+    title: "円と方べき — 積の確認",
+    statement:
+      "共通設定において、$PA\\cdot PB$ の値を求めよ。",
+    options: ["15", "24", "36", "48"],
+    correctAnswer: "36",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "共通資料より $PA=3$、$PB=12$ である。したがって $PA\\cdot PB=3\\times12=36$。この積は、次の小問で $PC\\cdot PD$ や $PT^2$ と等しくなる量である。",
+    strategy:
+      "方べきの問題では、最初に基準となる積を計算する。ここで求めた36を後の小問で使い回す。",
+    trapExplanation:
+      "$PB$ は $AB$ の長さではなく、点 $P$ から遠い交点 $B$ までの長さである。与えられた長さの意味を図で確認すること。",
+    subQuestionIndex: 1,
+    difficultyStage: "basic",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "条件整理"],
+  },
+  "ct-m1a-s3-q2": {
+    title: "円と方べき — もう一方の割線",
+    statement:
+      "小問1の結果を用いる。$PC=4$ のとき、$PD$ の長さを求めよ。",
+    options: ["6", "8", "9", "12"],
+    correctAnswer: "9",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "同じ点 $P$ から引いた2本の割線について、$PA\\cdot PB=PC\\cdot PD$ が成り立つ。小問1より $PA\\cdot PB=36$、また $PC=4$ なので、$4\\cdot PD=36$。よって $PD=9$ である。",
+    strategy:
+      "前問で求めた36をそのまま右辺に置く。式を $4\\cdot PD=36$ と短く作れば、計算はすぐ終わる。",
+    trapExplanation:
+      "$PC+PD=36$ としてしまう誤りに注意。方べきで等しくなるのは和ではなく積である。",
+    subQuestionIndex: 2,
+    difficultyStage: "standard",
+    dependsOnPrevious: true,
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["誘導読解", "数式変形"],
+  },
+  "ct-m1a-s3-q3": {
+    title: "円と方べき — 前問から弦の一部を求める",
+    statement:
+      "小問2の結果を用いる。線分 $CD$ の長さを求めよ。",
+    options: ["4", "5", "9", "13"],
+    correctAnswer: "5",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "点の順序は $P,C,D$ であり、小問2より $PD=9$、共通資料より $PC=4$ である。したがって $CD=PD-PC=9-4=5$。前問で求めた $PD$ を使うのがポイントである。",
+    strategy:
+      "図上の順序を確認して、長い線分から短い線分を引く。前問の値を使う問題なので、新しく方べきの式を立て直さなくてよい。",
+    trapExplanation:
+      "$PC$ と $CD$ を混同しやすい。$PD$ は $P$ から遠い交点 $D$ までの長さで、$CD$ は円の中にある部分である。",
+    subQuestionIndex: 3,
+    difficultyStage: "guided",
+    dependsOnPrevious: true,
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "誘導読解", "計算処理"],
+  },
+  "ct-m1a-s3-q4": {
+    title: "円と方べき — 接線の長さ",
+    statement:
+      "同じ点 $P$ から円に接線 $PT$ を引く。小問1の結果を用いて、$PT$ の長さを求めよ。",
+    options: ["5", "6", "9", "36"],
+    correctAnswer: "6",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "接線と割線の方べきより、$PT^2=PA\\cdot PB$。小問1で $PA\\cdot PB=36$ と求めたので、$PT^2=36$、したがって $PT=6$ である。",
+    strategy:
+      "接線が出たら、長さそのものではなく2乗が方べきに等しいことを思い出す。小問1の36を使い、最後に平方根を取る。",
+    trapExplanation:
+      "$PT=36$ としてしまう誤りが多い。$36$ は $PT^2$ の値であり、接線の長さはその平方根の6である。",
+    subQuestionIndex: 4,
+    difficultyStage: "advanced",
+    dependsOnPrevious: true,
+    estimatedMinutes: 3,
+    difficulty: "HARD",
+    skillTags: ["誘導読解", "数式変形", "計算処理"],
+  },
+  "ct-m1a-s4-q1": {
+    title: "カードの確率 — 全事象",
+    statement:
+      "共通設定で、2枚を順に取り出すときの取り出し方は全部で何通りあるか。ただし、順序を区別する。",
+    options: ["15", "20", "30", "36"],
+    correctAnswer: "30",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "1枚目は6通り、2枚目は1枚目を戻さないので5通り。順序を区別するため、全事象は $6\\times5=30$ 通りである。この30通りを小問3の確率の分母として使う。",
+    strategy:
+      "順に取り出す場合は、組合せではなく順列として数える。『戻さない』ので2枚目は5通りになる。",
+    trapExplanation:
+      "$_6\\mathrm{C}_2=15$ としてしまうのは、順序を区別しない場合の数え方である。今回は $a,b$ の順序がある。",
+    subQuestionIndex: 1,
+    difficultyStage: "basic",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  "ct-m1a-s4-q2": {
+    title: "カードの確率 — 条件を満たす場合の数",
+    statement:
+      "$a+b$ が偶数になる取り出し方は何通りあるか。",
+    options: ["6", "12", "15", "18"],
+    correctAnswer: "12",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "$a+b$ が偶数になるのは、2枚とも奇数、または2枚とも偶数の場合である。奇数カードは1,3,5の3枚なので順に2枚取る方法は $3\\times2=6$ 通り。偶数カードも2,4,6の3枚なので $3\\times2=6$ 通り。合計で $6+6=12$ 通りである。",
+    strategy:
+      "和が偶数になる条件を『同じ偶奇』と言い換える。奇数どうし、偶数どうしに分けて数えると漏れにくい。",
+    trapExplanation:
+      "奇数3枚と偶数3枚を選ぶだけで終わると、順序を落としてしまう。今回は順に取り出すので、それぞれ $3\\times2$ 通りで数える。",
+    subQuestionIndex: 2,
+    difficultyStage: "standard",
+    dependsOnPrevious: true,
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  "ct-m1a-s4-q3": {
+    title: "カードの確率 — 前問から確率へ",
+    statement:
+      "$a+b$ が偶数になる確率を求めよ。",
+    options: [
+      "$\\dfrac{1}{5}$",
+      "$\\dfrac{2}{5}$",
+      "$\\dfrac{1}{2}$",
+      "$\\dfrac{3}{5}$",
+    ],
+    correctAnswer: "$\\dfrac{2}{5}$",
+    explanation:
+      "小問1より全事象は30通り、小問2より $a+b$ が偶数になる場合は12通りである。したがって確率は $\\dfrac{12}{30}=\\dfrac{2}{5}$ である。",
+    strategy:
+      "前問までの結果を分子と分母に入れる。確率は『条件を満たす場合の数 ÷ 全体の場合の数』で処理する。",
+    trapExplanation:
+      "$12$ 通りをそのまま答えにしないこと。また、全体を36通りとすると、戻さない条件を無視した確率になる。",
+    subQuestionIndex: 3,
+    difficultyStage: "guided",
+    dependsOnPrevious: true,
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["誘導読解", "計算処理"],
+  },
+  "ct-m1a-s4-q4": {
+    title: "カードの確率 — 期待値",
+    statement:
+      "共通資料のゲームでは、$a+b$ が偶数なら100円、奇数なら0円を受け取る。受け取る金額の期待値を求めよ。",
+    options: ["20", "40", "50", "60"],
+    correctAnswer: "40",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "小問3より、$a+b$ が偶数になる確率は $\\dfrac{2}{5}$ である。したがって期待値は $100\\times\\dfrac{2}{5}+0\\times\\dfrac{3}{5}=40$ 円である。前問の確率をそのまま賞金に掛ける。",
+    strategy:
+      "期待値は『金額 $\\times$ 確率』の合計で求める。前問で求めた成功確率 $\\dfrac{2}{5}$ を使うと、計算し直さずに済む。",
+    trapExplanation:
+      "偶数になる場合の数12を直接100に掛けないこと。期待値では場合の数ではなく確率を使う。",
+    subQuestionIndex: 4,
+    difficultyStage: "advanced",
+    dependsOnPrevious: true,
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["誘導読解", "計算処理", "条件整理"],
+  },
   "ct-m2bc-s3-q1": {
     title: "数列 — 座席数の具体値",
     statement:
@@ -439,10 +809,14 @@ function addExamFlowMetadata(questions: CommonTestDrillQuestion[]): CommonTestDr
   });
 }
 
+function limitMathIaExamQuestions(questions: CommonTestDrillQuestion[]): CommonTestDrillQuestion[] {
+  return questions.filter((question) => /^ct-m1a-s[1-4]-q[1-4]$/.test(question.id));
+}
+
 export function getCommonTestExamQuestions(examId: string): CommonTestDrillQuestion[] {
   const preset = getCommonTestExamPreset(examId);
   if (!preset) return [];
-  const questions = COMMON_TEST_DRILL_QUESTIONS.filter(
+  let questions = COMMON_TEST_DRILL_QUESTIONS.filter(
     (q) =>
       q.subjectId === preset.subjectId &&
       preset.sectionIds.includes(q.sectionId)
@@ -452,6 +826,9 @@ export function getCommonTestExamQuestions(examId: string): CommonTestDrillQuest
     if (sa !== sb) return sa - sb;
     return a.id.localeCompare(b.id);
   });
+  if (examId === "math-1a-70") {
+    questions = limitMathIaExamQuestions(questions);
+  }
   return addExamFlowMetadata(questions);
 }
 
