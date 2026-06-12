@@ -1755,6 +1755,800 @@ The cleanup collected 120 bags of trash in three hours, and plastic items made u
     skillTags: ["レポート完成", "情報照合", "要旨把握"],
     stimulusType: "multi-source",
   },
+
+  // Phase 11 additions: original common-test style items.
+  {
+    id: "ct-m1a-s1-q5",
+    subjectId: "math-1a",
+    sectionId: "section-1",
+    title: "数と式 - 式の値",
+    context:
+      "ある量 $x$ について、$A = 2(x-3) + 5$、$B = x + 4$ と表される2つの値を考える。",
+    statement:
+      "$A = B$ となるときの $x$ の値を求めよ。",
+    type: "single-choice",
+    options: ["5", "7", "9", "11"],
+    correctAnswer: "5",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "$2(x-3)+5 = x+4$ より、$2x-6+5 = x+4$、すなわち $2x-1 = x+4$。移項して $x = 5$ となる。選択肢では 5 が正しい。",
+    strategy:
+      "かっこを外してから同類項をまとめる。途中で暗算せず、$2x-1=x+4$ の形まで整理すると符号のミスを減らせる。",
+    trapExplanation:
+      "$2(x-3)$ を $2x-3$ としてしまうと答えがずれる。かっこの前の係数は中の全ての項にかける。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+  {
+    id: "ct-m1a-s1-q6",
+    subjectId: "math-1a",
+    sectionId: "section-1",
+    title: "集合と命題 - 逆の真偽",
+    statement:
+      "整数 $n$ について、命題 $p$:「$n$ は 12 の倍数である」、命題 $q$:「$n$ は 3 の倍数である」とする。$p$ は $q$ であるための何条件か。",
+    type: "single-choice",
+    options: [
+      "必要条件であるが、十分条件ではない",
+      "十分条件であるが、必要条件ではない",
+      "必要十分条件である",
+      "必要条件でも十分条件でもない",
+    ],
+    correctAnswer: "十分条件であるが、必要条件ではない",
+    explanation:
+      "$n$ が12の倍数なら必ず3の倍数なので $p \\Rightarrow q$ は真である。一方、3の倍数でも12の倍数とは限らないので $q \\Rightarrow p$ は偽である。したがって $p$ は $q$ であるための十分条件であるが、必要条件ではない。",
+    strategy:
+      "「pならばq」と「qならばp」を別々に確かめる。反例は $n=3$ や $n=6$ のように小さい数で探すと速い。",
+    trapExplanation:
+      "12の倍数と3の倍数の包含関係を逆に読むと、必要条件と十分条件を取り違える。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "選択肢消去"],
+  },
+  {
+    id: "ct-m1a-s1-q7",
+    subjectId: "math-1a",
+    sectionId: "section-1",
+    title: "三角比 - 日常場面の高さ",
+    context:
+      "校庭の地点Aから校舎の屋上を見ると仰角が $30°$ であった。地点Aから校舎の真下までの水平距離は $24$ m である。目の高さは考えない。",
+    statement:
+      "校舎の高さを求めよ。ただし、$\\tan 30° = \\dfrac{1}{\\sqrt{3}}$ とする。",
+    type: "single-choice",
+    options: ["$8\\sqrt{3}$ m", "$12\\sqrt{3}$ m", "$24\\sqrt{3}$ m", "$\\dfrac{24}{\\sqrt{3}}$ m"],
+    correctAnswer: "$8\\sqrt{3}$ m",
+    explanation:
+      "高さを $h$ m とすると、$\\tan 30° = \\dfrac{h}{24}$。よって $\\dfrac{1}{\\sqrt{3}} = \\dfrac{h}{24}$ なので、$h = \\dfrac{24}{\\sqrt{3}} = 8\\sqrt{3}$ m。",
+    strategy:
+      "直角三角形を描き、$\\tan = \\dfrac{高さ}{水平距離}$ を確認してから式を立てる。",
+    trapExplanation:
+      "$\\tan 30°$ を $\\sqrt{3}$ と覚え違えると $24\\sqrt{3}$ m を選びやすい。",
+    estimatedMinutes: 3,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+    sourceStyle: "日常場面",
+  },
+  {
+    id: "ct-m1a-s2-q5",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "二次関数 - 範囲内の最小値",
+    statement:
+      "$f(x) = x^2 - 6x + 11$ について、$1 \\leq x \\leq 5$ における最小値を求めよ。",
+    type: "single-choice",
+    options: ["1", "2", "3", "6"],
+    correctAnswer: "2",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "$f(x) = (x-3)^2 + 2$ と平方完成できる。頂点の $x=3$ は範囲 $1 \\leq x \\leq 5$ に含まれるので、最小値は $2$。",
+    strategy:
+      "二次関数はまず平方完成し、頂点が指定範囲に入るかを見る。端点だけを代入する前に頂点を確認する。",
+    trapExplanation:
+      "端点 $x=1,5$ だけを見ると $6$ を選びやすい。上に開く放物線では頂点が範囲内なら頂点が最小になる。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "条件整理"],
+  },
+  {
+    id: "ct-m1a-s2-q6",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "データの分析 - 四分位範囲",
+    context:
+      "9人の読書時間（分）は、短い順に 12, 18, 20, 25, 28, 31, 35, 39, 46 であった。",
+    statement:
+      "このデータの四分位範囲を求めよ。ただし、中央値を除いた下位4個と上位4個から第1四分位数、第3四分位数を求める。",
+    type: "single-choice",
+    options: ["16", "18", "20", "22"],
+    correctAnswer: "18",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "中央値は5番目の28。下位4個 12,18,20,25 の中央値は $(18+20)/2=19$、上位4個 31,35,39,46 の中央値は $(35+39)/2=37$。四分位範囲は $37-19=18$。",
+    strategy:
+      "四分位数は学校や資料で定義が分かれる場合がある。問題文に指定された方法を優先し、中央値を含めるかどうかを確認する。",
+    trapExplanation:
+      "四分位数の定義を確認せずに機械的に計算すると、選択肢と合わない値になることがある。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["データ読み取り", "計算処理"],
+    stimulusType: "table",
+  },
+  {
+    id: "ct-m1a-s2-q7",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "データの分析 - 箱ひげ図の読み取り",
+    context:
+      "あるクラスの小テストについて、最小値 42点、第1四分位数 55点、中央値 68点、第3四分位数 76点、最大値 94点であった。",
+    statement:
+      "このデータについて、確実に正しいといえるものを選べ。",
+    type: "single-choice",
+    options: [
+      "半数以上の生徒が68点以上である",
+      "平均点は68点である",
+      "四分位範囲は21点である",
+      "最高点と最低点の差は50点である",
+    ],
+    correctAnswer: "四分位範囲は21点である",
+    explanation:
+      "四分位範囲は第3四分位数から第1四分位数を引いて $76-55=21$ 点。平均点は箱ひげ図の5数要約からは分からない。範囲は $94-42=52$ 点である。",
+    strategy:
+      "箱ひげ図では、中央値・四分位数・最大最小から確実に分かることだけを選ぶ。平均や細かな人数分布は原則分からない。",
+    trapExplanation:
+      "中央値を平均と混同するのが典型的なミス。中央値はデータを順に並べた中央の値であり、平均とは限らない。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["データ読み取り", "図表読解", "選択肢消去"],
+    stimulusType: "boxplot",
+  },
+  {
+    id: "ct-m1a-s3-q5",
+    subjectId: "math-1a",
+    sectionId: "section-3",
+    title: "図形の性質 - 円周角",
+    statement:
+      "円に内接する四角形 $ABCD$ において、$\\angle ABC = 72°$ である。$\\angle ADC$ の大きさを求めよ。",
+    type: "single-choice",
+    options: ["72°", "98°", "108°", "118°"],
+    correctAnswer: "108°",
+    explanation:
+      "円に内接する四角形の向かい合う角の和は $180°$。したがって $\\angle ADC = 180° - 72° = 108°$。",
+    strategy:
+      "円に内接する四角形では、対角の和が $180°$ になることをまず確認する。",
+    trapExplanation:
+      "同じ弧に対する円周角と混同して、同じ72°と考えないようにする。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "図表読解"],
+  },
+  {
+    id: "ct-m1a-s3-q6",
+    subjectId: "math-1a",
+    sectionId: "section-3",
+    title: "図形の性質 - 角の二等分線",
+    statement:
+      "三角形 $ABC$ において、$AB=6$、$AC=9$ である。角 $A$ の二等分線が辺 $BC$ と交わる点を $D$ とするとき、$BD:DC$ を求めよ。",
+    type: "single-choice",
+    options: ["1:1", "2:3", "3:2", "4:9"],
+    correctAnswer: "2:3",
+    explanation:
+      "角の二等分線の定理より、$BD:DC = AB:AC = 6:9 = 2:3$。",
+    strategy:
+      "角の二等分線が出たら、隣り合う2辺の長さの比が、分けられた辺の比になることを使う。",
+    trapExplanation:
+      "$AB:AC$ を逆にして $3:2$ を選ぶミスが多い。点Dが辺BC上にあることを図で確認する。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "図表読解"],
+  },
+  {
+    id: "ct-m1a-s4-q5",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "場合の数 - 委員の選び方",
+    context:
+      "男子4人、女子3人から3人の委員を選ぶ。ただし、少なくとも1人は女子を含める。",
+    statement:
+      "選び方は何通りあるか。",
+    type: "single-choice",
+    options: ["18", "30", "31", "35"],
+    correctAnswer: "31",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "全体から男子だけを選ぶ場合を除く。全体は $_7\\mathrm{C}_3 = 35$ 通り、男子だけは $_4\\mathrm{C}_3 = 4$ 通り。よって $35-4=31$ 通り。",
+    strategy:
+      "「少なくとも1人」は余事象で処理すると速い。全体から条件に反する場合だけを引く。",
+    trapExplanation:
+      "女子が1人の場合だけを数えて終わると、女子2人・3人の場合を落としてしまう。",
+    estimatedMinutes: 3,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-q6",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 - くじの条件付き確率",
+    context:
+      "箱に当たりくじ2本、はずれくじ3本が入っている。くじを1本引いて戻さず、続けてもう1本引く。",
+    statement:
+      "1本目が当たりであったと分かっているとき、2本目も当たりである確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{1}{4}$", "$\\dfrac{1}{3}$", "$\\dfrac{2}{5}$", "$\\dfrac{1}{2}$"],
+    correctAnswer: "$\\dfrac{1}{4}$",
+    explanation:
+      "1本目が当たりなら、残りは当たり1本、はずれ3本の計4本。したがって2本目も当たりである確率は $\\dfrac{1}{4}$。",
+    strategy:
+      "条件付き確率では、条件が分かった後の状態を作り直す。今回は1本目を取り除いた後の箱を見る。",
+    trapExplanation:
+      "最初の当たりの割合 $\\dfrac{2}{5}$ をそのまま使うと誤り。戻さないので母数も当たりの本数も変わる。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+
+  {
+    id: "ct-m2bc-s1-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-1",
+    title: "図形と方程式 - 2点間の距離",
+    statement:
+      "座標平面上の2点 $A(1, 2)$、$B(7, 10)$ の距離を求めよ。",
+    type: "single-choice",
+    options: ["8", "10", "12", "14"],
+    correctAnswer: "10",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "$AB = \\sqrt{(7-1)^2+(10-2)^2} = \\sqrt{36+64} = \\sqrt{100}=10$。",
+    strategy:
+      "2点間の距離は、x座標の差とy座標の差をそれぞれ2乗して足す。差の符号は2乗で消える。",
+    trapExplanation:
+      "座標の差を足して $6+8=14$ とするミスに注意。距離は三平方の定理で求める。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+  {
+    id: "ct-m2bc-s1-q5",
+    subjectId: "math-2bc",
+    sectionId: "section-1",
+    title: "指数・対数 - 対数方程式",
+    statement:
+      "$\\log_2 x + \\log_2 4 = 5$ を満たす $x$ の値を求めよ。",
+    type: "single-choice",
+    options: ["4", "6", "8", "16"],
+    correctAnswer: "8",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "$\\log_2 4 = 2$ なので、$\\log_2 x = 3$。したがって $x=2^3=8$。",
+    strategy:
+      "まず定数部分の対数を計算する。対数の式を指数の式に直すと、値をすばやく確定できる。",
+    trapExplanation:
+      "$\\log_2 4$ を4として扱うと誤る。対数は「2を何乗すると4か」を表す。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+  {
+    id: "ct-m2bc-s2-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-2",
+    title: "三角関数 - 最大値",
+    statement:
+      "$0 \\leq x \\leq 2\\pi$ において、$2\\sin x + 1$ の最大値を求めよ。",
+    type: "single-choice",
+    options: ["1", "2", "3", "4"],
+    correctAnswer: "3",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "$\\sin x$ の最大値は1である。したがって $2\\sin x + 1$ の最大値は $2\\cdot1+1=3$。",
+    strategy:
+      "$\\sin x$ の取り得る範囲 $-1 \\leq \\sin x \\leq 1$ を使い、係数と定数を反映する。",
+    trapExplanation:
+      "$\\sin x$ の最大値を $0$ と考えたり、係数2を忘れたりすると誤る。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "条件整理"],
+  },
+  {
+    id: "ct-m2bc-s2-q5",
+    subjectId: "math-2bc",
+    sectionId: "section-2",
+    title: "微分 - 接線の傾き",
+    statement:
+      "関数 $f(x)=x^3-2x$ について、$x=2$ における接線の傾きを求めよ。",
+    type: "single-choice",
+    options: ["6", "8", "10", "12"],
+    correctAnswer: "10",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイ", length: 2 }],
+    explanation:
+      "$f'(x)=3x^2-2$。したがって $f'(2)=3\\cdot4-2=10$ である。",
+    strategy:
+      "接線の傾きは微分係数で求める。まず導関数を作り、指定されたxの値を代入する。",
+    trapExplanation:
+      "$f(2)$ を計算してしまうと、点のy座標を求めているだけで傾きではない。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+  {
+    id: "ct-m2bc-s3-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-3",
+    title: "数列 - 等差数列",
+    statement:
+      "等差数列 $\\{a_n\\}$ で、$a_2=7$、$a_6=19$ である。公差を求めよ。",
+    type: "single-choice",
+    options: ["2", "3", "4", "6"],
+    correctAnswer: "3",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "$a_6-a_2$ は4つ分の公差にあたる。$19-7=12$ なので、$4d=12$、よって $d=3$。",
+    strategy:
+      "項番号の差と値の差を対応させる。$6-2=4$ なので、公差4個分である。",
+    trapExplanation:
+      "項番号の差を5と考えるミスがある。第2項から第6項までは4ステップ進む。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+  {
+    id: "ct-m2bc-s3-q5",
+    subjectId: "math-2bc",
+    sectionId: "section-3",
+    title: "数列 - 和の計算",
+    statement:
+      "$\\displaystyle\\sum_{k=1}^{8} (3k-1)$ の値を求めよ。",
+    type: "single-choice",
+    options: ["92", "96", "100", "104"],
+    correctAnswer: "100",
+    answerFormat: "digits",
+    digitSlots: [{ label: "アイウ", length: 3 }],
+    explanation:
+      "$\\sum_{k=1}^{8}(3k-1)=3\\sum_{k=1}^{8}k-\\sum_{k=1}^{8}1 = 3\\cdot36-8 = 108-8=100$。",
+    strategy:
+      "シグマは項ごとに分けて、$\\sum k = \\dfrac{n(n+1)}{2}$ と $\\sum 1=n$ を使う。",
+    trapExplanation:
+      "定数 $-1$ の和を $-1$ のままにすると $107$ になる。8項分あるので $-8$ である。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["計算処理", "数式変形"],
+  },
+  {
+    id: "ct-m2bc-s4-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-4",
+    title: "統計的推測 - 標本平均",
+    statement:
+      "母平均が50、母標準偏差が12の母集団から、大きさ36の無作為標本を抽出する。標本平均の標準偏差を求めよ。",
+    type: "single-choice",
+    options: ["2", "3", "6", "12"],
+    correctAnswer: "2",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "標本平均の標準偏差は $\\dfrac{\\sigma}{\\sqrt{n}}$。ここでは $\\dfrac{12}{\\sqrt{36}}=\\dfrac{12}{6}=2$。",
+    strategy:
+      "標本平均では標準偏差が $\\sqrt{n}$ で割られる。母標準偏差そのものを答えないようにする。",
+    trapExplanation:
+      "標本の大きさ36で割って $\\dfrac{1}{3}$ とするのは誤り。分母は $\\sqrt{36}$ である。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["計算処理", "データ読み取り"],
+  },
+  {
+    id: "ct-m2bc-s5-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-5",
+    title: "ベクトル - 内積",
+    statement:
+      "$\\vec{a}=(3, -2, 1)$、$\\vec{b}=(2, 4, -5)$ のとき、$\\vec{a}\\cdot\\vec{b}$ を求めよ。",
+    type: "single-choice",
+    options: ["-7", "-5", "3", "9"],
+    correctAnswer: "-7",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "$\\vec{a}\\cdot\\vec{b}=3\\cdot2+(-2)\\cdot4+1\\cdot(-5)=6-8-5=-7$。",
+    strategy:
+      "対応する成分どうしを掛けて足す。負の数を含む成分は、積の符号を一つずつ確認する。",
+    trapExplanation:
+      "$(-2)\\cdot4$ や $1\\cdot(-5)$ の符号を落とすと、正の値を選びやすい。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+  {
+    id: "ct-m2bc-s5-q5",
+    subjectId: "math-2bc",
+    sectionId: "section-5",
+    title: "ベクトル - 中点の位置ベクトル",
+    statement:
+      "点 $A$、$B$ の位置ベクトルをそれぞれ $\\vec{a}$、$\\vec{b}$ とする。線分 $AB$ の中点 $M$ の位置ベクトルを選べ。",
+    type: "single-choice",
+    options: [
+      "$\\dfrac{\\vec{a}+\\vec{b}}{2}$",
+      "$\\vec{a}+\\vec{b}$",
+      "$\\dfrac{\\vec{a}-\\vec{b}}{2}$",
+      "$2\\vec{a}+2\\vec{b}$",
+    ],
+    correctAnswer: "$\\dfrac{\\vec{a}+\\vec{b}}{2}$",
+    explanation:
+      "中点の位置ベクトルは両端の位置ベクトルの平均である。したがって $\\overrightarrow{OM}=\\dfrac{\\vec{a}+\\vec{b}}{2}$。",
+    strategy:
+      "中点は比が $1:1$ の内分点。内分公式に入れても、単に平均と見てもよい。",
+    trapExplanation:
+      "和を2で割り忘れると、点ではなく2倍された位置を表してしまう。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "数式変形"],
+  },
+  {
+    id: "ct-m2bc-s6-q5",
+    subjectId: "math-2bc",
+    sectionId: "section-6",
+    title: "平面上の曲線 - 楕円",
+    statement:
+      "楕円 $\\dfrac{x^2}{16}+\\dfrac{y^2}{9}=1$ について、長軸の長さを求めよ。",
+    type: "single-choice",
+    options: ["4", "6", "8", "16"],
+    correctAnswer: "8",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "分母の大きい方が $16=4^2$ なので、x方向の半長軸は4。長軸の長さはその2倍で $8$。",
+    strategy:
+      "楕円の標準形では、分母が半軸の長さの2乗を表す。長軸は半長軸の2倍である。",
+    trapExplanation:
+      "分母16をそのまま長軸の長さと読むミスがある。まず平方根を取って半軸を求める。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["図表読解", "計算処理"],
+  },
+  {
+    id: "ct-m2bc-s7-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-7",
+    title: "複素数平面 - 絶対値",
+    statement:
+      "複素数 $z=3-4i$ の絶対値 $|z|$ を求めよ。",
+    type: "single-choice",
+    options: ["1", "5", "7", "25"],
+    correctAnswer: "5",
+    answerFormat: "number",
+    markLabels: ["ア"],
+    explanation:
+      "$|z|=\\sqrt{3^2+(-4)^2}=\\sqrt{9+16}=5$。",
+    strategy:
+      "複素数 $a+bi$ の絶対値は、原点から点 $(a,b)$ までの距離である。",
+    trapExplanation:
+      "$3-4= -1$ のように実部と虚部を単純に引くのではない。三平方の定理を使う。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "図表読解"],
+  },
+
+  {
+    id: "ct-eng-s1-q4",
+    subjectId: "english-reading",
+    sectionId: "section-1",
+    title: "Short Notice - Library Workshop",
+    passage: `City Library: Weekend Workshop
+Learn how to make a simple travel journal.
+Date: Saturday, June 15
+Time: 10:00 a.m. - 11:30 a.m.
+Place: Meeting Room B
+Bring: three printed photos and a pen
+The workshop is free, but students must sign up by June 12.`,
+    statement:
+      "What should students bring to the workshop?",
+    type: "single-choice",
+    options: [
+      "A notebook and a lunch box",
+      "Three printed photos and a pen",
+      "A library card and scissors",
+      "A camera and colored paper",
+    ],
+    correctAnswer: "Three printed photos and a pen",
+    explanation:
+      "The notice says, 'Bring: three printed photos and a pen.' The other items are not listed as things students need to bring.",
+    strategy:
+      "案内文では、日時・場所・持ち物などの見出しを先に確認する。設問が 'bring' を聞いているので Bring の行を見る。",
+    trapExplanation:
+      "travel journal という内容から notebook を連想しやすいが、本文で指定されている持ち物とは違う。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["英語スキャニング", "情報照合"],
+    stimulusType: "notice",
+  },
+  {
+    id: "ct-eng-s2-q4",
+    subjectId: "english-reading",
+    sectionId: "section-2",
+    title: "Email - Club Schedule Change",
+    passage: `From: Ms. Rivera
+To: Green Club members
+
+Thank you for volunteering for the garden project. Because heavy rain is expected on Friday, we will not meet after school that day. Instead, please come to the school garden at 9:00 a.m. on Saturday. We will finish by 11:00 a.m. You do not need to bring tools, but please bring a water bottle.`,
+    statement:
+      "Why was the meeting moved to Saturday?",
+    type: "single-choice",
+    options: [
+      "The teacher could not come on Friday.",
+      "Heavy rain is expected on Friday.",
+      "The garden tools were not ready.",
+      "More members can come on Saturday.",
+    ],
+    correctAnswer: "Heavy rain is expected on Friday.",
+    explanation:
+      "The email says, 'Because heavy rain is expected on Friday,' the club will not meet after school that day. This gives the reason for the schedule change.",
+    strategy:
+      "理由を問う設問では because, since, so などのつながりを探す。今回は Because の直後が根拠になる。",
+    trapExplanation:
+      "Saturdayの集合時刻に目が行くと、理由ではなく変更後の予定を選んでしまいやすい。",
+    estimatedMinutes: 3,
+    difficulty: "BASIC",
+    skillTags: ["英語スキャニング", "時系列整理"],
+    stimulusType: "email",
+  },
+  {
+    id: "ct-eng-s3-q4",
+    subjectId: "english-reading",
+    sectionId: "section-3",
+    title: "Short Story - A Small Choice",
+    passage: `Mika wanted to buy a new phone case, but she also needed a book for her science project. At the store, she saw a case with her favorite design. She held it for a while, then put it back. On the way home with the science book, she felt a little disappointed, but she also felt ready for the project meeting on Monday.`,
+    statement:
+      "What can be inferred about Mika?",
+    type: "single-choice",
+    options: [
+      "She forgot about the project meeting.",
+      "She chose what she needed over what she wanted.",
+      "She bought both the case and the book.",
+      "She did not like the phone case design.",
+    ],
+    correctAnswer: "She chose what she needed over what she wanted.",
+    explanation:
+      "Mika wanted the phone case but put it back and bought the science book. This shows that she chose the item she needed for her project.",
+    strategy:
+      "物語では、登場人物の行動の変化を見る。wanted と needed の対比が推論の根拠になる。",
+    trapExplanation:
+      "disappointed だけを見ると否定的な選択肢に引かれるが、最後には project meeting に備えられている。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["要旨把握", "選択肢消去"],
+    stimulusType: "story",
+  },
+  {
+    id: "ct-eng-s4-q4",
+    subjectId: "english-reading",
+    sectionId: "section-4",
+    title: "Chart - School Lunch Survey",
+    passage: `A student council survey asked 120 students which lunch menu they wanted for Sports Day.
+
+Rice balls: 42 students
+Sandwiches: 36 students
+Curry: 30 students
+Noodles: 12 students`,
+    statement:
+      "Which statement is true according to the survey?",
+    type: "single-choice",
+    options: [
+      "Curry was chosen by more students than sandwiches.",
+      "Noodles received one fifth of all votes.",
+      "Rice balls and sandwiches together received 78 votes.",
+      "More than half of the students chose rice balls.",
+    ],
+    correctAnswer: "Rice balls and sandwiches together received 78 votes.",
+    explanation:
+      "Rice balls received 42 votes and sandwiches received 36 votes. Together, they received $42+36=78$ votes. Noodles received 12 out of 120 votes, which is one tenth, not one fifth.",
+    strategy:
+      "図表問題では、各選択肢を数字で検算する。合計や割合を問うものは、計算式を短くメモする。",
+    trapExplanation:
+      "割合と人数の両方が出ると、複数の選択肢が正しそうに見える。設問は必ず一つに絞れるか確認する。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["図表読解", "情報照合", "データ読み取り"],
+    stimulusType: "chart",
+  },
+  {
+    id: "ct-eng-s5-q4",
+    subjectId: "english-reading",
+    sectionId: "section-5",
+    title: "Information Match - Volunteer Tasks",
+    passage: `Three students are choosing volunteer tasks for the school festival.
+
+Task A: Guide visitors at the front gate. Good for students who enjoy talking. 9:00-11:00.
+Task B: Carry boxes from classrooms to the gym. Good for students who do not mind physical work. 8:00-9:30.
+Task C: Take photos of performances. Students must bring their own camera. 12:00-2:00.
+
+Students:
+Ken can come only before 10:00 and prefers active work.
+Sara enjoys speaking with visitors but cannot come before 10:30.
+Yui has a camera and is free after lunch.`,
+    statement:
+      "Which task is best for Yui?",
+    type: "single-choice",
+    options: ["Task A", "Task B", "Task C", "No task matches her"],
+    correctAnswer: "Task C",
+    explanation:
+      "Yui has a camera and is free after lunch. Task C requires students to bring their own camera and takes place from 12:00 to 2:00, so it matches her conditions.",
+    strategy:
+      "人物の条件を時間・持ち物・好みに分けて、タスク条件と照合する。Yui は camera と after lunch が決め手。",
+    trapExplanation:
+      "Task Aは人と話す仕事だが、Yuiについては話すのが好きとは書かれていない。本文の条件だけで判断する。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["情報照合", "英語スキャニング", "条件整理"],
+    stimulusType: "matching",
+  },
+  {
+    id: "ct-eng-s5-q5",
+    subjectId: "english-reading",
+    sectionId: "section-5",
+    title: "Information Match - Course Choice",
+    passage: `Community Center Summer Courses
+
+Course 1: Digital Drawing
+Tuesday evenings, 6:00-7:30. Students use tablets provided by the center.
+
+Course 2: Local Cooking
+Saturday mornings, 10:00-12:00. Students must bring 500 yen for ingredients.
+
+Course 3: Nature Walk
+Sunday mornings, 8:30-11:00. Students should wear comfortable shoes.
+
+Rina wants a weekend course, but she is busy on Sundays. She is interested in food and can pay a small fee.`,
+    statement:
+      "Which course should Rina choose?",
+    type: "single-choice",
+    options: ["Course 1", "Course 2", "Course 3", "None of the courses"],
+    correctAnswer: "Course 2",
+    explanation:
+      "Rina wants a weekend course and is busy on Sundays, so Saturday is possible. She is interested in food and can pay a small fee, which matches Course 2.",
+    strategy:
+      "曜日条件で先に候補を絞り、その後に内容と費用を確認する。Sundayが不可なのでCourse 3は外す。",
+    trapExplanation:
+      "weekendだけを見るとCourse 3も候補になるが、Rinaは日曜日が忙しい。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["情報照合", "条件整理", "英語スキャニング"],
+    stimulusType: "matching",
+  },
+  {
+    id: "ct-eng-s6-q4",
+    subjectId: "english-reading",
+    sectionId: "section-6",
+    title: "Summary - Classroom Plants",
+    passage: `Some schools are putting small plants in classrooms. Teachers report that students often become calmer when they can see greenery near their desks. Plants also give students a simple responsibility: watering them and checking their growth. However, plants alone do not improve learning. They work best when teachers use them as part of class activities, such as observation journals or science discussions.`,
+    statement:
+      "Which is the best summary of the passage?",
+    type: "single-choice",
+    options: [
+      "Classroom plants can help students, especially when they are connected to learning activities.",
+      "Schools should replace science classes with plant care activities.",
+      "Teachers should put many large plants in every classroom.",
+      "Plants improve test scores even when teachers do not use them in lessons.",
+    ],
+    correctAnswer: "Classroom plants can help students, especially when they are connected to learning activities.",
+    explanation:
+      "The passage says plants may calm students and give responsibility, but they work best as part of class activities. Option 1 includes both the benefit and the condition.",
+    strategy:
+      "要約問題では、本文全体の主張と但し書きの両方を含む選択肢を選ぶ。極端な表現は避ける。",
+    trapExplanation:
+      "plants alone do not improve learning とあるので、植物だけで成績が上がるという選択肢は本文と逆である。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["要旨把握", "選択肢消去"],
+    stimulusType: "essay",
+  },
+  {
+    id: "ct-eng-s7-q4",
+    subjectId: "english-reading",
+    sectionId: "section-7",
+    title: "Inference - Public Benches",
+    passage: `A town removed several benches from the area near its station because officials wanted people to keep walking and avoid crowding. A month later, shop owners asked the town to bring some benches back. They said older visitors were spending less time in the area because there were few places to rest. The town decided to place fewer benches than before, but to put them near wide sidewalks.`,
+    statement:
+      "What does the town's final decision suggest?",
+    type: "single-choice",
+    options: [
+      "The town ignored the shop owners' concerns.",
+      "The town tried to balance safety and visitors' needs.",
+      "The town wanted to close the station area.",
+      "The town believed benches were no longer necessary.",
+    ],
+    correctAnswer: "The town tried to balance safety and visitors' needs.",
+    explanation:
+      "The town first removed benches to avoid crowding, but later brought back fewer benches near wide sidewalks. This shows a compromise between safety and the need for resting places.",
+    strategy:
+      "推論問題では、最初の対応と最後の対応の変化を見る。both sides を満たす選択肢が正解になりやすい。",
+    trapExplanation:
+      "benchesを減らした事実だけを見ると不要と判断したように見えるが、実際には一部を戻している。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["要旨把握", "選択肢消去"],
+    stimulusType: "essay",
+  },
+  {
+    id: "ct-eng-s8-q4",
+    subjectId: "english-reading",
+    sectionId: "section-8",
+    title: "Report Completion - Bicycle Parking",
+    passage: `[Source 1 - Student Survey]
+Question: Why do you avoid riding a bicycle to school?
+No safe parking space: 46%
+Too far from home: 24%
+Bad weather: 18%
+Other reasons: 12%
+
+[Source 2 - School Notice]
+The school has an unused space beside the east gate. It is currently closed, but it could be opened for student use if a teacher is present in the morning.`,
+    context: `Report Draft: Encouraging Bicycle Use
+
+The survey shows that the most common reason students avoid riding bicycles is not distance or weather, but the lack of safe parking. The school also has unused space beside the east gate. Therefore, [ A ]`,
+    statement:
+      "Which sentence best completes [ A ]?",
+    type: "single-choice",
+    options: [
+      "the school should consider creating supervised bicycle parking near the east gate.",
+      "students should be told to ride bicycles even when parking is unsafe.",
+      "the east gate should remain closed because students do not need it.",
+      "weather is the biggest problem for students who ride bicycles.",
+    ],
+    correctAnswer: "the school should consider creating supervised bicycle parking near the east gate.",
+    explanation:
+      "Source 1 identifies safe parking as the biggest issue, and Source 2 says there is unused space by the east gate that could be used with teacher supervision. Option 1 combines both sources.",
+    strategy:
+      "レポート完成では、直前の文と複数資料の情報を同時に満たす文を選ぶ。safe parking と east gate が対応する。",
+    trapExplanation:
+      "bad weatherは18%で最大ではない。割合の大きさを取り違えると本文と逆の結論になる。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["レポート完成", "情報照合", "図表読解"],
+    stimulusType: "multi-source",
+  },
+  {
+    id: "ct-eng-s8-q5",
+    subjectId: "english-reading",
+    sectionId: "section-8",
+    title: "Report Completion - Museum Visit",
+    passage: `[Source 1 - Museum Website]
+The River Museum offers a student program on water use. Groups can test water samples and compare old and new maps of the town. The program takes 90 minutes.
+
+[Source 2 - Class Goal]
+Our geography class is studying how rivers shape local communities. We need an activity that includes both data collection and map reading.`,
+    context: `Field Trip Plan
+
+The River Museum program fits our class goal because students can [ B ].`,
+    statement:
+      "Which phrase best completes [ B ]?",
+    type: "single-choice",
+    options: [
+      "practice data collection and map reading in one activity",
+      "learn how to sell museum tickets to visitors",
+      "watch a movie about rivers for three hours",
+      "study only the history of old buildings",
+    ],
+    correctAnswer: "practice data collection and map reading in one activity",
+    explanation:
+      "Source 1 says students can test water samples and compare old and new maps. Source 2 asks for data collection and map reading. Option 1 matches both.",
+    strategy:
+      "空所の前後を読み、必要な要素をリスト化する。data collection は water samples、map reading は old and new maps に対応する。",
+    trapExplanation:
+      "museumという語からticketやmovieを連想しない。資料に明記された活動だけで判断する。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["レポート完成", "情報照合", "英語スキャニング"],
+    stimulusType: "multi-source",
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────
