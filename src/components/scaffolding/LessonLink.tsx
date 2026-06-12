@@ -22,7 +22,7 @@ export function LessonLink({
       </span>
       <div className="min-w-0 flex-1">
         <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-neon-magenta/80">
-          さらに深く理解する
+          関連講座
         </div>
         <div className="mt-0.5 truncate font-display font-semibold text-foreground">
           {title}

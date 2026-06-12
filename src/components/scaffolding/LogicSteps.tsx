@@ -263,7 +263,7 @@ export function LogicSteps({
         </motion.div>
       )}
 
-      {/* 関連授業への誘導（躓いたユーザー向け。常時表示） */}
+      {/* 関連講座への誘導（躓いたユーザー向け。常時表示） */}
       {relatedLesson && (
         <div className="pt-2">
           <LessonLink slug={relatedLesson.slug} title={relatedLesson.title} />

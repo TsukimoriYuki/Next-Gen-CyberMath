@@ -158,7 +158,7 @@ export default function MockExamPage() {
             サイバー模試・特訓モード
           </h1>
           <p className="mt-2 text-muted-foreground">
-            条件を選んでオリジナル模試を生成。提出後に厳密解で自己採点し、弱点を授業で補強します。
+            条件を選んでオリジナル模試を生成。提出後に厳密解で自己採点し、弱点を講座で補強します。
           </p>
           <Link
             href="/mock/history"
@@ -446,7 +446,7 @@ export default function MockExamPage() {
         {finalized && weakTags.length > 0 && (
           <div className="mt-5 rounded-xl border border-neon-magenta/30 bg-neon-magenta/5 p-4">
             <div className="mb-2 flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-neon-magenta">
-              <Lightbulb className="h-4 w-4" /> 弱点タグと補強授業
+              <Lightbulb className="h-4 w-4" /> 弱点タグと補強講座
             </div>
             <div className="mb-3 flex flex-wrap gap-1.5">
               {weakTags.slice(0, 8).map((t) => (
@@ -467,7 +467,7 @@ export default function MockExamPage() {
               </div>
             ) : (
               <p className="text-xs text-muted-foreground">
-                対応する授業が見つかりませんでした。タグから問題を復習しましょう。
+                対応する講座が見つかりませんでした。タグから問題を復習しましょう。
               </p>
             )}
           </div>

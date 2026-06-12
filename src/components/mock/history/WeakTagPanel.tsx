@@ -15,7 +15,7 @@ export function WeakTagPanel({ weakTags, lessons }: Props) {
     <section className="glass glow-magenta rounded-2xl p-5">
       <h2 className="mb-1 flex items-center gap-2 font-display text-sm font-bold tracking-wide text-neon-magenta">
         <Lightbulb className="h-4 w-4" />
-        弱点タグと、おすすめの復習授業
+        弱点タグと、おすすめの復習講座
       </h2>
       <p className="mb-4 text-xs text-muted-foreground">
         これまでに間違えた問題のタグを集計しました。よく間違える概念ほど大きく表示されます。
@@ -51,7 +51,7 @@ export function WeakTagPanel({ weakTags, lessons }: Props) {
             })}
           </div>
 
-          {/* おすすめ授業 */}
+          {/* おすすめ講座 */}
           {lessons.length > 0 ? (
             <div className="grid gap-2 sm:grid-cols-2">
               {lessons.map((rec) => (
@@ -94,7 +94,7 @@ export function WeakTagPanel({ weakTags, lessons }: Props) {
             </div>
           ) : (
             <p className="text-xs text-muted-foreground">
-              弱点タグに直接対応する授業が見つかりませんでした。上のタグから関連問題を復習しましょう。
+              弱点タグに直接対応する講座が見つかりませんでした。上のタグから関連問題を復習しましょう。
             </p>
           )}
         </>

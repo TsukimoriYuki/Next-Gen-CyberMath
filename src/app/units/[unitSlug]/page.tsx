@@ -58,7 +58,7 @@ export default async function UnitDetailPage({
         <section className="mt-8">
           <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-bold uppercase tracking-[0.2em] text-neon-magenta/90">
             <BookOpen className="h-4 w-4" />
-            この単元の授業
+            この単元の講座
           </h2>
           <div className="grid gap-3 sm:grid-cols-2">
             {lessons.map((l) => (

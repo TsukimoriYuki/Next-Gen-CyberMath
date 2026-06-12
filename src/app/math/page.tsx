@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layers, Skull, Target } from "lucide-react";
+import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layers, Skull, Target, GraduationCap } from "lucide-react";
 import {
   getAllProblems,
   getChallengeProblems,
@@ -221,15 +221,31 @@ export default async function MathHomePage() {
             </div>
           </Link>
 
-          {/* 授業スキルツリー */}
-          <Link href="/lessons" className="washi washi-hover group block rounded-2xl p-6">
+          {/* 講座 */}
+          <Link href="/courses" className="washi washi-hover group block rounded-2xl p-6">
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 transition-transform group-hover:scale-105">
+                <GraduationCap className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">講座</div>
+                <div className="mt-1 text-sm text-muted-foreground">初学者・中級者・上級者の3段階。二次関数から体系的に学ぶ。</div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-blue-400">
+                  受講する <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 講座集（旧: 授業スキルツリー） */}
+          <Link href="/courses" className="washi washi-hover group block rounded-2xl p-6">
             <div className="flex items-start gap-4">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-magenta/10 text-neon-magenta transition-transform group-hover:scale-105">
                 <BookOpen className="h-6 w-6" />
               </span>
               <div>
-                <div className="font-display text-lg font-bold text-foreground">授業スキルツリー</div>
-                <div className="mt-1 text-sm text-muted-foreground">概念のつながりをたどる。証明から極意まで 3 段構成で体得する。</div>
+                <div className="font-display text-lg font-bold text-foreground">講座集</div>
+                <div className="mt-1 text-sm text-muted-foreground">初学者・中級者・上級者の3段階。概念のつながりをたどって理解を深める。</div>
                 <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-magenta">
                   受講する <ArrowRight className="h-3.5 w-3.5" />
                 </div>

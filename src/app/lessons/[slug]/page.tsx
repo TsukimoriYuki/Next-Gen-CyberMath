@@ -29,8 +29,8 @@ export async function generateMetadata({
 }: PageProps<"/lessons/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const lesson = getLesson(slug);
-  if (!lesson) return { title: "授業が見つかりません" };
-  return { title: lesson.title, description: lesson.summary ?? `${lesson.unit} の授業` };
+  if (!lesson) return { title: "講座が見つかりません" };
+  return { title: lesson.title, description: lesson.summary ?? `${lesson.unit} の講座` };
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -97,11 +97,11 @@ export default async function LessonPage({
   return (
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
       <Link
-        href="/lessons"
+        href="/courses"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-neon-magenta"
       >
         <ArrowLeft className="h-4 w-4" />
-        授業一覧へ戻る
+        講座集へ戻る
       </Link>
 
       {/* Header */}
@@ -256,7 +256,7 @@ export default async function LessonPage({
       {!isRich && relatedProblems.length > 0 && (
         <section className="mt-10">
           <h2 className="mb-3 font-display text-sm font-bold uppercase tracking-[0.2em] text-neon-cyan/90">
-            この授業で解ける問題
+            この講座で解ける問題
           </h2>
           <div className="grid gap-3">
             {relatedProblems.map((p) => (
