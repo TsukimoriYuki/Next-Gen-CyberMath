@@ -32,7 +32,7 @@ export default async function MultiSourceProblemPage({
   const levelMeta = ENGLISH_LEVEL_META[problem.level];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="english-academic min-h-screen bg-slate-50 text-slate-900">
       {/* Ambient grid */}
       <div
         className="pointer-events-none fixed inset-0"
@@ -66,15 +66,15 @@ export default async function MultiSourceProblemPage({
             >
               {levelMeta.label}
             </span>
-            <span className="font-mono text-xs text-white/30">
-              {problem.sources.length}資料 · {problem.questions.length}問 ·{" "}
-              {problem.tags.join(" · ")}
+            <span className="text-xs text-slate-500">
+              {problem.sources.length}資料 / {problem.questions.length}問 /{" "}
+              {problem.tags.join(" / ")}
             </span>
           </div>
-          <h1 className="font-display text-xl font-extrabold text-white sm:text-2xl">
+          <h1 className="font-display text-xl font-extrabold text-slate-950 sm:text-2xl">
             {problem.title}
           </h1>
-          <p className="mt-1.5 font-mono text-[11px] text-white/30">
+          <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
             左ペインの複数資料を照合しながら、右ペインの設問に答えてください。
           </p>
         </div>

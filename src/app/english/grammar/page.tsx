@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "文法ドリル | CYBER English" };
 
 export default function GrammarPage() {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
       {/* Grid bg */}
       <div
         className="pointer-events-none fixed inset-0"
@@ -40,17 +40,11 @@ export default function GrammarPage() {
             Grammar Drill · 文法ドリル
           </div>
           <h1
-            className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
-            style={{
-              background: "linear-gradient(135deg, #a78bfa 0%, #ffffff 60%, #c4b5fd 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
+            className="font-display text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl"
           >
-            文法を制覇せよ
+            文法ドリル
           </h1>
-          <p className="mt-2 font-mono text-sm text-white/40">
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
             仮定法・分詞構文・関係詞・倒置・強調構文 — 入試頻出5項目を4択で徹底演習
           </p>
         </header>

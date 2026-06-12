@@ -383,7 +383,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
                         key={optIdx}
                         onClick={() => handleSelect(qIdx, optIdx)}
                         disabled={submitted}
-                        className="w-full flex items-start gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200"
+                        className="english-option flex w-full items-start gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200"
                         style={{
                           background: bg,
                           border: `1px solid ${border}`,
@@ -396,7 +396,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
                         >
                           {String.fromCharCode(65 + optIdx)}
                         </span>
-                        <span className="text-sm leading-relaxed" style={{ color: textColor }}>
+                        <span className="min-w-0 flex-1 whitespace-normal break-words text-sm leading-relaxed" style={{ color: textColor }}>
                           {opt}
                         </span>
                       </button>

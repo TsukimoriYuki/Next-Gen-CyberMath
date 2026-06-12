@@ -234,6 +234,112 @@
     0 6px 18px oklch(0.55 0.22 350 / 0.1);
 }
 
+/* CYBER English academic UI override.
+   Scoped to /english pages so legacy dark exercise components can be softened
+   without touching scoring, question data, or API behavior. */
+.english-academic {
+  min-height: 100vh;
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+.english-academic [class*="bg-black"] {
+  background-color: #f8fafc !important;
+}
+
+.english-academic [class*="text-white"] {
+  color: #0f172a !important;
+}
+
+.english-academic [class*="text-emerald-400"],
+.english-academic [class*="text-emerald-500"],
+.english-academic [class*="text-emerald-600"] {
+  color: #059669 !important;
+}
+
+.english-academic [class*="text-cyan-"],
+.english-academic [class*="text-blue-"] {
+  color: #2563eb !important;
+}
+
+.english-academic [class*="text-yellow-"],
+.english-academic [class*="text-amber-"] {
+  color: #d97706 !important;
+}
+
+.english-academic [class*="text-red-"],
+.english-academic [class*="text-rose-"] {
+  color: #e11d48 !important;
+}
+
+.english-academic [style*="color: rgba(255"],
+.english-academic [style*="color:rgba(255"],
+.english-academic [style*="color:rgb(255"],
+.english-academic [style*="color: #fff"],
+.english-academic [style*="color: rgb(255"] {
+  color: #475569 !important;
+}
+
+.english-academic [style*="background: rgba(255"],
+.english-academic [style*="background:rgba(255"],
+.english-academic [style*="background: rgba(0"],
+.english-academic [style*="background:rgba(0"] {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.english-academic [style*="linear-gradient(145deg"],
+.english-academic [style*="linear-gradient(135deg, rgba"],
+.english-academic [style*="color-mix(in srgb"] {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.english-academic [style*="border: 1px solid rgba(255"],
+.english-academic [style*="border:1px solid rgba(255"],
+.english-academic [style*="border-color: rgba(255"],
+.english-academic [style*="border-color:rgba(255"] {
+  border-color: #e2e8f0 !important;
+}
+
+.english-academic [style*="radial-gradient"] {
+  display: none !important;
+}
+
+.english-academic a,
+.english-academic button {
+  text-shadow: none !important;
+}
+
+.english-academic button,
+.english-academic a {
+  overflow-wrap: anywhere;
+}
+
+.english-academic p,
+.english-academic li,
+.english-academic span {
+  letter-spacing: 0;
+}
+
+.english-academic .english-paper {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+}
+
+.english-academic .english-option {
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+
 /* KaTeX inherits the foreground colour cleanly (now near-black on white) */
 .katex {
   color: inherit;

@@ -31,7 +31,7 @@ export default function MultiSourceListPage() {
   }, [activeTag]);
 
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
       {/* Ambient grid */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -63,7 +63,7 @@ export default function MultiSourceListPage() {
             }}
           >
             <Link2 className="h-3.5 w-3.5" />
-            Cross-Data Link
+            資料照合
           </div>
           <h1
             className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
@@ -77,7 +77,7 @@ export default function MultiSourceListPage() {
           >
             マルチソース
           </h1>
-          <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/50">
+          <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-600">
             表・リスト・本文の複数資料を横断照合し、条件を絞り込んで最適解を導く。
             共通テスト第4・5問の典型的な情報処理パズルを再現。
           </p>
@@ -213,7 +213,7 @@ export default function MultiSourceListPage() {
 
         {/* Footer */}
         <p className="mt-12 text-center font-mono text-xs tracking-[0.2em] text-white/20 uppercase">
-          More problem sets coming soon
+          条件を整理し、資料の根拠を確認しながら解きましょう
         </p>
       </div>
     </div>

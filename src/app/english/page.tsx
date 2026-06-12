@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, Timer, BookOpen, Layers, PenLine, CreditCard, Swords } from "lucide-react";
+import { ArrowRight, ChevronLeft, Timer, BookOpen, Layers, PenLine, CreditCard, GraduationCap } from "lucide-react";
 
 export default function EnglishHomePage() {
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] bg-black text-white overflow-hidden">
+    <div className="english-academic relative min-h-[calc(100vh-4rem)] overflow-hidden bg-slate-50 text-slate-900">
 
       {/* Ambient grid */}
       <div
@@ -67,12 +67,12 @@ export default function EnglishHomePage() {
             CYBER English
           </h1>
 
-          <p className="mt-4 font-mono text-sm text-white/40 tracking-[0.15em]">
-            R E A D · A N A L Y Z E · M A S T E R
+          <p className="mt-4 text-sm font-semibold text-slate-500">
+            読む・整理する・根拠を選ぶ
           </p>
-          <p className="mt-3 max-w-lg mx-auto text-sm leading-relaxed text-white/50">
-            速読から精読まで、英語力を根本から解体して再構築する。
-            タイムプレッシャーと構文解析で、本物の読解力を鍛える。
+          <p className="mt-3 max-w-lg mx-auto text-sm leading-relaxed text-slate-600">
+            速読から精読まで、大学入試と共通テストに必要な読解力を段階的に伸ばします。
+            英文の根拠を丁寧に確認し、解答までの判断を安定させましょう。
           </p>
         </header>
 
@@ -131,9 +131,9 @@ export default function EnglishHomePage() {
                 >
                   Speed Reading
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-white/50">
-                  制限時間内に長文を読み切り、記憶だけで設問に答える。
-                  スピードと集中力を極限まで高める特訓モード。
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                  制限時間内に長文を読み、要点を保持したまま設問に答えます。
+                  処理速度と内容把握のバランスを整える練習です。
                 </p>
               </div>
 
@@ -203,9 +203,9 @@ export default function EnglishHomePage() {
                 >
                   Comprehension
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-white/50">
-                  じっくりと構文を解析し、文法知識と読解力を同時に鍛える。
-                  論理的思考で英文の構造を完全に解体する精読モード。
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                  英文を段落・構文・根拠に分けて読みます。
+                  文法知識と読解判断を結びつける精読演習です。
                 </p>
               </div>
 
@@ -275,9 +275,9 @@ export default function EnglishHomePage() {
                 >
                   Multi-Source Reading
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-white/50">
-                  複数の資料を横断して情報を照合し、正確な判断を下す。
-                  共通テスト〜国公立大レベルの情報処理力を養う実戦モード。
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                  複数の資料を横断して条件を照合します。
+                  共通テストで問われる情報整理と根拠確認の練習です。
                 </p>
               </div>
 
@@ -328,12 +328,12 @@ export default function EnglishHomePage() {
                 border: "1px solid rgba(232,121,249,0.35)",
               }}
             >
-              <Swords className="h-7 w-7" style={{ color: "#e879f9" }} />
+              <GraduationCap className="h-7 w-7" style={{ color: "#e879f9" }} />
             </div>
 
             <div className="flex-1 min-w-0">
-              <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/35">
-                Mode 06 — Private University
+              <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                Private University
               </div>
               <h2
                 className="mt-1 font-display text-2xl font-extrabold"
@@ -351,7 +351,7 @@ export default function EnglishHomePage() {
               </p>
               <p className="mt-2 text-sm leading-relaxed text-white/50">
                 志望校群別の英語過去問を速読・精読・文法の3科目で一括攻略。
-                大学群ごとの傾向を把握し、最短で合格ラインを超える。
+                大学群ごとの傾向を把握し、合格ラインに必要な読解・文法力を整理します。
               </p>
             </div>
 
@@ -414,7 +414,7 @@ export default function EnglishHomePage() {
                 >
                   英単語フラッシュカード
                 </h2>
-                <p className="mt-2 text-sm leading-relaxed text-white/45">
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   頻出語彙 B1〜C1 をフリップカード形式で反復。知ってた / もう一度で定着を加速。
                 </p>
               </div>
@@ -474,7 +474,7 @@ export default function EnglishHomePage() {
                 >
                   文法ドリル
                 </h2>
-                <p className="mt-2 text-sm leading-relaxed text-white/45">
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   仮定法・分詞構文・関係詞・倒置・強調構文。入試頻出5項目を4択で集中訓練。
                 </p>
               </div>

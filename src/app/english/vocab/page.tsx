@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "英単語フラッシュカード | 
 
 export default function VocabPage() {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
       {/* Grid bg */}
       <div
         className="pointer-events-none fixed inset-0"
@@ -40,17 +40,11 @@ export default function VocabPage() {
             Vocabulary · フラッシュカード
           </div>
           <h1
-            className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
-            style={{
-              background: "linear-gradient(135deg, #10b981 0%, #ffffff 60%, #6ee7b7 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
+            className="font-display text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl"
           >
-            英単語を叩き込め
+            英単語フラッシュカード
           </h1>
-          <p className="mt-2 font-mono text-sm text-white/40">
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
             学術・社会・科学・ビジネス — 試験頻出語彙 B1〜C1 を反復で定着させる
           </p>
         </header>

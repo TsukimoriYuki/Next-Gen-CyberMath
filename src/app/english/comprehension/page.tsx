@@ -44,7 +44,7 @@ export default function ComprehensionPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
       {/* Ambient grid */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -76,7 +76,7 @@ export default function ComprehensionPage() {
             }}
           >
             <AlignLeft className="h-3.5 w-3.5" />
-            Comprehension · Threat Level Select
+            精読長文 · レベル選択
           </div>
           <h1
             className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
@@ -91,8 +91,8 @@ export default function ComprehensionPage() {
             精読長文
           </h1>
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/50">
-            難易度（Threat Level）を選択すると、該当レベルの英文がランダムにアサインされる。
-            本文を手元に置きながら設問に取り組み、構文解析で複文を解体せよ。
+            レベルを選ぶと、該当レベルの英文がランダムに出題されます。
+            本文を確認しながら設問に取り組み、構文と根拠を丁寧に整理します。
           </p>
         </header>
 
@@ -142,7 +142,7 @@ export default function ComprehensionPage() {
                     {locked ? (
                       <span className="flex items-center gap-1 font-mono text-[10px] text-white/22">
                         <Lock className="h-3 w-3" />
-                        CLASSIFIED
+                        準備中
                       </span>
                     ) : (
                       <span
@@ -188,7 +188,7 @@ export default function ComprehensionPage() {
                     ) : (
                       <>
                         <Zap className="h-3.5 w-3.5" />
-                        RANDOM MATCH
+                        このレベルで始める
                       </>
                     )}
                   </div>
@@ -200,7 +200,7 @@ export default function ComprehensionPage() {
 
         {/* Footer */}
         <p className="mt-12 text-center font-mono text-xs tracking-[0.2em] text-white/20 uppercase">
-          Select threat level · random mission assigned
+          レベルを選んで、今日の精読演習を始めましょう
         </p>
       </div>
     </div>

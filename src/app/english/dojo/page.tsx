@@ -6,7 +6,7 @@ import {
   BookOpen,
   Timer,
   PenLine,
-  Swords,
+  GraduationCap,
 } from "lucide-react";
 import { COMPREHENSION_PRIVATE_PACK_1 } from "@/data/english-comprehension-private-pack-1";
 import { SPEED_READING_PRIVATE_PACK_1 } from "@/data/english-speed-reading-private-pack-1";
@@ -24,7 +24,7 @@ const ACCENT = "#e879f9";
 
 export default function EnglishDojoPage() {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
 
       {/* Ambient grid */}
       <div
@@ -50,7 +50,7 @@ export default function EnglishDojoPage() {
           style={{ color: "rgba(232,121,249,0.7)" }}
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          CYBER English へ戻る
+          CYBER Englishへ戻る
         </Link>
 
         {/* Header */}
@@ -59,8 +59,8 @@ export default function EnglishDojoPage() {
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-xs uppercase tracking-[0.25em]"
             style={{ background: "rgba(232,121,249,0.08)", border: `1px solid rgba(232,121,249,0.25)`, color: ACCENT }}
           >
-            <Swords className="h-3.5 w-3.5" />
-            English Dojo — Private Uni
+            <GraduationCap className="h-3.5 w-3.5" />
+            私立文系英語対策
           </div>
 
           <h1
@@ -74,12 +74,12 @@ export default function EnglishDojoPage() {
           >
             英語 過去問道場
           </h1>
-          <p className="mt-3 font-mono text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="mt-3 text-sm leading-relaxed text-slate-600">
             私立文系の英語入試傾向を科目横断で攻略する。速読・精読・文法を一カ所に集約。
           </p>
         </header>
 
-        {/* ── 私立文系 HACK MODE パネル ─────────────────────────────────── */}
+          {/* ── 私立文系 傾向整理パネル ─────────────────────────────────── */}
         <section
           className="mt-10 rounded-2xl overflow-hidden"
           style={{ background: "rgba(232,121,249,0.04)", border: `1px solid rgba(232,121,249,0.22)` }}
@@ -89,7 +89,7 @@ export default function EnglishDojoPage() {
             style={{ background: "rgba(232,121,249,0.08)", borderBottom: `1px solid rgba(232,121,249,0.15)` }}
           >
             <span className="font-mono text-xs font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
-              ▸ 私立文系 HACK MODE
+              私立文系 傾向整理
             </span>
             <span className="font-mono text-[10px] ml-1" style={{ color: "rgba(255,255,255,0.50)" }}>
               志望校群別・英語出題傾向
@@ -167,7 +167,7 @@ export default function EnglishDojoPage() {
               <Timer className="h-4.5 w-4.5" style={{ color: "#10b981" }} />
             </div>
             <div>
-              <h2 className="font-display text-lg font-bold text-white">速読長文</h2>
+              <h2 className="font-display text-lg font-bold text-slate-950">速読長文</h2>
               <p className="font-mono text-[10px]" style={{ color: "rgba(16,185,129,0.7)" }}>
                 Speed Reading — 日東駒専 / 産近甲龍 対策
               </p>
@@ -244,7 +244,7 @@ export default function EnglishDojoPage() {
               <BookOpen className="h-4.5 w-4.5" style={{ color: "#f59e0b" }} />
             </div>
             <div>
-              <h2 className="font-display text-lg font-bold text-white">精読・長文読解</h2>
+              <h2 className="font-display text-lg font-bold text-slate-950">精読・長文読解</h2>
               <p className="font-mono text-[10px]" style={{ color: "rgba(245,158,11,0.7)" }}>
                 Comprehension — MARCH / 関関同立 対策
               </p>

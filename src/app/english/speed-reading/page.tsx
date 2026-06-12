@@ -44,7 +44,7 @@ export default function SpeedReadingPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
       {/* Ambient grid */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -76,7 +76,7 @@ export default function SpeedReadingPage() {
             }}
           >
             <Timer className="h-3.5 w-3.5" />
-            Speed Reading · Threat Level Select
+            速読長文 · レベル選択
           </div>
           <h1
             className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
@@ -91,8 +91,8 @@ export default function SpeedReadingPage() {
             速読長文
           </h1>
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/50">
-            難易度（Threat Level）を選択すると、該当レベルの英文が
-            ランダムにアサインされる。制限時間内に読み切り、記憶だけで設問に答えよ。
+            レベルを選ぶと、該当レベルの英文がランダムに出題されます。
+            制限時間内に要点を読み取り、記憶を頼りに設問へ進みます。
           </p>
         </header>
 
@@ -142,7 +142,7 @@ export default function SpeedReadingPage() {
                     {locked ? (
                       <span className="flex items-center gap-1 font-mono text-[10px] text-white/22">
                         <Lock className="h-3 w-3" />
-                        CLASSIFIED
+                        準備中
                       </span>
                     ) : (
                       <span
@@ -188,7 +188,7 @@ export default function SpeedReadingPage() {
                     ) : (
                       <>
                         <Zap className="h-3.5 w-3.5" />
-                        RANDOM MATCH
+                        このレベルで始める
                       </>
                     )}
                   </div>
@@ -200,7 +200,7 @@ export default function SpeedReadingPage() {
 
         {/* Footer */}
         <p className="mt-12 text-center font-mono text-xs tracking-[0.2em] text-white/20 uppercase">
-          Select threat level · random mission assigned
+          レベルを選んで、今日の読解演習を始めましょう
         </p>
       </div>
     </div>

@@ -247,7 +247,7 @@ function QuestionScreen({
               key={i}
               onClick={() => handleSelect(i)}
               disabled={answered}
-              className="rounded-xl px-4 py-3 text-left font-mono text-sm font-semibold transition-all duration-200"
+              className="english-option rounded-xl px-4 py-3 text-left text-sm font-semibold transition-all duration-200"
               style={{ background: bg, border: `1px solid ${border}`, color }}
             >
               <span className="mr-2 opacity-50">

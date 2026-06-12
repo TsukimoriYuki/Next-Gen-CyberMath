@@ -32,7 +32,7 @@ export default async function SpeedReadingProblemPage({
   const levelMeta = ENGLISH_LEVEL_META[problem.level];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="english-academic min-h-screen bg-slate-50 text-slate-900">
       {/* Ambient grid */}
       <div
         className="pointer-events-none fixed inset-0"
@@ -66,11 +66,11 @@ export default async function SpeedReadingProblemPage({
             >
               {levelMeta.label}
             </span>
-            <span className="font-mono text-xs text-white/30">
-              制限時間 {problem.timeLimit}s · {problem.tags?.join(" · ")}
+            <span className="text-xs text-slate-500">
+              制限時間 {problem.timeLimit}秒 / {problem.tags?.join(" / ")}
             </span>
           </div>
-          <h1 className="font-display text-2xl font-extrabold text-white sm:text-3xl">
+          <h1 className="font-display text-2xl font-extrabold text-slate-950 sm:text-3xl">
             {problem.title}
           </h1>
         </div>

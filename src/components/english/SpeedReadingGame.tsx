@@ -209,7 +209,7 @@ function AnsweringPhase({
                   key={optIdx}
                   type="button"
                   onClick={() => handleSelect(qIdx, optIdx)}
-                  className="w-full rounded-xl px-4 py-3 text-left text-sm transition-all duration-200"
+                  className="english-option w-full rounded-xl px-4 py-3 text-left text-sm transition-all duration-200"
                   style={{
                     background: selected
                       ? "rgba(16,185,129,0.15)"
@@ -340,7 +340,7 @@ function ResultPhase({
                 return (
                   <div
                     key={oi}
-                    className="rounded-lg px-3 py-2 text-sm"
+                    className="english-option rounded-lg px-3 py-2 text-sm"
                     style={{ background: bg, border: `1px solid ${border}`, color }}
                   >
                     <span className="mr-1.5 font-mono text-xs opacity-60">
