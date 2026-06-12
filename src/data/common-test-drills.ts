@@ -21,6 +21,13 @@ export interface CommonTestDigitSlot {
   allowDecimal?: boolean;
 }
 
+export interface CommonTestSharedData {
+  title?: string;
+  headers?: string[];
+  rows?: string[][];
+  notes?: string[];
+}
+
 export type CommonTestSkillTag =
   | "誘導読解"
   | "条件整理"
@@ -44,6 +51,13 @@ export interface CommonTestDrillQuestion {
   title: string;
   passage?: string;
   context?: string;
+  examPassage?: string;
+  examContext?: string;
+  sharedStem?: string;
+  sharedData?: CommonTestSharedData;
+  subQuestionIndex?: number;
+  difficultyStage?: "basic" | "standard" | "guided" | "advanced";
+  dependsOnPrevious?: boolean;
   statement: string;
   type: CommonTestQuestionType;
   options?: string[];

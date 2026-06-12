@@ -63,6 +63,7 @@ export function CommonTestExamQuestionPanel({
           <span className="text-sm" style={{ color: "#4b5563" }}>
             問{questionNumber}
           </span>
+          <ExamStageBadge question={question} />
         </div>
 
         {/* Flag button */}
@@ -80,6 +81,8 @@ export function CommonTestExamQuestionPanel({
           あとで見直す
         </button>
       </div>
+
+      <ExamSharedMaterial question={question} isMath={isMath} />
 
       {/* Passage (English) */}
       {question.passage && (
@@ -208,6 +211,124 @@ function BlankNumberInput({
           color: "#111827",
         }}
       />
+    </div>
+  );
+}
+
+function ExamStageBadge({ question }: { question: CommonTestDrillQuestion }) {
+  if (!question.subQuestionIndex && !question.difficultyStage) return null;
+
+  const stageLabel = {
+    basic: "基本確認",
+    standard: "標準",
+    guided: "誘導",
+    advanced: "応用",
+  }[question.difficultyStage ?? "standard"];
+
+  return (
+    <span
+      className="rounded-full px-2.5 py-1 text-[11px] font-bold"
+      style={{ background: "#f3f4f6", border: "1px solid #e5e7eb", color: "#374151" }}
+    >
+      {question.subQuestionIndex ? `小問${question.subQuestionIndex}` : "小問"}・{stageLabel}
+      {question.dependsOnPrevious ? "・前問利用" : ""}
+    </span>
+  );
+}
+
+function ExamSharedMaterial({
+  question,
+  isMath,
+}: {
+  question: CommonTestDrillQuestion;
+  isMath: boolean;
+}) {
+  const hasMaterial =
+    question.examContext ||
+    question.examPassage ||
+    question.sharedStem ||
+    question.sharedData;
+
+  if (!hasMaterial) return null;
+
+  const renderText = (text: string) => (isMath ? <RenderMath text={text} /> : text);
+
+  return (
+    <div
+      className="rounded-lg p-4 sm:p-5 space-y-4"
+      style={{ background: "#f8fafc", border: "1px solid #cbd5e1", color: "#1f2937" }}
+    >
+      <div className="text-xs font-bold uppercase tracking-[0.12em]" style={{ color: "#475569" }}>
+        共通設定・資料
+      </div>
+
+      {question.examContext && (
+        <div className="text-[14px] leading-[1.9] whitespace-pre-wrap">
+          {renderText(question.examContext)}
+        </div>
+      )}
+
+      {question.examPassage && (
+        <div className="text-[14px] leading-[1.9] whitespace-pre-wrap">
+          {question.examPassage}
+        </div>
+      )}
+
+      {question.sharedData && (
+        <div className="overflow-x-auto rounded border border-slate-200 bg-white">
+          {question.sharedData.title && (
+            <div className="border-b border-slate-200 px-3 py-2 text-xs font-bold text-slate-600">
+              {renderText(question.sharedData.title)}
+            </div>
+          )}
+          {question.sharedData.headers?.length ? (
+            <table className="min-w-full border-collapse text-sm">
+              <thead>
+                <tr>
+                  {question.sharedData.headers.map((header) => (
+                    <th
+                      key={header}
+                      className="border-b border-slate-200 bg-slate-50 px-3 py-2 text-left text-xs font-bold text-slate-600"
+                    >
+                      {renderText(header)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {(question.sharedData.rows ?? []).map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {row.map((cell, cellIndex) => (
+                      <td
+                        key={`${rowIndex}-${cellIndex}`}
+                        className="border-b border-slate-100 px-3 py-2 text-slate-800"
+                      >
+                        {renderText(cell)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : null}
+          {question.sharedData.notes?.length ? (
+            <div className="space-y-1 px-3 py-2 text-xs leading-relaxed text-slate-500">
+              {question.sharedData.notes.map((note) => (
+                <p key={note}>{renderText(note)}</p>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      )}
+
+      {question.sharedStem && (
+        <div
+          className="rounded border border-blue-100 px-3 py-2 text-[13px] leading-relaxed"
+          style={{ background: "#eff6ff", color: "#1e3a8a" }}
+        >
+          {renderText(question.sharedStem)}
+        </div>
+      )}
     </div>
   );
 }
