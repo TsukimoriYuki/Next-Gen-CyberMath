@@ -18,6 +18,8 @@ import type { CommonTestExamPreset } from "@/data/common-test-exams";
 import { ReviewQueueRegistrar } from "@/components/common-test/ReviewQueueRegistrar";
 import type { ReviewCandidate } from "@/components/common-test/ReviewQueueRegistrar";
 import { CommonTestAiStrategyPanel } from "@/components/common-test/ai/CommonTestAiStrategyPanel";
+import { CommonTestGuidedReviewPanel } from "@/components/common-test/CommonTestGuidedReviewPanel";
+import type { CommonTestGuidedReviewItem } from "@/lib/common-test-guided-review";
 import {
   analyzeExamResult,
   ALL_STAGES,
@@ -40,6 +42,7 @@ interface Props {
 
 interface ExamResultPanelProps extends Props {
   questionTitlesMap: Map<string, QuestionMapEntry>;
+  guidedReviewItems: CommonTestGuidedReviewItem[];
 }
 
 function formatDuration(sec: number): string {
@@ -110,6 +113,7 @@ export function CommonTestExamResultPanel({
   historyItem,
   preset,
   questionTitlesMap,
+  guidedReviewItems,
 }: ExamResultPanelProps) {
   const hasPoints =
     historyItem.maxScore != null &&
@@ -444,6 +448,18 @@ export function CommonTestExamResultPanel({
                 </span>
               ))}
             </div>
+          </section>
+        )}
+
+        {guidedReviewItems.length > 0 && (
+          <section>
+            <SectionLabel color={preset.theme.primary}>▸ 段階復習</SectionLabel>
+            <CommonTestGuidedReviewPanel
+              items={guidedReviewItems}
+              title="間違えた問題から段階的に復習"
+              description="不正解・未解答・前問利用の問題を優先して並べます。まずヒントだけを開き、考えてから完全解説へ進みましょう。"
+              theme={preset.theme}
+            />
           </section>
         )}
 

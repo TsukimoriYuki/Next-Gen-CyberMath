@@ -8,12 +8,20 @@ import {
   type CommonTestExamHistoryItem,
 } from "@/lib/common-test-exam-history";
 import { CommonTestAiStrategyPanel } from "@/components/common-test/ai/CommonTestAiStrategyPanel";
+import { CommonTestGuidedReviewPanel } from "@/components/common-test/CommonTestGuidedReviewPanel";
+import { buildCommonTestGuidedReviewItemsFromAnswers } from "@/lib/common-test-guided-review";
 import type { CommonTestTheme } from "@/data/common-test";
 
 const EXAM_LABELS: Record<string, { label: string; color: string; glowRgb: string }> = {
   "math-1a-70": { label: "数IA 70min", color: "#00d2ff", glowRgb: "0,210,255" },
+  "math-1a-70-v2": { label: "数IA 第2回", color: "#00d2ff", glowRgb: "0,210,255" },
+  "math-1a-70-v3": { label: "数IA 第3回", color: "#00d2ff", glowRgb: "0,210,255" },
   "math-2bc-70": { label: "数IIB 70min", color: "#a855f7", glowRgb: "168,85,247" },
+  "math-2bc-70-v2": { label: "数IIBC 第2回", color: "#a855f7", glowRgb: "168,85,247" },
+  "math-2bc-70-v3": { label: "数IIBC 第3回", color: "#a855f7", glowRgb: "168,85,247" },
   "english-reading-80": { label: "英語R 80min", color: "#10b981", glowRgb: "16,185,129" },
+  "english-reading-80-v2": { label: "英語R 第2回", color: "#10b981", glowRgb: "16,185,129" },
+  "english-reading-80-v3": { label: "英語R 第3回", color: "#10b981", glowRgb: "16,185,129" },
 };
 
 function formatDuration(sec: number): string {
@@ -96,6 +104,9 @@ export function CommonTestExamHistoryPanel() {
         const examInfo = EXAM_LABELS[item.examId] ?? { label: item.examId, color: "#ffffff", glowRgb: "255,255,255" };
         const isExpanded = expandedId === item.id;
         const overTime = item.actualDurationSec > item.examLimitSec;
+        const guidedReviewItems = isExpanded
+          ? buildCommonTestGuidedReviewItemsFromAnswers(item.answers, item.examId)
+          : [];
 
         return (
           <div
@@ -240,6 +251,19 @@ export function CommonTestExamHistoryPanel() {
                     </span>
                   ))}
                 </div>
+
+                {guidedReviewItems.length > 0 && (
+                  <CommonTestGuidedReviewPanel
+                    items={guidedReviewItems}
+                    title="この本番演習を段階復習する"
+                    description="保存された答案を使い、不正解・未解答・前問利用の問題から順に復習できます。"
+                    theme={{
+                      primary: examInfo.color,
+                      glowRgb: examInfo.glowRgb,
+                    }}
+                    compact
+                  />
+                )}
 
                 {/* AI作戦会議（展開時のみマウント。APIはボタン押下後にのみ呼ばれる） */}
                 <CommonTestAiStrategyPanel

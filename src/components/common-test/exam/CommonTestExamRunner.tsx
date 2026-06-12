@@ -22,6 +22,7 @@ import {
   isCommonTestAnswerCorrect,
   normalizeCommonTestAnswer,
 } from "@/lib/common-test-answer-normalize";
+import { buildCommonTestGuidedReviewItem } from "@/lib/common-test-guided-review";
 import { CommonTestExamHeader } from "./CommonTestExamHeader";
 import { CommonTestExamNavigator } from "./CommonTestExamNavigator";
 import type { QuestionNavState } from "./CommonTestExamNavigator";
@@ -627,11 +628,18 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
         },
       ])
     );
+    const answerByQuestionId = new Map(
+      historyItem.answers.map((answer) => [answer.questionId, answer])
+    );
+    const guidedReviewItems = activeQuestions.map((q) =>
+      buildCommonTestGuidedReviewItem(q, answerByQuestionId.get(q.id), preset.id)
+    );
     return (
       <CommonTestExamResultPanel
         historyItem={historyItem}
         preset={preset}
         questionTitlesMap={questionTitlesMap}
+        guidedReviewItems={guidedReviewItems}
       />
     );
   }

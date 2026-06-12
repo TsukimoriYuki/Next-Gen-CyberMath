@@ -12,7 +12,13 @@ import {
   Clock,
   AlertTriangle,
   LogIn,
+  Lightbulb,
 } from "lucide-react";
+import { CommonTestGuidedReviewPanel } from "@/components/common-test/CommonTestGuidedReviewPanel";
+import {
+  buildCommonTestGuidedReviewItem,
+  findCommonTestQuestionById,
+} from "@/lib/common-test-guided-review";
 
 interface ReviewItemData {
   id: string;
@@ -77,6 +83,7 @@ export function CommonTestReviewQueue() {
   const [doneIds, setDoneIds] = useState<Set<string>>(new Set());
   const [subjectFilter, setSubjectFilter] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+  const [activeGuidedId, setActiveGuidedId] = useState<string | null>(null);
 
   const fetchAll = useCallback(async () => {
     setLoading(true);
@@ -244,6 +251,8 @@ export function CommonTestReviewQueue() {
           completing={completing}
           doneIds={doneIds}
           onComplete={handleComplete}
+          activeGuidedId={activeGuidedId}
+          onToggleGuided={(id) => setActiveGuidedId((current) => (current === id ? null : id))}
           highlight
         />
       )}
@@ -257,6 +266,8 @@ export function CommonTestReviewQueue() {
           completing={completing}
           doneIds={doneIds}
           onComplete={handleComplete}
+          activeGuidedId={activeGuidedId}
+          onToggleGuided={(id) => setActiveGuidedId((current) => (current === id ? null : id))}
           showActions={false}
         />
       )}
@@ -337,6 +348,8 @@ function ReviewSection({
   completing,
   doneIds,
   onComplete,
+  activeGuidedId,
+  onToggleGuided,
   highlight = false,
   showActions = true,
 }: {
@@ -346,6 +359,8 @@ function ReviewSection({
   completing: string | null;
   doneIds: Set<string>;
   onComplete: (id: string, isCorrect: boolean) => void;
+  activeGuidedId: string | null;
+  onToggleGuided: (id: string) => void;
   highlight?: boolean;
   showActions?: boolean;
 }) {
@@ -373,6 +388,17 @@ function ReviewSection({
             item.subjectId && item.sectionId
               ? `/common-test/${item.subjectId}/${item.sectionId}`
               : "#";
+          const guidedQuestion =
+            item.itemType === "common-test-drill"
+              ? findCommonTestQuestionById(item.itemId)
+              : undefined;
+          const guidedItem = guidedQuestion
+            ? buildCommonTestGuidedReviewItem(guidedQuestion)
+            : null;
+          const guidedTheme = {
+            primary: subjMeta?.color ?? "#f97316",
+            glowRgb: hexToRgb(subjMeta?.color ?? "#f97316"),
+          };
 
           return (
             <div
@@ -455,6 +481,21 @@ function ReviewSection({
                 {/* Actions */}
                 {showActions && (
                   <div className="flex shrink-0 flex-wrap items-center gap-2">
+                    {guidedItem && (
+                      <button
+                        type="button"
+                        onClick={() => onToggleGuided(item.id)}
+                        className="flex items-center gap-1.5 rounded-lg px-3 py-2 font-mono text-[10px] font-medium transition-all"
+                        style={{
+                          background: "rgba(251,191,36,0.08)",
+                          border: "1px solid rgba(251,191,36,0.22)",
+                          color: "#fbbf24",
+                        }}
+                      >
+                        <Lightbulb className="h-3 w-3" />
+                        段階復習
+                      </button>
+                    )}
                     {reviewHref !== "#" && (
                       <Link
                         href={reviewHref}
@@ -492,6 +533,18 @@ function ReviewSection({
                   </div>
                 )}
               </div>
+              {guidedItem && activeGuidedId === item.id && (
+                <div className="px-4 pb-4">
+                  <CommonTestGuidedReviewPanel
+                    items={[guidedItem]}
+                    title="この問題を段階復習する"
+                    description="ヒントから順に開き、解説を見る前にもう一度考えてみましょう。"
+                    theme={guidedTheme}
+                    compact
+                    initialQuestionId={guidedItem.questionId}
+                  />
+                </div>
+              )}
             </div>
           );
         })}
