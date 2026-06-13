@@ -413,9 +413,14 @@ title: "よくあるミス：cosの加法定理の符号",
 body: "$\\cos(\\alpha+\\beta)$ の公式は、\n\n$\\cos\\alpha\\cos\\beta-\\sin\\alpha\\sin\\beta$\n\nです。\n\n真ん中がマイナスになることに注意してください。\n\n一方、$\\cos(\\alpha-\\beta)$ ではプラスになります。\n\nsinの加法定理とcosの加法定理では符号の出方が違うため、混同しやすいです。\n\n最初は公式表を見ながら、丁寧に代入してください。",
 },
 {
+kind: "commonMistake",
+title: "よくあるミス：$\\sin(\\alpha+\\beta)=\\sin\\alpha+\\sin\\beta$ としてしまう",
+body: "加法定理を習い始めの頃、最もよくあるミスが\n\n$\\sin(\\alpha+\\beta)=\\sin\\alpha+\\sin\\beta$\n\nとしてしまうことです。これは正しくありません。\n\n具体的に $\\alpha=\\beta=30^\\circ$ で確認します。\n\n左辺：$\\sin(30^\\circ+30^\\circ)=\\sin60^\\circ=\\frac{\\sqrt{3}}{2}\\approx0.87$\n\n右辺：$\\sin30^\\circ+\\sin30^\\circ=\\frac{1}{2}+\\frac{1}{2}=1$\n\n左辺 $\\neq$ 右辺 なので、この等式は成立しません。\n\n三角関数は「角度 $\\to$ 座標」という対応であり、角度の足し算が座標の足し算にはなりません。単位円上では、$\\alpha+\\beta$ の方向の点と、$\\alpha$ の点・$\\beta$ の点は全く別の場所にあります。\n\n入試頻出パターンとして「$75^\\circ$ のsinを求めよ」という問題があります。このとき $75^\\circ=45^\\circ+30^\\circ$ と分解し、公式を使います。\n\n$\\sin75^\\circ=\\sin45^\\circ\\cos30^\\circ+\\cos45^\\circ\\sin30^\\circ=\\frac{\\sqrt{6}+\\sqrt{2}}{4}$\n\n加法定理を使う場面では、必ず右辺の展開形（sin cos＋cos sin）を丁寧に書き下してください。",
+},
+{
 kind: "summary",
 title: "まとめ",
-body: "- 基本公式は $\\sin^2 x+\\cos^2 x=1$\n- $\\tan x=\\frac{\\sin x}{\\cos x}$\n- 2乗から戻すときは象限で符号を決める\n- 加法定理は三角関数の中心公式\n- $\\sin(\\alpha+\\beta)$ はsin cos + cos sin\n- $\\cos(\\alpha+\\beta)$ はcos cos - sin sin\n- 加法定理から多くの公式が導かれる",
+body: "- 基本公式は $\\sin^2 x+\\cos^2 x=1$\n- $\\tan x=\\frac{\\sin x}{\\cos x}$\n- 2乗から戻すときは象限で符号を決める\n- 加法定理は三角関数の中心公式\n- $\\sin(\\alpha+\\beta)$ はsin cos + cos sin\n- $\\cos(\\alpha+\\beta)$ はcos cos - sin sin\n- 加法定理から多くの公式が導かれる\n- $\\sin(\\alpha+\\beta)\\neq\\sin\\alpha+\\sin\\beta$（線形ではない）",
 },
 ],
 checkQuestions: [
