@@ -66,7 +66,7 @@ body: "$(2+3i)(1-i)$ を計算します。\n\n普通の式の展開と同じよ�
 {
 kind: "concept",
 title: "iの累乗",
-body: "$i$ の累乗は、4つごとに同じ形を繰り返します。\n\n$i^1=i$\n\n$i^2=-1$\n\n$i^3=i^2\cdot i=-i$\n\n$i^4=(i^2)^2=1$\n\nです。\n\nその後は、$i^5=i$、$i^6=-1$ のように繰り返します。\n\n大きな累乗は、指数を4で割った余りで考えると整理できます。",
+body: "$i$ の累乗は、4つごとに同じ形を繰り返します。\n\n$i^1=i$\n\n$i^2=-1$\n\n$i^3=i^2\\cdot i=-i$\n\n$i^4=(i^2)^2=1$\n\nです。\n\nその後は、$i^5=i$、$i^6=-1$ のように繰り返します。\n\n大きな累乗は、指数を4で割った余りで考えると整理できます。",
 },
 {
 kind: "commonMistake",
@@ -92,7 +92,7 @@ hint: "$i^2=-1$ を使う。",
 },
 {
 question: "$i^6$ を求めよ。",
-answer: "$i^6=i^4\cdot i^2=1\cdot(-1)=-1$。",
+answer: "$i^6=i^4\\cdot i^2=1\\cdot(-1)=-1$。",
 hint: "$i^4=1$。",
 },
 ],
@@ -120,13 +120,13 @@ lessonBlocks: [
 {
 kind: "intro",
 title: "判別式が負でも解ける",
-body: "実数の範囲では、判別式が負の二次方程式は解なしでした。\n\nしかし、複素数を使えば、判別式が負でも解を求められます。\n\n例えば、$x^2+1=0$ は実数解をもちませんが、複素数の範囲では $x=\pm i$ が解です。\n\n数学IIでは、二次方程式を複素数の範囲まで広げて考えます。",
+body: "実数の範囲では、判別式が負の二次方程式は解なしでした。\n\nしかし、複素数を使えば、判別式が負でも解を求められます。\n\n例えば、$x^2+1=0$ は実数解をもちませんが、複素数の範囲では $x=\\pm i$ が解です。\n\n数学IIでは、二次方程式を複素数の範囲まで広げて考えます。",
 },
 {
 kind: "formula",
 title: "二次方程式の解の公式",
 body: "$ax^2+bx+c=0$ の解は、複素数の範囲でも次の公式で表されます。",
-formula: "x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}",
+formula: "x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}",
 },
 {
 kind: "concept",
@@ -154,12 +154,12 @@ cells: ["$D<0$", "実数解なし", "異なる2複素数解"],
 {
 kind: "workedExample",
 title: "例1：複素数解を求める",
-body: "$x^2+4x+5=0$ を解きます。\n\n解の公式を使います。\n\n$a=1$、$b=4$、$c=5$ なので、\n\n$D=4^2-4\cdot1\cdot5=16-20=-4$\n\nです。\n\nしたがって、\n\n$x=\frac{-4\pm\sqrt{-4}}{2}$\n\n$=\frac{-4\pm2i}{2}$\n\n$=-2\pm i$\n\nです。",
+body: "$x^2+4x+5=0$ を解きます。\n\n解の公式を使います。\n\n$a=1$、$b=4$、$c=5$ なので、\n\n$D=4^2-4\\cdot1\\cdot5=16-20=-4$\n\nです。\n\nしたがって、\n\n$x=\\frac{-4\\pm\\sqrt{-4}}{2}$\n\n$=\\frac{-4\\pm2i}{2}$\n\n$=-2\\pm i$\n\nです。",
 },
 {
 kind: "workedExample",
 title: "例2：平方完成で解く",
-body: "$x^2-2x+5=0$ を平方完成で解きます。\n\n左辺を平方完成します。\n\n$x^2-2x+5=(x-1)^2+4$\n\nなので、\n\n$(x-1)^2+4=0$\n\n$(x-1)^2=-4$\n\nです。\n\nしたがって、\n\n$x-1=\pm2i$\n\nより、\n\n$x=1\pm2i$\n\nです。\n\n判別式だけでなく、平方完成でも複素数解を求められます。",
+body: "$x^2-2x+5=0$ を平方完成で解きます。\n\n左辺を平方完成します。\n\n$x^2-2x+5=(x-1)^2+4$\n\nなので、\n\n$(x-1)^2+4=0$\n\n$(x-1)^2=-4$\n\nです。\n\nしたがって、\n\n$x-1=\\pm2i$\n\nより、\n\n$x=1\\pm2i$\n\nです。\n\n判別式だけでなく、平方完成でも複素数解を求められます。",
 },
 {
 kind: "concept",
@@ -169,7 +169,7 @@ body: "実数係数の二次方程式で、複素数解が出る場合、その2
 {
 kind: "commonMistake",
 title: "よくあるミス：√-4を-2としてしまう",
-body: "$\sqrt{-4}$ を $-2$ としてはいけません。\n\n負の数の平方根は、虚数単位 $i$ を使って表します。\n\n$\sqrt{-4}=2i$\n\nです。\n\n一般に、$\sqrt{-a}=\sqrt{a}i$ と考えます。ただし $a>0$ です。\n\n判別式が負のときは、必ず $i$ を使って整理しましょう。",
+body: "$\\sqrt{-4}$ を $-2$ としてはいけません。\n\n負の数の平方根は、虚数単位 $i$ を使って表します。\n\n$\\sqrt{-4}=2i$\n\nです。\n\n一般に、$\\sqrt{-a}=\\sqrt{a}i$ と考えます。ただし $a>0$ です。\n\n判別式が負のときは、必ず $i$ を使って整理しましょう。",
 },
 {
 kind: "summary",
@@ -180,13 +180,13 @@ body: "- 複素数の範囲では二次方程式は解をもつ\n- 解の公式�
 checkQuestions: [
 {
 question: "$x^2+2x+5=0$ を解け。",
-answer: "$D=4-20=-16$ より、$x=\frac{-2\pm4i}{2}=-1\pm2i$。",
+answer: "$D=4-20=-16$ より、$x=\\frac{-2\\pm4i}{2}=-1\\pm2i$。",
 hint: "解の公式を使う。",
 },
 {
 question: "$x^2+9=0$ を解け。",
-answer: "$x^2=-9$ より、$x=\pm3i$。",
-hint: "$\sqrt{-9}=3i$。",
+answer: "$x^2=-9$ より、$x=\\pm3i$。",
+hint: "$\\sqrt{-9}=3i$。",
 },
 {
 question: "実数係数の二次方程式で $2+3i$ が解なら、もう一つの解は何か。",
@@ -223,44 +223,44 @@ body: "二次方程式では、解を直接求めなくても、2つの解の和
 {
 kind: "formula",
 title: "解と係数の関係",
-body: "二次方程式 $ax^2+bx+c=0$ の2つの解を $\alpha,\beta$ とすると、次の関係が成り立ちます。",
-formula: "\alpha+\beta=-\frac{b}{a},\quad \alpha\beta=\frac{c}{a}",
+body: "二次方程式 $ax^2+bx+c=0$ の2つの解を $\\alpha,\\beta$ とすると、次の関係が成り立ちます。",
+formula: "\\alpha+\\beta=-\\frac{b}{a},\\quad \\alpha\\beta=\\frac{c}{a}",
 },
 {
 kind: "workedExample",
 title: "例1：解の和と積を求める",
-body: "$2x^2-3x+5=0$ の2つの解を $\alpha,\beta$ とします。\n\n解と係数の関係より、\n\n$\alpha+\beta=-\frac{-3}{2}=\frac{3}{2}$\n\nです。\n\nまた、\n\n$\alpha\beta=\frac{5}{2}$\n\nです。\n\n解そのものを求めなくても、和と積は分かります。",
+body: "$2x^2-3x+5=0$ の2つの解を $\\alpha,\\beta$ とします。\n\n解と係数の関係より、\n\n$\\alpha+\\beta=-\\frac{-3}{2}=\\frac{3}{2}$\n\nです。\n\nまた、\n\n$\\alpha\\beta=\\frac{5}{2}$\n\nです。\n\n解そのものを求めなくても、和と積は分かります。",
 },
 {
 kind: "concept",
 title: "なぜ成り立つのか",
-body: "二次方程式の解が $\alpha,\beta$ であるとき、方程式は\n\n$a(x-\alpha)(x-\beta)=0$\n\nの形にできます。\n\n展開すると、\n\n$a\{x^2-(\alpha+\beta)x+\alpha\beta\}=0$\n\nつまり、\n\n$ax^2-a(\alpha+\beta)x+a\alpha\beta=0$\n\nです。\n\nこれを $ax^2+bx+c=0$ と比べると、\n\n$-a(\alpha+\beta)=b$、$a\alpha\beta=c$\n\nとなり、解と係数の関係が得られます。",
+body: "二次方程式の解が $\\alpha,\\beta$ であるとき、方程式は\n\n$a(x-\\alpha)(x-\\beta)=0$\n\nの形にできます。\n\n展開すると、\n\n$a\{x^2-(\\alpha+\\beta)x+\\alpha\\beta\}=0$\n\nつまり、\n\n$ax^2-a(\\alpha+\\beta)x+a\\alpha\\beta=0$\n\nです。\n\nこれを $ax^2+bx+c=0$ と比べると、\n\n$-a(\\alpha+\\beta)=b$、$a\\alpha\\beta=c$\n\nとなり、解と係数の関係が得られます。",
 },
 {
 kind: "workedExample",
 title: "例2：解から方程式を作る",
-body: "2つの解が $3$ と $-2$ である二次方程式を1つ作ります。\n\n解が $3$ と $-2$ なので、\n\n$(x-3)(x+2)=0$\n\nとできます。\n\n展開すると、\n\n$x^2-x-6=0$\n\nです。\n\nまた、解の和は $1$、積は $-6$ なので、\n\n$x^2-(\text{和})x+(\text{積})=0$\n\nより、$x^2-x-6=0$ と作ることもできます。",
+body: "2つの解が $3$ と $-2$ である二次方程式を1つ作ります。\n\n解が $3$ と $-2$ なので、\n\n$(x-3)(x+2)=0$\n\nとできます。\n\n展開すると、\n\n$x^2-x-6=0$\n\nです。\n\nまた、解の和は $1$、積は $-6$ なので、\n\n$x^2-(\\text{和})x+(\\text{積})=0$\n\nより、$x^2-x-6=0$ と作ることもできます。",
 },
 {
 kind: "workedExample",
 title: "例3：対称式を求める",
-body: "$x^2-4x+1=0$ の2つの解を $\alpha,\beta$ とします。$\alpha^2+\beta^2$ を求めます。\n\n解と係数の関係より、\n\n$\alpha+\beta=4$、$\alpha\beta=1$\n\nです。\n\n$\alpha^2+\beta^2$ は、\n\n$(\alpha+\beta)^2-2\alpha\beta$\n\nで求められます。\n\nしたがって、\n\n$\alpha^2+\beta^2=4^2-2\cdot1=14$\n\nです。",
+body: "$x^2-4x+1=0$ の2つの解を $\\alpha,\\beta$ とします。$\\alpha^2+\\beta^2$ を求めます。\n\n解と係数の関係より、\n\n$\\alpha+\\beta=4$、$\\alpha\\beta=1$\n\nです。\n\n$\\alpha^2+\\beta^2$ は、\n\n$(\\alpha+\\beta)^2-2\\alpha\\beta$\n\nで求められます。\n\nしたがって、\n\n$\\alpha^2+\\beta^2=4^2-2\\cdot1=14$\n\nです。",
 },
 {
 kind: "commonMistake",
 title: "よくあるミス：和の符号を間違える",
-body: "$ax^2+bx+c=0$ の解の和は $-\frac{b}{a}$ です。\n\n$\frac{b}{a}$ ではありません。\n\n例えば、$x^2-5x+6=0$ の場合、$b=-5$ なので、解の和は $-(-5)=5$ です。\n\n和にはマイナスがつく、積にはマイナスがつかない。この違いを押さえましょう。",
+body: "$ax^2+bx+c=0$ の解の和は $-\\frac{b}{a}$ です。\n\n$\\frac{b}{a}$ ではありません。\n\n例えば、$x^2-5x+6=0$ の場合、$b=-5$ なので、解の和は $-(-5)=5$ です。\n\n和にはマイナスがつく、積にはマイナスがつかない。この違いを押さえましょう。",
 },
 {
 kind: "summary",
 title: "まとめ",
-body: "- 二次方程式の解の和と積は係数から分かる\n- 解の和は $-\frac{b}{a}$\n- 解の積は $\frac{c}{a}$\n- 解が分かれば $(x-\alpha)(x-\beta)=0$ から方程式を作れる\n- 対称式は和と積に変形して処理する\n- 和の符号ミスに注意する",
+body: "- 二次方程式の解の和と積は係数から分かる\n- 解の和は $-\\frac{b}{a}$\n- 解の積は $\\frac{c}{a}$\n- 解が分かれば $(x-\\alpha)(x-\\beta)=0$ から方程式を作れる\n- 対称式は和と積に変形して処理する\n- 和の符号ミスに注意する",
 },
 ],
 checkQuestions: [
 {
-question: "$3x^2+2x-7=0$ の2つの解を $\alpha,\beta$ とするとき、$\alpha+\beta$ と $\alpha\beta$ を求めよ。",
-answer: "$\alpha+\beta=-\frac{2}{3}$、$\alpha\beta=-\frac{7}{3}$。",
+question: "$3x^2+2x-7=0$ の2つの解を $\\alpha,\\beta$ とするとき、$\\alpha+\\beta$ と $\\alpha\\beta$ を求めよ。",
+answer: "$\\alpha+\\beta=-\\frac{2}{3}$、$\\alpha\\beta=-\\frac{7}{3}$。",
 hint: "和は $-b/a$、積は $c/a$。",
 },
 {
@@ -269,9 +269,9 @@ answer: "$(x-1)(x-4)=0$ より、$x^2-5x+4=0$。",
 hint: "解から因数を作る。",
 },
 {
-question: "$x^2-3x+2=0$ の解を $\alpha,\beta$ とするとき、$\alpha^2+\beta^2$ を求めよ。",
-answer: "$\alpha+\beta=3$、$\alpha\beta=2$ より、$\alpha^2+\beta^2=3^2-2\cdot2=5$。",
-hint: "$(\alpha+\beta)^2-2\alpha\beta$。",
+question: "$x^2-3x+2=0$ の解を $\\alpha,\\beta$ とするとき、$\\alpha^2+\\beta^2$ を求めよ。",
+answer: "$\\alpha+\\beta=3$、$\\alpha\\beta=2$ より、$\\alpha^2+\\beta^2=3^2-2\\cdot2=5$。",
+hint: "$(\\alpha+\\beta)^2-2\\alpha\\beta$。",
 },
 ],
 relatedPracticeLinks: [
@@ -312,18 +312,18 @@ body: "整数の割り算で、割られる数、割る数、商、余りを考�
 kind: "formula",
 title: "剰余の定理",
 body: "整式 $P(x)$ を $x-a$ で割った余りは、$P(a)$ です。",
-formula: "P(x)\text{ を }x-a\text{ で割った余り}=P(a)",
+formula: "P(x)\\text{ を }x-a\\text{ で割った余り}=P(a)",
 },
 {
 kind: "workedExample",
 title: "例1：剰余の定理",
-body: "$P(x)=x^3-2x+5$ を $x-2$ で割った余りを求めます。\n\n剰余の定理より、余りは $P(2)$ です。\n\n$P(2)=2^3-2\cdot2+5=8-4+5=9$\n\nです。\n\nしたがって、余りは $9$ です。\n\n実際に割り算をしなくても、代入だけで余りが求められます。",
+body: "$P(x)=x^3-2x+5$ を $x-2$ で割った余りを求めます。\n\n剰余の定理より、余りは $P(2)$ です。\n\n$P(2)=2^3-2\\cdot2+5=8-4+5=9$\n\nです。\n\nしたがって、余りは $9$ です。\n\n実際に割り算をしなくても、代入だけで余りが求められます。",
 },
 {
 kind: "formula",
 title: "因数定理",
 body: "整式 $P(x)$ について、$P(a)=0$ なら、$P(x)$ は $x-a$ を因数にもちます。",
-formula: "P(a)=0 \Longleftrightarrow x-a\text{ が }P(x)\text{ の因数}",
+formula: "P(a)=0 \Longleftrightarrow x-a\\text{ が }P(x)\\text{ の因数}",
 },
 {
 kind: "workedExample",
@@ -402,7 +402,7 @@ body: "$x^3-6x^2+11x-6=0$ を解きます。\n\nまず、$x=1$ を代入しま�
 {
 kind: "workedExample",
 title: "例2：複素数解を含む三次方程式",
-body: "$x^3-x^2+x-1=0$ を解きます。\n\nまず、$x=1$ を代入すると、\n\n$1-1+1-1=0$\n\nなので、$x-1$ が因数です。\n\n因数分解すると、\n\n$x^3-x^2+x-1=(x-1)(x^2+1)$\n\nです。\n\nしたがって、\n\n$(x-1)(x^2+1)=0$\n\nです。\n\n$x-1=0$ より $x=1$。\n\n$x^2+1=0$ より $x=\pm i$。\n\nしたがって、解は $x=1, i, -i$ です。",
+body: "$x^3-x^2+x-1=0$ を解きます。\n\nまず、$x=1$ を代入すると、\n\n$1-1+1-1=0$\n\nなので、$x-1$ が因数です。\n\n因数分解すると、\n\n$x^3-x^2+x-1=(x-1)(x^2+1)$\n\nです。\n\nしたがって、\n\n$(x-1)(x^2+1)=0$\n\nです。\n\n$x-1=0$ より $x=1$。\n\n$x^2+1=0$ より $x=\\pm i$。\n\nしたがって、解は $x=1, i, -i$ です。",
 },
 {
 kind: "concept",
@@ -412,7 +412,7 @@ body: "四次方程式の中には、置き換えで二次方程式にできる�
 {
 kind: "workedExample",
 title: "例3：四次方程式を置き換える",
-body: "$x^4-5x^2+4=0$ を解きます。\n\n$t=x^2$ と置きます。\n\nすると、\n\n$t^2-5t+4=0$\n\nです。\n\n因数分解して、\n\n$(t-1)(t-4)=0$\n\nしたがって、$t=1,4$ です。\n\n$t=x^2$ に戻すと、\n\n$x^2=1$ または $x^2=4$\n\nです。\n\nよって、$x=\pm1,\pm2$ です。",
+body: "$x^4-5x^2+4=0$ を解きます。\n\n$t=x^2$ と置きます。\n\nすると、\n\n$t^2-5t+4=0$\n\nです。\n\n因数分解して、\n\n$(t-1)(t-4)=0$\n\nしたがって、$t=1,4$ です。\n\n$t=x^2$ に戻すと、\n\n$x^2=1$ または $x^2=4$\n\nです。\n\nよって、$x=\\pm1,\\pm2$ です。",
 },
 {
 kind: "commonMistake",
@@ -428,7 +428,7 @@ body: "- 高次方程式は因数分解して次数を下げる\n- 整数解の�
 checkQuestions: [
 {
 question: "$x^3-4x^2+x+6=0$ で、$x=2$ が解であることを確認せよ。",
-answer: "$2^3-4\cdot2^2+2+6=8-16+2+6=0$ なので、$x=2$ は解。",
+answer: "$2^3-4\\cdot2^2+2+6=8-16+2+6=0$ なので、$x=2$ は解。",
 hint: "代入して0になるか確認する。",
 },
 {
@@ -438,7 +438,7 @@ hint: "偶数乗だけが出ている。",
 },
 {
 question: "$x^2+4=0$ の解を求めよ。",
-answer: "$x^2=-4$ より、$x=\pm2i$。",
+answer: "$x^2=-4$ より、$x=\\pm2i$。",
 hint: "複素数解を使う。",
 },
 ],
@@ -482,7 +482,7 @@ highlight: true,
 cells: ["重解", "$D=0$", "グラフがx軸に接する"],
 },
 {
-cells: ["実数解をもつ", "$D\geq0$", "2実数解または重解"],
+cells: ["実数解をもつ", "$D\\geq0$", "2実数解または重解"],
 },
 {
 cells: ["実数解をもたない", "$D<0$", "複素数解のみ"],
@@ -492,17 +492,17 @@ cells: ["実数解をもたない", "$D<0$", "複素数解のみ"],
 {
 kind: "workedExample",
 title: "例1：実数解をもつ条件",
-body: "$x^2-2x+k=0$ が実数解をもつような $k$ の範囲を求めます。\n\n判別式を計算します。\n\n$D=(-2)^2-4\cdot1\cdot k=4-4k$\n\nです。\n\n実数解をもつ条件は $D\geq0$ です。\n\nしたがって、\n\n$4-4k\geq0$\n\n$k\leq1$\n\nです。\n\nよって、$k\leq1$ のとき実数解をもちます。",
+body: "$x^2-2x+k=0$ が実数解をもつような $k$ の範囲を求めます。\n\n判別式を計算します。\n\n$D=(-2)^2-4\\cdot1\\cdot k=4-4k$\n\nです。\n\n実数解をもつ条件は $D\\geq0$ です。\n\nしたがって、\n\n$4-4k\\geq0$\n\n$k\\leq1$\n\nです。\n\nよって、$k\\leq1$ のとき実数解をもちます。",
 },
 {
 kind: "workedExample",
 title: "例2：重解をもつ条件",
-body: "$x^2+kx+4=0$ が重解をもつような $k$ を求めます。\n\n重解をもつ条件は $D=0$ です。\n\n判別式は、\n\n$D=k^2-4\cdot1\cdot4=k^2-16$\n\nです。\n\n$D=0$ より、\n\n$k^2-16=0$\n\n$k=\pm4$\n\nです。\n\nしたがって、$k=4,-4$ のとき重解をもちます。",
+body: "$x^2+kx+4=0$ が重解をもつような $k$ を求めます。\n\n重解をもつ条件は $D=0$ です。\n\n判別式は、\n\n$D=k^2-4\\cdot1\\cdot4=k^2-16$\n\nです。\n\n$D=0$ より、\n\n$k^2-16=0$\n\n$k=\\pm4$\n\nです。\n\nしたがって、$k=4,-4$ のとき重解をもちます。",
 },
 {
 kind: "workedExample",
 title: "例3：解の個数を分類する",
-body: "$x^2-2kx+1=0$ の実数解の個数を $k$ の値で分類します。\n\n判別式は、\n\n$D=(-2k)^2-4\cdot1\cdot1=4k^2-4=4(k^2-1)$\n\nです。\n\n$D>0$ なら異なる2実数解なので、$k^2-1>0$、つまり $k<-1$ または $k>1$ です。\n\n$D=0$ なら重解なので、$k=\pm1$ です。\n\n$D<0$ なら実数解なしなので、$-1<k<1$ です。",
+body: "$x^2-2kx+1=0$ の実数解の個数を $k$ の値で分類します。\n\n判別式は、\n\n$D=(-2k)^2-4\\cdot1\\cdot1=4k^2-4=4(k^2-1)$\n\nです。\n\n$D>0$ なら異なる2実数解なので、$k^2-1>0$、つまり $k<-1$ または $k>1$ です。\n\n$D=0$ なら重解なので、$k=\\pm1$ です。\n\n$D<0$ なら実数解なしなので、$-1<k<1$ です。",
 },
 {
 kind: "concept",
@@ -512,23 +512,23 @@ body: "二次方程式の実数解は、二次関数のグラフとx軸の共有
 {
 kind: "commonMistake",
 title: "よくあるミス：実数解をもつ条件をD>0にしてしまう",
-body: "実数解をもつ条件は $D\geq0$ です。\n\n$D=0$ のときも、重解という実数解をもちます。\n\n異なる2つの実数解をもつ条件は $D>0$ です。\n\n問題文が「実数解をもつ」なのか、「異なる2つの実数解をもつ」なのかを必ず確認しましょう。",
+body: "実数解をもつ条件は $D\\geq0$ です。\n\n$D=0$ のときも、重解という実数解をもちます。\n\n異なる2つの実数解をもつ条件は $D>0$ です。\n\n問題文が「実数解をもつ」なのか、「異なる2つの実数解をもつ」なのかを必ず確認しましょう。",
 },
 {
 kind: "summary",
 title: "まとめ",
-body: "- パラメータを含む二次方程式は判別式で処理する\n- 異なる2実数解は $D>0$\n- 重解は $D=0$\n- 実数解をもつ条件は $D\geq0$\n- 実数解なしは $D<0$\n- 判別式は二次関数のグラフとx軸の共有点を表す\n- 問題文の条件の違いに注意する",
+body: "- パラメータを含む二次方程式は判別式で処理する\n- 異なる2実数解は $D>0$\n- 重解は $D=0$\n- 実数解をもつ条件は $D\\geq0$\n- 実数解なしは $D<0$\n- 判別式は二次関数のグラフとx軸の共有点を表す\n- 問題文の条件の違いに注意する",
 },
 ],
 checkQuestions: [
 {
 question: "$x^2+2x+k=0$ が実数解をもつ条件を求めよ。",
-answer: "$D=4-4k\geq0$ より、$k\leq1$。",
-hint: "実数解をもつ条件は $D\geq0$。",
+answer: "$D=4-4k\\geq0$ より、$k\\leq1$。",
+hint: "実数解をもつ条件は $D\\geq0$。",
 },
 {
 question: "$x^2+kx+9=0$ が重解をもつような $k$ を求めよ。",
-answer: "$D=k^2-36=0$ より、$k=\pm6$。",
+answer: "$D=k^2-36=0$ より、$k=\\pm6$。",
 hint: "重解は $D=0$。",
 },
 {
@@ -595,12 +595,12 @@ body: "上に開く二次関数 $f(x)$ の2つの解が、ともに区間 $p<x<q
 {
 kind: "workedExample",
 title: "例1：2つの解がともに正",
-body: "$x^2-2kx+1=0$ の2つの解がともに正となる条件を考えます。\n\n2つの解を $\alpha,\beta$ とします。\n\n解と係数の関係より、\n\n$\alpha+\beta=2k$、$\alpha\beta=1$\n\nです。\n\n2つの解がともに正であるためには、まず実数解をもつ必要があります。\n\n判別式は、\n\n$D=4k^2-4=4(k^2-1)$\n\nです。\n\n異なる2実数解なら $D>0$ より、$k<-1$ または $k>1$ です。\n\nまた、積 $\alpha\beta=1>0$ なので、2解は同符号です。\n\n和 $\alpha+\beta=2k$ が正なら、2解はともに正です。\n\nしたがって、$k>1$ です。\n\n重解も含めてともに正と見る場合は、$k\geq1$ になります。問題文の条件に注意します。",
+body: "$x^2-2kx+1=0$ の2つの解がともに正となる条件を考えます。\n\n2つの解を $\\alpha,\\beta$ とします。\n\n解と係数の関係より、\n\n$\\alpha+\\beta=2k$、$\\alpha\\beta=1$\n\nです。\n\n2つの解がともに正であるためには、まず実数解をもつ必要があります。\n\n判別式は、\n\n$D=4k^2-4=4(k^2-1)$\n\nです。\n\n異なる2実数解なら $D>0$ より、$k<-1$ または $k>1$ です。\n\nまた、積 $\\alpha\\beta=1>0$ なので、2解は同符号です。\n\n和 $\\alpha+\\beta=2k$ が正なら、2解はともに正です。\n\nしたがって、$k>1$ です。\n\n重解も含めてともに正と見る場合は、$k\\geq1$ になります。問題文の条件に注意します。",
 },
 {
 kind: "workedExample",
 title: "例2：区間内に解をもつ",
-body: "$f(x)=x^2-2x+k$ が、区間 $0<x<2$ に少なくとも1つの解をもつ条件を考えます。\n\nこの関数は上に開く放物線で、軸は $x=1$ です。\n\n$f(0)=k$、$f(2)=k$ です。\n\n頂点の値は、\n\n$f(1)=1-2+k=k-1$\n\nです。\n\n区間内でx軸と交わるには、頂点が0以下になる必要があります。\n\nしたがって、$k-1\leq0$、つまり $k\leq1$ です。\n\nただし、$k=0$ のときは解が $0$ と $2$ になり、開区間 $0<x<2$ の中にはありません。\n\nよって、開区間に解をもつ条件としては $0<k\leq1$ となります。\n\nこのように、端点を含むかどうかが重要です。",
+body: "$f(x)=x^2-2x+k$ が、区間 $0<x<2$ に少なくとも1つの解をもつ条件を考えます。\n\nこの関数は上に開く放物線で、軸は $x=1$ です。\n\n$f(0)=k$、$f(2)=k$ です。\n\n頂点の値は、\n\n$f(1)=1-2+k=k-1$\n\nです。\n\n区間内でx軸と交わるには、頂点が0以下になる必要があります。\n\nしたがって、$k-1\\leq0$、つまり $k\\leq1$ です。\n\nただし、$k=0$ のときは解が $0$ と $2$ になり、開区間 $0<x<2$ の中にはありません。\n\nよって、開区間に解をもつ条件としては $0<k\\leq1$ となります。\n\nこのように、端点を含むかどうかが重要です。",
 },
 {
 kind: "commonMistake",
@@ -654,7 +654,7 @@ lessonBlocks: [
 {
 kind: "intro",
 title: "解そのものより和と積を見る",
-body: "二次方程式の問題では、解そのものを求めずに、解の式の値を求めることがあります。\n\n例えば、解を $\alpha,\beta$ として、$\alpha^2+\beta^2$ や $\frac{1}{\alpha}+\frac{1}{\beta}$ を求める問題です。\n\nこのような式は、解の和 $\alpha+\beta$ と積 $\alpha\beta$ に変形できることが多いです。\n\n解と係数の関係を使うことで、計算を大幅に短くできます。",
+body: "二次方程式の問題では、解そのものを求めずに、解の式の値を求めることがあります。\n\n例えば、解を $\\alpha,\\beta$ として、$\\alpha^2+\\beta^2$ や $\\frac{1}{\\alpha}+\\frac{1}{\\beta}$ を求める問題です。\n\nこのような式は、解の和 $\\alpha+\\beta$ と積 $\\alpha\\beta$ に変形できることが多いです。\n\n解と係数の関係を使うことで、計算を大幅に短くできます。",
 },
 {
 kind: "comparisonTable",
@@ -663,34 +663,34 @@ body: "解の式は、和と積で表すのが基本です。",
 columns: ["式", "変形", "使うもの"],
 rows: [
 {
-cells: ["$\alpha^2+\beta^2$", "$(\alpha+\beta)^2-2\alpha\beta$", "和と積"],
+cells: ["$\\alpha^2+\\beta^2$", "$(\\alpha+\\beta)^2-2\\alpha\\beta$", "和と積"],
 highlight: true,
 },
 {
-cells: ["$\frac{1}{\alpha}+\frac{1}{\beta}$", "$\frac{\alpha+\beta}{\alpha\beta}$", "和と積"],
+cells: ["$\\frac{1}{\\alpha}+\\frac{1}{\\beta}$", "$\\frac{\\alpha+\\beta}{\\alpha\\beta}$", "和と積"],
 },
 {
-cells: ["$(\alpha-\beta)^2$", "$(\alpha+\beta)^2-4\alpha\beta$", "和と積"],
+cells: ["$(\\alpha-\\beta)^2$", "$(\\alpha+\\beta)^2-4\\alpha\\beta$", "和と積"],
 },
 {
-cells: ["$\alpha^3+\beta^3$", "$(\alpha+\beta)^3-3\alpha\beta(\alpha+\beta)$", "和と積"],
+cells: ["$\\alpha^3+\\beta^3$", "$(\\alpha+\\beta)^3-3\\alpha\\beta(\\alpha+\\beta)$", "和と積"],
 },
 ],
 },
 {
 kind: "workedExample",
 title: "例1：逆数の和",
-body: "$2x^2-5x+3=0$ の2つの解を $\alpha,\beta$ とします。\n\n$\frac{1}{\alpha}+\frac{1}{\beta}$ を求めます。\n\n解と係数の関係より、\n\n$\alpha+\beta=\frac{5}{2}$、$\alpha\beta=\frac{3}{2}$\n\nです。\n\nしたがって、\n\n$\frac{1}{\alpha}+\frac{1}{\beta}=\frac{\alpha+\beta}{\alpha\beta}$\n\n$=\frac{\frac{5}{2}}{\frac{3}{2}}=\frac{5}{3}$\n\nです。",
+body: "$2x^2-5x+3=0$ の2つの解を $\\alpha,\\beta$ とします。\n\n$\\frac{1}{\\alpha}+\\frac{1}{\\beta}$ を求めます。\n\n解と係数の関係より、\n\n$\\alpha+\\beta=\\frac{5}{2}$、$\\alpha\\beta=\\frac{3}{2}$\n\nです。\n\nしたがって、\n\n$\\frac{1}{\\alpha}+\\frac{1}{\\beta}=\\frac{\\alpha+\\beta}{\\alpha\\beta}$\n\n$=\\frac{\\frac{5}{2}}{\\frac{3}{2}}=\\frac{5}{3}$\n\nです。",
 },
 {
 kind: "workedExample",
 title: "例2：二乗の和",
-body: "$x^2-6x+2=0$ の2つの解を $\alpha,\beta$ とします。\n\n$\alpha^2+\beta^2$ を求めます。\n\n解と係数の関係より、\n\n$\alpha+\beta=6$、$\alpha\beta=2$\n\nです。\n\n$\alpha^2+\beta^2=(\alpha+\beta)^2-2\alpha\beta$\n\nなので、\n\n$\alpha^2+\beta^2=6^2-2\cdot2=32$\n\nです。",
+body: "$x^2-6x+2=0$ の2つの解を $\\alpha,\\beta$ とします。\n\n$\\alpha^2+\\beta^2$ を求めます。\n\n解と係数の関係より、\n\n$\\alpha+\\beta=6$、$\\alpha\\beta=2$\n\nです。\n\n$\\alpha^2+\\beta^2=(\\alpha+\\beta)^2-2\\alpha\\beta$\n\nなので、\n\n$\\alpha^2+\\beta^2=6^2-2\\cdot2=32$\n\nです。",
 },
 {
 kind: "workedExample",
 title: "例3：新しい方程式を作る",
-body: "二次方程式の2つの解を $\alpha,\beta$ とします。\n\n新しい解が $\alpha+1$、$\beta+1$ である二次方程式を作りたいとします。\n\n新しい2解の和は、\n\n$(\alpha+1)+(\beta+1)=\alpha+\beta+2$\n\nです。\n\n新しい2解の積は、\n\n$(\alpha+1)(\beta+1)=\alpha\beta+\alpha+\beta+1$\n\nです。\n\nこの和と積を使って、\n\n$x^2-(\text{和})x+(\text{積})=0$\n\nの形で方程式を作れます。\n\n解を直接求めなくても、新しい方程式を作れるのが強みです。",
+body: "二次方程式の2つの解を $\\alpha,\\beta$ とします。\n\n新しい解が $\\alpha+1$、$\\beta+1$ である二次方程式を作りたいとします。\n\n新しい2解の和は、\n\n$(\\alpha+1)+(\\beta+1)=\\alpha+\\beta+2$\n\nです。\n\n新しい2解の積は、\n\n$(\\alpha+1)(\\beta+1)=\\alpha\\beta+\\alpha+\\beta+1$\n\nです。\n\nこの和と積を使って、\n\n$x^2-(\\text{和})x+(\\text{積})=0$\n\nの形で方程式を作れます。\n\n解を直接求めなくても、新しい方程式を作れるのが強みです。",
 },
 {
 kind: "concept",
@@ -700,23 +700,23 @@ body: "解と係数の関係は、解が実数でなくても成り立ちます�
 {
 kind: "commonMistake",
 title: "よくあるミス：対称式に変形せずに解を求めにいく",
-body: "解と係数の関係の問題では、解そのものを求める必要がないことが多いです。\n\n$\alpha^2+\beta^2$ や $\frac{1}{\alpha}+\frac{1}{\beta}$ は、和と積に変形できます。\n\nいきなり解の公式を使うと計算が重くなります。\n\nまず、求めたい式が $\alpha+\beta$ と $\alpha\beta$ で表せないか考えましょう。",
+body: "解と係数の関係の問題では、解そのものを求める必要がないことが多いです。\n\n$\\alpha^2+\\beta^2$ や $\\frac{1}{\\alpha}+\\frac{1}{\\beta}$ は、和と積に変形できます。\n\nいきなり解の公式を使うと計算が重くなります。\n\nまず、求めたい式が $\\alpha+\\beta$ と $\\alpha\\beta$ で表せないか考えましょう。",
 },
 {
 kind: "summary",
 title: "まとめ",
-body: "- 解の対称式は和と積で処理する\n- $\alpha^2+\beta^2=(\alpha+\beta)^2-2\alpha\beta$\n- 逆数の和は $\frac{\alpha+\beta}{\alpha\beta}$\n- 新しい解の和と積を作れば方程式を作れる\n- 複素数解でも解と係数の関係は成り立つ\n- 解そのものを求める前に、和と積で処理できるか考える",
+body: "- 解の対称式は和と積で処理する\n- $\\alpha^2+\\beta^2=(\\alpha+\\beta)^2-2\\alpha\\beta$\n- 逆数の和は $\\frac{\\alpha+\\beta}{\\alpha\\beta}$\n- 新しい解の和と積を作れば方程式を作れる\n- 複素数解でも解と係数の関係は成り立つ\n- 解そのものを求める前に、和と積で処理できるか考える",
 },
 ],
 checkQuestions: [
 {
-question: "$x^2-4x+3=0$ の解を $\alpha,\beta$ とするとき、$\alpha^2+\beta^2$ を求めよ。",
-answer: "$\alpha+\beta=4$、$\alpha\beta=3$ より、$16-6=10$。",
-hint: "$(\alpha+\beta)^2-2\alpha\beta$。",
+question: "$x^2-4x+3=0$ の解を $\\alpha,\\beta$ とするとき、$\\alpha^2+\\beta^2$ を求めよ。",
+answer: "$\\alpha+\\beta=4$、$\\alpha\\beta=3$ より、$16-6=10$。",
+hint: "$(\\alpha+\\beta)^2-2\\alpha\\beta$。",
 },
 {
-question: "$x^2-5x+2=0$ の解を $\alpha,\beta$ とするとき、$\frac{1}{\alpha}+\frac{1}{\beta}$ を求めよ。",
-answer: "$\frac{\alpha+\beta}{\alpha\beta}=\frac{5}{2}$。",
+question: "$x^2-5x+2=0$ の解を $\\alpha,\\beta$ とするとき、$\\frac{1}{\\alpha}+\\frac{1}{\\beta}$ を求めよ。",
+answer: "$\\frac{\\alpha+\\beta}{\\alpha\\beta}=\\frac{5}{2}$。",
 hint: "逆数の和を通分する。",
 },
 {
@@ -764,17 +764,17 @@ body: "実数係数の二次方程式が $1+2i$ を解にもつとします。\n
 {
 kind: "workedExample",
 title: "例2：高次方程式と複素数解",
-body: "$x^3-2x^2+2x-4=0$ を解きます。\n\nまず、整数解を探します。\n\n$x=2$ を代入すると、\n\n$8-8+4-4=0$\n\nなので、$x=2$ は解です。\n\nしたがって、$x-2$ が因数です。\n\n因数分解すると、\n\n$x^3-2x^2+2x-4=(x-2)(x^2+2)$\n\nです。\n\n$x^2+2=0$ より、\n\n$x=\pm\sqrt{2}i$\n\nです。\n\nしたがって、解は $x=2,\sqrt{2}i,-\sqrt{2}i$ です。",
+body: "$x^3-2x^2+2x-4=0$ を解きます。\n\nまず、整数解を探します。\n\n$x=2$ を代入すると、\n\n$8-8+4-4=0$\n\nなので、$x=2$ は解です。\n\nしたがって、$x-2$ が因数です。\n\n因数分解すると、\n\n$x^3-2x^2+2x-4=(x-2)(x^2+2)$\n\nです。\n\n$x^2+2=0$ より、\n\n$x=\\pm\\sqrt{2}i$\n\nです。\n\nしたがって、解は $x=2,\\sqrt{2}i,-\\sqrt{2}i$ です。",
 },
 {
 kind: "workedExample",
 title: "例3：判別式とパラメータ",
-body: "$x^2-2kx+k+2=0$ が実数解をもつ条件を求めます。\n\n判別式は、\n\n$D=(-2k)^2-4(k+2)$\n\n$=4k^2-4k-8$\n\n$=4(k^2-k-2)$\n\n$=4(k-2)(k+1)$\n\nです。\n\n実数解をもつ条件は $D\geq0$ なので、\n\n$(k-2)(k+1)\geq0$\n\nです。\n\nよって、\n\n$k\leq-1$ または $k\geq2$\n\nです。",
+body: "$x^2-2kx+k+2=0$ が実数解をもつ条件を求めます。\n\n判別式は、\n\n$D=(-2k)^2-4(k+2)$\n\n$=4k^2-4k-8$\n\n$=4(k^2-k-2)$\n\n$=4(k-2)(k+1)$\n\nです。\n\n実数解をもつ条件は $D\\geq0$ なので、\n\n$(k-2)(k+1)\\geq0$\n\nです。\n\nよって、\n\n$k\\leq-1$ または $k\\geq2$\n\nです。",
 },
 {
 kind: "workedExample",
 title: "例4：解と係数で処理する",
-body: "$x^2-3x+1=0$ の2つの解を $\alpha,\beta$ とします。\n\n$\alpha^3+\beta^3$ を求めます。\n\n解と係数の関係より、\n\n$\alpha+\beta=3$、$\alpha\beta=1$\n\nです。\n\n公式\n\n$\alpha^3+\beta^3=(\alpha+\beta)^3-3\alpha\beta(\alpha+\beta)$\n\nを使います。\n\nしたがって、\n\n$\alpha^3+\beta^3=3^3-3\cdot1\cdot3=27-9=18$\n\nです。\n\n解そのものを求めずに計算できます。",
+body: "$x^2-3x+1=0$ の2つの解を $\\alpha,\\beta$ とします。\n\n$\\alpha^3+\\beta^3$ を求めます。\n\n解と係数の関係より、\n\n$\\alpha+\\beta=3$、$\\alpha\\beta=1$\n\nです。\n\n公式\n\n$\\alpha^3+\\beta^3=(\\alpha+\\beta)^3-3\\alpha\\beta(\\alpha+\\beta)$\n\nを使います。\n\nしたがって、\n\n$\\alpha^3+\\beta^3=3^3-3\\cdot1\\cdot3=27-9=18$\n\nです。\n\n解そのものを求めずに計算できます。",
 },
 {
 kind: "comparisonTable",
@@ -827,8 +827,8 @@ hint: "偶数乗だけが出ている。",
 },
 {
 question: "$x^2+kx+1=0$ が実数解をもつ条件を判別式で表せ。",
-answer: "$D=k^2-4\geq0$。",
-hint: "実数解をもつ条件は $D\geq0$。",
+answer: "$D=k^2-4\\geq0$。",
+hint: "実数解をもつ条件は $D\\geq0$。",
 },
 ],
 relatedPracticeLinks: [

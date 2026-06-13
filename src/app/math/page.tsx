@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, BookOpen, Layers, Skull, Target, GraduationCap } from "lucide-react";
+import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, Layers, Skull, Target, GraduationCap } from "lucide-react";
 import {
   getAllProblems,
   getChallengeProblems,
@@ -229,24 +229,8 @@ export default async function MathHomePage() {
               </span>
               <div>
                 <div className="font-display text-lg font-bold text-foreground">講座</div>
-                <div className="mt-1 text-sm text-muted-foreground">初学者・中級者・上級者の3段階。二次関数から体系的に学ぶ。</div>
+                <div className="mt-1 text-sm text-muted-foreground">初学者・中級者・上級者の3段階。二次関数から始まり、概念のつながりをたどって体系的に学ぶ。</div>
                 <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-blue-400">
-                  受講する <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* 講座集（旧: 授業スキルツリー） */}
-          <Link href="/courses" className="washi washi-hover group block rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-magenta/10 text-neon-magenta transition-transform group-hover:scale-105">
-                <BookOpen className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">講座集</div>
-                <div className="mt-1 text-sm text-muted-foreground">初学者・中級者・上級者の3段階。概念のつながりをたどって理解を深める。</div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-magenta">
                   受講する <ArrowRight className="h-3.5 w-3.5" />
                 </div>
               </div>
