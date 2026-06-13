@@ -5,6 +5,12 @@ import { COURSE_LEVEL_META } from "@/types/course";
 import { CourseBodyRenderer } from "./CourseBodyRenderer";
 import { CourseLessonBlockRenderer } from "./CourseLessonBlockRenderer";
 
+const LEVEL_LABELS = {
+  beginner: "初学者",
+  standard: "中級者",
+  advanced: "上級者",
+} as const;
+
 export function CourseLessonPageView({
   subject,
   unit,
@@ -46,7 +52,7 @@ export function CourseLessonPageView({
                   color: levelMeta.color,
                 }}
               >
-                {levelMeta.label}
+                {LEVEL_LABELS[lesson.level]}
               </span>
               <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs text-slate-500">
                 <Clock className="h-3 w-3" />
@@ -66,7 +72,9 @@ export function CourseLessonPageView({
             <section className="border-t border-slate-200 bg-slate-50 p-5">
               <div className="mb-3 flex items-center gap-2">
                 <Target className="h-4 w-4 text-blue-600" />
-                <h2 className="text-sm font-extrabold text-slate-900">この講座の目標</h2>
+                <h2 className="text-sm font-extrabold text-slate-900">
+                  この講座の目標
+                </h2>
               </div>
               <ul className="space-y-2">
                 {lesson.goals.map((goal) => (
@@ -87,7 +95,9 @@ export function CourseLessonPageView({
 
           {lesson.checkQuestions.length > 0 && (
             <section className="border-t border-slate-200 p-5">
-              <h2 className="mb-3 text-sm font-extrabold text-slate-900">確認問題</h2>
+              <h2 className="mb-3 text-sm font-extrabold text-slate-900">
+                確認問題
+              </h2>
               <div className="space-y-3">
                 {lesson.checkQuestions.map((question, index) => (
                   <details
@@ -117,4 +127,3 @@ export function CourseLessonPageView({
     </div>
   );
 }
-

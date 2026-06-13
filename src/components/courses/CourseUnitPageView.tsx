@@ -1,9 +1,19 @@
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, Clock } from "lucide-react";
-import { COURSE_LEVEL_META, type CourseLevel, type CourseSubject, type CourseUnit } from "@/types/course";
+import {
+  COURSE_LEVEL_META,
+  type CourseLevel,
+  type CourseSubject,
+  type CourseUnit,
+} from "@/types/course";
 import { CourseBodyRenderer } from "./CourseBodyRenderer";
 
 const LEVELS: CourseLevel[] = ["beginner", "standard", "advanced"];
+const LEVEL_LABELS: Record<CourseLevel, string> = {
+  beginner: "初学者",
+  standard: "中級者",
+  advanced: "上級者",
+};
 
 export function CourseUnitPageView({
   subject,
@@ -53,7 +63,7 @@ export function CourseUnitPageView({
                     style={{ background: meta.dot }}
                   />
                   <h2 className="text-lg font-extrabold" style={{ color: meta.color }}>
-                    {meta.label}
+                    {LEVEL_LABELS[level]}
                   </h2>
                   <span className="text-xs text-slate-500">{meta.sublabel}</span>
                   <span className="ml-auto rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-500">
@@ -63,7 +73,7 @@ export function CourseUnitPageView({
 
                 {lessons.length === 0 ? (
                   <p className="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
-                    このレベルの講座本文は準備中です。講座データを追加すると、ここにカードが表示されます。
+                    このレベルの講座本文は準備中です。講座データを追加すると、ここに講座カードが表示されます。
                   </p>
                 ) : (
                   <div className="grid gap-4 md:grid-cols-2">
@@ -102,4 +112,3 @@ export function CourseUnitPageView({
     </div>
   );
 }
-

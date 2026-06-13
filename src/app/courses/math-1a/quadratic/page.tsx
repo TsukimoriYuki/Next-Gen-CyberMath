@@ -14,4 +14,3 @@ export default function QuadraticCoursePage() {
   if (!subject || !unit) notFound();
   return <CourseUnitPageView subject={subject} unit={unit} />;
 }
-

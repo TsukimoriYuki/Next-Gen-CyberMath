@@ -55,11 +55,11 @@ export function CourseSubjectPageView({ subject }: { subject: CourseSubject }) {
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-600">
                   <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
-                    {lessonCount}講座
+                    {lessonCount > 0 ? `${lessonCount}講座` : "準備中"}
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
                     <Clock className="h-3 w-3" />
-                    {totalMinutes > 0 ? `約${totalMinutes}分` : "講座準備中"}
+                    {totalMinutes > 0 ? `約${totalMinutes}分` : "講座追加予定"}
                   </span>
                 </div>
                 <Link
@@ -77,4 +77,3 @@ export function CourseSubjectPageView({ subject }: { subject: CourseSubject }) {
     </div>
   );
 }
-

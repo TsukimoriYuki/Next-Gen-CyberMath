@@ -33,4 +33,3 @@ export default async function CourseSubjectPage({
   if (!subject) notFound();
   return <CourseSubjectPageView subject={subject} />;
 }
-

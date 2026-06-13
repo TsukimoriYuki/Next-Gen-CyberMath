@@ -14,6 +14,10 @@ function renderKatex(tex: string): string {
 
 type InlineNode = React.ReactNode;
 
+function normalizeLatexEscapes(text: string): string {
+  return text.replace(/\f/g, "\\f");
+}
+
 function renderInline(text: string, keyBase: string): InlineNode[] {
   const parts = text.split(/(\$[^$\n]+\$)/g);
   return parts.map((part, i) => {
@@ -51,9 +55,11 @@ export function CourseBodyRenderer({
   body: string;
   className?: string;
 }) {
-  if (!body.trim()) return null;
+  const normalizedBody = normalizeLatexEscapes(body);
 
-  const paragraphs = body.split(/\n\n+/);
+  if (!normalizedBody.trim()) return null;
+
+  const paragraphs = normalizedBody.split(/\n\n+/);
 
   return (
     <div className={className ?? "space-y-2 text-xs leading-relaxed text-slate-700"}>

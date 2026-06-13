@@ -5,7 +5,8 @@ import { COURSE_SUBJECTS } from "@/data/course-curriculum";
 
 export const metadata: Metadata = {
   title: "講座集 | CYBER OS",
-  description: "数学IA・数学II,B,C・数学III,Cの講座を単元ごとに整理した講座集です。",
+  description:
+    "数学IA・数学II,B,C・数学III,Cの講座を単元ごとに整理した講座集です。",
 };
 
 export default function CoursesIndexPage() {
@@ -74,4 +75,3 @@ export default function CoursesIndexPage() {
     </div>
   );
 }
-

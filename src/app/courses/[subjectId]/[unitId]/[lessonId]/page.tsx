@@ -44,4 +44,3 @@ export default async function CourseLessonPage({
   if (!subject || !unit || !lesson) notFound();
   return <CourseLessonPageView subject={subject} unit={unit} lesson={lesson} />;
 }
-

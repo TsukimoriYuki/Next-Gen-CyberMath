@@ -13,4 +13,3 @@ export default function MathIACoursePage() {
   if (!subject) notFound();
   return <CourseSubjectPageView subject={subject} />;
 }
-
