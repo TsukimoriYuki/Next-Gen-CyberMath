@@ -850,7 +850,7 @@ qualityTags: ["旧帝大準備", "融合問題", "余弦定理", "面積公式",
 },
 ];
 
-export const FIGURES_MEASUREMENT_UNIT: CourseUnit = {
+export const FIGURES_AND_MEASUREMENT_UNIT: CourseUnit = {
 unitId: "figures-and-measurement",
 subjectId: "math-1a",
 unitTitle: "図形と計量",
