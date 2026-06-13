@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, Layers, Skull, Target, GraduationCap } from "lucide-react";
+import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, Layers, Skull, Target, GraduationCap, Trophy } from "lucide-react";
 import {
   getAllProblems,
   getChallengeProblems,
@@ -168,6 +168,22 @@ export default async function MathHomePage() {
                 <div className="mt-1 text-sm text-muted-foreground">タグ・難易度・時間を自在にカスタムした本番形式テスト。</div>
                 <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-magenta">
                   受験する <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 本番レベル模試集 */}
+          <Link href="/exam-sets" className="washi washi-hover group block rounded-2xl p-6">
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-500/10 text-rose-400 transition-transform group-hover:scale-105">
+                <Trophy className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">本番レベル模試集</div>
+                <div className="mt-1 text-sm text-muted-foreground">私立・国公立の個別試験を想定したレベル別実戦模試。中堅私立〜難関国公立の4カテゴリ。</div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-rose-400">
+                  見る <ArrowRight className="h-3.5 w-3.5" />
                 </div>
               </div>
             </div>
