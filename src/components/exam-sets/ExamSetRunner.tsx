@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, Clock, RotateCcw, Send, XCircle } from "lucide-react";
+import { InlineMath, MathText } from "@/components/math/Math";
 import type { ExamSet, ExamSetBlank } from "@/data/exam-sets";
 
 type AnswerMap = Record<string, string>;
@@ -38,6 +39,40 @@ function scoreBlank(answer: string | undefined, blank: ExamSetBlank): number {
     : 0;
 }
 
+// 見出し用の軽量インライン数式レンダラー。$...$ を KaTeX に、それ以外は素のテキストにする。
+// 見出し内に KaTeX を埋め込めるよう、ブロック要素を生成する MathText とは別に用意する。
+function renderInlineMathTitle(text: string): React.ReactNode[] {
+  return text.split(/(\$[^$]+\$)/g).map((part, i) =>
+    part.startsWith("$") && part.endsWith("$") && part.length > 2 ? (
+      <InlineMath key={i} math={part.slice(1, -1)} />
+    ) : (
+      <span key={i}>{part}</span>
+    ),
+  );
+}
+
+function ExamText({
+  children,
+  tone = "body",
+}: {
+  children: string;
+  tone?: "body" | "explanation";
+}) {
+  return (
+    <div className="max-w-full overflow-x-auto break-words">
+      <MathText
+        className={
+          tone === "body"
+            ? "text-sm leading-7 text-slate-800 [&_.katex-display]:overflow-x-auto"
+            : "text-sm leading-7 text-slate-700 [&_.katex-display]:overflow-x-auto"
+        }
+      >
+        {children}
+      </MathText>
+    </div>
+  );
+}
+
 export function ExamSetRunner({ examSet }: { examSet: ExamSet }) {
   const [answers, setAnswers] = useState<AnswerMap>({});
   const [submitted, setSubmitted] = useState(false);
@@ -47,7 +82,8 @@ export function ExamSetRunner({ examSet }: { examSet: ExamSet }) {
   const totalScore = useMemo(
     () =>
       allBlanks.reduce(
-        (sum, { problem, blank }) => sum + scoreBlank(answers[blankKey(problem.id, blank.label)], blank),
+        (sum, { problem, blank }) =>
+          sum + scoreBlank(answers[blankKey(problem.id, blank.label)], blank),
         0,
       ),
     [allBlanks, answers],
@@ -192,11 +228,16 @@ export function ExamSetRunner({ examSet }: { examSet: ExamSet }) {
           }}
         >
           {examSet.sections.map((section) => (
-            <section key={section.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <section
+              key={section.id}
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
+            >
               <div className="mb-5 flex flex-wrap items-start justify-between gap-3 border-b border-slate-200 pb-4">
                 <div>
                   <h2 className="text-xl font-extrabold">{section.title}</h2>
-                  <p className="mt-1 text-sm leading-6 text-slate-600">{section.description}</p>
+                  <p className="mt-1 text-sm leading-6 text-slate-600">
+                    {section.description}
+                  </p>
                 </div>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">
                   {section.points}点
@@ -205,11 +246,16 @@ export function ExamSetRunner({ examSet }: { examSet: ExamSet }) {
 
               <div className="space-y-6">
                 {section.problems.map((problem) => (
-                  <article key={problem.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                    <h3 className="font-extrabold text-slate-950">{problem.title}</h3>
-                    <div className="mt-3 space-y-2 text-sm leading-7 text-slate-800">
+                  <article
+                    key={problem.id}
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <h3 className="font-extrabold text-slate-950">
+                      {renderInlineMathTitle(problem.title)}
+                    </h3>
+                    <div className="mt-3 space-y-2">
                       {problem.body.map((line) => (
-                        <p key={line}>{line}</p>
+                        <ExamText key={line}>{line}</ExamText>
                       ))}
                     </div>
 
@@ -218,9 +264,11 @@ export function ExamSetRunner({ examSet }: { examSet: ExamSet }) {
                         const key = blankKey(problem.id, blank.label);
                         const value = answers[key] ?? "";
                         const isCorrect =
-                          submitted && normalizeExamSetAnswer(value) === normalizeExamSetAnswer(blank.answer);
+                          submitted &&
+                          normalizeExamSetAnswer(value) === normalizeExamSetAnswer(blank.answer);
                         const isWrong =
-                          submitted && normalizeExamSetAnswer(value) !== normalizeExamSetAnswer(blank.answer);
+                          submitted &&
+                          normalizeExamSetAnswer(value) !== normalizeExamSetAnswer(blank.answer);
 
                         return (
                           <label
@@ -264,9 +312,9 @@ export function ExamSetRunner({ examSet }: { examSet: ExamSet }) {
                     {submitted && (
                       <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
                         <div className="text-xs font-extrabold text-slate-500">解説</div>
-                        <p className="mt-2 text-sm leading-7 text-slate-700">
-                          {problem.explanation}
-                        </p>
+                        <div className="mt-2">
+                          <ExamText tone="explanation">{problem.explanation}</ExamText>
+                        </div>
                       </div>
                     )}
                   </article>
