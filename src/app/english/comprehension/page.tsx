@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, AlignLeft, Zap, Lock } from "lucide-react";
 import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
 import { ENGLISH_LEVEL_META, type EnglishLevel } from "@/lib/english-types";
-import React from "react";
+import React, { useCallback } from "react";
 
 const LEVELS: { level: EnglishLevel; order: string; tagline: string }[] = [
   {
@@ -33,7 +33,7 @@ const LEVELS: { level: EnglishLevel; order: string; tagline: string }[] = [
 export default function ComprehensionPage() {
   const router = useRouter();
 
-  const handleSelect = (level: EnglishLevel) => {
+  const handleSelect = useCallback((level: EnglishLevel) => {
     const pool = COMPREHENSION_PROBLEMS.filter((p) => p.level === level);
     if (pool.length === 0) {
       alert("該当レベルのデータが未実装です。別のレベルを選択してください。");
@@ -41,7 +41,7 @@ export default function ComprehensionPage() {
     }
     const pick = pool[Math.floor(Math.random() * pool.length)];
     router.push(`/english/comprehension/${pick.id}`);
-  };
+  }, [router]);
 
   return (
     <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">

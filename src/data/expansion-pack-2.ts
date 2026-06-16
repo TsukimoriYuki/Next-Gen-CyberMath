@@ -1,8 +1,10 @@
+import type { Problem } from "@/lib/types";
+
 // Expansion Pack 2 — 数学1A 良問集（難易度 A〜D）
 // Pack 1 とは単元・テーマが重複しないよう設計。
 // src/data/problems.ts の RAW_PROBLEMS に展開して使用する。
 
-export const EXPANSION_PACK_2: any[] = [
+export const EXPANSION_PACK_2: Problem[] = [
   // ─────────────────────────────────────────────────────────────────
   // 1. 集合の要素の個数と包除原理  [難易度 A / 偏差値 50]
   // ─────────────────────────────────────────────────────────────────

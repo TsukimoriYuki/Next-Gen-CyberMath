@@ -227,8 +227,10 @@ export function CommonTestDailyPlaylistPanel({ showFullLink = true }: Props) {
   const [calcKey, setCalcKey] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
-  // モードを localStorage から読む（マウント時のみ）
+  // モードを localStorage から読む（マウント時のみ）。hydration mismatch を避けて
+  // マウント後に読む。
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMode(loadDailyPlaylistMode());
   }, []);
 

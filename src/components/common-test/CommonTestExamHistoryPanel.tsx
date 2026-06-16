@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Trophy, Clock, AlertTriangle, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import {
   getCommonTestExamHistory,
@@ -41,6 +42,8 @@ export function CommonTestExamHistoryPanel() {
   const [confirmClear, setConfirmClear] = useState(false);
 
   useEffect(() => {
+    // localStorage はサーバーに存在しないため、hydration mismatch を避けてマウント後に読む
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHistory(getCommonTestExamHistory());
   }, []);
 
@@ -65,12 +68,12 @@ export function CommonTestExamHistoryPanel() {
         <p className="text-xs leading-relaxed text-slate-500">
           本番演習を1回受けると、AI作戦会議・弱点分析・今日の学習メニューがより正確になります。
         </p>
-        <a
+        <Link
           href="/common-test/simulator"
           className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700"
         >
           本番演習を受ける →
-        </a>
+        </Link>
       </div>
     );
   }

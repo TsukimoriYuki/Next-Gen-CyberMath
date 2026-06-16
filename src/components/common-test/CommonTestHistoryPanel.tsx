@@ -55,6 +55,8 @@ export function CommonTestHistoryPanel() {
   const [confirmClear, setConfirmClear] = useState(false);
 
   useEffect(() => {
+    // localStorage はサーバーに存在しないため、hydration mismatch を避けてマウント後に読む
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHistory(getCommonTestDrillHistory());
   }, []);
 

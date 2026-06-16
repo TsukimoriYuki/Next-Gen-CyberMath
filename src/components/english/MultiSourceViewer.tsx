@@ -173,8 +173,8 @@ function SourceCard({ block, index }: { block: SourceBlock; index: number }) {
   );
 }
 
-function CrossRefBadge({ ref }: { ref: string }) {
-  const match = ref.match(/Source ([A-E])/);
+function CrossRefBadge({ sourceRef }: { sourceRef: string }) {
+  const match = sourceRef.match(/Source ([A-E])/);
   const idx = match ? match[1].charCodeAt(0) - 65 : 0;
   const p = getPalette(idx);
   return (
@@ -182,7 +182,7 @@ function CrossRefBadge({ ref }: { ref: string }) {
       className="inline-flex items-center rounded px-2 py-0.5 font-mono text-[10px] font-semibold"
       style={{ background: p.bg, color: p.text, border: `1px solid ${p.border}` }}
     >
-      {ref}
+      {sourceRef}
     </span>
   );
 }
@@ -342,7 +342,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
                     {q.crossReferences && (
                       <div className="mt-2 flex flex-wrap items-center gap-1.5">
                         {q.crossReferences.map((ref) => (
-                          <CrossRefBadge key={ref} ref={ref} />
+                          <CrossRefBadge key={ref} sourceRef={ref} />
                         ))}
                         <span className="font-mono text-[10px] text-white/25">を参照</span>
                       </div>
@@ -427,7 +427,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
                       {q.crossReferences && (
                         <div className="flex flex-wrap gap-1">
                           {q.crossReferences.map((ref) => (
-                            <CrossRefBadge key={ref} ref={ref} />
+                            <CrossRefBadge key={ref} sourceRef={ref} />
                           ))}
                         </div>
                       )}

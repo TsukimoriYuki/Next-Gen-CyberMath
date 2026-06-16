@@ -115,6 +115,8 @@ export function AIOracle() {
   }, []);
 
   useEffect(() => {
+    // API フェッチ（キャッシュ確認・ローディング状態の設定を含む）はマウント時の正規の副作用
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchOracle();
   }, [fetchOracle]);
 

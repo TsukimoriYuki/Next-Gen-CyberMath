@@ -384,6 +384,7 @@ export function CommonTestWeaknessBossPanel({
   const [report, setReport] = useState<CommonTestWeaknessReport | null>(null);
 
   useEffect(() => {
+    // localStorage はサーバーに存在しないため、hydration mismatch を避けてマウント後に読む
     try {
       const examHistory = getCommonTestExamHistory();
       const drillHistory = getCommonTestDrillHistory();
@@ -393,6 +394,7 @@ export function CommonTestWeaknessBossPanel({
         drillHistory,
         targetScores,
       });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setReport(r);
     } catch {
       // 万一の例外もUIを壊さない

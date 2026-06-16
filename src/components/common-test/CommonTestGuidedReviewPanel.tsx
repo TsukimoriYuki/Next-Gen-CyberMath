@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import katex from "katex";
 import {
@@ -45,11 +45,18 @@ export function CommonTestGuidedReviewPanel({
   const [revealedCounts, setRevealedCounts] = useState<Record<string, number>>({});
   const [variantPracticeId, setVariantPracticeId] = useState<string | null>(null);
 
-  useEffect(() => {
+  // initialQuestionId または orderedItems（= items）が変わったら表示状態をリセットする。
+  // レンダー中に直接 setState することで、コミット後の余分な再レンダーを避ける。
+  const [resetTracker, setResetTracker] = useState({ initialQuestionId, orderedItems });
+  if (
+    resetTracker.initialQuestionId !== initialQuestionId ||
+    resetTracker.orderedItems !== orderedItems
+  ) {
+    setResetTracker({ initialQuestionId, orderedItems });
     setOpenId(initialQuestionId ?? orderedItems[0]?.questionId ?? null);
     setRevealedCounts({});
     setVariantPracticeId(null);
-  }, [initialQuestionId, orderedItems]);
+  }
 
   if (orderedItems.length === 0) return null;
 

@@ -1,8 +1,10 @@
+import type { Problem } from "@/lib/types";
+
 // Expansion Pack 1 — 数学1A 良問集（難易度 A〜D）
 // src/data/problems.ts の RAW_PROBLEMS に展開して使用する。
 // prisma/seed.ts でも参照可能。
 
-export const EXPANSION_PACK_1: any[] = [
+export const EXPANSION_PACK_1: Problem[] = [
   // ─────────────────────────────────────────────────────────────────
   // 1. 解と係数の関係による連鎖問題  [難易度 A / 偏差値 50]
   // ─────────────────────────────────────────────────────────────────

@@ -3,7 +3,11 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
 import { SpeedReadingGame } from "@/components/english/SpeedReadingGame";
-import { ENGLISH_LEVEL_META, getSpeedReadingTimeLimitSeconds } from "@/lib/english-types";
+import {
+  ENGLISH_LEVEL_META,
+  ENGLISH_LEVEL_SLUG,
+  getSpeedReadingTimeLimitSeconds,
+} from "@/lib/english-types";
 
 export function generateStaticParams() {
   return SPEED_READING_PROBLEMS.map((p) => ({ id: p.id }));
@@ -54,11 +58,11 @@ export default async function SpeedReadingProblemPage({
       <div className="relative mx-auto max-w-3xl px-4 py-8 sm:px-6">
         {/* Back */}
         <Link
-          href="/english/speed-reading"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 hover:text-emerald-400 transition-colors"
+          href={`/english/speed-reading/level/${ENGLISH_LEVEL_SLUG[problem.level]}`}
+          className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 hover:text-emerald-500 transition-colors"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
-          問題一覧へ
+          長文一覧へ
         </Link>
 
         {/* Header */}

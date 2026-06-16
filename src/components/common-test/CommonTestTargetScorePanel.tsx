@@ -23,6 +23,8 @@ export function CommonTestTargetScorePanel() {
   const [feedback, setFeedback] = useState<"saved" | "error" | null>(null);
 
   useEffect(() => {
+    // localStorage はサーバーに存在しないため、hydration mismatch を避けてマウント後に読む
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTargets(getCommonTestTargetScores());
     setLatestScores(getLatestCommonTestExamScores());
   }, []);

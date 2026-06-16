@@ -79,6 +79,61 @@ export function getSpeedReadingTargetWpm(problem: SpeedReadingProblem): number {
   return problem.targetWpm ?? SPEED_READING_DEFAULT_TARGET_WPM[problem.level];
 }
 
+/** レベルとURLスラッグの対応（長文一覧ルート用） */
+export const ENGLISH_LEVEL_SLUG: Record<EnglishLevel, string> = {
+  TEXTBOOK: "textbook",
+  COMMON_TEST: "common-test",
+  PRIVATE_UNI: "private-uni",
+  NATIONAL_UNI: "national-uni",
+};
+
+const SLUG_TO_ENGLISH_LEVEL: Record<string, EnglishLevel> = Object.fromEntries(
+  (Object.entries(ENGLISH_LEVEL_SLUG) as [EnglishLevel, string][]).map(
+    ([level, slug]) => [slug, level],
+  ),
+) as Record<string, EnglishLevel>;
+
+/** URLスラッグからレベルを引く。未知のスラッグなら null。 */
+export function getEnglishLevelBySlug(slug: string): EnglishLevel | null {
+  return SLUG_TO_ENGLISH_LEVEL[slug] ?? null;
+}
+
+/**
+ * 英文の語数を数える。本文（passage）専用。設問・選択肢・解説は対象外。
+ * スピードサポート（SpeedSupportReader）と同一ロジックを共有する。
+ */
+export function countWords(text: string): number {
+  return text
+    .trim()
+    .split(/\s+/)
+    .filter((word) => /[A-Za-z0-9]/.test(word)).length;
+}
+
+/** 速読長文の本文語数 */
+export function getSpeedReadingWordCount(problem: SpeedReadingProblem): number {
+  return countWords(problem.passage);
+}
+
+/**
+ * 目標読了時間（秒）。estimatedSeconds = wordCount / targetWpm * 60。
+ * SpeedSupportReader の estimatedSeconds と一致するよう切り上げる。
+ */
+export function getSpeedReadingEstimatedSeconds(
+  problem: SpeedReadingProblem,
+): number {
+  const wpm = Math.max(1, getSpeedReadingTargetWpm(problem));
+  const words = getSpeedReadingWordCount(problem);
+  return Math.max(1, Math.ceil((words / wpm) * 60));
+}
+
+/** 秒数を m:ss 形式に整形する */
+export function formatSpeedReadingTime(totalSeconds: number): string {
+  const safe = Math.max(0, Math.ceil(totalSeconds));
+  const minutes = Math.floor(safe / 60);
+  const seconds = safe % 60;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+}
+
 // ── Comprehension (精読) types ────────────────────────────────────────────
 
 /** 構文役割ラベル */

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Pause, Play, RotateCcw, Timer, Zap } from "lucide-react";
+import { countWords } from "@/lib/english-types";
 
 type SentenceChunk = {
   text: string;
@@ -15,13 +16,6 @@ function formatTime(seconds: number): string {
   const minutes = Math.floor(safeSeconds / 60);
   const rest = safeSeconds % 60;
   return `${minutes}:${String(rest).padStart(2, "0")}`;
-}
-
-export function countWords(text: string): number {
-  return text
-    .trim()
-    .split(/\s+/)
-    .filter((word) => /[A-Za-z0-9]/.test(word)).length;
 }
 
 function splitParagraphIntoSentences(paragraph: string): string[] {
@@ -164,8 +158,7 @@ export function SpeedSupportReader({
             目標WPM: <span className="font-mono font-semibold text-slate-950">{safeTargetWpm}</span>
           </div>
           <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
-            現在WPM: <span className="font-mono font-semibold text-slate-950">{safeTargetWpm}</span>
-            <span className="ml-1 text-slate-600">目安</span>
+            目標ペース: <span className="font-mono font-semibold text-slate-950">{safeTargetWpm} WPM</span>
           </div>
           <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
             本文語数: <span className="font-mono font-semibold text-slate-950">{totalWords}語</span>
@@ -181,7 +174,7 @@ export function SpeedSupportReader({
             残り: <span className="font-mono font-semibold text-slate-950">{formatTime(remainingSeconds)}</span>
           </div>
           <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2 sm:col-span-2 lg:col-span-1">
-            目安:{" "}
+            読了目安:{" "}
             <span className="font-mono font-semibold text-slate-950">
               {targetWordsRead}語 / {totalWords}語
             </span>
@@ -194,8 +187,8 @@ export function SpeedSupportReader({
             共通テスト基準との差:{" "}
             <span className="font-mono font-semibold text-slate-950">
               {commonTestWpmDiff === 0
-                ? "±0 WPM"
-                : `${commonTestWpmDiff > 0 ? "+" : ""}${commonTestWpmDiff} WPM`}
+                ? "目標比 ±0 WPM"
+                : `目標比 ${commonTestWpmDiff > 0 ? "+" : ""}${commonTestWpmDiff} WPM`}
             </span>
           </div>
         </div>

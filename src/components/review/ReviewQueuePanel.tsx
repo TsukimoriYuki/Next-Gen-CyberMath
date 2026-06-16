@@ -82,6 +82,8 @@ export function ReviewQueuePanel() {
   }, []);
 
   useEffect(() => {
+    // API フェッチはマウント時の正規の副作用
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchItems();
   }, [fetchItems]);
 

@@ -94,15 +94,15 @@ export default async function MathHomePage() {
           A から D+ へ。上に行くほど、解法そのものが美しくなる。
         </p>
 
-        <div className="mt-6 flex flex-col items-center gap-2">
+        <div className="mt-6 flex w-full max-w-full flex-col items-center gap-2 overflow-hidden">
           {[...DIFFICULTY_ORDER].reverse().map((d, i) => {
             const meta = DIFFICULTY_META[d];
             const count = all.filter((p) => p.difficulty === d).length;
-            const width = 52 + i * 11;
+            const width = 52 + (i * 48) / (DIFFICULTY_ORDER.length - 1);
             return (
               <div
                 key={d}
-                className="glass glass-hover flex items-center justify-between rounded-xl px-5 py-3"
+                className="glass glass-hover flex w-full max-w-full items-center justify-between rounded-xl px-5 py-3"
                 style={{
                   width: `${width}%`,
                   borderColor: `color-mix(in oklch, ${meta.accent} 35%, transparent)`,

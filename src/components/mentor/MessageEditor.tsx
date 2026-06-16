@@ -23,6 +23,8 @@ export function MessageEditor({ students }: { students: Student[] }) {
     if (res.ok) setMessages(await res.json());
   }, []);
 
+  // API フェッチはマウント時の正規の副作用
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { loadMessages(); }, [loadMessages]);
 
   async function handleSend() {

@@ -110,6 +110,8 @@ export function CommonTestReviewQueue() {
   }, []);
 
   useEffect(() => {
+    // API フェッチ（ローディング状態の設定を含む）はマウント時の正規の副作用
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAll();
   }, [fetchAll]);
 

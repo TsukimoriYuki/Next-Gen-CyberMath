@@ -228,13 +228,10 @@ function QuestionScreen({
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
   const [selected, setSelected] = useState<number | null>(null);
   const [showHint, setShowHint] = useState(false);
-  const startTime = useRef(Date.now());
+  const startTime = useRef<number>(0);
 
   useEffect(() => {
     startTime.current = Date.now();
-    setTimeLeft(QUESTION_TIME);
-    setSelected(null);
-    setShowHint(false);
   }, [problem.id]);
 
   useEffect(() => {
@@ -253,12 +250,12 @@ function QuestionScreen({
     return () => clearInterval(id);
   }, [selected, onAnswer, problem.id]);
 
-  const handleSelect = (idx: number) => {
+  const handleSelect = useCallback((idx: number) => {
     if (selected !== null) return;
     setSelected(idx);
     const used = Math.round((Date.now() - startTime.current) / 1000);
     setTimeout(() => onAnswer(idx, Math.min(used, QUESTION_TIME)), 600);
-  };
+  }, [selected, onAnswer]);
 
   const progress = (timeLeft / QUESTION_TIME) * 100;
   const isUrgent = timeLeft <= 10;

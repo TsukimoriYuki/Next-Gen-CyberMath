@@ -18,6 +18,7 @@ export function MessageBarClient({ id, content, dateStr, isDM }: MessageBarClien
   // Hydration 後に localStorage を参照して表示判定
   useEffect(() => {
     const read = localStorage.getItem(STORAGE_KEY);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (read !== id) setVisible(true);
   }, [id]);
 

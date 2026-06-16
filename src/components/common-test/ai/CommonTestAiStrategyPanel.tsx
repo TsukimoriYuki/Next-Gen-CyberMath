@@ -56,10 +56,12 @@ export function CommonTestAiStrategyPanel({
   const [source, setSource] = useState<"gemini" | "rule" | null>(null);
   const [cachedAt, setCachedAt] = useState<string | null>(null);
 
-  // 既存のキャッシュがあれば初期表示に使う
+  // 既存のキャッシュがあれば初期表示に使う。localStorage はサーバーに存在しないため、
+  // hydration mismatch を避けてマウント後（および対象が変わった後）に読む。
   useEffect(() => {
     const cached = getCommonTestAiAnalysisEntry(examHistoryItem.id);
     if (cached) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAnalysis(cached.analysis);
       setFromCache(true);
       setSource(cached.source ?? null);

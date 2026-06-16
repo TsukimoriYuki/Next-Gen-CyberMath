@@ -1,11 +1,10 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ChevronLeft, Gauge, Lock, Timer, Zap } from "lucide-react";
+import { ArrowRight, ChevronLeft, Gauge, Lock, Timer } from "lucide-react";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
+import { SpeedReadingRandomButton } from "@/components/english/SpeedReadingRandomButton";
 import {
   ENGLISH_LEVEL_META,
+  ENGLISH_LEVEL_SLUG,
   getSpeedReadingTargetWpm,
   type EnglishLevel,
 } from "@/lib/english-types";
@@ -34,30 +33,8 @@ const LEVELS: { level: EnglishLevel; order: string; tagline: string }[] = [
   },
 ];
 
-function pickProblem(level: EnglishLevel) {
-  const pool = SPEED_READING_PROBLEMS.filter((p) => p.level === level);
-  if (pool.length === 0) return null;
-
-  const randomValues = new Uint32Array(1);
-  globalThis.crypto?.getRandomValues(randomValues);
-  const index = randomValues[0] % pool.length;
-
-  return pool[index];
-}
-
 export default function SpeedReadingPage() {
-  const router = useRouter();
-
-  const handleSelect = (level: EnglishLevel, speedSupport: boolean) => {
-    const pick = pickProblem(level);
-    if (!pick) {
-      alert("該当レベルのデータが未実装です。別のレベルを選択してください。");
-      return;
-    }
-
-    const suffix = speedSupport ? "?speedSupport=1" : "";
-    router.push(`/english/speed-reading/${pick.id}${suffix}`);
-  };
+  const allIds = SPEED_READING_PROBLEMS.map((p) => p.id);
 
   return (
     <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
@@ -73,7 +50,7 @@ export default function SpeedReadingPage() {
       <div className="relative mx-auto max-w-4xl px-4 py-10 sm:px-6">
         <Link
           href="/english"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 transition-colors hover:text-emerald-400"
+          className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 transition-colors hover:text-emerald-500"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
           CYBER English
@@ -103,9 +80,9 @@ export default function SpeedReadingPage() {
           >
             速読長文
           </h1>
-          <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/50">
-            レベルを選び、通常モードまたはスピードサポートモードで読解を開始します。
-            スピードサポートではWPM基準で本文中の読了目安を表示します。
+          <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-600">
+            レベルを選ぶと、そのレベルの長文一覧が開きます。
+            各長文を「通常」または「スピードサポート」で読み始められます。
           </p>
         </header>
 
@@ -117,126 +94,118 @@ export default function SpeedReadingPage() {
             );
             const count = levelProblems.length;
             const locked = count === 0;
-            const sampleProblem = levelProblems[0];
-            const targetWpm = sampleProblem
-              ? getSpeedReadingTargetWpm(sampleProblem)
+            const targetWpm = levelProblems[0]
+              ? getSpeedReadingTargetWpm(levelProblems[0])
               : null;
 
-            return (
-              <article
-                key={level}
-                className={`group relative w-full overflow-hidden rounded-2xl text-left transition-all duration-300 ${
-                  !locked
-                    ? "hover:[border-color:color-mix(in_srgb,var(--level-accent)_50%,transparent)] hover:[background:color-mix(in_srgb,var(--level-accent)_8%,transparent)]"
-                    : ""
-                }`}
-                style={{
-                  "--level-accent": meta.accent,
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  opacity: locked ? 0.52 : 1,
-                } as React.CSSProperties}
-              >
-                {!locked && (
-                  <span
-                    className="pointer-events-none absolute inset-0 -translate-x-full transition-transform duration-700 group-hover:translate-x-full"
-                    style={{
-                      background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${meta.accent} 8%, transparent), transparent)`,
-                    }}
-                  />
-                )}
-
-                <div className="relative p-6">
-                  <div className="mb-4 flex items-center justify-between gap-3">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">
-                      LV.{order}
-                    </span>
-                    {locked ? (
-                      <span className="flex items-center gap-1 font-mono text-[10px] text-white/22">
-                        <Lock className="h-3 w-3" />
-                        準備中
-                      </span>
-                    ) : (
-                      <span
-                        className="rounded-full px-2.5 py-0.5 font-mono text-[10px] font-semibold"
-                        style={{
-                          background: `color-mix(in srgb, ${meta.accent} 14%, transparent)`,
-                          border: `1px solid color-mix(in srgb, ${meta.accent} 35%, transparent)`,
-                          color: meta.accent,
-                        }}
-                      >
-                        {count}問収録
-                      </span>
-                    )}
-                  </div>
-
-                  <h2
-                    className="font-display text-2xl font-extrabold sm:text-3xl"
-                    style={{
-                      color: locked ? "rgba(255,255,255,0.2)" : meta.accent,
-                    }}
-                  >
-                    {meta.label}
-                  </h2>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-white/28">
-                    {meta.name} · {meta.wordRange}
-                  </p>
-
-                  <p className="mt-3 text-xs leading-relaxed text-white/50">
-                    {tagline}
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap gap-2 text-[10px] text-white/42">
-                    <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1">
-                      通常モード
-                    </span>
-                    {targetWpm ? (
-                      <span className="rounded-full border border-sky-400/20 bg-sky-400/8 px-2 py-1 text-sky-200/80">
-                        目標 {targetWpm} WPM
-                      </span>
-                    ) : null}
-                  </div>
-
-                  <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                    <button
-                      type="button"
-                      disabled={locked}
-                      onClick={() => handleSelect(level, false)}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/5 px-3 py-2.5 font-mono text-xs font-semibold text-white/65 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      <Timer className="h-3.5 w-3.5" />
-                      通常で読む
-                    </button>
-                    <button
-                      type="button"
-                      disabled={locked}
-                      onClick={() => handleSelect(level, true)}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-sky-400/35 bg-sky-400/12 px-3 py-2.5 font-mono text-xs font-semibold text-sky-200 transition hover:bg-sky-400/18 disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      <Gauge className="h-3.5 w-3.5" />
-                      スピードサポートで読む
-                    </button>
-                  </div>
-
+            const cardInner = (
+              <div className="relative p-6">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-400">
+                    LV.{order}
+                  </span>
                   {locked ? (
-                    <div className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold text-white/20">
-                      COMING SOON
-                    </div>
+                    <span className="flex items-center gap-1 font-mono text-[10px] text-slate-400">
+                      <Lock className="h-3 w-3" />
+                      準備中
+                    </span>
                   ) : (
-                    <div className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-3">
-                      <Zap className="h-3.5 w-3.5" style={{ color: meta.accent }} />
-                      <span style={{ color: meta.accent }}>モードを選んで開始</span>
-                    </div>
+                    <span
+                      className="rounded-full px-2.5 py-0.5 font-mono text-[10px] font-semibold"
+                      style={{
+                        background: `color-mix(in srgb, ${meta.accent} 14%, transparent)`,
+                        border: `1px solid color-mix(in srgb, ${meta.accent} 35%, transparent)`,
+                        color: meta.accent,
+                      }}
+                    >
+                      {count}問収録
+                    </span>
                   )}
                 </div>
-              </article>
+
+                <h2
+                  className="font-display text-2xl font-extrabold sm:text-3xl"
+                  style={{
+                    color: locked ? "#94a3b8" : meta.accent,
+                  }}
+                >
+                  {meta.label}
+                </h2>
+                <p className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-slate-400">
+                  {meta.name} · {meta.wordRange}
+                </p>
+
+                <p className="mt-3 text-xs leading-relaxed text-slate-600">
+                  {tagline}
+                </p>
+
+                <div className="mt-4 flex flex-wrap gap-2 text-[10px] text-slate-500">
+                  {targetWpm ? (
+                    <span className="inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-2 py-1 font-mono font-semibold text-sky-700">
+                      <Gauge className="h-3 w-3" />
+                      目標 {targetWpm} WPM
+                    </span>
+                  ) : null}
+                </div>
+
+                {locked ? (
+                  <div className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold text-slate-400">
+                    COMING SOON
+                  </div>
+                ) : (
+                  <div className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-3">
+                    <span style={{ color: meta.accent }}>長文一覧を見る</span>
+                    <ArrowRight
+                      className="h-3.5 w-3.5"
+                      style={{ color: meta.accent }}
+                    />
+                  </div>
+                )}
+              </div>
+            );
+
+            if (locked) {
+              return (
+                <article
+                  key={level}
+                  className="group relative w-full overflow-hidden rounded-2xl border border-slate-200 bg-white text-left opacity-60 shadow-sm"
+                >
+                  {cardInner}
+                </article>
+              );
+            }
+
+            return (
+              <Link
+                key={level}
+                href={`/english/speed-reading/level/${ENGLISH_LEVEL_SLUG[level]}`}
+                className="group relative block w-full overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm transition-all duration-300 hover:shadow-md hover:[border-color:color-mix(in_srgb,var(--level-accent)_55%,transparent)]"
+                style={
+                  { "--level-accent": meta.accent } as React.CSSProperties
+                }
+              >
+                <span
+                  className="pointer-events-none absolute inset-0 -translate-x-full transition-transform duration-700 group-hover:translate-x-full"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${meta.accent} 10%, transparent), transparent)`,
+                  }}
+                />
+                {cardInner}
+              </Link>
             );
           })}
         </div>
 
-        <p className="mt-12 text-center font-mono text-xs uppercase tracking-[0.2em] text-white/20">
-          レベルと読解モードを選んで、今日の演習を始めましょう
-        </p>
+        {/* Supplementary random quick-start */}
+        <div className="mt-10 flex flex-col items-center gap-3 border-t border-slate-200 pt-8">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-slate-400">
+            すぐ始めたいときは
+          </p>
+          <SpeedReadingRandomButton
+            ids={allIds}
+            label="全レベルからランダムに1題読む"
+          />
+        </div>
       </div>
     </div>
   );

@@ -52,6 +52,8 @@ export function DailyChallengeEditor({ allProblems }: DailyChallengeEditorProps)
     }
   }, []);
 
+  // API フェッチ（ローディング状態の設定を含む）は日付変更時の正規の副作用
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchForDate(date); }, [date, fetchForDate]);
 
   async function handleSave() {

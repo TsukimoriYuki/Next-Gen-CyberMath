@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import katex from "katex";
 import {
   AlertTriangle,
@@ -46,13 +46,21 @@ export function CommonTestAnswerPanel({
   const [selectedConfidence, setSelectedConfidence] =
     useState<CommonTestConfidence | null>(null);
 
-  useEffect(() => {
+  // isRevealed が閉じた（やり直し等）瞬間に確信度の選択をリセットする。
+  // レンダー中に直接 setState することで、コミット後の余分な再レンダーを避ける。
+  const [prevIsRevealed, setPrevIsRevealed] = useState(isRevealed);
+  if (isRevealed !== prevIsRevealed) {
+    setPrevIsRevealed(isRevealed);
     if (!isRevealed) setSelectedConfidence(null);
-  }, [isRevealed]);
+  }
 
-  useEffect(() => {
+  // question または selectedAnswer が変わったら draftAnswer を同期する。
+  const questionKey = `${question.id}:${selectedAnswer ?? ""}`;
+  const [prevQuestionKey, setPrevQuestionKey] = useState(questionKey);
+  if (questionKey !== prevQuestionKey) {
+    setPrevQuestionKey(questionKey);
     setDraftAnswer(selectedAnswer ?? "");
-  }, [question.id, selectedAnswer]);
+  }
 
   return (
     <div className="space-y-4">

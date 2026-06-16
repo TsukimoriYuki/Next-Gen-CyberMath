@@ -41,14 +41,10 @@ async function main() {
         graphConfig: p.graphKey ? { graphKey: p.graphKey } : undefined,
         relatedLessonSlug: p.relatedLessonSlug ?? null,
         tags: p.tags ?? [],
-        // 道場メタ — `prisma db push` + `prisma generate` 後に型が有効になる。
-        // @ts-ignore
+        // 道場メタ
         university: p.university ?? null,
-        // @ts-ignore
         deviation: p.deviation ?? null,
-        // @ts-ignore
         year: p.year ?? null,
-        // @ts-ignore
         backgroundTag: p.backgroundTag ?? null,
         steps: {
           create: p.steps.map((s) => ({

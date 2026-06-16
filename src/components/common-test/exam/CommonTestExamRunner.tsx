@@ -82,12 +82,12 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
     return () => clearInterval(interval);
   }, [phase]);
 
-  // Transition to overtime when time limit reached
-  useEffect(() => {
-    if (phase === "running" && elapsedSec >= preset.examLimitSec) {
-      setPhase("overtime");
-    }
-  }, [elapsedSec, phase, preset.examLimitSec]);
+  // Transition to overtime when time limit reached.
+  // レンダー中に直接 setState することで、コミット後の余分な再レンダーを避ける
+  // （次のレンダーでは条件が false になるため無限ループにはならない）。
+  if (phase === "running" && elapsedSec >= preset.examLimitSec) {
+    setPhase("overtime");
+  }
 
   const toggleOptionalSection = useCallback(
     (sectionId: string) => {

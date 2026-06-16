@@ -108,7 +108,9 @@ export function CommonTestAnalyticsSummary() {
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
 
   useEffect(() => {
+    // localStorage はサーバーに存在しないため、hydration mismatch を避けてマウント後に読む
     const history = getCommonTestDrillHistory();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAnalytics(computeAnalytics(history));
   }, []);
 
