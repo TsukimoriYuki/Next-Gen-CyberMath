@@ -22,15 +22,22 @@ export async function generateMetadata({
 
 export default async function SpeedReadingProblemPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ speedSupport?: string | string[] }>;
 }) {
   const { id } = await params;
+  const { speedSupport } = await searchParams;
   const problem = SPEED_READING_PROBLEMS.find((p) => p.id === id);
   if (!problem) notFound();
 
   const levelMeta = ENGLISH_LEVEL_META[problem.level];
   const timeLimitSeconds = getSpeedReadingTimeLimitSeconds(problem);
+  const speedSupportMode =
+    speedSupport === "1" ||
+    speedSupport === "true" ||
+    (Array.isArray(speedSupport) && speedSupport.includes("1"));
 
   return (
     <div className="english-academic min-h-screen bg-slate-50 text-slate-900">
@@ -70,6 +77,15 @@ export default async function SpeedReadingProblemPage({
             <span className="text-xs text-slate-500">
               制限時間 {timeLimitSeconds}秒 / {problem.tags?.join(" / ")}
             </span>
+            <span
+              className={`rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold ${
+                speedSupportMode
+                  ? "border border-sky-400/35 bg-sky-400/10 text-sky-300"
+                  : "border border-slate-200 bg-slate-100 text-slate-500"
+              }`}
+            >
+              {speedSupportMode ? "スピードサポートON" : "通常モード"}
+            </span>
           </div>
           <h1 className="font-display text-2xl font-extrabold text-slate-950 sm:text-3xl">
             {problem.title}
@@ -77,7 +93,7 @@ export default async function SpeedReadingProblemPage({
         </div>
 
         {/* Game */}
-        <SpeedReadingGame problem={problem} />
+        <SpeedReadingGame problem={problem} speedSupportMode={speedSupportMode} />
       </div>
     </div>
   );

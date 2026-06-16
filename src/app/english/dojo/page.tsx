@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
+  Gauge,
   Timer,
   PenLine,
   GraduationCap,
@@ -12,7 +13,11 @@ import { COMPREHENSION_PRIVATE_PACK_1 } from "@/data/english-comprehension-priva
 import { SPEED_READING_PRIVATE_PACK_1 } from "@/data/english-speed-reading-private-pack-1";
 import { UNIVERSITY_GROUP_META } from "@/lib/types";
 import type { UniversityGroup } from "@/lib/types";
-import { ENGLISH_LEVEL_META, getSpeedReadingTimeLimitSeconds } from "@/lib/english-types";
+import {
+  ENGLISH_LEVEL_META,
+  getSpeedReadingTargetWpm,
+  getSpeedReadingTimeLimitSeconds,
+} from "@/lib/english-types";
 
 export const metadata: Metadata = {
   title: "英語 過去問道場",
@@ -180,16 +185,15 @@ export default function EnglishDojoPage() {
               const uKey = p.universityGroup;
               const uMeta = uKey ? UNIVERSITY_GROUP_META[uKey] : null;
               return (
-                <Link
+                <article
                   key={p.id}
-                  href={`/english/speed-reading/${p.id}`}
-                  className="group flex items-center justify-between rounded-xl p-4 transition-all duration-200"
+                  className="group rounded-xl p-4 transition-all duration-200"
                   style={{
                     background: "rgba(16,185,129,0.04)",
                     border: "1px solid rgba(16,185,129,0.16)",
                   }}
                 >
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <span
                         className="rounded px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wide shrink-0"
@@ -221,14 +225,30 @@ export default function EnglishDojoPage() {
                     </div>
                     <p className="font-display text-sm font-semibold text-white truncate">{p.title}</p>
                     <p className="font-mono text-[10px] mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>
-                      制限時間 {getSpeedReadingTimeLimitSeconds(p)}秒 · {p.questions.length}問
+                      制限時間 {getSpeedReadingTimeLimitSeconds(p)}秒 · 目標 {getSpeedReadingTargetWpm(p)} WPM · {p.questions.length}問
                     </p>
                   </div>
-                  <ArrowRight
-                    className="h-4 w-4 shrink-0 ml-3 opacity-40 transition-all group-hover:opacity-100 group-hover:translate-x-0.5"
-                    style={{ color: "#10b981" }}
-                  />
-                </Link>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Link
+                      href={`/english/speed-reading/${p.id}`}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 font-mono text-[10px] font-semibold text-white/65 transition hover:bg-white/10"
+                    >
+                      <Timer className="h-3.5 w-3.5" />
+                      通常で読む
+                    </Link>
+                    <Link
+                      href={`/english/speed-reading/${p.id}?speedSupport=1`}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-sky-400/30 bg-sky-400/10 px-3 py-2 font-mono text-[10px] font-semibold text-sky-200 transition hover:bg-sky-400/15"
+                    >
+                      <Gauge className="h-3.5 w-3.5" />
+                      スピードサポートで読む
+                    </Link>
+                    <span className="ml-auto hidden items-center font-mono text-[10px] font-semibold text-emerald-400/70 sm:inline-flex">
+                      モード選択
+                      <ArrowRight className="ml-1 h-3.5 w-3.5 transition-all group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
+                </article>
               );
             })}
           </div>

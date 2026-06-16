@@ -1,18 +1,27 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Pause, Play, RotateCcw, Timer } from "lucide-react";
+import { Pause, Play, RotateCcw, Timer, Zap } from "lucide-react";
 
 type SentenceChunk = {
   text: string;
   sentenceIndex: number;
+  wordCount: number;
+  cumulativeWords: number;
 };
 
 function formatTime(seconds: number): string {
-  const safeSeconds = Math.max(0, seconds);
+  const safeSeconds = Math.max(0, Math.ceil(seconds));
   const minutes = Math.floor(safeSeconds / 60);
   const rest = safeSeconds % 60;
   return `${minutes}:${String(rest).padStart(2, "0")}`;
+}
+
+export function countWords(text: string): number {
+  return text
+    .trim()
+    .split(/\s+/)
+    .filter((word) => /[A-Za-z0-9]/.test(word)).length;
 }
 
 function splitParagraphIntoSentences(paragraph: string): string[] {
@@ -22,55 +31,78 @@ function splitParagraphIntoSentences(paragraph: string): string[] {
 
 function splitPassage(passage: string): SentenceChunk[][] {
   let sentenceIndex = 0;
+  let cumulativeWords = 0;
 
   return passage.split("\n\n").map((paragraph) =>
-    splitParagraphIntoSentences(paragraph).map((sentence) => ({
-      text: sentence,
-      sentenceIndex: sentenceIndex++,
-    })),
+    splitParagraphIntoSentences(paragraph).map((sentence) => {
+      const wordCount = countWords(sentence);
+      cumulativeWords += wordCount;
+
+      return {
+        text: sentence,
+        sentenceIndex: sentenceIndex++,
+        wordCount,
+        cumulativeWords,
+      };
+    }),
   );
+}
+
+function findCurrentSentenceIndex(
+  sentences: SentenceChunk[],
+  targetWordsRead: number,
+): number {
+  if (sentences.length === 0) return -1;
+  if (targetWordsRead <= 0) return 0;
+
+  const found = sentences.find(
+    (sentence) => sentence.cumulativeWords >= targetWordsRead,
+  );
+
+  return found?.sentenceIndex ?? sentences[sentences.length - 1].sentenceIndex;
 }
 
 export function SpeedSupportReader({
   passage,
-  totalTimeSeconds,
+  targetWpm,
+  timeLimitSeconds,
 }: {
   passage: string;
-  totalTimeSeconds: number;
+  targetWpm: number;
+  timeLimitSeconds: number;
 }) {
-  const [enabled, setEnabled] = useState(false);
   const [running, setRunning] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   const paragraphs = useMemo(() => splitPassage(passage), [passage]);
-  const sentenceCount = paragraphs.reduce(
-    (sum, paragraph) => sum + paragraph.length,
-    0,
+  const sentences = useMemo(() => paragraphs.flat(), [paragraphs]);
+  const totalWords = sentences.at(-1)?.cumulativeWords ?? 0;
+  const safeTargetWpm = Math.max(1, targetWpm);
+  const estimatedSeconds = Math.max(1, Math.ceil((totalWords / safeTargetWpm) * 60));
+  const cappedElapsed = Math.min(elapsedSeconds, estimatedSeconds);
+  const targetWordsRead = Math.min(
+    totalWords,
+    Math.floor((cappedElapsed / 60) * safeTargetWpm),
   );
-  const safeTotalTime = Math.max(1, totalTimeSeconds);
-  const cappedElapsed = Math.min(elapsedSeconds, safeTotalTime);
-  const progressRatio = cappedElapsed / safeTotalTime;
-  const currentIndex =
-    sentenceCount === 0
-      ? -1
-      : cappedElapsed >= safeTotalTime
-        ? sentenceCount - 1
-        : Math.min(sentenceCount - 1, Math.floor(progressRatio * sentenceCount));
-  const currentSentenceNumber =
-    sentenceCount === 0 ? 0 : Math.min(sentenceCount, currentIndex + 1);
-  const remainingSeconds = Math.max(0, safeTotalTime - cappedElapsed);
-  const isFinished = cappedElapsed >= safeTotalTime;
-  const progressPercent = Math.round(progressRatio * 100);
+  const currentSentenceIndex =
+    cappedElapsed >= estimatedSeconds
+      ? sentences.length - 1
+      : findCurrentSentenceIndex(sentences, targetWordsRead);
+  const commonTestWpmDiff = safeTargetWpm - 150;
+  const progressPercent =
+    totalWords === 0 ? 0 : Math.min(100, Math.round((targetWordsRead / totalWords) * 100));
+  const remainingSeconds = Math.max(0, estimatedSeconds - cappedElapsed);
+  const isFinished = cappedElapsed >= estimatedSeconds;
 
   useEffect(() => {
     if (!running) return;
 
     const intervalId = window.setInterval(() => {
       setElapsedSeconds((current) => {
-        if (current + 1 >= safeTotalTime) {
+        if (current + 1 >= estimatedSeconds) {
           window.clearInterval(intervalId);
           setRunning(false);
-          return safeTotalTime;
+          return estimatedSeconds;
         }
 
         return current + 1;
@@ -78,17 +110,10 @@ export function SpeedSupportReader({
     }, 1000);
 
     return () => window.clearInterval(intervalId);
-  }, [running, safeTotalTime]);
-
-  const handleToggle = () => {
-    setEnabled((current) => {
-      if (current) setRunning(false);
-      return !current;
-    });
-  };
+  }, [estimatedSeconds, running]);
 
   const handleStart = () => {
-    if (!enabled || isFinished) return;
+    if (isFinished) return;
     setRunning(true);
   };
 
@@ -111,34 +136,19 @@ export function SpeedSupportReader({
         }}
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <label className="flex cursor-pointer items-center gap-3">
-            <span
-              className={`relative h-6 w-11 rounded-full transition-colors ${
-                enabled ? "bg-sky-500" : "bg-white/15"
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={enabled}
-                onChange={handleToggle}
-                className="sr-only"
-                aria-label="スピードサポートを切り替える"
-              />
-              <span
-                className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-transform ${
-                  enabled ? "translate-x-6" : "translate-x-1"
-                }`}
-              />
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sky-300/30 bg-sky-400/12 text-sky-200">
+              <Zap className="h-5 w-5" />
             </span>
-            <span>
-              <span className="block font-display text-base font-bold text-white">
-                スピードサポート
-              </span>
-              <span className="font-mono text-xs text-white/45">
-                制限時間: {formatTime(safeTotalTime)}
-              </span>
-            </span>
-          </label>
+            <div>
+              <div className="font-display text-base font-bold text-white">
+                スピードサポート ON
+              </div>
+              <div className="font-mono text-xs text-white/45">
+                WPM基準で読了目安を表示
+              </div>
+            </div>
+          </div>
 
           <span
             className={`rounded-full px-2.5 py-1 font-mono text-xs font-semibold ${
@@ -149,19 +159,49 @@ export function SpeedSupportReader({
           </span>
         </div>
 
-        <div className="mt-4 grid gap-2 text-xs text-white/60 sm:grid-cols-3">
+        <div className="mt-4 grid gap-2 text-xs text-white/60 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-xl bg-white/5 px-3 py-2">
+            目標WPM: <span className="font-mono text-white">{safeTargetWpm}</span>
+          </div>
+          <div className="rounded-xl bg-white/5 px-3 py-2">
+            現在WPM: <span className="font-mono text-white">{safeTargetWpm}</span>
+            <span className="ml-1 text-white/35">目安</span>
+          </div>
+          <div className="rounded-xl bg-white/5 px-3 py-2">
+            本文語数: <span className="font-mono text-white">{totalWords}語</span>
+          </div>
+          <div className="rounded-xl bg-white/5 px-3 py-2">
+            目標読了時間:{" "}
+            <span className="font-mono text-white">{formatTime(estimatedSeconds)}</span>
+          </div>
           <div className="rounded-xl bg-white/5 px-3 py-2">
             経過: <span className="font-mono text-white">{formatTime(cappedElapsed)}</span>
           </div>
           <div className="rounded-xl bg-white/5 px-3 py-2">
             残り: <span className="font-mono text-white">{formatTime(remainingSeconds)}</span>
           </div>
-          <div className="rounded-xl bg-white/5 px-3 py-2">
-            現在の読了目安:{" "}
+          <div className="rounded-xl bg-white/5 px-3 py-2 sm:col-span-2 lg:col-span-1">
+            目安:{" "}
             <span className="font-mono text-white">
-              {currentSentenceNumber} / {sentenceCount} 文
+              {targetWordsRead}語 / {totalWords}語
             </span>
           </div>
+          <div className="rounded-xl bg-white/5 px-3 py-2">
+            制限時間:{" "}
+            <span className="font-mono text-white">{formatTime(timeLimitSeconds)}</span>
+          </div>
+          <div className="rounded-xl bg-white/5 px-3 py-2">
+            共通テスト基準との差:{" "}
+            <span className="font-mono text-white">
+              {commonTestWpmDiff === 0
+                ? "±0 WPM"
+                : `${commonTestWpmDiff > 0 ? "+" : ""}${commonTestWpmDiff} WPM`}
+            </span>
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-xl border border-sky-400/20 bg-sky-400/8 px-3 py-2 text-xs leading-relaxed text-sky-100/75">
+          この英文は{safeTargetWpm}WPMなら約{formatTime(estimatedSeconds)}で読了できます。
         </div>
 
         <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-white/10">
@@ -178,7 +218,7 @@ export function SpeedSupportReader({
           <button
             type="button"
             onClick={handleStart}
-            disabled={!enabled || running || isFinished}
+            disabled={running || isFinished}
             className="inline-flex items-center gap-1.5 rounded-xl border border-sky-400/40 bg-sky-400/12 px-3 py-2 text-sm font-semibold text-sky-200 transition hover:bg-sky-400/18 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <Play className="h-4 w-4" />
@@ -187,7 +227,7 @@ export function SpeedSupportReader({
           <button
             type="button"
             onClick={handlePause}
-            disabled={!enabled || !running}
+            disabled={!running}
             className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/6 px-3 py-2 text-sm font-semibold text-white/70 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <Pause className="h-4 w-4" />
@@ -196,7 +236,7 @@ export function SpeedSupportReader({
           <button
             type="button"
             onClick={handleReset}
-            disabled={!enabled && elapsedSeconds === 0}
+            disabled={elapsedSeconds === 0}
             className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/6 px-3 py-2 text-sm font-semibold text-white/70 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <RotateCcw className="h-4 w-4" />
@@ -213,9 +253,12 @@ export function SpeedSupportReader({
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             {paragraph.map((sentence) => {
-              const alreadyRead = enabled && sentence.sentenceIndex < currentIndex;
-              const isCurrent = enabled && sentence.sentenceIndex === currentIndex;
-              const shouldHighlight = alreadyRead || isCurrent;
+              const alreadyRead =
+                isFinished ||
+                (targetWordsRead > 0 && sentence.cumulativeWords < targetWordsRead);
+              const isCurrent =
+                !isFinished && sentence.sentenceIndex === currentSentenceIndex;
+              const shouldHighlight = isFinished || alreadyRead || isCurrent;
 
               return (
                 <span
@@ -228,7 +271,12 @@ export function SpeedSupportReader({
                       : ""
                   }`}
                 >
-                  {sentence.text}{" "}
+                  {sentence.text}
+                  {isCurrent ? (
+                    <span className="ml-1 rounded-full border border-sky-300/25 bg-sky-400/15 px-1.5 py-0.5 align-middle font-mono text-[10px] text-sky-100">
+                      現在の目安
+                    </span>
+                  ) : null}{" "}
                 </span>
               );
             })}
@@ -236,12 +284,10 @@ export function SpeedSupportReader({
         ))}
       </div>
 
-      {enabled ? (
-        <div className="flex items-center gap-2 rounded-xl border border-sky-400/20 bg-sky-400/8 px-3 py-2 text-xs leading-relaxed text-sky-100/75">
-          <Timer className="h-4 w-4 shrink-0 text-sky-300" />
-          青色の位置が、制限時間に対する現在の読了目安です。
-        </div>
-      ) : null}
+      <div className="flex items-center gap-2 rounded-xl border border-sky-400/20 bg-sky-400/8 px-3 py-2 text-xs leading-relaxed text-sky-100/75">
+        <Timer className="h-4 w-4 shrink-0 text-sky-300" />
+        青色の位置が、目標WPMに対する現在の読了目安です。
+      </div>
     </div>
   );
 }

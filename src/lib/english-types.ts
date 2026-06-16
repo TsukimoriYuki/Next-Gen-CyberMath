@@ -25,6 +25,13 @@ export const SPEED_READING_DEFAULT_TIME_LIMIT_SECONDS: Record<EnglishLevel, numb
   NATIONAL_UNI: 600,
 };
 
+export const SPEED_READING_DEFAULT_TARGET_WPM: Record<EnglishLevel, number> = {
+  TEXTBOOK: 100,
+  COMMON_TEST: 150,
+  PRIVATE_UNI: 150,
+  NATIONAL_UNI: 120,
+};
+
 /** 速読長文の1設問 */
 export interface SpeedReadingQuestion {
   /** 設問文 */
@@ -50,6 +57,8 @@ export interface SpeedReadingProblem {
   timeLimitSeconds?: number;
   /** 将来のデータ拡張用: スピードサポートの初期有効状態 */
   speedSupportEnabled?: boolean;
+  /** スピードサポート用の目標 WPM。未指定ならレベル別デフォルトを使う。 */
+  targetWpm?: number;
   /** 設問リスト */
   questions: SpeedReadingQuestion[];
   /** 問題の概要タグ（語数・テーマ等） */
@@ -64,6 +73,10 @@ export function getSpeedReadingTimeLimitSeconds(problem: SpeedReadingProblem): n
     problem.timeLimit ??
     SPEED_READING_DEFAULT_TIME_LIMIT_SECONDS[problem.level]
   );
+}
+
+export function getSpeedReadingTargetWpm(problem: SpeedReadingProblem): number {
+  return problem.targetWpm ?? SPEED_READING_DEFAULT_TARGET_WPM[problem.level];
 }
 
 // ── Comprehension (精読) types ────────────────────────────────────────────

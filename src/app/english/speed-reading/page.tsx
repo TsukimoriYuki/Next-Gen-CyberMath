@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Timer, Zap, Lock } from "lucide-react";
+import { ChevronLeft, Gauge, Lock, Timer, Zap } from "lucide-react";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
-import { ENGLISH_LEVEL_META, type EnglishLevel } from "@/lib/english-types";
+import {
+  ENGLISH_LEVEL_META,
+  getSpeedReadingTargetWpm,
+  type EnglishLevel,
+} from "@/lib/english-types";
 import React from "react";
 
 const LEVELS: { level: EnglishLevel; order: string; tagline: string }[] = [
@@ -16,7 +20,7 @@ const LEVELS: { level: EnglishLevel; order: string; tagline: string }[] = [
   {
     level: "COMMON_TEST",
     order: "02",
-    tagline: "共通テスト形式。実用英文を制限時間内に処理する。",
+    tagline: "共通テスト形式。150WPMを基準に実用英文を処理する。",
   },
   {
     level: "PRIVATE_UNI",
@@ -30,22 +34,33 @@ const LEVELS: { level: EnglishLevel; order: string; tagline: string }[] = [
   },
 ];
 
+function pickProblem(level: EnglishLevel) {
+  const pool = SPEED_READING_PROBLEMS.filter((p) => p.level === level);
+  if (pool.length === 0) return null;
+
+  const randomValues = new Uint32Array(1);
+  globalThis.crypto?.getRandomValues(randomValues);
+  const index = randomValues[0] % pool.length;
+
+  return pool[index];
+}
+
 export default function SpeedReadingPage() {
   const router = useRouter();
 
-  const handleSelect = (level: EnglishLevel) => {
-    const pool = SPEED_READING_PROBLEMS.filter((p) => p.level === level);
-    if (pool.length === 0) {
+  const handleSelect = (level: EnglishLevel, speedSupport: boolean) => {
+    const pick = pickProblem(level);
+    if (!pick) {
       alert("該当レベルのデータが未実装です。別のレベルを選択してください。");
       return;
     }
-    const pick = pool[Math.floor(Math.random() * pool.length)];
-    router.push(`/english/speed-reading/${pick.id}`);
+
+    const suffix = speedSupport ? "?speedSupport=1" : "";
+    router.push(`/english/speed-reading/${pick.id}${suffix}`);
   };
 
   return (
     <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
-      {/* Ambient grid */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -56,19 +71,17 @@ export default function SpeedReadingPage() {
       />
 
       <div className="relative mx-auto max-w-4xl px-4 py-10 sm:px-6">
-        {/* Back */}
         <Link
           href="/english"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 hover:text-emerald-400 transition-colors"
+          className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 transition-colors hover:text-emerald-400"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
           CYBER English
         </Link>
 
-        {/* Header */}
         <header className="mt-8 mb-12">
           <div
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-xs uppercase tracking-[0.25em] mb-4"
+            className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-xs uppercase tracking-[0.25em]"
             style={{
               background: "rgba(16,185,129,0.08)",
               border: "1px solid rgba(16,185,129,0.25)",
@@ -91,26 +104,28 @@ export default function SpeedReadingPage() {
             速読長文
           </h1>
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/50">
-            レベルを選ぶと、該当レベルの英文がランダムに出題されます。
-            制限時間内に要点を読み取り、記憶を頼りに設問へ進みます。
+            レベルを選び、通常モードまたはスピードサポートモードで読解を開始します。
+            スピードサポートではWPM基準で本文中の読了目安を表示します。
           </p>
         </header>
 
-        {/* Level panels */}
         <div className="grid gap-4 sm:grid-cols-2">
           {LEVELS.map(({ level, order, tagline }) => {
             const meta = ENGLISH_LEVEL_META[level];
-            const count = SPEED_READING_PROBLEMS.filter(
-              (p) => p.level === level
-            ).length;
+            const levelProblems = SPEED_READING_PROBLEMS.filter(
+              (p) => p.level === level,
+            );
+            const count = levelProblems.length;
             const locked = count === 0;
+            const sampleProblem = levelProblems[0];
+            const targetWpm = sampleProblem
+              ? getSpeedReadingTargetWpm(sampleProblem)
+              : null;
 
             return (
-              <button
+              <article
                 key={level}
-                type="button"
-                onClick={() => handleSelect(level)}
-                className={`group relative w-full overflow-hidden rounded-2xl text-left transition-all duration-300 focus:outline-none ${
+                className={`group relative w-full overflow-hidden rounded-2xl text-left transition-all duration-300 ${
                   !locked
                     ? "hover:[border-color:color-mix(in_srgb,var(--level-accent)_50%,transparent)] hover:[background:color-mix(in_srgb,var(--level-accent)_8%,transparent)]"
                     : ""
@@ -120,13 +135,11 @@ export default function SpeedReadingPage() {
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   opacity: locked ? 0.52 : 1,
-                  cursor: locked ? "not-allowed" : "pointer",
                 } as React.CSSProperties}
               >
-                {/* Shimmer sweep (unlocked only) */}
                 {!locked && (
                   <span
-                    className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+                    className="pointer-events-none absolute inset-0 -translate-x-full transition-transform duration-700 group-hover:translate-x-full"
                     style={{
                       background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${meta.accent} 8%, transparent), transparent)`,
                     }}
@@ -134,8 +147,7 @@ export default function SpeedReadingPage() {
                 )}
 
                 <div className="relative p-6">
-                  {/* Level number + availability */}
-                  <div className="mb-4 flex items-center justify-between">
+                  <div className="mb-4 flex items-center justify-between gap-3">
                     <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">
                       LV.{order}
                     </span>
@@ -158,7 +170,6 @@ export default function SpeedReadingPage() {
                     )}
                   </div>
 
-                  {/* Level title */}
                   <h2
                     className="font-display text-2xl font-extrabold sm:text-3xl"
                     style={{
@@ -171,36 +182,60 @@ export default function SpeedReadingPage() {
                     {meta.name} · {meta.wordRange}
                   </p>
 
-                  {/* Tagline */}
                   <p className="mt-3 text-xs leading-relaxed text-white/50">
                     {tagline}
                   </p>
 
-                  {/* CTA */}
-                  <div
-                    className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-3"
-                    style={{
-                      color: locked ? "rgba(255,255,255,0.2)" : meta.accent,
-                    }}
-                  >
-                    {locked ? (
-                      "COMING SOON"
-                    ) : (
-                      <>
-                        <Zap className="h-3.5 w-3.5" />
-                        このレベルで始める
-                      </>
-                    )}
+                  <div className="mt-4 flex flex-wrap gap-2 text-[10px] text-white/42">
+                    <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1">
+                      通常モード
+                    </span>
+                    {targetWpm ? (
+                      <span className="rounded-full border border-sky-400/20 bg-sky-400/8 px-2 py-1 text-sky-200/80">
+                        目標 {targetWpm} WPM
+                      </span>
+                    ) : null}
                   </div>
+
+                  <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                    <button
+                      type="button"
+                      disabled={locked}
+                      onClick={() => handleSelect(level, false)}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/5 px-3 py-2.5 font-mono text-xs font-semibold text-white/65 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <Timer className="h-3.5 w-3.5" />
+                      通常で読む
+                    </button>
+                    <button
+                      type="button"
+                      disabled={locked}
+                      onClick={() => handleSelect(level, true)}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-sky-400/35 bg-sky-400/12 px-3 py-2.5 font-mono text-xs font-semibold text-sky-200 transition hover:bg-sky-400/18 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <Gauge className="h-3.5 w-3.5" />
+                      スピードサポートで読む
+                    </button>
+                  </div>
+
+                  {locked ? (
+                    <div className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold text-white/20">
+                      COMING SOON
+                    </div>
+                  ) : (
+                    <div className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-3">
+                      <Zap className="h-3.5 w-3.5" style={{ color: meta.accent }} />
+                      <span style={{ color: meta.accent }}>モードを選んで開始</span>
+                    </div>
+                  )}
                 </div>
-              </button>
+              </article>
             );
           })}
         </div>
 
-        {/* Footer */}
-        <p className="mt-12 text-center font-mono text-xs tracking-[0.2em] text-white/20 uppercase">
-          レベルを選んで、今日の読解演習を始めましょう
+        <p className="mt-12 text-center font-mono text-xs uppercase tracking-[0.2em] text-white/20">
+          レベルと読解モードを選んで、今日の演習を始めましょう
         </p>
       </div>
     </div>

@@ -4,7 +4,11 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Timer, CheckCircle, XCircle, RotateCcw, ChevronRight, Eye, EyeOff } from "lucide-react";
 import type { SpeedReadingProblem } from "@/lib/english-types";
-import { ENGLISH_LEVEL_META, getSpeedReadingTimeLimitSeconds } from "@/lib/english-types";
+import {
+  ENGLISH_LEVEL_META,
+  getSpeedReadingTargetWpm,
+  getSpeedReadingTimeLimitSeconds,
+} from "@/lib/english-types";
 import { saveEnglishAttempt } from "@/lib/english-history";
 import { SpeedSupportReader } from "./SpeedSupportReader";
 
@@ -21,10 +25,12 @@ const SPEED_PRESETS = [
 function ReadingPhase({
   problem,
   timeLimit,
+  speedSupportMode,
   onFinish,
 }: {
   problem: SpeedReadingProblem;
   timeLimit: number;
+  speedSupportMode: boolean;
   onFinish: () => void;
 }) {
   const [timeLeft, setTimeLeft] = useState(timeLimit);
@@ -112,10 +118,25 @@ function ReadingPhase({
         <p className="mb-5 font-display text-xl font-bold text-white sm:text-2xl">
           {problem.title}
         </p>
-        <SpeedSupportReader
-          passage={problem.passage}
-          totalTimeSeconds={timeLimit}
-        />
+        {speedSupportMode ? (
+          <SpeedSupportReader
+            passage={problem.passage}
+            targetWpm={getSpeedReadingTargetWpm(problem)}
+            timeLimitSeconds={timeLimit}
+          />
+        ) : (
+          <div className="prose prose-invert max-w-none">
+            {problem.passage.split("\n\n").map((para, i) => (
+              <p
+                key={i}
+                className="mb-4 text-base leading-8 text-white/85 last:mb-0"
+                style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+              >
+                {para}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Finish reading button */}
@@ -426,7 +447,13 @@ function ResultPhase({
 }
 
 // ── Main exported component ───────────────────────────────────────────────
-export function SpeedReadingGame({ problem }: { problem: SpeedReadingProblem }) {
+export function SpeedReadingGame({
+  problem,
+  speedSupportMode = false,
+}: {
+  problem: SpeedReadingProblem;
+  speedSupportMode?: boolean;
+}) {
   const [phase, setPhase] = useState<Phase>("setup");
   const [presetIdx, setPresetIdx] = useState(1); // 1 = 標準
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
@@ -434,6 +461,7 @@ export function SpeedReadingGame({ problem }: { problem: SpeedReadingProblem }) 
 
   const baseTimeLimit = getSpeedReadingTimeLimitSeconds(problem);
   const timeLimit = Math.round(baseTimeLimit * SPEED_PRESETS[presetIdx].mult);
+  const targetWpm = getSpeedReadingTargetWpm(problem);
 
   const handleStart = useCallback(() => setPhase("reading"), []);
   const handleReadingFinish = useCallback(() => setPhase("answering"), []);
@@ -521,8 +549,19 @@ export function SpeedReadingGame({ problem }: { problem: SpeedReadingProblem }) 
             >
               <div className="mb-3 flex items-center gap-2">
                 <Timer className="h-4 w-4 text-emerald-400" />
-                <span className="font-mono text-xs text-white/50 uppercase tracking-wider">読解タイマー設定</span>
+                <span className="font-mono text-xs text-white/50 uppercase tracking-wider">
+                  {speedSupportMode ? "スピードサポートで読む" : "通常モードで読む"}
+                </span>
               </div>
+              {speedSupportMode ? (
+                <div className="mb-4 rounded-xl border border-sky-400/20 bg-sky-400/8 px-3 py-2 text-xs leading-relaxed text-sky-100/75">
+                  目標WPM {targetWpm} を基準に、本文中の読了目安位置を青色で表示します。タイマーは本文画面で開始ボタンを押すまで動きません。
+                </div>
+              ) : (
+                <div className="mb-4 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs leading-relaxed text-white/50">
+                  青色ハイライトなしで、従来通り制限時間内に本文を読みます。
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {SPEED_PRESETS.map((preset, i) => (
                   <button
@@ -560,7 +599,13 @@ export function SpeedReadingGame({ problem }: { problem: SpeedReadingProblem }) 
           </motion.div>
         )}
         {phase === "reading" && (
-          <ReadingPhase key="reading" problem={problem} timeLimit={timeLimit} onFinish={handleReadingFinish} />
+          <ReadingPhase
+            key="reading"
+            problem={problem}
+            timeLimit={timeLimit}
+            speedSupportMode={speedSupportMode}
+            onFinish={handleReadingFinish}
+          />
         )}
         {phase === "answering" && (
           <AnsweringPhase key="answering" problem={problem} onFinish={handleAnsweringFinish} />
