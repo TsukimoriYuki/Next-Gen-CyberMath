@@ -123,6 +123,7 @@ function ReadingPhase({
             passage={problem.passage}
             targetWpm={getSpeedReadingTargetWpm(problem)}
             timeLimitSeconds={timeLimit}
+            autoStart
           />
         ) : (
           <div className="prose prose-invert max-w-none">
@@ -454,7 +455,9 @@ export function SpeedReadingGame({
   problem: SpeedReadingProblem;
   speedSupportMode?: boolean;
 }) {
-  const [phase, setPhase] = useState<Phase>("setup");
+  const [phase, setPhase] = useState<Phase>(() =>
+    speedSupportMode ? "reading" : "setup",
+  );
   const [presetIdx, setPresetIdx] = useState(1); // 1 = 標準
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
   const [dbSyncError, setDbSyncError] = useState(false);
@@ -482,8 +485,8 @@ export function SpeedReadingGame({
   const handleRetry = useCallback(() => {
     setUserAnswers([]);
     setDbSyncError(false);
-    setPhase("setup");
-  }, []);
+    setPhase(speedSupportMode ? "reading" : "setup");
+  }, [speedSupportMode]);
 
   const phaseLabel: Record<Phase, string> = {
     setup: "Setup · 準備",
@@ -555,7 +558,7 @@ export function SpeedReadingGame({
               </div>
               {speedSupportMode ? (
                 <div className="mb-4 rounded-xl border border-sky-400/20 bg-sky-400/8 px-3 py-2 text-xs leading-relaxed text-sky-100/75">
-                  目標WPM {targetWpm} を基準に、本文中の読了目安位置を青色で表示します。タイマーは本文画面で開始ボタンを押すまで動きません。
+                  目標WPM {targetWpm} を基準に、本文中の読了目安位置を青色で表示します。本文画面に入ると自動で開始します。
                 </div>
               ) : (
                 <div className="mb-4 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs leading-relaxed text-white/50">

@@ -66,12 +66,14 @@ export function SpeedSupportReader({
   passage,
   targetWpm,
   timeLimitSeconds,
+  autoStart = true,
 }: {
   passage: string;
   targetWpm: number;
   timeLimitSeconds: number;
+  autoStart?: boolean;
 }) {
-  const [running, setRunning] = useState(false);
+  const [running, setRunning] = useState(autoStart);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   const paragraphs = useMemo(() => splitPassage(passage), [passage]);
@@ -219,10 +221,10 @@ export function SpeedSupportReader({
             type="button"
             onClick={handleStart}
             disabled={running || isFinished}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-sky-400/40 bg-sky-400/12 px-3 py-2 text-sm font-semibold text-sky-200 transition hover:bg-sky-400/18 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-sky-300/50 bg-sky-300/16 px-3 py-2 text-sm font-semibold text-sky-100 transition hover:bg-sky-300/22 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <Play className="h-4 w-4" />
-            開始
+            再開
           </button>
           <button
             type="button"
@@ -264,16 +266,16 @@ export function SpeedSupportReader({
                 <span
                   key={sentence.sentenceIndex}
                   className={`rounded-md transition-colors duration-300 ${
-                    shouldHighlight ? "text-sky-300" : "text-white/85"
+                    shouldHighlight ? "text-cyan-100" : "text-white/85"
                   } ${
                     isCurrent
-                      ? "bg-sky-400/12 px-1 font-semibold text-sky-200 ring-1 ring-sky-300/20"
+                      ? "border-l-4 border-sky-300 bg-sky-300/18 px-2 py-1 font-bold text-sky-50 shadow-[0_0_0_1px_rgba(125,211,252,0.18)]"
                       : ""
                   }`}
                 >
                   {sentence.text}
                   {isCurrent ? (
-                    <span className="ml-1 rounded-full border border-sky-300/25 bg-sky-400/15 px-1.5 py-0.5 align-middle font-mono text-[10px] text-sky-100">
+                    <span className="ml-1 rounded-full border border-sky-200/40 bg-sky-300/20 px-1.5 py-0.5 align-middle font-mono text-[10px] text-sky-50">
                       現在の目安
                     </span>
                   ) : null}{" "}
