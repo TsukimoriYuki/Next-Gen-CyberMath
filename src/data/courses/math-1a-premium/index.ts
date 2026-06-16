@@ -1,4 +1,5 @@
 import type { CourseSubject, CourseUnit } from "@/types/course";
+import { QUADRATIC_PREMIUM_UNIT } from "./quadratic";
 
 function createPremiumUnit(unitId: string, unitTitle: string): CourseUnit {
   return {
@@ -22,7 +23,7 @@ export const MATH_1A_PREMIUM_COURSE_SUBJECT: CourseSubject = {
   badges: ["有料版", "準備中"],
   units: [
     createPremiumUnit("numbers-sets-logic-advanced", "数と式・集合と論理"),
-    createPremiumUnit("quadratic-advanced", "二次関数"),
+    QUADRATIC_PREMIUM_UNIT,
     createPremiumUnit("figures-measurement-advanced", "図形と計量"),
     createPremiumUnit("data-analysis-advanced", "データの分析"),
     createPremiumUnit("counting-probability-advanced", "場合の数と確率"),
@@ -30,3 +31,5 @@ export const MATH_1A_PREMIUM_COURSE_SUBJECT: CourseSubject = {
     createPremiumUnit("geometry-properties-advanced", "図形の性質"),
   ],
 };
+
+export * from "./quadratic";

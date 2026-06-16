@@ -21,6 +21,7 @@ export function CourseLessonPageView({
   lesson: CourseLesson;
 }) {
   const levelMeta = COURSE_LEVEL_META[lesson.level];
+  const isPremium = subject.courseKind === "premium";
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -58,6 +59,16 @@ export function CourseLessonPageView({
                 <Clock className="h-3 w-3" />
                 約{lesson.estimatedMinutes}分
               </span>
+              {isPremium
+                ? ["有料版", "Premium", "難関大レベル"].map((badge) => (
+                    <span
+                      key={badge}
+                      className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700"
+                    >
+                      {badge}
+                    </span>
+                  ))
+                : null}
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
               {lesson.lessonTitle}

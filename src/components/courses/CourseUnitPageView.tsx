@@ -22,6 +22,11 @@ export function CourseUnitPageView({
   subject: CourseSubject;
   unit: CourseUnit;
 }) {
+  const isPremium = subject.courseKind === "premium";
+  const levelsToShow = isPremium && unit.lessons.length > 0
+    ? LEVELS.filter((level) => unit.lessons.some((lesson) => lesson.level === level))
+    : LEVELS;
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
@@ -51,7 +56,7 @@ export function CourseUnitPageView({
         </header>
 
         <div className="space-y-8">
-          {LEVELS.map((level) => {
+          {levelsToShow.map((level) => {
             const meta = COURSE_LEVEL_META[level];
             const lessons = unit.lessons.filter((lesson) => lesson.level === level);
 
@@ -86,6 +91,18 @@ export function CourseUnitPageView({
                         <h3 className="text-base font-extrabold text-slate-950">
                           {lesson.lessonTitle}
                         </h3>
+                        {isPremium ? (
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {["有料版", "Premium", "難関大レベル"].map((badge) => (
+                              <span
+                                key={badge}
+                                className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700"
+                              >
+                                {badge}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
                         <CourseBodyRenderer
                           body={lesson.lessonDescription}
                           className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600"
