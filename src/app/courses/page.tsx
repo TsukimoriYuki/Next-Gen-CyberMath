@@ -10,7 +10,7 @@ import type { CourseSubject } from "@/types/course";
 export const metadata: Metadata = {
   title: "講座集 | CYBER OS",
   description:
-    "数学IA・数学II,B,C・数学III,Cの通常講座と、有料版の発展講座を単元ごとに整理した講座集です。",
+    "数学IA・数学II,B,C・数学III,Cの基礎講座と、有料版の発展講座を単元ごとに整理した講座集です。",
 };
 
 export default function CoursesIndexPage() {
@@ -26,11 +26,11 @@ export default function CoursesIndexPage() {
             講座集
           </h1>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
-            科目から単元、単元から講座へ進める学習用の入口です。通常講座と、今後追加予定の発展講座・有料版を分けて表示しています。
+            科目から単元、単元から講座へ進める学習用の入口です。受験数学の土台を固める基礎講座と、今後追加予定の発展講座・有料版を分けて表示しています。
           </p>
         </header>
 
-        <CourseSection title="通常講座" subjects={STANDARD_COURSE_SUBJECTS} />
+        <CourseSection title="基礎講座" subjects={STANDARD_COURSE_SUBJECTS} />
         <CourseSection
           title="発展講座・有料版"
           subjects={PREMIUM_COURSE_SUBJECTS}
