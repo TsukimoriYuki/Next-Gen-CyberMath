@@ -77,7 +77,11 @@ export type DiagramType =
   | "completing-square-shift" // 平方完成による移動イメージ
   | "domain-max-min"          // 定義域つき最大最小
   | "axis-position-cases"     // 軸が定義域の左・中・右の3ケース
-  | "case-split-flow";        // 場合分けフローチャート
+  | "case-split-flow"         // 場合分けフローチャート
+  // ─── 図形の性質（円）─────────────────────────────────────────────────────
+  | "circle-inscribed-central-angle" // 円周角と中心角（中心角＝2×円周角）
+  | "circle-same-arc-angles"         // 同じ弧を見る円周角は等しい
+  | "circle-tangent-chord-angle";    // 接弦定理（接線と弦のなす角）
 
 // ─── Phase 20.0: 手順ステップ ───────────────────────────────────────────────
 

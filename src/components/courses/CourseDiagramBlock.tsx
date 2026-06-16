@@ -404,6 +404,125 @@ function CaseSplitFlow() {
   );
 }
 
+// ─── 円: 円周角と中心角 ──────────────────────────────────────────────────────
+// O(120,95) r=60。A(68,125), B(172,125) は下の弧の両端、P(120,35) は上の円周上。
+// 中心角 ∠AOB（紫）と円周角 ∠APB（青）が同じ弧 AB（橙）を見ている。
+
+function CircleInscribedCentralAngle() {
+  return (
+    <svg viewBox="0 0 240 180" width="100%" aria-label="円周角と中心角の関係図">
+      <rect x="0" y="0" width="240" height="180" rx="12" fill="#f8fafc" />
+      <circle cx="120" cy="95" r="60" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* 共通して見ている弧 AB（下側）を強調 */}
+      <path d="M 68 125 A 60 60 0 0 1 172 125" fill="none" stroke={AMBER} strokeWidth="4" />
+
+      {/* 中心角 ∠AOB（半径 OA, OB） */}
+      <line x1="120" y1="95" x2="68" y2="125" stroke={VIOLET} strokeWidth="2" />
+      <line x1="120" y1="95" x2="172" y2="125" stroke={VIOLET} strokeWidth="2" />
+
+      {/* 円周角 ∠APB（弦 PA, PB） */}
+      <line x1="120" y1="35" x2="68" y2="125" stroke={BLUE} strokeWidth="2" />
+      <line x1="120" y1="35" x2="172" y2="125" stroke={BLUE} strokeWidth="2" />
+
+      {/* 点 */}
+      <circle cx="120" cy="95" r="3" fill={VIOLET} />
+      <circle cx="68" cy="125" r="3" fill="#0f172a" />
+      <circle cx="172" cy="125" r="3" fill="#0f172a" />
+      <circle cx="120" cy="35" r="3" fill={BLUE} />
+
+      {/* ラベル */}
+      <AxisLabel x={120} y={108} anchor="middle" fill={VIOLET}>O</AxisLabel>
+      <AxisLabel x={58} y={132} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={182} y={132} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={120} y={28} anchor="middle" fill={BLUE}>P</AxisLabel>
+      <AxisLabel x={120} y={84} anchor="middle" fill={VIOLET}>∠AOB</AxisLabel>
+      <AxisLabel x={120} y={52} anchor="middle" fill={BLUE}>∠APB</AxisLabel>
+      <text x="120" y="172" fontSize="8" fill={AMBER} textAnchor="middle">
+        橙の弧 AB を、中心と円周から見ている
+      </text>
+    </svg>
+  );
+}
+
+// ─── 円: 同じ弧を見る円周角 ──────────────────────────────────────────────────
+// 弦 AB（下）を、上側の異なる2点 P, Q から見る。位置が違っても角は等しい。
+
+function CircleSameArcAngles() {
+  return (
+    <svg viewBox="0 0 240 180" width="100%" aria-label="同じ弧を見る円周角は等しい図">
+      <rect x="0" y="0" width="240" height="180" rx="12" fill="#f8fafc" />
+      <circle cx="120" cy="95" r="60" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* 共通の弧 AB（下側）を強調 */}
+      <path d="M 68 125 A 60 60 0 0 1 172 125" fill="none" stroke={AMBER} strokeWidth="4" />
+
+      {/* 円周角 ∠APB（P は右上寄り） */}
+      <line x1="135" y1="37" x2="68" y2="125" stroke={BLUE} strokeWidth="2" />
+      <line x1="135" y1="37" x2="172" y2="125" stroke={BLUE} strokeWidth="2" />
+
+      {/* 円周角 ∠AQB（Q は左上寄り） */}
+      <line x1="95" y1="41" x2="68" y2="125" stroke={EMERALD} strokeWidth="2" />
+      <line x1="95" y1="41" x2="172" y2="125" stroke={EMERALD} strokeWidth="2" />
+
+      {/* 点 */}
+      <circle cx="68" cy="125" r="3" fill="#0f172a" />
+      <circle cx="172" cy="125" r="3" fill="#0f172a" />
+      <circle cx="135" cy="37" r="3" fill={BLUE} />
+      <circle cx="95" cy="41" r="3" fill={EMERALD} />
+
+      {/* ラベル */}
+      <AxisLabel x={58} y={132} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={182} y={132} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={144} y={32} anchor="middle" fill={BLUE}>P</AxisLabel>
+      <AxisLabel x={86} y={36} anchor="middle" fill={EMERALD}>Q</AxisLabel>
+      <text x="120" y="172" fontSize="8" fill={AMBER} textAnchor="middle">
+        P でも Q でも、同じ弧 AB を見れば角は等しい
+      </text>
+    </svg>
+  );
+}
+
+// ─── 円: 接弦定理 ────────────────────────────────────────────────────────────
+// A(86,144) で接線 AT、弦 AB、反対側の円周上の点 P(120,35)。
+// 接線と弦のなす角 ∠BAT（橙）＝円周角 ∠APB（青）。
+
+function CircleTangentChordAngle() {
+  return (
+    <svg viewBox="0 0 240 180" width="100%" aria-label="接弦定理の図">
+      <rect x="0" y="0" width="240" height="180" rx="12" fill="#f8fafc" />
+      <circle cx="120" cy="95" r="60" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* 接線 AT（A で円に接する） */}
+      <line x1="65" y1="129" x2="121" y2="168" stroke={ROSE} strokeWidth="2" />
+
+      {/* 弦 AB */}
+      <line x1="86" y1="144" x2="154" y2="144" stroke={AMBER} strokeWidth="2.5" />
+
+      {/* 円周角 ∠APB（弦 PA, PB） */}
+      <line x1="120" y1="35" x2="86" y2="144" stroke={BLUE} strokeWidth="2" />
+      <line x1="120" y1="35" x2="154" y2="144" stroke={BLUE} strokeWidth="2" />
+
+      {/* 点 */}
+      <circle cx="86" cy="144" r="3" fill="#0f172a" />
+      <circle cx="154" cy="144" r="3" fill="#0f172a" />
+      <circle cx="120" cy="35" r="3" fill={BLUE} />
+      <circle cx="121" cy="168" r="3" fill={ROSE} />
+
+      {/* ラベル */}
+      <AxisLabel x={78} y={150} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={164} y={150} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={120} y={28} anchor="middle" fill={BLUE}>P</AxisLabel>
+      <AxisLabel x={132} y={170} anchor="middle" fill={ROSE}>T</AxisLabel>
+      <AxisLabel x={104} y={138} anchor="middle" fill={AMBER}>∠BAT</AxisLabel>
+      <AxisLabel x={120} y={52} anchor="middle" fill={BLUE}>∠APB</AxisLabel>
+      <text x="120" y="16" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        接線と弦の角＝反対側の円周角
+      </text>
+    </svg>
+  );
+}
+
 // ─── ディスパッチャー ────────────────────────────────────────────────────────
 
 export function CourseDiagramBlock({
@@ -427,6 +546,12 @@ export function CourseDiagramBlock({
         return <AxisPositionCases />;
       case "case-split-flow":
         return <CaseSplitFlow />;
+      case "circle-inscribed-central-angle":
+        return <CircleInscribedCentralAngle />;
+      case "circle-same-arc-angles":
+        return <CircleSameArcAngles />;
+      case "circle-tangent-chord-angle":
+        return <CircleTangentChordAngle />;
       default:
         return null;
     }
