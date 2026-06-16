@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCourseSubject } from "@/data/course-curriculum";
+import { COURSE_SUBJECTS, getCourseSubject } from "@/data/course-curriculum";
 import { CourseSubjectPageView } from "@/components/courses/CourseSubjectPageView";
 
 export async function generateMetadata({
@@ -16,11 +16,9 @@ export async function generateMetadata({
 }
 
 export function generateStaticParams() {
-  return [
-    { subjectId: "math-1a" },
-    { subjectId: "math-2bc" },
-    { subjectId: "math-3c" },
-  ];
+  return COURSE_SUBJECTS.map((subject) => ({
+    subjectId: subject.subjectId,
+  }));
 }
 
 export default async function CourseSubjectPage({

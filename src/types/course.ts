@@ -166,4 +166,8 @@ export interface CourseSubject {
   description: string;
   color: string;
   units: CourseUnit[];
+  courseKind?: "standard" | "premium";
+  status?: "available" | "preparing" | "coming-soon";
+  statusLabel?: string;
+  badges?: string[];
 }
