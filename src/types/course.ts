@@ -81,7 +81,11 @@ export type DiagramType =
   // ─── 図形の性質（円）─────────────────────────────────────────────────────
   | "circle-inscribed-central-angle" // 円周角と中心角（中心角＝2×円周角）
   | "circle-same-arc-angles"         // 同じ弧を見る円周角は等しい
-  | "circle-tangent-chord-angle";    // 接弦定理（接線と弦のなす角）
+  | "circle-tangent-chord-angle"     // 接弦定理（接線と弦のなす角）
+  // ─── 図形の性質（三角形の比）─────────────────────────────────────────────
+  | "geometry-ceva-theorem"          // チェバの定理（3本の線分が1点で交わる）
+  | "geometry-menelaus-theorem"      // メネラウスの定理（3点が一直線上にある）
+  | "geometry-ceva-menelaus-compare"; // チェバとメネラウスの比較
 
 // ─── Phase 20.0: 手順ステップ ───────────────────────────────────────────────
 

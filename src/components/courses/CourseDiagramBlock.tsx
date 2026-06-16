@@ -523,6 +523,151 @@ function CircleTangentChordAngle() {
   );
 }
 
+// ─── 三角形: チェバの定理 ───────────────────────────────────────────────────
+// 三角形ABCで、D, E, F が各辺上にあり、AD, BE, CF が1点Pで交わる。
+
+function GeometryCevaTheorem() {
+  return (
+    <svg viewBox="0 0 260 190" width="100%" aria-label="チェバの定理の図">
+      <rect x="0" y="0" width="260" height="190" rx="12" fill="#f8fafc" />
+
+      {/* triangle */}
+      <polygon
+        points="130,24 38,158 222,158"
+        fill="#ffffff"
+        stroke="#cbd5e1"
+        strokeWidth="1.5"
+      />
+
+      {/* points chosen so AD, BE, CF pass through P */}
+      <line x1="130" y1="24" x2="130" y2="158" stroke={BLUE} strokeWidth="2.2" />
+      <line x1="38" y1="158" x2="158" y2="82" stroke={EMERALD} strokeWidth="2.2" />
+      <line x1="222" y1="158" x2="84" y2="91" stroke={ROSE} strokeWidth="2.2" />
+
+      {/* concurrency */}
+      <circle cx="130" cy="100" r="5" fill={VIOLET} />
+      <AxisLabel x={138} y={101} fill={VIOLET}>P</AxisLabel>
+
+      {/* vertices */}
+      <circle cx="130" cy="24" r="4" fill="#0f172a" />
+      <circle cx="38" cy="158" r="4" fill="#0f172a" />
+      <circle cx="222" cy="158" r="4" fill="#0f172a" />
+      <AxisLabel x={130} y={17} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={29} y={166} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={231} y={166} anchor="middle" fill="#0f172a">C</AxisLabel>
+
+      {/* side points */}
+      <circle cx="130" cy="158" r="4" fill={BLUE} />
+      <circle cx="158" cy="82" r="4" fill={EMERALD} />
+      <circle cx="84" cy="91" r="4" fill={ROSE} />
+      <AxisLabel x={130} y={174} anchor="middle" fill={BLUE}>D</AxisLabel>
+      <AxisLabel x={166} y={82} fill={EMERALD}>E</AxisLabel>
+      <AxisLabel x={75} y={88} anchor="end" fill={ROSE}>F</AxisLabel>
+
+      {/* ratio hints */}
+      <text x="84" y="151" fontSize="8" fill={BLUE} textAnchor="middle">BD</text>
+      <text x="176" y="151" fontSize="8" fill={BLUE} textAnchor="middle">DC</text>
+      <text x="154" y="55" fontSize="8" fill={EMERALD}>CE</text>
+      <text x="174" y="112" fontSize="8" fill={EMERALD}>EA</text>
+      <text x="92" y="55" fontSize="8" fill={ROSE}>AF</text>
+      <text x="58" y="127" fontSize="8" fill={ROSE}>FB</text>
+
+      <text x="130" y="184" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        AD, BE, CF が1点 P で交わるならチェバ
+      </text>
+    </svg>
+  );
+}
+
+// ─── 三角形: メネラウスの定理 ───────────────────────────────────────────────
+// D, E, F が一直線上。F は AB の延長線上に置き、外分点に注意する図。
+
+function GeometryMenelausTheorem() {
+  return (
+    <svg viewBox="0 0 260 190" width="100%" aria-label="メネラウスの定理の図">
+      <rect x="0" y="0" width="260" height="190" rx="12" fill="#f8fafc" />
+
+      {/* triangle */}
+      <polygon
+        points="128,24 42,150 220,150"
+        fill="#ffffff"
+        stroke="#cbd5e1"
+        strokeWidth="1.5"
+      />
+
+      {/* extension of AB to F */}
+      <line x1="42" y1="150" x2="28" y2="171" stroke="#cbd5e1" strokeWidth="1.5" strokeDasharray="4,3" />
+
+      {/* transversal F-D-E */}
+      <line x1="28" y1="171" x2="166" y2="92" stroke={ROSE} strokeWidth="2.6" />
+
+      {/* vertices */}
+      <circle cx="128" cy="24" r="4" fill="#0f172a" />
+      <circle cx="42" cy="150" r="4" fill="#0f172a" />
+      <circle cx="220" cy="150" r="4" fill="#0f172a" />
+      <AxisLabel x={128} y={17} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={33} y={158} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={229} y={158} anchor="middle" fill="#0f172a">C</AxisLabel>
+
+      {/* collinear points */}
+      <circle cx="64" cy="150" r="4" fill={BLUE} />
+      <circle cx="166" cy="92" r="4" fill={EMERALD} />
+      <circle cx="28" cy="171" r="4" fill={ROSE} />
+      <AxisLabel x={64} y={165} anchor="middle" fill={BLUE}>D</AxisLabel>
+      <AxisLabel x={174} y={94} fill={EMERALD}>E</AxisLabel>
+      <AxisLabel x={20} y={181} anchor="middle" fill={ROSE}>F</AxisLabel>
+
+      {/* labels */}
+      <text x="53" y="143" fontSize="8" fill={BLUE} textAnchor="middle">BD</text>
+      <text x="143" y="143" fontSize="8" fill={BLUE} textAnchor="middle">DC</text>
+      <text x="177" y="68" fontSize="8" fill={EMERALD}>CE</text>
+      <text x="148" y="61" fontSize="8" fill={EMERALD}>EA</text>
+      <text x="75" y="100" fontSize="8" fill={ROSE}>AF</text>
+      <text x="24" y="153" fontSize="8" fill={ROSE}>FB</text>
+
+      <text x="130" y="184" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        D, E, F が一直線ならメネラウス。F は延長線上に来ることがある。
+      </text>
+    </svg>
+  );
+}
+
+// ─── 三角形: チェバとメネラウスの比較 ───────────────────────────────────────
+
+function GeometryCevaMenelausCompare() {
+  return (
+    <svg viewBox="0 0 340 170" width="100%" aria-label="チェバとメネラウスの比較図">
+      <rect x="0" y="0" width="340" height="170" rx="12" fill="#f8fafc" />
+      <line x1="170" y1="14" x2="170" y2="154" stroke="#e2e8f0" strokeWidth="1" />
+
+      {/* Ceva mini */}
+      <g transform="translate(12,12)">
+        <text x="74" y="10" fontSize="9" fill={BLUE} textAnchor="middle" fontWeight="bold">チェバ</text>
+        <polygon points="74,22 14,128 142,128" fill="#fff" stroke="#cbd5e1" strokeWidth="1.2" />
+        <line x1="74" y1="22" x2="74" y2="128" stroke={BLUE} strokeWidth="1.8" />
+        <line x1="14" y1="128" x2="93" y2="64" stroke={EMERALD} strokeWidth="1.8" />
+        <line x1="142" y1="128" x2="49" y2="76" stroke={ROSE} strokeWidth="1.8" />
+        <circle cx="74" cy="86" r="4" fill={VIOLET} />
+        <text x="82" y="88" fontSize="8" fill={VIOLET}>1点で交わる</text>
+        <text x="74" y="148" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">3本の線分 → 比の積=1</text>
+      </g>
+
+      {/* Menelaus mini */}
+      <g transform="translate(184,12)">
+        <text x="74" y="10" fontSize="9" fill={ROSE} textAnchor="middle" fontWeight="bold">メネラウス</text>
+        <polygon points="74,22 18,128 142,128" fill="#fff" stroke="#cbd5e1" strokeWidth="1.2" />
+        <line x1="18" y1="128" x2="6" y2="148" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="4,3" />
+        <line x1="6" y1="148" x2="104" y2="72" stroke={ROSE} strokeWidth="2" />
+        <circle cx="32" cy="128" r="3.5" fill={BLUE} />
+        <circle cx="104" cy="72" r="3.5" fill={EMERALD} />
+        <circle cx="6" cy="148" r="3.5" fill={ROSE} />
+        <text x="75" y="103" fontSize="8" fill={ROSE}>3点が一直線</text>
+        <text x="74" y="148" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">直線上の3点 → 比の積=1</text>
+      </g>
+    </svg>
+  );
+}
+
 // ─── ディスパッチャー ────────────────────────────────────────────────────────
 
 export function CourseDiagramBlock({
@@ -552,6 +697,12 @@ export function CourseDiagramBlock({
         return <CircleSameArcAngles />;
       case "circle-tangent-chord-angle":
         return <CircleTangentChordAngle />;
+      case "geometry-ceva-theorem":
+        return <GeometryCevaTheorem />;
+      case "geometry-menelaus-theorem":
+        return <GeometryMenelausTheorem />;
+      case "geometry-ceva-menelaus-compare":
+        return <GeometryCevaMenelausCompare />;
       default:
         return null;
     }
@@ -570,4 +721,3 @@ export function CourseDiagramBlock({
     </div>
   );
 }
-
