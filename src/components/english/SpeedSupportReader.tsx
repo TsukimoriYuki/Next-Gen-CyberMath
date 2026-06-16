@@ -131,70 +131,68 @@ export function SpeedSupportReader({
   return (
     <div className="space-y-5">
       <section
-        className="rounded-2xl p-4 sm:p-5"
-        style={{
-          background: "rgba(14,165,233,0.08)",
-          border: "1px solid rgba(14,165,233,0.25)",
-        }}
+        className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-slate-900 shadow-sm sm:p-5"
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sky-300/30 bg-sky-400/12 text-sky-200">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-300 bg-cyan-100 text-cyan-800">
               <Zap className="h-5 w-5" />
             </span>
             <div>
-              <div className="font-display text-base font-bold text-white">
+              <div className="font-display text-base font-bold text-slate-950">
                 スピードサポート ON
               </div>
-              <div className="font-mono text-xs text-white/45">
+              <div className="font-mono text-xs text-slate-700">
                 WPM基準で読了目安を表示
               </div>
             </div>
           </div>
 
           <span
-            className={`rounded-full px-2.5 py-1 font-mono text-xs font-semibold ${
-              isFinished ? "bg-sky-400/15 text-sky-200" : "bg-white/8 text-white/55"
+            className={`rounded-full border px-2.5 py-1 font-mono text-xs font-semibold ${
+              isFinished
+                ? "border-blue-300 bg-blue-100 text-blue-900"
+                : "border-cyan-200 bg-white text-slate-800"
             }`}
           >
             {isFinished ? "時間終了" : "標準ペース"}
           </span>
         </div>
 
-        <div className="mt-4 grid gap-2 text-xs text-white/60 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-xl bg-white/5 px-3 py-2">
-            目標WPM: <span className="font-mono text-white">{safeTargetWpm}</span>
+        <div className="mt-4 grid gap-2 text-xs text-slate-700 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
+            目標WPM: <span className="font-mono font-semibold text-slate-950">{safeTargetWpm}</span>
           </div>
-          <div className="rounded-xl bg-white/5 px-3 py-2">
-            現在WPM: <span className="font-mono text-white">{safeTargetWpm}</span>
-            <span className="ml-1 text-white/35">目安</span>
+          <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
+            現在WPM: <span className="font-mono font-semibold text-slate-950">{safeTargetWpm}</span>
+            <span className="ml-1 text-slate-600">目安</span>
           </div>
-          <div className="rounded-xl bg-white/5 px-3 py-2">
-            本文語数: <span className="font-mono text-white">{totalWords}語</span>
+          <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
+            本文語数: <span className="font-mono font-semibold text-slate-950">{totalWords}語</span>
           </div>
-          <div className="rounded-xl bg-white/5 px-3 py-2">
+          <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
             目標読了時間:{" "}
-            <span className="font-mono text-white">{formatTime(estimatedSeconds)}</span>
+            <span className="font-mono font-semibold text-slate-950">{formatTime(estimatedSeconds)}</span>
           </div>
-          <div className="rounded-xl bg-white/5 px-3 py-2">
-            経過: <span className="font-mono text-white">{formatTime(cappedElapsed)}</span>
+          <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
+            経過: <span className="font-mono font-semibold text-slate-950">{formatTime(cappedElapsed)}</span>
           </div>
-          <div className="rounded-xl bg-white/5 px-3 py-2">
-            残り: <span className="font-mono text-white">{formatTime(remainingSeconds)}</span>
+          <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
+            残り: <span className="font-mono font-semibold text-slate-950">{formatTime(remainingSeconds)}</span>
           </div>
-          <div className="rounded-xl bg-white/5 px-3 py-2 sm:col-span-2 lg:col-span-1">
+          <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2 sm:col-span-2 lg:col-span-1">
             目安:{" "}
-            <span className="font-mono text-white">
+            <span className="font-mono font-semibold text-slate-950">
               {targetWordsRead}語 / {totalWords}語
             </span>
           </div>
-          <div className="rounded-xl bg-white/5 px-3 py-2">
+          <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
             制限時間:{" "}
-            <span className="font-mono text-white">{formatTime(timeLimitSeconds)}</span>
+            <span className="font-mono font-semibold text-slate-950">{formatTime(timeLimitSeconds)}</span>
           </div>
-          <div className="rounded-xl bg-white/5 px-3 py-2">
+          <div className="rounded-xl border border-cyan-100 bg-white px-3 py-2">
             共通テスト基準との差:{" "}
-            <span className="font-mono text-white">
+            <span className="font-mono font-semibold text-slate-950">
               {commonTestWpmDiff === 0
                 ? "±0 WPM"
                 : `${commonTestWpmDiff > 0 ? "+" : ""}${commonTestWpmDiff} WPM`}
@@ -202,17 +200,17 @@ export function SpeedSupportReader({
           </div>
         </div>
 
-        <div className="mt-4 rounded-xl border border-sky-400/20 bg-sky-400/8 px-3 py-2 text-xs leading-relaxed text-sky-100/75">
+        <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs leading-relaxed text-blue-950">
           この英文は{safeTargetWpm}WPMなら約{formatTime(estimatedSeconds)}で読了できます。
         </div>
 
-        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-white/10">
+        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-slate-200">
           <div
             className="h-full rounded-full bg-gradient-to-r from-sky-500 to-cyan-300 transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
-        <div className="mt-1 text-right font-mono text-xs text-white/45">
+        <div className="mt-1 text-right font-mono text-xs font-semibold text-slate-700">
           {progressPercent}%
         </div>
 
@@ -221,7 +219,7 @@ export function SpeedSupportReader({
             type="button"
             onClick={handleStart}
             disabled={running || isFinished}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-sky-300/50 bg-sky-300/16 px-3 py-2 text-sm font-semibold text-sky-100 transition hover:bg-sky-300/22 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-cyan-300 bg-cyan-100 px-3 py-2 text-sm font-semibold text-cyan-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500"
           >
             <Play className="h-4 w-4" />
             再開
@@ -230,7 +228,7 @@ export function SpeedSupportReader({
             type="button"
             onClick={handlePause}
             disabled={!running}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/6 px-3 py-2 text-sm font-semibold text-white/70 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500"
           >
             <Pause className="h-4 w-4" />
             一時停止
@@ -239,7 +237,7 @@ export function SpeedSupportReader({
             type="button"
             onClick={handleReset}
             disabled={elapsedSeconds === 0}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/6 px-3 py-2 text-sm font-semibold text-white/70 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500"
           >
             <RotateCcw className="h-4 w-4" />
             リセット
@@ -275,7 +273,10 @@ export function SpeedSupportReader({
                 >
                   {sentence.text}
                   {isCurrent ? (
-                    <span className="ml-1 rounded-full border border-sky-200/40 bg-sky-300/20 px-1.5 py-0.5 align-middle font-mono text-[10px] text-sky-50">
+                    <span
+                      className="ml-1 rounded-full border border-cyan-500 bg-cyan-700 px-1.5 py-0.5 align-middle font-mono text-[10px] text-white"
+                      style={{ color: "#fff", WebkitTextFillColor: "#fff" }}
+                    >
                       現在の目安
                     </span>
                   ) : null}{" "}
@@ -286,8 +287,8 @@ export function SpeedSupportReader({
         ))}
       </div>
 
-      <div className="flex items-center gap-2 rounded-xl border border-sky-400/20 bg-sky-400/8 px-3 py-2 text-xs leading-relaxed text-sky-100/75">
-        <Timer className="h-4 w-4 shrink-0 text-sky-300" />
+      <div className="flex items-center gap-2 rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs leading-relaxed text-slate-800">
+        <Timer className="h-4 w-4 shrink-0 text-cyan-700" />
         青色の位置が、目標WPMに対する現在の読了目安です。
       </div>
     </div>
