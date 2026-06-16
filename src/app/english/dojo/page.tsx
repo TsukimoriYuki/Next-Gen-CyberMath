@@ -12,7 +12,7 @@ import { COMPREHENSION_PRIVATE_PACK_1 } from "@/data/english-comprehension-priva
 import { SPEED_READING_PRIVATE_PACK_1 } from "@/data/english-speed-reading-private-pack-1";
 import { UNIVERSITY_GROUP_META } from "@/lib/types";
 import type { UniversityGroup } from "@/lib/types";
-import { ENGLISH_LEVEL_META } from "@/lib/english-types";
+import { ENGLISH_LEVEL_META, getSpeedReadingTimeLimitSeconds } from "@/lib/english-types";
 
 export const metadata: Metadata = {
   title: "英語 過去問道場",
@@ -221,7 +221,7 @@ export default function EnglishDojoPage() {
                     </div>
                     <p className="font-display text-sm font-semibold text-white truncate">{p.title}</p>
                     <p className="font-mono text-[10px] mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>
-                      制限時間 {p.timeLimit}秒 · {p.questions.length}問
+                      制限時間 {getSpeedReadingTimeLimitSeconds(p)}秒 · {p.questions.length}問
                     </p>
                   </div>
                   <ArrowRight

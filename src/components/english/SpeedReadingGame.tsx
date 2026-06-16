@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Timer, CheckCircle, XCircle, RotateCcw, ChevronRight, Eye, EyeOff, Minus, Plus } from "lucide-react";
+import { Timer, CheckCircle, XCircle, RotateCcw, ChevronRight, Eye, EyeOff } from "lucide-react";
 import type { SpeedReadingProblem } from "@/lib/english-types";
-import { ENGLISH_LEVEL_META } from "@/lib/english-types";
+import { ENGLISH_LEVEL_META, getSpeedReadingTimeLimitSeconds } from "@/lib/english-types";
 import { saveEnglishAttempt } from "@/lib/english-history";
+import { SpeedSupportReader } from "./SpeedSupportReader";
 
 type Phase = "setup" | "reading" | "answering" | "result";
 
@@ -111,17 +112,10 @@ function ReadingPhase({
         <p className="mb-5 font-display text-xl font-bold text-white sm:text-2xl">
           {problem.title}
         </p>
-        <div className="prose prose-invert max-w-none">
-          {problem.passage.split("\n\n").map((para, i) => (
-            <p
-              key={i}
-              className="mb-4 text-base leading-8 text-white/85 last:mb-0"
-              style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-            >
-              {para}
-            </p>
-          ))}
-        </div>
+        <SpeedSupportReader
+          passage={problem.passage}
+          totalTimeSeconds={timeLimit}
+        />
       </div>
 
       {/* Finish reading button */}
@@ -438,7 +432,8 @@ export function SpeedReadingGame({ problem }: { problem: SpeedReadingProblem }) 
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
   const [dbSyncError, setDbSyncError] = useState(false);
 
-  const timeLimit = Math.round(problem.timeLimit * SPEED_PRESETS[presetIdx].mult);
+  const baseTimeLimit = getSpeedReadingTimeLimitSeconds(problem);
+  const timeLimit = Math.round(baseTimeLimit * SPEED_PRESETS[presetIdx].mult);
 
   const handleStart = useCallback(() => setPhase("reading"), []);
   const handleReadingFinish = useCallback(() => setPhase("answering"), []);

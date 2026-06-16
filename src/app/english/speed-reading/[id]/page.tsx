@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
 import { SpeedReadingGame } from "@/components/english/SpeedReadingGame";
-import { ENGLISH_LEVEL_META } from "@/lib/english-types";
+import { ENGLISH_LEVEL_META, getSpeedReadingTimeLimitSeconds } from "@/lib/english-types";
 
 export function generateStaticParams() {
   return SPEED_READING_PROBLEMS.map((p) => ({ id: p.id }));
@@ -30,6 +30,7 @@ export default async function SpeedReadingProblemPage({
   if (!problem) notFound();
 
   const levelMeta = ENGLISH_LEVEL_META[problem.level];
+  const timeLimitSeconds = getSpeedReadingTimeLimitSeconds(problem);
 
   return (
     <div className="english-academic min-h-screen bg-slate-50 text-slate-900">
@@ -67,7 +68,7 @@ export default async function SpeedReadingProblemPage({
               {levelMeta.label}
             </span>
             <span className="text-xs text-slate-500">
-              制限時間 {problem.timeLimit}秒 / {problem.tags?.join(" / ")}
+              制限時間 {timeLimitSeconds}秒 / {problem.tags?.join(" / ")}
             </span>
           </div>
           <h1 className="font-display text-2xl font-extrabold text-slate-950 sm:text-3xl">

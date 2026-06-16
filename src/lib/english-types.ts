@@ -18,6 +18,13 @@ export const ENGLISH_LEVEL_META: Record<
   NATIONAL_UNI:{ label: "国公立大", name: "National Uni", accent: "#f43f5e", wordRange: "160–220 語" },
 };
 
+export const SPEED_READING_DEFAULT_TIME_LIMIT_SECONDS: Record<EnglishLevel, number> = {
+  TEXTBOOK: 240,
+  COMMON_TEST: 360,
+  PRIVATE_UNI: 480,
+  NATIONAL_UNI: 600,
+};
+
 /** 速読長文の1設問 */
 export interface SpeedReadingQuestion {
   /** 設問文 */
@@ -37,14 +44,26 @@ export interface SpeedReadingProblem {
   level: EnglishLevel;
   /** 英語長文（プレーンテキスト）*/
   passage: string;
-  /** 制限時間（秒） */
-  timeLimit: number;
+  /** 制限時間（秒）。未指定ならレベル別デフォルトを使う。 */
+  timeLimit?: number;
+  /** 将来のデータ拡張用: 長文ごとの制限時間（秒） */
+  timeLimitSeconds?: number;
+  /** 将来のデータ拡張用: スピードサポートの初期有効状態 */
+  speedSupportEnabled?: boolean;
   /** 設問リスト */
   questions: SpeedReadingQuestion[];
   /** 問題の概要タグ（語数・テーマ等） */
   tags?: string[];
   /** 私立文系大学群タグ */
   universityGroup?: UniversityGroup;
+}
+
+export function getSpeedReadingTimeLimitSeconds(problem: SpeedReadingProblem): number {
+  return (
+    problem.timeLimitSeconds ??
+    problem.timeLimit ??
+    SPEED_READING_DEFAULT_TIME_LIMIT_SECONDS[problem.level]
+  );
 }
 
 // ── Comprehension (精読) types ────────────────────────────────────────────
