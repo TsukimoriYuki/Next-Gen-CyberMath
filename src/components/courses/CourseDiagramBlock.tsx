@@ -668,6 +668,364 @@ function GeometryCevaMenelausCompare() {
   );
 }
 
+// ─── 円: 方べきの定理（交わる2弦）────────────────────────────────────────────
+
+function GeometryPowerIntersectingChords() {
+  return (
+    <svg viewBox="0 0 260 190" width="100%" aria-label="方べきの定理：交わる2弦の図">
+      <rect x="0" y="0" width="260" height="190" rx="12" fill="#f8fafc" />
+      <circle cx="130" cy="94" r="62" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* chords */}
+      <line x1="72" y1="52" x2="188" y2="136" stroke={BLUE} strokeWidth="2.4" />
+      <line x1="68" y1="132" x2="192" y2="56" stroke={EMERALD} strokeWidth="2.4" />
+
+      {/* point P */}
+      <circle cx="130" cy="94" r="5" fill={VIOLET} />
+      <AxisLabel x={138} y={96} fill={VIOLET}>P</AxisLabel>
+
+      {/* endpoints */}
+      <circle cx="72" cy="52" r="4" fill={BLUE} />
+      <circle cx="188" cy="136" r="4" fill={BLUE} />
+      <circle cx="68" cy="132" r="4" fill={EMERALD} />
+      <circle cx="192" cy="56" r="4" fill={EMERALD} />
+      <AxisLabel x={65} y={48} anchor="end" fill={BLUE}>A</AxisLabel>
+      <AxisLabel x={196} y={144} fill={BLUE}>B</AxisLabel>
+      <AxisLabel x={60} y={140} anchor="end" fill={EMERALD}>C</AxisLabel>
+      <AxisLabel x={200} y={55} fill={EMERALD}>D</AxisLabel>
+
+      {/* segment hints */}
+      <text x="99" y="66" fontSize="8" fill={BLUE} textAnchor="middle">PA</text>
+      <text x="164" y="124" fontSize="8" fill={BLUE} textAnchor="middle">PB</text>
+      <text x="96" y="122" fontSize="8" fill={EMERALD} textAnchor="middle">PC</text>
+      <text x="166" y="71" fontSize="8" fill={EMERALD} textAnchor="middle">PD</text>
+
+      <text x="130" y="176" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        円の中で2本の弦が交わると、Pから両端までの積が等しい
+      </text>
+    </svg>
+  );
+}
+
+// ─── 円: 方べきの定理（外部の点から2本の割線）────────────────────────────────
+
+function GeometryPowerTwoSecants() {
+  return (
+    <svg viewBox="0 0 280 190" width="100%" aria-label="方べきの定理：外部の点から2本の割線の図">
+      <rect x="0" y="0" width="280" height="190" rx="12" fill="#f8fafc" />
+      <circle cx="166" cy="94" r="58" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* secants */}
+      <line x1="32" y1="154" x2="226" y2="68" stroke={BLUE} strokeWidth="2.4" />
+      <line x1="32" y1="154" x2="224" y2="133" stroke={EMERALD} strokeWidth="2.4" />
+
+      {/* external point */}
+      <circle cx="32" cy="154" r="5" fill={VIOLET} />
+      <AxisLabel x={22} y={166} anchor="middle" fill={VIOLET}>P</AxisLabel>
+
+      {/* intersections */}
+      <circle cx="113" cy="118" r="4" fill={BLUE} />
+      <circle cx="216" cy="72" r="4" fill={BLUE} />
+      <circle cx="109" cy="146" r="4" fill={EMERALD} />
+      <circle cx="221" cy="134" r="4" fill={EMERALD} />
+      <AxisLabel x={113} y={111} anchor="middle" fill={BLUE}>A</AxisLabel>
+      <AxisLabel x={225} y={68} fill={BLUE}>B</AxisLabel>
+      <AxisLabel x={109} y={160} anchor="middle" fill={EMERALD}>C</AxisLabel>
+      <AxisLabel x={229} y={141} fill={EMERALD}>D</AxisLabel>
+
+      {/* segment hints */}
+      <text x="74" y="130" fontSize="8" fill={BLUE} textAnchor="middle">PA</text>
+      <text x="164" y="88" fontSize="8" fill={BLUE} textAnchor="middle">PB</text>
+      <text x="72" y="151" fontSize="8" fill={EMERALD} textAnchor="middle">PC</text>
+      <text x="166" y="143" fontSize="8" fill={EMERALD} textAnchor="middle">PD</text>
+
+      <text x="140" y="176" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        外部点Pから円を切る2本の直線でも、外側×全体が等しい
+      </text>
+    </svg>
+  );
+}
+
+// ─── 円: 方べきの定理（接線と割線）────────────────────────────────────────────
+
+function GeometryPowerTangentSecant() {
+  return (
+    <svg viewBox="0 0 280 190" width="100%" aria-label="方べきの定理：接線と割線の図">
+      <rect x="0" y="0" width="280" height="190" rx="12" fill="#f8fafc" />
+      <circle cx="166" cy="94" r="58" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* tangent and secant */}
+      <line x1="34" y1="150" x2="124" y2="43" stroke={ROSE} strokeWidth="2.6" />
+      <line x1="34" y1="150" x2="225" y2="112" stroke={BLUE} strokeWidth="2.4" />
+
+      {/* tangent point and radius guide */}
+      <line x1="166" y1="94" x2="124" y2="43" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="4,3" />
+      <text x="149" y="61" fontSize="8" fill="#64748b">半径</text>
+
+      {/* external point */}
+      <circle cx="34" cy="150" r="5" fill={VIOLET} />
+      <AxisLabel x={24} y={162} anchor="middle" fill={VIOLET}>P</AxisLabel>
+
+      {/* points */}
+      <circle cx="124" cy="43" r="4" fill={ROSE} />
+      <circle cx="109" cy="135" r="4" fill={BLUE} />
+      <circle cx="220" cy="113" r="4" fill={BLUE} />
+      <AxisLabel x={124} y={36} anchor="middle" fill={ROSE}>T</AxisLabel>
+      <AxisLabel x={109} y={129} anchor="middle" fill={BLUE}>A</AxisLabel>
+      <AxisLabel x={229} y={118} fill={BLUE}>B</AxisLabel>
+
+      {/* right angle at tangent point */}
+      <path d="M 130 49 L 136 42 L 130 36" fill="none" stroke="#94a3b8" strokeWidth="1" />
+
+      {/* segment hints */}
+      <text x="77" y="91" fontSize="8" fill={ROSE} textAnchor="middle">PT</text>
+      <text x="72" y="146" fontSize="8" fill={BLUE} textAnchor="middle">PA</text>
+      <text x="164" y="127" fontSize="8" fill={BLUE} textAnchor="middle">PB</text>
+
+      <text x="140" y="176" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        接線があるときは、接線の長さの2乗＝割線の外側×全体
+      </text>
+    </svg>
+  );
+}
+
+// ─── 三角形: 五心（外心・内心）──────────────────────────────────────────────
+
+function GeometryCentersCircumIncenter() {
+  return (
+    <svg viewBox="0 0 300 210" width="100%" aria-label="三角形の五心：外心と内心の図">
+      <rect x="0" y="0" width="300" height="210" rx="12" fill="#f8fafc" />
+
+      {/* circumcircle and triangle */}
+      <circle cx="150" cy="102" r="78" fill="#ffffff" stroke="#bfdbfe" strokeWidth="1.8" />
+      <polygon points="150,24 54,164 246,164" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* incenter circle */}
+      <circle cx="150" cy="116" r="34" fill="#ecfeff" stroke={EMERALD} strokeWidth="1.7" />
+
+      {/* equal distances from circumcenter to vertices */}
+      <line x1="150" y1="102" x2="150" y2="24" stroke={BLUE} strokeWidth="1.5" strokeDasharray="4,3" />
+      <line x1="150" y1="102" x2="54" y2="164" stroke={BLUE} strokeWidth="1.5" strokeDasharray="4,3" />
+      <line x1="150" y1="102" x2="246" y2="164" stroke={BLUE} strokeWidth="1.5" strokeDasharray="4,3" />
+
+      {/* equal distances from incenter to sides */}
+      <line x1="150" y1="116" x2="150" y2="164" stroke={EMERALD} strokeWidth="1.6" strokeDasharray="4,3" />
+      <line x1="150" y1="116" x2="122" y2="65" stroke={EMERALD} strokeWidth="1.6" strokeDasharray="4,3" />
+      <line x1="150" y1="116" x2="178" y2="65" stroke={EMERALD} strokeWidth="1.6" strokeDasharray="4,3" />
+
+      {/* points */}
+      <circle cx="150" cy="24" r="4" fill="#0f172a" />
+      <circle cx="54" cy="164" r="4" fill="#0f172a" />
+      <circle cx="246" cy="164" r="4" fill="#0f172a" />
+      <circle cx="150" cy="102" r="5" fill={BLUE} />
+      <circle cx="150" cy="116" r="5" fill={EMERALD} />
+
+      <AxisLabel x={150} y={17} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={45} y={173} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={255} y={173} anchor="middle" fill="#0f172a">C</AxisLabel>
+      <AxisLabel x={139} y={100} anchor="end" fill={BLUE}>O</AxisLabel>
+      <AxisLabel x={160} y={120} fill={EMERALD}>I</AxisLabel>
+
+      <text x="72" y="34" fontSize="8.5" fill={BLUE}>外心O: 頂点から等距離</text>
+      <text x="165" y="152" fontSize="8.5" fill={EMERALD}>内心I: 辺から等距離</text>
+      <text x="150" y="198" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        外心は外接円の中心、内心は内接円の中心
+      </text>
+    </svg>
+  );
+}
+
+// ─── 三角形: 五心（重心・垂心）──────────────────────────────────────────────
+
+function GeometryCentersCentroidOrthocenter() {
+  return (
+    <svg viewBox="0 0 300 210" width="100%" aria-label="三角形の五心：重心と垂心の図">
+      <rect x="0" y="0" width="300" height="210" rx="12" fill="#f8fafc" />
+      <polygon points="150,28 58,166 248,166" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* medians */}
+      <line x1="150" y1="28" x2="153" y2="166" stroke={BLUE} strokeWidth="2" />
+      <line x1="58" y1="166" x2="199" y2="97" stroke={BLUE} strokeWidth="1.8" strokeDasharray="5,4" />
+      <line x1="248" y1="166" x2="104" y2="97" stroke={BLUE} strokeWidth="1.8" strokeDasharray="5,4" />
+
+      {/* altitudes */}
+      <line x1="150" y1="28" x2="150" y2="166" stroke={ROSE} strokeWidth="2.2" />
+      <line x1="58" y1="166" x2="176" y2="67" stroke={ROSE} strokeWidth="1.8" strokeDasharray="4,3" />
+      <line x1="248" y1="166" x2="121" y2="72" stroke={ROSE} strokeWidth="1.8" strokeDasharray="4,3" />
+
+      {/* midpoint marks */}
+      <circle cx="153" cy="166" r="3.5" fill={BLUE} />
+      <circle cx="199" cy="97" r="3.5" fill={BLUE} />
+      <circle cx="104" cy="97" r="3.5" fill={BLUE} />
+      <AxisLabel x={161} y={181} fill={BLUE}>中点</AxisLabel>
+
+      {/* centers */}
+      <circle cx="151" cy="120" r="5" fill={BLUE} />
+      <circle cx="150" cy="94" r="5" fill={ROSE} />
+      <AxisLabel x={160} y={123} fill={BLUE}>G</AxisLabel>
+      <AxisLabel x={138} y={91} anchor="end" fill={ROSE}>H</AxisLabel>
+
+      {/* vertices */}
+      <circle cx="150" cy="28" r="4" fill="#0f172a" />
+      <circle cx="58" cy="166" r="4" fill="#0f172a" />
+      <circle cx="248" cy="166" r="4" fill="#0f172a" />
+      <AxisLabel x={150} y={21} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={49} y={174} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={257} y={174} anchor="middle" fill="#0f172a">C</AxisLabel>
+
+      <text x="70" y="38" fontSize="8.5" fill={BLUE}>重心G: 中線の交点</text>
+      <text x="176" y="47" fontSize="8.5" fill={ROSE}>垂心H: 高さの交点</text>
+      <text x="150" y="198" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        中線は中点へ、高さは辺に垂直。見た目が似ても役割は別
+      </text>
+    </svg>
+  );
+}
+
+// ─── 三角形: 五心の比較 ─────────────────────────────────────────────────────
+
+function GeometryCentersFiveCompare() {
+  const cards = [
+    { x: 12, y: 18, title: "外心 O", sub: "頂点から等距離", cue: "垂直二等分線", fill: "#eff6ff", stroke: "#bfdbfe", color: BLUE },
+    { x: 158, y: 18, title: "内心 I", sub: "辺から等距離", cue: "角の二等分線", fill: "#ecfdf5", stroke: "#a7f3d0", color: EMERALD },
+    { x: 12, y: 80, title: "重心 G", sub: "中線の交点", cue: "2:1に分ける", fill: "#f5f3ff", stroke: "#ddd6fe", color: VIOLET },
+    { x: 158, y: 80, title: "垂心 H", sub: "高さの交点", cue: "垂直を追う", fill: "#fff1f2", stroke: "#fecdd3", color: ROSE },
+    { x: 85, y: 142, title: "傍心", sub: "外角の二等分線", cue: "三角形の外側", fill: "#fffbeb", stroke: "#fde68a", color: AMBER },
+  ];
+
+  return (
+    <svg viewBox="0 0 300 210" width="100%" aria-label="三角形の五心の比較図">
+      <rect x="0" y="0" width="300" height="210" rx="12" fill="#f8fafc" />
+      {cards.map((card) => (
+        <g key={card.title}>
+          <rect x={card.x} y={card.y} width="130" height="48" rx="8" fill={card.fill} stroke={card.stroke} strokeWidth="1.3" />
+          <text x={card.x + 10} y={card.y + 17} fontSize="10" fill={card.color} fontWeight="bold">
+            {card.title}
+          </text>
+          <text x={card.x + 10} y={card.y + 31} fontSize="8.5" fill={TEXT_COLOR}>
+            {card.sub}
+          </text>
+          <text x={card.x + 10} y={card.y + 43} fontSize="8" fill="#64748b">
+            {card.cue}
+          </text>
+        </g>
+      ))}
+      <text x="150" y="199" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        「何から等距離か」「どの線が出ているか」で中心を判定する
+      </text>
+    </svg>
+  );
+}
+
+// ─── 円: 内接四角形の対角 ───────────────────────────────────────────────────
+
+function GeometryCyclicOppositeAngles() {
+  return (
+    <svg viewBox="0 0 300 210" width="100%" aria-label="内接四角形の対角の図">
+      <rect x="0" y="0" width="300" height="210" rx="12" fill="#f8fafc" />
+      <circle cx="150" cy="104" r="76" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.6" />
+
+      {/* cyclic quadrilateral */}
+      <polygon points="150,28 70,133 142,178 232,92" fill="#eff6ff" stroke={BLUE} strokeWidth="2" />
+      <path d="M 136 47 Q 150 61 165 47" fill="none" stroke={ROSE} strokeWidth="2" />
+      <path d="M 134 158 Q 146 145 158 158" fill="none" stroke={ROSE} strokeWidth="2" />
+      <path d="M 90 128 Q 101 117 95 104" fill="none" stroke={EMERALD} strokeWidth="2" />
+      <path d="M 212 96 Q 199 106 203 121" fill="none" stroke={EMERALD} strokeWidth="2" />
+
+      {/* points */}
+      <circle cx="150" cy="28" r="4" fill="#0f172a" />
+      <circle cx="70" cy="133" r="4" fill="#0f172a" />
+      <circle cx="142" cy="178" r="4" fill="#0f172a" />
+      <circle cx="232" cy="92" r="4" fill="#0f172a" />
+      <AxisLabel x={150} y={21} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={60} y={139} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={142} y={193} anchor="middle" fill="#0f172a">C</AxisLabel>
+      <AxisLabel x={242} y={94} fill="#0f172a">D</AxisLabel>
+
+      <text x="150" y="198" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        対角どうしの和は180°。AとC、BとDをペアで見る
+      </text>
+    </svg>
+  );
+}
+
+// ─── 円: 内接四角形の外角 ───────────────────────────────────────────────────
+
+function GeometryCyclicExteriorAngle() {
+  return (
+    <svg viewBox="0 0 300 210" width="100%" aria-label="内接四角形の外角と向かいの内角の図">
+      <rect x="0" y="0" width="300" height="210" rx="12" fill="#f8fafc" />
+      <circle cx="142" cy="104" r="74" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.6" />
+
+      {/* cyclic quadrilateral and extension */}
+      <polygon points="140,31 66,126 139,178 218,100" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.4" />
+      <line x1="218" y1="100" x2="270" y2="49" stroke={ROSE} strokeWidth="2.4" />
+      <line x1="139" y1="178" x2="218" y2="100" stroke={ROSE} strokeWidth="2.4" />
+      <line x1="66" y1="126" x2="140" y2="31" stroke={BLUE} strokeWidth="2.4" />
+      <line x1="66" y1="126" x2="139" y2="178" stroke={BLUE} strokeWidth="2.4" />
+
+      {/* angle marks: exterior at D, opposite at B */}
+      <path d="M 229 105 Q 231 83 213 79" fill="none" stroke={ROSE} strokeWidth="2.2" />
+      <path d="M 83 125 Q 92 143 76 152" fill="none" stroke={BLUE} strokeWidth="2.2" />
+      <text x="236" y="82" fontSize="8.5" fill={ROSE}>外角</text>
+      <text x="88" y="150" fontSize="8.5" fill={BLUE}>向かいの内角</text>
+
+      {/* points */}
+      <circle cx="140" cy="31" r="4" fill="#0f172a" />
+      <circle cx="66" cy="126" r="4" fill="#0f172a" />
+      <circle cx="139" cy="178" r="4" fill="#0f172a" />
+      <circle cx="218" cy="100" r="4" fill="#0f172a" />
+      <circle cx="270" cy="49" r="3.5" fill={ROSE} />
+      <AxisLabel x={140} y={24} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={56} y={132} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={139} y={193} anchor="middle" fill="#0f172a">C</AxisLabel>
+      <AxisLabel x={224} y={112} fill="#0f172a">D</AxisLabel>
+      <AxisLabel x={275} y={48} fill={ROSE}>E</AxisLabel>
+
+      <text x="150" y="198" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        辺を延長してできる外角は、向かい側の内角に等しい
+      </text>
+    </svg>
+  );
+}
+
+// ─── 円: 同じ弧を見る角 ─────────────────────────────────────────────────────
+
+function GeometryCyclicSameArc() {
+  return (
+    <svg viewBox="0 0 300 210" width="100%" aria-label="内接四角形で同じ弧を見る角の図">
+      <rect x="0" y="0" width="300" height="210" rx="12" fill="#f8fafc" />
+      <circle cx="150" cy="104" r="76" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.6" />
+
+      {/* points A, B and two points C, D seeing arc AB */}
+      <path d="M 82 138 A 76 76 0 0 1 218 138" fill="none" stroke={AMBER} strokeWidth="4" />
+      <line x1="82" y1="138" x2="121" y2="38" stroke={BLUE} strokeWidth="2.1" />
+      <line x1="218" y1="138" x2="121" y2="38" stroke={BLUE} strokeWidth="2.1" />
+      <line x1="82" y1="138" x2="187" y2="38" stroke={EMERALD} strokeWidth="2.1" />
+      <line x1="218" y1="138" x2="187" y2="38" stroke={EMERALD} strokeWidth="2.1" />
+
+      {/* angle marks */}
+      <path d="M 130 54 Q 145 62 152 48" fill="none" stroke={BLUE} strokeWidth="2" />
+      <path d="M 177 53 Q 162 62 154 48" fill="none" stroke={EMERALD} strokeWidth="2" />
+
+      {/* points */}
+      <circle cx="82" cy="138" r="4" fill="#0f172a" />
+      <circle cx="218" cy="138" r="4" fill="#0f172a" />
+      <circle cx="187" cy="38" r="4" fill={BLUE} />
+      <circle cx="121" cy="38" r="4" fill={EMERALD} />
+      <AxisLabel x={72} y={146} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={228} y={146} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={196} y={35} fill={BLUE}>C</AxisLabel>
+      <AxisLabel x={112} y={35} anchor="end" fill={EMERALD}>D</AxisLabel>
+      <text x="150" y="161" fontSize="8.5" fill={AMBER} textAnchor="middle">同じ弧AB</text>
+
+      <text x="150" y="198" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        Cから見てもDから見ても、同じ弧ABを見る円周角は等しい
+      </text>
+    </svg>
+  );
+}
+
 // ─── ディスパッチャー ────────────────────────────────────────────────────────
 
 export function CourseDiagramBlock({
@@ -703,6 +1061,24 @@ export function CourseDiagramBlock({
         return <GeometryMenelausTheorem />;
       case "geometry-ceva-menelaus-compare":
         return <GeometryCevaMenelausCompare />;
+      case "geometry-power-intersecting-chords":
+        return <GeometryPowerIntersectingChords />;
+      case "geometry-power-two-secants":
+        return <GeometryPowerTwoSecants />;
+      case "geometry-power-tangent-secant":
+        return <GeometryPowerTangentSecant />;
+      case "geometry-centers-circum-incenter":
+        return <GeometryCentersCircumIncenter />;
+      case "geometry-centers-centroid-orthocenter":
+        return <GeometryCentersCentroidOrthocenter />;
+      case "geometry-centers-five-compare":
+        return <GeometryCentersFiveCompare />;
+      case "geometry-cyclic-opposite-angles":
+        return <GeometryCyclicOppositeAngles />;
+      case "geometry-cyclic-exterior-angle":
+        return <GeometryCyclicExteriorAngle />;
+      case "geometry-cyclic-same-arc":
+        return <GeometryCyclicSameArc />;
       default:
         return null;
     }

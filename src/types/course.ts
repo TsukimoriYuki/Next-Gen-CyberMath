@@ -85,7 +85,19 @@ export type DiagramType =
   // ─── 図形の性質（三角形の比）─────────────────────────────────────────────
   | "geometry-ceva-theorem"          // チェバの定理（3本の線分が1点で交わる）
   | "geometry-menelaus-theorem"      // メネラウスの定理（3点が一直線上にある）
-  | "geometry-ceva-menelaus-compare"; // チェバとメネラウスの比較
+  | "geometry-ceva-menelaus-compare" // チェバとメネラウスの比較
+  // ─── 図形の性質（方べき）─────────────────────────────────────────────────
+  | "geometry-power-intersecting-chords" // 交わる2弦
+  | "geometry-power-two-secants"         // 外部の点から2本の割線
+  | "geometry-power-tangent-secant"      // 接線と割線
+  // ─── 図形の性質（三角形の五心）────────────────────────────────────────────
+  | "geometry-centers-circum-incenter"   // 外心と内心
+  | "geometry-centers-centroid-orthocenter" // 重心と垂心
+  | "geometry-centers-five-compare"      // 五心の比較
+  // ─── 図形の性質（内接四角形）────────────────────────────────────────────
+  | "geometry-cyclic-opposite-angles"    // 内接四角形の対角
+  | "geometry-cyclic-exterior-angle"     // 外角と向かいの内角
+  | "geometry-cyclic-same-arc";          // 同じ弧を見る角
 
 // ─── Phase 20.0: 手順ステップ ───────────────────────────────────────────────
 
