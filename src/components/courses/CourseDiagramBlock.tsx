@@ -404,6 +404,372 @@ function CaseSplitFlow() {
   );
 }
 
+// ─── 三角関数: 単位円 ────────────────────────────────────────────────────────
+// 原点 O(130,105) 中心、半径 70 の単位円。角 θ≈55° の方向の点 P(170,48)。
+// cosθ＝Pのx座標（青）、sinθ＝Pのy座標（ローズ）。x・y 方向への射影を破線で示す。
+
+function UnitCircle() {
+  return (
+    <svg viewBox="0 0 260 200" width="100%" aria-label="単位円と点P(cosθ, sinθ)の図">
+      <rect x="0" y="0" width="260" height="200" rx="12" fill="#f8fafc" />
+
+      {/* 単位円 */}
+      <circle cx="130" cy="105" r="70" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* 座標軸 */}
+      <line x1="30" y1="105" x2="232" y2="105" stroke={AXIS_COLOR} strokeWidth="1.3" />
+      <polygon points="232,105 225,102 225,108" fill={AXIS_COLOR} />
+      <line x1="130" y1="190" x2="130" y2="24" stroke={AXIS_COLOR} strokeWidth="1.3" />
+      <polygon points="130,24 127,31 133,31" fill={AXIS_COLOR} />
+      <AxisLabel x={236} y={109}>x</AxisLabel>
+      <AxisLabel x={134} y={24}>y</AxisLabel>
+      <AxisLabel x={120} y={119} anchor="end">O</AxisLabel>
+
+      {/* x方向・y方向への射影（破線） */}
+      <line x1="170" y1="48" x2="170" y2="105" stroke={GRAY} strokeWidth="1.1" strokeDasharray="4,3" />
+      <line x1="170" y1="48" x2="130" y2="48" stroke={GRAY} strokeWidth="1.1" strokeDasharray="4,3" />
+
+      {/* cosθ＝x座標（青の太線） */}
+      <line x1="130" y1="105" x2="170" y2="105" stroke={BLUE} strokeWidth="3.4" strokeLinecap="round" />
+      {/* sinθ＝y座標（ローズの太線） */}
+      <line x1="130" y1="105" x2="130" y2="48" stroke={ROSE} strokeWidth="3.4" strokeLinecap="round" />
+
+      {/* 半径 OP */}
+      <line x1="130" y1="105" x2="170" y2="48" stroke={VIOLET} strokeWidth="2" />
+
+      {/* 角θの弧 */}
+      <path d="M 154 105 A 24 24 0 0 0 144 85" fill="none" stroke={EMERALD} strokeWidth="1.8" />
+      <AxisLabel x={158} y={96} fill={EMERALD}>θ</AxisLabel>
+
+      {/* 点 */}
+      <circle cx="130" cy="105" r="3" fill="#0f172a" />
+      <circle cx="170" cy="48" r="4" fill={VIOLET} />
+
+      {/* ラベル */}
+      <AxisLabel x={176} y={45} fill={VIOLET}>P(cosθ, sinθ)</AxisLabel>
+      <AxisLabel x={150} y={101} anchor="middle" fill={BLUE}>cosθ</AxisLabel>
+      <AxisLabel x={126} y={78} anchor="end" fill={ROSE}>sinθ</AxisLabel>
+      <AxisLabel x={142} y={68} fill={VIOLET}>1</AxisLabel>
+
+      <text x="130" y="194" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        cosθ は横座標(x)、sinθ は縦座標(y)
+      </text>
+    </svg>
+  );
+}
+
+// ─── 三角関数: sin と cos のグラフ ──────────────────────────────────────────
+// θ=0..2π を x=40..300 に、値 -1..1 を y=130..50 に対応させる。
+// sin（ローズ）は0から、cos（青）は1から始まり、どちらも周期2π・値域[-1,1]。
+
+function TrigGraphSincos() {
+  const X0 = 40;
+  const PLOT_W = 260; // 2π 分の横幅
+  const Y_MID = 90;
+  const AMP = 40; // 値1あたりの縦ピクセル
+
+  const toX = (t: number) => X0 + (t / (2 * Math.PI)) * PLOT_W;
+  const toY = (v: number) => Y_MID - v * AMP;
+
+  const buildPath = (fn: (t: number) => number) =>
+    Array.from({ length: 65 }, (_, i) => {
+      const t = (i / 64) * 2 * Math.PI;
+      return `${i === 0 ? "M" : "L"} ${toX(t).toFixed(1)} ${toY(fn(t)).toFixed(1)}`;
+    }).join(" ");
+
+  const sinPath = buildPath(Math.sin);
+  const cosPath = buildPath(Math.cos);
+
+  const xticks: { x: number; label: string }[] = [
+    { x: toX(0), label: "0" },
+    { x: toX(Math.PI / 2), label: "π/2" },
+    { x: toX(Math.PI), label: "π" },
+    { x: toX((3 * Math.PI) / 2), label: "3π/2" },
+    { x: toX(2 * Math.PI), label: "2π" },
+  ];
+
+  return (
+    <svg viewBox="0 0 320 178" width="100%" aria-label="y=sinθ と y=cosθ のグラフ">
+      <rect x="0" y="0" width="320" height="178" rx="12" fill="#f8fafc" />
+
+      {/* 縦のグリッド（目盛り位置） */}
+      {xticks.slice(1).map((t) => (
+        <line key={`g-${t.label}`} x1={t.x} y1="46" x2={t.x} y2="134" stroke="#e2e8f0" strokeWidth="0.8" />
+      ))}
+
+      {/* ±1 の補助線 */}
+      <line x1={X0} y1={toY(1)} x2="304" y2={toY(1)} stroke="#e2e8f0" strokeWidth="0.8" strokeDasharray="4,3" />
+      <line x1={X0} y1={toY(-1)} x2="304" y2={toY(-1)} stroke="#e2e8f0" strokeWidth="0.8" strokeDasharray="4,3" />
+
+      {/* 座標軸 */}
+      <line x1="26" y1={Y_MID} x2="312" y2={Y_MID} stroke={AXIS_COLOR} strokeWidth="1.3" />
+      <polygon points={`312,${Y_MID} 305,${Y_MID - 3} 305,${Y_MID + 3}`} fill={AXIS_COLOR} />
+      <line x1={X0} y1="146" x2={X0} y2="40" stroke={AXIS_COLOR} strokeWidth="1.3" />
+      <polygon points={`${X0},40 ${X0 - 3},47 ${X0 + 3},47`} fill={AXIS_COLOR} />
+      <AxisLabel x={314} y={Y_MID + 3}>θ</AxisLabel>
+      <AxisLabel x={X0 + 4} y={44}>y</AxisLabel>
+
+      {/* y 目盛り */}
+      <AxisLabel x={X0 - 6} y={toY(1) + 3} anchor="end">1</AxisLabel>
+      <AxisLabel x={X0 - 6} y={Y_MID + 3} anchor="end">0</AxisLabel>
+      <AxisLabel x={X0 - 6} y={toY(-1) + 3} anchor="end">-1</AxisLabel>
+
+      {/* x 目盛り（下にまとめて表示し曲線と重ねない） */}
+      {xticks.map((t) => (
+        <g key={`x-${t.label}`}>
+          <line x1={t.x} y1={Y_MID - 2.5} x2={t.x} y2={Y_MID + 2.5} stroke={AXIS_COLOR} strokeWidth="1" />
+          <text x={t.x} y="160" fontSize="9" fill={TEXT_COLOR} textAnchor="middle" fontFamily="system-ui, sans-serif">
+            {t.label}
+          </text>
+        </g>
+      ))}
+
+      {/* cos の曲線（青、1から始まる） */}
+      <path d={cosPath} fill="none" stroke={BLUE} strokeWidth="2.4" strokeLinecap="round" />
+      {/* sin の曲線（ローズ、0から始まる） */}
+      <path d={sinPath} fill="none" stroke={ROSE} strokeWidth="2.4" strokeLinecap="round" />
+
+      {/* π/2 のずれを示す矢印（cos の山は sin の山より π/2 早い） */}
+      <defs>
+        <marker id="course-trig-shift" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill={AMBER} />
+        </marker>
+      </defs>
+      <line
+        x1={toX(Math.PI / 2)}
+        y1={toY(1) - 6}
+        x2={toX(0) + 3}
+        y2={toY(1) - 6}
+        stroke={AMBER}
+        strokeWidth="1.2"
+        strokeDasharray="3,2"
+        markerEnd="url(#course-trig-shift)"
+      />
+      <text x={toX(Math.PI / 4)} y={toY(1) - 9} fontSize="7.5" fill={AMBER} textAnchor="middle">
+        π/2 ずれ
+      </text>
+
+      {/* 凡例 */}
+      <AxisLabel x={toX(Math.PI / 2) + 6} y={toY(1) + 12} fill={ROSE}>y = sinθ</AxisLabel>
+      <AxisLabel x={toX(Math.PI) + 6} y={toY(-1) + 2} fill={BLUE}>y = cosθ</AxisLabel>
+
+      <text x="170" y="174" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        どちらも周期 2π・値域 -1≤y≤1。cos は sin より山が π/2 早い
+      </text>
+    </svg>
+  );
+}
+
+// ─── 三角関数: 加法定理（角を重ねる回転）────────────────────────────────────
+// 単位円の中心 O(110,112)、半径 80。角 α(35°)→点A、さらに β(40°) 回転して α+β(75°)→点B。
+// 「角を足す＝回転を重ねる」ことを示す。
+
+function TrigAngleAddition() {
+  return (
+    <svg viewBox="0 0 240 200" width="100%" aria-label="加法定理：単位円で角αにβを重ねる図">
+      <rect x="0" y="0" width="240" height="200" rx="12" fill="#f8fafc" />
+
+      {/* 単位円 */}
+      <circle cx="110" cy="112" r="80" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* 座標軸 */}
+      <line x1="14" y1="112" x2="212" y2="112" stroke={AXIS_COLOR} strokeWidth="1.3" />
+      <polygon points="212,112 205,109 205,115" fill={AXIS_COLOR} />
+      <line x1="110" y1="196" x2="110" y2="22" stroke={AXIS_COLOR} strokeWidth="1.3" />
+      <polygon points="110,22 107,29 113,29" fill={AXIS_COLOR} />
+      <AxisLabel x={214} y={116}>x</AxisLabel>
+      <AxisLabel x={114} y={24}>y</AxisLabel>
+      <AxisLabel x={100} y={126} anchor="end">O</AxisLabel>
+
+      {/* 半径 OA（角 α）と半径 OB（角 α+β） */}
+      <line x1="110" y1="112" x2="176" y2="66" stroke={BLUE} strokeWidth="2.2" />
+      <line x1="110" y1="112" x2="131" y2="35" stroke={ROSE} strokeWidth="2.2" />
+
+      {/* 回転を重ねる矢印（A から B へ、β の回転） */}
+      <defs>
+        <marker id="course-rot-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L7,3.5 z" fill={AMBER} />
+        </marker>
+      </defs>
+      <path
+        d="M 176 66 A 80 80 0 0 0 131 35"
+        fill="none"
+        stroke={AMBER}
+        strokeWidth="1.8"
+        strokeDasharray="4,3"
+        markerEnd="url(#course-rot-arrow)"
+      />
+
+      {/* 角 α の弧（x軸→OA） */}
+      <path d="M 140 112 A 30 30 0 0 0 134.6 94.8" fill="none" stroke={EMERALD} strokeWidth="1.8" />
+      {/* 角 β の弧（OA→OB） */}
+      <path d="M 147.7 85.6 A 46 46 0 0 0 121.9 67.6" fill="none" stroke={VIOLET} strokeWidth="1.8" />
+
+      {/* 点 */}
+      <circle cx="110" cy="112" r="3" fill="#0f172a" />
+      <circle cx="176" cy="66" r="4" fill={BLUE} />
+      <circle cx="131" cy="35" r="4" fill={ROSE} />
+
+      {/* ラベル */}
+      <AxisLabel x={181} y={64} fill={BLUE}>A（角 α）</AxisLabel>
+      <AxisLabel x={135} y={33} fill={ROSE}>B（角 α+β）</AxisLabel>
+      <AxisLabel x={146} y={106} fill={EMERALD}>α</AxisLabel>
+      <AxisLabel x={150} y={78} fill={VIOLET}>β</AxisLabel>
+
+      <text x="120" y="188" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        角を足す＝回転を重ねる。α からさらに β 回すと α+β
+      </text>
+    </svg>
+  );
+}
+
+// ─── 図形と計量: 直角三角形と三角比 ─────────────────────────────────────────
+// 直角三角形 ABC（直角は C）。θ は頂点 A の角。
+// AC（左の縦）＝隣辺(青)、CB（下の横）＝対辺(ローズ)、AB（斜め）＝斜辺(紫)。
+
+function RightTriangleTrig() {
+  return (
+    <svg viewBox="0 0 260 210" width="100%" aria-label="直角三角形と三角比（対辺・隣辺・斜辺）の図">
+      <rect x="0" y="0" width="260" height="210" rx="12" fill="#f8fafc" />
+
+      {/* 三角形 ABC */}
+      <polygon points="58,36 58,140 206,140" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+
+      {/* 各辺を色分け（隣辺＝青、対辺＝ローズ、斜辺＝紫） */}
+      <line x1="58" y1="36" x2="58" y2="140" stroke={BLUE} strokeWidth="3" strokeLinecap="round" />
+      <line x1="58" y1="140" x2="206" y2="140" stroke={ROSE} strokeWidth="3" strokeLinecap="round" />
+      <line x1="58" y1="36" x2="206" y2="140" stroke={VIOLET} strokeWidth="3" strokeLinecap="round" />
+
+      {/* 直角マーク（頂点 C） */}
+      <path d="M 58 130 L 68 130 L 68 140" fill="none" stroke="#94a3b8" strokeWidth="1.3" />
+
+      {/* 角 θ の弧（頂点 A） */}
+      <path d="M 58 60 A 24 24 0 0 0 77.6 49.8" fill="none" stroke={EMERALD} strokeWidth="1.8" />
+      <AxisLabel x={70} y={66} fill={EMERALD}>θ</AxisLabel>
+
+      {/* 頂点 */}
+      <circle cx="58" cy="36" r="3.5" fill="#0f172a" />
+      <circle cx="58" cy="140" r="3.5" fill="#0f172a" />
+      <circle cx="206" cy="140" r="3.5" fill="#0f172a" />
+      <AxisLabel x={50} y={39} anchor="end" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={50} y={150} anchor="end" fill="#0f172a">C</AxisLabel>
+      <AxisLabel x={212} y={144} fill="#0f172a">B</AxisLabel>
+
+      {/* 辺のラベル */}
+      <AxisLabel x={52} y={92} anchor="end" fill={BLUE}>隣辺</AxisLabel>
+      <AxisLabel x={132} y={155} anchor="middle" fill={ROSE}>対辺</AxisLabel>
+      <AxisLabel x={150} y={80} fill={VIOLET}>斜辺</AxisLabel>
+
+      {/* 仕切り線 */}
+      <line x1="20" y1="164" x2="240" y2="164" stroke="#e2e8f0" strokeWidth="1" />
+
+      {/* 三角比の式（色は辺と対応） */}
+      <text x="130" y="180" fontSize="9" fill={ROSE} textAnchor="middle" fontFamily="system-ui, sans-serif">
+        sinθ = 対辺 / 斜辺
+      </text>
+      <text x="130" y="193" fontSize="9" fill={BLUE} textAnchor="middle" fontFamily="system-ui, sans-serif">
+        cosθ = 隣辺 / 斜辺
+      </text>
+      <text x="130" y="206" fontSize="9" fill={VIOLET} textAnchor="middle" fontFamily="system-ui, sans-serif">
+        tanθ = 対辺 / 隣辺
+      </text>
+    </svg>
+  );
+}
+
+// ─── 図形と計量: 正弦定理（外接円）─────────────────────────────────────────
+// 外接円（中心 O(130,95), R=75）に内接する三角形 ABC。
+// 辺と向かいの角を同色で対応させる：a=BC/角A=ローズ、b=CA/角B=青、c=AB/角C=紫。
+
+function SineRuleCircumcircle() {
+  return (
+    <svg viewBox="0 0 260 205" width="100%" aria-label="正弦定理：外接円と辺・向かいの角の図">
+      <rect x="0" y="0" width="260" height="205" rx="12" fill="#f8fafc" />
+
+      {/* 外接円 */}
+      <circle cx="130" cy="95" r="75" fill="#ffffff" stroke="#bfdbfe" strokeWidth="1.6" />
+
+      {/* 三角形（下地） */}
+      <polygon points="104,25 69,138 204,108" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.2" />
+
+      {/* 各辺を「向かいの角」と同色で（a=BC=ローズ, b=CA=青, c=AB=紫） */}
+      <line x1="69" y1="138" x2="204" y2="108" stroke={ROSE} strokeWidth="3" strokeLinecap="round" />
+      <line x1="204" y1="108" x2="104" y2="25" stroke={BLUE} strokeWidth="3" strokeLinecap="round" />
+      <line x1="104" y1="25" x2="69" y2="138" stroke={VIOLET} strokeWidth="3" strokeLinecap="round" />
+
+      {/* 外接円の半径 R */}
+      <line x1="130" y1="95" x2="204" y2="108" stroke="#94a3b8" strokeWidth="1.3" strokeDasharray="4,3" />
+      <circle cx="130" cy="95" r="2.8" fill="#0f172a" />
+      <AxisLabel x={128} y={92} anchor="end">O</AxisLabel>
+      <AxisLabel x={168} y={94}>R</AxisLabel>
+
+      {/* 頂点 */}
+      <circle cx="104" cy="25" r="3.5" fill="#0f172a" />
+      <circle cx="69" cy="138" r="3.5" fill="#0f172a" />
+      <circle cx="204" cy="108" r="3.5" fill="#0f172a" />
+
+      {/* 角ラベル（辺と同色で対応を示す） */}
+      <AxisLabel x={104} y={18} anchor="middle" fill={ROSE}>A</AxisLabel>
+      <AxisLabel x={59} y={146} anchor="middle" fill={BLUE}>B</AxisLabel>
+      <AxisLabel x={212} y={110} fill={VIOLET}>C</AxisLabel>
+
+      {/* 辺ラベル */}
+      <AxisLabel x={140} y={132} fill={ROSE}>a</AxisLabel>
+      <AxisLabel x={160} y={60} fill={BLUE}>b</AxisLabel>
+      <AxisLabel x={78} y={80} anchor="end" fill={VIOLET}>c</AxisLabel>
+
+      {/* 仕切りと式 */}
+      <line x1="20" y1="178" x2="240" y2="178" stroke="#e2e8f0" strokeWidth="1" />
+      <text x="130" y="195" fontSize="9.5" fill={TEXT_COLOR} textAnchor="middle" fontFamily="system-ui, sans-serif">
+        a/sin A = b/sin B = c/sin C = 2R
+      </text>
+    </svg>
+  );
+}
+
+// ─── 図形と計量: 余弦定理 ───────────────────────────────────────────────────
+// 三角形 ABC。角 C をはさむ2辺 a(=CB), b(=CA) と、向かいの辺 c(=AB)。
+// 2辺とその間の角から、向かいの辺を求める。
+
+function CosineRuleTriangle() {
+  return (
+    <svg viewBox="0 0 260 200" width="100%" aria-label="余弦定理：2辺とその間の角から向かいの辺の図">
+      <rect x="0" y="0" width="260" height="200" rx="12" fill="#f8fafc" />
+
+      {/* 三角形 ABC（A上, B右下, C左下） */}
+      <polygon points="120,40 215,150 55,150" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.2" />
+
+      {/* 角Cをはさむ2辺 a(CB), b(CA)＝青、向かいの辺 c(AB)＝ローズ */}
+      <line x1="55" y1="150" x2="215" y2="150" stroke={BLUE} strokeWidth="3" strokeLinecap="round" />
+      <line x1="55" y1="150" x2="120" y2="40" stroke={BLUE} strokeWidth="3" strokeLinecap="round" />
+      <line x1="120" y1="40" x2="215" y2="150" stroke={ROSE} strokeWidth="3" strokeLinecap="round" />
+
+      {/* 角Cの弧 */}
+      <path d="M 81 150 A 26 26 0 0 0 68.2 127.7" fill="none" stroke={EMERALD} strokeWidth="1.8" />
+      <AxisLabel x={84} y={142} fill={EMERALD}>C</AxisLabel>
+
+      {/* 頂点 */}
+      <circle cx="120" cy="40" r="3.5" fill="#0f172a" />
+      <circle cx="215" cy="150" r="3.5" fill="#0f172a" />
+      <circle cx="55" cy="150" r="3.5" fill="#0f172a" />
+      <AxisLabel x={120} y={33} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={221} y={154} fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={49} y={154} anchor="end" fill="#0f172a">C</AxisLabel>
+
+      {/* 辺ラベル */}
+      <AxisLabel x={135} y={164} anchor="middle" fill={BLUE}>a</AxisLabel>
+      <AxisLabel x={80} y={92} anchor="end" fill={BLUE}>b</AxisLabel>
+      <AxisLabel x={176} y={92} fill={ROSE}>c（向かいの辺）</AxisLabel>
+
+      {/* 仕切りと式 */}
+      <line x1="20" y1="174" x2="240" y2="174" stroke="#e2e8f0" strokeWidth="1" />
+      <text x="130" y="190" fontSize="9.5" fill={TEXT_COLOR} textAnchor="middle" fontFamily="system-ui, sans-serif">
+        c² = a² + b² − 2ab cos C
+      </text>
+    </svg>
+  );
+}
+
 // ─── 円: 円周角と中心角 ──────────────────────────────────────────────────────
 // O(120,95) r=60。A(68,125), B(172,125) は下の弧の両端、P(120,35) は上の円周上。
 // 中心角 ∠AOB（紫）と円周角 ∠APB（青）が同じ弧 AB（橙）を見ている。
@@ -1026,6 +1392,228 @@ function GeometryCyclicSameArc() {
   );
 }
 
+// ─── データの分析: 箱ひげ図 ─────────────────────────────────────────────────
+
+function Boxplot() {
+  const minX = 42;
+  const q1X = 100;
+  const q2X = 145;
+  const q3X = 180;
+  const maxX = 268;
+  const y = 94;
+  const boxTop = 70;
+  const boxHeight = 48;
+  const boxBottom = boxTop + boxHeight;
+
+  return (
+    <svg viewBox="0 0 320 210" width="100%" aria-label="箱ひげ図と四分位数の読み取り">
+      <rect x="0" y="0" width="320" height="210" rx="12" fill="#f8fafc" />
+
+      {/* scale */}
+      <line x1="28" y1="154" x2="292" y2="154" stroke={AXIS_COLOR} strokeWidth="1.2" />
+      <polygon points="292,154 285,151 285,157" fill={AXIS_COLOR} />
+      <AxisLabel x={296} y={158}>値</AxisLabel>
+      {[minX, q1X, q2X, q3X, maxX].map((x) => (
+        <line key={x} x1={x} y1="150" x2={x} y2="158" stroke={AXIS_COLOR} strokeWidth="1" />
+      ))}
+
+      {/* whiskers */}
+      <line x1={minX} y1={y} x2={q1X} y2={y} stroke={BLUE} strokeWidth="3" strokeLinecap="round" />
+      <line x1={q3X} y1={y} x2={maxX} y2={y} stroke={ROSE} strokeWidth="3" strokeLinecap="round" />
+      <line x1={minX} y1={y - 18} x2={minX} y2={y + 18} stroke={BLUE} strokeWidth="2.2" />
+      <line x1={maxX} y1={y - 18} x2={maxX} y2={y + 18} stroke={ROSE} strokeWidth="2.2" />
+
+      {/* box and median */}
+      <rect x={q1X} y={boxTop} width={q3X - q1X} height={boxHeight} rx="6" fill="#dbeafe" stroke={BLUE} strokeWidth="2.2" />
+      <rect x={q1X} y={boxTop} width={q2X - q1X} height={boxHeight} rx="6" fill="#eff6ff" stroke="none" />
+      <line x1={q2X} y1={boxTop} x2={q2X} y2={boxBottom} stroke={VIOLET} strokeWidth="3" />
+
+      {/* points */}
+      <circle cx={minX} cy={y} r="4" fill={BLUE} />
+      <circle cx={q1X} cy={y} r="4" fill={BLUE} />
+      <circle cx={q2X} cy={y} r="4" fill={VIOLET} />
+      <circle cx={q3X} cy={y} r="4" fill={BLUE} />
+      <circle cx={maxX} cy={y} r="4" fill={ROSE} />
+
+      {/* labels */}
+      <AxisLabel x={minX} y={47} anchor="middle" fill={BLUE}>最小値</AxisLabel>
+      <AxisLabel x={q1X} y={47} anchor="middle" fill={BLUE}>Q1</AxisLabel>
+      <AxisLabel x={q2X} y={47} anchor="middle" fill={VIOLET}>Q2 中央値</AxisLabel>
+      <AxisLabel x={q3X} y={47} anchor="middle" fill={BLUE}>Q3</AxisLabel>
+      <AxisLabel x={maxX} y={47} anchor="middle" fill={ROSE}>最大値</AxisLabel>
+      <line x1={minX} y1="52" x2={minX} y2={y - 20} stroke={BLUE} strokeWidth="1" strokeDasharray="3,3" />
+      <line x1={q1X} y1="52" x2={q1X} y2={boxTop} stroke={BLUE} strokeWidth="1" strokeDasharray="3,3" />
+      <line x1={q2X} y1="52" x2={q2X} y2={boxTop} stroke={VIOLET} strokeWidth="1" strokeDasharray="3,3" />
+      <line x1={q3X} y1="52" x2={q3X} y2={boxTop} stroke={BLUE} strokeWidth="1" strokeDasharray="3,3" />
+      <line x1={maxX} y1="52" x2={maxX} y2={y - 20} stroke={ROSE} strokeWidth="1" strokeDasharray="3,3" />
+
+      {/* IQR bracket */}
+      <line x1={q1X} y1="134" x2={q3X} y2="134" stroke={EMERALD} strokeWidth="2.2" />
+      <polygon points={`${q1X},134 ${q1X + 7},130 ${q1X + 7},138`} fill={EMERALD} />
+      <polygon points={`${q3X},134 ${q3X - 7},130 ${q3X - 7},138`} fill={EMERALD} />
+      <AxisLabel x={(q1X + q3X) / 2} y={148} anchor="middle" fill={EMERALD}>IQR = Q3−Q1（中央50%）</AxisLabel>
+
+      {/* spread notes */}
+      <line x1={minX} y1="174" x2={q1X} y2="174" stroke={BLUE} strokeWidth="2" strokeLinecap="round" />
+      <AxisLabel x={(minX + q1X) / 2} y={188} anchor="middle" fill={BLUE}>左のひげ</AxisLabel>
+      <AxisLabel x={(minX + q1X) / 2} y={201} anchor="middle" fill={TEXT_COLOR}>端の散らばり</AxisLabel>
+
+      <line x1={q3X} y1="174" x2={maxX} y2="174" stroke={ROSE} strokeWidth="3" strokeLinecap="round" />
+      <AxisLabel x={(q3X + maxX) / 2} y={188} anchor="middle" fill={ROSE}>長いひげ</AxisLabel>
+      <AxisLabel x={(q3X + maxX) / 2} y={201} anchor="middle" fill={TEXT_COLOR}>端の散らばり大</AxisLabel>
+
+      <text x="160" y="20" fontSize="10" fill={TEXT_COLOR} textAnchor="middle" fontWeight="bold">
+        箱はQ1からQ3、箱の中の線が中央値Q2
+      </text>
+    </svg>
+  );
+}
+
+// ─── データの分析: 散布図と相関 ─────────────────────────────────────────────
+
+function ScatterMiniPanel({
+  x,
+  title,
+  label,
+  color,
+  points,
+  trend,
+  outlier,
+}: {
+  x: number;
+  title: string;
+  label: string;
+  color: string;
+  points: Array<[number, number]>;
+  trend?: "up" | "down";
+  outlier?: [number, number];
+}) {
+  const axisLeft = 17;
+  const axisBottom = 80;
+  const axisTop = 18;
+  const axisRight = 98;
+
+  return (
+    <g transform={`translate(${x}, 30)`}>
+      <rect x="0" y="0" width="108" height="112" rx="10" fill="#ffffff" stroke="#e2e8f0" strokeWidth="1.1" />
+      <line x1={axisLeft} y1={axisBottom} x2={axisRight} y2={axisBottom} stroke={AXIS_COLOR} strokeWidth="1" />
+      <polygon points={`${axisRight},${axisBottom} ${axisRight - 6},${axisBottom - 3} ${axisRight - 6},${axisBottom + 3}`} fill={AXIS_COLOR} />
+      <line x1={axisLeft} y1={axisBottom} x2={axisLeft} y2={axisTop} stroke={AXIS_COLOR} strokeWidth="1" />
+      <polygon points={`${axisLeft},${axisTop} ${axisLeft - 3},${axisTop + 6} ${axisLeft + 3},${axisTop + 6}`} fill={AXIS_COLOR} />
+      <text x={axisRight + 1} y={axisBottom + 9} fontSize="7" fill={TEXT_COLOR}>x</text>
+      <text x={axisLeft - 10} y={axisTop + 4} fontSize="7" fill={TEXT_COLOR}>y</text>
+
+      {trend === "up" && (
+        <line x1="27" y1="67" x2="88" y2="25" stroke={color} strokeWidth="1.6" strokeDasharray="4,3" />
+      )}
+      {trend === "down" && (
+        <line x1="27" y1="25" x2="88" y2="67" stroke={color} strokeWidth="1.6" strokeDasharray="4,3" />
+      )}
+
+      {points.map(([px, py], index) => (
+        <circle key={`${title}-${index}`} cx={px} cy={py} r="2.8" fill={color} opacity="0.9" />
+      ))}
+      {outlier && (
+        <>
+          <circle cx={outlier[0]} cy={outlier[1]} r="4" fill={ROSE} />
+          <path d={`M ${outlier[0] - 12} ${outlier[1] - 10} L ${outlier[0] - 4} ${outlier[1] - 3}`} stroke={ROSE} strokeWidth="1.2" markerEnd="url(#course-scatter-outlier)" />
+          <text x={outlier[0] - 15} y={outlier[1] - 13} fontSize="7" fill={ROSE} textAnchor="end">外れ値</text>
+        </>
+      )}
+
+      <text x="54" y="96" fontSize="9" fill={color} textAnchor="middle" fontWeight="bold">
+        {title}
+      </text>
+      <text x="54" y="107" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        {label}
+      </text>
+    </g>
+  );
+}
+
+function ScatterCorrelation() {
+  const positivePoints: Array<[number, number]> = [
+    [28, 66],
+    [35, 61],
+    [43, 57],
+    [50, 49],
+    [59, 45],
+    [68, 38],
+    [77, 33],
+    [87, 27],
+  ];
+  const negativePoints: Array<[number, number]> = [
+    [28, 28],
+    [36, 33],
+    [44, 39],
+    [52, 44],
+    [61, 50],
+    [70, 56],
+    [79, 62],
+    [88, 68],
+  ];
+  const weakPoints: Array<[number, number]> = [
+    [28, 47],
+    [35, 64],
+    [43, 35],
+    [51, 59],
+    [59, 43],
+    [67, 69],
+    [75, 31],
+    [84, 54],
+  ];
+
+  return (
+    <svg viewBox="0 0 360 220" width="100%" aria-label="散布図と相関の3パターン">
+      <rect x="0" y="0" width="360" height="220" rx="12" fill="#f8fafc" />
+      <defs>
+        <marker id="course-scatter-outlier" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill={ROSE} />
+        </marker>
+      </defs>
+
+      <text x="180" y="20" fontSize="10" fill={TEXT_COLOR} textAnchor="middle" fontWeight="bold">
+        点の並び方で、相関の向きと強さを読む
+      </text>
+
+      <ScatterMiniPanel
+        x={10}
+        title="正の相関"
+        label="右上がり / r>0"
+        color={BLUE}
+        points={positivePoints}
+        trend="up"
+      />
+      <ScatterMiniPanel
+        x={126}
+        title="負の相関"
+        label="右下がり / r<0"
+        color={ROSE}
+        points={negativePoints}
+        trend="down"
+      />
+      <ScatterMiniPanel
+        x={242}
+        title="相関が弱い"
+        label="ばらばら / r≈0"
+        color={VIOLET}
+        points={weakPoints}
+        outlier={[88, 22]}
+      />
+
+      <text x="180" y="174" fontSize="8.5" fill={TEXT_COLOR} textAnchor="middle">
+        点が直線に近いほど相関は強い。ばらつきが大きいほど相関は弱い。
+      </text>
+      <text x="180" y="190" fontSize="8.5" fill={ROSE} textAnchor="middle">
+        1つの外れ値でも、相関係数や見た目の傾向が変わることがある。
+      </text>
+      <text x="180" y="206" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
+        相関は「一緒に動く傾向」であり、原因と結果を証明するものではない
+      </text>
+    </svg>
+  );
+}
+
 // ─── ディスパッチャー ────────────────────────────────────────────────────────
 
 export function CourseDiagramBlock({
@@ -1049,6 +1637,22 @@ export function CourseDiagramBlock({
         return <AxisPositionCases />;
       case "case-split-flow":
         return <CaseSplitFlow />;
+      case "unit-circle":
+        return <UnitCircle />;
+      case "trig-graph-sincos":
+        return <TrigGraphSincos />;
+      case "trig-angle-addition":
+        return <TrigAngleAddition />;
+      case "right-triangle-trig":
+        return <RightTriangleTrig />;
+      case "sine-rule-circumcircle":
+        return <SineRuleCircumcircle />;
+      case "cosine-rule-triangle":
+        return <CosineRuleTriangle />;
+      case "boxplot":
+        return <Boxplot />;
+      case "scatter-correlation":
+        return <ScatterCorrelation />;
       case "circle-inscribed-central-angle":
         return <CircleInscribedCentralAngle />;
       case "circle-same-arc-angles":

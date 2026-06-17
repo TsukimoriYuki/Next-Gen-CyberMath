@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeft, Clock, Target } from "lucide-react";
+import { ArrowRight, BookOpen, ChevronLeft, Clock, Target } from "lucide-react";
 import type { CourseLesson, CourseSubject, CourseUnit } from "@/types/course";
 import { COURSE_LEVEL_META } from "@/types/course";
 import { CourseBodyRenderer } from "./CourseBodyRenderer";
@@ -129,6 +129,39 @@ export function CourseLessonPageView({
                       />
                     )}
                   </details>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {lesson.relatedPracticeLinks.length > 0 && (
+            <section className="border-t border-slate-200 bg-slate-50 p-5">
+              <div className="mb-3 flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-blue-600" />
+                <h2 className="text-sm font-extrabold text-slate-900">
+                  関連演習・次に読む講座
+                </h2>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {lesson.relatedPracticeLinks.map((link) => (
+                  <Link
+                    key={`${link.href}-${link.label}`}
+                    href={link.href}
+                    className="group flex min-w-0 items-start justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 text-left transition hover:border-blue-300 hover:bg-blue-50"
+                  >
+                    <div className="min-w-0">
+                      <span className="block text-sm font-bold text-slate-900 group-hover:text-blue-700">
+                        {link.label}
+                      </span>
+                      {link.description ? (
+                        <CourseBodyRenderer
+                          body={link.description}
+                          className="mt-1 text-xs leading-relaxed text-slate-600"
+                        />
+                      ) : null}
+                    </div>
+                    <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 group-hover:text-blue-600" />
+                  </Link>
                 ))}
               </div>
             </section>

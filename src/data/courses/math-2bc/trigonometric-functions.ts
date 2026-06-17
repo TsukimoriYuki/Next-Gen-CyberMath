@@ -22,9 +22,24 @@ title: "三角比を角度全体に広げる",
 body: "数学IAでは、主に直角三角形の中で $\\sin$、$\\cos$、$\\tan$ を考えました。\n\nしかし、数学IIでは三角比をさらに広げて、三角関数として扱います。\n\n三角関数では、$30^\\circ$ や $60^\\circ$ だけでなく、$120^\\circ$、$210^\\circ$、$390^\\circ$ のような角も扱います。\n\nそのために使うのが単位円です。\n\n単位円を使うと、直角三角形の範囲を超えて、あらゆる角に対して $\\sin$ と $\\cos$ を定義できます。",
 },
 {
+kind: "strategy",
+title: "まずこれだけ覚える",
+body: "細かい話に入る前に、この講座で本当に大切な5つを先に頭へ入れます。これが単位円の地図になります。",
+emphasis:
+"1. 三角比は直角三角形の辺の比。　2. 三角関数は単位円上の点の座標として見る。　3. $\\cos\\theta$ は $x$ 座標、$\\sin\\theta$ は $y$ 座標。　4. $\\tan\\theta$ は $y$ 座標 $\\div$ $x$ 座標。　5. $\\theta$ が $90^\\circ$ を超えても、単位円なら値を考えられる。",
+},
+{
 kind: "concept",
 title: "単位円とは何か",
 body: "単位円とは、原点を中心とし、半径が $1$ の円です。\n\n座標平面上で、原点から角 $\\theta$ の方向に半径を引きます。その半径と単位円の交点を $P$ とします。\n\nこの点 $P$ の座標を $(x,y)$ とすると、\n\n$x=\\cos\\theta$\n\n$y=\\sin\\theta$\n\nと定義します。\n\nつまり、単位円では、$\\cos\\theta$ は点の横座標、$\\sin\\theta$ は点の縦座標です。\n\nこの見方が、三角関数のすべての土台になります。",
+},
+{
+kind: "diagram",
+title: "図で見る：単位円と点 P",
+body: "三角関数は、直角三角形だけでなく、単位円上の点 $P$ の座標として考えられます。横（$x$）が $\\cos\\theta$、縦（$y$）が $\\sin\\theta$ です。",
+diagramType: "unit-circle",
+caption:
+"単位円上の点 $P(\\cos\\theta,\\sin\\theta)$ を見ると、$\\cos\\theta$ はx座標、$\\sin\\theta$ はy座標として読める。",
 },
 {
 kind: "comparisonTable",
@@ -41,6 +56,30 @@ cells: ["$\\sin\\theta$", "単位円上の点の縦座標", "$y$ 座標"],
 },
 {
 cells: ["$\\tan\\theta$", "$\\frac{\\sin\\theta}{\\cos\\theta}$", "縦座標÷横座標"],
+},
+],
+},
+{
+kind: "comparisonTable",
+title: "問題文の読み替え表",
+body: "問題文の表現を「単位円のどこを見るか」に翻訳できると、$90^\\circ$ を超える角でも迷いません。",
+columns: ["問題文の表現", "意味", "使う考え方"],
+rows: [
+{
+cells: ["一般角", "$90^\\circ$ を超える角も扱う", "単位円"],
+highlight: true,
+},
+{
+cells: ["$\\sin\\theta$ の値", "$y$ 座標を見る", "単位円の縦方向"],
+},
+{
+cells: ["$\\cos\\theta$ の値", "$x$ 座標を見る", "単位円の横方向"],
+},
+{
+cells: ["$\\tan\\theta$ の値", "$\\frac{y}{x}$ を見る", "傾き"],
+},
+{
+cells: ["第何象限か", "符号を決める", "$x,y$ の正負"],
 },
 ],
 },
@@ -81,9 +120,29 @@ title: "例2：210度のsinとcos",
 body: "$210^\\circ$ は第3象限の角です。\n\n基準角は $210^\\circ-180^\\circ=30^\\circ$ です。\n\n第3象限では、$\\sin$ も $\\cos$ も負です。\n\nしたがって、\n\n$\\sin210^\\circ=-\\sin30^\\circ=-\\frac{1}{2}$\n\n$\\cos210^\\circ=-\\cos30^\\circ=-\\frac{\\sqrt{3}}{2}$\n\nです。",
 },
 {
+kind: "workedExample",
+title: "例3・基本：点Pの座標から sin・cos を読む",
+body: "**問題**　単位円上で、角 $\\theta$ に対応する点 $P$ の座標が $\\left(-\\dfrac{1}{2},\\ \\dfrac{\\sqrt{3}}{2}\\right)$ であった。$\\sin\\theta$ と $\\cos\\theta$ を求めよ。\n\n**まず注目すること**　単位円では、点 $P$ の横座標がそのまま $\\cos\\theta$、縦座標がそのまま $\\sin\\theta$。座標を読むだけでよい。\n\n**読み取り**　$x$ 座標 $=-\\dfrac{1}{2}$ なので $\\cos\\theta=-\\dfrac{1}{2}$。$y$ 座標 $=\\dfrac{\\sqrt{3}}{2}$ なので $\\sin\\theta=\\dfrac{\\sqrt{3}}{2}$。\n\n**確認**　$x<0$、$y>0$ なので $P$ は第2象限。$\\cos<0$、$\\sin>0$ と符号が合っている。\n\n**答え**　$\\cos\\theta=-\\dfrac{1}{2}$、$\\sin\\theta=\\dfrac{\\sqrt{3}}{2}$。",
+},
+{
+kind: "workedExample",
+title: "例4・標準：$\\tan\\theta=\\dfrac{\\sin\\theta}{\\cos\\theta}$ を使う",
+body: "**問題**　例3と同じ点 $P\\left(-\\dfrac{1}{2},\\ \\dfrac{\\sqrt{3}}{2}\\right)$ について、$\\tan\\theta$ を求めよ。\n\n**まず注目すること**　$\\tan\\theta$ は単独の長さではなく、$\\dfrac{\\sin\\theta}{\\cos\\theta}=\\dfrac{y\\text{ 座標}}{x\\text{ 座標}}$、つまり原点と $P$ を結ぶ直線の傾き。\n\n**途中式**　$\\tan\\theta=\\dfrac{\\sin\\theta}{\\cos\\theta}=\\dfrac{\\frac{\\sqrt{3}}{2}}{-\\frac{1}{2}}=-\\sqrt{3}$。\n\n**確認**　第2象限では $\\sin>0$、$\\cos<0$ なので $\\tan<0$。符号が合っている。\n\n**答え**　$\\tan\\theta=-\\sqrt{3}$。",
+},
+{
 kind: "commonMistake",
 title: "よくあるミス：値の大きさと符号を同時に考えて混乱する",
 body: "三角関数の値を求めるときは、最初から一気に答えを出そうとすると符号ミスが起こりやすいです。\n\nまず基準角で値の大きさを決めます。\n\n次に象限で符号を決めます。\n\n例えば、$240^\\circ$ なら基準角は $60^\\circ$ です。第3象限なので、$\\sin$ も $\\cos$ も負です。\n\nこのように、値の大きさと符号を分けて考えると安定します。",
+},
+{
+kind: "commonMistake",
+title: "よくあるミス：sin と cos を逆にする／象限の符号を間違える",
+body: "**NG**　$\\sin\\theta$ を $x$ 座標、$\\cos\\theta$ を $y$ 座標として読んでしまう。また、第2象限なのに $\\cos\\theta$ を正にしてしまう。\n\n**OK**　単位円では **$\\cos\\theta$ が横（$x$）、$\\sin\\theta$ が縦（$y$）**。符号は点がある象限の $x,y$ の正負で決める。第2象限なら $x<0$ だから $\\cos\\theta<0$。\n\n**見分け方**　「コサインのコは横（よこ）」と語呂で横＝$\\cos$ を固定する。符号に迷ったら、値を出す前に点がどの象限にあるかを単位円で先に確認する。",
+},
+{
+kind: "commonMistake",
+title: "よくあるミス：tan を長さだと思う／直角三角形だけで考えて90°以上で詰まる",
+body: "**NG**　$\\tan\\theta$ をどこかの辺の「長さ」だと思い込む。さらに、直角三角形のイメージだけで考えるため、$120^\\circ$ や $210^\\circ$ のような $90^\\circ$ を超える角で手が止まる。\n\n**OK**　$\\tan\\theta=\\dfrac{\\sin\\theta}{\\cos\\theta}=\\dfrac{y}{x}$ は **原点と $P$ を結ぶ直線の傾き**。そして角は単位円で考えれば、$90^\\circ$ を超えても点 $P$ の座標として $\\sin,\\cos$ が決まる。\n\n**見分け方**　角が $90^\\circ$ 以上、または負の角が出たら「直角三角形ではなく単位円」と切り替える合図。$\\tan$ は比（傾き）であって長さではない、と意識する。",
 },
 {
 kind: "summary",
@@ -112,12 +171,22 @@ question: "単位円で $\\cos\\theta$ は何を表すか。",
 answer: "単位円上の点の横座標。",
 hint: "cosはx座標。",
 },
+{
+question: "単位円上で角 $\\theta$ に対応する点 $P$ の座標が $\\left(\\frac{\\sqrt{2}}{2},\\ -\\frac{\\sqrt{2}}{2}\\right)$ のとき、$\\sin\\theta$ と $\\cos\\theta$ を求めよ。",
+answer: "$\\cos\\theta=\\frac{\\sqrt{2}}{2}$（x座標）、$\\sin\\theta=-\\frac{\\sqrt{2}}{2}$（y座標）。",
+hint: "横座標が $\\cos\\theta$、縦座標が $\\sin\\theta$。",
+},
+{
+question: "$\\sin\\theta=\\frac{1}{2}$、$\\cos\\theta=-\\frac{\\sqrt{3}}{2}$ のとき、$\\tan\\theta$ を求めよ。",
+answer: "$\\tan\\theta=\\frac{\\sin\\theta}{\\cos\\theta}=\\frac{\\frac{1}{2}}{-\\frac{\\sqrt{3}}{2}}=-\\frac{1}{\\sqrt{3}}=-\\frac{\\sqrt{3}}{3}$。",
+hint: "$\\tan\\theta=\\frac{\\sin\\theta}{\\cos\\theta}$（縦÷横）。",
+},
 ],
 relatedPracticeLinks: [
 { label: "三角関数 基礎演習", href: "/units/trigonometric-functions", description: "単位円の確認" },
 { label: "図形と計量 講座", href: "/courses/math-1a/figures-and-measurement", description: "数学IAの復習" },
 ],
-qualityTags: ["単位円", "三角関数", "象限", "基準角", "確認問題3問"],
+qualityTags: ["単位円", "三角関数", "象限", "基準角", "確認問題3問", "diagram-upgraded", "unit-circle", "読み替え表あり", "よくあるミスあり"],
 },
 {
 lessonId: "radian-measure-basic",
@@ -253,6 +322,13 @@ title: "三角関数は波のグラフになる",
 body: "三角関数の大きな特徴は、値が周期的に繰り返されることです。\n\n単位円を1周すると、同じ点に戻ります。\n\nそのため、$\\sin\\theta$ や $\\cos\\theta$ の値も、角を $2\\pi$ だけ増やすと同じ値になります。\n\nこの周期性をグラフにすると、波のような形になります。\n\n三角関数のグラフでは、形を丸暗記するだけでなく、単位円との対応を理解することが大切です。",
 },
 {
+kind: "strategy",
+title: "まずこれだけ覚える",
+body: "グラフの細部に入る前に、この講座で本当に大切な5つを先に頭へ入れます。これが波を読む地図になります。",
+emphasis:
+"1. $\\sin$ と $\\cos$ の値域は $-1\\le y\\le 1$。　2. $\\sin$ と $\\cos$ の周期は $2\\pi$。　3. $\\sin$ は $0$ から始まり、$\\frac{\\pi}{2}$ で最大。　4. $\\cos$ は $1$ から始まり、$\\pi$ で最小。　5. グラフ問題では、周期・振幅・平行移動を見る。",
+},
+{
 kind: "concept",
 title: "sinのグラフ",
 body: "$y=\\sin x$ のグラフは、$x=0$ で $0$ から始まります。\n\n$x=\\frac{\\pi}{2}$ で最大値 $1$ をとります。\n\n$x=\\pi$ で再び $0$ になります。\n\n$x=\\frac{3\\pi}{2}$ で最小値 $-1$ をとります。\n\n$x=2\\pi$ でまた $0$ に戻ります。\n\nこの形が周期 $2\\pi$ で繰り返されます。",
@@ -261,6 +337,14 @@ body: "$y=\\sin x$ のグラフは、$x=0$ で $0$ から始まります。\n\n$
 kind: "concept",
 title: "cosのグラフ",
 body: "$y=\\cos x$ のグラフは、$x=0$ で $1$ から始まります。\n\n$x=\\frac{\\pi}{2}$ で $0$ になります。\n\n$x=\\pi$ で最小値 $-1$ をとります。\n\n$x=\\frac{3\\pi}{2}$ で再び $0$ になります。\n\n$x=2\\pi$ で $1$ に戻ります。\n\n$\\sin$ と $\\cos$ は形が似ていますが、スタート位置が違います。",
+},
+{
+kind: "diagram",
+title: "図で見る：sin と cos のグラフ",
+body: "$y=\\sin\\theta$ は $0$ から、$y=\\cos\\theta$ は $1$ から始まります。どちらも値域は $-1\\le y\\le 1$、周期は $2\\pi$ で、$\\cos$ は $\\sin$ を左に $\\frac{\\pi}{2}$ ずらした形です。",
+diagramType: "trig-graph-sincos",
+caption:
+"$y=\\sin\\theta$ と $y=\\cos\\theta$ はどちらも周期 $2\\pi$、値の範囲は $-1\\le y\\le 1$。cos は sin より山が $\\frac{\\pi}{2}$ 早く現れる。",
 },
 {
 kind: "comparisonTable",
@@ -281,6 +365,30 @@ cells: ["$y=\\tan x$", "$\\pi$", "すべての実数", "漸近線をもつ"],
 ],
 },
 {
+kind: "comparisonTable",
+title: "問題文の読み替え表",
+body: "問題文の表現を「グラフのどこを見るか」に翻訳できると、最大最小・周期・平行移動の問題で迷いません。",
+columns: ["問題文の表現", "意味", "使う考え方"],
+rows: [
+{
+cells: ["最大値・最小値", "値域を見る", "振幅"],
+highlight: true,
+},
+{
+cells: ["周期", "何ごとに繰り返すか", "横方向の変化"],
+},
+{
+cells: ["$\\sin\\theta$", "$0$ から始まる波", "基本グラフ"],
+},
+{
+cells: ["$\\cos\\theta$", "$1$ から始まる波", "$\\sin$ の平行移動"],
+},
+{
+cells: ["$y=a\\sin b\\theta$", "振幅と周期が変わる", "$a$ と $b$ を見る"],
+},
+],
+},
+{
 kind: "formula",
 title: "周期性",
 body: "$\\sin$ と $\\cos$ は $2\\pi$ ごとに同じ値をとります。\n\n$\\tan$ は $\\pi$ ごとに同じ値をとります。",
@@ -295,6 +403,21 @@ body: "$y=\\sin x$ について、$0\\leq x\\leq2\\pi$ の範囲で最大値と�
 kind: "workedExample",
 title: "例2：周期を使う",
 body: "$\\sin\\left(x+2\\pi\\right)=\\sin x$ です。\n\nしたがって、$\\sin\\frac{13\\pi}{6}$ を考えるとき、\n\n$\\frac{13\\pi}{6}=2\\pi+\\frac{\\pi}{6}$\n\nなので、\n\n$\\sin\\frac{13\\pi}{6}=\\sin\\frac{\\pi}{6}=\\frac{1}{2}$\n\nです。\n\n大きな角は、周期を使って基本範囲に戻すと考えやすくなります。",
+},
+{
+kind: "workedExample",
+title: "例3・標準：$y=a\\sin b\\theta$ の値域と周期を読む",
+body: "**問題**　$y=3\\sin 2\\theta$ の値域と周期を求めよ。\n\n**まず注目すること**　$y=a\\sin b\\theta$ の形。**振幅は $|a|$（値域を決める）、周期は $\\dfrac{2\\pi}{|b|}$（横の繰り返しを決める）** と役割が分かれている。\n\n**値域**　$\\sin 2\\theta$ 自体は $-1$ から $1$。これを $3$ 倍するので、$-3\\le y\\le 3$。\n\n**周期**　$b=2$ なので周期は $\\dfrac{2\\pi}{2}=\\pi$。基本の $2\\pi$ より短く、波が2倍細かくなる。\n\n**確認**　$a$ は縦の伸び（振幅）、$b$ は横の縮み（周期）と、別々に効くことを意識する。\n\n**答え**　値域 $-3\\le y\\le 3$、周期 $\\pi$。",
+},
+{
+kind: "commonMistake",
+title: "よくあるミス：sin と cos の始まり方を混同／周期を π と勘違いする",
+body: "**NG**　$y=\\cos\\theta$ を $0$ から始まる波として描く。また、$\\sin\\theta$・$\\cos\\theta$ の周期を $\\pi$ だと思い込む。\n\n**OK**　$\\sin\\theta$ は $0$ から、$\\cos\\theta$ は $1$ から始まる。$\\sin\\theta$・$\\cos\\theta$ の周期は $2\\pi$（$\\pi$ で繰り返すのは $\\tan\\theta$）。\n\n**見分け方**　$\\theta=0$ を代入して確かめる：$\\sin 0=0$、$\\cos 0=1$。周期は「単位円を1周＝$2\\pi$」が基本、と単位円に戻って確認する。",
+},
+{
+kind: "commonMistake",
+title: "よくあるミス：振幅・周期の変化を見落とす",
+body: "**NG**　$y=2\\sin\\theta$ の値域を $-1\\le y\\le 1$ のままにする。$y=\\sin 2\\theta$ の周期を $2\\pi$ のまま答える。\n\n**OK**　$y=a\\sin b\\theta$ では、値域は $-|a|\\le y\\le|a|$、周期は $\\dfrac{2\\pi}{|b|}$。$y=2\\sin\\theta$ は $-2\\le y\\le 2$、$y=\\sin 2\\theta$ は周期 $\\dfrac{2\\pi}{2}=\\pi$。\n\n**見分け方**　$\\sin$ の前の数（$a$）は縦＝振幅・値域、$\\theta$ の前の数（$b$）は横＝周期、と係数の位置で役割を分けて見る。",
 },
 {
 kind: "commonMistake",
@@ -323,12 +446,27 @@ question: "$0\\leq x\\leq2\\pi$ で、$\\sin x$ が最小値をとるのはど�
 answer: "$x=\\frac{3\\pi}{2}$ で最小値 $-1$ をとる。",
 hint: "単位円の一番下の点。",
 },
+{
+question: "$x=0$ で $1$ から始まり、$x=\\pi$ で最小値 $-1$ をとる波は、$y=\\sin x$ と $y=\\cos x$ のどちらか。",
+answer: "$y=\\cos x$。（$\\cos 0=1$ で始まり、$\\cos\\pi=-1$ で最小）",
+hint: "0から始まるのが $\\sin$、1から始まるのが $\\cos$。",
+},
+{
+question: "$y=4\\cos\\theta$ の最大値と最小値を求めよ。",
+answer: "$\\cos\\theta$ は $-1$ から $1$ なので、$4$ 倍して最大値 $4$、最小値 $-4$。",
+hint: "振幅は $\\sin$・$\\cos$ の前の数。",
+},
+{
+question: "$y=2\\sin 3\\theta$ の値域と周期を求めよ。",
+answer: "値域は $-2\\le y\\le 2$（振幅 $2$）、周期は $\\frac{2\\pi}{3}$。",
+hint: "$y=a\\sin b\\theta$ は値域 $-|a|\\le y\\le|a|$、周期 $\\frac{2\\pi}{|b|}$。",
+},
 ],
 relatedPracticeLinks: [
 { label: "三角関数グラフ 演習", href: "/units/trigonometric-functions" },
 { label: "二次関数 グラフ", href: "/courses/math-1a/quadratic" },
 ],
-qualityTags: ["グラフ", "周期", "sin", "cos", "確認問題3問"],
+qualityTags: ["グラフ", "周期", "sin", "cos", "確認問題3問", "diagram-upgraded", "trig-graph", "読み替え表あり", "よくあるミスあり"],
 },
 ];
 
@@ -376,15 +514,32 @@ title: "例1：sinからcosを求める",
 body: "$\\sin x=\\frac{3}{5}$ で、$x$ が第2象限の角であるとします。$\\cos x$ を求めます。\n\n相互関係より、\n\n$\\sin^2 x+\\cos^2 x=1$\n\nです。\n\n$\\left(\\frac{3}{5}\\right)^2+\\cos^2 x=1$\n\n$\\frac{9}{25}+\\cos^2 x=1$\n\n$\\cos^2 x=\\frac{16}{25}$\n\nしたがって、$\\cos x=\\pm\\frac{4}{5}$ です。\n\n第2象限では $\\cos x<0$ なので、\n\n$\\cos x=-\\frac{4}{5}$\n\nです。\n\n三角関数では、2乗から戻すときに符号を象限で決めます。",
 },
 {
+kind: "strategy",
+title: "まずこれだけ覚える（加法定理）",
+body: "加法定理は暗記に走ると符号で崩れます。先にこの5つを地図として頭へ入れます。",
+emphasis:
+"1. 加法定理は、角の和や差の $\\sin$・$\\cos$ を分解する公式。　2. $\\sin$ は「sin cos ＋ cos sin」。　3. $\\cos$ は「cos cos − sin sin」。　4. 差の公式は、$\\beta$ を $-\\beta$ に置き換えて考える。　5. 符号ミスを防ぐには、sin型か cos型かを先に判断する。",
+},
+{
 kind: "formula",
 title: "加法定理",
-body: "三角関数の最重要公式の1つが加法定理です。\n\n三角関数の多くの公式は、加法定理から導けます。",
+body: "三角関数の最重要公式の1つが加法定理です。\n\n三角関数の多くの公式は、加法定理から導けます。$\\sin$ 型は「sin cos ＋ cos sin」、$\\cos$ 型は「cos cos − sin sin」と、型ごとにまとめて覚えます。",
 formula: "\\sin(\\alpha+\\beta)=\\sin\\alpha\\cos\\beta+\\cos\\alpha\\sin\\beta",
+emphasis:
+"重要：$\\sin(\\alpha+\\beta)\\neq\\sin\\alpha+\\sin\\beta$。角の足し算を、そのまま値の足し算にしてはいけない（加法定理は線形ではない）。",
+},
+{
+kind: "diagram",
+title: "図で見る：角を足す＝回転を重ねる",
+body: "角 $\\alpha$ からさらに $\\beta$ だけ回すと $\\alpha+\\beta$ になります。加法定理は、この回転後の点の座標を $\\sin\\alpha,\\cos\\alpha,\\sin\\beta,\\cos\\beta$ で表す公式です。",
+diagramType: "trig-angle-addition",
+caption:
+"角 $\\alpha$ からさらに $\\beta$ だけ回転すると $\\alpha+\\beta$ になる。加法定理は、この回転後の座標を $\\sin\\alpha,\\cos\\alpha,\\sin\\beta,\\cos\\beta$ で表す公式。",
 },
 {
 kind: "comparisonTable",
-title: "加法定理の基本形",
-body: "まずはsinとcosの加法定理を確実に覚えます。",
+title: "加法定理の基本形（4つの公式）",
+body: "まずはsinとcosの加法定理を確実に覚えます。差の公式は $\\beta$ を $-\\beta$ にしたものです。",
 columns: ["式", "公式"],
 rows: [
 {
@@ -403,9 +558,44 @@ cells: ["$\\cos(\\alpha-\\beta)$", "$\\cos\\alpha\\cos\\beta+\\sin\\alpha\\sin\\
 ],
 },
 {
+kind: "comparisonTable",
+title: "問題文の読み替え表",
+body: "問題文の表現を「どの型の加法定理を、どう使うか」に翻訳できると、符号と分解で迷いません。",
+columns: ["問題文の表現", "意味", "使う考え方"],
+rows: [
+{
+cells: ["$\\sin(\\alpha+\\beta)$", "sin型の加法定理", "sin cos ＋ cos sin"],
+highlight: true,
+},
+{
+cells: ["$\\cos(\\alpha+\\beta)$", "cos型の加法定理", "cos cos − sin sin"],
+highlight: true,
+},
+{
+cells: ["$\\sin(\\alpha-\\beta)$", "$\\beta$ を $-\\beta$ にする", "sin cos − cos sin"],
+},
+{
+cells: ["$\\cos(\\alpha-\\beta)$", "$\\beta$ を $-\\beta$ にする", "cos cos ＋ sin sin"],
+},
+{
+cells: ["$15^\\circ$ や $75^\\circ$", "$45^\\circ\\pm30^\\circ$ に分ける", "加法定理"],
+},
+],
+},
+{
 kind: "workedExample",
 title: "例2：加法定理で値を求める",
 body: "$\\sin75^\\circ$ を求めます。\n\n$75^\\circ=45^\\circ+30^\\circ$ と見ます。\n\n加法定理より、\n\n$\\sin75^\\circ=\\sin(45^\\circ+30^\\circ)$\n\n$=\\sin45^\\circ\\cos30^\\circ+\\cos45^\\circ\\sin30^\\circ$\n\n$=\\frac{\\sqrt{2}}{2}\\cdot\\frac{\\sqrt{3}}{2}+\\frac{\\sqrt{2}}{2}\\cdot\\frac{1}{2}$\n\n$=\\frac{\\sqrt{6}+\\sqrt{2}}{4}$\n\nです。\n\n特別な角の和として見ることで、新しい角の三角関数の値を求められます。",
+},
+{
+kind: "workedExample",
+title: "例3・基本：$\\sin(\\alpha+\\beta)$ を公式で展開する",
+body: "**問題**　$\\sin\\alpha=\\dfrac{3}{5}$（$\\alpha$ は第1象限）、$\\cos\\beta=\\dfrac{5}{13}$（$\\beta$ は第1象限）のとき、$\\sin(\\alpha+\\beta)$ を求めよ。\n\n**まず注目すること**　$\\sin(\\alpha+\\beta)$ は **sin型**。型を先に決めると「sin cos ＋ cos sin」と展開形が確定する。\n\n**不足分を補う**　第1象限なので、$\\cos\\alpha=\\sqrt{1-\\frac{9}{25}}=\\dfrac{4}{5}$、$\\sin\\beta=\\sqrt{1-\\frac{25}{169}}=\\dfrac{12}{13}$。\n\n**途中式**　$\\sin(\\alpha+\\beta)=\\sin\\alpha\\cos\\beta+\\cos\\alpha\\sin\\beta=\\dfrac{3}{5}\\cdot\\dfrac{5}{13}+\\dfrac{4}{5}\\cdot\\dfrac{12}{13}=\\dfrac{15+48}{65}=\\dfrac{63}{65}$。\n\n**答え**　$\\sin(\\alpha+\\beta)=\\dfrac{63}{65}$。",
+},
+{
+kind: "workedExample",
+title: "例4・標準：$\\cos(\\alpha+\\beta)$ を展開して $\\cos15^\\circ$ を求める",
+body: "**問題**　$\\cos15^\\circ$ を加法定理で求めよ。\n\n**まず注目すること**　$15^\\circ$ は特別な角の差 $45^\\circ-30^\\circ$ に分解できる。求めるのは $\\cos$ なので **cos型（差）**＝「cos cos ＋ sin sin」。\n\n**型の確認**　$\\cos(\\alpha-\\beta)=\\cos\\alpha\\cos\\beta+\\sin\\alpha\\sin\\beta$（差は真ん中がプラス）。\n\n**途中式**　$\\cos15^\\circ=\\cos(45^\\circ-30^\\circ)=\\cos45^\\circ\\cos30^\\circ+\\sin45^\\circ\\sin30^\\circ=\\dfrac{\\sqrt{2}}{2}\\cdot\\dfrac{\\sqrt{3}}{2}+\\dfrac{\\sqrt{2}}{2}\\cdot\\dfrac{1}{2}=\\dfrac{\\sqrt{6}+\\sqrt{2}}{4}$。\n\n**確認**　$\\cos15^\\circ\\approx0.97$。$\\dfrac{\\sqrt{6}+\\sqrt{2}}{4}\\approx\\dfrac{2.449+1.414}{4}\\approx0.966$ で一致。\n\n**答え**　$\\cos15^\\circ=\\dfrac{\\sqrt{6}+\\sqrt{2}}{4}$。",
 },
 {
 kind: "commonMistake",
@@ -416,6 +606,16 @@ body: "$\\cos(\\alpha+\\beta)$ の公式は、\n\n$\\cos\\alpha\\cos\\beta-\\sin
 kind: "commonMistake",
 title: "よくあるミス：$\\sin(\\alpha+\\beta)=\\sin\\alpha+\\sin\\beta$ としてしまう",
 body: "加法定理を習い始めの頃、最もよくあるミスが\n\n$\\sin(\\alpha+\\beta)=\\sin\\alpha+\\sin\\beta$\n\nとしてしまうことです。これは正しくありません。\n\n具体的に $\\alpha=\\beta=30^\\circ$ で確認します。\n\n左辺：$\\sin(30^\\circ+30^\\circ)=\\sin60^\\circ=\\frac{\\sqrt{3}}{2}\\approx0.87$\n\n右辺：$\\sin30^\\circ+\\sin30^\\circ=\\frac{1}{2}+\\frac{1}{2}=1$\n\n左辺 $\\neq$ 右辺 なので、この等式は成立しません。\n\n三角関数は「角度 $\\to$ 座標」という対応であり、角度の足し算が座標の足し算にはなりません。単位円上では、$\\alpha+\\beta$ の方向の点と、$\\alpha$ の点・$\\beta$ の点は全く別の場所にあります。\n\n入試頻出パターンとして「$75^\\circ$ のsinを求めよ」という問題があります。このとき $75^\\circ=45^\\circ+30^\\circ$ と分解し、公式を使います。\n\n$\\sin75^\\circ=\\sin45^\\circ\\cos30^\\circ+\\cos45^\\circ\\sin30^\\circ=\\frac{\\sqrt{6}+\\sqrt{2}}{4}$\n\n加法定理を使う場面では、必ず右辺の展開形（sin cos＋cos sin）を丁寧に書き下してください。",
+},
+{
+kind: "commonMistake",
+title: "よくあるミス：差（α−β）のときの符号を間違える",
+body: "**NG**　$\\cos(\\alpha-\\beta)$ を $\\cos\\alpha\\cos\\beta-\\sin\\alpha\\sin\\beta$ と、和のときと同じ符号で書いてしまう。\n\n**OK**　差は **$\\beta$ を $-\\beta$ に置き換える** と考える。$\\cos(-\\beta)=\\cos\\beta$、$\\sin(-\\beta)=-\\sin\\beta$ なので、$\\cos(\\alpha-\\beta)=\\cos\\alpha\\cos\\beta+\\sin\\alpha\\sin\\beta$（真ん中がプラス）。$\\sin(\\alpha-\\beta)=\\sin\\alpha\\cos\\beta-\\cos\\alpha\\sin\\beta$。\n\n**見分け方**　符号は丸暗記せず「$\\beta\\to-\\beta$」で毎回作り直す。$\\cos$ は偶関数（符号変わらず）、$\\sin$ は奇関数（符号反転）を使えば、和の公式から差の公式へ機械的に変換できる。",
+},
+{
+kind: "commonMistake",
+title: "よくあるミス：15°・75° をどう分解するか分からない",
+body: "**NG**　$\\sin75^\\circ$ や $\\cos15^\\circ$ を、特別な角でないからと諦める、または分解を思いつけない。\n\n**OK**　$75^\\circ=45^\\circ+30^\\circ$、$15^\\circ=45^\\circ-30^\\circ$ のように、**$30^\\circ,45^\\circ,60^\\circ$ の和・差**で作る。$105^\\circ=60^\\circ+45^\\circ$ なども同様。\n\n**見分け方**　$15$ の倍数の角が出たら「$45\\pm30$ か $60\\pm45$ に分けられないか」を先に疑う。分解できたら、求める関数が sin型か cos型かを決めて公式に当てはめる。",
 },
 {
 kind: "summary",
@@ -439,12 +639,27 @@ question: "$\\cos(\\alpha+\\beta)$ の加法定理を答えよ。",
 answer: "$\\cos(\\alpha+\\beta)=\\cos\\alpha\\cos\\beta-\\sin\\alpha\\sin\\beta$。",
 hint: "cosの和は真ん中がマイナス。",
 },
+{
+question: "$\\sin\\alpha=\\frac{4}{5}$（$\\alpha$ は第1象限）、$\\sin\\beta=\\frac{5}{13}$（$\\beta$ は第1象限）のとき、$\\sin(\\alpha+\\beta)$ を求めよ。",
+answer: "第1象限より $\\cos\\alpha=\\frac{3}{5}$、$\\cos\\beta=\\frac{12}{13}$。$\\sin(\\alpha+\\beta)=\\frac{4}{5}\\cdot\\frac{12}{13}+\\frac{3}{5}\\cdot\\frac{5}{13}=\\frac{48+15}{65}=\\frac{63}{65}$。",
+hint: "sin型は「sin cos ＋ cos sin」。先に $\\cos\\alpha,\\cos\\beta$ を相互関係で求める。",
+},
+{
+question: "$\\sin15^\\circ$ を加法定理で求めよ。",
+answer: "$\\sin15^\\circ=\\sin(45^\\circ-30^\\circ)=\\sin45^\\circ\\cos30^\\circ-\\cos45^\\circ\\sin30^\\circ=\\frac{\\sqrt{6}-\\sqrt{2}}{4}$。",
+hint: "$15^\\circ=45^\\circ-30^\\circ$。差なので sin型は「sin cos − cos sin」。",
+},
+{
+question: "$\\cos105^\\circ$ を求めるには、$105^\\circ$ をどう分解して、どの型の加法定理を使えばよいか。",
+answer: "$105^\\circ=60^\\circ+45^\\circ$ と分解し、cos型（和）$\\cos(\\alpha+\\beta)=\\cos\\alpha\\cos\\beta-\\sin\\alpha\\sin\\beta$ を使う。",
+hint: "特別な角の和・差に分ける。求めるのが cos なので cos型。",
+},
 ],
 relatedPracticeLinks: [
 { label: "三角関数公式 演習", href: "/units/trigonometric-functions" },
 { label: "数と式 式変形", href: "/courses/math-1a/numbers-and-expressions/expression-transformation-strategy" },
 ],
-qualityTags: ["相互関係", "加法定理", "式変形", "確認問題3問"],
+qualityTags: ["相互関係", "加法定理", "式変形", "確認問題3問", "diagram-upgraded", "読み替え表あり", "よくあるミスあり"],
 },
 {
 lessonId: "double-angle-and-transformations",

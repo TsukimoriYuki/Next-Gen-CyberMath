@@ -852,6 +852,11 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
         href: "/courses/math-1a/geometry-properties/geometry-properties-power-of-a-point",
         description: "円と線分の長さを扱う定理として、外接円の問題と接続する",
       },
+      {
+        label: "本番レベル模試集",
+        href: "/exam-sets",
+        description: "図形の性質を含む数学IAの実戦演習へ進む",
+      },
     ],
     qualityTags: [
       "template-v2-complete",
@@ -1062,6 +1067,11 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
         href: "/courses/math-1a/geometry-properties/geometry-properties-triangle-centers",
         description: "外心・外接円とあわせて、円に関わる図形性質を整理する",
       },
+      {
+        label: "本番レベル模試集",
+        href: "/exam-sets",
+        description: "円の角度・長さの知識を数学IAの実戦問題で確認する",
+      },
     ],
     qualityTags: [
       "template-v2-complete",
@@ -1078,11 +1088,32 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
   },
 ];
 
+const GEOMETRY_PROPERTIES_ALL_LESSONS: CourseLesson[] = [
+  ...GEOMETRY_PROPERTIES_BEGINNER,
+  ...GEOMETRY_PROPERTIES_STANDARD,
+];
+
+function getGeometryPropertiesLesson(lessonId: string): CourseLesson {
+  const lesson = GEOMETRY_PROPERTIES_ALL_LESSONS.find((item) => item.lessonId === lessonId);
+  if (!lesson) {
+    throw new Error(`geometry-properties lesson not found: ${lessonId}`);
+  }
+  return lesson;
+}
+
+const GEOMETRY_PROPERTIES_ORDERED_LESSONS: CourseLesson[] = [
+  getGeometryPropertiesLesson("geometry-properties-inscribed-angle-tangent-chord"),
+  getGeometryPropertiesLesson("geometry-properties-cyclic-quadrilateral"),
+  getGeometryPropertiesLesson("geometry-properties-power-of-a-point"),
+  getGeometryPropertiesLesson("geometry-properties-ceva-menelaus"),
+  getGeometryPropertiesLesson("geometry-properties-triangle-centers"),
+];
+
 export const GEOMETRY_PROPERTIES_UNIT: CourseUnit = {
   unitId: "geometry-properties",
   subjectId: "math-1a",
   unitTitle: "図形の性質",
   unitDescription:
-    "円周角・接弦角、内接四角形、チェバ・メネラウス、方べきの定理、三角形の五心など、円と三角形の性質を扱う単元です。",
-  lessons: [...GEOMETRY_PROPERTIES_BEGINNER, ...GEOMETRY_PROPERTIES_STANDARD],
+    "円周角・内接四角形・方べき・チェバ・メネラウス・五心を通して、図形の角度・長さ・比・中心の見方を身につけます。",
+  lessons: GEOMETRY_PROPERTIES_ORDERED_LESSONS,
 };
