@@ -541,8 +541,8 @@ function GeometryCevaTheorem() {
 
       {/* points chosen so AD, BE, CF pass through P */}
       <line x1="130" y1="24" x2="130" y2="158" stroke={BLUE} strokeWidth="2.2" />
-      <line x1="38" y1="158" x2="158" y2="82" stroke={EMERALD} strokeWidth="2.2" />
-      <line x1="222" y1="158" x2="84" y2="91" stroke={ROSE} strokeWidth="2.2" />
+      <line x1="38" y1="158" x2="166" y2="77" stroke={EMERALD} strokeWidth="2.2" />
+      <line x1="222" y1="158" x2="94" y2="77" stroke={ROSE} strokeWidth="2.2" />
 
       {/* concurrency */}
       <circle cx="130" cy="100" r="5" fill={VIOLET} />
@@ -558,19 +558,19 @@ function GeometryCevaTheorem() {
 
       {/* side points */}
       <circle cx="130" cy="158" r="4" fill={BLUE} />
-      <circle cx="158" cy="82" r="4" fill={EMERALD} />
-      <circle cx="84" cy="91" r="4" fill={ROSE} />
+      <circle cx="166" cy="77" r="4" fill={EMERALD} />
+      <circle cx="94" cy="77" r="4" fill={ROSE} />
       <AxisLabel x={130} y={174} anchor="middle" fill={BLUE}>D</AxisLabel>
-      <AxisLabel x={166} y={82} fill={EMERALD}>E</AxisLabel>
-      <AxisLabel x={75} y={88} anchor="end" fill={ROSE}>F</AxisLabel>
+      <AxisLabel x={174} y={78} fill={EMERALD}>E</AxisLabel>
+      <AxisLabel x={86} y={75} anchor="end" fill={ROSE}>F</AxisLabel>
 
       {/* ratio hints */}
       <text x="84" y="151" fontSize="8" fill={BLUE} textAnchor="middle">BD</text>
       <text x="176" y="151" fontSize="8" fill={BLUE} textAnchor="middle">DC</text>
-      <text x="154" y="55" fontSize="8" fill={EMERALD}>CE</text>
-      <text x="174" y="112" fontSize="8" fill={EMERALD}>EA</text>
-      <text x="92" y="55" fontSize="8" fill={ROSE}>AF</text>
-      <text x="58" y="127" fontSize="8" fill={ROSE}>FB</text>
+      <text x="194" y="120" fontSize="8" fill={EMERALD}>CE</text>
+      <text x="146" y="55" fontSize="8" fill={EMERALD}>EA</text>
+      <text x="106" y="55" fontSize="8" fill={ROSE}>AF</text>
+      <text x="62" y="121" fontSize="8" fill={ROSE}>FB</text>
 
       <text x="130" y="184" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
         AD, BE, CF が1点 P で交わるならチェバ
@@ -599,7 +599,7 @@ function GeometryMenelausTheorem() {
       <line x1="42" y1="150" x2="28" y2="171" stroke="#cbd5e1" strokeWidth="1.5" strokeDasharray="4,3" />
 
       {/* transversal F-D-E */}
-      <line x1="28" y1="171" x2="166" y2="92" stroke={ROSE} strokeWidth="2.6" />
+      <line x1="28" y1="171" x2="168" y2="79" stroke={ROSE} strokeWidth="2.6" />
 
       {/* vertices */}
       <circle cx="128" cy="24" r="4" fill="#0f172a" />
@@ -610,19 +610,19 @@ function GeometryMenelausTheorem() {
       <AxisLabel x={229} y={158} anchor="middle" fill="#0f172a">C</AxisLabel>
 
       {/* collinear points */}
-      <circle cx="64" cy="150" r="4" fill={BLUE} />
-      <circle cx="166" cy="92" r="4" fill={EMERALD} />
+      <circle cx="60" cy="150" r="4" fill={BLUE} />
+      <circle cx="168" cy="79" r="4" fill={EMERALD} />
       <circle cx="28" cy="171" r="4" fill={ROSE} />
-      <AxisLabel x={64} y={165} anchor="middle" fill={BLUE}>D</AxisLabel>
-      <AxisLabel x={174} y={94} fill={EMERALD}>E</AxisLabel>
+      <AxisLabel x={60} y={165} anchor="middle" fill={BLUE}>D</AxisLabel>
+      <AxisLabel x={176} y={81} fill={EMERALD}>E</AxisLabel>
       <AxisLabel x={20} y={181} anchor="middle" fill={ROSE}>F</AxisLabel>
 
       {/* labels */}
-      <text x="53" y="143" fontSize="8" fill={BLUE} textAnchor="middle">BD</text>
-      <text x="143" y="143" fontSize="8" fill={BLUE} textAnchor="middle">DC</text>
-      <text x="177" y="68" fontSize="8" fill={EMERALD}>CE</text>
-      <text x="148" y="61" fontSize="8" fill={EMERALD}>EA</text>
-      <text x="75" y="100" fontSize="8" fill={ROSE}>AF</text>
+      <text x="51" y="143" fontSize="8" fill={BLUE} textAnchor="middle">BD</text>
+      <text x="142" y="143" fontSize="8" fill={BLUE} textAnchor="middle">DC</text>
+      <text x="195" y="112" fontSize="8" fill={EMERALD}>CE</text>
+      <text x="145" y="56" fontSize="8" fill={EMERALD}>EA</text>
+      <text x="78" y="103" fontSize="8" fill={ROSE}>AF</text>
       <text x="24" y="153" fontSize="8" fill={ROSE}>FB</text>
 
       <text x="130" y="184" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
@@ -645,8 +645,8 @@ function GeometryCevaMenelausCompare() {
         <text x="74" y="10" fontSize="9" fill={BLUE} textAnchor="middle" fontWeight="bold">チェバ</text>
         <polygon points="74,22 14,128 142,128" fill="#fff" stroke="#cbd5e1" strokeWidth="1.2" />
         <line x1="74" y1="22" x2="74" y2="128" stroke={BLUE} strokeWidth="1.8" />
-        <line x1="14" y1="128" x2="93" y2="64" stroke={EMERALD} strokeWidth="1.8" />
-        <line x1="142" y1="128" x2="49" y2="76" stroke={ROSE} strokeWidth="1.8" />
+        <line x1="14" y1="128" x2="102" y2="66" stroke={EMERALD} strokeWidth="1.8" />
+        <line x1="142" y1="128" x2="47" y2="69" stroke={ROSE} strokeWidth="1.8" />
         <circle cx="74" cy="86" r="4" fill={VIOLET} />
         <text x="82" y="88" fontSize="8" fill={VIOLET}>1点で交わる</text>
         <text x="74" y="148" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">3本の線分 → 比の積=1</text>
@@ -657,9 +657,9 @@ function GeometryCevaMenelausCompare() {
         <text x="74" y="10" fontSize="9" fill={ROSE} textAnchor="middle" fontWeight="bold">メネラウス</text>
         <polygon points="74,22 18,128 142,128" fill="#fff" stroke="#cbd5e1" strokeWidth="1.2" />
         <line x1="18" y1="128" x2="6" y2="148" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="4,3" />
-        <line x1="6" y1="148" x2="104" y2="72" stroke={ROSE} strokeWidth="2" />
-        <circle cx="32" cy="128" r="3.5" fill={BLUE} />
-        <circle cx="104" cy="72" r="3.5" fill={EMERALD} />
+        <line x1="6" y1="148" x2="107" y2="73" stroke={ROSE} strokeWidth="2" />
+        <circle cx="33" cy="128" r="3.5" fill={BLUE} />
+        <circle cx="107" cy="73" r="3.5" fill={EMERALD} />
         <circle cx="6" cy="148" r="3.5" fill={ROSE} />
         <text x="75" y="103" fontSize="8" fill={ROSE}>3点が一直線</text>
         <text x="74" y="148" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">直線上の3点 → 比の積=1</text>
@@ -677,28 +677,28 @@ function GeometryPowerIntersectingChords() {
       <circle cx="130" cy="94" r="62" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
 
       {/* chords */}
-      <line x1="72" y1="52" x2="188" y2="136" stroke={BLUE} strokeWidth="2.4" />
-      <line x1="68" y1="132" x2="192" y2="56" stroke={EMERALD} strokeWidth="2.4" />
+      <line x1="80" y1="58" x2="180" y2="130" stroke={BLUE} strokeWidth="2.4" />
+      <line x1="77" y1="127" x2="183" y2="61" stroke={EMERALD} strokeWidth="2.4" />
 
       {/* point P */}
       <circle cx="130" cy="94" r="5" fill={VIOLET} />
       <AxisLabel x={138} y={96} fill={VIOLET}>P</AxisLabel>
 
       {/* endpoints */}
-      <circle cx="72" cy="52" r="4" fill={BLUE} />
-      <circle cx="188" cy="136" r="4" fill={BLUE} />
-      <circle cx="68" cy="132" r="4" fill={EMERALD} />
-      <circle cx="192" cy="56" r="4" fill={EMERALD} />
-      <AxisLabel x={65} y={48} anchor="end" fill={BLUE}>A</AxisLabel>
-      <AxisLabel x={196} y={144} fill={BLUE}>B</AxisLabel>
-      <AxisLabel x={60} y={140} anchor="end" fill={EMERALD}>C</AxisLabel>
-      <AxisLabel x={200} y={55} fill={EMERALD}>D</AxisLabel>
+      <circle cx="80" cy="58" r="4" fill={BLUE} />
+      <circle cx="180" cy="130" r="4" fill={BLUE} />
+      <circle cx="77" cy="127" r="4" fill={EMERALD} />
+      <circle cx="183" cy="61" r="4" fill={EMERALD} />
+      <AxisLabel x={73} y={54} anchor="end" fill={BLUE}>A</AxisLabel>
+      <AxisLabel x={188} y={138} fill={BLUE}>B</AxisLabel>
+      <AxisLabel x={69} y={135} anchor="end" fill={EMERALD}>C</AxisLabel>
+      <AxisLabel x={191} y={60} fill={EMERALD}>D</AxisLabel>
 
       {/* segment hints */}
-      <text x="99" y="66" fontSize="8" fill={BLUE} textAnchor="middle">PA</text>
-      <text x="164" y="124" fontSize="8" fill={BLUE} textAnchor="middle">PB</text>
+      <text x="101" y="70" fontSize="8" fill={BLUE} textAnchor="middle">PA</text>
+      <text x="161" y="122" fontSize="8" fill={BLUE} textAnchor="middle">PB</text>
       <text x="96" y="122" fontSize="8" fill={EMERALD} textAnchor="middle">PC</text>
-      <text x="166" y="71" fontSize="8" fill={EMERALD} textAnchor="middle">PD</text>
+      <text x="166" y="72" fontSize="8" fill={EMERALD} textAnchor="middle">PD</text>
 
       <text x="130" y="176" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
         円の中で2本の弦が交わると、Pから両端までの積が等しい
@@ -716,8 +716,8 @@ function GeometryPowerTwoSecants() {
       <circle cx="166" cy="94" r="58" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
 
       {/* secants */}
-      <line x1="32" y1="154" x2="226" y2="68" stroke={BLUE} strokeWidth="2.4" />
-      <line x1="32" y1="154" x2="224" y2="133" stroke={EMERALD} strokeWidth="2.4" />
+      <line x1="32" y1="154" x2="228" y2="67" stroke={BLUE} strokeWidth="2.4" />
+      <line x1="32" y1="154" x2="226" y2="136" stroke={EMERALD} strokeWidth="2.4" />
 
       {/* external point */}
       <circle cx="32" cy="154" r="5" fill={VIOLET} />
@@ -725,19 +725,19 @@ function GeometryPowerTwoSecants() {
 
       {/* intersections */}
       <circle cx="113" cy="118" r="4" fill={BLUE} />
-      <circle cx="216" cy="72" r="4" fill={BLUE} />
-      <circle cx="109" cy="146" r="4" fill={EMERALD} />
-      <circle cx="221" cy="134" r="4" fill={EMERALD} />
+      <circle cx="219" cy="71" r="4" fill={BLUE} />
+      <circle cx="137" cy="144" r="4" fill={EMERALD} />
+      <circle cx="204" cy="138" r="4" fill={EMERALD} />
       <AxisLabel x={113} y={111} anchor="middle" fill={BLUE}>A</AxisLabel>
-      <AxisLabel x={225} y={68} fill={BLUE}>B</AxisLabel>
-      <AxisLabel x={109} y={160} anchor="middle" fill={EMERALD}>C</AxisLabel>
-      <AxisLabel x={229} y={141} fill={EMERALD}>D</AxisLabel>
+      <AxisLabel x={228} y={68} fill={BLUE}>B</AxisLabel>
+      <AxisLabel x={137} y={158} anchor="middle" fill={EMERALD}>C</AxisLabel>
+      <AxisLabel x={212} y={146} fill={EMERALD}>D</AxisLabel>
 
       {/* segment hints */}
       <text x="74" y="130" fontSize="8" fill={BLUE} textAnchor="middle">PA</text>
       <text x="164" y="88" fontSize="8" fill={BLUE} textAnchor="middle">PB</text>
-      <text x="72" y="151" fontSize="8" fill={EMERALD} textAnchor="middle">PC</text>
-      <text x="166" y="143" fontSize="8" fill={EMERALD} textAnchor="middle">PD</text>
+      <text x="86" y="153" fontSize="8" fill={EMERALD} textAnchor="middle">PC</text>
+      <text x="166" y="145" fontSize="8" fill={EMERALD} textAnchor="middle">PD</text>
 
       <text x="140" y="176" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
         外部点Pから円を切る2本の直線でも、外側×全体が等しい
@@ -755,32 +755,32 @@ function GeometryPowerTangentSecant() {
       <circle cx="166" cy="94" r="58" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
 
       {/* tangent and secant */}
-      <line x1="34" y1="150" x2="124" y2="43" stroke={ROSE} strokeWidth="2.6" />
-      <line x1="34" y1="150" x2="225" y2="112" stroke={BLUE} strokeWidth="2.4" />
+      <line x1="34" y1="150" x2="124" y2="54" stroke={ROSE} strokeWidth="2.6" />
+      <line x1="34" y1="150" x2="226" y2="112" stroke={BLUE} strokeWidth="2.4" />
 
       {/* tangent point and radius guide */}
-      <line x1="166" y1="94" x2="124" y2="43" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="4,3" />
-      <text x="149" y="61" fontSize="8" fill="#64748b">半径</text>
+      <line x1="166" y1="94" x2="124" y2="54" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="4,3" />
+      <text x="148" y="69" fontSize="8" fill="#64748b">半径</text>
 
       {/* external point */}
       <circle cx="34" cy="150" r="5" fill={VIOLET} />
       <AxisLabel x={24} y={162} anchor="middle" fill={VIOLET}>P</AxisLabel>
 
       {/* points */}
-      <circle cx="124" cy="43" r="4" fill={ROSE} />
-      <circle cx="109" cy="135" r="4" fill={BLUE} />
-      <circle cx="220" cy="113" r="4" fill={BLUE} />
-      <AxisLabel x={124} y={36} anchor="middle" fill={ROSE}>T</AxisLabel>
-      <AxisLabel x={109} y={129} anchor="middle" fill={BLUE}>A</AxisLabel>
-      <AxisLabel x={229} y={118} fill={BLUE}>B</AxisLabel>
+      <circle cx="124" cy="54" r="4" fill={ROSE} />
+      <circle cx="123" cy="132" r="4" fill={BLUE} />
+      <circle cx="221" cy="113" r="4" fill={BLUE} />
+      <AxisLabel x={124} y={47} anchor="middle" fill={ROSE}>T</AxisLabel>
+      <AxisLabel x={123} y={126} anchor="middle" fill={BLUE}>A</AxisLabel>
+      <AxisLabel x={230} y={118} fill={BLUE}>B</AxisLabel>
 
       {/* right angle at tangent point */}
-      <path d="M 130 49 L 136 42 L 130 36" fill="none" stroke="#94a3b8" strokeWidth="1" />
+      <path d="M 130 60 L 124 65 L 119 60" fill="none" stroke="#94a3b8" strokeWidth="1" />
 
       {/* segment hints */}
-      <text x="77" y="91" fontSize="8" fill={ROSE} textAnchor="middle">PT</text>
-      <text x="72" y="146" fontSize="8" fill={BLUE} textAnchor="middle">PA</text>
-      <text x="164" y="127" fontSize="8" fill={BLUE} textAnchor="middle">PB</text>
+      <text x="78" y="99" fontSize="8" fill={ROSE} textAnchor="middle">PT</text>
+      <text x="78" y="146" fontSize="8" fill={BLUE} textAnchor="middle">PA</text>
+      <text x="165" y="127" fontSize="8" fill={BLUE} textAnchor="middle">PB</text>
 
       <text x="140" y="176" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
         接線があるときは、接線の長さの2乗＝割線の外側×全体
@@ -798,33 +798,33 @@ function GeometryCentersCircumIncenter() {
 
       {/* circumcircle and triangle */}
       <circle cx="150" cy="102" r="78" fill="#ffffff" stroke="#bfdbfe" strokeWidth="1.8" />
-      <polygon points="150,24 54,164 246,164" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+      <polygon points="150,24 95,157 205,157" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
 
       {/* incenter circle */}
-      <circle cx="150" cy="116" r="34" fill="#ecfeff" stroke={EMERALD} strokeWidth="1.7" />
+      <circle cx="150" cy="120" r="37" fill="#ecfeff" stroke={EMERALD} strokeWidth="1.7" />
 
       {/* equal distances from circumcenter to vertices */}
       <line x1="150" y1="102" x2="150" y2="24" stroke={BLUE} strokeWidth="1.5" strokeDasharray="4,3" />
-      <line x1="150" y1="102" x2="54" y2="164" stroke={BLUE} strokeWidth="1.5" strokeDasharray="4,3" />
-      <line x1="150" y1="102" x2="246" y2="164" stroke={BLUE} strokeWidth="1.5" strokeDasharray="4,3" />
+      <line x1="150" y1="102" x2="95" y2="157" stroke={BLUE} strokeWidth="1.5" strokeDasharray="4,3" />
+      <line x1="150" y1="102" x2="205" y2="157" stroke={BLUE} strokeWidth="1.5" strokeDasharray="4,3" />
 
       {/* equal distances from incenter to sides */}
-      <line x1="150" y1="116" x2="150" y2="164" stroke={EMERALD} strokeWidth="1.6" strokeDasharray="4,3" />
-      <line x1="150" y1="116" x2="122" y2="65" stroke={EMERALD} strokeWidth="1.6" strokeDasharray="4,3" />
-      <line x1="150" y1="116" x2="178" y2="65" stroke={EMERALD} strokeWidth="1.6" strokeDasharray="4,3" />
+      <line x1="150" y1="120" x2="150" y2="157" stroke={EMERALD} strokeWidth="1.6" strokeDasharray="4,3" />
+      <line x1="150" y1="120" x2="116" y2="106" stroke={EMERALD} strokeWidth="1.6" strokeDasharray="4,3" />
+      <line x1="150" y1="120" x2="184" y2="106" stroke={EMERALD} strokeWidth="1.6" strokeDasharray="4,3" />
 
       {/* points */}
       <circle cx="150" cy="24" r="4" fill="#0f172a" />
-      <circle cx="54" cy="164" r="4" fill="#0f172a" />
-      <circle cx="246" cy="164" r="4" fill="#0f172a" />
+      <circle cx="95" cy="157" r="4" fill="#0f172a" />
+      <circle cx="205" cy="157" r="4" fill="#0f172a" />
       <circle cx="150" cy="102" r="5" fill={BLUE} />
-      <circle cx="150" cy="116" r="5" fill={EMERALD} />
+      <circle cx="150" cy="120" r="5" fill={EMERALD} />
 
       <AxisLabel x={150} y={17} anchor="middle" fill="#0f172a">A</AxisLabel>
-      <AxisLabel x={45} y={173} anchor="middle" fill="#0f172a">B</AxisLabel>
-      <AxisLabel x={255} y={173} anchor="middle" fill="#0f172a">C</AxisLabel>
+      <AxisLabel x={86} y={166} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={214} y={166} anchor="middle" fill="#0f172a">C</AxisLabel>
       <AxisLabel x={139} y={100} anchor="end" fill={BLUE}>O</AxisLabel>
-      <AxisLabel x={160} y={120} fill={EMERALD}>I</AxisLabel>
+      <AxisLabel x={160} y={124} fill={EMERALD}>I</AxisLabel>
 
       <text x="72" y="34" fontSize="8.5" fill={BLUE}>外心O: 頂点から等距離</text>
       <text x="165" y="152" fontSize="8.5" fill={EMERALD}>内心I: 辺から等距離</text>
@@ -841,37 +841,37 @@ function GeometryCentersCentroidOrthocenter() {
   return (
     <svg viewBox="0 0 300 210" width="100%" aria-label="三角形の五心：重心と垂心の図">
       <rect x="0" y="0" width="300" height="210" rx="12" fill="#f8fafc" />
-      <polygon points="150,28 58,166 248,166" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
+      <polygon points="140,30 55,166 240,125" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
 
       {/* medians */}
-      <line x1="150" y1="28" x2="153" y2="166" stroke={BLUE} strokeWidth="2" />
-      <line x1="58" y1="166" x2="199" y2="97" stroke={BLUE} strokeWidth="1.8" strokeDasharray="5,4" />
-      <line x1="248" y1="166" x2="104" y2="97" stroke={BLUE} strokeWidth="1.8" strokeDasharray="5,4" />
+      <line x1="140" y1="30" x2="148" y2="146" stroke={BLUE} strokeWidth="2" />
+      <line x1="55" y1="166" x2="190" y2="78" stroke={BLUE} strokeWidth="1.8" strokeDasharray="5,4" />
+      <line x1="240" y1="125" x2="98" y2="98" stroke={BLUE} strokeWidth="1.8" strokeDasharray="5,4" />
 
       {/* altitudes */}
-      <line x1="150" y1="28" x2="150" y2="166" stroke={ROSE} strokeWidth="2.2" />
-      <line x1="58" y1="166" x2="176" y2="67" stroke={ROSE} strokeWidth="1.8" strokeDasharray="4,3" />
-      <line x1="248" y1="166" x2="121" y2="72" stroke={ROSE} strokeWidth="1.8" strokeDasharray="4,3" />
+      <line x1="140" y1="30" x2="165" y2="142" stroke={ROSE} strokeWidth="2.2" />
+      <line x1="55" y1="166" x2="163" y2="52" stroke={ROSE} strokeWidth="1.8" strokeDasharray="4,3" />
+      <line x1="240" y1="125" x2="125" y2="53" stroke={ROSE} strokeWidth="1.8" strokeDasharray="4,3" />
 
       {/* midpoint marks */}
-      <circle cx="153" cy="166" r="3.5" fill={BLUE} />
-      <circle cx="199" cy="97" r="3.5" fill={BLUE} />
-      <circle cx="104" cy="97" r="3.5" fill={BLUE} />
-      <AxisLabel x={161} y={181} fill={BLUE}>中点</AxisLabel>
+      <circle cx="148" cy="146" r="3.5" fill={BLUE} />
+      <circle cx="190" cy="78" r="3.5" fill={BLUE} />
+      <circle cx="98" cy="98" r="3.5" fill={BLUE} />
+      <AxisLabel x={154} y={160} fill={BLUE}>中点</AxisLabel>
 
       {/* centers */}
-      <circle cx="151" cy="120" r="5" fill={BLUE} />
-      <circle cx="150" cy="94" r="5" fill={ROSE} />
-      <AxisLabel x={160} y={123} fill={BLUE}>G</AxisLabel>
-      <AxisLabel x={138} y={91} anchor="end" fill={ROSE}>H</AxisLabel>
+      <circle cx="145" cy="107" r="5" fill={BLUE} />
+      <circle cx="148" cy="68" r="5" fill={ROSE} />
+      <AxisLabel x={153} y={111} fill={BLUE}>G</AxisLabel>
+      <AxisLabel x={137} y={66} anchor="end" fill={ROSE}>H</AxisLabel>
 
       {/* vertices */}
-      <circle cx="150" cy="28" r="4" fill="#0f172a" />
-      <circle cx="58" cy="166" r="4" fill="#0f172a" />
-      <circle cx="248" cy="166" r="4" fill="#0f172a" />
-      <AxisLabel x={150} y={21} anchor="middle" fill="#0f172a">A</AxisLabel>
-      <AxisLabel x={49} y={174} anchor="middle" fill="#0f172a">B</AxisLabel>
-      <AxisLabel x={257} y={174} anchor="middle" fill="#0f172a">C</AxisLabel>
+      <circle cx="140" cy="30" r="4" fill="#0f172a" />
+      <circle cx="55" cy="166" r="4" fill="#0f172a" />
+      <circle cx="240" cy="125" r="4" fill="#0f172a" />
+      <AxisLabel x={140} y={23} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={46} y={174} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={249} y={130} fill="#0f172a">C</AxisLabel>
 
       <text x="70" y="38" fontSize="8.5" fill={BLUE}>重心G: 中線の交点</text>
       <text x="176" y="47" fontSize="8.5" fill={ROSE}>垂心H: 高さの交点</text>
@@ -926,21 +926,21 @@ function GeometryCyclicOppositeAngles() {
       <circle cx="150" cy="104" r="76" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.6" />
 
       {/* cyclic quadrilateral */}
-      <polygon points="150,28 70,133 142,178 232,92" fill="#eff6ff" stroke={BLUE} strokeWidth="2" />
-      <path d="M 136 47 Q 150 61 165 47" fill="none" stroke={ROSE} strokeWidth="2" />
-      <path d="M 134 158 Q 146 145 158 158" fill="none" stroke={ROSE} strokeWidth="2" />
-      <path d="M 90 128 Q 101 117 95 104" fill="none" stroke={EMERALD} strokeWidth="2" />
-      <path d="M 212 96 Q 199 106 203 121" fill="none" stroke={EMERALD} strokeWidth="2" />
+      <polygon points="150,28 79,130 170,177 225,91" fill="#eff6ff" stroke={BLUE} strokeWidth="2" />
+      <path d="M 137 46 Q 150 60 164 47" fill="none" stroke={ROSE} strokeWidth="2" />
+      <path d="M 159 159 Q 172 146 184 158" fill="none" stroke={ROSE} strokeWidth="2" />
+      <path d="M 99 127 Q 110 115 104 101" fill="none" stroke={EMERALD} strokeWidth="2" />
+      <path d="M 207 96 Q 194 106 198 121" fill="none" stroke={EMERALD} strokeWidth="2" />
 
       {/* points */}
       <circle cx="150" cy="28" r="4" fill="#0f172a" />
-      <circle cx="70" cy="133" r="4" fill="#0f172a" />
-      <circle cx="142" cy="178" r="4" fill="#0f172a" />
-      <circle cx="232" cy="92" r="4" fill="#0f172a" />
+      <circle cx="79" cy="130" r="4" fill="#0f172a" />
+      <circle cx="170" cy="177" r="4" fill="#0f172a" />
+      <circle cx="225" cy="91" r="4" fill="#0f172a" />
       <AxisLabel x={150} y={21} anchor="middle" fill="#0f172a">A</AxisLabel>
-      <AxisLabel x={60} y={139} anchor="middle" fill="#0f172a">B</AxisLabel>
-      <AxisLabel x={142} y={193} anchor="middle" fill="#0f172a">C</AxisLabel>
-      <AxisLabel x={242} y={94} fill="#0f172a">D</AxisLabel>
+      <AxisLabel x={69} y={137} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={170} y={192} anchor="middle" fill="#0f172a">C</AxisLabel>
+      <AxisLabel x={235} y={93} fill="#0f172a">D</AxisLabel>
 
       <text x="150" y="198" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
         対角どうしの和は180°。AとC、BとDをペアで見る
@@ -958,29 +958,29 @@ function GeometryCyclicExteriorAngle() {
       <circle cx="142" cy="104" r="74" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.6" />
 
       {/* cyclic quadrilateral and extension */}
-      <polygon points="140,31 66,126 139,178 218,100" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.4" />
-      <line x1="218" y1="100" x2="270" y2="49" stroke={ROSE} strokeWidth="2.4" />
-      <line x1="139" y1="178" x2="218" y2="100" stroke={ROSE} strokeWidth="2.4" />
-      <line x1="66" y1="126" x2="140" y2="31" stroke={BLUE} strokeWidth="2.4" />
-      <line x1="66" y1="126" x2="139" y2="178" stroke={BLUE} strokeWidth="2.4" />
+      <polygon points="142,30 72,129 148,178 216,98" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.4" />
+      <line x1="216" y1="98" x2="257" y2="50" stroke={ROSE} strokeWidth="2.4" />
+      <line x1="216" y1="98" x2="142" y2="30" stroke={ROSE} strokeWidth="2.4" />
+      <line x1="72" y1="129" x2="142" y2="30" stroke={BLUE} strokeWidth="2.4" />
+      <line x1="72" y1="129" x2="148" y2="178" stroke={BLUE} strokeWidth="2.4" />
 
       {/* angle marks: exterior at D, opposite at B */}
-      <path d="M 229 105 Q 231 83 213 79" fill="none" stroke={ROSE} strokeWidth="2.2" />
-      <path d="M 83 125 Q 92 143 76 152" fill="none" stroke={BLUE} strokeWidth="2.2" />
-      <text x="236" y="82" fontSize="8.5" fill={ROSE}>外角</text>
-      <text x="88" y="150" fontSize="8.5" fill={BLUE}>向かいの内角</text>
+      <path d="M 226 93 Q 231 76 215 70" fill="none" stroke={ROSE} strokeWidth="2.2" />
+      <path d="M 87 129 Q 96 145 81 153" fill="none" stroke={BLUE} strokeWidth="2.2" />
+      <text x="229" y="76" fontSize="8.5" fill={ROSE}>∠ADE</text>
+      <text x="88" y="151" fontSize="8.5" fill={BLUE}>∠ABC</text>
 
       {/* points */}
-      <circle cx="140" cy="31" r="4" fill="#0f172a" />
-      <circle cx="66" cy="126" r="4" fill="#0f172a" />
-      <circle cx="139" cy="178" r="4" fill="#0f172a" />
-      <circle cx="218" cy="100" r="4" fill="#0f172a" />
-      <circle cx="270" cy="49" r="3.5" fill={ROSE} />
-      <AxisLabel x={140} y={24} anchor="middle" fill="#0f172a">A</AxisLabel>
-      <AxisLabel x={56} y={132} anchor="middle" fill="#0f172a">B</AxisLabel>
-      <AxisLabel x={139} y={193} anchor="middle" fill="#0f172a">C</AxisLabel>
-      <AxisLabel x={224} y={112} fill="#0f172a">D</AxisLabel>
-      <AxisLabel x={275} y={48} fill={ROSE}>E</AxisLabel>
+      <circle cx="142" cy="30" r="4" fill="#0f172a" />
+      <circle cx="72" cy="129" r="4" fill="#0f172a" />
+      <circle cx="148" cy="178" r="4" fill="#0f172a" />
+      <circle cx="216" cy="98" r="4" fill="#0f172a" />
+      <circle cx="257" cy="50" r="3.5" fill={ROSE} />
+      <AxisLabel x={142} y={23} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={62} y={135} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={148} y={193} anchor="middle" fill="#0f172a">C</AxisLabel>
+      <AxisLabel x={222} y={110} fill="#0f172a">D</AxisLabel>
+      <AxisLabel x={262} y={49} fill={ROSE}>E</AxisLabel>
 
       <text x="150" y="198" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
         辺を延長してできる外角は、向かい側の内角に等しい
@@ -998,25 +998,25 @@ function GeometryCyclicSameArc() {
       <circle cx="150" cy="104" r="76" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.6" />
 
       {/* points A, B and two points C, D seeing arc AB */}
-      <path d="M 82 138 A 76 76 0 0 1 218 138" fill="none" stroke={AMBER} strokeWidth="4" />
-      <line x1="82" y1="138" x2="121" y2="38" stroke={BLUE} strokeWidth="2.1" />
-      <line x1="218" y1="138" x2="121" y2="38" stroke={BLUE} strokeWidth="2.1" />
-      <line x1="82" y1="138" x2="187" y2="38" stroke={EMERALD} strokeWidth="2.1" />
-      <line x1="218" y1="138" x2="187" y2="38" stroke={EMERALD} strokeWidth="2.1" />
+      <path d="M 84 142 A 76 76 0 0 1 216 142" fill="none" stroke={AMBER} strokeWidth="4" />
+      <line x1="84" y1="142" x2="106" y2="42" stroke={EMERALD} strokeWidth="2.1" />
+      <line x1="216" y1="142" x2="106" y2="42" stroke={EMERALD} strokeWidth="2.1" />
+      <line x1="84" y1="142" x2="194" y2="42" stroke={BLUE} strokeWidth="2.1" />
+      <line x1="216" y1="142" x2="194" y2="42" stroke={BLUE} strokeWidth="2.1" />
 
       {/* angle marks */}
-      <path d="M 130 54 Q 145 62 152 48" fill="none" stroke={BLUE} strokeWidth="2" />
-      <path d="M 177 53 Q 162 62 154 48" fill="none" stroke={EMERALD} strokeWidth="2" />
+      <path d="M 114 58 Q 128 66 136 52" fill="none" stroke={EMERALD} strokeWidth="2" />
+      <path d="M 184 57 Q 170 66 162 52" fill="none" stroke={BLUE} strokeWidth="2" />
 
       {/* points */}
-      <circle cx="82" cy="138" r="4" fill="#0f172a" />
-      <circle cx="218" cy="138" r="4" fill="#0f172a" />
-      <circle cx="187" cy="38" r="4" fill={BLUE} />
-      <circle cx="121" cy="38" r="4" fill={EMERALD} />
-      <AxisLabel x={72} y={146} anchor="middle" fill="#0f172a">A</AxisLabel>
-      <AxisLabel x={228} y={146} anchor="middle" fill="#0f172a">B</AxisLabel>
-      <AxisLabel x={196} y={35} fill={BLUE}>C</AxisLabel>
-      <AxisLabel x={112} y={35} anchor="end" fill={EMERALD}>D</AxisLabel>
+      <circle cx="84" cy="142" r="4" fill="#0f172a" />
+      <circle cx="216" cy="142" r="4" fill="#0f172a" />
+      <circle cx="194" cy="42" r="4" fill={BLUE} />
+      <circle cx="106" cy="42" r="4" fill={EMERALD} />
+      <AxisLabel x={74} y={150} anchor="middle" fill="#0f172a">A</AxisLabel>
+      <AxisLabel x={226} y={150} anchor="middle" fill="#0f172a">B</AxisLabel>
+      <AxisLabel x={203} y={39} fill={BLUE}>C</AxisLabel>
+      <AxisLabel x={97} y={39} anchor="end" fill={EMERALD}>D</AxisLabel>
       <text x="150" y="161" fontSize="8.5" fill={AMBER} textAnchor="middle">同じ弧AB</text>
 
       <text x="150" y="198" fontSize="8" fill={TEXT_COLOR} textAnchor="middle">
