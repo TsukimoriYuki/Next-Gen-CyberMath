@@ -79,14 +79,35 @@ export default function CommonTestPage() {
             <CommonTestReviewSummary />
           </section>
 
-          {/* ══ WEAKNESS ══════════════════════════════════════════════════════ */}
           <section className="order-6 sm:order-4">
+            <SectionLabel ja="特別講義" icon={<GraduationCap className="h-4 w-4 text-violet-600" />} />
+            <Link
+              href="/common-test/lectures"
+              className="group flex flex-col gap-4 rounded-2xl border border-violet-200 bg-white p-5 shadow-sm transition hover:border-violet-300 hover:shadow-md sm:flex-row sm:items-center"
+            >
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-50 ring-1 ring-violet-100">
+                <GraduationCap className="h-5 w-5 text-violet-600" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-base font-extrabold text-slate-950">共通テスト 図形と計量 徹底講座</div>
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  公式選択、符号ミス、本番判断を「できる人の頭の中」まで分解します。
+                </p>
+              </div>
+              <span className="inline-flex shrink-0 items-center justify-center rounded-xl bg-violet-600 px-4 py-2.5 text-xs font-bold text-white transition group-hover:bg-violet-700">
+                講義を開く
+              </span>
+            </Link>
+          </section>
+
+          {/* ══ WEAKNESS ══════════════════════════════════════════════════════ */}
+          <section className="order-7 sm:order-5">
             <SectionLabel ja="弱点分析と次の一手" icon={<ShieldAlert className="h-4 w-4 text-rose-600" />} />
             <CommonTestWeaknessBossPanel compact={true} showFullLink={false} />
           </section>
 
           {/* ══ SUBJECT ACCESS BOARD ══════════════════════════════════════════ */}
-          <section className="order-3 sm:order-5">
+          <section className="order-3 sm:order-6">
             <SectionLabel ja="科目別演習" icon={<BookOpen className="h-4 w-4 text-blue-600" />} />
             <div className="grid gap-4 sm:grid-cols-2">
               {mathSubjects.map((s) => (
@@ -103,7 +124,7 @@ export default function CommonTestPage() {
           </section>
 
           {/* ══ EXAM SIMULATOR ════════════════════════════════════════════════ */}
-          <section className="order-4 sm:order-6">
+          <section className="order-4 sm:order-7">
             <SectionLabel ja="本番演習" icon={<Zap className="h-4 w-4 text-blue-600" />} />
             <Link
               href="/common-test/simulator"
@@ -125,7 +146,7 @@ export default function CommonTestPage() {
           </section>
 
           {/* ══ TODAY'S MISSIONS ══════════════════════════════════════════════ */}
-          <section className="order-7">
+          <section className="order-8">
             <SectionLabel ja="短時間ドリル" icon={<CalendarDays className="h-4 w-4 text-blue-600" />} />
             <p className="-mt-2 mb-4 text-xs text-slate-500">
               図形・微積・確率を中心に、今日の演習候補を3つだけ表示します。
@@ -138,7 +159,7 @@ export default function CommonTestPage() {
           </section>
 
           {/* ══ ANALYTICS SUMMARY ════════════════════════════════════════════ */}
-          <section className="order-8">
+          <section className="order-9">
             <SectionLabel
               ja="詳細分析・履歴"
               right={
@@ -155,7 +176,7 @@ export default function CommonTestPage() {
           </section>
 
           {/* ══ ANALYSIS / REVIEW SUPPORT ════════════════════════════════════ */}
-          <section className="order-9">
+          <section className="order-10">
             <SectionLabel ja="学習診断・復習支援" icon={<Brain className="h-4 w-4 text-violet-600" />} />
             <div className="grid gap-4 sm:grid-cols-2">
 

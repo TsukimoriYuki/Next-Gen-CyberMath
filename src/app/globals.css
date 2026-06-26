@@ -213,6 +213,10 @@
       0 6px 20px oklch(0.4 0.05 250 / 0.08);
     transform: translateY(-2px);
   }
+
+  .input {
+    @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-300 focus:ring-2 focus:ring-blue-100;
+  }
 }
 
 /* Glow is intentionally restrained on the light theme: a crisp ring rather
