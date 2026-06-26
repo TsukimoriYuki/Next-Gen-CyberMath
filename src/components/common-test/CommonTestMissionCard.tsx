@@ -61,7 +61,7 @@ export function CommonTestMissionCard({ mission, index }: { mission: DailyMissio
           推奨 {mission.recommendedMinutes}分
         </div>
         <span className="flex items-center gap-1.5 text-xs font-bold text-blue-600 transition-all group-hover:gap-2.5">
-          演習する
+          {mission.recommendedMinutes}分演習を始める
           <ArrowRight className="h-3.5 w-3.5" />
         </span>
       </div>

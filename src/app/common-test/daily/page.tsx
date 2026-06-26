@@ -38,9 +38,6 @@ export default function CommonTestDailyPage() {
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5">
             <CalendarDays className="h-4 w-4 text-blue-600" />
             <span className="text-xs font-semibold text-blue-700">今日の学習メニュー</span>
-            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-blue-400">
-              Daily Plan
-            </span>
           </div>
 
           <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
@@ -69,7 +66,7 @@ export default function CommonTestDailyPage() {
             <ol className="space-y-2">
               {[
                 { step: 1, label: "本番演習を受ける", href: "/common-test/simulator", color: "#2563eb" },
-                { step: 2, label: "AI作戦会議で結果を確認する", href: "/common-test/history", color: "#0891b2" },
+                { step: 2, label: "本番分析で結果を確認する", href: "/common-test/history", color: "#0891b2" },
                 { step: 3, label: "弱点攻略で優先課題を確認する", href: "/common-test/weakness", color: "#e11d48" },
                 { step: 4, label: "今日の学習メニューを進める", href: "/common-test/daily", color: "#2563eb" },
                 { step: 5, label: "復習キューで定着させる", href: "/common-test/review", color: "#ea580c" },
@@ -111,8 +108,8 @@ export default function CommonTestDailyPage() {
             <QuickLink
               href="/common-test/history"
               icon={<History className="h-4 w-4 text-cyan-600" />}
-              label="AI作戦会議"
-              sub="演習履歴・分析"
+              label="本番分析"
+              sub="演習履歴・弱点レポート"
             />
             <QuickLink
               href="/common-test/review"

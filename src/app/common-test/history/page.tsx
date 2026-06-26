@@ -5,7 +5,7 @@ import { CommonTestHistoryPanel } from "@/components/common-test/CommonTestHisto
 import { CommonTestExamHistoryPanel } from "@/components/common-test/CommonTestExamHistoryPanel";
 
 export const metadata: Metadata = {
-  title: "演習履歴 — COMMON TEST COMMAND CENTER",
+  title: "演習履歴 — 共通テスト数学 攻略OS",
   description: "共通テスト対策ドリルの演習履歴と自信度分析",
 };
 
@@ -49,7 +49,7 @@ export default function CommonTestHistoryPage() {
 
         <CommonTestHistoryPanel />
 
-        {/* ── Exam Simulator 履歴 ─────────────────────────────────────────── */}
+        {/* ── 本番演習の履歴 ─────────────────────────────────────────────── */}
         <section className="mt-12">
           <div className="mb-6 flex items-center gap-3">
             <h2 className="text-sm font-bold text-slate-900">本番演習の履歴</h2>

@@ -7,7 +7,7 @@ import {
   clearCommonTestDrillHistory,
   type CommonTestDrillHistoryItem,
 } from "@/lib/common-test-history";
-import { CheckCircle2, Clock, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import { Clock, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 
 const SUBJECT_LABELS: Record<string, { label: string; color: string; glowRgb: string }> = {
   "math-1a": { label: "数学IA", color: "#2563eb", glowRgb: "37,99,235" },

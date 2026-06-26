@@ -14,12 +14,6 @@ const SUBJECT_LABELS: Record<string, string> = {
   "english-reading": "英語R",
 };
 
-function fmtSec(sec: number): string {
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return m > 0 ? `${m}分${s}秒` : `${s}秒`;
-}
-
 interface Analytics {
   drillCount: number;
   avgAccuracy: number;
@@ -120,7 +114,7 @@ export function CommonTestAnalyticsSummary() {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
         <div className="text-xs text-slate-400">
-          演習すると、ここに分析が表示されます
+          まずは10分診断で現在地を測ると、弱点レポートが表示されます
         </div>
       </div>
     );
@@ -131,8 +125,7 @@ export function CommonTestAnalyticsSummary() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
           <BarChart2 className="h-4 w-4 text-blue-600" />
-          演習データ分析
-          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-400">Analytics</span>
+          弱点レポート
         </div>
         {/* Mini grade strip */}
         <div className="flex gap-1">

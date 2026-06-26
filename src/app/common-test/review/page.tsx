@@ -4,7 +4,7 @@ import { ArrowLeft, Layers } from "lucide-react";
 import { CommonTestReviewQueue } from "@/components/common-test/CommonTestReviewQueue";
 
 export const metadata: Metadata = {
-  title: "REVIEW QUEUE — COMMON TEST COMMAND CENTER",
+  title: "復習キュー — 共通テスト数学 攻略OS",
   description: "共通テスト対策の間隔反復復習キュー。弱点問題を自動スケジューリングして反復演習する。",
 };
 
@@ -38,9 +38,6 @@ export default function CommonTestReviewPage() {
           <div className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3.5 py-1.5">
             <Layers className="h-4 w-4 text-orange-600" />
             <span className="text-xs font-semibold text-orange-700">復習キュー</span>
-            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-orange-400">
-              Review Queue
-            </span>
           </div>
 
           <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">

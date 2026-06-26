@@ -189,12 +189,20 @@ function TaskRow({
               color: cfg.color,
             }}
           >
-            開始 →
+            {getTaskCta(task)} →
           </Link>
         </div>
       </div>
     </div>
   );
+}
+
+function getTaskCta(task: CommonTestDailyTask): string {
+  if (task.type === "review") return "今日の復習を解く";
+  if (task.type === "exam") return "本番演習をする";
+  if (task.type === "target") return "目標点を見直す";
+  if (task.type === "analysis") return "弱点レポートを見る";
+  return `${task.estimatedMinutes}分演習を始める`;
 }
 
 // ── スケルトン ────────────────────────────────────────────────────────────

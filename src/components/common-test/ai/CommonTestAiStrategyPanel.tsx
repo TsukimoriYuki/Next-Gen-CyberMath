@@ -1,6 +1,6 @@
 "use client";
 
-// ── 共通テスト AI作戦会議パネル ───────────────────────────────────────────
+// ── 共通テスト 本番分析パネル ───────────────────────────────────────────
 // 外枠はCYBER OS風、講評本文は自然な受験指導の日本語カードで表示する。
 // ログイン不要。/api/common-test/oracle を叩き、結果を localStorage にキャッシュする。
 
@@ -138,7 +138,7 @@ export function CommonTestAiStrategyPanel({
           </div>
           <div className="min-w-0">
             <div className="text-base font-extrabold text-slate-900">
-              AI作戦会議
+              本番分析・次の一手
             </div>
             <p className="mt-1 text-[13px] leading-relaxed text-slate-500">
               今回の結果から、得点分析・時間配分・次にやるべき3つの行動を整理します。
@@ -163,7 +163,7 @@ export function CommonTestAiStrategyPanel({
           ) : (
             <>
               <Sparkles className="h-4 w-4" />
-              AI作戦会議を開く
+              弱点レポートを作る
             </>
           )}
         </button>
@@ -180,7 +180,7 @@ export function CommonTestAiStrategyPanel({
           <div className="flex flex-wrap items-center gap-2.5">
           <Sparkles className="h-4 w-4 shrink-0" style={{ color: theme.primary }} />
           <span className="text-base font-extrabold text-slate-900">
-            AI作戦会議
+            本番分析・次の一手
           </span>
           {fromCache && (
             <span className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[9px] text-slate-400">
@@ -293,7 +293,7 @@ export function CommonTestAiStrategyPanel({
                   </div>
                   {a.href && (
                     <div className="flex shrink-0 items-center gap-1 self-center font-mono text-[10px] text-slate-400">
-                      開く
+                      次へ
                       <ChevronRight className="h-4 w-4" />
                     </div>
                   )}

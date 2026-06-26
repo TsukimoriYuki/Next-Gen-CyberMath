@@ -72,8 +72,8 @@ export default function CommonTestWeaknessPage() {
             <QuickLink
               href="/common-test/history"
               icon={<History className="h-4 w-4 text-cyan-600" />}
-              label="演習履歴 / AI分析"
-              sub="AI作戦会議"
+              label="演習履歴 / 本番分析"
+              sub="弱点レポート"
             />
             <QuickLink
               href="/common-test/review"

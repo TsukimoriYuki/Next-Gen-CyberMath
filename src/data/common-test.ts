@@ -93,7 +93,7 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
     targetScoreDefault: 80,
     estimatedScoreMock: 64,
     description:
-      "数と式・2次関数・データの分析・図形の性質・場合の数と確率の全4大問を解答する。論理的読解力と計算の正確性が問われる。",
+      "数と式・命題・2次関数・図形・確率を、共通テストの誘導に乗って取り切る。読解、判断、計算精度を大問別に鍛える。",
     sections: [
       {
         number: 1,
@@ -254,7 +254,7 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
     targetScoreDefault: 85,
     estimatedScoreMock: 70,
     description:
-      "短文から論説文まで多様なテキストを処理する。情報照合・要約・推論の3能力と、一定の処理速度が合否を分ける。",
+      "β版のサブ科目。数学対策を優先しつつ、余力がある日に読解速度と情報照合を補強する。",
     sections: [
       {
         number: 1,
@@ -349,37 +349,37 @@ export const COMMON_TEST_SUBJECTS_MAP: Record<CommonTestSubjectId, CommonTestSub
 
 export const DAILY_MISSIONS: DailyMission[] = [
   {
-    id: "mission-math1a-data",
+    id: "mission-math1a-geometry",
     subjectId: "math-1a",
     subjectLabel: "数学IA",
-    sectionTitle: "第2問 データの分析 タイムアタック",
-    purpose: "相関係数・四分位数の計算を10分で完走。処理速度を測定する。",
-    recommendedMinutes: 10,
+    sectionTitle: "第1問 図形と計量 15分診断",
+    purpose: "正弦定理・余弦定理と命題の誘導を確認。目標80点への伸びしろが大きい大問です。",
+    recommendedMinutes: 15,
     accent: "#00d2ff",
-    difficulty: "SPRINT",
-    href: "/common-test/math-1a/section-2",
+    difficulty: "STANDARD",
+    href: "/common-test/math-1a/section-1",
   },
   {
-    id: "mission-math2bc-seq",
+    id: "mission-math2bc-calculus",
     subjectId: "math-2bc",
-    subjectLabel: "数学IIB",
-    sectionTitle: "第3問 数列 誘導読解ドリル",
-    purpose: "漸化式の誘導パターンを3種類習得する。読む → 立式 → 解答の流れを固める。",
+    subjectLabel: "数学II・B・C",
+    sectionTitle: "第2問 微分積分 20分演習",
+    purpose: "接線・増減・面積計算を本番時間で処理。計算ミスを自信度つきで記録します。",
     recommendedMinutes: 20,
     accent: "#a855f7",
     difficulty: "STANDARD",
-    href: "/common-test/math-2bc/section-3",
+    href: "/common-test/math-2bc/section-2",
   },
   {
-    id: "mission-eng-q5",
-    subjectId: "english-reading",
-    subjectLabel: "英語R",
-    sectionTitle: "第5問 情報照合 スプリント",
-    purpose: "複数テキスト照合を12分以内に完答する。スキミングと絞り込みの自動化を目指す。",
-    recommendedMinutes: 12,
-    accent: "#10b981",
+    id: "mission-math1a-probability",
+    subjectId: "math-1a",
+    subjectLabel: "数学IA",
+    sectionTitle: "第4問 確率 15分演習",
+    purpose: "条件付き確率と数え上げを短時間で確認。捨て問判断まで含めて練習します。",
+    recommendedMinutes: 15,
+    accent: "#00d2ff",
     difficulty: "SPRINT",
-    href: "/common-test/english-reading/section-5",
+    href: "/common-test/math-1a/section-4",
   },
 ];
 
@@ -394,8 +394,8 @@ export interface LockedFeature {
 export const LOCKED_FEATURES: LockedFeature[] = [
   {
     id: "exam-simulator",
-    title: "Exam Simulator",
+    title: "本番演習",
     description: "本番と同一形式・時間配分で全大問を通しで解く。採点・タイム計測・弱点自動解析付き。",
-    icon: "🖥️",
+    icon: "EX",
   },
 ];

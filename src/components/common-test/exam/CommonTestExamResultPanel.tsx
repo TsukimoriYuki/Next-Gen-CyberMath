@@ -13,7 +13,7 @@ import {
   Layers,
   ArrowRight,
 } from "lucide-react";
-import type { CommonTestExamHistoryItem, CommonTestExamAnswerRecord } from "@/lib/common-test-exam-history";
+import type { CommonTestExamHistoryItem } from "@/lib/common-test-exam-history";
 import type { CommonTestExamPreset } from "@/data/common-test-exams";
 import { ReviewQueueRegistrar } from "@/components/common-test/ReviewQueueRegistrar";
 import type { ReviewCandidate } from "@/components/common-test/ReviewQueueRegistrar";
@@ -22,7 +22,6 @@ import { CommonTestGuidedReviewPanel } from "@/components/common-test/CommonTest
 import type { CommonTestGuidedReviewItem } from "@/lib/common-test-guided-review";
 import {
   analyzeExamResult,
-  ALL_STAGES,
   type QuestionMetaForAnalysis,
   type DifficultyStage,
 } from "@/lib/common-test-result-analysis";
@@ -431,9 +430,9 @@ export function CommonTestExamResultPanel({
           </section>
         )}
 
-        {/* ── AI作戦会議 ──────────────────────────────────────────────────── */}
+        {/* ── 本番分析 ────────────────────────────────────────────────────── */}
         <section>
-          <SectionLabel color={preset.theme.primary} en="AI Strategy">AI作戦会議</SectionLabel>
+          <SectionLabel color={preset.theme.primary} en="Strategy">本番分析・次の一手</SectionLabel>
           <CommonTestAiStrategyPanel examHistoryItem={historyItem} theme={preset.theme} />
         </section>
 

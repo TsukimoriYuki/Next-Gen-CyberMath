@@ -7,6 +7,7 @@
     "build": "prisma db push && prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
+    "audit:course-formulas": "node scripts/audit-course-formulas.mjs",
     "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",

@@ -37,7 +37,6 @@ export function CommonTestAnswerPanel({
   onSelect,
   onNext,
   isLastQuestion,
-  theme,
 }: Props) {
   const isMath = question.subjectId !== "english-reading";
   const answerFormat = getCommonTestAnswerFormat(question);

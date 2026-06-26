@@ -6,7 +6,6 @@ import {
   AlertTriangle,
   ShieldAlert,
   TrendingUp,
-  TrendingDown,
   Minus,
   ChevronRight,
   Target,
@@ -104,8 +103,8 @@ function FirstTimeGuide() {
       <div className="grid gap-3 sm:grid-cols-3">
         {[
           { label: "数学IA 第1問", href: "/common-test/math-1a/section-1" },
-          { label: "数学IA 第2問", href: "/common-test/math-1a/section-2" },
-          { label: "英語R 第5問", href: "/common-test/english-reading/section-5" },
+          { label: "数学IIBC 第2問", href: "/common-test/math-2bc/section-2" },
+          { label: "数学IA 第4問", href: "/common-test/math-1a/section-4" },
         ].map((s) => (
           <Link
             key={s.href}
@@ -240,7 +239,7 @@ function WeaknessCard({ item }: { item: CommonTestWeaknessItem }) {
           className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-bold text-white transition-opacity hover:opacity-90"
           style={{ background: sev.color }}
         >
-          演習する →
+          次の演習へ →
         </Link>
       </div>
     </div>

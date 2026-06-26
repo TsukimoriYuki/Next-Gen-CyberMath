@@ -28,6 +28,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
     scoreRoutes,
   } = subject;
   const gap = targetScoreDefault - estimatedScoreMock;
+  const prioritySection = getPrioritySection(subject);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
@@ -43,7 +44,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
         <header className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
           <div className="flex flex-wrap items-center gap-2">
             <Badge icon={<BookOpen className="h-3.5 w-3.5" />} color={theme.primary}>
-              科目別対策
+              数学特化の大問攻略
             </Badge>
             <Badge icon={<Clock className="h-3.5 w-3.5" />}>
               本番 {examMinutes}分
@@ -55,8 +56,8 @@ export function CommonTestSubjectPage({ subject }: Props) {
 
           <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_280px] lg:items-end">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Common Test Subject
+              <p className="text-xs font-semibold text-slate-500">
+                目標点から逆算して、優先大問を決める
               </p>
               <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
                 {title}
@@ -91,17 +92,37 @@ export function CommonTestSubjectPage({ subject }: Props) {
                 />
               </div>
               <p className="mt-2 text-xs leading-5 text-slate-500">
-                大問別ドリルと本番演習の結果を見ながら、次に伸ばす大問を決めます。
+                まずは「あと何点」を確認し、最短で埋められる大問から練習します。
               </p>
             </div>
           </div>
         </header>
 
+        <section className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-5 shadow-sm">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="text-xs font-bold text-blue-700">次にやるべき大問</div>
+              <h2 className="mt-1 text-lg font-extrabold text-slate-950">
+                第{prioritySection.number}問：{prioritySection.title}
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-slate-600">
+                {getPriorityReason(subject.id, prioritySection.number)}
+              </p>
+            </div>
+            <Link
+              href={`${subject.route}/section-${prioritySection.number}`}
+              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-700"
+            >
+              第{prioritySection.number}問を{prioritySection.recommendedMinutes}分練習する
+            </Link>
+          </div>
+        </section>
+
         <section className="mt-8">
           <SectionTitle
             icon={<ClipboardList className="h-5 w-5" />}
             title="大問別ドリル"
-            description="大問ごとに出題テーマを確認し、短い演習で弱点を絞り込みます。"
+            description="配点・目標時間・優先度を見て、今の得点差を埋める順に練習します。"
           />
           <CommonTestSectionGrid sections={sections} theme={theme} subjectId={subject.id} />
         </section>
@@ -213,17 +234,17 @@ function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">
-            Exam Simulator
+            本番演習
           </p>
           <h2 className="mt-1 text-xl font-extrabold text-slate-950">
-            本番演習で力試し
+            {subject.examMinutes}分で本番形式を解く
           </h2>
           <p className="mt-2 text-sm leading-6 text-slate-600">
-            {sectionCount}大問・{questions.length}問を本番形式で解き、時間内スコアと弱点を確認します。
+            {sectionCount}大問・{questions.length}問を本番形式で解き、時間内スコアと時間外スコアの差を確認します。
           </p>
         </div>
         <span className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition group-hover:bg-blue-700">
-          開始する
+          {subject.examMinutes}分で本番演習する
         </span>
       </div>
     </Link>
@@ -234,4 +255,24 @@ function hexToRgb(hex: string): string {
   const m = hex.match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
   if (!m) return "37,99,235";
   return `${parseInt(m[1], 16)},${parseInt(m[2], 16)},${parseInt(m[3], 16)}`;
+}
+
+function getPrioritySection(subject: CommonTestSubject): CommonTestSubject["sections"][number] {
+  if (subject.id === "math-1a") {
+    return subject.sections.find((section) => section.number === 1) ?? subject.sections[0];
+  }
+  if (subject.id === "math-2bc") {
+    return subject.sections.find((section) => section.number === 2) ?? subject.sections[0];
+  }
+  return subject.sections[0];
+}
+
+function getPriorityReason(subjectId: string, sectionNumber: number): string {
+  if (subjectId === "math-1a" && sectionNumber === 1) {
+    return "図形と計量・命題は得点効率が高く、誘導読解の練習にもなります。";
+  }
+  if (subjectId === "math-2bc" && sectionNumber === 2) {
+    return "微分積分は時間内に取り切る価値が高く、計算精度の改善が点数に直結します。";
+  }
+  return "現在の目標差を埋めるために、短時間で確認しやすい大問です。";
 }

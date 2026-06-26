@@ -120,7 +120,7 @@ export function CommonTestReviewSummary() {
           href="/common-test/review"
           className="text-xs font-bold text-blue-600 transition-colors hover:text-blue-700"
         >
-          開く →
+          {urgent ? `今日の復習${dueCount}問を解く →` : "復習キューを見る →"}
         </Link>
       </div>
 

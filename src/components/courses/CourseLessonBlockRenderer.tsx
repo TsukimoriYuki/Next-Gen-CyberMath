@@ -6,6 +6,7 @@ import type { LessonBlock } from "@/types/course";
 import { LESSON_BLOCK_META } from "@/types/course";
 import { CourseBodyRenderer } from "./CourseBodyRenderer";
 import { CourseDiagramBlock } from "./CourseDiagramBlock";
+import { CourseFormulaRenderer } from "./CourseFormulaRenderer";
 import { CourseStepBlock } from "./CourseStepBlock";
 import { CourseComparisonTable } from "./CourseComparisonTable";
 
@@ -97,12 +98,7 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
 
       {/* 強調公式（formula ブロックの formula フィールド） */}
       {block.formula && (
-        <div className="mb-2 rounded-lg border border-cyan-200 bg-white px-3 py-2">
-          <CourseBodyRenderer
-            body={block.formula}
-            className="text-center text-sm font-semibold text-slate-900"
-          />
-        </div>
+        <CourseFormulaRenderer formula={block.formula} />
       )}
 
       {/* コールアウト（emphasis フィールド） */}
@@ -122,4 +118,3 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
     </div>
   );
 }
-

@@ -189,35 +189,6 @@ export function CommonTestExamQuestionPanel({
   );
 }
 
-// ── Blank number input ────────────────────────────────────────────────────
-function BlankNumberInput({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="text-xs font-bold" style={{ color: "#374151" }}>
-        解答欄
-      </div>
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="数値を入力"
-        className="w-full max-w-xs rounded px-4 py-3 font-mono text-base outline-none transition-all"
-        style={{
-          background: "#ffffff",
-          border: value ? "2px solid #2563eb" : "1px solid #9ca3af",
-          color: "#111827",
-        }}
-      />
-    </div>
-  );
-}
-
 function ExamStageBadge({ question }: { question: CommonTestDrillQuestion }) {
   if (!question.subQuestionIndex && !question.difficultyStage) return null;
 

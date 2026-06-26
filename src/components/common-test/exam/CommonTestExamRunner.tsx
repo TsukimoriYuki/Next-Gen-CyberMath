@@ -9,7 +9,6 @@ import type { CommonTestConfidence } from "@/lib/common-test-history";
 import {
   filterExamQuestionsBySections,
   getExamSectionInfos,
-  type ExamSectionInfo,
 } from "@/lib/common-test-exams";
 import {
   saveCommonTestExamHistory,
@@ -550,7 +549,7 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
             >
               <Zap className="h-4 w-4" />
               {canStart
-                ? "試験を開始する"
+                ? `${Math.round(preset.examLimitSec / 60)}分で本番演習する`
                 : `選択問題をあと${selectCount - selectedOptional.length}題選んでください`}
             </button>
           </div>

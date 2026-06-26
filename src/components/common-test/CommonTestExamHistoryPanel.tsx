@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Trophy, Clock, AlertTriangle, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import { Clock, AlertTriangle, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import {
   getCommonTestExamHistory,
   clearCommonTestExamHistory,
@@ -66,7 +66,7 @@ export function CommonTestExamHistoryPanel() {
           本番演習の履歴はありません
         </p>
         <p className="text-xs leading-relaxed text-slate-500">
-          本番演習を1回受けると、AI作戦会議・弱点分析・今日の学習メニューがより正確になります。
+          本番演習を1回受けると、本番分析・弱点分析・今日の学習メニューがより正確になります。
         </p>
         <Link
           href="/common-test/simulator"
@@ -251,7 +251,7 @@ export function CommonTestExamHistoryPanel() {
                   />
                 )}
 
-                {/* AI作戦会議（展開時のみマウント。APIはボタン押下後にのみ呼ばれる） */}
+                {/* 本番分析（展開時のみマウント。APIはボタン押下後にのみ呼ばれる） */}
                 <CommonTestAiStrategyPanel
                   examHistoryItem={item}
                   theme={

@@ -88,9 +88,6 @@ export function CommonTestTargetScorePanel() {
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-5 py-3">
         <div className="flex items-center gap-2">
           <span className="text-sm font-bold text-slate-900">目標点トラッカー</span>
-          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-400">
-            Score Tracker
-          </span>
         </div>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
           {feedback === "saved" && (
@@ -173,8 +170,8 @@ export function CommonTestTargetScorePanel() {
                     最新演習スコア反映済み
                   </span>
                 ) : (
-                  <span className="inline-block rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-400">
-                    演習履歴なし（初期推定値）
+                  <span className="inline-block rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-700">
+                    未診断のため仮スコアを表示中
                   </span>
                 )}
               </div>
@@ -218,8 +215,13 @@ export function CommonTestTargetScorePanel() {
               </div>
 
               <div className="mt-1 text-right font-mono text-[9px] text-slate-300">
-                {pct}% of target
+                目標到達率 {pct}%
               </div>
+              {!isLatest && (
+                <div className="mt-2 text-[11px] font-medium text-slate-500">
+                  まずは10分診断で現在地を測定
+                </div>
+              )}
             </div>
           );
         })}

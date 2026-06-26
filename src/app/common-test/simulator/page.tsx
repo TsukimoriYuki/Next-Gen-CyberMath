@@ -68,17 +68,14 @@ export default function SimulatorIndexPage() {
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5">
             <Zap className="h-4 w-4 text-blue-600" />
             <span className="text-xs font-semibold text-blue-700">本番演習</span>
-            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-blue-400">
-              Exam Simulator
-            </span>
           </div>
 
           <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-            本番形式の模擬試験
+            数学の本番力を測る
           </h1>
 
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-600">
-            本番と同じ時間制限で全大問を通しで解きます。各科目に第1〜第3回を用意しました。
+            数学IA・数学II/B/Cを70分で解き、時間内スコアと時間外スコアの差から次に伸ばす大問を決めます。
           </p>
 
           {/* Dual score explanation */}
@@ -105,8 +102,10 @@ export default function SimulatorIndexPage() {
         </header>
 
         {/* Exam preset cards — 科目ごと */}
-        {subjectIds.map((subjectId) => (
-          <section key={subjectId} className="mb-8">
+        {subjectIds.map((subjectId) => {
+          const isSubSubject = subjectId === "english-reading";
+          return (
+          <section key={subjectId} className={`mb-8 ${isSubSubject ? "opacity-80" : ""}`}>
             <div className="mb-4 flex items-center gap-3">
               <h2 className="flex items-center gap-2 text-sm font-bold text-slate-900">
                 <span
@@ -114,6 +113,11 @@ export default function SimulatorIndexPage() {
                   style={{ background: grouped[subjectId][0]?.theme.primary }}
                 />
                 {SUBJECT_NAMES[subjectId] ?? subjectId}
+                {isSubSubject && (
+                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-100">
+                    β版 / サブ科目
+                  </span>
+                )}
               </h2>
               <div className="h-px flex-1 bg-slate-200" />
             </div>
@@ -123,7 +127,7 @@ export default function SimulatorIndexPage() {
               ))}
             </div>
           </section>
-        ))}
+        );})}
 
         <footer className="mt-12 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
           CYBER OS · 本番演習
@@ -139,7 +143,9 @@ function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
   const sectionCount = new Set(questions.map((q) => q.sectionId)).size;
 
   return (
-    <div className="relative flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
+    <div className={`relative flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-slate-300 hover:shadow-md ${
+      preset.subjectId === "english-reading" ? "opacity-90" : ""
+    }`}>
       {/* Icon + round badge */}
       <div className="flex items-center justify-between">
         <div
@@ -185,7 +191,9 @@ function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
 
       {/* Description */}
       <p className="flex-1 text-[11px] leading-relaxed text-slate-500">
-        {preset.description}
+        {preset.subjectId === "english-reading"
+          ? "β版のサブ科目です。数学演習後の補強として利用します。"
+          : preset.description}
       </p>
 
       {/* Start button */}
@@ -194,7 +202,7 @@ function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
         className="mt-auto flex items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-xs font-bold text-white transition-colors hover:bg-blue-700 active:scale-[0.98]"
       >
         <Zap className="h-3.5 w-3.5" />
-        試験を始める
+        {minutes}分で本番演習する
       </Link>
     </div>
   );

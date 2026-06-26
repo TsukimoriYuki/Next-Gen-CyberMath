@@ -16,8 +16,8 @@ export function CommonTestStatusPanel() {
         className="flex items-center justify-between px-5 py-3"
         style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
       >
-        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
-          ◈ System Status — Score Tracker
+        <span className="text-[10px] font-bold text-white/60">
+          目標点との差
         </span>
         <span
           className="font-mono text-[10px] font-bold"
@@ -73,8 +73,8 @@ export function CommonTestStatusPanel() {
                 />
               </div>
 
-              <div className="mt-1 font-mono text-[9px] text-white/25 text-right">
-                {pct}% of target
+              <div className="mt-1 text-right font-mono text-[9px] text-white/25">
+                目標到達率 {pct}%
               </div>
             </div>
           );

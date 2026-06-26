@@ -194,6 +194,8 @@ export function CommonTestDrillRunner({
   }
 
   if (phase === "intro") {
+    const outcomes = getTrainingOutcomes(subjectId, sectionNumber, sectionTitle);
+
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -224,13 +226,25 @@ export function CommonTestDrillRunner({
           自信度も一緒に記録すると、復習キューと弱点分析で「本当に見直すべき問題」を見つけやすくなります。
         </div>
 
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <h3 className="text-sm font-extrabold text-slate-900">この演習で身につくこと</h3>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {outcomes.map((outcome) => (
+              <li key={outcome} className="flex gap-2 text-xs leading-5 text-slate-600">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />
+                <span>{outcome}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <button
           type="button"
           onClick={handleStart}
           className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-blue-700 active:scale-[0.99] sm:w-auto"
         >
           <Play className="h-4 w-4" />
-          練習を始める
+          第{sectionNumber}問を{recommendedMinutes}分練習する
         </button>
       </div>
     );
@@ -278,6 +292,53 @@ export function CommonTestDrillRunner({
       </CommonTestQuestionCard>
     </div>
   );
+}
+
+function getTrainingOutcomes(
+  subjectId: string,
+  sectionNumber: number,
+  sectionTitle: string,
+): string[] {
+  const common = [
+    "共通テスト特有の誘導に乗る",
+    "解ける問題と深追いしない問題を判断する",
+    "自信度から危険なミスを発見する",
+  ];
+
+  if (subjectId === "math-1a" && sectionNumber === 1) {
+    return [
+      "命題の真偽と反例を素早く確認する",
+      "図形と計量で使う定理を選び間違えない",
+      ...common,
+    ];
+  }
+  if (subjectId === "math-1a" && sectionNumber === 2) {
+    return [
+      "2次関数の最大最小で場合分けを落とさない",
+      "データの分析は計算より先に読み取り方を決める",
+      ...common,
+    ];
+  }
+  if (subjectId === "math-2bc" && sectionNumber === 2) {
+    return [
+      "微分の増減表と接線計算を時間内に処理する",
+      "積分の面積計算で符号ミスを防ぐ",
+      ...common,
+    ];
+  }
+  if (subjectId === "math-2bc" && sectionNumber === 3) {
+    return [
+      "数列の誘導を読み、次の式を自分で作る",
+      "漸化式と和の処理を本番時間でつなげる",
+      ...common,
+    ];
+  }
+
+  return [
+    `${sectionTitle}でよく出る型を確認する`,
+    "本番時間で解く順番を決める",
+    ...common,
+  ];
 }
 
 function Stat({ label, value }: { label: string; value: string }) {

@@ -503,7 +503,7 @@ body: "絶対値は、数直線上での距離を表します。\n\n例えば、
 kind: "formula",
 title: "絶対値の定義",
 body: "$|x|$ は、$x$ が0以上か負かで外し方が変わります。\n\n$x$ が0以上なら、そのまま $x$ です。\n\n$x$ が負なら、符号を変えて $-x$ になります。",
-formula: "|x|=\\begin{cases}x&(x\\geq0)\\-x&(x<0)\\end{cases}",
+formula: "|x|=\\begin{cases}x&(x\\geq0)\\\\ -x&(x<0)\\end{cases}",
 },
 {
 kind: "concept",
