@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, CheckCircle2, ExternalLink, Lightbulb, ListChecks, Sigma, Sparkles } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
+  ExternalLink,
+  Lightbulb,
+  ListChecks,
+  Sigma,
+  Sparkles,
+  TimerReset,
+} from "lucide-react";
 import type { Lecture, LectureBlock, ExplanationTab } from "@/data/specialLectures";
 import { MathText, BlockMath } from "@/components/math/Math";
 
@@ -17,7 +27,7 @@ const TAB_ORDER: ExplanationTab["label"][] = [
 
 export function LectureRenderer({ lecture }: { lecture: Lecture }) {
   return (
-    <article className="space-y-5">
+    <article className="space-y-7">
       {lecture.blocks.map((block) => (
         <LectureBlockView key={block.id} block={block} />
       ))}
@@ -29,26 +39,28 @@ function LectureBlockView({ block }: { block: LectureBlock }) {
   switch (block.type) {
     case "heading":
       return block.level === 2 ? (
-        <h2 className="pt-3 text-2xl font-extrabold tracking-tight text-slate-950">
-          {block.text}
-        </h2>
+        <div className="border-t border-slate-200 pt-7 first:border-t-0 first:pt-0">
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">
+            {block.text}
+          </h2>
+        </div>
       ) : (
         <h3 className="pt-2 text-lg font-extrabold text-slate-900">{block.text}</h3>
       );
     case "paragraph":
       return (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <MathText className="text-sm text-slate-700">{block.text}</MathText>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 leading-7 shadow-sm sm:p-6">
+          <MathText className="text-[15px] text-slate-700">{block.text}</MathText>
         </div>
       );
     case "math":
       return (
-        <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5 shadow-sm">
+        <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5 shadow-sm sm:p-6">
           <div className="flex items-center gap-2 text-xs font-bold text-blue-700">
             <Sigma className="h-4 w-4" />
             公式・計算
           </div>
-          <div className="mt-3 overflow-x-auto rounded-xl bg-white p-4 ring-1 ring-blue-100">
+          <div className="mt-3 overflow-x-auto rounded-xl bg-white px-4 py-5 ring-1 ring-blue-100">
             <BlockMath math={block.expression} />
           </div>
           {block.caption && <p className="mt-3 text-xs leading-5 text-slate-600">{block.caption}</p>}
@@ -71,25 +83,10 @@ function LectureBlockView({ block }: { block: LectureBlock }) {
     case "explanationTabs":
       return <ExplanationTabs tabs={block.tabs} />;
     case "expertThinking":
-      return (
-        <section className="rounded-2xl border border-violet-200 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-violet-600" />
-            <h2 className="text-lg font-extrabold text-slate-950">できる人の頭の中</h2>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {block.items.map((item) => (
-              <div key={item.label} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <div className="text-xs font-bold text-violet-700">{item.label}</div>
-                <MathText className="mt-1 text-xs text-slate-700">{item.body}</MathText>
-              </div>
-            ))}
-          </div>
-        </section>
-      );
+      return <ExpertThinkingBlock block={block} />;
     case "checklist":
       return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <div className="mb-3 flex items-center gap-2">
             <ListChecks className="h-4 w-4 text-blue-600" />
             <h2 className="text-sm font-extrabold text-slate-950">{block.title ?? "確認リスト"}</h2>
@@ -106,7 +103,7 @@ function LectureBlockView({ block }: { block: LectureBlock }) {
       );
     case "relatedProblems":
       return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <h2 className="text-sm font-extrabold text-slate-950">{block.title ?? "関連演習"}</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {block.items.map((item) =>
@@ -139,69 +136,145 @@ function LectureBlockView({ block }: { block: LectureBlock }) {
 
 function ProblemBlock({ block }: { block: Extract<LectureBlock, { type: "problem" }> }) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-lg font-extrabold text-slate-950">{block.title}</h2>
-        {block.points != null && (
-          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-            {block.points}点
+    <section className="overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-5 py-3">
+        <div>
+          <div className="text-[11px] font-bold text-slate-500">共通テスト形式</div>
+          <h2 className="mt-0.5 text-lg font-extrabold text-slate-950">{block.title}</h2>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          {block.points != null && (
+            <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 ring-1 ring-blue-100">
+              {block.points}点
+            </span>
+          )}
+          <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">
+            誘導確認
           </span>
+        </div>
+      </div>
+      <div className="p-5 sm:p-6">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <MathText className="text-[15px] leading-7 text-slate-800">{block.prompt}</MathText>
+        </div>
+        {block.choices && block.choices.length > 0 && (
+          <div className="mt-4 grid gap-2">
+            {block.choices.map((choice, index) => (
+              <div key={choice} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <div className="flex gap-3 text-sm text-slate-700">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white font-mono text-xs font-bold text-slate-500 ring-1 ring-slate-200">
+                    {index + 1}
+                  </span>
+                  <MathText>{choice}</MathText>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {block.mistakeTags && block.mistakeTags.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {block.mistakeTags.map((tag) => (
+              <span key={tag} className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700">
+                {tag}
+              </span>
+            ))}
+          </div>
         )}
       </div>
-      <MathText className="mt-4 text-sm text-slate-700">{block.prompt}</MathText>
-      {block.choices && block.choices.length > 0 && (
-        <div className="mt-4 grid gap-2">
-          {block.choices.map((choice, index) => (
-            <div key={choice} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-              <div className="flex gap-3 text-sm text-slate-700">
-                <span className="font-mono font-bold text-slate-400">{index + 1}</span>
-                <MathText>{choice}</MathText>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      {block.mistakeTags && block.mistakeTags.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2">
-          {block.mistakeTags.map((tag) => (
-            <span key={tag} className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700">
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
     </section>
   );
 }
 
 function ExplanationTabs({ tabs }: { tabs: ExplanationTab[] }) {
-  const orderedTabs = [...tabs].sort((a, b) => TAB_ORDER.indexOf(a.label) - TAB_ORDER.indexOf(b.label));
+  const orderedTabs = [...tabs]
+    .filter((tab) => tab.body.trim().length > 0)
+    .sort((a, b) => TAB_ORDER.indexOf(a.label) - TAB_ORDER.indexOf(b.label));
   const [active, setActive] = useState<ExplanationTab["label"]>(orderedTabs[0]?.label ?? "ヒント");
   const current = orderedTabs.find((tab) => tab.label === active) ?? orderedTabs[0];
 
   if (!current) return null;
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <h2 className="text-lg font-extrabold text-slate-950">解説</h2>
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-lg font-extrabold text-slate-950">解説</h2>
+        <span className="hidden text-xs font-bold text-slate-400 sm:inline">
+          {current.label}
+        </span>
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:flex sm:overflow-x-auto sm:pb-1">
         {orderedTabs.map((tab) => (
           <button
             key={tab.label}
             type="button"
             onClick={() => setActive(tab.label)}
-            className={`shrink-0 rounded-xl px-3 py-2 text-xs font-bold transition ${
+            className={`min-h-11 shrink-0 rounded-xl px-3 py-2 text-xs font-bold transition ${
               active === tab.label
-                ? "bg-blue-600 text-white"
-                : "border border-slate-200 bg-slate-50 text-slate-600 hover:border-blue-200"
+                ? tab.label === "最速解法"
+                  ? "bg-emerald-600 text-white"
+                  : tab.label === "よくあるミス"
+                    ? "bg-amber-600 text-white"
+                    : "bg-blue-600 text-white"
+                : tab.label === "最速解法"
+                  ? "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300"
+                  : tab.label === "よくあるミス"
+                    ? "border border-amber-200 bg-amber-50 text-amber-700 hover:border-amber-300"
+                    : "border border-slate-200 bg-slate-50 text-slate-600 hover:border-blue-200"
             }`}
           >
             {tab.label}
           </button>
         ))}
       </div>
-      <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <MathText className="text-sm text-slate-700">{current.body}</MathText>
+      <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+        <div className="mb-2 flex items-center gap-2 text-xs font-extrabold text-slate-500">
+          {current.label === "最速解法" && <TimerReset className="h-4 w-4 text-emerald-600" />}
+          {current.label === "よくあるミス" && <AlertTriangle className="h-4 w-4 text-amber-600" />}
+          {current.label}
+        </div>
+        <MathText className="text-[15px] leading-7 text-slate-700">{current.body}</MathText>
+      </div>
+    </section>
+  );
+}
+
+function ExpertThinkingBlock({ block }: { block: Extract<LectureBlock, { type: "expertThinking" }> }) {
+  return (
+    <section className="overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-sm">
+      <div className="border-b border-violet-100 bg-violet-50 px-5 py-4 sm:px-6">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-violet-700" />
+          <h2 className="text-lg font-extrabold text-slate-950">できる人の頭の中</h2>
+        </div>
+        <p className="mt-1 text-xs leading-5 text-violet-900/75">
+          できる生徒が、問題文を読んでから撤退判断までに見ている順番です。
+        </p>
+      </div>
+      <div className="p-5 sm:p-6">
+        <ol className="relative space-y-4">
+          {block.items.map((item, index) => (
+            <li key={item.label} className="relative grid gap-3 sm:grid-cols-[92px_1fr]">
+              {index < block.items.length - 1 && (
+                <span className="absolute left-[18px] top-10 hidden h-[calc(100%+16px)] w-px bg-violet-100 sm:block" />
+              )}
+              <div className="flex items-center gap-3 sm:block">
+                <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-600 font-mono text-sm font-extrabold text-white">
+                  {index + 1}
+                </span>
+                <span className="text-xs font-bold text-violet-700 sm:mt-2 sm:block">
+                  Step {index + 1}
+                </span>
+              </div>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <div className="flex items-center gap-2 text-sm font-extrabold text-slate-950">
+                  {item.label}
+                  {index < block.items.length - 1 && <ArrowRight className="hidden h-3.5 w-3.5 text-slate-300 sm:block" />}
+                </div>
+                <MathText className="mt-1 text-sm leading-6 text-slate-700">{item.body}</MathText>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );

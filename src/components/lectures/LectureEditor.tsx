@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowDown,
   ArrowLeft,
   ArrowUp,
+  ChevronDown,
+  ChevronRight,
   Clipboard,
+  Copy,
   Eye,
   FileDown,
   FileUp,
+  Layers,
   Plus,
   Save,
   Trash2,
@@ -69,6 +73,9 @@ export function LectureEditor({ lectureId }: Props) {
   const [selectedType, setSelectedType] = useState<LectureBlock["type"]>("paragraph");
   const [status, setStatus] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(true);
+  const [collapsedBlocks, setCollapsedBlocks] = useState<Record<string, boolean>>({});
+  const [autosaveLabel, setAutosaveLabel] = useState("未保存");
+  const didMountRef = useRef(false);
 
   useEffect(() => {
     if (!lectureId) {
@@ -83,14 +90,28 @@ export function LectureEditor({ lectureId }: Props) {
 
   const exportJson = useMemo(() => JSON.stringify(lecture, null, 2), [lecture]);
 
+  useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
+    const timeoutId = window.setTimeout(() => {
+      saveLectureDraft(lecture);
+      setAutosaveLabel(`自動保存済み ${new Date().toLocaleTimeString("ja-JP", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`);
+    }, 900);
+    return () => window.clearTimeout(timeoutId);
+  }, [lecture]);
+
   function updateMeta<K extends keyof Lecture>(key: K, value: Lecture[K]) {
     setLecture((current) => ({ ...current, [key]: value }));
   }
 
   function saveDraft() {
-    const drafts = loadDraftLectures();
-    const next = [lecture, ...drafts.filter((item) => item.id !== lecture.id)];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    saveLectureDraft(lecture);
+    setAutosaveLabel("手動保存済み");
     setStatus("localStorageに保存しました");
   }
 
@@ -102,6 +123,11 @@ export function LectureEditor({ lectureId }: Props) {
     } catch {
       setStatus("JSONを下の欄に生成しました");
     }
+  }
+
+  function generateJson() {
+    setJsonText(exportJson);
+    setStatus("JSONを生成しました");
   }
 
   function importJson() {
@@ -132,6 +158,17 @@ export function LectureEditor({ lectureId }: Props) {
     }));
   }
 
+  function duplicateBlock(block: LectureBlock) {
+    const cloned = cloneBlock(block);
+    setLecture((current) => {
+      const index = current.blocks.findIndex((item) => item.id === block.id);
+      if (index < 0) return { ...current, blocks: [...current.blocks, cloned] };
+      const blocks = [...current.blocks];
+      blocks.splice(index + 1, 0, cloned);
+      return { ...current, blocks };
+    });
+  }
+
   function deleteBlock(blockId: string) {
     setLecture((current) => ({
       ...current,
@@ -151,6 +188,17 @@ export function LectureEditor({ lectureId }: Props) {
     });
   }
 
+  function toggleCollapsed(blockId: string) {
+    setCollapsedBlocks((current) => ({ ...current, [blockId]: !current[blockId] }));
+  }
+
+  function addProblemTemplate() {
+    setLecture((current) => ({
+      ...current,
+      blocks: [...current.blocks, ...createProblemExplanationTemplate()],
+    }));
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
@@ -168,6 +216,10 @@ export function LectureEditor({ lectureId }: Props) {
             <p className="mt-2 text-sm text-slate-600">
               保存先はこのブラウザのlocalStorageです。公開反映はJSONをエクスポートしてspecialLectures.tsへ貼り付けます。
             </p>
+            <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+              <Save className="h-3.5 w-3.5" />
+              {autosaveLabel}
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={saveDraft} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-blue-700">
@@ -234,20 +286,42 @@ export function LectureEditor({ lectureId }: Props) {
             </section>
 
             <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <h2 className="text-lg font-extrabold text-slate-950">講義ブロック</h2>
-                <div className="flex flex-wrap gap-2">
-                  <select value={selectedType} onChange={(e) => setSelectedType(e.target.value as LectureBlock["type"])} className="input w-auto">
-                    {BLOCK_TYPES.map((item) => (
-                      <option key={item.type} value={item.type}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </select>
-                  <button type="button" onClick={() => addBlock(selectedType)} className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800">
-                    <Plus className="h-4 w-4" />
-                    ブロック追加
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 className="text-lg font-extrabold text-slate-950">講義ブロック</h2>
+                    <p className="mt-1 text-xs text-slate-500">
+                      よく使う部品を選んで追加します。問題解説セットは授業用の一式をまとめて挿入します。
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addProblemTemplate}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-violet-700"
+                  >
+                    <Layers className="h-4 w-4" />
+                    問題解説テンプレート
                   </button>
+                </div>
+
+                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+                  {BLOCK_TYPES.map((item) => (
+                    <button
+                      key={item.type}
+                      type="button"
+                      onClick={() => {
+                        setSelectedType(item.type);
+                        addBlock(item.type);
+                      }}
+                      className={`rounded-xl border px-3 py-2.5 text-left text-xs font-bold transition ${
+                        selectedType === item.type
+                          ? "border-blue-300 bg-blue-50 text-blue-700"
+                          : "border-slate-200 bg-slate-50 text-slate-600 hover:border-blue-200 hover:bg-white"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -262,6 +336,9 @@ export function LectureEditor({ lectureId }: Props) {
                     onChange={updateBlock}
                     onDelete={deleteBlock}
                     onMove={moveBlock}
+                    onDuplicate={duplicateBlock}
+                    collapsed={Boolean(collapsedBlocks[block.id])}
+                    onToggleCollapsed={toggleCollapsed}
                   />
                 ))}
               </div>
@@ -270,9 +347,13 @@ export function LectureEditor({ lectureId }: Props) {
             <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <h2 className="text-lg font-extrabold text-slate-950">JSONインポート / エクスポート</h2>
               <div className="mt-4 flex flex-wrap gap-2">
-                <button type="button" onClick={copyJson} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-blue-200">
+                <button type="button" onClick={generateJson} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-blue-200">
                   <FileDown className="h-4 w-4" />
-                  JSONエクスポート
+                  JSONを生成
+                </button>
+                <button type="button" onClick={copyJson} className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800">
+                  <Copy className="h-4 w-4" />
+                  JSONをコピー
                 </button>
                 <button type="button" onClick={importJson} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-blue-200">
                   <FileUp className="h-4 w-4" />
@@ -295,7 +376,7 @@ export function LectureEditor({ lectureId }: Props) {
                   <Clipboard className="h-4 w-4 text-blue-600" />
                   プレビュー
                 </div>
-                <div className="max-h-[calc(100vh-140px)] overflow-y-auto rounded-xl bg-slate-50 p-4">
+                <div className="max-h-[calc(100vh-140px)] overflow-y-auto rounded-xl bg-slate-50 p-3 sm:p-4">
                   <LectureRenderer lecture={lecture} />
                 </div>
               </div>
@@ -312,31 +393,54 @@ function BlockEditor({
   index,
   isFirst,
   isLast,
+  collapsed,
   onChange,
   onDelete,
   onMove,
+  onDuplicate,
+  onToggleCollapsed,
 }: {
   block: LectureBlock;
   index: number;
   isFirst: boolean;
   isLast: boolean;
+  collapsed: boolean;
   onChange: (block: LectureBlock) => void;
   onDelete: (blockId: string) => void;
   onMove: (blockId: string, direction: -1 | 1) => void;
+  onDuplicate: (block: LectureBlock) => void;
+  onToggleCollapsed: (blockId: string) => void;
 }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <div className="text-sm font-extrabold text-slate-900">
-          {index + 1}. {BLOCK_TYPES.find((item) => item.type === block.type)?.label ?? block.type}
-        </div>
+        <button
+          type="button"
+          onClick={() => onToggleCollapsed(block.id)}
+          className="flex min-w-0 items-center gap-2 text-left text-sm font-extrabold text-slate-900"
+        >
+          {collapsed ? <ChevronRight className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+          <span className="truncate">
+            {index + 1}. {BLOCK_TYPES.find((item) => item.type === block.type)?.label ?? block.type}
+          </span>
+          <span className="hidden rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-slate-400 ring-1 ring-slate-200 sm:inline">
+            {block.type}
+          </span>
+        </button>
         <div className="flex gap-1.5">
           <IconButton label="上へ" disabled={isFirst} onClick={() => onMove(block.id, -1)} icon={<ArrowUp className="h-4 w-4" />} />
           <IconButton label="下へ" disabled={isLast} onClick={() => onMove(block.id, 1)} icon={<ArrowDown className="h-4 w-4" />} />
+          <IconButton label="複製" onClick={() => onDuplicate(block)} icon={<Copy className="h-4 w-4" />} />
           <IconButton label="削除" onClick={() => onDelete(block.id)} icon={<Trash2 className="h-4 w-4" />} danger />
         </div>
       </div>
-      <BlockFields block={block} onChange={onChange} />
+      {collapsed ? (
+        <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-500">
+          折りたたみ中
+        </div>
+      ) : (
+        <BlockFields block={block} onChange={onChange} />
+      )}
     </div>
   );
 }
@@ -621,6 +725,12 @@ export function loadDraftLectures(): Lecture[] {
   }
 }
 
+function saveLectureDraft(lecture: Lecture) {
+  const drafts = loadDraftLectures();
+  const next = [lecture, ...drafts.filter((item) => item.id !== lecture.id)];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+}
+
 export function deleteDraftLecture(id: string) {
   const drafts = loadDraftLectures().filter((lecture) => lecture.id !== id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(drafts));
@@ -720,6 +830,34 @@ function createBlock(type: LectureBlock["type"]): LectureBlock {
     case "callout":
       return { id, type, tone: "info", title: "ポイント", text: "補足説明を入力してください。" };
   }
+}
+
+function createProblemExplanationTemplate(): LectureBlock[] {
+  return [
+    createBlock("problem"),
+    createBlock("expertThinking"),
+    createBlock("explanationTabs"),
+    {
+      id: blockId("checklist"),
+      type: "checklist",
+      title: "解いた後の確認",
+      items: [
+        "最初に見る条件を間違えていない",
+        "使う公式を1つに絞れた",
+        "本番で撤退するラインを決められた",
+      ],
+    },
+    createBlock("relatedProblems"),
+  ];
+}
+
+function cloneBlock(block: LectureBlock): LectureBlock {
+  const cloned = structuredCloneBlock(block);
+  return { ...cloned, id: blockId(block.type) } as LectureBlock;
+}
+
+function structuredCloneBlock(block: LectureBlock): LectureBlock {
+  return JSON.parse(JSON.stringify(block)) as LectureBlock;
 }
 
 function blockId(type: string): string {
