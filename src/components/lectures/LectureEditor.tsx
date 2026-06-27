@@ -23,6 +23,7 @@ import {
   SPECIAL_LECTURES,
   type ExpertThinkingItem,
   type ExplanationTab,
+  type GeometryLayer,
   type Lecture,
   type LectureBlock,
   type LectureDifficulty,
@@ -55,6 +56,7 @@ const BLOCK_TYPES: { type: LectureBlock["type"]; label: string }[] = [
   { type: "paragraph", label: "本文" },
   { type: "math", label: "数式" },
   { type: "image", label: "画像" },
+  { type: "geometryLayers", label: "図形レイヤー" },
   { type: "problem", label: "問題" },
   { type: "explanationTabs", label: "解説タブ" },
   { type: "expertThinking", label: "できる人の頭の中" },
@@ -492,6 +494,8 @@ function BlockFields({ block, onChange }: { block: LectureBlock; onChange: (bloc
           </Field>
         </div>
       );
+    case "geometryLayers":
+      return <GeometryLayersFields block={block} onChange={onChange} />;
     case "problem":
       return (
         <div className="grid gap-3">
@@ -631,6 +635,186 @@ function BlockFields({ block, onChange }: { block: LectureBlock; onChange: (bloc
         </div>
       );
   }
+}
+
+function GeometryLayersFields({
+  block,
+  onChange,
+}: {
+  block: Extract<LectureBlock, { type: "geometryLayers" }>;
+  onChange: (block: LectureBlock) => void;
+}) {
+  function updateLayer(layerId: string, nextLayer: GeometryLayer) {
+    onChange({
+      ...block,
+      layers: block.layers.map((layer) => (layer.id === layerId ? nextLayer : layer)),
+    });
+  }
+
+  function addLayer() {
+    const nextLayer: GeometryLayer = {
+      id: blockId("geometry-layer"),
+      label: "新しいレイヤー",
+      image: {
+        src: block.baseImage.src,
+        alt: block.baseImage.alt || "図形レイヤー",
+      },
+      explanation: "",
+    };
+    onChange({ ...block, layers: [...block.layers, nextLayer] });
+  }
+
+  function duplicateLayer(layer: GeometryLayer) {
+    const clonedLayer: GeometryLayer = {
+      ...structuredCloneLayer(layer),
+      id: blockId("geometry-layer"),
+      label: `${layer.label} コピー`,
+    };
+    const index = block.layers.findIndex((item) => item.id === layer.id);
+    const layers = [...block.layers];
+    layers.splice(index + 1, 0, clonedLayer);
+    onChange({ ...block, layers });
+  }
+
+  function deleteLayer(layerId: string) {
+    onChange({ ...block, layers: block.layers.filter((layer) => layer.id !== layerId) });
+  }
+
+  function moveLayer(layerId: string, direction: -1 | 1) {
+    const index = block.layers.findIndex((layer) => layer.id === layerId);
+    const nextIndex = index + direction;
+    if (index < 0 || nextIndex < 0 || nextIndex >= block.layers.length) return;
+    const layers = [...block.layers];
+    const [target] = layers.splice(index, 1);
+    layers.splice(nextIndex, 0, target);
+    onChange({ ...block, layers });
+  }
+
+  return (
+    <div className="grid gap-4">
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Field label="タイトル">
+          <input
+            value={block.title ?? ""}
+            onChange={(e) => onChange({ ...block, title: e.target.value })}
+            className="input"
+          />
+        </Field>
+        <Field label="説明">
+          <input
+            value={block.description ?? ""}
+            onChange={(e) => onChange({ ...block, description: e.target.value })}
+            className="input"
+          />
+        </Field>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <div className="mb-3 text-xs font-extrabold text-slate-600">基本図</div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Field label="baseImage src">
+            <input
+              value={block.baseImage.src}
+              onChange={(e) =>
+                onChange({
+                  ...block,
+                  baseImage: { ...block.baseImage, src: e.target.value },
+                })
+              }
+              className="input"
+            />
+          </Field>
+          <Field label="baseImage alt">
+            <input
+              value={block.baseImage.alt}
+              onChange={(e) =>
+                onChange({
+                  ...block,
+                  baseImage: { ...block.baseImage, alt: e.target.value },
+                })
+              }
+              className="input"
+            />
+          </Field>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="text-xs font-extrabold text-slate-600">レイヤー</div>
+          <button
+            type="button"
+            onClick={addLayer}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 hover:bg-blue-100"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            レイヤー追加
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {block.layers.map((layer, index) => (
+            <div key={layer.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div className="text-xs font-extrabold text-slate-700">
+                  {index + 1}. {layer.label || "無題のレイヤー"}
+                </div>
+                <div className="flex gap-1.5">
+                  <IconButton label="レイヤーを上へ" disabled={index === 0} onClick={() => moveLayer(layer.id, -1)} icon={<ArrowUp className="h-4 w-4" />} />
+                  <IconButton label="レイヤーを下へ" disabled={index === block.layers.length - 1} onClick={() => moveLayer(layer.id, 1)} icon={<ArrowDown className="h-4 w-4" />} />
+                  <IconButton label="レイヤー複製" onClick={() => duplicateLayer(layer)} icon={<Copy className="h-4 w-4" />} />
+                  <IconButton label="レイヤー削除" onClick={() => deleteLayer(layer.id)} icon={<Trash2 className="h-4 w-4" />} danger />
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field label="label">
+                  <input
+                    value={layer.label}
+                    onChange={(e) => updateLayer(layer.id, { ...layer, label: e.target.value })}
+                    className="input"
+                  />
+                </Field>
+                <Field label="image alt">
+                  <input
+                    value={layer.image.alt}
+                    onChange={(e) =>
+                      updateLayer(layer.id, {
+                        ...layer,
+                        image: { ...layer.image, alt: e.target.value },
+                      })
+                    }
+                    className="input"
+                  />
+                </Field>
+              </div>
+              <div className="mt-3 grid gap-3">
+                <Field label="image src">
+                  <input
+                    value={layer.image.src}
+                    onChange={(e) =>
+                      updateLayer(layer.id, {
+                        ...layer,
+                        image: { ...layer.image, src: e.target.value },
+                      })
+                    }
+                    className="input"
+                  />
+                </Field>
+                <Field label="explanation">
+                  <textarea
+                    value={layer.explanation ?? ""}
+                    onChange={(e) => updateLayer(layer.id, { ...layer, explanation: e.target.value })}
+                    className="input min-h-20"
+                  />
+                </Field>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function AdminLectureList() {
@@ -808,6 +992,37 @@ function createBlock(type: LectureBlock["type"]): LectureBlock {
       return { id, type, expression: "a^2+b^2=c^2", caption: "数式の説明" };
     case "image":
       return { id, type, src: "/window.svg", alt: "講義画像", caption: "画像の説明" };
+    case "geometryLayers":
+      return {
+        id,
+        type,
+        title: "図形レイヤー",
+        description: "同じ図形を、条件・角・補助線・公式・解法ルートに分けて確認します。",
+        baseImage: {
+          src: "/window.svg",
+          alt: "基本図",
+        },
+        layers: [
+          {
+            id: blockId("geometry-layer"),
+            label: "条件だけ",
+            image: {
+              src: "/window.svg",
+              alt: "条件だけを示した図",
+            },
+            explanation: "最初に拾う条件だけを表示します。",
+          },
+          {
+            id: blockId("geometry-layer"),
+            label: "解法ルート",
+            image: {
+              src: "/window.svg",
+              alt: "解法ルートを示した図",
+            },
+            explanation: "どの順に求めるかを確認します。",
+          },
+        ],
+      };
     case "problem":
       return {
         id,
@@ -858,6 +1073,10 @@ function cloneBlock(block: LectureBlock): LectureBlock {
 
 function structuredCloneBlock(block: LectureBlock): LectureBlock {
   return JSON.parse(JSON.stringify(block)) as LectureBlock;
+}
+
+function structuredCloneLayer(layer: GeometryLayer): GeometryLayer {
+  return JSON.parse(JSON.stringify(layer)) as GeometryLayer;
 }
 
 function blockId(type: string): string {

@@ -5,7 +5,7 @@ import { getNextReviewDate } from "@/lib/review-schedule";
 // POST /api/review/create
 // 復習アイテムを作成または更新（upsert）する。
 // Body:
-//   itemType: "common-test-drill" | "math-problem" | "english-problem"
+//   itemType: "common-test-drill" | "common-test-lecture" | "math-problem" | "english-problem"
 //   itemId: string
 //   subjectId?: string
 //   sectionId?: string
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       return Response.json({ ok: false, error: "missing required fields" }, { status: 400 });
     }
 
-    const VALID_TYPES = ["common-test-drill", "math-problem", "english-problem"];
+    const VALID_TYPES = ["common-test-drill", "common-test-lecture", "math-problem", "english-problem"];
     if (!VALID_TYPES.includes(itemType)) {
       return Response.json({ ok: false, error: "invalid itemType" }, { status: 400 });
     }

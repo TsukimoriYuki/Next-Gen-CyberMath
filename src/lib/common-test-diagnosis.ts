@@ -1,0 +1,428 @@
+import {
+  COMMON_TEST_MISTAKE_TAGS,
+  getCommonTestAnswerMistakeTagIds,
+  getCommonTestMistakeTagLabel,
+  getCommonTestRiskLevel,
+  type CommonTestDrillHistoryItem,
+  type CommonTestMistakeTagId,
+  type CommonTestRiskLevel,
+} from "@/lib/common-test-history";
+
+export interface CommonTestReviewQueueLike {
+  status: string;
+  nextReviewAt: string;
+  reasonFlags: string[];
+}
+
+export interface CommonTestMistakeStrategy {
+  tagId: CommonTestMistakeTagId;
+  title: string;
+  action: string;
+  lectureHref?: string;
+  lectureLabel?: string;
+}
+
+export interface CommonTestPrescription {
+  title: string;
+  reason: string;
+  priority: "高" | "中" | "低";
+  estimatedMinutes: number;
+  ctaLabel: string;
+  href: string;
+  lectureStatus?: "available" | "coming-soon";
+}
+
+export interface CommonTestSectionMistakeTrend {
+  key: string;
+  subjectId: string;
+  sectionId: string;
+  subjectLabel: string;
+  sectionLabel: string;
+  tagId: CommonTestMistakeTagId;
+  count: number;
+}
+
+export interface CommonTestLearningDiagnosis {
+  riskCounts: Partial<Record<CommonTestRiskLevel, number>>;
+  tagCounts: Partial<Record<CommonTestMistakeTagId, number>>;
+  topMistake: { tagId: CommonTestMistakeTagId; count: number } | null;
+  increasingMistake: { tagId: CommonTestMistakeTagId; recent: number; previous: number } | null;
+  sectionTendencies: CommonTestSectionMistakeTrend[];
+  confidentWrongCount: number;
+  unsureCorrectCount: number;
+  dueReviewCount: number | null;
+  prescription: CommonTestPrescription;
+  strategies: CommonTestMistakeStrategy[];
+}
+
+const SUBJECT_LABELS: Record<string, string> = {
+  "math-1a": "数学IA",
+  "math-2bc": "数学IIB(C)",
+  "english-reading": "英語R",
+};
+
+const RISK_PRIORITY: CommonTestRiskLevel[] = ["S", "A", "B", "C"];
+
+export const COMMON_TEST_MISTAKE_STRATEGIES: Record<
+  CommonTestMistakeTagId,
+  CommonTestMistakeStrategy
+> = {
+  calculation: {
+    tagId: "calculation",
+    title: "計算ミス",
+    action: "式変形を1行ずつ残し、最後に符号と分母だけ確認する。",
+  },
+  "formula-selection": {
+    tagId: "formula-selection",
+    title: "公式選択ミス",
+    action: "使える公式候補を先に並べ、与えられた辺・角・面積で絞る。",
+    lectureHref: "/common-test/lectures/geometry-measurement-intensive",
+    lectureLabel: "共通テスト 図形と計量 徹底講座",
+  },
+  "reading-misread": {
+    tagId: "reading-misread",
+    title: "問題文の読み違い",
+    action: "問われている値、条件、単位を分けて読み直す。",
+  },
+  "condition-missed": {
+    tagId: "condition-missed",
+    title: "条件見落とし",
+    action: "問題文に下線を引くつもりで条件を抽出する。",
+    lectureHref: "/common-test/lectures/geometry-measurement-intensive",
+    lectureLabel: "共通テスト 図形と計量 徹底講座",
+  },
+  "case-split": {
+    tagId: "case-split",
+    title: "場合分け不足",
+    action: "境界値を先に出し、等号が入る場所を確認する。",
+  },
+  "figure-reading": {
+    tagId: "figure-reading",
+    title: "図の見落とし",
+    action: "等しい角・同じ辺・円周角を探してから計算に入る。",
+    lectureHref: "/common-test/lectures/geometry-measurement-intensive",
+    lectureLabel: "共通テスト 図形と計量 徹底講座",
+  },
+  "time-up": {
+    tagId: "time-up",
+    title: "時間切れ",
+    action: "3分で方針が立たなければ一旦飛ばす練習をする。",
+  },
+  "confident-wrong": {
+    tagId: "confident-wrong",
+    title: "自信ありで間違えた",
+    action: "解説を読む前に、なぜ正しいと思ったかを確認する。",
+  },
+  "unsure-correct": {
+    tagId: "unsure-correct",
+    title: "自信なしで正解した",
+    action: "正解していても根拠が弱い問題を軽めに再演習する。",
+  },
+};
+
+export function getRiskLevelFromReviewReasonFlags(
+  flags: readonly string[]
+): CommonTestRiskLevel | null {
+  for (const level of RISK_PRIORITY) {
+    if (flags.includes(`risk:${level}`)) return level;
+  }
+  if (flags.includes("dangerous-misconception")) return "S";
+  return null;
+}
+
+export function getMistakeTagIdsFromReviewReasonFlags(
+  flags: readonly string[]
+): CommonTestMistakeTagId[] {
+  const knownIds = new Set(COMMON_TEST_MISTAKE_TAGS.map((tag) => tag.id));
+  return flags
+    .filter((flag) => flag.startsWith("mistake:"))
+    .map((flag) => flag.replace("mistake:", ""))
+    .filter((tagId): tagId is CommonTestMistakeTagId =>
+      knownIds.has(tagId as CommonTestMistakeTagId)
+    );
+}
+
+export function compareReviewItemsByRisk(
+  a: CommonTestReviewQueueLike,
+  b: CommonTestReviewQueueLike
+): number {
+  const aRisk = getRiskLevelFromReviewReasonFlags(a.reasonFlags);
+  const bRisk = getRiskLevelFromReviewReasonFlags(b.reasonFlags);
+  const aIndex = aRisk ? RISK_PRIORITY.indexOf(aRisk) : RISK_PRIORITY.length;
+  const bIndex = bRisk ? RISK_PRIORITY.indexOf(bRisk) : RISK_PRIORITY.length;
+  if (aIndex !== bIndex) return aIndex - bIndex;
+  return new Date(a.nextReviewAt).getTime() - new Date(b.nextReviewAt).getTime();
+}
+
+export function buildCommonTestLearningDiagnosis({
+  history,
+  reviewItems,
+  now = new Date(),
+}: {
+  history: CommonTestDrillHistoryItem[];
+  reviewItems?: CommonTestReviewQueueLike[] | null;
+  now?: Date;
+}): CommonTestLearningDiagnosis {
+  const tagCounts: Partial<Record<CommonTestMistakeTagId, number>> = {};
+  const riskCounts: Partial<Record<CommonTestRiskLevel, number>> = {};
+  const sectionCounts = new Map<string, Partial<Record<CommonTestMistakeTagId, number>>>();
+  const sectionMeta = new Map<string, { subjectId: string; sectionId: string; subjectLabel: string; sectionLabel: string }>();
+  let confidentWrongCount = 0;
+  let unsureCorrectCount = 0;
+
+  const sortedHistory = [...history].sort(
+    (a, b) => new Date(b.finishedAt).getTime() - new Date(a.finishedAt).getTime()
+  );
+  const recentHistory = sortedHistory.slice(0, Math.max(1, Math.ceil(sortedHistory.length / 2)));
+  const previousHistory = sortedHistory.slice(recentHistory.length);
+  const recentCounts = countMistakeTags(recentHistory);
+  const previousCounts = countMistakeTags(previousHistory);
+
+  for (const item of sortedHistory) {
+    const sectionKey =
+      item.sourceType === "lecture"
+        ? `lecture:${item.lectureSlug ?? item.sectionId}`
+        : `${item.subjectId}:${item.sectionId}`;
+    sectionMeta.set(sectionKey, {
+      subjectId: item.subjectId,
+      sectionId: item.sectionId,
+      subjectLabel: SUBJECT_LABELS[item.subjectId] ?? item.subjectId,
+      sectionLabel:
+        item.sourceType === "lecture"
+          ? `特別講義：${item.lectureTitle ?? item.problemTitle ?? "講義問題"}`
+          : `${item.sectionId.replace("section-", "第")}問`,
+    });
+    const currentSectionCounts = sectionCounts.get(sectionKey) ?? {};
+    for (const answer of item.answers) {
+      const tagIds = getCommonTestAnswerMistakeTagIds(answer);
+      const riskLevel = getCommonTestRiskLevel(tagIds);
+
+      if (riskLevel) riskCounts[riskLevel] = (riskCounts[riskLevel] ?? 0) + 1;
+      if (tagIds.includes("confident-wrong")) confidentWrongCount += 1;
+      if (tagIds.includes("unsure-correct")) unsureCorrectCount += 1;
+
+      for (const tagId of tagIds) {
+        tagCounts[tagId] = (tagCounts[tagId] ?? 0) + 1;
+        currentSectionCounts[tagId] = (currentSectionCounts[tagId] ?? 0) + 1;
+      }
+    }
+    sectionCounts.set(sectionKey, currentSectionCounts);
+  }
+
+  const topMistake = topTagEntry(tagCounts);
+  const increasingMistake = getIncreasingMistake(recentCounts, previousCounts);
+  const dueReviewCount =
+    reviewItems == null
+      ? null
+      : reviewItems.filter(
+          (item) => item.status === "ACTIVE" && new Date(item.nextReviewAt) <= now
+        ).length;
+  const sectionTendencies = buildSectionTendencies(sectionCounts, sectionMeta);
+  const prescription = buildPrescription({
+    topMistake,
+    increasingMistake,
+    riskCounts,
+    dueReviewCount,
+    confidentWrongCount,
+    unsureCorrectCount,
+  });
+  const strategies = buildStrategies(topMistake, increasingMistake, tagCounts);
+
+  return {
+    riskCounts,
+    tagCounts,
+    topMistake,
+    increasingMistake,
+    sectionTendencies,
+    confidentWrongCount,
+    unsureCorrectCount,
+    dueReviewCount,
+    prescription,
+    strategies,
+  };
+}
+
+function countMistakeTags(
+  history: CommonTestDrillHistoryItem[]
+): Partial<Record<CommonTestMistakeTagId, number>> {
+  const counts: Partial<Record<CommonTestMistakeTagId, number>> = {};
+  for (const item of history) {
+    for (const answer of item.answers) {
+      for (const tagId of getCommonTestAnswerMistakeTagIds(answer)) {
+        counts[tagId] = (counts[tagId] ?? 0) + 1;
+      }
+    }
+  }
+  return counts;
+}
+
+function topTagEntry(counts: Partial<Record<CommonTestMistakeTagId, number>>) {
+  return (
+    COMMON_TEST_MISTAKE_TAGS.map((tag) => ({
+      tagId: tag.id,
+      count: counts[tag.id] ?? 0,
+    }))
+      .filter((entry) => entry.count > 0)
+      .sort((a, b) => b.count - a.count)[0] ?? null
+  );
+}
+
+function getIncreasingMistake(
+  recentCounts: Partial<Record<CommonTestMistakeTagId, number>>,
+  previousCounts: Partial<Record<CommonTestMistakeTagId, number>>
+) {
+  return (
+    COMMON_TEST_MISTAKE_TAGS.map((tag) => {
+      const recent = recentCounts[tag.id] ?? 0;
+      const previous = previousCounts[tag.id] ?? 0;
+      return { tagId: tag.id, recent, previous, delta: recent - previous };
+    })
+      .filter((entry) => entry.recent > 0 && entry.delta > 0)
+      .sort((a, b) => b.delta - a.delta || b.recent - a.recent)
+      .map(({ tagId, recent, previous }) => ({ tagId, recent, previous }))[0] ?? null
+  );
+}
+
+function buildSectionTendencies(
+  sectionCounts: Map<string, Partial<Record<CommonTestMistakeTagId, number>>>,
+  sectionMeta: Map<string, { subjectId: string; sectionId: string; subjectLabel: string; sectionLabel: string }>
+): CommonTestSectionMistakeTrend[] {
+  return Array.from(sectionCounts.entries())
+    .map(([key, counts]) => {
+      const top = topTagEntry(counts);
+      if (!top) return null;
+      const [subjectId = "", sectionId = ""] = key.split(":");
+      const meta = sectionMeta.get(key);
+      return {
+        key,
+        subjectId: meta?.subjectId ?? subjectId,
+        sectionId: meta?.sectionId ?? sectionId,
+        subjectLabel: meta?.subjectLabel ?? SUBJECT_LABELS[subjectId] ?? subjectId,
+        sectionLabel: meta?.sectionLabel ?? `${sectionId.replace("section-", "第")}問`,
+        tagId: top.tagId,
+        count: top.count,
+      };
+    })
+    .filter((entry): entry is CommonTestSectionMistakeTrend => Boolean(entry))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 4);
+}
+
+function buildPrescription({
+  topMistake,
+  increasingMistake,
+  riskCounts,
+  dueReviewCount,
+  confidentWrongCount,
+  unsureCorrectCount,
+}: {
+  topMistake: { tagId: CommonTestMistakeTagId; count: number } | null;
+  increasingMistake: { tagId: CommonTestMistakeTagId; recent: number; previous: number } | null;
+  riskCounts: Partial<Record<CommonTestRiskLevel, number>>;
+  dueReviewCount: number | null;
+  confidentWrongCount: number;
+  unsureCorrectCount: number;
+}): CommonTestPrescription {
+  if ((dueReviewCount ?? 0) > 0 && (riskCounts.S ?? 0) > 0) {
+    return {
+      title: `危険度Sの復習を${Math.min(dueReviewCount ?? 2, 3)}問解く`,
+      reason: "自信ありで間違えた問題は、理解しているつもりの危険ミスです。",
+      priority: "高",
+      estimatedMinutes: Math.min(10 + (dueReviewCount ?? 0), 20),
+      ctaLabel: "復習キューを開く",
+      href: "/common-test/review",
+    };
+  }
+
+  const focusTag = increasingMistake?.tagId ?? topMistake?.tagId;
+  if (focusTag && ["formula-selection", "condition-missed", "figure-reading"].includes(focusTag)) {
+    return {
+      title: "図形と計量の「できる人の頭の中」を確認",
+      reason: `${getCommonTestMistakeTagLabel(focusTag)}が目立っています。まず何を見るかを復習しましょう。`,
+      priority: "高",
+      estimatedMinutes: 15,
+      ctaLabel: "特別講義を見る",
+      href: "/common-test/lectures/geometry-measurement-intensive",
+      lectureStatus: "available",
+    };
+  }
+
+  if (focusTag === "time-up") {
+    return {
+      title: "短時間ドリルで方針決定を練習",
+      reason: "時間切れが目立つ日は、本番演習より短時間ドリルを優先します。",
+      priority: "中",
+      estimatedMinutes: 12,
+      ctaLabel: "第1問を練習する",
+      href: "/common-test/math-1a/section-1",
+    };
+  }
+
+  if (focusTag === "case-split") {
+    return {
+      title: "場合分けの境界条件を復習",
+      reason: "二次関数・確率・図形では、境界値を先に出すと失点を減らせます。",
+      priority: "中",
+      estimatedMinutes: 15,
+      ctaLabel: "数学IAを開く",
+      href: "/common-test/math-1a",
+      lectureStatus: "coming-soon",
+    };
+  }
+
+  if (unsureCorrectCount >= Math.max(2, confidentWrongCount)) {
+    return {
+      title: "自信なしで正解した問題を軽く再演習",
+      reason: "正解しているが定着不足です。根拠を言える問題に変えましょう。",
+      priority: "中",
+      estimatedMinutes: 10,
+      ctaLabel: "履歴を確認する",
+      href: "/common-test/history",
+    };
+  }
+
+  if ((dueReviewCount ?? 0) > 0) {
+    return {
+      title: `今日の復習${dueReviewCount}問を先に解く`,
+      reason: "復習期限が来ています。間隔反復を先に片付けると定着が安定します。",
+      priority: "中",
+      estimatedMinutes: Math.min(10 + (dueReviewCount ?? 0), 20),
+      ctaLabel: "復習キューを開く",
+      href: "/common-test/review",
+    };
+  }
+
+  return {
+    title: "数学IA 第1問を15分で診断",
+    reason: "まだ診断材料が少ないため、図形と計量・命題・誘導読解をまとめて測ります。",
+    priority: "低",
+    estimatedMinutes: 15,
+    ctaLabel: "15分演習を始める",
+    href: "/common-test/math-1a/section-1",
+  };
+}
+
+function buildStrategies(
+  topMistake: { tagId: CommonTestMistakeTagId; count: number } | null,
+  increasingMistake: { tagId: CommonTestMistakeTagId; recent: number; previous: number } | null,
+  tagCounts: Partial<Record<CommonTestMistakeTagId, number>>
+): CommonTestMistakeStrategy[] {
+  const selected = new Set<CommonTestMistakeTagId>();
+  if (increasingMistake) selected.add(increasingMistake.tagId);
+  if (topMistake) selected.add(topMistake.tagId);
+
+  for (const tag of COMMON_TEST_MISTAKE_TAGS) {
+    if ((tagCounts[tag.id] ?? 0) > 0) selected.add(tag.id);
+    if (selected.size >= 4) break;
+  }
+
+  if (selected.size === 0) {
+    selected.add("condition-missed");
+    selected.add("formula-selection");
+    selected.add("time-up");
+  }
+
+  return Array.from(selected)
+    .slice(0, 4)
+    .map((tagId) => COMMON_TEST_MISTAKE_STRATEGIES[tagId]);
+}

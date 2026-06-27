@@ -8,6 +8,12 @@ import {
   LogIn,
   PlusCircle,
 } from "lucide-react";
+import {
+  getCommonTestMistakeTagLabel,
+  getCommonTestRiskMeta,
+  type CommonTestMistakeTagId,
+  type CommonTestRiskLevel,
+} from "@/lib/common-test-history";
 
 export interface ReviewCandidate {
   questionId: string;
@@ -16,6 +22,8 @@ export interface ReviewCandidate {
   sectionId: string;
   reasonFlags: string[];
   skillTags: string[];
+  mistakeTagIds?: CommonTestMistakeTagId[];
+  riskLevel?: CommonTestRiskLevel;
   quadrantLabel: string;
   quadrantColor: string;
 }
@@ -158,6 +166,7 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
           const isAdded = state.status === "added";
           const isLoading = state.status === "loading";
           const isError = state.status === "error";
+          const riskMeta = getCommonTestRiskMeta(candidate.riskLevel);
 
           return (
             <div
@@ -186,6 +195,21 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
                   >
                     {candidate.quadrantLabel}
                   </span>
+                  {riskMeta && (
+                    <span
+                      className={`rounded-full border px-2 py-0.5 text-xs font-bold ${riskMeta.className}`}
+                    >
+                      {riskMeta.label}
+                    </span>
+                  )}
+                  {candidate.mistakeTagIds?.slice(0, 3).map((tagId) => (
+                    <span
+                      key={tagId}
+                      className="rounded-full bg-white px-2 py-0.5 text-xs text-rose-600 ring-1 ring-rose-100"
+                    >
+                      {getCommonTestMistakeTagLabel(tagId)}
+                    </span>
+                  ))}
                   {candidate.skillTags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}

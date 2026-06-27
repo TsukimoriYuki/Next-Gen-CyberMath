@@ -7,10 +7,13 @@ import type { CommonTestTheme } from "@/data/common-test";
 import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import {
   buildHistoryItem,
+  getCommonTestRiskLevel,
+  normalizeCommonTestMistakeTags,
   saveCommonTestDrillHistory,
   type CommonTestAnswerRecord,
   type CommonTestConfidence,
   type CommonTestDrillHistoryItem,
+  type CommonTestMistakeTagId,
 } from "@/lib/common-test-history";
 import {
   getCommonTestAnswerFormat,
@@ -101,10 +104,18 @@ export function CommonTestDrillRunner({
   );
 
   const handleNext = useCallback(
-    (confidence: CommonTestConfidence) => {
+    (confidence: CommonTestConfidence, mistakeTagIds: CommonTestMistakeTagId[]) => {
       if (!pendingAnswer) return;
 
       const currentQ = questions[currentIdx];
+      const isOverTime = pendingAnswer.timeSpentSec > currentQ.estimatedMinutes * 60;
+      const normalizedMistakeTagIds = normalizeCommonTestMistakeTags({
+        tagIds: mistakeTagIds,
+        isCorrect: pendingAnswer.isCorrect,
+        confidence,
+        isOverTime,
+      });
+      const riskLevel = getCommonTestRiskLevel(normalizedMistakeTagIds);
       const newEntry: AnswerEntry = {
         questionId: currentQ.id,
         selectedAnswer: pendingAnswer.answer,
@@ -112,6 +123,8 @@ export function CommonTestDrillRunner({
         timeSpentSec: pendingAnswer.timeSpentSec,
         confidence,
         skillTags: currentQ.skillTags,
+        mistakeTagIds: normalizedMistakeTagIds,
+        ...(riskLevel ? { riskLevel } : {}),
       };
       const updatedAnswers = [...completedAnswers, newEntry];
       setCompletedAnswers(updatedAnswers);
@@ -130,6 +143,8 @@ export function CommonTestDrillRunner({
             estimatedMinutes: q?.estimatedMinutes ?? 0,
             confidence: entry.confidence,
             skillTags: entry.skillTags,
+            mistakeTagIds: entry.mistakeTagIds,
+            ...(entry.riskLevel ? { riskLevel: entry.riskLevel } : {}),
           };
         });
 

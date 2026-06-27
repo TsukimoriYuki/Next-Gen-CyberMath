@@ -12,7 +12,14 @@ import {
 } from "lucide-react";
 import type { CommonTestTheme } from "@/data/common-test";
 import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
-import type { CommonTestConfidence } from "@/lib/common-test-history";
+import {
+  COMMON_TEST_MISTAKE_TAGS,
+  getCommonTestRiskLevel,
+  getCommonTestRiskMeta,
+  normalizeCommonTestMistakeTags,
+  type CommonTestConfidence,
+  type CommonTestMistakeTagId,
+} from "@/lib/common-test-history";
 import {
   getCommonTestAnswerFormat,
   isCommonTestAnswerCorrect,
@@ -25,7 +32,10 @@ interface Props {
   selectedAnswer: string | null;
   isRevealed: boolean;
   onSelect: (answer: string) => void;
-  onNext: (confidence: CommonTestConfidence) => void;
+  onNext: (
+    confidence: CommonTestConfidence,
+    mistakeTagIds: CommonTestMistakeTagId[]
+  ) => void;
   isLastQuestion: boolean;
   theme: CommonTestTheme;
 }
@@ -44,13 +54,22 @@ export function CommonTestAnswerPanel({
   const [draftAnswer, setDraftAnswer] = useState(selectedAnswer ?? "");
   const [selectedConfidence, setSelectedConfidence] =
     useState<CommonTestConfidence | null>(null);
+  const [selectedMistakeTagIds, setSelectedMistakeTagIds] = useState<
+    CommonTestMistakeTagId[]
+  >([]);
+  const isCurrentCorrect =
+    selectedAnswer !== null &&
+    isCommonTestAnswerCorrect(selectedAnswer, question.correctAnswer, answerFormat);
 
   // isRevealed が閉じた（やり直し等）瞬間に確信度の選択をリセットする。
   // レンダー中に直接 setState することで、コミット後の余分な再レンダーを避ける。
   const [prevIsRevealed, setPrevIsRevealed] = useState(isRevealed);
   if (isRevealed !== prevIsRevealed) {
     setPrevIsRevealed(isRevealed);
-    if (!isRevealed) setSelectedConfidence(null);
+    if (!isRevealed) {
+      setSelectedConfidence(null);
+      setSelectedMistakeTagIds([]);
+    }
   }
 
   // question または selectedAnswer が変わったら draftAnswer を同期する。
@@ -59,6 +78,7 @@ export function CommonTestAnswerPanel({
   if (questionKey !== prevQuestionKey) {
     setPrevQuestionKey(questionKey);
     setDraftAnswer(selectedAnswer ?? "");
+    setSelectedMistakeTagIds([]);
   }
 
   return (
@@ -123,9 +143,15 @@ export function CommonTestAnswerPanel({
             selected={selectedConfidence}
             onSelect={setSelectedConfidence}
           />
+          <MistakeTagPicker
+            isCorrect={isCurrentCorrect}
+            confidence={selectedConfidence}
+            selected={selectedMistakeTagIds}
+            onChange={setSelectedMistakeTagIds}
+          />
           <button
             type="button"
-            onClick={() => onNext(selectedConfidence ?? "unsure")}
+            onClick={() => onNext(selectedConfidence ?? "unsure", selectedMistakeTagIds)}
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-700 active:scale-[0.99] sm:w-auto"
           >
             {isLastQuestion ? "結果を見る" : "次の問題へ"}
@@ -221,6 +247,81 @@ function ConfidencePicker({
           );
         })}
       </div>
+    </section>
+  );
+}
+
+function MistakeTagPicker({
+  isCorrect,
+  confidence,
+  selected,
+  onChange,
+}: {
+  isCorrect: boolean;
+  confidence: CommonTestConfidence | null;
+  selected: CommonTestMistakeTagId[];
+  onChange: (next: CommonTestMistakeTagId[]) => void;
+}) {
+  const availableTags = COMMON_TEST_MISTAKE_TAGS.filter((tag) =>
+    isCorrect ? tag.appliesTo === "correct" : tag.appliesTo === "wrong"
+  );
+  const previewTags = normalizeCommonTestMistakeTags({
+    tagIds: selected,
+    isCorrect,
+    confidence: confidence ?? "unsure",
+  });
+  const riskMeta = getCommonTestRiskMeta(getCommonTestRiskLevel(previewTags));
+
+  function toggle(tagId: CommonTestMistakeTagId) {
+    onChange(
+      selected.includes(tagId)
+        ? selected.filter((id) => id !== tagId)
+        : [...selected, tagId]
+    );
+  }
+
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <div className="text-sm font-extrabold text-slate-950">今回の原因を記録</div>
+          <p className="mt-1 text-xs leading-5 text-slate-500">
+            復習キューと履歴で、なぜ失点したかを見返せます。
+          </p>
+        </div>
+        {riskMeta && (
+          <div
+            className={`inline-flex shrink-0 items-center rounded-full border px-3 py-1 text-xs font-bold ${riskMeta.className}`}
+          >
+            {riskMeta.label}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        {availableTags.map((tag) => {
+          const active = selected.includes(tag.id);
+          const tagRiskMeta = getCommonTestRiskMeta(tag.riskLevel);
+          return (
+            <button
+              key={tag.id}
+              type="button"
+              onClick={() => toggle(tag.id)}
+              className={`rounded-full border px-3 py-2 text-xs font-bold transition ${
+                active
+                  ? (tagRiskMeta?.className ?? "border-blue-200 bg-blue-50 text-blue-700")
+                  : "border-slate-200 bg-slate-50 text-slate-600 hover:border-blue-200 hover:bg-white"
+              }`}
+            >
+              {tag.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {riskMeta && (
+        <p className="mt-3 text-xs leading-5 text-slate-500">{riskMeta.description}</p>
+      )}
     </section>
   );
 }

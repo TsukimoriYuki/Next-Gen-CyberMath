@@ -1,4 +1,8 @@
-import type { CommonTestConfidence } from "@/lib/common-test-history";
+import type {
+  CommonTestConfidence,
+  CommonTestMistakeTagId,
+  CommonTestRiskLevel,
+} from "@/lib/common-test-history";
 
 export interface AnswerEntry {
   questionId: string;
@@ -7,4 +11,6 @@ export interface AnswerEntry {
   timeSpentSec: number;
   confidence: CommonTestConfidence;
   skillTags: string[];
+  mistakeTagIds?: CommonTestMistakeTagId[];
+  riskLevel?: CommonTestRiskLevel;
 }

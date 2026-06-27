@@ -2,12 +2,21 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { buildCommonTestLearningDiagnosis } from "@/lib/common-test-diagnosis";
 import {
   getCommonTestDrillHistory,
   clearCommonTestDrillHistory,
+  COMMON_TEST_MISTAKE_TAGS,
+  getCommonTestAnswerMistakeTagIds,
+  getCommonTestMistakeTagLabel,
+  getCommonTestRiskLevel,
+  getCommonTestRiskMeta,
   type CommonTestDrillHistoryItem,
+  type CommonTestMistakeTagId,
+  type CommonTestRiskLevel,
 } from "@/lib/common-test-history";
-import { Clock, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import { AlertTriangle, Clock, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import { CommonTestMistakeStrategyCards } from "./CommonTestMistakeStrategyCards";
 
 const SUBJECT_LABELS: Record<string, { label: string; color: string; glowRgb: string }> = {
   "math-1a": { label: "数学IA", color: "#2563eb", glowRgb: "37,99,235" },
@@ -47,6 +56,109 @@ function getGradeLetter(pct: number): string {
   if (pct >= 75) return "A";
   if (pct >= 60) return "B";
   return "C";
+}
+
+interface MistakeSummary {
+  totalTaggedAnswers: number;
+  topMistake: { tagId: CommonTestMistakeTagId; count: number } | null;
+  tagCounts: Partial<Record<CommonTestMistakeTagId, number>>;
+  riskCounts: Partial<Record<CommonTestRiskLevel, number>>;
+  confidentWrongQuestionIds: string[];
+  sectionTendencies: {
+    key: string;
+    subjectLabel: string;
+    sectionLabel: string;
+    tagId: CommonTestMistakeTagId;
+    count: number;
+  }[];
+}
+
+function computeMistakeSummary(history: CommonTestDrillHistoryItem[]): MistakeSummary {
+  const tagCounts: Partial<Record<CommonTestMistakeTagId, number>> = {};
+  const riskCounts: Partial<Record<CommonTestRiskLevel, number>> = {};
+  const confidentWrongQuestionIds: string[] = [];
+  const sectionTagCounts = new Map<string, Partial<Record<CommonTestMistakeTagId, number>>>();
+  const sectionMeta = new Map<string, { subjectLabel: string; sectionLabel: string }>();
+
+  for (const item of history) {
+    const sectionKey =
+      item.sourceType === "lecture"
+        ? `lecture:${item.lectureSlug ?? item.sectionId}`
+        : `${item.subjectId}:${item.sectionId}`;
+    const subject = SUBJECT_LABELS[item.subjectId] ?? {
+      label: item.subjectId,
+      color: "#64748b",
+      glowRgb: "100,116,139",
+    };
+    sectionMeta.set(sectionKey, {
+      subjectLabel: subject.label,
+      sectionLabel:
+        item.sourceType === "lecture"
+          ? `特別講義：${item.lectureTitle ?? item.problemTitle ?? "講義問題"}`
+          : `${item.sectionId.replace("section-", "第")}問`,
+    });
+    const sectionCounts = sectionTagCounts.get(sectionKey) ?? {};
+    for (const answer of item.answers) {
+      const tagIds = getCommonTestAnswerMistakeTagIds(answer);
+      const riskLevel = getCommonTestRiskLevel(tagIds);
+
+      if (riskLevel) riskCounts[riskLevel] = (riskCounts[riskLevel] ?? 0) + 1;
+      if (riskLevel === "S") confidentWrongQuestionIds.push(answer.questionId);
+
+      for (const tagId of tagIds) {
+        tagCounts[tagId] = (tagCounts[tagId] ?? 0) + 1;
+        sectionCounts[tagId] = (sectionCounts[tagId] ?? 0) + 1;
+      }
+    }
+    sectionTagCounts.set(sectionKey, sectionCounts);
+  }
+
+  const topMistake =
+    COMMON_TEST_MISTAKE_TAGS.map((tag) => ({
+      tagId: tag.id,
+      count: tagCounts[tag.id] ?? 0,
+    }))
+      .filter((entry) => entry.count > 0)
+      .sort((a, b) => b.count - a.count)[0] ?? null;
+
+  const sectionTendencies = Array.from(sectionTagCounts.entries())
+    .map(([key, counts]) => {
+      const [rawSubjectId, rawSectionId] = key.split(":");
+      const subjectId = rawSubjectId ?? "";
+      const sectionId = rawSectionId ?? "";
+      const top = COMMON_TEST_MISTAKE_TAGS.map((tag) => ({
+        tagId: tag.id,
+        count: counts[tag.id] ?? 0,
+      }))
+        .filter((entry) => entry.count > 0)
+        .sort((a, b) => b.count - a.count)[0];
+      if (!top) return null;
+      const meta = sectionMeta.get(key);
+      const subject = SUBJECT_LABELS[subjectId] ?? {
+        label: subjectId,
+        color: "#64748b",
+        glowRgb: "100,116,139",
+      };
+      return {
+        key,
+        subjectLabel: meta?.subjectLabel ?? subject.label,
+        sectionLabel: meta?.sectionLabel ?? `${sectionId.replace("section-", "第")}問`,
+        tagId: top.tagId,
+        count: top.count,
+      };
+    })
+    .filter((entry): entry is MistakeSummary["sectionTendencies"][number] => Boolean(entry))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 3);
+
+  return {
+    totalTaggedAnswers: Object.values(tagCounts).reduce((sum, count) => sum + (count ?? 0), 0),
+    topMistake,
+    tagCounts,
+    riskCounts,
+    confidentWrongQuestionIds,
+    sectionTendencies,
+  };
 }
 
 export function CommonTestHistoryPanel() {
@@ -97,6 +209,9 @@ export function CommonTestHistoryPanel() {
     );
   }
 
+  const mistakeSummary = computeMistakeSummary(history);
+  const diagnosis = buildCommonTestLearningDiagnosis({ history, reviewItems: null });
+
   return (
     <div className="space-y-3">
       {/* Header actions */}
@@ -119,6 +234,12 @@ export function CommonTestHistoryPanel() {
         </button>
       </div>
 
+      {mistakeSummary.totalTaggedAnswers > 0 && (
+        <MistakeSummaryPanel summary={mistakeSummary} />
+      )}
+
+      <CommonTestMistakeStrategyCards strategies={diagnosis.strategies} />
+
       {/* History list */}
       {history.map((item) => {
         const subj = SUBJECT_LABELS[item.subjectId] ?? {
@@ -133,6 +254,8 @@ export function CommonTestHistoryPanel() {
         const gradeColor = getGradeColor(pct);
         const grade = getGradeLetter(pct);
         const isExpanded = expandedId === item.id;
+        const itemSummary = computeMistakeSummary([item]);
+        const riskSCount = itemSummary.riskCounts.S ?? 0;
 
         return (
           <div
@@ -162,9 +285,21 @@ export function CommonTestHistoryPanel() {
                     {subj.label}
                   </span>
                   <span className="text-[11px] text-slate-500">
-                    {item.sectionId.replace("section-", "第")}問
+                    {item.sourceType === "lecture"
+                      ? "講義問題"
+                      : `${item.sectionId.replace("section-", "第")}問`}
                   </span>
+                  {item.sourceType === "lecture" && (
+                    <span className="rounded bg-violet-50 px-1.5 py-0.5 text-[10px] font-bold text-violet-700">
+                      特別講義
+                    </span>
+                  )}
                 </div>
+                {item.sourceType === "lecture" && item.lectureTitle && (
+                  <div className="mb-1 truncate text-[11px] font-bold text-violet-700">
+                    特別講義：{item.lectureTitle}
+                  </div>
+                )}
                 <div className="flex items-center gap-3 font-mono text-[11px]">
                   <span style={{ color: gradeColor }}>
                     {item.correctCount}/{item.totalQuestions} ({pct}%)
@@ -192,6 +327,21 @@ export function CommonTestHistoryPanel() {
             {/* Expanded detail */}
             {isExpanded && (
               <div className="space-y-3 border-t border-slate-100 px-4 pb-4">
+                {item.sourceType === "lecture" && (
+                  <div className="mt-3 rounded-xl border border-violet-200 bg-violet-50 p-3 text-xs leading-5 text-violet-800">
+                    <div className="font-extrabold">特別講義：{item.lectureTitle}</div>
+                    {item.problemTitle && <div className="mt-0.5">問題：{item.problemTitle}</div>}
+                    {item.lectureSlug && (
+                      <Link
+                        href={`/common-test/lectures/${item.lectureSlug}`}
+                        className="mt-2 inline-flex font-bold text-violet-700 hover:text-violet-900"
+                      >
+                        講義に戻る →
+                      </Link>
+                    )}
+                  </div>
+                )}
+
                 {/* Weak tags */}
                 {item.weakSkillTags.length > 0 && (
                   <div>
@@ -214,8 +364,8 @@ export function CommonTestHistoryPanel() {
                 {/* Danger + careless stats */}
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                   <MiniStat
-                    label="危険な誤解"
-                    value={item.dangerousMisunderstandingQuestionIds.length}
+                    label="危険度S"
+                    value={riskSCount}
                     color="#e11d48"
                   />
                   <MiniStat
@@ -234,6 +384,34 @@ export function CommonTestHistoryPanel() {
                     color="#ea580c"
                   />
                 </div>
+
+                {itemSummary.topMistake && (
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                    <div className="text-[11px] font-bold text-slate-500">
+                      この回で多いミス原因
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {COMMON_TEST_MISTAKE_TAGS.map((tag) => {
+                        const count = itemSummary.tagCounts[tag.id] ?? 0;
+                        if (count === 0) return null;
+                        return (
+                          <span
+                            key={tag.id}
+                            className="rounded-full bg-white px-2 py-1 text-[10px] font-bold text-slate-600 ring-1 ring-slate-200"
+                          >
+                            {tag.label} {count}
+                          </span>
+                        );
+                      })}
+                    </div>
+                    {riskSCount > 0 && (
+                      <p className="mt-2 text-[11px] leading-5 text-rose-600">
+                        自信ありで間違えた問題:{" "}
+                        {itemSummary.confidentWrongQuestionIds.slice(0, 5).join(" / ")}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -243,14 +421,98 @@ export function CommonTestHistoryPanel() {
   );
 }
 
+function MistakeSummaryPanel({ summary }: { summary: MistakeSummary }) {
+  const riskSMeta = getCommonTestRiskMeta("S");
+  const tagEntries = COMMON_TEST_MISTAKE_TAGS.map((tag) => ({
+    tag,
+    count: summary.tagCounts[tag.id] ?? 0,
+  })).filter((entry) => entry.count > 0);
+
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="flex items-start gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-rose-600 ring-1 ring-rose-100">
+          <AlertTriangle className="h-4 w-4" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-sm font-extrabold text-slate-950">ミス原因レポート</h3>
+          <p className="mt-1 text-xs leading-5 text-slate-500">
+            正誤だけでなく、失点理由と危険度を集計しています。
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-2 sm:grid-cols-3">
+        <MiniStat
+          label="最も多い原因"
+          value={summary.topMistake ? summary.topMistake.count : 0}
+          color="#2563eb"
+          suffix={summary.topMistake ? getCommonTestMistakeTagLabel(summary.topMistake.tagId) : "なし"}
+        />
+        <MiniStat
+          label="危険度S"
+          value={summary.riskCounts.S ?? 0}
+          color={riskSMeta?.color ?? "#e11d48"}
+          suffix="自信あり誤答"
+        />
+        <MiniStat
+          label="原因タグ記録"
+          value={summary.totalTaggedAnswers}
+          color="#64748b"
+          suffix="件"
+        />
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-1.5">
+        {tagEntries.map(({ tag, count }) => {
+          const riskMeta = getCommonTestRiskMeta(tag.riskLevel);
+          return (
+            <span
+              key={tag.id}
+              className={`rounded-full border px-2.5 py-1 text-xs font-bold ${
+                riskMeta?.className ?? "border-slate-200 bg-slate-50 text-slate-600"
+              }`}
+            >
+              {tag.label} {count}
+            </span>
+          );
+        })}
+      </div>
+
+      {summary.sectionTendencies.length > 0 && (
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
+          <div className="text-[11px] font-bold text-slate-500">単元別の傾向</div>
+          <div className="mt-2 space-y-1.5">
+            {summary.sectionTendencies.map((entry) => (
+              <div
+                key={entry.key}
+                className="flex flex-wrap items-center justify-between gap-2 text-xs"
+              >
+                <span className="font-bold text-slate-700">
+                  {entry.subjectLabel} {entry.sectionLabel}
+                </span>
+                <span className="text-slate-500">
+                  {getCommonTestMistakeTagLabel(entry.tagId)} {entry.count}件
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
 function MiniStat({
   label,
   value,
   color,
+  suffix,
 }: {
   label: string;
   value: number;
   color: string;
+  suffix?: string;
 }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-slate-50 p-2 text-center">
@@ -258,6 +520,7 @@ function MiniStat({
       <div className="mt-0.5 font-mono text-lg font-bold" style={{ color }}>
         {value}
       </div>
+      {suffix && <div className="mt-0.5 truncate text-[10px] text-slate-500">{suffix}</div>}
     </div>
   );
 }

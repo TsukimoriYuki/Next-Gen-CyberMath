@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, CalendarDays, Clock, GraduationCap, Tag } from "lucide-react";
+import { ArrowLeft, GraduationCap, Tag } from "lucide-react";
 import { SPECIAL_LECTURES } from "@/data/specialLectures";
+import { LectureCardFooter } from "@/components/lectures/LectureCardFooter";
 
 export const metadata: Metadata = {
   title: "特別講義 — 共通テスト数学",
@@ -77,25 +78,7 @@ export default function CommonTestLecturesPage() {
                   ))}
                 </div>
 
-                <div className="flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="h-3.5 w-3.5" />
-                      1講座 {lecture.recommendedMinutes}分
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <CalendarDays className="h-3.5 w-3.5" />
-                      {lecture.publishedAt}
-                    </span>
-                  </div>
-                  <Link
-                    href={`/common-test/lectures/${lecture.slug}`}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-700"
-                  >
-                    講義を受ける
-                    <BookOpen className="h-4 w-4" />
-                  </Link>
-                </div>
+                <LectureCardFooter lecture={lecture} />
               </div>
             </article>
           ))}

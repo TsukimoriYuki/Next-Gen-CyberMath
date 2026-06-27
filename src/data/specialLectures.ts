@@ -25,11 +25,34 @@ export interface Lecture {
   blocks: LectureBlock[];
 }
 
+export interface GeometryLayer {
+  id: string;
+  label: string;
+  image: {
+    src: string;
+    alt: string;
+  };
+  explanation?: string;
+}
+
+export interface GeometryLayerBlock {
+  id: string;
+  type: "geometryLayers";
+  title?: string;
+  description?: string;
+  baseImage: {
+    src: string;
+    alt: string;
+  };
+  layers: GeometryLayer[];
+}
+
 export type LectureBlock =
   | { id: string; type: "heading"; level: 2 | 3; text: string }
   | { id: string; type: "paragraph"; text: string }
   | { id: string; type: "math"; expression: string; caption?: string }
   | { id: string; type: "image"; src: string; alt: string; caption?: string }
+  | GeometryLayerBlock
   | {
       id: string;
       type: "problem";
@@ -80,6 +103,72 @@ export const MISTAKE_DIAGNOSIS_TAGS: MistakeDiagnosisTag[] = [
   "自信なしで正解した",
 ];
 
+type GeometryLayerSvgKind = "base" | "conditions" | "angles" | "auxiliary" | "formulas" | "route";
+
+function geometryLayerSvg(layer: GeometryLayerSvgKind): string {
+  const overlays: Record<GeometryLayerSvgKind, string> = {
+    base: "",
+    conditions: `
+      <text x="192" y="350" font-size="18" font-weight="700" fill="#1d4ed8">AB=6</text>
+      <text x="395" y="350" font-size="18" font-weight="700" fill="#1d4ed8">AC=8</text>
+      <path d="M226 320 A38 38 0 0 1 250 286" fill="none" stroke="#1d4ed8" stroke-width="4"/>
+      <text x="252" y="308" font-size="18" font-weight="700" fill="#1d4ed8">60°</text>
+    `,
+    angles: `
+      <path d="M226 320 A38 38 0 0 1 250 286" fill="none" stroke="#7c3aed" stroke-width="4"/>
+      <path d="M454 320 A46 46 0 0 0 421 286" fill="none" stroke="#7c3aed" stroke-width="4"/>
+      <text x="254" y="308" font-size="17" font-weight="700" fill="#7c3aed">A</text>
+      <text x="420" y="307" font-size="17" font-weight="700" fill="#7c3aed">B</text>
+      <text x="333" y="112" font-size="14" fill="#7c3aed">対応する辺と角を見る</text>
+    `,
+    auxiliary: `
+      <line x1="455" y1="320" x2="455" y2="146" stroke="#ea580c" stroke-width="4" stroke-dasharray="8 7"/>
+      <circle cx="455" cy="146" r="5" fill="#ea580c"/>
+      <text x="466" y="210" font-size="16" font-weight="700" fill="#ea580c">補助線</text>
+      <text x="392" y="135" font-size="14" fill="#ea580c">高さ・面積を確認</text>
+    `,
+    formulas: `
+      <rect x="62" y="38" width="240" height="96" rx="14" fill="#eff6ff" stroke="#bfdbfe"/>
+      <text x="78" y="68" font-size="16" font-weight="700" fill="#1d4ed8">公式候補</text>
+      <text x="78" y="94" font-size="14" fill="#334155">1. 余弦定理で BC</text>
+      <text x="78" y="116" font-size="14" fill="#334155">2. 面積公式で S</text>
+      <text x="78" y="138" font-size="14" fill="#334155">3. 正弦定理で sinB</text>
+    `,
+    route: `
+      <circle cx="340" cy="320" r="18" fill="#2563eb"/>
+      <text x="334" y="327" font-size="18" font-weight="800" fill="white">1</text>
+      <circle cx="455" cy="146" r="18" fill="#2563eb"/>
+      <text x="449" y="153" font-size="18" font-weight="800" fill="white">2</text>
+      <circle cx="455" cy="320" r="18" fill="#2563eb"/>
+      <text x="449" y="327" font-size="18" font-weight="800" fill="white">3</text>
+      <path d="M360 315 C390 285 425 230 445 166" fill="none" stroke="#2563eb" stroke-width="4" marker-end="url(#arrow)"/>
+      <path d="M455 170 C470 220 470 270 460 300" fill="none" stroke="#2563eb" stroke-width="4" marker-end="url(#arrow)"/>
+      <text x="74" y="72" font-size="15" font-weight="700" fill="#1e293b">BC → 面積 → sinB</text>
+    `,
+  };
+
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/>
+        </marker>
+      </defs>
+      <rect width="640" height="420" rx="24" fill="#ffffff"/>
+      <rect x="24" y="24" width="592" height="372" rx="20" fill="#f8fafc" stroke="#e2e8f0"/>
+      <polygon points="185,320 455,320 330,105" fill="#ffffff" stroke="#0f172a" stroke-width="4"/>
+      <circle cx="185" cy="320" r="5" fill="#0f172a"/>
+      <circle cx="455" cy="320" r="5" fill="#0f172a"/>
+      <circle cx="330" cy="105" r="5" fill="#0f172a"/>
+      <text x="172" y="350" font-size="18" font-weight="700" fill="#0f172a">B</text>
+      <text x="462" y="350" font-size="18" font-weight="700" fill="#0f172a">C</text>
+      <text x="323" y="92" font-size="18" font-weight="700" fill="#0f172a">A</text>
+      ${overlays[layer]}
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
 export const SPECIAL_LECTURES: Lecture[] = [
   {
     id: "lecture-geometry-measurement-001",
@@ -123,6 +212,69 @@ export const SPECIAL_LECTURES: Lecture[] = [
           "2辺とその間の角が分かっているか",
           "3辺、または最大の角に関する条件があるか",
           "面積、円、補角、同じ角が登場しているか",
+        ],
+      },
+      {
+        id: "geometry-layer-first-look",
+        type: "geometryLayers",
+        title: "図形レイヤー：条件から解法ルートまで",
+        description:
+          "同じ図形でも、見るレイヤーを分けると公式選択が安定します。条件、角、補助線、公式、求める順番を一つずつ重ねて確認します。",
+        baseImage: {
+          src: geometryLayerSvg("base"),
+          alt: "三角形ABCの基本図",
+        },
+        layers: [
+          {
+            id: "conditions",
+            label: "条件だけ",
+            image: {
+              src: geometryLayerSvg("conditions"),
+              alt: "辺の長さと角度だけを示した三角形",
+            },
+            explanation:
+              "まず辺の長さと角度だけを拾います。2辺とはさむ角が見えたら、最初の候補は余弦定理です。",
+          },
+          {
+            id: "equal-angles",
+            label: "等しい角",
+            image: {
+              src: geometryLayerSvg("angles"),
+              alt: "対応する辺と角を示した三角形",
+            },
+            explanation:
+              "角を直接求める前に、向かい合う辺と角の対応を確認します。正弦定理で運べる情報を探します。",
+          },
+          {
+            id: "auxiliary-line",
+            label: "補助線",
+            image: {
+              src: geometryLayerSvg("auxiliary"),
+              alt: "高さの補助線を示した三角形",
+            },
+            explanation:
+              "面積や高さが絡むときは補助線を意識します。ただし、この例では面積公式で先に処理できます。",
+          },
+          {
+            id: "formula-candidates",
+            label: "使う公式",
+            image: {
+              src: geometryLayerSvg("formulas"),
+              alt: "余弦定理、面積公式、正弦定理の候補を示した図",
+            },
+            explanation:
+              "余弦定理、面積公式、正弦定理の順で候補を並べます。公式を暗記ではなく条件から選ぶのがポイントです。",
+          },
+          {
+            id: "solution-route",
+            label: "解法ルート",
+            image: {
+              src: geometryLayerSvg("route"),
+              alt: "BC、面積、sinBの順に求める解法ルートを示した図",
+            },
+            explanation:
+              "求める順番は BC → 面積 → sinB。誘導に乗ると、最後の正弦定理まで自然につながります。",
+          },
         ],
       },
       {

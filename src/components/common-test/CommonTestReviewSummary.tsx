@@ -23,7 +23,7 @@ export function CommonTestReviewSummary() {
   useEffect(() => {
     Promise.all([
       fetch("/api/auth/me").then((r) => r.ok),
-      fetch("/api/review/list?itemType=common-test-drill&limit=100").then((r) =>
+      fetch("/api/review/list?limit=100").then((r) =>
         r.ok ? r.json() : { ok: false }
       ),
     ])
@@ -38,11 +38,30 @@ export function CommonTestReviewSummary() {
         }
         // Top weak tag from active items
         const items = (listData.items ?? []) as {
+          itemType: string;
           status: string;
           skillTags: string[];
+          nextReviewAt: string;
         }[];
+        const commonTestItems = items.filter(
+          (item) => item.itemType === "common-test-drill" || item.itemType === "common-test-lecture"
+        );
+        const now = new Date();
+        const meta = {
+          total: commonTestItems.length,
+          todayCount: commonTestItems.filter(
+            (item) => item.status === "ACTIVE" && new Date(item.nextReviewAt) <= now
+          ).length,
+          overdueCount: commonTestItems.filter(
+            (item) =>
+              item.status === "ACTIVE" &&
+              new Date(item.nextReviewAt) < now &&
+              new Date(item.nextReviewAt).toDateString() !== now.toDateString()
+          ).length,
+          masteredCount: commonTestItems.filter((item) => item.status === "MASTERED").length,
+        };
         const tagFreq = new Map<string, number>();
-        for (const item of items) {
+        for (const item of commonTestItems) {
           if (item.status !== "ACTIVE") continue;
           for (const tag of item.skillTags.slice(0, 3)) {
             tagFreq.set(tag, (tagFreq.get(tag) ?? 0) + 1);
@@ -53,7 +72,7 @@ export function CommonTestReviewSummary() {
             ? [...tagFreq.entries()].sort((a, b) => b[1] - a[1])[0][0]
             : null;
 
-        setState({ isLoggedIn: true, meta: listData.meta, topWeakTag });
+        setState({ isLoggedIn: true, meta, topWeakTag });
       })
       .catch(() => {
         setState({ isLoggedIn: false, meta: null, topWeakTag: null });

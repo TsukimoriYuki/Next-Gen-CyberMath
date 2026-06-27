@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import type { Lecture, LectureBlock, ExplanationTab } from "@/data/specialLectures";
 import { MathText, BlockMath } from "@/components/math/Math";
+import { GeometryLayersBlock } from "./GeometryLayersBlock";
+import { LectureProblemInteraction } from "./LectureProblemInteraction";
 
 const TAB_ORDER: ExplanationTab["label"][] = [
   "ヒント",
@@ -29,13 +31,28 @@ export function LectureRenderer({ lecture }: { lecture: Lecture }) {
   return (
     <article className="space-y-7">
       {lecture.blocks.map((block) => (
-        <LectureBlockView key={block.id} block={block} />
+        <LectureBlockView key={block.id} lecture={lecture} block={block} />
       ))}
     </article>
   );
 }
 
-function LectureBlockView({ block }: { block: LectureBlock }) {
+export function LectureBlockView({
+  lecture,
+  block,
+  onProblemAnswered,
+  onTabsViewed,
+  onGeometryLayersCompleted,
+}: {
+  lecture: Lecture;
+  block: LectureBlock;
+  /** problem ブロックを解答したときに呼ばれる（進捗連携）。 */
+  onProblemAnswered?: () => void;
+  /** explanationTabs のタブを開いたときに呼ばれる（進捗連携）。 */
+  onTabsViewed?: () => void;
+  /** geometryLayers の全レイヤーを確認したときに呼ばれる（進捗連携）。 */
+  onGeometryLayersCompleted?: () => void;
+}) {
   switch (block.type) {
     case "heading":
       return block.level === 2 ? (
@@ -78,10 +95,23 @@ function LectureBlockView({ block }: { block: LectureBlock }) {
           )}
         </figure>
       );
+    case "geometryLayers":
+      return (
+        <GeometryLayersBlock
+          block={block}
+          onComplete={onGeometryLayersCompleted}
+        />
+      );
     case "problem":
-      return <ProblemBlock block={block} />;
+      return (
+        <LectureProblemInteraction
+          lecture={lecture}
+          block={block}
+          onAnswered={onProblemAnswered}
+        />
+      );
     case "explanationTabs":
-      return <ExplanationTabs tabs={block.tabs} />;
+      return <ExplanationTabs tabs={block.tabs} onView={onTabsViewed} />;
     case "expertThinking":
       return <ExpertThinkingBlock block={block} />;
     case "checklist":
@@ -134,58 +164,7 @@ function LectureBlockView({ block }: { block: LectureBlock }) {
   }
 }
 
-function ProblemBlock({ block }: { block: Extract<LectureBlock, { type: "problem" }> }) {
-  return (
-    <section className="overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-sm">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-5 py-3">
-        <div>
-          <div className="text-[11px] font-bold text-slate-500">共通テスト形式</div>
-          <h2 className="mt-0.5 text-lg font-extrabold text-slate-950">{block.title}</h2>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {block.points != null && (
-            <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 ring-1 ring-blue-100">
-              {block.points}点
-            </span>
-          )}
-          <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">
-            誘導確認
-          </span>
-        </div>
-      </div>
-      <div className="p-5 sm:p-6">
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
-          <MathText className="text-[15px] leading-7 text-slate-800">{block.prompt}</MathText>
-        </div>
-        {block.choices && block.choices.length > 0 && (
-          <div className="mt-4 grid gap-2">
-            {block.choices.map((choice, index) => (
-              <div key={choice} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                <div className="flex gap-3 text-sm text-slate-700">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white font-mono text-xs font-bold text-slate-500 ring-1 ring-slate-200">
-                    {index + 1}
-                  </span>
-                  <MathText>{choice}</MathText>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-        {block.mistakeTags && block.mistakeTags.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {block.mistakeTags.map((tag) => (
-              <span key={tag} className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function ExplanationTabs({ tabs }: { tabs: ExplanationTab[] }) {
+function ExplanationTabs({ tabs, onView }: { tabs: ExplanationTab[]; onView?: () => void }) {
   const orderedTabs = [...tabs]
     .filter((tab) => tab.body.trim().length > 0)
     .sort((a, b) => TAB_ORDER.indexOf(a.label) - TAB_ORDER.indexOf(b.label));
@@ -193,6 +172,11 @@ function ExplanationTabs({ tabs }: { tabs: ExplanationTab[] }) {
   const current = orderedTabs.find((tab) => tab.label === active) ?? orderedTabs[0];
 
   if (!current) return null;
+
+  function openTab(label: ExplanationTab["label"]) {
+    setActive(label);
+    onView?.();
+  }
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
@@ -207,7 +191,7 @@ function ExplanationTabs({ tabs }: { tabs: ExplanationTab[] }) {
           <button
             key={tab.label}
             type="button"
-            onClick={() => setActive(tab.label)}
+            onClick={() => openTab(tab.label)}
             className={`min-h-11 shrink-0 rounded-xl px-3 py-2 text-xs font-bold transition ${
               active === tab.label
                 ? tab.label === "最速解法"

@@ -19,6 +19,16 @@ import {
   buildCommonTestGuidedReviewItem,
   findCommonTestQuestionById,
 } from "@/lib/common-test-guided-review";
+import {
+  compareReviewItemsByRisk,
+  getMistakeTagIdsFromReviewReasonFlags,
+  getRiskLevelFromReviewReasonFlags,
+} from "@/lib/common-test-diagnosis";
+import {
+  getCommonTestMistakeTagLabel,
+  getCommonTestRiskMeta,
+  type CommonTestRiskLevel,
+} from "@/lib/common-test-history";
 
 interface ReviewItemData {
   id: string;
@@ -75,6 +85,29 @@ function fmtDate(iso: string): string {
   return `${diffDays}日後`;
 }
 
+function isCommonTestReviewItem(item: ReviewItemData): boolean {
+  return item.itemType === "common-test-drill" || item.itemType === "common-test-lecture";
+}
+
+function buildMeta(items: ReviewItemData[]): ListMeta {
+  const now = new Date();
+  return {
+    total: items.length,
+    todayCount: items.filter((i) => i.status === "ACTIVE" && new Date(i.nextReviewAt) <= now).length,
+    masteredCount: items.filter((i) => i.status === "MASTERED").length,
+    overdueCount: items.filter(
+      (i) =>
+        i.status === "ACTIVE" &&
+        new Date(i.nextReviewAt) < now &&
+        new Date(i.nextReviewAt).toDateString() !== now.toDateString()
+    ).length,
+  };
+}
+
+function getLectureSlugFromReasonFlags(flags: string[]): string | null {
+  return flags.find((flag) => flag.startsWith("lecture-slug:"))?.replace("lecture-slug:", "") ?? null;
+}
+
 export function CommonTestReviewQueue() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [allItems, setAllItems] = useState<ReviewItemData[]>([]);
@@ -90,7 +123,7 @@ export function CommonTestReviewQueue() {
     try {
       const [meRes, listRes] = await Promise.all([
         fetch("/api/auth/me"),
-        fetch("/api/review/list?itemType=common-test-drill&limit=100"),
+        fetch("/api/review/list?limit=100"),
       ]);
 
       setIsLoggedIn(meRes.ok);
@@ -98,8 +131,9 @@ export function CommonTestReviewQueue() {
       if (listRes.ok) {
         const data = await listRes.json();
         if (data.ok) {
-          setAllItems(data.items);
-          setMeta(data.meta);
+          const items = (data.items as ReviewItemData[]).filter(isCommonTestReviewItem);
+          setAllItems(items);
+          setMeta(buildMeta(items));
         }
       }
     } catch {
@@ -173,10 +207,10 @@ export function CommonTestReviewQueue() {
 
   const todayItems = filtered.filter(
     (i) => i.status === "ACTIVE" && new Date(i.nextReviewAt) <= now
-  );
+  ).sort(compareReviewItemsByRisk);
   const upcomingItems = filtered.filter(
     (i) => i.status === "ACTIVE" && new Date(i.nextReviewAt) > now
-  );
+  ).sort(compareReviewItemsByRisk);
   const masteredItems = filtered.filter((i) => i.status === "MASTERED");
 
   const uniqueSubjects = Array.from(new Set(allItems.map((i) => i.subjectId).filter(Boolean)));
@@ -192,6 +226,8 @@ export function CommonTestReviewQueue() {
           <StatCard label="克服済み" value={meta.masteredCount} color="#059669" />
         </div>
       )}
+
+      <RiskPriorityGuide />
 
       {/* Subject filter + refresh */}
       <div className="flex flex-wrap items-center gap-2">
@@ -368,10 +404,13 @@ function ReviewSection({
           const isDone = doneIds.has(item.id);
           const subjMeta = item.subjectId ? SUBJECT_LABELS[item.subjectId] : null;
           const levelLabel = LEVEL_LABEL[item.level] ?? `Lv.${item.level}`;
+          const lectureSlug = getLectureSlugFromReasonFlags(item.reasonFlags);
           const reviewHref =
-            item.subjectId && item.sectionId
-              ? `/common-test/${item.subjectId}/${item.sectionId}`
-              : "#";
+            item.itemType === "common-test-lecture" && lectureSlug
+              ? `/common-test/lectures/${lectureSlug}`
+              : item.subjectId && item.sectionId
+                ? `/common-test/${item.subjectId}/${item.sectionId}`
+                : "#";
           const guidedQuestion =
             item.itemType === "common-test-drill"
               ? findCommonTestQuestionById(item.itemId)
@@ -379,6 +418,9 @@ function ReviewSection({
           const guidedItem = guidedQuestion
             ? buildCommonTestGuidedReviewItem(guidedQuestion)
             : null;
+          const riskLevel = getRiskLevelFromReviewReasonFlags(item.reasonFlags);
+          const riskMeta = getCommonTestRiskMeta(riskLevel);
+          const mistakeTagIds = getMistakeTagIdsFromReviewReasonFlags(item.reasonFlags);
           const guidedTheme = {
             primary: subjMeta?.color ?? "#f97316",
             glowRgb: hexToRgb(subjMeta?.color ?? "#f97316"),
@@ -410,6 +452,11 @@ function ReviewSection({
                         {item.sectionId && ` ${item.sectionId.replace("section-", "第")}問`}
                       </span>
                     )}
+                    {item.itemType === "common-test-lecture" && (
+                      <span className="rounded bg-violet-50 px-1.5 py-0.5 text-[10px] font-bold text-violet-700">
+                        出典：特別講義
+                      </span>
+                    )}
                     <span className="flex items-center gap-1 text-[10px] text-slate-400">
                       <Clock className="h-3 w-3" />
                       {fmtDate(item.nextReviewAt)}
@@ -421,6 +468,13 @@ function ReviewSection({
                   </div>
 
                   <div className="flex flex-wrap gap-1">
+                    {riskMeta && (
+                      <span
+                        className={`rounded border px-1.5 py-0.5 text-[10px] font-bold ${riskMeta.className}`}
+                      >
+                        {riskMeta.label}
+                      </span>
+                    )}
                     {item.reasonFlags.map((f) => {
                       const r = REASON_LABEL[f];
                       if (!r) return null;
@@ -434,6 +488,14 @@ function ReviewSection({
                         </span>
                       );
                     })}
+                    {mistakeTagIds.map((tagId) => (
+                      <span
+                        key={tagId}
+                        className="rounded bg-rose-50 px-1.5 py-0.5 text-[10px] font-bold text-rose-600 ring-1 ring-rose-100"
+                      >
+                        {getCommonTestMistakeTagLabel(tagId)}
+                      </span>
+                    ))}
                     {item.skillTags.slice(0, 3).map((t) => (
                       <span key={t} className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">
                         {t}
@@ -443,6 +505,11 @@ function ReviewSection({
                   {item.wrongCount > 1 && (
                     <p className="text-[11px] text-rose-500">
                       ✕ {item.wrongCount}回 間違えた問題
+                    </p>
+                  )}
+                  {riskMeta && (
+                    <p className="text-[11px] leading-5 text-slate-500">
+                      {riskMeta.description}
                     </p>
                   )}
                 </div>
@@ -507,6 +574,37 @@ function ReviewSection({
         })}
       </div>
     </div>
+  );
+}
+
+function RiskPriorityGuide() {
+  const items: { level: CommonTestRiskLevel; text: string }[] = [
+    { level: "S", text: "最優先。理解しているつもりの危険ミス" },
+    { level: "A", text: "優先。解法選択や条件処理のミス" },
+    { level: "B", text: "通常。計算・時間・読み違い" },
+    { level: "C", text: "軽め。正解したが自信が弱い" },
+  ];
+
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="text-sm font-extrabold text-slate-950">危険度別の復習優先度</div>
+      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        {items.map((item) => {
+          const meta = getCommonTestRiskMeta(item.level);
+          return (
+            <div
+              key={item.level}
+              className={`rounded-xl border px-3 py-2 text-xs leading-5 ${
+                meta?.className ?? "border-slate-200 bg-slate-50 text-slate-600"
+              }`}
+            >
+              <span className="font-extrabold">{item.level}：</span>
+              {item.text}
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 

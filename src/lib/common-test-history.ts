@@ -7,6 +7,78 @@ export type CommonTestConfidence =
   | "guessed"
   | "blank";
 
+export type CommonTestMistakeTagId =
+  | "calculation"
+  | "formula-selection"
+  | "reading-misread"
+  | "condition-missed"
+  | "case-split"
+  | "figure-reading"
+  | "time-up"
+  | "confident-wrong"
+  | "unsure-correct";
+
+export type CommonTestRiskLevel = "S" | "A" | "B" | "C";
+export type CommonTestHistorySourceType = "drill" | "lecture";
+
+export interface CommonTestHistorySourceInfo {
+  sourceType?: CommonTestHistorySourceType;
+  lectureId?: string;
+  lectureSlug?: string;
+  lectureTitle?: string;
+  blockId?: string;
+  problemTitle?: string;
+}
+
+export interface CommonTestMistakeTagDefinition {
+  id: CommonTestMistakeTagId;
+  label: string;
+  riskLevel: CommonTestRiskLevel;
+  appliesTo: "wrong" | "correct";
+}
+
+export const COMMON_TEST_MISTAKE_TAGS: CommonTestMistakeTagDefinition[] = [
+  { id: "calculation", label: "計算ミス", riskLevel: "B", appliesTo: "wrong" },
+  { id: "formula-selection", label: "公式選択ミス", riskLevel: "A", appliesTo: "wrong" },
+  { id: "reading-misread", label: "問題文の読み違い", riskLevel: "B", appliesTo: "wrong" },
+  { id: "condition-missed", label: "条件見落とし", riskLevel: "A", appliesTo: "wrong" },
+  { id: "case-split", label: "場合分け不足", riskLevel: "A", appliesTo: "wrong" },
+  { id: "figure-reading", label: "図の見落とし", riskLevel: "A", appliesTo: "wrong" },
+  { id: "time-up", label: "時間切れ", riskLevel: "B", appliesTo: "wrong" },
+  { id: "confident-wrong", label: "自信ありで間違えた", riskLevel: "S", appliesTo: "wrong" },
+  { id: "unsure-correct", label: "自信なしで正解した", riskLevel: "C", appliesTo: "correct" },
+];
+
+export const COMMON_TEST_RISK_META: Record<
+  CommonTestRiskLevel,
+  { label: string; description: string; color: string; className: string }
+> = {
+  S: {
+    label: "危険度S",
+    description: "自信ありで間違えた問題。最優先で復習。",
+    color: "#e11d48",
+    className: "border-rose-200 bg-rose-50 text-rose-700",
+  },
+  A: {
+    label: "危険度A",
+    description: "考え方や条件処理を再確認。",
+    color: "#d97706",
+    className: "border-amber-200 bg-amber-50 text-amber-700",
+  },
+  B: {
+    label: "危険度B",
+    description: "処理速度と読み取りを安定化。",
+    color: "#2563eb",
+    className: "border-blue-200 bg-blue-50 text-blue-700",
+  },
+  C: {
+    label: "危険度C",
+    description: "正解したが根拠を固めたい問題。",
+    color: "#64748b",
+    className: "border-slate-200 bg-slate-50 text-slate-600",
+  },
+};
+
 export interface CommonTestAnswerRecord {
   questionId: string;
   selectedAnswer: string | string[];
@@ -16,9 +88,17 @@ export interface CommonTestAnswerRecord {
   estimatedMinutes: number;
   confidence: CommonTestConfidence;
   skillTags: string[];
+  mistakeTagIds?: CommonTestMistakeTagId[];
+  riskLevel?: CommonTestRiskLevel;
+  sourceType?: CommonTestHistorySourceType;
+  lectureId?: string;
+  lectureSlug?: string;
+  lectureTitle?: string;
+  blockId?: string;
+  problemTitle?: string;
 }
 
-export interface CommonTestDrillHistoryItem {
+export interface CommonTestDrillHistoryItem extends CommonTestHistorySourceInfo {
   id: string;
   subjectId: string;
   sectionId: string;
@@ -34,6 +114,75 @@ export interface CommonTestDrillHistoryItem {
   carelessMistakeQuestionIds: string[];
   guessedCorrectQuestionIds: string[];
   dangerousMisunderstandingQuestionIds: string[];
+  mistakeTagCounts?: Partial<Record<CommonTestMistakeTagId, number>>;
+  riskLevelCounts?: Partial<Record<CommonTestRiskLevel, number>>;
+  highRiskQuestionIds?: string[];
+}
+
+export function getCommonTestMistakeTagDefinition(
+  id: string
+): CommonTestMistakeTagDefinition | undefined {
+  return COMMON_TEST_MISTAKE_TAGS.find((tag) => tag.id === id);
+}
+
+export function getCommonTestMistakeTagLabel(id: string): string {
+  return getCommonTestMistakeTagDefinition(id)?.label ?? id;
+}
+
+export function getCommonTestRiskMeta(level?: CommonTestRiskLevel | null) {
+  return level ? COMMON_TEST_RISK_META[level] : null;
+}
+
+export function getCommonTestRiskLevel(
+  tagIds: readonly CommonTestMistakeTagId[]
+): CommonTestRiskLevel | null {
+  const levels = tagIds
+    .map((id) => getCommonTestMistakeTagDefinition(id)?.riskLevel)
+    .filter(Boolean) as CommonTestRiskLevel[];
+  if (levels.includes("S")) return "S";
+  if (levels.includes("A")) return "A";
+  if (levels.includes("B")) return "B";
+  if (levels.includes("C")) return "C";
+  return null;
+}
+
+export function normalizeCommonTestMistakeTags({
+  tagIds = [],
+  isCorrect,
+  confidence,
+  isOverTime = false,
+}: {
+  tagIds?: readonly CommonTestMistakeTagId[];
+  isCorrect: boolean;
+  confidence: CommonTestConfidence;
+  isOverTime?: boolean;
+}): CommonTestMistakeTagId[] {
+  const allowedAppliesTo = isCorrect ? "correct" : "wrong";
+  const normalized = new Set<CommonTestMistakeTagId>();
+
+  for (const tagId of tagIds) {
+    const definition = getCommonTestMistakeTagDefinition(tagId);
+    if (definition?.appliesTo === allowedAppliesTo) normalized.add(definition.id);
+  }
+
+  if (!isCorrect && confidence === "confident") normalized.add("confident-wrong");
+  if (!isCorrect && isOverTime) normalized.add("time-up");
+  if (isCorrect && confidence === "unsure") normalized.add("unsure-correct");
+
+  return COMMON_TEST_MISTAKE_TAGS
+    .map((tag) => tag.id)
+    .filter((tagId) => normalized.has(tagId));
+}
+
+export function getCommonTestAnswerMistakeTagIds(
+  answer: CommonTestAnswerRecord
+): CommonTestMistakeTagId[] {
+  return normalizeCommonTestMistakeTags({
+    tagIds: answer.mistakeTagIds,
+    isCorrect: answer.isCorrect,
+    confidence: answer.confidence,
+    isOverTime: answer.timeSpentSec > answer.estimatedMinutes * 60,
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -105,12 +254,13 @@ export interface BuildHistoryItemInput {
   startedAt: number; // epoch ms
   finishedAt: number; // epoch ms
   answers: CommonTestAnswerRecord[];
+  source?: CommonTestHistorySourceInfo;
 }
 
 export function buildHistoryItem(
   input: BuildHistoryItemInput
 ): CommonTestDrillHistoryItem {
-  const { subjectId, sectionId, startedAt, finishedAt, answers } = input;
+  const { subjectId, sectionId, startedAt, finishedAt, answers, source } = input;
 
   const totalTimeSec = Math.floor((finishedAt - startedAt) / 1000);
   const estimatedTotalTimeSec = answers.reduce(
@@ -118,24 +268,33 @@ export function buildHistoryItem(
     0
   );
   const correctCount = answers.filter((a) => a.isCorrect).length;
+  const normalizedAnswers = answers.map((answer) => {
+    const mistakeTagIds = getCommonTestAnswerMistakeTagIds(answer);
+    const riskLevel = getCommonTestRiskLevel(mistakeTagIds);
+    return {
+      ...answer,
+      mistakeTagIds,
+      ...(riskLevel ? { riskLevel } : {}),
+    };
+  });
 
   // Over time: actual > estimated
-  const overTimeQuestionIds = answers
+  const overTimeQuestionIds = normalizedAnswers
     .filter((a) => a.timeSpentSec > a.estimatedMinutes * 60)
     .map((a) => a.questionId);
 
   // Guessed correct
-  const guessedCorrectQuestionIds = answers
+  const guessedCorrectQuestionIds = normalizedAnswers
     .filter((a) => a.isCorrect && a.confidence === "guessed")
     .map((a) => a.questionId);
 
   // Dangerous misconception: wrong + confident
-  const dangerousMisunderstandingQuestionIds = answers
+  const dangerousMisunderstandingQuestionIds = normalizedAnswers
     .filter((a) => !a.isCorrect && a.confidence === "confident")
     .map((a) => a.questionId);
 
   // Careless mistakes: wrong + (confident | unsure) = had some idea but wrong
-  const carelessMistakeQuestionIds = answers
+  const carelessMistakeQuestionIds = normalizedAnswers
     .filter(
       (a) =>
         !a.isCorrect &&
@@ -144,7 +303,21 @@ export function buildHistoryItem(
     .map((a) => a.questionId);
 
   // Weak skill tags: from wrong + guessedCorrect + dangerousMisunderstanding
-  const weakCandidates = answers.filter(
+  const mistakeTagCounts: Partial<Record<CommonTestMistakeTagId, number>> = {};
+  const riskLevelCounts: Partial<Record<CommonTestRiskLevel, number>> = {};
+  const highRiskQuestionIds: string[] = [];
+
+  for (const answer of normalizedAnswers) {
+    for (const tagId of answer.mistakeTagIds ?? []) {
+      mistakeTagCounts[tagId] = (mistakeTagCounts[tagId] ?? 0) + 1;
+    }
+    if (answer.riskLevel) {
+      riskLevelCounts[answer.riskLevel] = (riskLevelCounts[answer.riskLevel] ?? 0) + 1;
+      if (answer.riskLevel === "S") highRiskQuestionIds.push(answer.questionId);
+    }
+  }
+
+  const weakCandidates = normalizedAnswers.filter(
     (a) =>
       !a.isCorrect ||
       guessedCorrectQuestionIds.includes(a.questionId) ||
@@ -164,18 +337,22 @@ export function buildHistoryItem(
     id: `${subjectId}-${sectionId}-${finishedAt}`,
     subjectId,
     sectionId,
+    ...source,
     startedAt: new Date(startedAt).toISOString(),
     finishedAt: new Date(finishedAt).toISOString(),
-    totalQuestions: answers.length,
+    totalQuestions: normalizedAnswers.length,
     correctCount,
     totalTimeSec,
     estimatedTotalTimeSec,
-    answers,
+    answers: normalizedAnswers,
     weakSkillTags,
     overTimeQuestionIds,
     carelessMistakeQuestionIds,
     guessedCorrectQuestionIds,
     dangerousMisunderstandingQuestionIds,
+    mistakeTagCounts,
+    riskLevelCounts,
+    highRiskQuestionIds,
   };
 }
 

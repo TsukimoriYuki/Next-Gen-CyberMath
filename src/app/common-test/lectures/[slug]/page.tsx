@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, BookOpen, Clock, GraduationCap, Tag } from "lucide-react";
 import { getSpecialLectureBySlug, SPECIAL_LECTURES } from "@/data/specialLectures";
-import { LectureRenderer } from "@/components/lectures/LectureRenderer";
+import { LectureExperience } from "@/components/lectures/LectureExperience";
 
 export function generateStaticParams() {
   return SPECIAL_LECTURES.map((lecture) => ({ slug: lecture.slug }));
@@ -34,7 +34,7 @@ export default async function LectureDetailPage({
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
         <Link
           href="/common-test/lectures"
           className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-800"
@@ -100,9 +100,7 @@ export default async function LectureDetailPage({
           </div>
         </header>
 
-        <section className="mt-7">
-          <LectureRenderer lecture={lecture} />
-        </section>
+        <LectureExperience lecture={lecture} />
       </div>
     </main>
   );

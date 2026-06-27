@@ -10,7 +10,11 @@ import {
 import type { CommonTestTheme } from "@/data/common-test";
 import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import type { CommonTestDrillHistoryItem } from "@/lib/common-test-history";
-import { TAG_RECOMMENDATIONS } from "@/lib/common-test-history";
+import {
+  getCommonTestMistakeTagLabel,
+  getCommonTestRiskMeta,
+  TAG_RECOMMENDATIONS,
+} from "@/lib/common-test-history";
 import type { AnswerEntry } from "./common-test-drill-types";
 import { ReviewQueueRegistrar, type ReviewCandidate } from "./ReviewQueueRegistrar";
 
@@ -101,6 +105,7 @@ export function CommonTestResultPanel({
             const question = questions.find((q) => q.id === answer.questionId);
             const estimated = (question?.estimatedMinutes ?? 0) * 60;
             const isOver = answer.timeSpentSec > estimated;
+            const riskMeta = getCommonTestRiskMeta(answer.riskLevel);
             return (
               <div
                 key={answer.questionId}
@@ -121,6 +126,18 @@ export function CommonTestResultPanel({
                     {question?.title ?? answer.questionId}
                   </div>
                   <div className="mt-1 flex flex-wrap gap-1.5">
+                    {riskMeta && (
+                      <span
+                        className={`rounded border px-2 py-0.5 text-xs font-bold ${riskMeta.className}`}
+                      >
+                        {riskMeta.label}
+                      </span>
+                    )}
+                    {answer.mistakeTagIds?.slice(0, 3).map((tagId) => (
+                      <span key={tagId} className="rounded bg-white px-2 py-0.5 text-xs text-rose-600 ring-1 ring-rose-100">
+                        {getCommonTestMistakeTagLabel(tagId)}
+                      </span>
+                    ))}
                     {answer.skillTags.slice(0, 3).map((tag) => (
                       <span key={tag} className="rounded bg-white px-2 py-0.5 text-xs text-slate-500 ring-1 ring-slate-200">
                         {tag}
@@ -255,6 +272,8 @@ function buildReviewCandidates(
     .map((answer) => {
       const question = questions.find((q) => q.id === answer.questionId);
       const bucket = getBucket(answer);
+      const riskFlags = answer.riskLevel ? [`risk:${answer.riskLevel}`] : [];
+      const mistakeFlags = (answer.mistakeTagIds ?? []).map((tagId) => `mistake:${tagId}`);
       return {
         questionId: answer.questionId,
         title: question?.title ?? answer.questionId,
@@ -263,8 +282,12 @@ function buildReviewCandidates(
         reasonFlags: [
           answer.isCorrect ? "guessed-or-unsure" : "wrong",
           ...(historyItem.overTimeQuestionIds.includes(answer.questionId) ? ["overtime"] : []),
+          ...riskFlags,
+          ...mistakeFlags,
         ],
         skillTags: answer.skillTags,
+        ...(answer.mistakeTagIds?.length ? { mistakeTagIds: answer.mistakeTagIds } : {}),
+        ...(answer.riskLevel ? { riskLevel: answer.riskLevel } : {}),
         quadrantLabel: bucket,
         quadrantColor: BUCKET_STYLE[bucket].color,
       };
