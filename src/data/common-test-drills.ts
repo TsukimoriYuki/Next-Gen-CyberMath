@@ -2563,6 +2563,322 @@ The River Museum program fits our class goal because students can [ B ].`,
     skillTags: ["レポート完成", "情報照合", "英語スキャニング"],
     stimulusType: "multi-source",
   },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 追加オリジナル問題（共通テスト風・完全オリジナル）
+  // 既存セクションへ追記。section ページ・履歴・復習キュー・処方箋に自動連携。
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // ── 数学IA 第1問（数と式・命題・図形と計量）──────────────────────────────
+  {
+    id: "ct-m1a-s1-q5",
+    subjectId: "math-1a",
+    sectionId: "section-1",
+    title: "数と式 — 対称式の値",
+    statement:
+      "$x = \\sqrt{3} + \\sqrt{2}$、$y = \\sqrt{3} - \\sqrt{2}$ のとき、$x^2 + y^2$ の値を求めよ。",
+    type: "single-choice",
+    options: ["$8$", "$10$", "$12$", "$2\\sqrt{6}$"],
+    correctAnswer: "$10$",
+    explanation:
+      "$x + y = 2\\sqrt{3}$、$xy = (\\sqrt{3})^2 - (\\sqrt{2})^2 = 3 - 2 = 1$。対称式の基本変形より $x^2 + y^2 = (x+y)^2 - 2xy = (2\\sqrt{3})^2 - 2 \\cdot 1 = 12 - 2 = 10$。",
+    strategy:
+      "対称式は必ず基本対称式 $x+y$, $xy$ で表してから代入する。$x, y$ を個別に2乗すると $\\sqrt{6}$ の項が出て煩雑になる。まず和と積を出す手順を固定化すれば2分以内。",
+    trapExplanation:
+      "$x^2 + y^2 = (x+y)^2$ と思い込んで $-2xy$ を落とす誤りが最頻出。また $xy$ を和と差の積 $(\\sqrt3+\\sqrt2)(\\sqrt3-\\sqrt2)$ で計算するとき $3-2=1$ を確実に。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["数式変形", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s1-q6",
+    subjectId: "math-1a",
+    sectionId: "section-1",
+    title: "図形と計量 — 3辺から角を求める",
+    context:
+      "三角形の3辺の長さがすべて分かっているときは、まず余弦定理で角の余弦を求める。角が鈍角か鋭角かは、その符号で判断できる。",
+    statement:
+      "三角形 $ABC$ において $BC = 7$、$CA = 5$、$AB = 3$ とする。$\\cos A$ の値を求めよ。",
+    type: "single-choice",
+    options: ["$-\\dfrac{1}{2}$", "$\\dfrac{1}{2}$", "$-\\dfrac{1}{5}$", "$\\dfrac{11}{30}$"],
+    correctAnswer: "$-\\dfrac{1}{2}$",
+    explanation:
+      "角 $A$ の対辺は $BC = 7$。余弦定理より $\\cos A = \\dfrac{AB^2 + AC^2 - BC^2}{2 \\cdot AB \\cdot AC} = \\dfrac{3^2 + 5^2 - 7^2}{2 \\cdot 3 \\cdot 5} = \\dfrac{9 + 25 - 49}{30} = \\dfrac{-15}{30} = -\\dfrac{1}{2}$。よって $A = 120°$（鈍角）。この後、面積は $\\dfrac12 \\cdot 3 \\cdot 5 \\sin 120° = \\dfrac{15\\sqrt3}{4}$ と続けられる。",
+    strategy:
+      "「3辺が分かっている → 余弦定理で角」を反射にする。角 $A$ をはさむ2辺が $AB, AC$、向かいの辺が $BC$。$\\cos A$ が負なら鈍角と即断でき、後続の面積・正弦へつなげやすい。3分以内。",
+    trapExplanation:
+      "向かいの辺（$BC$）とはさむ辺（$AB, AC$）を取り違えると分子の符号が狂う。$\\cos A < 0$ なのに鋭角と決めつけると面積や $\\sin$ の処理を誤る。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理", "数式変形"],
+  },
+
+  // ── 数学IA 第2問（2次関数・データの分析）────────────────────────────────
+  {
+    id: "ct-m1a-s2-q5",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 異なる2解をもつ条件",
+    statement:
+      "$x$ の2次方程式 $x^2 - 2x + k = 0$ が異なる2つの実数解をもつような定数 $k$ の値の範囲を求めよ。",
+    type: "single-choice",
+    options: ["$k < 1$", "$k \\leqq 1$", "$k > 1$", "$k < -1$"],
+    correctAnswer: "$k < 1$",
+    explanation:
+      "判別式を $D$ とすると、異なる2つの実数解をもつ条件は $D > 0$。$\\dfrac{D}{4} = (-1)^2 - 1 \\cdot k = 1 - k > 0$ より $k < 1$。",
+    strategy:
+      "解の個数の条件は判別式の符号で判断する。$x^2$ の係数が1、$x$ の係数が偶数なので $D/4$ を使うと計算が軽い。「異なる2解 → $D>0$（等号なし）」を即座に。2分以内。",
+    trapExplanation:
+      "「異なる2つ」は厳密不等号 $D>0$。$D \\geqq 0$（重解を含む）と混同して $k \\leqq 1$ を選ぶ誤りが最頻出。重解は「ただ1つの解」であることを確認。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "条件整理"],
+  },
+  {
+    id: "ct-m1a-s2-q6",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "データの分析 — 変量の一次変換",
+    context:
+      "あるクラスのテストの得点 $x$ について、平均が $50$ 点、標準偏差が $10$ 点であった。先生がボーナス点として全員の得点を $y = 2x + 5$ で変換することにした。",
+    statement:
+      "変換後の得点 $y$ の平均と標準偏差の組として正しいものを選べ。",
+    type: "single-choice",
+    options: [
+      "平均 $105$、標準偏差 $20$",
+      "平均 $105$、標準偏差 $25$",
+      "平均 $55$、標準偏差 $20$",
+      "平均 $105$、標準偏差 $10$",
+    ],
+    correctAnswer: "平均 $105$、標準偏差 $20$",
+    explanation:
+      "一次変換 $y = ax + b$ では、平均は $a\\bar{x} + b$、標準偏差は $|a|$ 倍になる（定数 $b$ は散らばりに影響しない）。よって平均 $= 2 \\cdot 50 + 5 = 105$、標準偏差 $= |2| \\cdot 10 = 20$。",
+    strategy:
+      "「平均は $a$ 倍して $b$ を足す、標準偏差は $|a|$ 倍、分散は $a^2$ 倍、$b$ は無関係」とセットで覚える。平均と散らばりで $b$ の扱いが違う点が出題の核心。2分以内。",
+    trapExplanation:
+      "標準偏差にも $+5$ を足してしまう誤り（平均 $105$・標準偏差 $25$）が典型。定数の足し算は全データを平行移動するだけで散らばりは変えない、というイメージを持つこと。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["データ読み取り", "計算処理"],
+    stimulusType: "table",
+  },
+
+  // ── 数学IA 第3問（図形の性質）────────────────────────────────────────────
+  {
+    id: "ct-m1a-s3-q5",
+    subjectId: "math-1a",
+    sectionId: "section-3",
+    title: "図形の性質 — 角の二等分線と辺の比",
+    statement:
+      "三角形 $ABC$ において $AB = 6$、$AC = 4$ とする。$\\angle A$ の二等分線と辺 $BC$ の交点を $D$ とするとき、$BD : DC$ を求めよ。",
+    type: "single-choice",
+    options: ["$3 : 2$", "$2 : 3$", "$3 : 5$", "$9 : 4$"],
+    correctAnswer: "$3 : 2$",
+    explanation:
+      "角の二等分線の性質より、$BD : DC = AB : AC = 6 : 4 = 3 : 2$。二等分線は対辺を、はさむ2辺の比に内分する。",
+    strategy:
+      "「内角の二等分線 → 対辺を隣り合う2辺の比に内分」を即適用。$B$ 側の比は $B$ に隣り合う辺 $AB$、$C$ 側の比は $AC$ に対応する。比を約分して答える。1分以内。",
+    trapExplanation:
+      "比の向きを逆にして $2:3$ とする誤りが典型。$BD$ は頂点 $B$ 側なので、$B$ を端点にもつ辺 $AB$ の長さが対応する。図で対応を確認すること。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "数式変形"],
+  },
+
+  // ── 数学IA 第4問（場合の数と確率）────────────────────────────────────────
+  {
+    id: "ct-m1a-s4-q5",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 少なくとも1個（余事象）",
+    statement:
+      "2個のさいころを同時に投げるとき、少なくとも1個は偶数の目が出る確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{3}{4}$", "$\\dfrac{1}{2}$", "$\\dfrac{2}{3}$", "$\\dfrac{1}{4}$"],
+    correctAnswer: "$\\dfrac{3}{4}$",
+    explanation:
+      "余事象「2個とも奇数」を考える。1個のさいころで奇数が出る確率は $\\dfrac{3}{6} = \\dfrac{1}{2}$。2個とも奇数の確率は $\\dfrac{1}{2} \\times \\dfrac{1}{2} = \\dfrac{1}{4}$。よって求める確率は $1 - \\dfrac{1}{4} = \\dfrac{3}{4}$。",
+    strategy:
+      "「少なくとも1個」は余事象（＝1個も〜ない）を疑うのが定石。直接数えると「偶数1個」と「偶数2個」に場合分けが必要だが、余事象なら一発。2分以内。",
+    trapExplanation:
+      "各さいころの確率 $\\dfrac12$ を単純に足して $1$ としたり、$\\dfrac12 + \\dfrac12 \\cdot \\dfrac12$ のように重複を二重に数える誤りに注意。余事象なら重複を気にせず処理できる。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-q6",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "場合の数 — 円順列",
+    statement:
+      "異なる $5$ 冊の本を円形のテーブルに並べる並べ方は何通りあるか。回転して一致する並べ方は同じものとみなす。",
+    type: "single-choice",
+    options: ["$24$ 通り", "$120$ 通り", "$60$ 通り", "$12$ 通り"],
+    correctAnswer: "$24$ 通り",
+    explanation:
+      "円順列の総数は $(n-1)!$。$n = 5$ なので $(5-1)! = 4! = 24$ 通り。1冊を固定して残り4冊を一列に並べると考えてもよい。",
+    strategy:
+      "円順列は「1つを固定して残りを並べる」＝ $(n-1)!$。回転で重なる分を割るイメージ。一列の順列 $n!$ との違いを即座に区別する。1分30秒以内。",
+    trapExplanation:
+      "通常の順列 $5! = 120$ をそのまま答える誤りが最頻出。円形では回転による重複（$n$ 通り）を割るので $5!/5 = 24$ になる。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+
+  // ── 数学II・B・C 第1問（図形と方程式・三角関数）──────────────────────────
+  {
+    id: "ct-m2bc-s1-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-1",
+    title: "三角関数 — 合成と最大値",
+    statement:
+      "$0 \\leqq \\theta < 2\\pi$ のとき、$f(\\theta) = \\sin\\theta + \\sqrt{3}\\cos\\theta$ の最大値を求めよ。",
+    type: "single-choice",
+    options: ["$2$", "$\\sqrt{3}$", "$1 + \\sqrt{3}$", "$\\sqrt{2}$"],
+    correctAnswer: "$2$",
+    explanation:
+      "三角関数の合成より $f(\\theta) = \\sqrt{1^2 + (\\sqrt{3})^2}\\,\\sin(\\theta + \\alpha) = 2\\sin\\left(\\theta + \\dfrac{\\pi}{3}\\right)$。$\\sin$ の最大値は $1$ なので、$f(\\theta)$ の最大値は $2$。",
+    strategy:
+      "$a\\sin\\theta + b\\cos\\theta = \\sqrt{a^2+b^2}\\,\\sin(\\theta+\\alpha)$ の合成を即適用。最大値は振幅 $\\sqrt{a^2+b^2}$ そのもの。位相 $\\alpha$ を求めなくても最大値は出せる。2分以内。",
+    trapExplanation:
+      "振幅を $a + b = 1 + \\sqrt{3}$ としてしまう誤りが典型。合成の振幅は2乗和の平方根 $\\sqrt{a^2+b^2}$ であることを確認。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["数式変形", "計算処理"],
+  },
+
+  // ── 数学II・B・C 第2問（指数・対数・微分・積分）──────────────────────────
+  {
+    id: "ct-m2bc-s2-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-2",
+    title: "微分 — 接線の方程式",
+    statement:
+      "曲線 $y = x^3 - 2x$ 上の点 $(1,\\ -1)$ における接線の方程式を求めよ。",
+    type: "single-choice",
+    options: ["$y = x - 2$", "$y = x$", "$y = 2x - 3$", "$y = -x$"],
+    correctAnswer: "$y = x - 2$",
+    explanation:
+      "$y' = 3x^2 - 2$。接点 $x = 1$ での傾きは $y'(1) = 3 - 2 = 1$。接線は $y - (-1) = 1 \\cdot (x - 1)$、すなわち $y = x - 2$。",
+    strategy:
+      "接線は公式 $y - f(a) = f'(a)(x - a)$ に当てはめるだけ。①微分して傾き $f'(a)$ ②点 $(a, f(a))$ を通る、の2点を押さえる。2分以内。",
+    trapExplanation:
+      "傾きに $f'(a)$ ではなく $f(a)$ を使う、または点の代入を忘れて切片を誤る。接点が曲線上にあること（$f(1) = 1 - 2 = -1$）を確認すると安心。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+
+  // ── 数学II・B・C 第3問（数列）────────────────────────────────────────────
+  {
+    id: "ct-m2bc-s3-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-3",
+    title: "数列 — 等比数列の和",
+    statement:
+      "初項 $3$、公比 $2$ の等比数列について、初項から第 $5$ 項までの和 $S_5$ を求めよ。",
+    type: "single-choice",
+    options: ["$93$", "$96$", "$45$", "$189$"],
+    correctAnswer: "$93$",
+    explanation:
+      "等比数列の和の公式 $S_n = \\dfrac{a(r^n - 1)}{r - 1}$ に $a = 3$, $r = 2$, $n = 5$ を代入。$S_5 = \\dfrac{3(2^5 - 1)}{2 - 1} = 3(32 - 1) = 3 \\cdot 31 = 93$。",
+    strategy:
+      "等比和は公式に乗せるだけ。$2^5 = 32$ を即出し、$r - 1 = 1$ なので分母処理も軽い。各項 $3,6,12,24,48$ を直接足して $93$ と検算してもよい。2分以内。",
+    trapExplanation:
+      "指数を $r^{n-1}$（$2^4 = 16$）と取り違える、または項数 $n$ を1ずらす誤り。「第5項まで＝$n=5$」「$2^5$」を確認。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+
+  // ── 数学II・B・C 第5問（ベクトル）────────────────────────────────────────
+  {
+    id: "ct-m2bc-s5-q4",
+    subjectId: "math-2bc",
+    sectionId: "section-5",
+    title: "ベクトル — 2つのベクトルのなす角",
+    statement:
+      "$\\vec{a} = (1,\\ 1)$、$\\vec{b} = (1,\\ 0)$ のなす角 $\\theta$（$0° \\leqq \\theta \\leqq 180°$）を求めよ。",
+    type: "single-choice",
+    options: ["$45°$", "$30°$", "$60°$", "$90°$"],
+    correctAnswer: "$45°$",
+    explanation:
+      "$\\vec{a} \\cdot \\vec{b} = 1 \\cdot 1 + 1 \\cdot 0 = 1$、$|\\vec{a}| = \\sqrt{2}$、$|\\vec{b}| = 1$。$\\cos\\theta = \\dfrac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|} = \\dfrac{1}{\\sqrt{2}}$。よって $\\theta = 45°$。",
+    strategy:
+      "なす角は $\\cos\\theta = \\dfrac{\\vec{a}\\cdot\\vec{b}}{|\\vec{a}||\\vec{b}|}$ の1本道。①内積 ②各大きさ ③割って $\\cos\\theta$ ④角度、の順で機械的に。2分以内。",
+    trapExplanation:
+      "内積の値だけで角度を決めようとして大きさで割り忘れる、または $|\\vec{a}| = \\sqrt{2}$ を $2$ と誤る。$\\cos\\theta = 1/\\sqrt2$ から $45°$ を即答できるようにする。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["計算処理", "数式変形"],
+  },
+
+  // ── 英語リーディング 第1問（短文・案内文）──────────────────────────────
+  {
+    id: "ct-eng-s1-q5",
+    subjectId: "english-reading",
+    sectionId: "section-1",
+    title: "案内文読解 — 持ち物の特定",
+    passage: `Greenfield Park — Spring Volunteer Clean-up
+
+Date: Saturday, April 6 (rain date: April 13)
+Time: 9:00 a.m. - 12:00 p.m.
+Meeting point: South Gate parking lot
+
+Volunteers will collect litter and plant flowers along the walking paths. Gloves and trash bags will be provided. Please wear shoes you don't mind getting dirty, and bring your own water bottle.
+
+Students under 15 are welcome but must register together with a family member. To join, send an e-mail to the park office by April 3.`,
+    statement:
+      "What is one thing volunteers are asked to bring by themselves?",
+    type: "single-choice",
+    options: ["Gloves", "Trash bags", "A water bottle", "Flowers to plant"],
+    correctAnswer: "A water bottle",
+    explanation:
+      "本文に \"Gloves and trash bags will be provided\"（手袋とゴミ袋は用意される）とあり、続けて \"bring your own water bottle\"（自分の水筒を持参）とある。よって自分で持参するのは水筒。手袋・ゴミ袋は主催者が用意し、花は植える作業の対象であって持参物ではない。",
+    strategy:
+      "案内文では「主催者が用意するもの（provided）」と「参加者が持参するもの（bring your own）」を必ず区別する。設問の by themselves（自分で）に対応するのは bring your own の部分。該当の1文を見つければ即答できる。2分以内。",
+    trapExplanation:
+      "provided されるもの（手袋・ゴミ袋）を「持ち物」と混同するのが典型のワナ。provide / bring の動詞に印をつけながら読むと取り違えを防げる。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["英語スキャニング", "条件整理", "情報照合"],
+    stimulusType: "notice",
+  },
+
+  // ── 英語リーディング 第2問（ウェブサイト・投稿）────────────────────────
+  {
+    id: "ct-eng-s2-q5",
+    subjectId: "english-reading",
+    sectionId: "section-2",
+    title: "投稿読解 — 主旨の把握",
+    passage: `Posted by Mei | Study Tips Blog
+
+Last month I switched from paper notebooks to a tablet for taking notes in class. At first, typing felt faster, and I loved that I could search my notes instantly. However, after a few weeks I noticed that I remembered less of what I had written. When I went back to handwriting for math, the formulas stayed in my memory much better.
+
+Now I use both: the tablet for long, text-heavy classes, and paper for subjects with many diagrams and formulas. The lesson for me wasn't "paper is best" or "digital is best." It was that the right tool depends on the subject.`,
+    statement:
+      "What is the main point Mei makes in this post?",
+    type: "single-choice",
+    options: [
+      "Typing notes is always better than handwriting.",
+      "The best note-taking method depends on the subject.",
+      "She has completely stopped using her tablet.",
+      "Being able to search notes is the most important thing.",
+    ],
+    correctAnswer: "The best note-taking method depends on the subject.",
+    explanation:
+      "最終段落の \"the right tool depends on the subject\"（適した道具は科目によって変わる）が筆者の主旨。彼女はタブレットをやめておらず両方使っている（both）。typing が速い・検索できるは途中の利点であって結論ではない。",
+    strategy:
+      "ブログ・投稿の主旨は、最後の段落の結論文（the lesson was / the point is など）に出やすい。冒頭の具体的な利点・欠点は主旨ではなく根拠。結論の言い換えを選ぶ。3分以内。",
+    trapExplanation:
+      "途中の \"typing felt faster\" や \"search instantly\" を主旨と取り違えるのがワナ。\"However\" 以降で評価が変わる点と、最後の \"depends on the subject\" という中立的な結論を見落とさないこと。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["要旨把握", "英語スキャニング", "選択肢消去"],
+    stimulusType: "blog",
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────

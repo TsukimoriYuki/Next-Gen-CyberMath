@@ -9,14 +9,28 @@ import { WhyPopover } from "@/components/scaffolding/WhyPopover";
 // KaTeX renders to an HTML string on the server (no DOM needed), so these
 // stay as server components — zero client JS for static math.
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// TeX が壊れていてもページ全体を落とさず、生のTeXをそのまま出すのではなく
+// 「読める素のテキスト」へフォールバックする。throwOnError:false で大半は
+// 赤字レンダリングになるが、想定外の例外はここで握りつぶす。
 function render(tex: string, displayMode: boolean): string {
-  return katex.renderToString(tex, {
-    displayMode,
-    throwOnError: false,
-    strict: false,
-    trust: false,
-    output: "html",
-  });
+  try {
+    return katex.renderToString(tex, {
+      displayMode,
+      throwOnError: false,
+      strict: false,
+      trust: false,
+      output: "html",
+    });
+  } catch {
+    return `<span class="katex-fallback">${escapeHtml(tex)}</span>`;
+  }
 }
 
 export function InlineMath({ math }: { math: string }) {
@@ -29,17 +43,29 @@ export function InlineMath({ math }: { math: string }) {
 }
 
 export function BlockMath({ math }: { math: string }) {
+  // スマホでも長い数式が見切れないよう、ブロック数式は横スクロール可にする。
   return (
     <div
-      className="katex-block"
+      className="katex-block w-full max-w-full overflow-x-auto overflow-y-hidden"
       dangerouslySetInnerHTML={{ __html: render(math, true) }}
     />
   );
 }
 
 // ---- lightweight markdown + KaTeX rich text ----------------------------
-// Supports:  $$display$$ (own line),  $inline$,  blank-line paragraphs,
-// "- " bullet lines, and **bold** spans.
+// Supports:  $$display$$ / \[display\],  $inline$ / \(inline\),
+// blank-line paragraphs, "- " bullet lines, and **bold** spans.
+
+// 教材データには `\( ... \)` `\[ ... \]` が混在する。レンダリング前に
+// `$ ... $` `$$ ... $$` へ正規化して、デリミタ揺れによる raw 表示を防ぐ。
+// `\\[6pt]` のような行間指定（直前にバックスラッシュがある）は変換しない。
+export function normalizeMathDelimiters(input: string): string {
+  return input
+    .replace(/(?<!\\)\\\[/g, () => "$$")
+    .replace(/(?<!\\)\\\]/g, () => "$$")
+    .replace(/(?<!\\)\\\(/g, () => "$")
+    .replace(/(?<!\\)\\\)/g, () => "$");
+}
 
 // @@why:<key>|<label>@@ トークンを WhyPopover に展開するパーサー。
 // 毎回新しい RegExp を作成してグローバル状態を回避する。
@@ -67,6 +93,7 @@ function renderInline(text: string, keyBase: string): React.ReactNode[] {
         return (
           <span
             key={key}
+            className="katex-inline"
             dangerouslySetInnerHTML={{ __html: render(part.slice(1, -1), false) }}
           />
         );
@@ -97,7 +124,7 @@ export function MathText({
   children: string;
   className?: string;
 }) {
-  const blocks = children.trim().split(/\n\s*\n/);
+  const blocks = normalizeMathDelimiters(children.trim()).split(/\n\s*\n/);
 
   return (
     <div className={cn("space-y-3 leading-relaxed", className)}>

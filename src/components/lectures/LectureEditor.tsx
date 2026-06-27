@@ -17,7 +17,14 @@ import {
   Plus,
   Save,
   Trash2,
+  Wand2,
 } from "lucide-react";
+import {
+  createTriangleGeometryLayerBlock,
+  DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT,
+  type TriangleAuxiliaryLinePreset,
+  type TriangleGeometrySvgInput,
+} from "@/lib/lecture-geometry-svg";
 import {
   MISTAKE_DIAGNOSIS_TAGS,
   SPECIAL_LECTURES,
@@ -644,6 +651,74 @@ function GeometryLayersFields({
   block: Extract<LectureBlock, { type: "geometryLayers" }>;
   onChange: (block: LectureBlock) => void;
 }) {
+  const [triangleInput, setTriangleInput] = useState<TriangleGeometrySvgInput>(() =>
+    createTriangleInputFromGeometryBlock(block),
+  );
+  const generatedBlock = useMemo(
+    () => createTriangleGeometryLayerBlock(triangleInput, block.id),
+    [triangleInput, block.id],
+  );
+
+  function updateTriangleInput<K extends keyof TriangleGeometrySvgInput>(
+    key: K,
+    value: TriangleGeometrySvgInput[K],
+  ) {
+    setTriangleInput((current) => ({ ...current, [key]: value }));
+  }
+
+  function updatePointLabel(
+    key: keyof TriangleGeometrySvgInput["pointLabels"],
+    value: string,
+  ) {
+    setTriangleInput((current) => ({
+      ...current,
+      pointLabels: { ...current.pointLabels, [key]: value },
+    }));
+  }
+
+  function updateSideLabel(
+    key: keyof TriangleGeometrySvgInput["sideLabels"],
+    value: string,
+  ) {
+    setTriangleInput((current) => ({
+      ...current,
+      sideLabels: { ...current.sideLabels, [key]: value },
+    }));
+  }
+
+  function updateAngleLabel(
+    key: keyof TriangleGeometrySvgInput["angleLabels"],
+    value: string,
+  ) {
+    setTriangleInput((current) => ({
+      ...current,
+      angleLabels: { ...current.angleLabels, [key]: value },
+    }));
+  }
+
+  function applyGeneratedBlock() {
+    onChange({
+      ...generatedBlock,
+      id: block.id,
+    });
+  }
+
+  function applyGeneratedBaseImage() {
+    onChange({
+      ...block,
+      title: generatedBlock.title,
+      description: generatedBlock.description,
+      baseImage: generatedBlock.baseImage,
+    });
+  }
+
+  function applyGeneratedLayers() {
+    onChange({
+      ...block,
+      layers: generatedBlock.layers,
+    });
+  }
+
   function updateLayer(layerId: string, nextLayer: GeometryLayer) {
     onChange({
       ...block,
@@ -692,6 +767,162 @@ function GeometryLayersFields({
 
   return (
     <div className="grid gap-4">
+      <section className="rounded-xl border border-blue-100 bg-blue-50/60 p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-extrabold text-blue-700">
+              <Wand2 className="h-4 w-4" />
+              三角形SVG生成補助
+            </div>
+            <p className="mt-1 text-xs leading-5 text-slate-600">
+              点名・辺・角・公式メモを入れると、geometryLayers用のSVG data URIをまとめて生成します。
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={applyGeneratedBlock}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-xs font-bold text-white hover:bg-blue-700"
+            >
+              <Wand2 className="h-3.5 w-3.5" />
+              三角形SVGを生成
+            </button>
+            <button
+              type="button"
+              onClick={applyGeneratedBaseImage}
+              className="rounded-lg border border-blue-200 bg-white px-3 py-2 text-xs font-bold text-blue-700 hover:bg-blue-50"
+            >
+              基本図だけ反映
+            </button>
+            <button
+              type="button"
+              onClick={applyGeneratedLayers}
+              className="rounded-lg border border-blue-200 bg-white px-3 py-2 text-xs font-bold text-blue-700 hover:bg-blue-50"
+            >
+              レイヤーだけ反映
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px]">
+          <div className="grid gap-3">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Field label="図形タイトル">
+                <input
+                  value={triangleInput.title}
+                  onChange={(e) => updateTriangleInput("title", e.target.value)}
+                  className="input bg-white"
+                />
+              </Field>
+              <Field label="補助線プリセット">
+                <select
+                  value={triangleInput.auxiliaryLine}
+                  onChange={(e) =>
+                    updateTriangleInput("auxiliaryLine", e.target.value as TriangleAuxiliaryLinePreset)
+                  }
+                  className="input bg-white"
+                >
+                  <option value="altitude-from-a">AからBCへ</option>
+                  <option value="altitude-from-b">BからACへ</option>
+                  <option value="median-from-a">AからBCの中点へ</option>
+                  <option value="none">補助線なし</option>
+                </select>
+              </Field>
+            </div>
+
+            <Field label="説明文">
+              <textarea
+                value={triangleInput.description}
+                onChange={(e) => updateTriangleInput("description", e.target.value)}
+                className="input min-h-20 bg-white"
+              />
+            </Field>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <Field label="点A">
+                <input value={triangleInput.pointLabels.a} onChange={(e) => updatePointLabel("a", e.target.value)} className="input bg-white" />
+              </Field>
+              <Field label="点B">
+                <input value={triangleInput.pointLabels.b} onChange={(e) => updatePointLabel("b", e.target.value)} className="input bg-white" />
+              </Field>
+              <Field label="点C">
+                <input value={triangleInput.pointLabels.c} onChange={(e) => updatePointLabel("c", e.target.value)} className="input bg-white" />
+              </Field>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <Field label="辺AB">
+                <input value={triangleInput.sideLabels.ab} onChange={(e) => updateSideLabel("ab", e.target.value)} className="input bg-white" />
+              </Field>
+              <Field label="辺BC">
+                <input value={triangleInput.sideLabels.bc} onChange={(e) => updateSideLabel("bc", e.target.value)} className="input bg-white" />
+              </Field>
+              <Field label="辺CA">
+                <input value={triangleInput.sideLabels.ca} onChange={(e) => updateSideLabel("ca", e.target.value)} className="input bg-white" />
+              </Field>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <Field label="角A">
+                <input value={triangleInput.angleLabels.a} onChange={(e) => updateAngleLabel("a", e.target.value)} className="input bg-white" />
+              </Field>
+              <Field label="角B">
+                <input value={triangleInput.angleLabels.b} onChange={(e) => updateAngleLabel("b", e.target.value)} className="input bg-white" />
+              </Field>
+              <Field label="角C">
+                <input value={triangleInput.angleLabels.c} onChange={(e) => updateAngleLabel("c", e.target.value)} className="input bg-white" />
+              </Field>
+            </div>
+
+            <details className="rounded-xl border border-blue-100 bg-white p-3">
+              <summary className="cursor-pointer text-xs font-extrabold text-slate-700">
+                詳細メモを編集
+              </summary>
+              <div className="mt-3 grid gap-3">
+                <Field label="等しい角の説明">
+                  <input
+                    value={triangleInput.equalAngleLabel}
+                    onChange={(e) => updateTriangleInput("equalAngleLabel", e.target.value)}
+                    className="input"
+                  />
+                </Field>
+                <Field label="使う公式（1行1つ）">
+                  <textarea
+                    value={triangleInput.formulaNotes.join("\n")}
+                    onChange={(e) => updateTriangleInput("formulaNotes", splitLines(e.target.value))}
+                    className="input min-h-24"
+                  />
+                </Field>
+                <Field label="解法ルート（1行1つ）">
+                  <textarea
+                    value={triangleInput.routeSteps.join("\n")}
+                    onChange={(e) => updateTriangleInput("routeSteps", splitLines(e.target.value))}
+                    className="input min-h-24"
+                  />
+                </Field>
+              </div>
+            </details>
+          </div>
+
+          <div className="rounded-xl border border-slate-200 bg-white p-3">
+            <div className="mb-2 text-xs font-extrabold text-slate-600">生成プレビュー</div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={generatedBlock.layers[0]?.image.src ?? generatedBlock.baseImage.src}
+              alt="生成した三角形SVGプレビュー"
+              className="h-auto w-full rounded-lg border border-slate-100 bg-white object-contain"
+            />
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {generatedBlock.layers.map((layer) => (
+                <span key={layer.id} className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-600">
+                  {layer.label}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label="タイトル">
           <input
@@ -993,36 +1224,7 @@ function createBlock(type: LectureBlock["type"]): LectureBlock {
     case "image":
       return { id, type, src: "/window.svg", alt: "講義画像", caption: "画像の説明" };
     case "geometryLayers":
-      return {
-        id,
-        type,
-        title: "図形レイヤー",
-        description: "同じ図形を、条件・角・補助線・公式・解法ルートに分けて確認します。",
-        baseImage: {
-          src: "/window.svg",
-          alt: "基本図",
-        },
-        layers: [
-          {
-            id: blockId("geometry-layer"),
-            label: "条件だけ",
-            image: {
-              src: "/window.svg",
-              alt: "条件だけを示した図",
-            },
-            explanation: "最初に拾う条件だけを表示します。",
-          },
-          {
-            id: blockId("geometry-layer"),
-            label: "解法ルート",
-            image: {
-              src: "/window.svg",
-              alt: "解法ルートを示した図",
-            },
-            explanation: "どの順に求めるかを確認します。",
-          },
-        ],
-      };
+      return createTriangleGeometryLayerBlock(DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT, id);
     case "problem":
       return {
         id,
@@ -1077,6 +1279,16 @@ function structuredCloneBlock(block: LectureBlock): LectureBlock {
 
 function structuredCloneLayer(layer: GeometryLayer): GeometryLayer {
   return JSON.parse(JSON.stringify(layer)) as GeometryLayer;
+}
+
+function createTriangleInputFromGeometryBlock(
+  block: Extract<LectureBlock, { type: "geometryLayers" }>,
+): TriangleGeometrySvgInput {
+  return {
+    ...DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT,
+    title: block.title ?? DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT.title,
+    description: block.description ?? DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT.description,
+  };
 }
 
 function blockId(type: string): string {

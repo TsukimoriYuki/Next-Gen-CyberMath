@@ -32,6 +32,15 @@ export interface CommonTestPrescription {
   lectureStatus?: "available" | "coming-soon";
 }
 
+export interface CommonTestRecommendedLecture {
+  slug: string;
+  title: string;
+  reason: string;
+  estimatedMinutes: number;
+  href: string;
+  sourceTagId?: CommonTestMistakeTagId;
+}
+
 export interface CommonTestSectionMistakeTrend {
   key: string;
   subjectId: string;
@@ -52,6 +61,7 @@ export interface CommonTestLearningDiagnosis {
   unsureCorrectCount: number;
   dueReviewCount: number | null;
   prescription: CommonTestPrescription;
+  recommendedLecture: CommonTestRecommendedLecture;
   strategies: CommonTestMistakeStrategy[];
 }
 
@@ -62,6 +72,84 @@ const SUBJECT_LABELS: Record<string, string> = {
 };
 
 const RISK_PRIORITY: CommonTestRiskLevel[] = ["S", "A", "B", "C"];
+
+const COMMON_TEST_LECTURE_RECOMMENDATIONS: Record<
+  CommonTestMistakeTagId,
+  CommonTestRecommendedLecture
+> = {
+  calculation: {
+    slug: "quadratic-case-split-intensive",
+    title: "共通テスト 二次関数 場合分け完全攻略",
+    reason: "計算だけでなく、端点比較と境界値を先に固定すると処理ミスを減らせます。",
+    estimatedMinutes: 40,
+    href: "/common-test/lectures/quadratic-case-split-intensive",
+    sourceTagId: "calculation",
+  },
+  "formula-selection": {
+    slug: "geometry-measurement-intensive",
+    title: "共通テスト 図形と計量 徹底講座",
+    reason: "公式選択ミスが目立つときは、辺・角・面積から候補を絞る順番を確認します。",
+    estimatedMinutes: 45,
+    href: "/common-test/lectures/geometry-measurement-intensive",
+    sourceTagId: "formula-selection",
+  },
+  "reading-misread": {
+    slug: "probability-guided-reading",
+    title: "共通テスト 確率 誘導の読み方講座",
+    reason: "条件文を事象に言い換え、分母と分子の数え方をそろえる練習ができます。",
+    estimatedMinutes: 40,
+    href: "/common-test/lectures/probability-guided-reading",
+    sourceTagId: "reading-misread",
+  },
+  "condition-missed": {
+    slug: "probability-guided-reading",
+    title: "共通テスト 確率 誘導の読み方講座",
+    reason: "条件見落としが増えています。誘導文の条件を分解して読む練習が効果的です。",
+    estimatedMinutes: 40,
+    href: "/common-test/lectures/probability-guided-reading",
+    sourceTagId: "condition-missed",
+  },
+  "case-split": {
+    slug: "quadratic-case-split-intensive",
+    title: "共通テスト 二次関数 場合分け完全攻略",
+    reason: "場合分け不足が目立つときは、境界値を先に出す型を固めます。",
+    estimatedMinutes: 40,
+    href: "/common-test/lectures/quadratic-case-split-intensive",
+    sourceTagId: "case-split",
+  },
+  "figure-reading": {
+    slug: "geometry-properties-auxiliary-lines",
+    title: "共通テスト 図形の性質 補助線発見講座",
+    reason: "図の見落としが多いときは、同じ角・円周角・補助線の見る順番を確認します。",
+    estimatedMinutes: 45,
+    href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+    sourceTagId: "figure-reading",
+  },
+  "time-up": {
+    slug: "quadratic-case-split-intensive",
+    title: "共通テスト 二次関数 場合分け完全攻略",
+    reason: "時間切れが目立つ日は、判断を短くするために境界値を先に決める講義から始めます。",
+    estimatedMinutes: 40,
+    href: "/common-test/lectures/quadratic-case-split-intensive",
+    sourceTagId: "time-up",
+  },
+  "confident-wrong": {
+    slug: "geometry-measurement-intensive",
+    title: "共通テスト 図形と計量 徹底講座",
+    reason: "自信ありで間違えた問題は、最初に見た条件や公式選択の思い込みを点検します。",
+    estimatedMinutes: 45,
+    href: "/common-test/lectures/geometry-measurement-intensive",
+    sourceTagId: "confident-wrong",
+  },
+  "unsure-correct": {
+    slug: "probability-guided-reading",
+    title: "共通テスト 確率 誘導の読み方講座",
+    reason: "正解していても根拠が弱いときは、条件整理と言い換えで説明できる状態にします。",
+    estimatedMinutes: 40,
+    href: "/common-test/lectures/probability-guided-reading",
+    sourceTagId: "unsure-correct",
+  },
+};
 
 export const COMMON_TEST_MISTAKE_STRATEGIES: Record<
   CommonTestMistakeTagId,
@@ -88,20 +176,22 @@ export const COMMON_TEST_MISTAKE_STRATEGIES: Record<
     tagId: "condition-missed",
     title: "条件見落とし",
     action: "問題文に下線を引くつもりで条件を抽出する。",
-    lectureHref: "/common-test/lectures/geometry-measurement-intensive",
-    lectureLabel: "共通テスト 図形と計量 徹底講座",
+    lectureHref: "/common-test/lectures/probability-guided-reading",
+    lectureLabel: "共通テスト 確率 誘導の読み方講座",
   },
   "case-split": {
     tagId: "case-split",
     title: "場合分け不足",
     action: "境界値を先に出し、等号が入る場所を確認する。",
+    lectureHref: "/common-test/lectures/quadratic-case-split-intensive",
+    lectureLabel: "共通テスト 二次関数 場合分け完全攻略",
   },
   "figure-reading": {
     tagId: "figure-reading",
     title: "図の見落とし",
     action: "等しい角・同じ辺・円周角を探してから計算に入る。",
-    lectureHref: "/common-test/lectures/geometry-measurement-intensive",
-    lectureLabel: "共通テスト 図形と計量 徹底講座",
+    lectureHref: "/common-test/lectures/geometry-properties-auxiliary-lines",
+    lectureLabel: "共通テスト 図形の性質 補助線発見講座",
   },
   "time-up": {
     tagId: "time-up",
@@ -238,8 +328,40 @@ export function buildCommonTestLearningDiagnosis({
     unsureCorrectCount,
     dueReviewCount,
     prescription,
+    recommendedLecture: buildRecommendedLecture({
+      topMistake,
+      increasingMistake,
+      riskCounts,
+      tagCounts,
+    }),
     strategies,
   };
+}
+
+export function buildRecommendedLecture({
+  topMistake,
+  increasingMistake,
+  riskCounts,
+  tagCounts,
+}: {
+  topMistake: { tagId: CommonTestMistakeTagId; count: number } | null;
+  increasingMistake: { tagId: CommonTestMistakeTagId; recent: number; previous: number } | null;
+  riskCounts: Partial<Record<CommonTestRiskLevel, number>>;
+  tagCounts: Partial<Record<CommonTestMistakeTagId, number>>;
+}): CommonTestRecommendedLecture {
+  const focusTag =
+    increasingMistake?.tagId ??
+    ((riskCounts.S ?? 0) > 0 ? "confident-wrong" : null) ??
+    topMistake?.tagId ??
+    COMMON_TEST_MISTAKE_TAGS.map((tag) => ({
+      tagId: tag.id,
+      count: tagCounts[tag.id] ?? 0,
+    }))
+      .filter((entry) => entry.count > 0)
+      .sort((a, b) => b.count - a.count)[0]?.tagId ??
+    "case-split";
+
+  return COMMON_TEST_LECTURE_RECOMMENDATIONS[focusTag];
 }
 
 function countMistakeTags(
@@ -335,7 +457,7 @@ function buildPrescription({
   }
 
   const focusTag = increasingMistake?.tagId ?? topMistake?.tagId;
-  if (focusTag && ["formula-selection", "condition-missed", "figure-reading"].includes(focusTag)) {
+  if (focusTag === "formula-selection") {
     return {
       title: "図形と計量の「できる人の頭の中」を確認",
       reason: `${getCommonTestMistakeTagLabel(focusTag)}が目立っています。まず何を見るかを復習しましょう。`,
@@ -343,6 +465,30 @@ function buildPrescription({
       estimatedMinutes: 15,
       ctaLabel: "特別講義を見る",
       href: "/common-test/lectures/geometry-measurement-intensive",
+      lectureStatus: "available",
+    };
+  }
+
+  if (focusTag === "condition-missed") {
+    return {
+      title: "確率の誘導文から条件を拾う",
+      reason: "条件見落としが増えています。事象の言い換えと条件整理を講義で確認しましょう。",
+      priority: "高",
+      estimatedMinutes: 15,
+      ctaLabel: "特別講義を見る",
+      href: "/common-test/lectures/probability-guided-reading",
+      lectureStatus: "available",
+    };
+  }
+
+  if (focusTag === "figure-reading") {
+    return {
+      title: "図形の性質で補助線の判断を確認",
+      reason: "図の見落としが目立っています。同じ角・円周角・補助線の見る順番を復習しましょう。",
+      priority: "高",
+      estimatedMinutes: 15,
+      ctaLabel: "特別講義を見る",
+      href: "/common-test/lectures/geometry-properties-auxiliary-lines",
       lectureStatus: "available",
     };
   }
@@ -360,13 +506,13 @@ function buildPrescription({
 
   if (focusTag === "case-split") {
     return {
-      title: "場合分けの境界条件を復習",
-      reason: "二次関数・確率・図形では、境界値を先に出すと失点を減らせます。",
-      priority: "中",
+      title: "二次関数の境界値を講義で復習",
+      reason: "場合分け不足が増えています。軸・端点・境界値を先に出す型を確認しましょう。",
+      priority: "高",
       estimatedMinutes: 15,
-      ctaLabel: "数学IAを開く",
-      href: "/common-test/math-1a",
-      lectureStatus: "coming-soon",
+      ctaLabel: "特別講義を見る",
+      href: "/common-test/lectures/quadratic-case-split-intensive",
+      lectureStatus: "available",
     };
   }
 

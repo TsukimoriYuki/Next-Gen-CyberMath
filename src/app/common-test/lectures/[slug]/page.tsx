@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, BookOpen, Clock, GraduationCap, Tag } from "lucide-react";
 import { getSpecialLectureBySlug, SPECIAL_LECTURES } from "@/data/specialLectures";
 import { LectureExperience } from "@/components/lectures/LectureExperience";
+import { LectureNextRecommendation } from "@/components/lectures/LectureNextRecommendation";
 
 export function generateStaticParams() {
   return SPECIAL_LECTURES.map((lecture) => ({ slug: lecture.slug }));
@@ -101,6 +102,7 @@ export default async function LectureDetailPage({
         </header>
 
         <LectureExperience lecture={lecture} />
+        <LectureNextRecommendation currentSlug={lecture.slug} />
       </div>
     </main>
   );

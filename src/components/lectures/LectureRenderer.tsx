@@ -80,17 +80,25 @@ export function LectureBlockView({
           <div className="mt-3 overflow-x-auto rounded-xl bg-white px-4 py-5 ring-1 ring-blue-100">
             <BlockMath math={block.expression} />
           </div>
-          {block.caption && <p className="mt-3 text-xs leading-5 text-slate-600">{block.caption}</p>}
+          {block.caption && (
+            <MathText className="mt-3 text-xs leading-5 text-slate-600">{block.caption}</MathText>
+          )}
         </div>
       );
     case "image":
       return (
         <figure className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={block.src} alt={block.alt} className="max-h-[420px] w-full object-cover" />
+          <div className="bg-gradient-to-b from-white to-slate-50 p-3 sm:p-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={block.src}
+              alt={block.alt}
+              className="mx-auto block h-auto w-full max-w-[640px] object-contain"
+            />
+          </div>
           {block.caption && (
             <figcaption className="border-t border-slate-100 px-4 py-3 text-xs text-slate-500">
-              {block.caption}
+              <MathText className="text-xs leading-5 text-slate-500">{block.caption}</MathText>
             </figcaption>
           )}
         </figure>

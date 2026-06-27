@@ -1,3 +1,13 @@
+import {
+  createTriangleGeometryLayerBlock,
+  DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT,
+} from "@/lib/lecture-geometry-svg";
+import {
+  createPowerOfPointSvg,
+  createProbabilityCountingSvg,
+  createQuadraticAxisCasesSvg,
+} from "@/lib/lecture-diagram-svg";
+
 export type LectureDifficulty = "基礎" | "標準" | "発展";
 
 export type MistakeDiagnosisTag =
@@ -23,6 +33,12 @@ export interface Lecture {
   tags: string[];
   publishedAt: string;
   blocks: LectureBlock[];
+}
+
+export interface SpecialLectureRoadmapStep {
+  slug: string;
+  purpose: string;
+  recommendedTiming: string;
 }
 
 export interface GeometryLayer {
@@ -103,71 +119,28 @@ export const MISTAKE_DIAGNOSIS_TAGS: MistakeDiagnosisTag[] = [
   "自信なしで正解した",
 ];
 
-type GeometryLayerSvgKind = "base" | "conditions" | "angles" | "auxiliary" | "formulas" | "route";
-
-function geometryLayerSvg(layer: GeometryLayerSvgKind): string {
-  const overlays: Record<GeometryLayerSvgKind, string> = {
-    base: "",
-    conditions: `
-      <text x="192" y="350" font-size="18" font-weight="700" fill="#1d4ed8">AB=6</text>
-      <text x="395" y="350" font-size="18" font-weight="700" fill="#1d4ed8">AC=8</text>
-      <path d="M226 320 A38 38 0 0 1 250 286" fill="none" stroke="#1d4ed8" stroke-width="4"/>
-      <text x="252" y="308" font-size="18" font-weight="700" fill="#1d4ed8">60°</text>
-    `,
-    angles: `
-      <path d="M226 320 A38 38 0 0 1 250 286" fill="none" stroke="#7c3aed" stroke-width="4"/>
-      <path d="M454 320 A46 46 0 0 0 421 286" fill="none" stroke="#7c3aed" stroke-width="4"/>
-      <text x="254" y="308" font-size="17" font-weight="700" fill="#7c3aed">A</text>
-      <text x="420" y="307" font-size="17" font-weight="700" fill="#7c3aed">B</text>
-      <text x="333" y="112" font-size="14" fill="#7c3aed">対応する辺と角を見る</text>
-    `,
-    auxiliary: `
-      <line x1="455" y1="320" x2="455" y2="146" stroke="#ea580c" stroke-width="4" stroke-dasharray="8 7"/>
-      <circle cx="455" cy="146" r="5" fill="#ea580c"/>
-      <text x="466" y="210" font-size="16" font-weight="700" fill="#ea580c">補助線</text>
-      <text x="392" y="135" font-size="14" fill="#ea580c">高さ・面積を確認</text>
-    `,
-    formulas: `
-      <rect x="62" y="38" width="240" height="96" rx="14" fill="#eff6ff" stroke="#bfdbfe"/>
-      <text x="78" y="68" font-size="16" font-weight="700" fill="#1d4ed8">公式候補</text>
-      <text x="78" y="94" font-size="14" fill="#334155">1. 余弦定理で BC</text>
-      <text x="78" y="116" font-size="14" fill="#334155">2. 面積公式で S</text>
-      <text x="78" y="138" font-size="14" fill="#334155">3. 正弦定理で sinB</text>
-    `,
-    route: `
-      <circle cx="340" cy="320" r="18" fill="#2563eb"/>
-      <text x="334" y="327" font-size="18" font-weight="800" fill="white">1</text>
-      <circle cx="455" cy="146" r="18" fill="#2563eb"/>
-      <text x="449" y="153" font-size="18" font-weight="800" fill="white">2</text>
-      <circle cx="455" cy="320" r="18" fill="#2563eb"/>
-      <text x="449" y="327" font-size="18" font-weight="800" fill="white">3</text>
-      <path d="M360 315 C390 285 425 230 445 166" fill="none" stroke="#2563eb" stroke-width="4" marker-end="url(#arrow)"/>
-      <path d="M455 170 C470 220 470 270 460 300" fill="none" stroke="#2563eb" stroke-width="4" marker-end="url(#arrow)"/>
-      <text x="74" y="72" font-size="15" font-weight="700" fill="#1e293b">BC → 面積 → sinB</text>
-    `,
-  };
-
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
-      <defs>
-        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-          <path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/>
-        </marker>
-      </defs>
-      <rect width="640" height="420" rx="24" fill="#ffffff"/>
-      <rect x="24" y="24" width="592" height="372" rx="20" fill="#f8fafc" stroke="#e2e8f0"/>
-      <polygon points="185,320 455,320 330,105" fill="#ffffff" stroke="#0f172a" stroke-width="4"/>
-      <circle cx="185" cy="320" r="5" fill="#0f172a"/>
-      <circle cx="455" cy="320" r="5" fill="#0f172a"/>
-      <circle cx="330" cy="105" r="5" fill="#0f172a"/>
-      <text x="172" y="350" font-size="18" font-weight="700" fill="#0f172a">B</text>
-      <text x="462" y="350" font-size="18" font-weight="700" fill="#0f172a">C</text>
-      <text x="323" y="92" font-size="18" font-weight="700" fill="#0f172a">A</text>
-      ${overlays[layer]}
-    </svg>
-  `;
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
+export const SPECIAL_LECTURE_ROADMAP: SpecialLectureRoadmapStep[] = [
+  {
+    slug: "quadratic-case-split-intensive",
+    purpose: "軸・定義域・端点比較を整理し、場合分け不足を減らす",
+    recommendedTiming: "二次関数の最大最小で境界値が曖昧なとき",
+  },
+  {
+    slug: "probability-guided-reading",
+    purpose: "条件・事象・同様に確からしい単位をそろえる",
+    recommendedTiming: "確率で条件見落としや読み違いが増えたとき",
+  },
+  {
+    slug: "geometry-measurement-intensive",
+    purpose: "辺・角・面積から使う公式を選び切る",
+    recommendedTiming: "図形と計量で公式選択ミスが出たとき",
+  },
+  {
+    slug: "geometry-properties-auxiliary-lines",
+    purpose: "円周角・相似・方べきから補助線を判断する",
+    recommendedTiming: "図の見落としや補助線判断で止まるとき",
+  },
+];
 
 export const SPECIAL_LECTURES: Lecture[] = [
   {
@@ -214,69 +187,29 @@ export const SPECIAL_LECTURES: Lecture[] = [
           "面積、円、補角、同じ角が登場しているか",
         ],
       },
-      {
-        id: "geometry-layer-first-look",
-        type: "geometryLayers",
-        title: "図形レイヤー：条件から解法ルートまで",
-        description:
-          "同じ図形でも、見るレイヤーを分けると公式選択が安定します。条件、角、補助線、公式、求める順番を一つずつ重ねて確認します。",
-        baseImage: {
-          src: geometryLayerSvg("base"),
-          alt: "三角形ABCの基本図",
+      createTriangleGeometryLayerBlock(
+        {
+          ...DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT,
+          title: "図形レイヤー：条件から解法ルートまで",
+          description:
+            "同じ図形でも、見るレイヤーを分けると公式選択が安定します。条件、角、補助線、公式、求める順番を一つずつ重ねて確認します。",
+          sideLabels: {
+            ab: "AB=6",
+            bc: "BC=?",
+            ca: "AC=8",
+          },
+          angleLabels: {
+            a: "60°",
+            b: "",
+            c: "",
+          },
+          equalAngleLabel: "向かい合う辺と角の対応を見る",
+          auxiliaryLine: "altitude-from-a",
+          formulaNotes: ["余弦定理で BC", "面積公式で S", "正弦定理で sinB"],
+          routeSteps: ["BCを求める", "面積を出す", "sinBへつなぐ"],
         },
-        layers: [
-          {
-            id: "conditions",
-            label: "条件だけ",
-            image: {
-              src: geometryLayerSvg("conditions"),
-              alt: "辺の長さと角度だけを示した三角形",
-            },
-            explanation:
-              "まず辺の長さと角度だけを拾います。2辺とはさむ角が見えたら、最初の候補は余弦定理です。",
-          },
-          {
-            id: "equal-angles",
-            label: "等しい角",
-            image: {
-              src: geometryLayerSvg("angles"),
-              alt: "対応する辺と角を示した三角形",
-            },
-            explanation:
-              "角を直接求める前に、向かい合う辺と角の対応を確認します。正弦定理で運べる情報を探します。",
-          },
-          {
-            id: "auxiliary-line",
-            label: "補助線",
-            image: {
-              src: geometryLayerSvg("auxiliary"),
-              alt: "高さの補助線を示した三角形",
-            },
-            explanation:
-              "面積や高さが絡むときは補助線を意識します。ただし、この例では面積公式で先に処理できます。",
-          },
-          {
-            id: "formula-candidates",
-            label: "使う公式",
-            image: {
-              src: geometryLayerSvg("formulas"),
-              alt: "余弦定理、面積公式、正弦定理の候補を示した図",
-            },
-            explanation:
-              "余弦定理、面積公式、正弦定理の順で候補を並べます。公式を暗記ではなく条件から選ぶのがポイントです。",
-          },
-          {
-            id: "solution-route",
-            label: "解法ルート",
-            image: {
-              src: geometryLayerSvg("route"),
-              alt: "BC、面積、sinBの順に求める解法ルートを示した図",
-            },
-            explanation:
-              "求める順番は BC → 面積 → sinB。誘導に乗ると、最後の正弦定理まで自然につながります。",
-          },
-        ],
-      },
+        "geometry-layer-first-look",
+      ),
       {
         id: "sin-priority-heading",
         type: "heading",
@@ -392,7 +325,7 @@ export const SPECIAL_LECTURES: Lecture[] = [
         type: "problem",
         title: "図形と計量：誘導に乗る問題",
         prompt:
-          "三角形ABCにおいて、AB=6, AC=8, \\angle A=60^\\circ とする。辺BCを $a$ とする。次の問いに答えよ。\n\n(1) $a^2$ の値を求めよ。\n(2) 三角形ABCの面積 $S$ を求めよ。\n(3) $\\sin B$ の値を求めよ。",
+          "三角形ABCにおいて、$AB=6$, $AC=8$, $\\angle A=60^\\circ$ とする。辺BCの長さを $a$ とおく。次の問いに答えよ。\n\n(1) $a^2$ の値を求めよ。\n(2) 三角形ABCの面積 $S$ を求めよ。\n(3) $\\sin B$ の値を求めよ。",
         choices: [
           "$a^2=52,\\ S=12\\sqrt3,\\ \\sin B=\\frac{4\\sqrt3}{\\sqrt{52}}$",
           "$a^2=28,\\ S=12\\sqrt3,\\ \\sin B=\\frac{4\\sqrt3}{\\sqrt{28}}$",
@@ -409,7 +342,7 @@ export const SPECIAL_LECTURES: Lecture[] = [
         items: [
           {
             label: "まず見るところ",
-            body: "AB=6, AC=8, \\angle A=60^\\circ。2辺とはさむ角がそろっているので、辺BCは余弦定理で出せる。",
+            body: "$AB=6$, $AC=8$, $\\angle A=60^\\circ$。2辺とはさむ角がそろっているので、辺BCは余弦定理で出せる。",
           },
           {
             label: "怪しい条件",
@@ -460,7 +393,7 @@ export const SPECIAL_LECTURES: Lecture[] = [
           },
           {
             label: "類題",
-            body: "三角形ABCで AB=5, AC=9, \\angle A=120^\\circ とする。$BC^2$、面積、$\\sin B$ を同じ流れで求めてください。鈍角なので $\\cos120^\\circ$ の符号に注意します。",
+            body: "三角形ABCで $AB=5$, $AC=9$, $\\angle A=120^\\circ$ とする。$BC^2$、面積、$\\sin B$ を同じ流れで求めてください。鈍角なので $\\cos120^\\circ$ の符号に注意します。",
           },
         ],
       },
@@ -497,6 +430,611 @@ export const SPECIAL_LECTURES: Lecture[] = [
             title: "数学IA 本番演習",
             href: "/common-test/simulator/math-1a-70",
             note: "時間内スコアとの差を見る",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "lecture-quadratic-case-split-001",
+    slug: "quadratic-case-split-intensive",
+    title: "共通テスト 二次関数 場合分け完全攻略",
+    description:
+      "軸・定義域・端点比較・境界値を整理し、パラメータ付き二次関数の最大最小を本番で崩さないための重点講座です。",
+    subject: "数学IA",
+    unit: "二次関数",
+    difficulty: "標準",
+    recommendedMinutes: 40,
+    tags: ["数学IA", "共通テスト", "二次関数", "場合分け", "できる人の頭の中", "重点講座"],
+    publishedAt: "2026-06-27",
+    blocks: [
+      {
+        id: "quadratic-opening",
+        type: "callout",
+        tone: "info",
+        title: "この講義のゴール",
+        text:
+          "二次関数の最大・最小は、計算よりも「軸が定義域のどこにあるか」を先に決める問題です。境界値を言語化して、場合分けを機械的に処理できる状態にします。",
+      },
+      {
+        id: "quadratic-first-look-heading",
+        type: "heading",
+        level: 2,
+        text: "1. 二次関数で最初に見るもの",
+      },
+      {
+        id: "quadratic-first-look-text",
+        type: "paragraph",
+        text:
+          "最初に見るのは、開き方、軸、定義域の3つです。式を展開する前に、平方完成で軸を出し、定義域の左端・右端・軸の位置関係を比べます。",
+      },
+      {
+        id: "quadratic-axis-math",
+        type: "math",
+        expression: "f(x)=a(x-p)^2+q",
+        caption: "$a>0$ なら最小は軸に近いところ、最大は端点候補から選ぶ。$a<0$ なら逆に考える。",
+      },
+      {
+        id: "quadratic-axis-heading",
+        type: "heading",
+        level: 2,
+        text: "2. 軸と定義域の位置関係",
+      },
+      {
+        id: "quadratic-axis-text",
+        type: "paragraph",
+        text:
+          "定義域が $0\\le x\\le 4$、軸が $x=t$ なら、境界は $t=0$ と $t=4$ です。軸が左にある、内側にある、右にある、の3つに分けます。下の図で、軸の位置によって最小値がどこで起きるかを見比べてください。",
+      },
+      {
+        id: "quadratic-axis-cases-figure",
+        type: "image",
+        src: createQuadraticAxisCasesSvg(),
+        alt: "軸が定義域の左・中・右にある3パターンと、それぞれの最小値の位置",
+        caption:
+          "上に開く放物線の最小値は、軸が定義域の左なら左端、内側なら頂点、右なら右端で起きる。最大値は逆に、軸から遠い端点で起きる。",
+      },
+      {
+        id: "quadratic-endpoint-callout",
+        type: "callout",
+        tone: "success",
+        title: "端点比較の型",
+        text:
+          "最大値は端点で起きることが多いです。$f(0)$ と $f(4)$ を先に比べ、どちらが大きいかを式で判定します。端点比較の境界は $f(0)=f(4)$ から出します。",
+      },
+      {
+        id: "quadratic-boundary-heading",
+        type: "heading",
+        level: 2,
+        text: "3. 場合分けの境界値",
+      },
+      {
+        id: "quadratic-boundary-text",
+        type: "paragraph",
+        text:
+          "場合分けの境界は、気分で作りません。軸が端点をまたぐ値、端点の値が入れ替わる値、条件が等号になる値だけを候補にします。",
+      },
+      {
+        id: "quadratic-parameter-heading",
+        type: "heading",
+        level: 2,
+        text: "4. パラメータ付き二次関数",
+      },
+      {
+        id: "quadratic-parameter-text",
+        type: "paragraph",
+        text:
+          "パラメータ $t$ があるときも、見る順番は同じです。軸を $t$ で表し、定義域との位置関係を不等式で書きます。式変形より先に、図の横軸上で整理します。",
+      },
+      {
+        id: "quadratic-original-heading",
+        type: "heading",
+        level: 2,
+        text: "5. 共通テスト形式オリジナル問題",
+      },
+      {
+        id: "quadratic-original-problem",
+        type: "problem",
+        title: "二次関数：軸と端点で最大最小を決める",
+        prompt:
+          "実数 $t$ に対して、関数 $f(x)=(x-t)^2+2t$ を $0\\le x\\le4$ で考える。\n\n(1) $f(x)$ の最小値を $t$ の範囲に分けて求めよ。\n(2) $f(x)$ の最大値を $t$ の範囲に分けて求めよ。\n(3) $t=3$ のとき、最大値と最小値の差を求めよ。",
+        choices: [
+          "最小値：$t<0$で$t^2+2t$、$0\\le t\\le4$で$2t$、$t>4$で$(4-t)^2+2t$。最大値：$t<2$で$(4-t)^2+2t$、$t\\ge2$で$t^2+2t$。$t=3$の差は9。",
+          "最小値：常に$2t$。最大値：常に$(4-t)^2+2t$。$t=3$の差は1。",
+          "最小値：$t<2$で$t^2+2t$、$t\\ge2$で$(4-t)^2+2t$。最大値：常に$2t$。$t=3$の差は0。",
+          "最小値：$0\\le t\\le4$で$t^2+2t$。最大値：$t<2$で$t^2+2t$。$t=3$の差は5。",
+        ],
+        answer:
+          "最小値：$t<0$で$t^2+2t$、$0\\le t\\le4$で$2t$、$t>4$で$(4-t)^2+2t$。最大値：$t<2$で$(4-t)^2+2t$、$t\\ge2$で$t^2+2t$。$t=3$の差は9。",
+        points: 8,
+        mistakeTags: ["場合分け不足", "条件見落とし", "計算ミス", "自信ありで間違えた"],
+      },
+      {
+        id: "quadratic-expert-thinking",
+        type: "expertThinking",
+        items: [
+          {
+            label: "まず見るところ",
+            body: "$f(x)=(x-t)^2+2t$ なので軸は $x=t$、上に開く放物線。定義域は $0\\le x\\le4$。",
+          },
+          {
+            label: "怪しい条件",
+            body: "最小値は軸が定義域に入るかで変わる。最大値は両端 $x=0,4$ の比較で変わる。",
+          },
+          {
+            label: "使う公式候補",
+            body: "平方完成、端点代入、端点比較 $f(0)=f(4)$。特別な公式より、軸と端点の位置関係を使う。",
+          },
+          {
+            label: "決め手",
+            body: "最小値の境界は $t=0,4$。最大値の境界は $f(0)=f(4)$ から $t=2$。",
+          },
+          {
+            label: "本番判断",
+            body: "先に境界値だけ書き出す。境界が $0,2,4$ と見えたら、答案の骨格はほぼ完成。",
+          },
+          {
+            label: "撤退ライン",
+            body: "最大値で迷ったら、最小値だけ確実に取り、端点比較の式 $f(0),f(4)$ を残して次へ進む。",
+          },
+        ],
+      },
+      {
+        id: "quadratic-tabs",
+        type: "explanationTabs",
+        tabs: [
+          {
+            label: "ヒント",
+            body: "最小値は軸 $x=t$ が $[0,4]$ に入るかで分けます。最大値は $f(0)$ と $f(4)$ の大きい方です。",
+          },
+          {
+            label: "方針",
+            body: "$f(0)=t^2+2t$、$f(4)=(4-t)^2+2t$、軸での値は $2t$。最小値は軸の位置、最大値は端点比較で決めます。",
+          },
+          {
+            label: "詳しい解説",
+            body:
+              "上に開くので、軸 $x=t$ が定義域内なら最小値は $2t$。$t<0$ なら定義域で軸に最も近いのは $x=0$ なので $t^2+2t$。$t>4$ なら $x=4$ なので $(4-t)^2+2t$。\n\n最大値は端点比較です。$f(0)-f(4)=t^2+2t-((4-t)^2+2t)=8t-16$。よって $t<2$ なら $f(4)$、$t\\ge2$ なら $f(0)$。\n\n$t=3$ では最小値 $6$、最大値 $15$ なので差は $9$。",
+          },
+          {
+            label: "最速解法",
+            body: "境界だけ先に出します。最小値は軸が端点をまたぐ $t=0,4$。最大値は端点が入れ替わる $t=2$。あとは $f(0),f(4),2t$ を並べるだけです。",
+          },
+          {
+            label: "よくあるミス",
+            body: "最小値と最大値の境界を混ぜる。$t=2$ を最小値の境界に入れてしまう。$t=3$ のとき最大値を軸の値だと思う。端点比較で符号を逆に読む。",
+          },
+          {
+            label: "類題",
+            body: "$g(x)=-(x-a)^2+3a$ を $-1\\le x\\le3$ で考え、最大値と最小値を $a$ で場合分けしてください。下に開くので、最大と最小の考え方が入れ替わります。",
+          },
+        ],
+      },
+      {
+        id: "quadratic-checklist",
+        type: "checklist",
+        title: "二次関数の確認チェック",
+        items: [
+          "平方完成して軸を書いた",
+          "定義域の左端・右端を確認した",
+          "最小値の境界と最大値の境界を分けた",
+          "端点比較は $f(左端)=f(右端)$ から出した",
+          "境界値を含む・含まないを最後に確認した",
+        ],
+      },
+      {
+        id: "quadratic-related",
+        type: "relatedProblems",
+        title: "類題と次の演習",
+        items: [
+          {
+            title: "数学IA 第2問 二次関数",
+            href: "/common-test/math-1a/section-2",
+            note: "軸と端点比較を10分で確認",
+          },
+          {
+            title: "共通テスト本番演習",
+            href: "/common-test/simulator",
+            note: "時間内に場合分けを書き切る練習",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "lecture-probability-guided-reading-001",
+    slug: "probability-guided-reading",
+    title: "共通テスト 確率 誘導の読み方講座",
+    description:
+      "確率で条件・状態・誘導文を整理し、表・樹形図・組合せ・余事象を使い分けるための重点講座です。",
+    subject: "数学IA",
+    unit: "確率",
+    difficulty: "標準",
+    recommendedMinutes: 40,
+    tags: ["数学IA", "共通テスト", "確率", "誘導読解", "できる人の頭の中", "重点講座"],
+    publishedAt: "2026-06-27",
+    blocks: [
+      {
+        id: "probability-opening",
+        type: "callout",
+        tone: "info",
+        title: "この講義のゴール",
+        text:
+          "確率は、ただ数える単元ではありません。条件を言い換え、何を同様に確からしいものとして数えるかを決める読解の単元です。",
+      },
+      {
+        id: "probability-first-heading",
+        type: "heading",
+        level: 2,
+        text: "1. 確率で最初に確認すること",
+      },
+      {
+        id: "probability-first-text",
+        type: "paragraph",
+        text:
+          "最初に、試行の回数、戻す・戻さない、順序を区別するか、条件付きかを確認します。この4つを外すと、式が合っていても分母がずれます。",
+      },
+      {
+        id: "probability-rephrase-heading",
+        type: "heading",
+        level: 2,
+        text: "2. 事象の言い換え",
+      },
+      {
+        id: "probability-rephrase-text",
+        type: "paragraph",
+        text:
+          "「少なくとも1つ」「ちょうど2つ」「連続しない」などは、そのまま数えるより言い換えた方が速いことがあります。特に「少なくとも」は余事象を疑います。",
+      },
+      {
+        id: "probability-complement-callout",
+        type: "callout",
+        tone: "success",
+        title: "余事象を使う判断",
+        text:
+          "条件が「少なくとも1回」「全部ではない」「失敗しない」なら、反対側を数えた方が少ないかを先に見ます。余事象は楽をするための選択肢です。",
+      },
+      {
+        id: "probability-tools-heading",
+        type: "heading",
+        level: 2,
+        text: "3. 表・樹形図・組合せの使い分け",
+      },
+      {
+        id: "probability-tools-text",
+        type: "paragraph",
+        text:
+          "状態が少ないなら表、手順が分岐するなら樹形図、順序を問わず個数だけなら組合せです。共通テストの誘導は、この道具選びを自然に促してきます。下の表のように、まず分母（全体の数え方）を1つに固定すると、各事象は分子を数えるだけになります。",
+      },
+      {
+        id: "probability-counting-figure",
+        type: "image",
+        src: createProbabilityCountingSvg(),
+        alt: "玉の取り出し問題の状態整理表。全体20通りを分母に固定し、各事象の分子を数える。",
+        caption:
+          "分母を $\\binom{6}{3}=20$ に固定すると、各小問は分子の数え方だけに集中できる。「少なくとも」は余事象、「すべて異なる」は1個ずつ、「ちょうど2個」は残り1個の色に注意。",
+      },
+      {
+        id: "probability-original-heading",
+        type: "heading",
+        level: 2,
+        text: "4. 共通テスト形式オリジナル問題",
+      },
+      {
+        id: "probability-original-problem",
+        type: "problem",
+        title: "確率：誘導文を言い換えて数える",
+        prompt:
+          "袋の中に赤玉3個、白玉2個、青玉1個が入っている。この袋から玉を戻さずに3個取り出す。\n\n(1) 3個の中に赤玉が少なくとも1個含まれる確率を求めよ。\n(2) 取り出した3個の色がすべて異なる確率を求めよ。\n(3) 取り出した3個の中に赤玉がちょうど2個含まれる確率を求めよ。",
+        choices: [
+          "(1) $\\frac{19}{20}$、(2) $\\frac{3}{10}$、(3) $\\frac{9}{20}$",
+          "(1) $\\frac{1}{20}$、(2) $\\frac{3}{10}$、(3) $\\frac{3}{10}$",
+          "(1) $\\frac{19}{20}$、(2) $\\frac{1}{10}$、(3) $\\frac{9}{20}$",
+          "(1) $\\frac{3}{5}$、(2) $\\frac{3}{10}$、(3) $\\frac{1}{2}$",
+        ],
+        answer: "(1) $\\frac{19}{20}$、(2) $\\frac{3}{10}$、(3) $\\frac{9}{20}$",
+        points: 8,
+        mistakeTags: ["問題文の読み違い", "条件見落とし", "場合分け不足", "公式選択ミス"],
+      },
+      {
+        id: "probability-expert-thinking",
+        type: "expertThinking",
+        items: [
+          {
+            label: "まず見るところ",
+            body: "戻さずに3個。順序は問われていないので、全体は $\\binom{6}{3}=20$ 通りで数える。",
+          },
+          {
+            label: "怪しい条件",
+            body: "「少なくとも1個」は余事象が速い。「すべて異なる」は赤・白・青を1個ずつ。「ちょうど2個」は残り1個の色に注意。",
+          },
+          {
+            label: "使う公式候補",
+            body: "組合せ、余事象、場合分け。確率の公式を先に探すより、分母と分子を同じ数え方にそろえる。",
+          },
+          {
+            label: "決め手",
+            body: "全体20通りで統一できる。分母を固定すると、各設問が分子を数えるだけになる。",
+          },
+          {
+            label: "本番判断",
+            body: "誘導が小問ごとに事象を変えているので、毎回分母を作り直さない。全体を固定して時間を節約する。",
+          },
+          {
+            label: "撤退ライン",
+            body: "後半で迷ったら、事象を日本語で言い換えて式だけ残す。分母20を守れば部分点を取りやすい。",
+          },
+        ],
+      },
+      {
+        id: "probability-tabs",
+        type: "explanationTabs",
+        tabs: [
+          {
+            label: "ヒント",
+            body: "順序を区別せず、全体を $\\binom{6}{3}$ で数えます。(1)は赤玉が0個の余事象を考えると速いです。",
+          },
+          {
+            label: "方針",
+            body: "全体は20通り。(1)は $1-\\frac{\\binom{3}{0}\\binom{3}{3}}{20}$、(2)は赤白青を1個ずつ、(3)は赤2個と赤以外1個です。",
+          },
+          {
+            label: "詳しい解説",
+            body:
+              "全体は6個から3個を選ぶので $\\binom{6}{3}=20$。\n\n(1) 赤が1個もないのは、白2個と青1個をすべて選ぶ1通り。よって $1-\\frac{1}{20}=\\frac{19}{20}$。\n\n(2) 3色すべて異なるには、赤3個から1個、白2個から1個、青1個から1個を選ぶので $3\\cdot2\\cdot1=6$ 通り。確率は $\\frac{6}{20}=\\frac{3}{10}$。\n\n(3) 赤を2個、赤以外を1個選ぶので $\\binom{3}{2}\\binom{3}{1}=9$ 通り。確率は $\\frac{9}{20}$ です。",
+          },
+          {
+            label: "最速解法",
+            body: "全体20通り。(1)は赤なし1通りなので $19/20$。(2)は $3\\times2\\times1=6$ で $3/10$。(3)は $\\binom32\\binom31=9$ で $9/20$。分母を固定すると一気に処理できます。",
+          },
+          {
+            label: "よくあるミス",
+            body: "戻さずに取るのに毎回確率を掛けて分母をずらす。少なくとも1個を赤1個だけと読む。赤以外1個を白だけにして青を落とす。同様に確からしい単位を途中で変える。",
+          },
+          {
+            label: "類題",
+            body: "赤4個、白3個、青2個から4個を戻さずに取り出す。赤が少なくとも1個、3色すべて含む、赤がちょうど2個、を同じ分母で数えてください。",
+          },
+        ],
+      },
+      {
+        id: "probability-equally-likely-callout",
+        type: "callout",
+        tone: "warning",
+        title: "同様に確からしいかの確認",
+        text:
+          "確率の分母は、同じ条件で同じ単位を数えている必要があります。この問題では、順序を区別しない3個の組を全体20通りとして統一します。",
+      },
+      {
+        id: "probability-checklist",
+        type: "checklist",
+        title: "確率の確認チェック",
+        items: [
+          "戻す・戻さないを確認した",
+          "順序を区別するかを決めた",
+          "分母と分子を同じ数え方にそろえた",
+          "少なくともは余事象を疑った",
+          "条件に含まれる色・個数を落としていない",
+        ],
+      },
+      {
+        id: "probability-related",
+        type: "relatedProblems",
+        title: "類題と次の演習",
+        items: [
+          {
+            title: "数学IA 第3問 確率",
+            href: "/common-test/math-1a/section-3",
+            note: "誘導文を読みながら10分演習",
+          },
+          {
+            title: "復習キュー",
+            href: "/common-test/review",
+            note: "条件見落としの危険度Aを優先確認",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "lecture-geometry-properties-auxiliary-001",
+    slug: "geometry-properties-auxiliary-lines",
+    title: "共通テスト 図形の性質 補助線発見講座",
+    description:
+      "円周角・相似・方べき・補助線の見つけ方を、図形レイヤーと本番判断で整理する重点講座です。",
+    subject: "数学IA",
+    unit: "図形の性質",
+    difficulty: "標準",
+    recommendedMinutes: 45,
+    tags: ["数学IA", "共通テスト", "図形の性質", "補助線", "できる人の頭の中", "重点講座"],
+    publishedAt: "2026-06-27",
+    blocks: [
+      {
+        id: "geometry-properties-opening",
+        type: "callout",
+        tone: "info",
+        title: "この講義のゴール",
+        text:
+          "図形の性質は、補助線を思いつく単元ではありません。同じ角、円周角、相似、方べきの形を順番に確認し、引くべき線を判断する単元です。",
+      },
+      {
+        id: "geometry-properties-first-heading",
+        type: "heading",
+        level: 2,
+        text: "1. 図形の性質で最初に見るもの",
+      },
+      {
+        id: "geometry-properties-first-text",
+        type: "paragraph",
+        text:
+          "最初に見るのは、円、接線、平行線、同じ長さ、同じ角です。図にある情報を増やす前に、すでに見えている等しさを拾います。",
+      },
+      {
+        id: "geometry-properties-angle-heading",
+        type: "heading",
+        level: 2,
+        text: "2. 同じ角・円周角・相似を疑う",
+      },
+      {
+        id: "geometry-properties-angle-text",
+        type: "paragraph",
+        text:
+          "同じ弧に対する円周角は等しくなります。同じ角が2組見えたら相似を疑います。相似が見えたら、辺の比と積の関係が一気につながります。",
+      },
+      {
+        id: "geometry-properties-power-callout",
+        type: "callout",
+        tone: "success",
+        title: "方べきを疑う形",
+        text:
+          "円と2本の割線、接線と割線、交わる弦が見えたら方べきを疑います。式を覚えるより、同じ点から円へ伸びる線の積を見るのがコツです。",
+      },
+      {
+        id: "geometry-properties-power-figure",
+        type: "image",
+        src: createPowerOfPointSvg(),
+        alt: "円の外の点Pから2本の割線を引いた図。PA·PB=PC·PDが成り立つ。",
+        caption:
+          "外部点Pから出る2本の割線では $PA\\cdot PB=PC\\cdot PD$ が成り立つ。「同じ点から円へ伸びる線分の積」をそろえて式にするのがコツ。",
+      },
+      createTriangleGeometryLayerBlock(
+        {
+          ...DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT,
+          title: "図形レイヤー：補助線を引く前に見るもの",
+          description:
+            "補助線を引く前に、点名、辺、角、同じ角、使う性質、解法ルートを段階的に確認します。",
+          pointLabels: {
+            a: "A",
+            b: "B",
+            c: "C",
+          },
+          sideLabels: {
+            ab: "AB",
+            bc: "BC",
+            ca: "CA",
+          },
+          angleLabels: {
+            a: "",
+            b: "∠B",
+            c: "∠C",
+          },
+          equalAngleLabel: "同じ弧に対する角を探す",
+          auxiliaryLine: "median-from-a",
+          formulaNotes: ["円周角の定理", "相似", "方べき"],
+          routeSteps: ["同じ角を探す", "相似を作る", "辺の比へ進む"],
+        },
+        "geometry-properties-layer",
+      ),
+      {
+        id: "geometry-properties-original-heading",
+        type: "heading",
+        level: 2,
+        text: "3. 共通テスト形式オリジナル問題",
+      },
+      {
+        id: "geometry-properties-original-problem",
+        type: "problem",
+        title: "図形の性質：相似と方べきへつなぐ",
+        prompt:
+          "円O上に4点A, B, C, Dがこの順にある。直線ABと直線CDの延長が点Pで交わっている。$PA=3$, $PB=9$, $PC=4$ とする。\n\n(1) 方べきの定理を用いて $PD$ を求めよ。\n(2) もし $\\angle PBC=\\angle PDA$ が分かっているとき、相似になる三角形の組を1つ答えよ。\n(3) 補助線を引くなら、まずどの2点を結ぶと角の対応を見つけやすいか。",
+        choices: [
+          "(1) $PD=\\frac{27}{4}$、(2) $\\triangle PBC \\sim \\triangle PDA$、(3) BとDを結ぶ",
+          "(1) $PD=12$、(2) $\\triangle PAB \\sim \\triangle PCD$、(3) AとCを結ぶ",
+          "(1) $PD=\\frac{4}{27}$、(2) $\\triangle PBC \\sim \\triangle PCD$、(3) PとOを結ぶ",
+          "(1) $PD=6$、(2) $\\triangle ABC \\sim \\triangle CDA$、(3) AとDを結ぶ",
+        ],
+        answer:
+          "(1) $PD=\\frac{27}{4}$、(2) $\\triangle PBC \\sim \\triangle PDA$、(3) BとDを結ぶ",
+        points: 8,
+        mistakeTags: ["図の見落とし", "公式選択ミス", "条件見落とし", "場合分け不足"],
+      },
+      {
+        id: "geometry-properties-expert-thinking",
+        type: "expertThinking",
+        items: [
+          {
+            label: "まず見るところ",
+            body: "円と外部点P、2本の割線が見える。これは方べきの形。$PA\\cdot PB=PC\\cdot PD$ を疑う。",
+          },
+          {
+            label: "怪しい条件",
+            body: "角の等しさが与えられているので、後半は相似へ誘導している。辺の積だけで終わらない。",
+          },
+          {
+            label: "使う公式候補",
+            body: "方べき、円周角、相似。補助線は同じ角を見つけるために引く。",
+          },
+          {
+            label: "決め手",
+            body: "$PA\\cdot PB=3\\cdot9=27$。$PC=4$ なので $PD=27/4$。角条件から相似の対応を見る。",
+          },
+          {
+            label: "本番判断",
+            body: "数値が3,9,4のように積を作りやすいなら、まず方べき。図形を眺め続けるより、積の式を置く。",
+          },
+          {
+            label: "撤退ライン",
+            body: "相似が見えなければ、方べきの(1)を確実に取り、角の対応を書き込んで次へ進む。",
+          },
+        ],
+      },
+      {
+        id: "geometry-properties-tabs",
+        type: "explanationTabs",
+        tabs: [
+          {
+            label: "ヒント",
+            body: "点Pから円に向かう2本の割線があります。方べきの定理では、同じ外部点から出る線分の積を比べます。",
+          },
+          {
+            label: "方針",
+            body: "$PA\\cdot PB=PC\\cdot PD$ を立てます。相似は、与えられた角と共通角または円周角から対応を探します。",
+          },
+          {
+            label: "詳しい解説",
+            body:
+              "(1) 方べきの定理より $PA\\cdot PB=PC\\cdot PD$。したがって $3\\cdot9=4\\cdot PD$ なので $PD=\\frac{27}{4}$。\n\n(2) $\\angle PBC=\\angle PDA$ があり、さらにPを含む角の対応を確認すると、$\\triangle PBC \\sim \\triangle PDA$ が候補になります。\n\n(3) BとDを結ぶと、円周角や同じ弧に対する角が見つけやすくなります。補助線は、角の対応を増やすために引きます。",
+          },
+          {
+            label: "最速解法",
+            body: "円＋外部点＋2本の割線を見た瞬間に方べきです。$3\\cdot9=4\\cdot PD$ で $PD=27/4$。後半は角条件を図に写し、相似の候補を1つに絞ります。",
+          },
+          {
+            label: "よくあるミス",
+            body: "$PA\\cdot PB$ ではなく $AB\\cdot PB$ としてしまう。外部点からの長さを使うことを忘れる。補助線を目的なく引き、角の対応を増やせていない。",
+          },
+          {
+            label: "類題",
+            body: "外部点Pから円に2本の割線PAB, PCDを引く。PA=2, PB=10, PC=5のときPDを求め、補助線BDを引いたときに見える角の等しさを探してください。",
+          },
+        ],
+      },
+      {
+        id: "geometry-properties-checklist",
+        type: "checklist",
+        title: "図形の性質の確認チェック",
+        items: [
+          "円周角で同じ角を探した",
+          "相似を作るための角が2組あるか確認した",
+          "方べきは同じ外部点からの線分で式を作った",
+          "補助線は角の対応を増やす目的で引いた",
+          "図にない思い込みの等しさを使っていない",
+        ],
+      },
+      {
+        id: "geometry-properties-related",
+        type: "relatedProblems",
+        title: "類題と次の演習",
+        items: [
+          {
+            title: "数学IA 第4問 図形の性質",
+            href: "/common-test/math-1a/section-4",
+            note: "補助線と相似を20分練習",
+          },
+          {
+            title: "図形と計量 徹底講座",
+            href: "/common-test/lectures/geometry-measurement-intensive",
+            note: "三角比との接続を復習",
           },
         ],
       },

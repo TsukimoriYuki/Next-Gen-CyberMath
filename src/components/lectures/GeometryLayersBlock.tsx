@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Layers } from "lucide-react";
+import { CheckCircle2, Eye, Layers, MousePointerClick } from "lucide-react";
 import type { GeometryLayer, GeometryLayerBlock as GeometryLayerBlockData } from "@/data/specialLectures";
 import { MathText } from "@/components/math/Math";
 
@@ -17,6 +17,7 @@ export function GeometryLayersBlock({ block, onComplete }: GeometryLayersBlockPr
   const activeLayer = block.layers.find((layer) => layer.id === activeLayerId) ?? null;
   const displayedImage = activeLayer?.image ?? block.baseImage;
   const viewedAllLayers = block.layers.length > 0 && viewedLayerIds.size >= block.layers.length;
+  const viewedCount = viewedLayerIds.size;
 
   function selectLayer(layer: GeometryLayer) {
     setActiveLayerId(layer.id);
@@ -46,18 +47,35 @@ export function GeometryLayersBlock({ block, onComplete }: GeometryLayersBlockPr
               </h2>
             )}
           </div>
-          {viewedAllLayers && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-700">
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              全レイヤー確認済み
-            </span>
-          )}
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold ${
+              viewedAllLayers
+                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                : "border-slate-200 bg-white text-slate-500"
+            }`}
+          >
+            {viewedAllLayers ? (
+              <>
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                全レイヤー確認済み
+              </>
+            ) : (
+              <>
+                <Eye className="h-3.5 w-3.5" />
+                {viewedCount}/{block.layers.length} レイヤー
+              </>
+            )}
+          </span>
         </div>
         {block.description && (
           <MathText className="mt-2 text-sm leading-6 text-slate-600">
             {block.description}
           </MathText>
         )}
+        <p className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1.5 text-[11px] font-bold text-blue-700">
+          <MousePointerClick className="h-3.5 w-3.5" />
+          番号順に押して、図の見方を一段ずつ確認しましょう
+        </p>
       </div>
 
       <div className="p-5 sm:p-6">
@@ -73,7 +91,7 @@ export function GeometryLayersBlock({ block, onComplete }: GeometryLayersBlockPr
           >
             基本図
           </button>
-          {block.layers.map((layer) => {
+          {block.layers.map((layer, index) => {
             const active = activeLayerId === layer.id;
             const viewed = viewedLayerIds.has(layer.id);
             return (
@@ -87,7 +105,13 @@ export function GeometryLayersBlock({ block, onComplete }: GeometryLayersBlockPr
                     : "border-slate-200 bg-slate-50 text-slate-600 hover:border-blue-200 hover:bg-white hover:text-blue-700"
                 }`}
               >
-                {viewed && !active && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />}
+                <span
+                  className={`flex h-[18px] w-[18px] items-center justify-center rounded-full text-[10px] font-mono font-extrabold ${
+                    active ? "bg-white/25 text-white" : "bg-white text-slate-500 ring-1 ring-slate-200"
+                  }`}
+                >
+                  {viewed && !active ? "✓" : index + 1}
+                </span>
                 {layer.label}
               </button>
             );
@@ -95,16 +119,19 @@ export function GeometryLayersBlock({ block, onComplete }: GeometryLayersBlockPr
         </div>
 
         <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white">
-          <div className="bg-white p-3 sm:p-4">
+          <div className="bg-gradient-to-b from-white to-slate-50 p-3 sm:p-5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={displayedImage.src}
               alt={displayedImage.alt}
-              className="mx-auto h-auto max-h-[520px] w-full max-w-full object-contain"
+              className="mx-auto block h-auto w-full max-w-[520px] object-contain"
             />
           </div>
-          <div className="border-t border-slate-100 bg-slate-50 px-4 py-3">
-            <div className="text-xs font-extrabold text-slate-500">
+          <div className="border-t border-slate-100 bg-slate-50 px-4 py-3 sm:px-5 sm:py-4">
+            <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wide text-slate-400">
+              このレイヤーで見ること
+            </div>
+            <div className="mt-1 text-sm font-extrabold text-slate-800">
               {activeLayer?.label ?? "基本図"}
             </div>
             {activeLayer?.explanation ? (
@@ -113,7 +140,7 @@ export function GeometryLayersBlock({ block, onComplete }: GeometryLayersBlockPr
               </MathText>
             ) : (
               <p className="mt-1 text-sm leading-6 text-slate-500">
-                レイヤーを選ぶと、見るべき条件や解法の順番を段階的に確認できます。
+                まず基本図で点の名前を確認し、上のボタンを順に押して条件・角・補助線・公式・解法ルートを重ねていきましょう。
               </p>
             )}
           </div>
