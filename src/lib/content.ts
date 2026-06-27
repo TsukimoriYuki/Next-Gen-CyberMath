@@ -20,6 +20,10 @@ import {
 // (getAllSlugs) はフルの PROBLEMS を使い、模試・履歴復習からの直リンクは生かす。
 const PUBLIC_PROBLEMS: Problem[] = PROBLEMS.filter((p) => !p.isMockOnly);
 
+const UNIT_SLUG_ALIASES: Record<string, string> = {
+  probability: "counting-probability",
+};
+
 /** 公開カタログ用（初見殺しを除外）。 */
 export function getAllProblems(): Problem[] {
   return PUBLIC_PROBLEMS;
@@ -66,7 +70,8 @@ export function slugForUnit(name: string): string {
 
 /** Resolve a slug back to its unit name. */
 export function unitNameForSlug(slug: string): string | undefined {
-  const meta = UNIT_META_BY_SLUG[slug];
+  const canonicalSlug = UNIT_SLUG_ALIASES[slug] ?? slug;
+  const meta = UNIT_META_BY_SLUG[canonicalSlug];
   if (meta) return meta.name;
   // Fallback: a unit that isn't in the registry but is encoded.
   return getUnits().find((u) => encodeURIComponent(u) === slug);
@@ -110,7 +115,10 @@ export function getUnitSlugs(): string[] {
     ...getUnits(),
     ...LESSONS.map((l) => l.unit),
   ]);
-  return Array.from(names).map(slugForUnit);
+  return [
+    ...Array.from(names).map(slugForUnit),
+    ...Object.keys(UNIT_SLUG_ALIASES),
+  ];
 }
 
 export function getProblemsByUnitSlug(slug: string): {

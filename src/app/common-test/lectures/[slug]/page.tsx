@@ -5,9 +5,15 @@ import { ArrowLeft, BookOpen, Clock, GraduationCap, Tag } from "lucide-react";
 import { getSpecialLectureBySlug, SPECIAL_LECTURES } from "@/data/specialLectures";
 import { LectureExperience } from "@/components/lectures/LectureExperience";
 import { LectureNextRecommendation } from "@/components/lectures/LectureNextRecommendation";
+import { MASTERY_LECTURE_GUIDES } from "@/lib/special-lecture-guidance";
 
 export function generateStaticParams() {
-  return SPECIAL_LECTURES.map((lecture) => ({ slug: lecture.slug }));
+  return [
+    ...SPECIAL_LECTURES.map((lecture) => ({ slug: lecture.slug })),
+    ...MASTERY_LECTURE_GUIDES.flatMap((guide) =>
+      guide.legacySlugs.map((slug) => ({ slug })),
+    ),
+  ];
 }
 
 export async function generateMetadata({

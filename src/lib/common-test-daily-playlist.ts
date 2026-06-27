@@ -389,10 +389,7 @@ function buildCandidateTasks(input: BuildPlaylistInput): CommonTestDailyTask[] {
 
 // ── サマリー文生成 ────────────────────────────────────────────────────────
 
-function generateSummary(
-  input: BuildPlaylistInput,
-  _tasks: CommonTestDailyTask[]
-): string {
+function generateSummary(input: BuildPlaylistInput): string {
   const { drillHistory, examHistory, targetScores, reviewTodayCount } = input;
 
   if (drillHistory.length === 0 && examHistory.length === 0) {
@@ -490,7 +487,7 @@ export function buildCommonTestDailyPlaylist(
     date: new Date().toISOString().slice(0, 10),
     mode: input.mode,
     totalMinutes,
-    summary: generateSummary(input, selected),
+    summary: generateSummary(input),
     tasks: selected,
   };
 }

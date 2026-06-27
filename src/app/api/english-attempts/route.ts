@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
 
 // ── GET /api/english-attempts — 生徒: 自分の履歴 / MENTOR: 全生徒の集計 ──
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   const session = await getSession();
   if (!session) {
     return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });

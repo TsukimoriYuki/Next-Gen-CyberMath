@@ -17,6 +17,11 @@ import type { Lecture, LectureBlock, ExplanationTab } from "@/data/specialLectur
 import { MathText, BlockMath } from "@/components/math/Math";
 import { GeometryLayersBlock } from "./GeometryLayersBlock";
 import { LectureProblemInteraction } from "./LectureProblemInteraction";
+import {
+  DiscriminationDrillBlock,
+  MistakeRecoveryBlock,
+  SolutionFlowBlock,
+} from "./MasteryBlocks";
 
 const TAB_ORDER: ExplanationTab["label"][] = [
   "ヒント",
@@ -43,6 +48,7 @@ export function LectureBlockView({
   onProblemAnswered,
   onTabsViewed,
   onGeometryLayersCompleted,
+  onDiscriminationDrillCompleted,
 }: {
   lecture: Lecture;
   block: LectureBlock;
@@ -52,6 +58,8 @@ export function LectureBlockView({
   onTabsViewed?: () => void;
   /** geometryLayers の全レイヤーを確認したときに呼ばれる（進捗連携）。 */
   onGeometryLayersCompleted?: () => void;
+  /** discriminationDrill を全問解答したときに呼ばれる（進捗連携）。 */
+  onDiscriminationDrillCompleted?: () => void;
 }) {
   switch (block.type) {
     case "heading":
@@ -169,6 +177,17 @@ export function LectureBlockView({
       );
     case "callout":
       return <Callout block={block} />;
+    case "solutionFlow":
+      return <SolutionFlowBlock block={block} />;
+    case "discriminationDrill":
+      return (
+        <DiscriminationDrillBlock
+          block={block}
+          onComplete={onDiscriminationDrillCompleted}
+        />
+      );
+    case "mistakeRecovery":
+      return <MistakeRecoveryBlock block={block} />;
   }
 }
 

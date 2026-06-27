@@ -10,7 +10,6 @@ import {
   Sparkles,
   RotateCcw,
   Trash2,
-  Timer,
   TrendingUp,
   BookMarked,
   Network,

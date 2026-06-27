@@ -321,7 +321,7 @@ function ResultScreen({
   // Topic breakdown
   const topicStats = (Object.keys(GRAMMAR_TOPICS) as TopicKey[]).map((t) => {
     const qs = questions.filter((q) => q.topic === t);
-    const correct = qs.filter((q, qi) => results[questions.indexOf(q)] === true).length;
+    const correct = qs.filter((q) => results[questions.indexOf(q)] === true).length;
     return { topic: t, correct, total: qs.length };
   }).filter((s) => s.total > 0);
 

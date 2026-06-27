@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { ArrowLeft, BookOpen, GraduationCap, Target } from "lucide-react";
 import {
   getUnitSlugs,
   getProblemsByUnitSlug,
   getLessonsByUnitName,
 } from "@/lib/content";
 import { ProblemCard } from "@/components/shell/ProblemCard";
+import { getMasteryLectureGuideForUnit } from "@/lib/special-lecture-guidance";
 
 export function generateStaticParams() {
   return getUnitSlugs().map((unitSlug) => ({ unitSlug }));
@@ -30,6 +31,10 @@ export default async function UnitDetailPage({
   if (!unit) notFound();
 
   const lessons = getLessonsByUnitName(unit.name);
+  const masteryLecture = getMasteryLectureGuideForUnit({
+    unitName: unit.name,
+    unitSlug,
+  });
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
@@ -52,6 +57,44 @@ export default async function UnitDetailPage({
           {unit.problems.length} 問
         </p>
       </header>
+
+      {masteryLecture && (
+        <section className="mt-8 overflow-hidden rounded-2xl border border-neon-cyan/25 bg-card/70 shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
+          <div className="border-b border-neon-cyan/10 bg-neon-cyan/5 px-5 py-3">
+            <div className="flex items-center gap-2 text-sm font-bold text-neon-cyan">
+              <GraduationCap className="h-4 w-4" />
+              この単元で満点を狙うなら
+            </div>
+          </div>
+          <div className="grid gap-5 p-5 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <h2 className="font-display text-2xl font-extrabold tracking-tight text-foreground">
+                {masteryLecture.title}
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {masteryLecture.description}
+              </p>
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                {masteryLecture.weapons.slice(0, 3).map((weapon) => (
+                  <div
+                    key={weapon}
+                    className="rounded-xl border border-white/10 bg-background/40 px-3 py-2 text-xs leading-5 text-foreground/85"
+                  >
+                    <Target className="mb-1 h-3.5 w-3.5 text-neon-lime" />
+                    {weapon}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <Link
+              href={`/common-test/lectures/${masteryLecture.lectureSlug}`}
+              className="inline-flex items-center justify-center rounded-xl bg-neon-cyan px-4 py-3 text-sm font-extrabold text-background transition hover:brightness-110"
+            >
+              {masteryLecture.ctaLabel}
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Related lessons for this unit */}
       {lessons.length > 0 && (

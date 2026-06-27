@@ -70,6 +70,9 @@ const BLOCK_TYPES: { type: LectureBlock["type"]; label: string }[] = [
   { type: "checklist", label: "チェックリスト" },
   { type: "relatedProblems", label: "関連演習" },
   { type: "callout", label: "補足" },
+  { type: "solutionFlow", label: "解法判別フロー" },
+  { type: "discriminationDrill", label: "判別ドリル" },
+  { type: "mistakeRecovery", label: "ミス別補講" },
 ];
 
 interface Props {
@@ -77,7 +80,7 @@ interface Props {
 }
 
 export function LectureEditor({ lectureId }: Props) {
-  const [lecture, setLecture] = useState<Lecture>(() => createEmptyLecture());
+  const [lecture, setLecture] = useState<Lecture>(() => createEmptyLecture(false));
   const [jsonText, setJsonText] = useState("");
   const [selectedType, setSelectedType] = useState<LectureBlock["type"]>("paragraph");
   const [status, setStatus] = useState<string | null>(null);
@@ -641,6 +644,92 @@ function BlockFields({ block, onChange }: { block: LectureBlock; onChange: (bloc
           </Field>
         </div>
       );
+    case "solutionFlow":
+      return (
+        <div className="grid gap-3">
+          <Field label="タイトル">
+            <input value={block.title ?? ""} onChange={(e) => onChange({ ...block, title: e.target.value })} className="input" />
+          </Field>
+          <Field label="説明">
+            <input value={block.intro ?? ""} onChange={(e) => onChange({ ...block, intro: e.target.value })} className="input" />
+          </Field>
+          <Field label="ステップ（1行1つ：条件 | 道具 | 理由）">
+            <textarea
+              value={block.steps.map((s) => [s.condition, s.tool, s.reason ?? ""].join(" | ")).join("\n")}
+              onChange={(e) =>
+                onChange({
+                  ...block,
+                  steps: splitLines(e.target.value).map((line) => {
+                    const [condition, tool, reason] = line.split("|").map((v) => v.trim());
+                    return { condition: condition ?? "", tool: tool ?? "", reason: reason || undefined };
+                  }),
+                })
+              }
+              className="input min-h-32 font-mono"
+            />
+          </Field>
+        </div>
+      );
+    case "discriminationDrill":
+      return (
+        <div className="grid gap-3">
+          <Field label="タイトル">
+            <input value={block.title ?? ""} onChange={(e) => onChange({ ...block, title: e.target.value })} className="input" />
+          </Field>
+          <Field label="説明">
+            <input value={block.intro ?? ""} onChange={(e) => onChange({ ...block, intro: e.target.value })} className="input" />
+          </Field>
+          <Field label="設問（1行1つ：条件 | 求めたいもの | 選択肢;区切り | 正解 | 理由）">
+            <textarea
+              value={block.items
+                .map((it) => [it.condition, it.goal ?? "", it.choices.join(";"), it.answer, it.reason].join(" | "))
+                .join("\n")}
+              onChange={(e) =>
+                onChange({
+                  ...block,
+                  items: splitLines(e.target.value).map((line) => {
+                    const [condition, goal, choices, answer, reason] = line.split("|").map((v) => v.trim());
+                    return {
+                      condition: condition ?? "",
+                      goal: goal || undefined,
+                      choices: (choices ?? "").split(";").map((c) => c.trim()).filter(Boolean),
+                      answer: answer ?? "",
+                      reason: reason ?? "",
+                    };
+                  }),
+                })
+              }
+              className="input min-h-32 font-mono"
+            />
+          </Field>
+        </div>
+      );
+    case "mistakeRecovery":
+      return (
+        <div className="grid gap-3">
+          <Field label="タイトル">
+            <input value={block.title ?? ""} onChange={(e) => onChange({ ...block, title: e.target.value })} className="input" />
+          </Field>
+          <Field label="説明">
+            <input value={block.intro ?? ""} onChange={(e) => onChange({ ...block, intro: e.target.value })} className="input" />
+          </Field>
+          <Field label="項目（1行1つ：間違えた理由 | 戻る場所 | リンク）">
+            <textarea
+              value={block.items.map((it) => [it.symptom, it.action, it.href ?? ""].join(" | ")).join("\n")}
+              onChange={(e) =>
+                onChange({
+                  ...block,
+                  items: splitLines(e.target.value).map((line) => {
+                    const [symptom, action, href] = line.split("|").map((v) => v.trim());
+                    return { symptom: symptom ?? "", action: action ?? "", href: href || undefined };
+                  }),
+                })
+              }
+              className="input min-h-32 font-mono"
+            />
+          </Field>
+        </div>
+      );
   }
 }
 
@@ -1190,8 +1279,10 @@ function IconButton({
   );
 }
 
-function createEmptyLecture(): Lecture {
-  const id = `lecture-${Date.now()}`;
+function createEmptyLecture(useUniqueIds = true): Lecture {
+  const id = useUniqueIds ? `lecture-${Date.now()}` : "lecture-draft";
+  const idFor = (type: string, index: number) =>
+    useUniqueIds ? blockId(type) : `${type}-draft-${index}`;
   return {
     id,
     slug: "new-special-lecture",
@@ -1202,12 +1293,20 @@ function createEmptyLecture(): Lecture {
     difficulty: "標準",
     recommendedMinutes: 30,
     tags: ["共通テスト", "数学IA"],
-    publishedAt: new Date().toISOString().slice(0, 10),
+    publishedAt: useUniqueIds ? new Date().toISOString().slice(0, 10) : "2026-01-01",
     blocks: [
-      { id: blockId("heading"), type: "heading", level: 2, text: "講義の見出し" },
-      { id: blockId("paragraph"), type: "paragraph", text: "ここに講義本文を入力します。" },
-      createBlock("expertThinking"),
-      createBlock("explanationTabs"),
+      { id: idFor("heading", 1), type: "heading", level: 2, text: "講義の見出し" },
+      { id: idFor("paragraph", 2), type: "paragraph", text: "ここに講義本文を入力します。" },
+      {
+        id: idFor("expertThinking", 3),
+        type: "expertThinking",
+        items: THINKING_LABELS.map((label) => ({ label, body: `${label}を入力してください。` })),
+      },
+      {
+        id: idFor("explanationTabs", 4),
+        type: "explanationTabs",
+        tabs: EXPLANATION_LABELS.map((label) => ({ label, body: `${label}を入力してください。` })),
+      },
     ],
   };
 }
@@ -1246,6 +1345,42 @@ function createBlock(type: LectureBlock["type"]): LectureBlock {
       return { id, type, title: "関連演習", items: [{ title: "数学IA 第1問", href: "/common-test/math-1a/section-1", note: "講義後に解く" }] };
     case "callout":
       return { id, type, tone: "info", title: "ポイント", text: "補足説明を入力してください。" };
+    case "solutionFlow":
+      return {
+        id,
+        type,
+        title: "解法判別フロー",
+        intro: "何が見えたら、どの道具を選ぶかを確認します。",
+        steps: [
+          { condition: "2辺とその間の角がある", tool: "余弦定理", reason: "挟角を含む2辺から第三辺が出る" },
+          { condition: "辺と向かいの角のセットがある", tool: "正弦定理", reason: "向かい合う辺と角をつなげる" },
+        ],
+      };
+    case "discriminationDrill":
+      return {
+        id,
+        type,
+        title: "判別ドリル：初手は何を使う？",
+        intro: "計算はしません。条件を見て最初に使う道具を選びます。",
+        items: [
+          {
+            condition: "2辺とその間の角が分かっている。残りの辺を求めたい。",
+            goal: "残りの辺",
+            choices: ["余弦定理", "正弦定理", "面積公式"],
+            answer: "余弦定理",
+            reason: "挟角を含む2辺から第三辺は余弦定理で出る。",
+          },
+        ],
+      };
+    case "mistakeRecovery":
+      return {
+        id,
+        type,
+        title: "ミス別補講：間違えた理由から戻る",
+        items: [
+          { symptom: "公式選択を間違えた", action: "解法判別フローをもう一度見る", href: "" },
+        ],
+      };
   }
 }
 

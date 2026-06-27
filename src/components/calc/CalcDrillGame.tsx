@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Timer, CheckCircle, XCircle, RotateCcw, Zap, ChevronRight, Trophy, Target } from "lucide-react";
+import { CheckCircle, XCircle, RotateCcw, Zap, Trophy, Target } from "lucide-react";
 import type { CalcDrillProblem, DrillCategory, DrillDifficulty } from "@/data/calc-drill";
 import { CALC_DRILL_PROBLEMS, DRILL_CATEGORIES } from "@/data/calc-drill";
 

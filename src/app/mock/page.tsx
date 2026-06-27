@@ -284,10 +284,11 @@ export default function MockExamPage() {
                   <>
                     <div className="mb-3 flex flex-wrap items-baseline gap-2">
                       <span className="font-display text-2xl font-extrabold text-neon-cyan">
-                        計 {plan.totalCount} 問
+                        計 {Number.isFinite(plan.totalCount) ? plan.totalCount : 0} 問
                       </span>
                       <span className="font-mono text-sm text-muted-foreground">
-                        推定所要 約 {plan.estimatedMin} 分 / 制限 {minutes} 分
+                        推定所要 約 {Number.isFinite(plan.estimatedMin) ? plan.estimatedMin : 0} 分 / 制限{" "}
+                        {Number.isFinite(minutes) ? minutes : "未設定"} 分
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { RotateCcw, ChevronRight, Check, X, BookOpen } from "lucide-react";
 import {
   VOCAB_CARDS,
@@ -377,9 +377,7 @@ function ResultScreen({
             要復習 ({unknown.length} 語)
           </p>
           <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-            {unknown.map((c) => {
-              const meta = VOCAB_CATEGORIES[c.category];
-              return (
+            {unknown.map((c) => (
                 <div
                   key={c.id}
                   className="flex items-start justify-between gap-3 rounded-lg px-4 py-2.5"
@@ -400,8 +398,7 @@ function ResultScreen({
                     {c.meaning}
                   </span>
                 </div>
-              );
-            })}
+              ))}
           </div>
         </div>
       )}

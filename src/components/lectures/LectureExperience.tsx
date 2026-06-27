@@ -211,6 +211,7 @@ export function LectureExperience({ lecture }: { lecture: Lecture }) {
                     onProblemAnswered={() => completeBlock(block.id)}
                     onTabsViewed={() => completeBlock(block.id)}
                     onGeometryLayersCompleted={() => completeBlock(block.id)}
+                    onDiscriminationDrillCompleted={() => completeBlock(block.id)}
                   />
                   {completable && (
                     <div className="mt-2 flex justify-end">

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import type { Approach } from "@/lib/types";
-import { MathText } from "@/components/math/Math";
 import { LessonRenderer } from "@/components/lessons/LessonRenderer";
 
 /**

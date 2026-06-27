@@ -106,7 +106,10 @@ export function buildExamPlan(
   allowedDifficulties: Difficulty[],
   tags: string[],
 ): ExamPlan {
-  const T = timeLimitSec / 60;
+  // 不正な制限時間（NaN / 負 / 非数）でも壊れないようにガードする。
+  const safeLimitSec =
+    Number.isFinite(timeLimitSec) && timeLimitSec > 0 ? timeLimitSec : 0;
+  const T = safeLimitSec / 60;
 
   // 在庫（選択タグ × 許可難度に合致する問題数）を難度別に集計
   const pool = PROBLEMS.filter(
@@ -135,10 +138,18 @@ export function buildExamPlan(
   }
 
   // 目標問題数 = 予算 / コスト（在庫で頭打ち）
+  // コスト 0（EX/OLYMPIAD は模試対象外）や share 0 のときに 0/0=NaN へ落ちると
+  // 合計値が NaN に伝播するため、ここで明示的に 0 へ丸める。
   const n = {} as Record<Difficulty, number>;
   for (const d of DIFFICULTY_ORDER) {
+    const cost = DIFFICULTY_COST_MIN[d];
+    if (cost <= 0 || share[d] <= 0 || stock[d] <= 0) {
+      n[d] = 0;
+      continue;
+    }
     const budget = T * share[d];
-    n[d] = Math.max(0, Math.min(stock[d], Math.round(budget / DIFFICULTY_COST_MIN[d])));
+    const target = Math.round(budget / cost);
+    n[d] = Math.max(0, Math.min(stock[d], Number.isFinite(target) ? target : 0));
   }
 
   const est = () =>

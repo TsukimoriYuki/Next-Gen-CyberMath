@@ -36,7 +36,7 @@ function render(tex: string, displayMode: boolean): string {
 export function InlineMath({ math }: { math: string }) {
   return (
     <span
-      className="katex-inline"
+      className="katex-inline inline-block max-w-full overflow-x-auto overflow-y-hidden align-middle"
       dangerouslySetInnerHTML={{ __html: render(math, false) }}
     />
   );
@@ -93,7 +93,7 @@ function renderInline(text: string, keyBase: string): React.ReactNode[] {
         return (
           <span
             key={key}
-            className="katex-inline"
+            className="katex-inline inline-block max-w-full overflow-x-auto overflow-y-hidden align-middle"
             dangerouslySetInnerHTML={{ __html: render(part.slice(1, -1), false) }}
           />
         );

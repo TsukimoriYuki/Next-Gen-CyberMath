@@ -2,6 +2,7 @@ import {
   createTriangleGeometryLayerBlock,
   DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT,
 } from "@/lib/lecture-geometry-svg";
+import { canonicalLectureSlug } from "@/lib/special-lecture-guidance";
 import {
   createPowerOfPointSvg,
   createProbabilityCountingSvg,
@@ -83,7 +84,10 @@ export type LectureBlock =
   | { id: string; type: "expertThinking"; items: ExpertThinkingItem[] }
   | { id: string; type: "checklist"; title?: string; items: string[] }
   | { id: string; type: "relatedProblems"; title?: string; items: RelatedProblem[] }
-  | { id: string; type: "callout"; tone: "info" | "warning" | "success"; title?: string; text: string };
+  | { id: string; type: "callout"; tone: "info" | "warning" | "success"; title?: string; text: string }
+  | { id: string; type: "solutionFlow"; title?: string; intro?: string; steps: SolutionFlowStep[] }
+  | { id: string; type: "discriminationDrill"; title?: string; intro?: string; items: DiscriminationDrillItem[] }
+  | { id: string; type: "mistakeRecovery"; title?: string; intro?: string; items: MistakeRecoveryItem[] };
 
 export interface ExplanationTab {
   label: "ヒント" | "方針" | "詳しい解説" | "最速解法" | "よくあるミス" | "類題";
@@ -105,6 +109,40 @@ export interface RelatedProblem {
   title: string;
   href?: string;
   note?: string;
+}
+
+/** 解法判別フロー：「何が見えたら、どの道具を選ぶか」を1行ずつ示す。 */
+export interface SolutionFlowStep {
+  /** 見えている条件（例: 2辺とその間の角がある）。 */
+  condition: string;
+  /** 選ぶ道具（例: 余弦定理）。 */
+  tool: string;
+  /** なぜそれを選ぶか（例: 挟角を含む2辺から第三辺が出るから）。 */
+  reason?: string;
+}
+
+/** 判別ドリル：計算ではなく「初手＝何を使うか」だけを訓練する1問。 */
+export interface DiscriminationDrillItem {
+  /** 与えられている状況。 */
+  condition: string;
+  /** 求めたいもの（任意）。 */
+  goal?: string;
+  /** 道具の選択肢。answer はこのいずれかと一致させる。 */
+  choices: string[];
+  /** 正解の道具。 */
+  answer: string;
+  /** なぜその道具なのか。 */
+  reason: string;
+}
+
+/** ミス別補講：間違えた理由から、戻るべき場所へ誘導する。 */
+export interface MistakeRecoveryItem {
+  /** 間違えた症状（例: 公式選択を間違えた）。 */
+  symptom: string;
+  /** 戻る場所・やること（例: 解法判別フローをもう一度見る）。 */
+  action: string;
+  /** 講義内アンカー（#blockId）または別講義への絶対パス（任意）。 */
+  href?: string;
 }
 
 export const MISTAKE_DIAGNOSIS_TAGS: MistakeDiagnosisTag[] = [
@@ -187,6 +225,65 @@ export const SPECIAL_LECTURES: Lecture[] = [
           "面積、円、補角、同じ角が登場しているか",
         ],
       },
+      {
+        id: "map-heading",
+        type: "heading",
+        level: 2,
+        text: "満点までの地図",
+      },
+      {
+        id: "map-callout",
+        type: "callout",
+        tone: "info",
+        title: "図形と計量で満点を取る地図",
+        text:
+          "出るパターンは7系統です。①正弦・余弦の選択 ②$\\sin$ を出す優先順位 ③面積から逆算 ④外接円$R$・内接円$r$ ⑤円周角・補角で角を移す ⑥測量・空間図形 ⑦図形の性質との融合。共通テストでは第1問の誘導小問として、$a^2 \\to$ 面積 $\\to \\sin B$ のように1本の流れで出ます。\n\n最初に見るのは「辺・角・面積のどれが与えられ、どれが問われているか」。公式の優先順位は、向かい合う辺と角があれば正弦定理、2辺と挟角または3辺なら余弦定理、面積がからめば $S=\\frac{1}{2}ab\\sin C$。落としやすいのは $\\cos$ の符号、正弦定理の辺と角の対応ずれ、$\\frac{1}{2}$ の付け忘れです。",
+      },
+      {
+        id: "tool-flow-heading",
+        type: "heading",
+        level: 2,
+        text: "解法判別フロー：何を見たら何を使うか",
+      },
+      {
+        id: "tool-flow",
+        type: "solutionFlow",
+        title: "図形と計量の道具選び",
+        intro:
+          "計算の前に、まず「見えている条件」から使う道具を1つに絞ります。この対応を覚えると、誘導に迷わなくなります。",
+        steps: [
+          {
+            condition: "2辺とその間の角（挟角）が分かっている",
+            tool: "余弦定理",
+            reason: "挟角を含む2辺から第三辺 $a^2=b^2+c^2-2bc\\cos A$ が一気に出る。",
+          },
+          {
+            condition: "辺と、その向かいの角がセットで見える",
+            tool: "正弦定理",
+            reason: "$\\dfrac{a}{\\sin A}=\\dfrac{b}{\\sin B}=2R$ で、別の辺・角・外接円 $R$ へ運べる。",
+          },
+          {
+            condition: "面積と2辺（または面積を問われる）",
+            tool: "面積公式 $S=\\dfrac{1}{2}ab\\sin C$",
+            reason: "はさむ角の $\\sin$ と面積を相互に逆算できる。",
+          },
+          {
+            condition: "3辺がすべて分かっている",
+            tool: "余弦定理（角を求める向き）",
+            reason: "$\\cos$ の符号で鋭角・鈍角まで判定できる。",
+          },
+          {
+            condition: "円に内接している・補角が見える",
+            tool: "円周角・補角 $\\sin(180^\\circ-\\theta)=\\sin\\theta$",
+            reason: "同じ $\\sin$ を別の角へ移せる。$\\cos$ は符号が変わる点に注意。",
+          },
+          {
+            condition: "比・相似・方べきが見える",
+            tool: "図形の性質（相似・方べき・二等分線）",
+            reason: "必要な辺を先に作ってから計量に戻る。",
+          },
+        ],
+      },
       createTriangleGeometryLayerBlock(
         {
           ...DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT,
@@ -223,12 +320,48 @@ export const SPECIAL_LECTURES: Lecture[] = [
           "$\\sin\\theta$ を求める問題でも、最初からsinを直接探すとは限りません。角そのもの、$\\cos\\theta$、面積、同じ円周角の順に候補を見ます。",
       },
       {
-        id: "sin-priority-callout",
-        type: "callout",
-        tone: "success",
-        title: "優先順位",
-        text:
-          "1. 角が直接分かる  2. 余弦定理で $\\cos\\theta$ が出る  3. 面積公式から $\\sin\\theta$ が出る  4. 補角・円周角で同じsinを探す",
+        id: "sin-priority-flow",
+        type: "solutionFlow",
+        title: "sin を求めるときの優先順位",
+        intro:
+          "「$\\sin$ を出せ」と言われても、上から順に「これで出せるか？」を当てていきます。最初に止まったところがその問題の解法です。",
+        steps: [
+          {
+            condition: "角そのものが分かる（$30^\\circ,45^\\circ,60^\\circ,120^\\circ$ など）",
+            tool: "三角比の値を直接代入",
+            reason: "有名角ならその場で値が確定する。",
+          },
+          {
+            condition: "辺と、その向かいの角がそろう",
+            tool: "正弦定理で直接",
+            reason: "$\\sin B=\\dfrac{b\\sin A}{a}$ の形に乗せるだけ。",
+          },
+          {
+            condition: "面積と、はさむ2辺が分かる",
+            tool: "面積公式から逆算",
+            reason: "$\\sin C=\\dfrac{2S}{ab}$ で一発。",
+          },
+          {
+            condition: "2辺と挟角、または3辺で $\\cos$ が出る",
+            tool: "相互関係 $\\sin^2\\theta+\\cos^2\\theta=1$",
+            reason: "三角形なら $\\sin\\theta>0$ なので $\\sin\\theta=\\sqrt{1-\\cos^2\\theta}$。",
+          },
+          {
+            condition: "補角の関係がある",
+            tool: "$\\sin(180^\\circ-\\theta)=\\sin\\theta$",
+            reason: "違う角でも同じ $\\sin$ を使える。$\\cos$ は符号反転に注意。",
+          },
+          {
+            condition: "円に内接している",
+            tool: "円周角で同じ角を別の場所へ移す",
+            reason: "同じ弧に対する円周角は等しい。",
+          },
+          {
+            condition: "辺が足りない／空間図形",
+            tool: "方べき・相似で辺を作る／断面・直角三角形に落とす",
+            reason: "計量に必要な辺を先に用意してから戻る。",
+          },
+        ],
       },
       {
         id: "sine-rule-heading",
@@ -315,10 +448,161 @@ export const SPECIAL_LECTURES: Lecture[] = [
         caption: "sinは同じ、cosは符号が変わる。この違いを本番で落とさない。",
       },
       {
+        id: "circumradius-heading",
+        type: "heading",
+        level: 2,
+        text: "外接円の半径 R を出す",
+      },
+      {
+        id: "circumradius-text",
+        type: "paragraph",
+        text:
+          "外接円の半径 $R$ は、正弦定理の右端 $\\dfrac{a}{\\sin A}=2R$ から出します。「辺とその向かいの角」が1組見えれば $R$ は確定です。共通テストでは $R$ そのものより、$R$ を経由して別の辺や $\\sin$ を出させる誘導が多いです。",
+      },
+      {
+        id: "circumradius-math",
+        type: "math",
+        expression: "2R=\\frac{a}{\\sin A}\\quad\\Longleftrightarrow\\quad a=2R\\sin A",
+        caption: "辺と向かいの角が1組あれば $R$ が出る。$a=2R\\sin A$ の向きも使えると速い。",
+      },
+      {
+        id: "inradius-heading",
+        type: "heading",
+        level: 2,
+        text: "内接円の半径 r と面積 S=rs",
+      },
+      {
+        id: "inradius-text",
+        type: "paragraph",
+        text:
+          "内接円の半径 $r$ は、面積 $S$ と「周の半分」$s=\\dfrac{a+b+c}{2}$ を使って $S=rs$ から出します。面積を先に余弦定理＋面積公式で求めておき、最後に $r=\\dfrac{S}{s}$ とするのが定番の流れです。",
+      },
+      {
+        id: "inradius-math",
+        type: "math",
+        expression: "S=rs,\\quad s=\\frac{a+b+c}{2}\\ \\Longrightarrow\\ r=\\frac{S}{s}=\\frac{2S}{a+b+c}",
+        caption: "$s$ は周の半分。$r=\\dfrac{2S}{a+b+c}$ まで一気に書けると本番で速い。",
+      },
+      {
+        id: "circle-angle-heading",
+        type: "heading",
+        level: 2,
+        text: "円周角・補角で角を移す",
+      },
+      {
+        id: "circle-angle-text",
+        type: "paragraph",
+        text:
+          "図形が円に内接しているときは、求めたい角を「同じ弧に対する別の円周角」へ移せないかを見ます。直接は求めにくい角でも、移した先なら辺とセットになって正弦定理に乗ることがあります。四角形が内接しているなら対角の和は $180^\\circ$ で、補角の $\\sin$ が等しい性質と直結します。",
+      },
+      {
+        id: "survey-space-heading",
+        type: "heading",
+        level: 2,
+        text: "測量・空間図形を平面に落とす",
+      },
+      {
+        id: "survey-space-text",
+        type: "paragraph",
+        text:
+          "測量問題は、まず「2つの直角三角形」または「1つの三角形＋仰角」の図を自分で描きます。見上げる角（仰角）と水平距離を、$\\tan$ で高さに変換するのが基本です。空間図形は、求めたい長さや角を含む「断面の三角形」を取り出し、平面の図形と計量に落とし込みます。立体のまま考えないのがコツです。",
+      },
+      {
+        id: "fusion-heading",
+        type: "heading",
+        level: 2,
+        text: "図形の性質との融合",
+      },
+      {
+        id: "fusion-text",
+        type: "paragraph",
+        text:
+          "計量で必要な辺や比が直接与えられないとき、図形の性質（相似・方べき・角の二等分線・チェバ・メネラウス）で先に辺を作ってから、正弦・余弦定理に戻ります。「比が出たら相似や二等分線」「円と割線が出たら方べき」を疑い、足りない辺を補ってから計量に入ります。",
+      },
+      {
+        id: "discrimination-drill",
+        type: "discriminationDrill",
+        title: "判別ドリル：初手は何を使う？（図形と計量）",
+        intro:
+          "計算はしません。条件を読んで「最初に使う道具」を選び、理由まで言えるかを確認します。10問連続で、初手選択のスピードを上げましょう。",
+        items: [
+          {
+            condition: "$AB=7$, $AC=5$, $\\angle A=60^\\circ$。辺 $BC$ を求めたい。",
+            goal: "$BC$",
+            choices: ["余弦定理", "正弦定理", "面積公式"],
+            answer: "余弦定理",
+            reason: "2辺と挟角があるので、第三辺は余弦定理で直接出る。",
+          },
+          {
+            condition: "$BC=6$, $\\angle A=30^\\circ$ が分かっていて、外接円の半径 $R$ を求めたい。",
+            goal: "$R$",
+            choices: ["正弦定理", "余弦定理", "面積公式"],
+            answer: "正弦定理",
+            reason: "辺と向かいの角が1組。$\\dfrac{a}{\\sin A}=2R$ で $R$ が出る。",
+          },
+          {
+            condition: "3辺 $a=8,b=7,c=5$ が分かっていて、$\\cos A$ を求めたい。",
+            goal: "$\\cos A$",
+            choices: ["余弦定理", "正弦定理", "面積公式"],
+            answer: "余弦定理",
+            reason: "3辺がそろえば余弦定理で角の余弦が出る。符号で鋭角・鈍角も分かる。",
+          },
+          {
+            condition: "面積 $S=10$、はさむ2辺が $4,5$。間の角の $\\sin$ を求めたい。",
+            goal: "$\\sin C$",
+            choices: ["面積公式から逆算", "正弦定理", "余弦定理"],
+            answer: "面積公式から逆算",
+            reason: "$S=\\dfrac12 ab\\sin C$ を $\\sin C=\\dfrac{2S}{ab}$ と変形するだけ。",
+          },
+          {
+            condition: "余弦定理で $\\cos\\theta=-\\dfrac{1}{3}$ が出た。$\\sin\\theta$ を求めたい（三角形の内角）。",
+            goal: "$\\sin\\theta$",
+            choices: ["相互関係 $\\sin^2+\\cos^2=1$", "正弦定理", "面積公式"],
+            answer: "相互関係 $\\sin^2+\\cos^2=1$",
+            reason: "三角形の内角は $\\sin>0$。$\\sin\\theta=\\sqrt{1-\\cos^2\\theta}$ で出す。",
+          },
+          {
+            condition: "3辺 $a,b,c$ と面積 $S$ が分かっていて、内接円の半径 $r$ を求めたい。",
+            goal: "$r$",
+            choices: ["$S=rs$", "正弦定理", "円周角の定理"],
+            answer: "$S=rs$",
+            reason: "$s=\\dfrac{a+b+c}{2}$ として $r=\\dfrac{S}{s}$。面積から内接円半径へ。",
+          },
+          {
+            condition: "円に内接する四角形で $\\angle A=110^\\circ$。向かいの $\\angle C$ を求めたい。",
+            goal: "$\\angle C$",
+            choices: ["対角の和 $180^\\circ$", "正弦定理", "余弦定理"],
+            answer: "対角の和 $180^\\circ$",
+            reason: "内接四角形は対角の和が $180^\\circ$。$\\angle C=70^\\circ$。",
+          },
+          {
+            condition: "地点 $A$ から仰角 $30^\\circ$、$20$m 近づいた $B$ から仰角 $45^\\circ$。木の高さを求めたい。",
+            goal: "木の高さ",
+            choices: ["2つの直角三角形＋$\\tan$", "正弦定理だけ", "面積公式"],
+            answer: "2つの直角三角形＋$\\tan$",
+            reason: "測量は図を描き、$\\tan$ で高さに変換して2式の差から解く。",
+          },
+          {
+            condition: "正四面体の1つの面の中で、頂点から対辺へ下ろした長さを求めたい。",
+            goal: "断面の長さ",
+            choices: ["断面の三角形に落として計量", "立体のまま余弦定理", "方べきの定理"],
+            answer: "断面の三角形に落として計量",
+            reason: "空間は求めたい長さを含む断面を取り出し、平面の図形と計量に落とす。",
+          },
+          {
+            condition: "円の外の点 $P$ から割線 $PAB$ と接線 $PT$。$PA,PB$ から $PT$ を求めたい。",
+            goal: "$PT$",
+            choices: ["方べきの定理", "正弦定理", "面積公式"],
+            answer: "方べきの定理",
+            reason: "円＋外部点＋接線は方べき。$PT^2=PA\\cdot PB$ で辺を作ってから計量へ。",
+          },
+        ],
+      },
+      {
         id: "original-problem-heading",
         type: "heading",
         level: 2,
-        text: "8. 共通テスト形式オリジナル問題",
+        text: "本番形式演習①：誘導に乗る基本問題",
       },
       {
         id: "original-problem",
@@ -398,6 +682,56 @@ export const SPECIAL_LECTURES: Lecture[] = [
         ],
       },
       {
+        id: "fusion-problem-heading",
+        type: "heading",
+        level: 2,
+        text: "本番形式演習②：誘導が薄い融合問題",
+      },
+      {
+        id: "fusion-problem-callout",
+        type: "callout",
+        tone: "warning",
+        title: "ここからは自分で道具を選ぶ",
+        text:
+          "次の問題は小問の誘導が薄く、外接円・内接円・面積をまたぎます。さっきの判別フローを思い出しながら、6分を目安に解いてください。",
+      },
+      {
+        id: "fusion-problem",
+        type: "problem",
+        title: "図形と計量：外接円と内接円の融合",
+        prompt:
+          "三角形ABCにおいて $a=BC=7$, $b=CA=5$, $c=AB=3$ とする。\n\n(1) $\\cos A$ を求めよ。\n(2) 三角形ABCの面積 $S$ を求めよ。\n(3) 外接円の半径 $R$ と内接円の半径 $r$ を求めよ。",
+        choices: [
+          "$\\cos A=-\\dfrac{1}{2},\\ S=\\dfrac{15\\sqrt3}{4},\\ R=\\dfrac{7\\sqrt3}{3},\\ r=\\dfrac{\\sqrt3}{2}$",
+          "$\\cos A=\\dfrac{1}{2},\\ S=\\dfrac{15\\sqrt3}{4},\\ R=\\dfrac{7}{2},\\ r=\\sqrt3$",
+          "$\\cos A=-\\dfrac{1}{2},\\ S=\\dfrac{15\\sqrt3}{2},\\ R=\\dfrac{7\\sqrt3}{3},\\ r=\\sqrt3$",
+          "$\\cos A=-\\dfrac{1}{5},\\ S=\\dfrac{15\\sqrt3}{4},\\ R=\\dfrac{7\\sqrt3}{3},\\ r=\\dfrac{\\sqrt3}{2}$",
+        ],
+        answer:
+          "$\\cos A=-\\dfrac{1}{2},\\ S=\\dfrac{15\\sqrt3}{4},\\ R=\\dfrac{7\\sqrt3}{3},\\ r=\\dfrac{\\sqrt3}{2}$",
+        points: 9,
+        mistakeTags: ["公式選択ミス", "計算ミス", "条件見落とし"],
+      },
+      {
+        id: "fusion-problem-tabs",
+        type: "explanationTabs",
+        tabs: [
+          {
+            label: "方針",
+            body: "3辺がそろっているので $\\cos A$ は余弦定理。$\\sin A$ は相互関係。面積は $S=\\frac12 bc\\sin A$。$R$ は正弦定理 $\\frac{a}{\\sin A}=2R$、$r$ は $S=rs$。",
+          },
+          {
+            label: "詳しい解説",
+            body:
+              "(1) $\\cos A=\\dfrac{b^2+c^2-a^2}{2bc}=\\dfrac{25+9-49}{30}=-\\dfrac{1}{2}$。よって $A=120^\\circ$。\n\n(2) $\\sin A=\\sqrt{1-\\cos^2A}=\\dfrac{\\sqrt3}{2}$。$S=\\dfrac12\\cdot5\\cdot3\\cdot\\dfrac{\\sqrt3}{2}=\\dfrac{15\\sqrt3}{4}$。\n\n(3) $2R=\\dfrac{a}{\\sin A}=\\dfrac{7}{\\sqrt3/2}=\\dfrac{14}{\\sqrt3}$ より $R=\\dfrac{7}{\\sqrt3}=\\dfrac{7\\sqrt3}{3}$。$s=\\dfrac{7+5+3}{2}=\\dfrac{15}{2}$、$r=\\dfrac{S}{s}=\\dfrac{15\\sqrt3/4}{15/2}=\\dfrac{\\sqrt3}{2}$。",
+          },
+          {
+            label: "よくあるミス",
+            body: "(1) で $\\cos A$ の符号を $+$ にしてしまう（$a=7$ が最長辺なので $A$ は鈍角、$\\cos A<0$）。$R$ の有理化で $\\dfrac{7}{\\sqrt3}=\\dfrac{7\\sqrt3}{3}$ を忘れる。$s$ を周そのもの $15$ としてしまう（$s$ は半分）。",
+          },
+        ],
+      },
+      {
         id: "fast-and-withdraw",
         type: "callout",
         tone: "warning",
@@ -417,9 +751,48 @@ export const SPECIAL_LECTURES: Lecture[] = [
         ],
       },
       {
+        id: "mistake-recovery",
+        type: "mistakeRecovery",
+        title: "ミス別補講：間違えた理由から戻る",
+        intro:
+          "演習で間違えたら、原因に合わせて戻る場所を変えます。やみくもに解き直さず、つまずいた「種類」から復習しましょう。",
+        items: [
+          {
+            symptom: "公式選択を間違えた（余弦か正弦か迷った）",
+            action: "解法判別フローをもう一度",
+            href: "#tool-flow",
+          },
+          {
+            symptom: "$\\sin$ をどこから出すか迷った",
+            action: "$\\sin$ の優先順位フローへ",
+            href: "#sin-priority-flow",
+          },
+          {
+            symptom: "$\\sin$/$\\cos$ の符号を間違えた",
+            action: "鋭角・鈍角の符号確認へ",
+            href: "#angle-sign-heading",
+          },
+          {
+            symptom: "図の条件を読み落とした",
+            action: "図形レイヤーで条件を1段ずつ確認",
+            href: "#geometry-layer-first-look",
+          },
+          {
+            symptom: "外接円R・内接円rで詰まった",
+            action: "R と S=rs のチャプターへ",
+            href: "#circumradius-heading",
+          },
+          {
+            symptom: "比・方べきに気づかなかった",
+            action: "図形の性質 補助線発見講座へ",
+            href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+          },
+        ],
+      },
+      {
         id: "related",
         type: "relatedProblems",
-        title: "12. 類題と次の演習",
+        title: "類題と次の演習",
         items: [
           {
             title: "数学IA 第1問 図形と計量",
@@ -527,10 +900,129 @@ export const SPECIAL_LECTURES: Lecture[] = [
           "パラメータ $t$ があるときも、見る順番は同じです。軸を $t$ で表し、定義域との位置関係を不等式で書きます。式変形より先に、図の横軸上で整理します。",
       },
       {
+        id: "quadratic-flow-heading",
+        type: "heading",
+        level: 2,
+        text: "解法判別フロー：何を見て場合分けするか",
+      },
+      {
+        id: "quadratic-flow",
+        type: "solutionFlow",
+        title: "二次関数の道具選び",
+        intro:
+          "二次関数は、聞かれているもの（最大か最小か、解の個数か）と、軸・定義域の位置関係で、やることが決まります。",
+        steps: [
+          {
+            condition: "最小値を聞かれている（上に開く）",
+            tool: "軸が定義域に入るか",
+            reason: "入れば頂点が最小、入らなければ軸に近い端点が最小。",
+          },
+          {
+            condition: "最大値を聞かれている（上に開く）",
+            tool: "端点比較 $f(左端)$ と $f(右端)$",
+            reason: "軸から遠い端点が最大。境界は $f(左)=f(右)$ から出す。",
+          },
+          {
+            condition: "下に開く（$a<0$）",
+            tool: "最大と最小の考え方を入れ替える",
+            reason: "頂点が最大になる。上に開く場合の逆を当てはめる。",
+          },
+          {
+            condition: "文字定数で軸が動く",
+            tool: "軸を文字で表し、定義域の端と比較",
+            reason: "軸が端をまたぐ値が場合分けの境界。先に境界だけ書き出す。",
+          },
+          {
+            condition: "解の個数・符号を聞かれている",
+            tool: "判別式 ＋ 軸の位置 ＋ 端点の符号",
+            reason: "$D$ だけでは足りない。区間内の解は軸と端点の符号もそろえる。",
+          },
+          {
+            condition: "$x$ 軸との共有点・不等式の解",
+            tool: "グラフと $x$ 軸の上下で読む",
+            reason: "$f(x)>0$ はグラフが $x$ 軸より上の範囲。頂点の符号で判断。",
+          },
+        ],
+      },
+      {
+        id: "quadratic-drill",
+        type: "discriminationDrill",
+        title: "判別ドリル：どう場合分けする？（二次関数）",
+        intro:
+          "計算はしません。聞かれているものと軸・定義域の関係から、最小・最大がどこで起きるか、境界はどこかを即答します。",
+        items: [
+          {
+            condition: "上に開く放物線。軸が定義域の内側にある。最小値はどこ？",
+            goal: "最小値の位置",
+            choices: ["頂点", "左端", "右端"],
+            answer: "頂点",
+            reason: "上に開いて軸が定義域内なら、最小は頂点。",
+          },
+          {
+            condition: "上に開く放物線。軸が定義域より右にある。最小値はどこ？",
+            goal: "最小値の位置",
+            choices: ["右端", "頂点", "左端"],
+            answer: "右端",
+            reason: "軸が右外なら定義域では減少。軸に最も近い右端が最小。",
+          },
+          {
+            condition: "上に開く放物線で、最大値を求めたい。まず何をする？",
+            goal: "最大値",
+            choices: ["両端 $f(左),f(右)$ を比較", "頂点を求める", "判別式を計算"],
+            answer: "両端 $f(左),f(右)$ を比較",
+            reason: "上に開くと最大は端点。軸から遠い端が最大。",
+          },
+          {
+            condition: "最大値の場合分けの境界はどこから出す？",
+            choices: ["$f(左端)=f(右端)$", "頂点 $=0$", "判別式 $=0$"],
+            answer: "$f(左端)=f(右端)$",
+            reason: "端点の大小が入れ替わるところが境界。",
+          },
+          {
+            condition: "下に開く放物線。軸が定義域内。最大値はどこ？",
+            goal: "最大値の位置",
+            choices: ["頂点", "左端", "右端"],
+            answer: "頂点",
+            reason: "下に開くと頂点が最大（上に開く場合の逆）。",
+          },
+          {
+            condition: "2次方程式が異なる2つの実数解をもつ条件を調べたい。",
+            choices: ["判別式 $D>0$", "判別式 $D\\geqq0$", "頂点の $y$ 座標"],
+            answer: "判別式 $D>0$",
+            reason: "異なる2解は $D>0$（等号なし）。重解は1つの解。",
+          },
+          {
+            condition: "ある区間に2解がともに入る条件を調べたい。何をそろえる？",
+            choices: ["判別式・軸の位置・端点の符号", "判別式だけ", "頂点の符号だけ"],
+            answer: "判別式・軸の位置・端点の符号",
+            reason: "区間内の解配置は $D$・軸・端点の符号の3点セット。",
+          },
+          {
+            condition: "$f(x)>0$ の解の範囲（上に開く）を求めたい。",
+            goal: "不等式の解",
+            choices: ["グラフが $x$ 軸より上の範囲", "頂点の $x$ 座標", "判別式の値"],
+            answer: "グラフが $x$ 軸より上の範囲",
+            reason: "不等式はグラフと $x$ 軸の上下で読む。",
+          },
+          {
+            condition: "文字定数 $t$ で軸 $x=t$ が動く。場合分けの境界の候補は？",
+            choices: ["軸が定義域の端をまたぐ $t$", "$t=0$ だけ", "頂点の $y=0$"],
+            answer: "軸が定義域の端をまたぐ $t$",
+            reason: "軸が左端・右端をまたぐ値が境界。気分で作らない。",
+          },
+          {
+            condition: "最大値と最小値、両方を $t$ で場合分けする。境界は同じ？",
+            choices: ["別々に出す（最小は軸、最大は端点比較）", "同じ境界を使う", "判別式で決める"],
+            answer: "別々に出す（最小は軸、最大は端点比較）",
+            reason: "最小の境界は軸が端をまたぐ値、最大の境界は端点が入れ替わる値。混ぜない。",
+          },
+        ],
+      },
+      {
         id: "quadratic-original-heading",
         type: "heading",
         level: 2,
-        text: "5. 共通テスト形式オリジナル問題",
+        text: "本番形式演習：軸と端点で最大最小を決める",
       },
       {
         id: "quadratic-original-problem",
@@ -620,6 +1112,34 @@ export const SPECIAL_LECTURES: Lecture[] = [
           "最小値の境界と最大値の境界を分けた",
           "端点比較は $f(左端)=f(右端)$ から出した",
           "境界値を含む・含まないを最後に確認した",
+        ],
+      },
+      {
+        id: "quadratic-mistake-recovery",
+        type: "mistakeRecovery",
+        title: "ミス別補講：間違えた理由から戻る",
+        intro: "場合分けは「どこでつまずいたか」で戻る場所が変わります。",
+        items: [
+          {
+            symptom: "最大か最小か、どこで起きるか迷った",
+            action: "解法判別フローをもう一度",
+            href: "#quadratic-flow",
+          },
+          {
+            symptom: "軸と定義域の位置関係が描けない",
+            action: "軸の左・中・右の3パターン図へ",
+            href: "#quadratic-axis-cases-figure",
+          },
+          {
+            symptom: "場合分けの境界を作り間違えた",
+            action: "場合分けの境界値のチャプターへ",
+            href: "#quadratic-boundary-heading",
+          },
+          {
+            symptom: "最小と最大の境界を混ぜた",
+            action: "判別ドリルで境界の出し方を再確認",
+            href: "#quadratic-drill",
+          },
         ],
       },
       {
@@ -715,10 +1235,130 @@ export const SPECIAL_LECTURES: Lecture[] = [
           "分母を $\\binom{6}{3}=20$ に固定すると、各小問は分子の数え方だけに集中できる。「少なくとも」は余事象、「すべて異なる」は1個ずつ、「ちょうど2個」は残り1個の色に注意。",
       },
       {
+        id: "probability-flow-heading",
+        type: "heading",
+        level: 2,
+        text: "解法判別フロー：数える前に決めること",
+      },
+      {
+        id: "probability-flow",
+        type: "solutionFlow",
+        title: "確率の道具選び",
+        intro:
+          "確率は数え始める前に「何を1通りと数えるか」を決めます。次の判別で、順序・道具・余事象を先に確定させましょう。",
+        steps: [
+          {
+            condition: "順番に意味があるか（並び・くじの順）",
+            tool: "順列で数える",
+            reason: "並べる順を区別するなら順列。同じ組でも順序違いは別と数える。",
+          },
+          {
+            condition: "順番に意味がない（選ぶだけ・組）",
+            tool: "組合せで数える",
+            reason: "順序を区別しないなら組合せ。分母・分子を同じ数え方にそろえる。",
+          },
+          {
+            condition: "「少なくとも」「〜でない」が出てきた",
+            tool: "余事象",
+            reason: "反対側を数える方が速いことが多い。$1-(\\text{反対})$。",
+          },
+          {
+            condition: "毎回同じ条件で繰り返す試行",
+            tool: "反復試行 $\\binom{n}{k}p^k(1-p)^{n-k}$",
+            reason: "成功回数の選び方×成功×失敗の3点セット。",
+          },
+          {
+            condition: "「〜が起きたとき」と前提がついた",
+            tool: "条件付き確率（母集団を絞る）",
+            reason: "前提が起きた後の状態で数え直す。分母が変わる。",
+          },
+          {
+            condition: "状態が少ない／手順が分岐する",
+            tool: "表・樹形図で全列挙",
+            reason: "数え漏れ・重複を防ぐ。小さい問題は描いた方が速い。",
+          },
+        ],
+      },
+      {
+        id: "probability-drill",
+        type: "discriminationDrill",
+        title: "判別ドリル：数える前に何を決める？（確率）",
+        intro:
+          "計算はしません。設定を読んで、順序を区別するか、余事象を使うか、どの道具で数えるかを即決します。",
+        items: [
+          {
+            condition: "5人を1列に並べる並べ方の数を求めたい。",
+            goal: "並べ方",
+            choices: ["順列", "組合せ", "余事象"],
+            answer: "順列",
+            reason: "並ぶ順を区別するので順列。$5!$。",
+          },
+          {
+            condition: "10人から委員3人を選ぶ選び方の数を求めたい。",
+            goal: "選び方",
+            choices: ["組合せ", "順列", "反復試行"],
+            answer: "組合せ",
+            reason: "役職がなく順序を区別しないので組合せ。$\\binom{10}{3}$。",
+          },
+          {
+            condition: "3個のさいころで、少なくとも1個が6である確率を求めたい。",
+            goal: "確率",
+            choices: ["余事象", "順列", "条件付き確率"],
+            answer: "余事象",
+            reason: "「少なくとも1個」は1個も6でない確率を引く方が速い。",
+          },
+          {
+            condition: "1個のさいころを5回投げ、偶数がちょうど3回出る確率を求めたい。",
+            goal: "確率",
+            choices: ["反復試行", "条件付き確率", "順列"],
+            answer: "反復試行",
+            reason: "同じ試行の繰り返し。$\\binom{5}{3}p^3(1-p)^2$。",
+          },
+          {
+            condition: "袋から戻さず2個取り、1個目が赤と分かったとき2個目が赤の確率。",
+            goal: "確率",
+            choices: ["条件付き確率（母集団を絞る）", "反復試行", "順列"],
+            answer: "条件付き確率（母集団を絞る）",
+            reason: "1個目が赤の後の残りで数え直す。分母が変わる。",
+          },
+          {
+            condition: "赤白青の玉から3個取る。3色すべて異なる場合の数を数えたい。",
+            goal: "場合の数",
+            choices: ["各色から1個ずつの積", "余事象", "順列"],
+            answer: "各色から1個ずつの積",
+            reason: "色ごとに1個ずつ選ぶ積で数える。順序は区別しない。",
+          },
+          {
+            condition: "コインを4回投げ、表と裏の出方を全部調べたい（少数）。",
+            choices: ["樹形図・表で全列挙", "条件付き確率", "余事象"],
+            answer: "樹形図・表で全列挙",
+            reason: "状態が少ないときは全列挙が確実で速い。",
+          },
+          {
+            condition: "「ちょうど2個が赤」を数える。残りの1個はどう数える？",
+            choices: ["赤以外からちょうど1個", "赤を含めて1個", "区別しない"],
+            answer: "赤以外からちょうど1個",
+            reason: "「ちょうど2個」は残りを赤以外に限定して数える。",
+          },
+          {
+            condition: "確率の分母を作るとき、最も大事なことは？",
+            choices: ["分母と分子を同じ数え方にそろえる", "必ず順列で数える", "必ず組合せで数える"],
+            answer: "分母と分子を同じ数え方にそろえる",
+            reason: "同様に確からしい単位をそろえる。途中で順序の扱いを変えない。",
+          },
+          {
+            condition: "「A または B」の確率で、A と B が同時に起こりうる。",
+            choices: ["和の法則＋重複を引く", "そのまま足す", "余事象だけ"],
+            answer: "和の法則＋重複を引く",
+            reason: "排反でないなら $P(A)+P(B)-P(A\\cap B)$。重複を一度引く。",
+          },
+        ],
+      },
+      {
         id: "probability-original-heading",
         type: "heading",
         level: 2,
-        text: "4. 共通テスト形式オリジナル問題",
+        text: "本番形式演習：誘導文を言い換えて数える",
       },
       {
         id: "probability-original-problem",
@@ -818,6 +1458,34 @@ export const SPECIAL_LECTURES: Lecture[] = [
         ],
       },
       {
+        id: "probability-mistake-recovery",
+        type: "mistakeRecovery",
+        title: "ミス別補講：間違えた理由から戻る",
+        intro: "数え間違いは原因が分かれます。種類に合わせて戻りましょう。",
+        items: [
+          {
+            symptom: "順列か組合せか迷った／取り違えた",
+            action: "解法判別フローをもう一度",
+            href: "#probability-flow",
+          },
+          {
+            symptom: "「少なくとも」を直接数えて手間取った",
+            action: "余事象を使う判断へ",
+            href: "#probability-complement-callout",
+          },
+          {
+            symptom: "分母と分子の数え方がずれた",
+            action: "状態整理表で分母を固定し直す",
+            href: "#probability-counting-figure",
+          },
+          {
+            symptom: "条件付きで母集団を更新し忘れた",
+            action: "判別ドリルで前提の扱いを再確認",
+            href: "#probability-drill",
+          },
+        ],
+      },
+      {
         id: "probability-related",
         type: "relatedProblems",
         title: "類題と次の演習",
@@ -897,6 +1565,70 @@ export const SPECIAL_LECTURES: Lecture[] = [
         caption:
           "外部点Pから出る2本の割線では $PA\\cdot PB=PC\\cdot PD$ が成り立つ。「同じ点から円へ伸びる線分の積」をそろえて式にするのがコツ。",
       },
+      {
+        id: "gp-map-heading",
+        type: "heading",
+        level: 2,
+        text: "満点までの地図",
+      },
+      {
+        id: "gp-map-callout",
+        type: "callout",
+        tone: "info",
+        title: "図形の性質で満点を取る地図",
+        text:
+          "図形の性質は「定理を知っている」だけでは点になりません。図のどの形を見たら、どの定理を出すかの判別が勝負です。出る形は、円（円周角・接弦・方べき）、比（相似・角の二等分線・チェバ・メネラウス）、内接四角形（対角の和・トレミー）の3系統。共通テストでは、計量（正弦・余弦定理）とつないで「辺を作る道具」として出ることが多いです。\n\n最初に見るのは「円があるか」「比が出ているか」「点がどこに並んでいるか」。落としやすいのは、方べきで外部点からの距離ではなく弦の長さを掛ける、チェバとメネラウスの取り違え、相似の対応順のずれです。",
+      },
+      {
+        id: "gp-flow-heading",
+        type: "heading",
+        level: 2,
+        text: "解法判別フロー：その形は何を疑うか",
+      },
+      {
+        id: "gp-flow",
+        type: "solutionFlow",
+        title: "図形の性質の道具選び",
+        intro:
+          "図に出ている「形」から、疑う定理を1つに絞ります。形と定理の対応を覚えると、補助線も自然に決まります。",
+        steps: [
+          {
+            condition: "比が出ている（線分の比・面積比）",
+            tool: "相似・角の二等分線・チェバ・メネラウス",
+            reason: "比は比を生む。まず相似、内部の交点ならチェバ、直線が横切るならメネラウス。",
+          },
+          {
+            condition: "円があり、同じ弧・等しい角が見える",
+            tool: "円周角の定理",
+            reason: "同じ弧に対する円周角は等しい。角を別の場所へ移せる。",
+          },
+          {
+            condition: "円の接線と弦が見える",
+            tool: "接弦定理",
+            reason: "接線と弦のなす角＝その弦に対する円周角。",
+          },
+          {
+            condition: "円と2本の割線・接線・交わる弦（外部点や交点）",
+            tool: "方べきの定理",
+            reason: "同じ点から円へ伸びる線分の積が等しい。$PA\\cdot PB=PC\\cdot PD$。",
+          },
+          {
+            condition: "三角形の内部で3頂点からの線が1点で交わる",
+            tool: "チェバの定理",
+            reason: "内部の交点まわりの3つの辺の比の積が1。",
+          },
+          {
+            condition: "1本の直線が三角形の3辺（延長含む）を横切る",
+            tool: "メネラウスの定理",
+            reason: "横切る直線まわりの3つの比の積が1。",
+          },
+          {
+            condition: "四角形が円に内接している",
+            tool: "対角の和 $180^\\circ$・トレミーの定理",
+            reason: "向かい合う角の和は $180^\\circ$。対角線と辺の積はトレミーで結べる。",
+          },
+        ],
+      },
       createTriangleGeometryLayerBlock(
         {
           ...DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT,
@@ -926,10 +1658,143 @@ export const SPECIAL_LECTURES: Lecture[] = [
         "geometry-properties-layer",
       ),
       {
+        id: "gp-theorems-heading",
+        type: "heading",
+        level: 2,
+        text: "パターン別ミニ講義：使う場面と初手",
+      },
+      {
+        id: "gp-ratio-heading",
+        type: "heading",
+        level: 3,
+        text: "比が出たら：相似・角の二等分線・チェバ・メネラウス",
+      },
+      {
+        id: "gp-ratio-text",
+        type: "paragraph",
+        text:
+          "辺の比や面積比が出たら、まず相似な三角形を探します。三角形の内角の二等分線は、対辺を「はさむ2辺の比」に内分します（$BD:DC=AB:AC$）。中点が出れば中点連結定理で「平行かつ半分」。内部で3本の線が1点に集まればチェバ、1本の直線が3辺を横切ればメネラウスです。",
+      },
+      {
+        id: "gp-ratio-math",
+        type: "math",
+        expression: "\\frac{BD}{DC}\\cdot\\frac{CE}{EA}\\cdot\\frac{AF}{FB}=1",
+        caption: "チェバ（内部の交点）もメネラウス（横切る直線）も、3つの比の積=1。どの点を回るかで使い分ける。",
+      },
+      {
+        id: "gp-circle-heading",
+        type: "heading",
+        level: 3,
+        text: "円が出たら：円周角・接弦定理・方べき",
+      },
+      {
+        id: "gp-circle-text",
+        type: "paragraph",
+        text:
+          "円があれば、まず同じ弧に対する円周角の等しさで角を移します。接線があれば接弦定理（接線と弦のなす角＝弦に対する円周角）。外部点や交点から2本の線が円に伸びていれば方べきの定理です。方べきは「同じ点からの距離の積」で、弦の長さを掛けないのが鉄則です。",
+      },
+      {
+        id: "gp-circle-math",
+        type: "math",
+        expression: "PA\\cdot PB=PC\\cdot PD,\\qquad PT^2=PA\\cdot PB",
+        caption: "左は2本の割線、右は接線と割線。どちらも外部点Pからの距離の積でそろえる。",
+      },
+      {
+        id: "gp-cyclic-heading",
+        type: "heading",
+        level: 3,
+        text: "円に内接する四角形：対角の和とトレミー",
+      },
+      {
+        id: "gp-cyclic-text",
+        type: "paragraph",
+        text:
+          "四角形が円に内接していれば、向かい合う角の和は $180^\\circ$。補角なので $\\sin$ が等しく、計量へつなぎやすい形です。対角線と辺の積を結びたいときはトレミーの定理 $AC\\cdot BD=AB\\cdot CD+AD\\cdot BC$ を使います。",
+      },
+      {
+        id: "gp-fusion-text",
+        type: "paragraph",
+        text:
+          "図形の性質で求めた辺や比は、最後に正弦・余弦定理へ渡して長さや角を出すことが多いです。「性質で辺を作る → 計量で仕上げる」という二段構えを意識しましょう。",
+      },
+      {
+        id: "gp-drill",
+        type: "discriminationDrill",
+        title: "判別ドリル：その形は何を疑う？（図形の性質）",
+        intro:
+          "図の特徴を読んで、最初に疑う定理を選びます。計算はしません。比・円・交点・内接の手がかりに反応できるかを確認しましょう。",
+        items: [
+          {
+            condition: "三角形の内部で、3頂点から対辺へ引いた線が1点で交わっている。",
+            choices: ["チェバの定理", "メネラウスの定理", "方べきの定理"],
+            answer: "チェバの定理",
+            reason: "内部の1点で交わる3本＝チェバ。3辺の比の積が1。",
+          },
+          {
+            condition: "1本の直線が三角形の3辺（またはその延長）を横切っている。",
+            choices: ["メネラウスの定理", "チェバの定理", "接弦定理"],
+            answer: "メネラウスの定理",
+            reason: "三角形を横切る直線＝メネラウス。比の積が1。",
+          },
+          {
+            condition: "円の外部の点から接線と割線が引かれ、接線の長さを求めたい。",
+            goal: "接線の長さ",
+            choices: ["方べきの定理", "正弦定理", "中点連結定理"],
+            answer: "方べきの定理",
+            reason: "接線と割線は $PT^2=PA\\cdot PB$。外部点からの距離の積。",
+          },
+          {
+            condition: "$\\angle A$ の二等分線が対辺 $BC$ と交わり、$BD:DC$ を求めたい。",
+            goal: "$BD:DC$",
+            choices: ["角の二等分線の性質", "方べきの定理", "円周角の定理"],
+            answer: "角の二等分線の性質",
+            reason: "$BD:DC=AB:AC$。はさむ2辺の比に内分する。",
+          },
+          {
+            condition: "円に内接する四角形で、1つの角から向かいの角を求めたい。",
+            goal: "向かいの角",
+            choices: ["対角の和 $180^\\circ$", "接弦定理", "チェバの定理"],
+            answer: "対角の和 $180^\\circ$",
+            reason: "内接四角形は対角の和が $180^\\circ$。引き算で出る。",
+          },
+          {
+            condition: "円の接線と、接点から引いた弦のなす角を、別の角に移したい。",
+            choices: ["接弦定理", "方べきの定理", "中点連結定理"],
+            answer: "接弦定理",
+            reason: "接線と弦のなす角＝その弦に対する円周角に等しい。",
+          },
+          {
+            condition: "2つの三角形で2組の角が等しいと分かり、辺の比を求めたい。",
+            goal: "辺の比",
+            choices: ["相似", "方べきの定理", "メネラウスの定理"],
+            answer: "相似",
+            reason: "2角が等しければ相似。対応する辺の比が等しい。",
+          },
+          {
+            condition: "三角形の2辺の中点を結んだ線分について調べたい。",
+            choices: ["中点連結定理", "角の二等分線の性質", "方べきの定理"],
+            answer: "中点連結定理",
+            reason: "中点どうしを結ぶと、第三辺に平行で長さは半分。",
+          },
+          {
+            condition: "円に内接する四角形で、対角線と辺の積を結びつけたい。",
+            choices: ["トレミーの定理", "方べきの定理", "正弦定理"],
+            answer: "トレミーの定理",
+            reason: "$AC\\cdot BD=AB\\cdot CD+AD\\cdot BC$。対角線×対角線＝辺の積の和。",
+          },
+          {
+            condition: "円の中で2本の弦が交わり、交点から各端までの積を比べたい。",
+            choices: ["方べきの定理", "接弦定理", "チェバの定理"],
+            answer: "方べきの定理",
+            reason: "交わる弦も方べき。交点から各弦の両端までの積が等しい。",
+          },
+        ],
+      },
+      {
         id: "geometry-properties-original-heading",
         type: "heading",
         level: 2,
-        text: "3. 共通テスト形式オリジナル問題",
+        text: "本番形式演習：方べきと相似へつなぐ",
       },
       {
         id: "geometry-properties-original-problem",
@@ -1022,6 +1887,39 @@ export const SPECIAL_LECTURES: Lecture[] = [
         ],
       },
       {
+        id: "gp-mistake-recovery",
+        type: "mistakeRecovery",
+        title: "ミス別補講：間違えた理由から戻る",
+        intro: "つまずいた種類に合わせて、戻る場所を変えましょう。",
+        items: [
+          {
+            symptom: "どの定理を使うか選べなかった",
+            action: "解法判別フローをもう一度",
+            href: "#gp-flow",
+          },
+          {
+            symptom: "チェバとメネラウスを取り違えた",
+            action: "比のミニ講義（内部の交点か、横切る直線か）へ",
+            href: "#gp-ratio-heading",
+          },
+          {
+            symptom: "方べきで掛ける長さを間違えた",
+            action: "円のミニ講義（外部点からの距離の積）へ",
+            href: "#gp-circle-heading",
+          },
+          {
+            symptom: "補助線が思いつかなかった",
+            action: "図形レイヤーで同じ角・相似を探す",
+            href: "#geometry-properties-layer",
+          },
+          {
+            symptom: "性質は出せたが長さで詰まった",
+            action: "図形と計量 徹底講座へ",
+            href: "/common-test/lectures/geometry-measurement-intensive",
+          },
+        ],
+      },
+      {
         id: "geometry-properties-related",
         type: "relatedProblems",
         title: "類題と次の演習",
@@ -1043,5 +1941,6 @@ export const SPECIAL_LECTURES: Lecture[] = [
 ];
 
 export function getSpecialLectureBySlug(slug: string): Lecture | undefined {
-  return SPECIAL_LECTURES.find((lecture) => lecture.slug === slug);
+  const canonicalSlug = canonicalLectureSlug(slug);
+  return SPECIAL_LECTURES.find((lecture) => lecture.slug === canonicalSlug);
 }

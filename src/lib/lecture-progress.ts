@@ -60,6 +60,9 @@ const TRACKABLE_BLOCK_TYPES: ReadonlySet<LectureBlock["type"]> = new Set([
   "callout",
   "problem",
   "explanationTabs",
+  // 満点講義の中核：解法判別フローは読了、判別ドリルは全問解答で完了扱い。
+  "solutionFlow",
+  "discriminationDrill",
 ]);
 
 export function isTrackableBlock(block: LectureBlock): boolean {
