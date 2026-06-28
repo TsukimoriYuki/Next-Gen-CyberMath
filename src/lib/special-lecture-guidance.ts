@@ -146,6 +146,27 @@ export function getMasteryLectureGuideForProblem(problem: Problem): MasteryLectu
     ...(problem.tags ?? []),
   ].join(" ");
 
+  if (
+    /図形と計量|正弦|余弦|三角比|面積公式|垂線|高さ|点と直線の距離|外接円|内接円|空間図形|断面/.test(
+      haystack,
+    )
+  ) {
+    return getMasteryLectureGuideBySlug("geometry-measurement-intensive");
+  }
+  if (
+    /図形の性質|円周角|方べき|チェバ|メネラウス|相似|内心|外心|重心|垂心|角の二等分線|垂直二等分線|中線|アポロニウス/.test(
+      haystack,
+    )
+  ) {
+    return getMasteryLectureGuideBySlug("geometry-properties-auxiliary-lines");
+  }
+  if (/2次関数|二次関数|平方完成|軸|最大最小|端点/.test(haystack)) {
+    return getMasteryLectureGuideBySlug("quadratic-case-split-intensive");
+  }
+  if (/確率|順列|組合せ|余事象|条件付き/.test(haystack)) {
+    return getMasteryLectureGuideBySlug("probability-guided-reading");
+  }
+
   if (/図形と計量|正弦|余弦|三角比|面積公式|外接円|内接円/.test(haystack)) {
     return getMasteryLectureGuideBySlug("geometry-measurement-intensive");
   }

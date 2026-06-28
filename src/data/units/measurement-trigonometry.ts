@@ -1,4 +1,5 @@
 import type { Problem } from "@/lib/types";
+import { measurementGeometryAddons } from "./geometry-height-centers";
 
 // 数学I「図形と計量」(三角比) — 20 問。
 // グラフ/図形が本質に効く難易度 C 以上の3問にのみラボを付ける。
@@ -779,4 +780,5 @@ $$V=\frac13 r\,S\ \Longrightarrow\ r=\frac{3V}{S}=\frac{3\cdot\frac{\sqrt2}{12}a
       },
     ],
   },
+  ...measurementGeometryAddons,
 ];

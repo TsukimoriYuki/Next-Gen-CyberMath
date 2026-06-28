@@ -5,7 +5,9 @@ import {
   PREMIUM_COURSE_SUBJECTS,
   STANDARD_COURSE_SUBJECTS,
 } from "@/data/course-curriculum";
+import { getLessonsForIndex } from "@/lib/content";
 import type { CourseSubject } from "@/types/course";
+import type { Lesson } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "講座集 | CYBER OS",
@@ -14,6 +16,8 @@ export const metadata: Metadata = {
 };
 
 export default function CoursesIndexPage() {
+  const lessonGroups = getLessonsForIndex();
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
@@ -36,6 +40,7 @@ export default function CoursesIndexPage() {
           subjects={PREMIUM_COURSE_SUBJECTS}
           className="mt-10"
         />
+        <LessonSection groups={lessonGroups} className="mt-10" />
       </main>
     </div>
   );
@@ -116,5 +121,57 @@ function CourseSubjectCard({ subject }: { subject: CourseSubject }) {
         <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
       </span>
     </Link>
+  );
+}
+
+function LessonSection({
+  groups,
+  className,
+}: {
+  groups: { unit: string; lessons: Lesson[] }[];
+  className?: string;
+}) {
+  return (
+    <section className={className}>
+      <div className="mb-4 flex items-center gap-3">
+        <h2 className="text-xl font-extrabold text-slate-950">単元別講座</h2>
+        <span className="h-px flex-1 bg-slate-200" />
+      </div>
+      <div className="space-y-5">
+        {groups.map((group) => (
+          <div
+            key={group.unit}
+            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+          >
+            <div className="mb-3 text-sm font-extrabold text-slate-700">
+              {group.unit}
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {group.lessons.map((lesson) => (
+                <Link
+                  key={lesson.slug}
+                  href={`/lessons/${lesson.slug}`}
+                  className="group rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:border-blue-200 hover:bg-white"
+                >
+                  <div className="flex items-center gap-2 text-sm font-extrabold text-slate-950">
+                    <BookOpen className="h-4 w-4 text-blue-600" />
+                    {lesson.title}
+                  </div>
+                  {lesson.summary && (
+                    <p className="mt-2 line-clamp-3 text-xs leading-5 text-slate-600">
+                      {lesson.summary}
+                    </p>
+                  )}
+                  <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-blue-600">
+                    講座を開く
+                    <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

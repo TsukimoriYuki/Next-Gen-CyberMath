@@ -1,4 +1,5 @@
 import type { Problem } from "@/lib/types";
+import { geometryCenterAddons } from "./geometry-height-centers";
 
 // 数学A「図形の性質」— 20 問。
 // 幾何単元。図形が本質に効く C 以上の3問（円周角・方べき・チェバ）にラボを付ける。
@@ -716,4 +717,5 @@ $$\mathrm{AB}\cdot\mathrm{CD}+\mathrm{AD}\cdot\mathrm{BC}=\mathrm{AC}(\mathrm{BE
       },
     ],
   },
+  ...geometryCenterAddons,
 ];

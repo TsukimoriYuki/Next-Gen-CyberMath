@@ -8,6 +8,7 @@ import {
   createProbabilityCountingSvg,
   createQuadraticAxisCasesSvg,
 } from "@/lib/lecture-diagram-svg";
+import { enhanceSpecialLectures } from "@/data/specialLectureEnhancements";
 
 export type LectureDifficulty = "基礎" | "標準" | "発展";
 
@@ -180,7 +181,7 @@ export const SPECIAL_LECTURE_ROADMAP: SpecialLectureRoadmapStep[] = [
   },
 ];
 
-export const SPECIAL_LECTURES: Lecture[] = [
+const BASE_SPECIAL_LECTURES: Lecture[] = [
   {
     id: "lecture-geometry-measurement-001",
     slug: "geometry-measurement-intensive",
@@ -763,12 +764,12 @@ export const SPECIAL_LECTURES: Lecture[] = [
             href: "#tool-flow",
           },
           {
-            symptom: "$\\sin$ をどこから出すか迷った",
-            action: "$\\sin$ の優先順位フローへ",
+            symptom: "sinをどこから出すか迷った",
+            action: "sinの優先順位フローへ",
             href: "#sin-priority-flow",
           },
           {
-            symptom: "$\\sin$/$\\cos$ の符号を間違えた",
+            symptom: "sinとcosの符号を間違えた",
             action: "鋭角・鈍角の符号確認へ",
             href: "#angle-sign-heading",
           },
@@ -1939,6 +1940,8 @@ export const SPECIAL_LECTURES: Lecture[] = [
     ],
   },
 ];
+
+export const SPECIAL_LECTURES: Lecture[] = enhanceSpecialLectures(BASE_SPECIAL_LECTURES);
 
 export function getSpecialLectureBySlug(slug: string): Lecture | undefined {
   const canonicalSlug = canonicalLectureSlug(slug);
