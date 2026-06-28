@@ -14,6 +14,7 @@ import {
   type GeometryDiagramType,
 } from "@/lib/geometry-diagrams";
 import { enhanceSpecialLectures } from "@/data/specialLectureEnhancements";
+import { SHORTCUT_FORMULAS_LECTURE } from "@/data/specialLectures/shortcut-formulas";
 
 export type LectureDifficulty = "基礎" | "標準" | "発展";
 
@@ -194,6 +195,11 @@ export const SPECIAL_LECTURE_ROADMAP: SpecialLectureRoadmapStep[] = [
     slug: "geometry-properties-auxiliary-lines",
     purpose: "円周角・相似・方べきから補助線を判断する",
     recommendedTiming: "図の見落としや補助線判断で止まるとき",
+  },
+  {
+    slug: "math-1a-shortcut-formulas",
+    purpose: "マーク式で使える即殺公式を検算・時間短縮の武器にする",
+    recommendedTiming: "通常講義と満点講義を終え、本番で時間を削りたいとき",
   },
 ];
 
@@ -1968,6 +1974,7 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
       },
     ],
   },
+  SHORTCUT_FORMULAS_LECTURE,
 ];
 
 export const SPECIAL_LECTURES: Lecture[] = enhanceSpecialLectures(BASE_SPECIAL_LECTURES);

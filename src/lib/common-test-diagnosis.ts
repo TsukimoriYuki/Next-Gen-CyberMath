@@ -126,11 +126,11 @@ const COMMON_TEST_LECTURE_RECOMMENDATIONS: Record<
     sourceTagId: "figure-reading",
   },
   "time-up": {
-    slug: "quadratic-case-split-intensive",
-    title: "共通テスト 二次関数 場合分け完全攻略",
-    reason: "時間切れが目立つ日は、判断を短くするために境界値を先に決める講義から始めます。",
-    estimatedMinutes: 40,
-    href: "/common-test/lectures/quadratic-case-split-intensive",
+    slug: "math-1a-shortcut-formulas",
+    title: "共通テスト数学IA 裏技・即殺公式講義",
+    reason: "時間切れが目立つ日は、正攻法を理解した上で使える検算・選択肢処理・即殺公式を整理します。",
+    estimatedMinutes: 60,
+    href: "/common-test/lectures/math-1a-shortcut-formulas",
     sourceTagId: "time-up",
   },
   "confident-wrong": {
@@ -196,7 +196,9 @@ export const COMMON_TEST_MISTAKE_STRATEGIES: Record<
   "time-up": {
     tagId: "time-up",
     title: "時間切れ",
-    action: "3分で方針が立たなければ一旦飛ばす練習をする。",
+    action: "正攻法で方針を確認した後、即殺公式・選択肢処理・検算で短縮する。",
+    lectureHref: "/common-test/lectures/math-1a-shortcut-formulas",
+    lectureLabel: "共通テスト数学IA 裏技・即殺公式講義",
   },
   "confident-wrong": {
     tagId: "confident-wrong",
