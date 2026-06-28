@@ -2,7 +2,9 @@
 
 import katex from "katex";
 import { cn } from "@/lib/utils";
+import { GeometryDiagram } from "@/components/geometry/GeometryDiagram";
 import { LabRenderer } from "@/components/graph/LabRenderer";
+import type { GeometryDiagramType } from "@/lib/geometry-diagrams";
 import type { GraphKey } from "@/lib/types";
 import { WhyPopover } from "@/components/scaffolding/WhyPopover";
 
@@ -140,6 +142,18 @@ export function MathText({
             <div key={bi} className="my-4">
               <LabRenderer graphKey={labMatch[1] as GraphKey} />
             </div>
+          );
+        }
+
+        const geometryDiagramMatch = trimmed.match(/^@@geometry-diagram:([a-z0-9-]+)(?:\|([^@]*))?@@$/);
+        if (geometryDiagramMatch) {
+          return (
+            <GeometryDiagram
+              key={bi}
+              type={geometryDiagramMatch[1] as GeometryDiagramType}
+              caption={geometryDiagramMatch[2]}
+              className="my-4"
+            />
           );
         }
 

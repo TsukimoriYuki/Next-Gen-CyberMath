@@ -1,9 +1,25 @@
 import type { Lecture, LectureBlock } from "@/data/specialLectures";
+import {
+  createGeometryDiagramDataUri,
+  GEOMETRY_DIAGRAM_META,
+  type GeometryDiagramType,
+} from "@/lib/geometry-diagrams";
 
 type LectureEnhancement = {
   reviewedGaps: string[];
   blocks: LectureBlock[];
 };
+
+function geometryDiagramBlock(id: string, type: GeometryDiagramType): LectureBlock {
+  const meta = GEOMETRY_DIAGRAM_META[type];
+  return {
+    id,
+    type: "image",
+    src: createGeometryDiagramDataUri(type),
+    alt: meta.alt,
+    caption: `この図で見るポイント: ${meta.point}`,
+  };
+}
 
 const geometryMeasurementDrill: LectureBlock = {
   id: "geometry-measurement-final-drill",
@@ -878,6 +894,12 @@ const geometryPropertiesCentersBlocks: LectureBlock[] = [
       },
     ],
   },
+  geometryDiagramBlock("geometry-properties-centers-incenter-diagram", "incenter-incircle"),
+  geometryDiagramBlock("geometry-properties-centers-circumcenter-diagram", "circumcenter-circumcircle"),
+  geometryDiagramBlock("geometry-properties-centers-centroid-diagram", "centroid-median"),
+  geometryDiagramBlock("geometry-properties-centers-orthocenter-diagram", "orthocenter-altitudes"),
+  geometryDiagramBlock("geometry-properties-centers-bisector-diagram", "angle-bisector-ratio"),
+  geometryDiagramBlock("geometry-properties-centers-median-diagram", "median-length"),
   {
     id: "geometry-properties-centers-drill",
     type: "discriminationDrill",

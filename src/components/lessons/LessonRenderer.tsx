@@ -6,12 +6,14 @@ import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 import type { Components } from "react-markdown";
 import { LabRenderer } from "@/components/graph/LabRenderer";
+import { GeometryDiagram } from "@/components/geometry/GeometryDiagram";
 import { WhyPopover } from "@/components/scaffolding/WhyPopover";
+import type { GeometryDiagramType } from "@/lib/geometry-diagrams";
 import type { GraphKey } from "@/lib/types";
 
 // Lab embeds are authored as a line token: @@lab:<graphKey>@@  (optional |caption).
 // We split on it and render <LabRenderer> between the Markdown segments.
-const LAB_TOKEN = /@@lab:([a-z0-9-]+)(?:\|[^@]*)?@@/g;
+const EMBED_TOKEN = /@@(?:lab|geometry-diagram):([a-z0-9-]+)(?:\|([^@]*))?@@/g;
 
 // CommonMark の強調フランキング規則は、`**太字**` が CJK の文字・句読点に直接
 // 隣接すると認識に失敗し（例: `）**` の直後が `に` のような場合）、`**` が
@@ -156,20 +158,30 @@ function MarkdownBlock({ children }: { children: string }) {
 }
 
 export function LessonRenderer({ content }: { content: string }) {
-  // Split the markdown around @@lab:...@@ tokens.
+  // Split the markdown around embed tokens.
   const nodes: React.ReactNode[] = [];
   let last = 0;
   let key = 0;
-  for (const m of content.matchAll(LAB_TOKEN)) {
+  for (const m of content.matchAll(EMBED_TOKEN)) {
     const before = content.slice(last, m.index);
     if (before.trim()) {
       nodes.push(<MarkdownBlock key={key++}>{before}</MarkdownBlock>);
     }
-    nodes.push(
-      <div key={key++} className="my-6">
-        <LabRenderer graphKey={m[1] as GraphKey} />
-      </div>,
-    );
+    if (m[0].startsWith("@@lab:")) {
+      nodes.push(
+        <div key={key++} className="my-6">
+          <LabRenderer graphKey={m[1] as GraphKey} />
+        </div>,
+      );
+    } else {
+      nodes.push(
+        <GeometryDiagram
+          key={key++}
+          type={m[1] as GeometryDiagramType}
+          caption={m[2]}
+        />,
+      );
+    }
     last = (m.index ?? 0) + m[0].length;
   }
   const tail = content.slice(last);

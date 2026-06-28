@@ -8,6 +8,11 @@ import {
   createProbabilityCountingSvg,
   createQuadraticAxisCasesSvg,
 } from "@/lib/lecture-diagram-svg";
+import {
+  createGeometryDiagramDataUri,
+  GEOMETRY_DIAGRAM_META,
+  type GeometryDiagramType,
+} from "@/lib/geometry-diagrams";
 import { enhanceSpecialLectures } from "@/data/specialLectureEnhancements";
 
 export type LectureDifficulty = "基礎" | "標準" | "発展";
@@ -146,6 +151,17 @@ export interface MistakeRecoveryItem {
   href?: string;
 }
 
+function geometryDiagramBlock(id: string, type: GeometryDiagramType): LectureBlock {
+  const meta = GEOMETRY_DIAGRAM_META[type];
+  return {
+    id,
+    type: "image",
+    src: createGeometryDiagramDataUri(type),
+    alt: meta.alt,
+    caption: `この図で見るポイント: ${meta.point}`,
+  };
+}
+
 export const MISTAKE_DIAGNOSIS_TAGS: MistakeDiagnosisTag[] = [
   "計算ミス",
   "公式選択ミス",
@@ -226,6 +242,7 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
           "面積、円、補角、同じ角が登場しているか",
         ],
       },
+      geometryDiagramBlock("geometry-measurement-altitude-figure", "altitude-basic"),
       {
         id: "map-heading",
         type: "heading",
@@ -285,6 +302,7 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
           },
         ],
       },
+      geometryDiagramBlock("geometry-measurement-tool-choice-figure", "auxiliary-line-choice"),
       createTriangleGeometryLayerBlock(
         {
           ...DEFAULT_TRIANGLE_GEOMETRY_SVG_INPUT,
@@ -430,6 +448,8 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
         expression: "S=\\frac{1}{2}ab\\sin C",
         caption: "辺の長さと角をつなぐ、共通テストで非常に使いやすい式。",
       },
+      geometryDiagramBlock("geometry-measurement-area-height-figure", "area-height-reverse"),
+      geometryDiagramBlock("geometry-measurement-trig-height-figure", "trig-height"),
       {
         id: "same-sin-heading",
         type: "heading",
@@ -466,6 +486,7 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
         expression: "2R=\\frac{a}{\\sin A}\\quad\\Longleftrightarrow\\quad a=2R\\sin A",
         caption: "辺と向かいの角が1組あれば $R$ が出る。$a=2R\\sin A$ の向きも使えると速い。",
       },
+      geometryDiagramBlock("geometry-measurement-circumcenter-figure", "circumcenter-circumcircle"),
       {
         id: "inradius-heading",
         type: "heading",
@@ -484,6 +505,7 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
         expression: "S=rs,\\quad s=\\frac{a+b+c}{2}\\ \\Longrightarrow\\ r=\\frac{S}{s}=\\frac{2S}{a+b+c}",
         caption: "$s$ は周の半分。$r=\\dfrac{2S}{a+b+c}$ まで一気に書けると本番で速い。",
       },
+      geometryDiagramBlock("geometry-measurement-incenter-figure", "incenter-incircle"),
       {
         id: "circle-angle-heading",
         type: "heading",
@@ -508,6 +530,7 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
         text:
           "測量問題は、まず「2つの直角三角形」または「1つの三角形＋仰角」の図を自分で描きます。見上げる角（仰角）と水平距離を、$\\tan$ で高さに変換するのが基本です。空間図形は、求めたい長さや角を含む「断面の三角形」を取り出し、平面の図形と計量に落とし込みます。立体のまま考えないのがコツです。",
       },
+      geometryDiagramBlock("geometry-measurement-spatial-section-figure", "spatial-section"),
       {
         id: "fusion-heading",
         type: "heading",
@@ -1538,6 +1561,7 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
         text:
           "最初に見るのは、円、接線、平行線、同じ長さ、同じ角です。図にある情報を増やす前に、すでに見えている等しさを拾います。",
       },
+      geometryDiagramBlock("geometry-properties-auxiliary-choice-figure", "auxiliary-line-choice"),
       {
         id: "geometry-properties-angle-heading",
         type: "heading",
@@ -1676,12 +1700,15 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
         text:
           "辺の比や面積比が出たら、まず相似な三角形を探します。三角形の内角の二等分線は、対辺を「はさむ2辺の比」に内分します（$BD:DC=AB:AC$）。中点が出れば中点連結定理で「平行かつ半分」。内部で3本の線が1点に集まればチェバ、1本の直線が3辺を横切ればメネラウスです。",
       },
+      geometryDiagramBlock("geometry-properties-bisector-ratio-figure", "angle-bisector-ratio"),
       {
         id: "gp-ratio-math",
         type: "math",
         expression: "\\frac{BD}{DC}\\cdot\\frac{CE}{EA}\\cdot\\frac{AF}{FB}=1",
         caption: "チェバ（内部の交点）もメネラウス（横切る直線）も、3つの比の積=1。どの点を回るかで使い分ける。",
       },
+      geometryDiagramBlock("geometry-properties-bisector-length-figure", "angle-bisector-length"),
+      geometryDiagramBlock("geometry-properties-median-length-figure", "median-length"),
       {
         id: "gp-circle-heading",
         type: "heading",
@@ -1700,6 +1727,8 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
         expression: "PA\\cdot PB=PC\\cdot PD,\\qquad PT^2=PA\\cdot PB",
         caption: "左は2本の割線、右は接線と割線。どちらも外部点Pからの距離の積でそろえる。",
       },
+      geometryDiagramBlock("geometry-properties-circumcenter-figure", "circumcenter-circumcircle"),
+      geometryDiagramBlock("geometry-properties-incenter-figure", "incenter-incircle"),
       {
         id: "gp-cyclic-heading",
         type: "heading",

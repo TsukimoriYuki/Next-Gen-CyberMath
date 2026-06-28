@@ -58,7 +58,9 @@ export const measurementGeometryAddons: Problem[] = [
     unit: "図形と計量",
     difficulty: "A",
     tagline: "面積が先に出ているときは、底辺を決めて高さを戻す。",
-    statement: r`三角形 ABC で、BC=10、面積が 30 である。A から BC に下ろした垂線の長さを求めよ。`,
+    statement: r`三角形 ABC で、BC=10、面積が 30 である。A から BC に下ろした垂線の長さを求めよ。
+
+@@geometry-diagram:area-height-reverse@@`,
     insight: r`「面積」と「底辺」が同時に見えるので、まず高さを逆算する。三角比を使う前に、$S=\dfrac12 \times 底辺 \times 高さ$ が最短になる。`,
     hint: r`BC を底辺にすると、$30=\dfrac12\cdot 10\cdot h$。`,
     solution: r`$30=5h$ より $h=6$。よって、A から BC に下ろした垂線の長さは $6$。`,
@@ -97,7 +99,9 @@ export const measurementGeometryAddons: Problem[] = [
     unit: "図形と計量",
     difficulty: "B",
     tagline: "辺と角が見えたら、高さは辺に sin を掛けて作る。",
-    statement: r`三角形 ABC で AB=8、角 B が 30 度である。A から BC に下ろした垂線の長さを求めよ。`,
+    statement: r`三角形 ABC で AB=8、角 B が 30 度である。A から BC に下ろした垂線の長さを求めよ。
+
+@@geometry-diagram:trig-height@@`,
     insight: r`A から BC に垂線を下ろすと直角三角形ができる。AB が斜辺、求める高さが角 B の向かい側なので、$h=AB\sin B$。`,
     hint: r`$\sin 30^\circ=\dfrac12$ を使う。`,
     solution: r`$h=8\sin 30^\circ=8\cdot\dfrac12=4$。`,
@@ -162,7 +166,9 @@ export const measurementGeometryAddons: Problem[] = [
     unit: "図形と計量",
     difficulty: "B",
     tagline: "三辺と面積が見えたら、内接円半径は面積を半周長で割る。",
-    statement: r`三角形 ABC の三辺が 5、6、7 で、面積が $6\sqrt6$ である。内接円の半径を求めよ。`,
+    statement: r`三角形 ABC の三辺が 5、6、7 で、面積が $6\sqrt6$ である。内接円の半径を求めよ。
+
+@@geometry-diagram:incenter-incircle@@`,
     insight: r`内接円半径は $S=rs$。ここで $s$ は半周長。三辺がそろっていて面積があるなら、この公式が最短。`,
     hint: r`$s=\dfrac{5+6+7}{2}=9$。`,
     solution: r`$S=rs$ より $6\sqrt6=9r$。したがって $r=\dfrac{2\sqrt6}{3}$。`,
@@ -201,7 +207,9 @@ export const measurementGeometryAddons: Problem[] = [
     unit: "図形と計量",
     difficulty: "B",
     tagline: "一辺と向かいの角が見えたら、正弦定理で半径へ。",
-    statement: r`三角形 ABC で、BC=6、角 A が 30 度である。外接円の半径を求めよ。`,
+    statement: r`三角形 ABC で、BC=6、角 A が 30 度である。外接円の半径を求めよ。
+
+@@geometry-diagram:circumcenter-circumcircle@@`,
     insight: r`辺 BC は角 A の向かいの辺。正弦定理より $\dfrac{BC}{\sin A}=2R$。`,
     hint: r`$\dfrac{6}{\sin 30^\circ}=2R$。`,
     solution: r`$\dfrac{6}{1/2}=12=2R$ より $R=6$。`,
@@ -240,7 +248,9 @@ export const measurementGeometryAddons: Problem[] = [
     unit: "図形と計量",
     difficulty: "C",
     tagline: "空間の高さは、必要な断面を切って直角三角形に戻す。",
-    statement: r`正四角すいの底面は 1 辺 6 の正方形、側辺は 5 である。この正四角すいの高さを求めよ。`,
+    statement: r`正四角すいの底面は 1 辺 6 の正方形、側辺は 5 である。この正四角すいの高さを求めよ。
+
+@@geometry-diagram:spatial-section@@`,
     insight: r`頂点、底面の中心、底面の頂点を通る断面を考える。底面中心から頂点までの距離は正方形の対角線の半分。`,
     hint: r`底面中心から底面の頂点までの距離は $3\sqrt2$。側辺 5 を斜辺とする。`,
     solution: r`高さを $h$ とすると、$h^2+(3\sqrt2)^2=5^2$。よって $h^2=25-18=7$ なので $h=\sqrt7$。`,
@@ -266,7 +276,9 @@ export const measurementGeometryAddons: Problem[] = [
     unit: "図形と計量",
     difficulty: "B",
     tagline: "面積・距離・高さが見えたら、まず垂線を候補にする。",
-    statement: r`三角形 ABC で、AB=10、BC=12、角 B が 30 度である。面積を求めるために最初に引くべき補助線を答え、その理由を述べよ。`,
+    statement: r`三角形 ABC で、AB=10、BC=12、角 B が 30 度である。面積を求めるために最初に引くべき補助線を答え、その理由を述べよ。
+
+@@geometry-diagram:altitude-basic@@`,
     insight: r`面積を求めたいが、高さが直接ない。辺 AB と角 B があるので、A から BC に垂線を下ろすと高さが $AB\sin B$ で作れる。`,
     hint: r`面積公式に必要なのは底辺と高さ。`,
     solution: r`A から BC に垂線を下ろす。すると高さは $10\sin30^\circ=5$ となり、底辺 $BC=12$ と合わせて面積公式に入れられる。`,
@@ -308,7 +320,9 @@ export const geometryCenterAddons: Problem[] = [
     unit: "図形の性質",
     difficulty: "A",
     tagline: "内心は三つの角の二等分線の交点で、三辺から等距離。",
-    statement: r`三角形 ABC の内心を I とする。I から辺 AB、BC、CA への距離がそれぞれ等しい理由を述べよ。`,
+    statement: r`三角形 ABC の内心を I とする。I から辺 AB、BC、CA への距離がそれぞれ等しい理由を述べよ。
+
+@@geometry-diagram:incenter-incircle@@`,
     insight: r`内心は角の二等分線上の点。角の二等分線上の点は、その角を作る二辺から等距離である。`,
     hint: r`角 A、角 B、角 C の二等分線が交わる点を考える。`,
     solution: r`I は各角の二等分線上にあるので、I から隣り合う二辺への距離は等しい。これを三つの角で考えると、三辺 AB、BC、CA への距離はすべて等しい。`,
@@ -373,7 +387,9 @@ export const geometryCenterAddons: Problem[] = [
     unit: "図形の性質",
     difficulty: "A",
     tagline: "三頂点から等距離の点は垂直二等分線で作る。",
-    statement: r`三角形 ABC の三頂点から等距離の点を作りたい。どの補助線を引けばよいか。`,
+    statement: r`三角形 ABC の三頂点から等距離の点を作りたい。どの補助線を引けばよいか。
+
+@@geometry-diagram:circumcenter-circumcircle@@`,
     insight: r`二点 A、B から等距離の点は、AB の垂直二等分線上にある。これを二辺で行えば外心が決まる。`,
     hint: r`AB と AC の垂直二等分線を考える。`,
     solution: r`AB と AC の垂直二等分線を引き、その交点を取る。この点が外心で、A、B、C から等距離になる。`,
@@ -412,7 +428,9 @@ export const geometryCenterAddons: Problem[] = [
     unit: "図形の性質",
     difficulty: "A",
     tagline: "重心は中線を頂点側から二対一に分ける。",
-    statement: r`三角形 ABC の重心を G、BC の中点を M とする。AG:GM を求めよ。`,
+    statement: r`三角形 ABC の重心を G、BC の中点を M とする。AG:GM を求めよ。
+
+@@geometry-diagram:centroid-median@@`,
     insight: r`重心は三本の中線の交点で、中線を頂点側から $2:1$ に分ける。`,
     hint: r`頂点に近いほうが長い。`,
     solution: r`$AG:GM=2:1$。`,
@@ -451,7 +469,9 @@ export const geometryCenterAddons: Problem[] = [
     unit: "図形の性質",
     difficulty: "A",
     tagline: "垂心が欲しいときは二本の高さを引く。",
-    statement: r`三角形 ABC の垂心を作図したい。どの補助線を引けばよいか。`,
+    statement: r`三角形 ABC の垂心を作図したい。どの補助線を引けばよいか。
+
+@@geometry-diagram:orthocenter-altitudes@@`,
     insight: r`垂心は三本の高さの交点。二本の頂点から対辺へ垂線を下ろせば十分に決まる。`,
     hint: r`A から BC、B から CA へ垂線を下ろす。`,
     solution: r`A から BC へ、B から CA へ垂線を下ろし、その交点を取る。この点が垂心である。`,
@@ -490,7 +510,9 @@ export const geometryCenterAddons: Problem[] = [
     unit: "図形の性質",
     difficulty: "B",
     tagline: "角の二等分線は対辺を隣の二辺の比に分ける。",
-    statement: r`三角形 ABC で、角 A の二等分線が BC と D で交わる。AB=6、AC=9、BD=4 のとき、DC を求めよ。`,
+    statement: r`三角形 ABC で、角 A の二等分線が BC と D で交わる。AB=6、AC=9、BD=4 のとき、DC を求めよ。
+
+@@geometry-diagram:angle-bisector-ratio@@`,
     insight: r`角の二等分線が対辺を切るなら、$BD:DC=AB:AC$。`,
     hint: r`$4:DC=6:9=2:3$。`,
     solution: r`$4:DC=2:3$ より $DC=6$。`,
@@ -516,7 +538,9 @@ export const geometryCenterAddons: Problem[] = [
     unit: "図形の性質",
     difficulty: "C",
     tagline: "角の二等分線の長さは、隣の二辺と対辺の分割で求める。",
-    statement: r`三角形 ABC で、角 A の二等分線が BC と D で交わる。AB=9、AC=12、BD=3、DC=4 のとき、AD の長さを求めよ。`,
+    statement: r`三角形 ABC で、角 A の二等分線が BC と D で交わる。AB=9、AC=12、BD=3、DC=4 のとき、AD の長さを求めよ。
+
+@@geometry-diagram:angle-bisector-length@@`,
     insight: r`角の二等分線の長さには $AD^2=AB\cdot AC-BD\cdot DC$ を使う。`,
     hint: r`$BD:DC=3:4$ は $AB:AC=9:12$ と一致している。$AD^2=9\cdot12-3\cdot4$。`,
     solution: r`$AD^2=9\cdot12-3\cdot4=108-12=96$。よって $AD=4\sqrt6$。`,
@@ -555,7 +579,9 @@ export const geometryCenterAddons: Problem[] = [
     unit: "図形の性質",
     difficulty: "C",
     tagline: "中線の長さはアポロニウスの定理で処理する。",
-    statement: r`三角形 ABC で AB=5、AC=7、BC=8、BC の中点を M とする。AM の長さを求めよ。`,
+    statement: r`三角形 ABC で AB=5、AC=7、BC=8、BC の中点を M とする。AM の長さを求めよ。
+
+@@geometry-diagram:median-length@@`,
     insight: r`中点と中線の長さが問われているので、アポロニウスの定理を使う。`,
     hint: r`$AB^2+AC^2=2(AM^2+BM^2)$、$BM=4$。`,
     solution: r`$25+49=2(AM^2+16)$。よって $74=2AM^2+32$、$AM^2=21$。したがって $AM=\sqrt{21}$。`,
@@ -581,7 +607,9 @@ export const geometryCenterAddons: Problem[] = [
     unit: "図形の性質",
     difficulty: "B",
     tagline: "内心・外心・重心・垂心で引く線は変わる。",
-    statement: r`三角形の内部に「三辺から等距離の点」が出た。最初に引くべき補助線を答えよ。`,
+    statement: r`三角形の内部に「三辺から等距離の点」が出た。最初に引くべき補助線を答えよ。
+
+@@geometry-diagram:auxiliary-line-choice@@`,
     insight: r`三辺から等距離は内心のサイン。角の二等分線を引く。`,
     hint: r`三頂点から等距離なら垂直二等分線、三辺から等距離なら角の二等分線。`,
     solution: r`角の二等分線を引く。交点が内心になる。`,
