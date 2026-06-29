@@ -201,8 +201,9 @@ export function DiscriminationDrillBlock({
                       : "border-amber-200 bg-amber-50 text-amber-900"
                   }`}
                 >
-                  <div className="mb-0.5 font-extrabold">
-                    {chosen === item.answer ? "正解" : "もう一度ここを意識"}：{item.answer}
+                  <div className="mb-0.5 flex flex-wrap items-center gap-x-1 font-extrabold">
+                    <span>{chosen === item.answer ? "正解" : "もう一度ここを意識"}：</span>
+                    <MathText>{item.answer}</MathText>
                   </div>
                   <MathText>{item.reason}</MathText>
                 </div>

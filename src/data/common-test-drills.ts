@@ -2879,6 +2879,185 @@ Now I use both: the tablet for long, text-heavy classes, and paper for subjects 
     skillTags: ["要旨把握", "英語スキャニング", "選択肢消去"],
     stimulusType: "blog",
   },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 満点講義 連携：二次関数（文字定数・場合分け境界・判別式）
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "ct-m1a-s2-mq1",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 文字定数つき最小値（軸が外）",
+    statement:
+      "関数 $f(x)=x^2-2ax+1$ の $0\\le x\\le 2$ における最小値を考える。$a=3$ のときの最小値を求めよ。",
+    type: "single-choice",
+    options: ["$-7$", "$-8$", "$-2$", "$1$"],
+    correctAnswer: "$-7$",
+    explanation:
+      "$f(x)=(x-a)^2+1-a^2$ より軸は $x=a$。$a=3$ は定義域 $0\\le x\\le 2$ の右外なので、最小値は最も近い右端 $f(2)=4-12+1=-7$。",
+    strategy:
+      "文字定数つきは軸の位置で場合分けする。$a=3$ は区間の右外と即断し、右端 $x=2$ を代入する。軸が外なら頂点は見ない。2分以内。",
+    trapExplanation:
+      "頂点の値 $1-a^2=-8$ を最小値にしてしまう誤りが最頻出。軸が定義域の外にあるときは頂点ではなく近い端点が最小。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理", "数式変形"],
+  },
+  {
+    id: "ct-m1a-s2-mq2",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 最小が頂点になる場合分け境界",
+    statement:
+      "関数 $f(x)=x^2-2ax+3$ の $1\\le x\\le 4$ における最小値が頂点で与えられるような定数 $a$ の値の範囲を求めよ。",
+    type: "single-choice",
+    options: ["$1\\le a\\le 4$", "$a<1$", "$a>4$", "$0\\le a\\le 4$"],
+    correctAnswer: "$1\\le a\\le 4$",
+    explanation:
+      "上に凸の放物線の最小値が頂点になるのは、軸 $x=a$ が定義域の内側にあるとき。よって $1\\le a\\le 4$。",
+    strategy:
+      "「最小が頂点」＝「軸が定義域内」と言い換える。境界は定義域の端点 $a=1,\\ 4$。端点を含むかまで確認する。2分以内。",
+    trapExplanation:
+      "不等号の向きを逆にして区間外（$a<1$ など）を選ぶ、または端点を含むかを曖昧にするミスが多い。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "数式変形"],
+  },
+  {
+    id: "ct-m1a-s2-mq3",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 判別式と異なる2解",
+    statement:
+      "2次方程式 $x^2-2ax+a+2=0$ が異なる2つの実数解をもつような定数 $a$ の値の範囲を求めよ。",
+    type: "single-choice",
+    options: ["$a<-1$ または $a>2$", "$-1<a<2$", "$a>2$", "$a<2$"],
+    correctAnswer: "$a<-1$ または $a>2$",
+    explanation:
+      "$\\dfrac{D}{4}=a^2-(a+2)=a^2-a-2=(a-2)(a+1)>0$ より $a<-1$ または $a>2$。",
+    strategy:
+      "異なる2解は $D>0$。$x$ の係数が偶数なので $D/4$ を使うと軽い。因数分解して符号を読む。2分以内。",
+    trapExplanation:
+      "$(a-2)(a+1)>0$ の解を内側 $-1<a<2$ と逆に取るミス。上に凸の積が正になるのは外側であることを確認する。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["数式変形", "条件整理"],
+  },
+  {
+    id: "ct-m1a-s2-mq4",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 利益を最大にする値上げ額",
+    context:
+      "ある商品の価格設定を考える。1個あたり $x$ 円値上げすると、売れる個数が $(100-2x)$ 個になると見込まれる。1個あたりの利益は $(x+10)$ 円である。",
+    statement:
+      "総利益 $P(x)=(x+10)(100-2x)$ を最大にする値上げ額 $x$ を求めよ。ただし $0\\le x\\le 50$ とする。",
+    type: "single-choice",
+    options: ["$x=20$", "$x=10$", "$x=40$", "$x=25$"],
+    correctAnswer: "$x=20$",
+    explanation:
+      "$P(x)=(x+10)(100-2x)=-2x^2+80x+1000$。$x^2$ の係数が負で上に凸だから最大は頂点。軸は $x=-\\dfrac{80}{2\\cdot(-2)}=20$ で、これは $0\\le x\\le 50$ に含まれるので最大は $x=20$。",
+    strategy:
+      "文章題はまず式を立てて平方完成（または軸の公式）。上に凸なら最大は頂点。軸が定義域に入るかを確認してから答える。4分以内。",
+    trapExplanation:
+      "展開せずに端点だけ調べる、軸の公式の符号を間違える、軸が区間外のときに頂点を使うミスに注意する。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["誘導読解", "数式変形", "計算処理"],
+    sourceStyle: "日常場面",
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 満点講義 連携：確率（包除・条件付き・独立排反）
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "ct-m1a-s4-mp1",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 3の倍数または5の倍数（包除）",
+    statement:
+      "1 から 30 までの整数から1つを等しい確率で選ぶとき、3の倍数または5の倍数である確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{7}{15}$", "$\\dfrac{8}{15}$", "$\\dfrac{16}{30}$", "$\\dfrac{1}{2}$"],
+    correctAnswer: "$\\dfrac{7}{15}$",
+    explanation:
+      "3の倍数は10個、5の倍数は6個、15の倍数（両方）は2個。包除原理より $10+6-2=14$ 個。確率は $\\dfrac{14}{30}=\\dfrac{7}{15}$。",
+    strategy:
+      "「または」で重なりがあるときは包除。重複している15の倍数を1回だけ引く。約分まで丁寧に。2分以内。",
+    trapExplanation:
+      "重複（15の倍数）を引き忘れて $\\dfrac{16}{30}$ としてしまうのが典型のミス。足したら重なりを必ず1回引く。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-mp2",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 母集団を更新する条件付き確率",
+    statement:
+      "袋に赤玉4個、白玉2個が入っている。戻さずに2個取り出すとき、1個目が白であった。2個目が白である条件付き確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{1}{5}$", "$\\dfrac{1}{3}$", "$\\dfrac{2}{6}$", "$\\dfrac{2}{5}$"],
+    correctAnswer: "$\\dfrac{1}{5}$",
+    explanation:
+      "1個目が白なので、残りは赤4個・白1個の計5個。2個目が白である確率は $\\dfrac{1}{5}$。",
+    strategy:
+      "条件付き確率は「その条件が起きた後の状態」で数え直す。戻さない抽出は母集団が変わる点が核心。2分以内。",
+    trapExplanation:
+      "条件を無視して元の全体6個を分母にする（$\\dfrac{2}{6}$ など）のが最頻出。1個減って中身も変わることを必ず反映する。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-mp3",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 独立と排反の判定",
+    statement:
+      "1個のサイコロを1回投げる。事象A「偶数の目が出る」、事象B「3の倍数の目が出る」について、最も適切なものを選べ。",
+    type: "single-choice",
+    options: [
+      "独立だが排反ではない",
+      "排反だが独立ではない",
+      "独立かつ排反である",
+      "独立でも排反でもない",
+    ],
+    correctAnswer: "独立だが排反ではない",
+    explanation:
+      "$P(A)=\\dfrac{3}{6}=\\dfrac{1}{2}$、$P(B)=\\dfrac{2}{6}=\\dfrac{1}{3}$、$A\\cap B$ は6の目だけで $P(A\\cap B)=\\dfrac{1}{6}$。$P(A)P(B)=\\dfrac{1}{6}=P(A\\cap B)$ なので独立。6が両方に入るので同時に起こり、排反ではない。",
+    strategy:
+      "独立は $P(A\\cap B)=P(A)P(B)$、排反は $P(A\\cap B)=0$。別々の概念なので両方を計算して確認する。3分以内。",
+    trapExplanation:
+      "「偶数と3の倍数は別の条件だから排反」と誤るミスが多い。6が両方に属するので排反ではない。独立と排反を混同しないこと。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "選択肢消去"],
+  },
+  {
+    id: "ct-m1a-s4-mp4",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 戻すくじと少なくとも1回",
+    context:
+      "太郎さんと花子さんは、3本のうち1本が当たりのくじを、引いたら戻してまた引く方式で3回引くゲームを考えている。",
+    statement:
+      "毎回くじを戻して3回引くとき、少なくとも1回当たる確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{19}{27}$", "$\\dfrac{8}{27}$", "$\\dfrac{1}{3}$", "$\\dfrac{2}{3}$"],
+    correctAnswer: "$\\dfrac{19}{27}$",
+    explanation:
+      "戻すので毎回独立で、当たりは $\\dfrac{1}{3}$、はずれは $\\dfrac{2}{3}$。少なくとも1回当たる確率は、余事象「3回ともはずれ」を使って $1-\\left(\\dfrac{2}{3}\\right)^3=1-\\dfrac{8}{27}=\\dfrac{19}{27}$。",
+    strategy:
+      "「少なくとも」は余事象。戻すので各回独立、確率の積が使える。$1-(\\text{全部はずれ})$ で一発。3分以内。",
+    trapExplanation:
+      "$\\dfrac{1}{3}$ を3回足して1にする、戻すのに戻さないと誤解する、余事象を取らずに直接数えて場合分けを増やすミスに注意。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理", "会話文"],
+    sourceStyle: "会話文",
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────

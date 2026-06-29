@@ -74,7 +74,8 @@ export const MASTERY_LECTURE_GUIDES: MasteryLectureGuide[] = [
     recoveryLinks: [
       { symptom: "場合分けが足りなかった", label: "解法判別フロー", href: "/common-test/lectures/quadratic-case-split-intensive#quadratic-flow" },
       { symptom: "端点比較を忘れた", label: "端点比較の型", href: "/common-test/lectures/quadratic-case-split-intensive#quadratic-endpoint-callout" },
-      { symptom: "境界値が曖昧", label: "判別ドリル", href: "/common-test/lectures/quadratic-case-split-intensive#quadratic-drill" },
+      { symptom: "文字定数の最大最小で詰まった", label: "軸と定義域の完全判別", href: "/common-test/lectures/quadratic-case-split-intensive#quadratic-parameter-flow" },
+      { symptom: "場合分けの境界を間違えた", label: "場合分け境界ドリル", href: "/common-test/lectures/quadratic-case-split-intensive#quadratic-boundary-drill" },
     ],
     commonTestAppearance:
       "第2問で、軸が定義域の内外を動く最大最小として出ます。",
@@ -95,7 +96,8 @@ export const MASTERY_LECTURE_GUIDES: MasteryLectureGuide[] = [
     recoveryLinks: [
       { symptom: "順列と組合せを取り違えた", label: "解法判別フロー", href: "/common-test/lectures/probability-guided-reading#probability-flow" },
       { symptom: "余事象を使えなかった", label: "余事象の判断", href: "/common-test/lectures/probability-guided-reading#probability-complement-callout" },
-      { symptom: "条件付きで分母を間違えた", label: "判別ドリル", href: "/common-test/lectures/probability-guided-reading#probability-drill" },
+      { symptom: "条件付きで分母を間違えた", label: "条件付きの判別フロー", href: "/common-test/lectures/probability-guided-reading#probability-conditional-flow" },
+      { symptom: "独立と排反を混同した", label: "独立・排反の判別ドリル", href: "/common-test/lectures/probability-guided-reading#probability-conditional-drill" },
     ],
     commonTestAppearance:
       "第3問で、条件整理、表や樹形図、余事象を誘導文に沿って選ばせる形で出ます。",
