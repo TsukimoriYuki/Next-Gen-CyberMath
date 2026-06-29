@@ -1,5 +1,22 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowRight, Cpu } from "lucide-react";
+import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: SITE_NAME,
+  },
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: "/",
+  },
+};
 
 export default function PortalPage() {
   return (
@@ -44,6 +61,7 @@ export default function PortalPage() {
           {/* ── CYBER MATH ───────────────────────────────── */}
           <Link
             href="/math"
+            aria-label="数学トップを開く"
             className="group relative block overflow-hidden rounded-3xl transition-all duration-500 hover:[box-shadow:var(--math-hover-shadow)] hover:[border-color:rgba(0,210,255,0.5)]"
             style={{
               background:
@@ -111,7 +129,7 @@ export default function PortalPage() {
                   color: "#00d2ff",
                 }}
               >
-                入室する
+                数学トップを開く
                 <ArrowRight className="h-4 w-4" />
               </div>
             </div>
@@ -120,6 +138,7 @@ export default function PortalPage() {
           {/* ── CYBER ENGLISH ────────────────────────────── */}
           <Link
             href="/english"
+            aria-label="英語トレーニングを開く"
             className="group relative block overflow-hidden rounded-3xl transition-all duration-500 hover:[box-shadow:var(--en-hover-shadow)] hover:[border-color:rgba(16,185,129,0.5)]"
             style={{
               background:
@@ -189,7 +208,7 @@ export default function PortalPage() {
                   color: "#10b981",
                 }}
               >
-                入室する
+                英語トレーニングを開く
                 <ArrowRight className="h-4 w-4" />
               </div>
             </div>
@@ -199,6 +218,7 @@ export default function PortalPage() {
         {/* ── COMMON TEST COMMAND CENTER (full-width mega card) ─────────── */}
         <Link
           href="/common-test"
+          aria-label="共通テスト対策室を開く"
           className="group relative mt-5 block overflow-hidden rounded-3xl transition-all duration-500"
           style={{
             background:
@@ -303,7 +323,7 @@ export default function PortalPage() {
                 color: "#fbbf24",
               }}
             >
-              司令室へ
+              共通テスト対策室を開く
               <ArrowRight className="h-4 w-4" />
             </div>
           </div>

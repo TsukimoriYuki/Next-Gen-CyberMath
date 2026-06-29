@@ -15,6 +15,15 @@ export const metadata: Metadata = {
   title: "共通テスト数学 攻略OS",
   description:
     "共通テスト数学IA・数学II/B/Cの目標点差、復習キュー、大問別演習、本番演習をつなぐ戦術学習OS。",
+  alternates: {
+    canonical: "/common-test",
+  },
+  openGraph: {
+    title: "共通テスト数学 攻略OS | Cyber Math",
+    description:
+      "目標点差、復習キュー、大問別演習、本番演習をつなぐ共通テスト数学の対策室。",
+    url: "/common-test",
+  },
 };
 
 export default function CommonTestPage() {
@@ -220,7 +229,7 @@ export default function CommonTestPage() {
 
         {/* Footer label */}
         <p className="mt-16 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
-          CYBER OS · 共通テスト対策室
+          Cyber Math · 共通テスト対策室
         </p>
       </div>
     </div>

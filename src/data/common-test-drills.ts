@@ -2571,7 +2571,7 @@ The River Museum program fits our class goal because students can [ B ].`,
 
   // ── 数学IA 第1問（数と式・命題・図形と計量）──────────────────────────────
   {
-    id: "ct-m1a-s1-q5",
+    id: "ct-m1a-s1-q8",
     subjectId: "math-1a",
     sectionId: "section-1",
     title: "数と式 — 対称式の値",
@@ -2591,7 +2591,7 @@ The River Museum program fits our class goal because students can [ B ].`,
     skillTags: ["数式変形", "計算処理"],
   },
   {
-    id: "ct-m1a-s1-q6",
+    id: "ct-m1a-s1-q9",
     subjectId: "math-1a",
     sectionId: "section-1",
     title: "図形と計量 — 3辺から角を求める",
@@ -2615,7 +2615,7 @@ The River Museum program fits our class goal because students can [ B ].`,
 
   // ── 数学IA 第2問（2次関数・データの分析）────────────────────────────────
   {
-    id: "ct-m1a-s2-q5",
+    id: "ct-m1a-s2-q8",
     subjectId: "math-1a",
     sectionId: "section-2",
     title: "2次関数 — 異なる2解をもつ条件",
@@ -2635,7 +2635,7 @@ The River Museum program fits our class goal because students can [ B ].`,
     skillTags: ["数式変形", "条件整理"],
   },
   {
-    id: "ct-m1a-s2-q6",
+    id: "ct-m1a-s2-q9",
     subjectId: "math-1a",
     sectionId: "section-2",
     title: "データの分析 — 変量の一次変換",
@@ -2665,7 +2665,7 @@ The River Museum program fits our class goal because students can [ B ].`,
 
   // ── 数学IA 第3問（図形の性質）────────────────────────────────────────────
   {
-    id: "ct-m1a-s3-q5",
+    id: "ct-m1a-s3-q7",
     subjectId: "math-1a",
     sectionId: "section-3",
     title: "図形の性質 — 角の二等分線と辺の比",
@@ -2687,7 +2687,7 @@ The River Museum program fits our class goal because students can [ B ].`,
 
   // ── 数学IA 第4問（場合の数と確率）────────────────────────────────────────
   {
-    id: "ct-m1a-s4-q5",
+    id: "ct-m1a-s4-q7",
     subjectId: "math-1a",
     sectionId: "section-4",
     title: "確率 — 少なくとも1個（余事象）",
@@ -2707,7 +2707,7 @@ The River Museum program fits our class goal because students can [ B ].`,
     skillTags: ["条件整理", "計算処理"],
   },
   {
-    id: "ct-m1a-s4-q6",
+    id: "ct-m1a-s4-q8",
     subjectId: "math-1a",
     sectionId: "section-4",
     title: "場合の数 — 円順列",
@@ -2729,7 +2729,7 @@ The River Museum program fits our class goal because students can [ B ].`,
 
   // ── 数学II・B・C 第1問（図形と方程式・三角関数）──────────────────────────
   {
-    id: "ct-m2bc-s1-q4",
+    id: "ct-m2bc-s1-q6",
     subjectId: "math-2bc",
     sectionId: "section-1",
     title: "三角関数 — 合成と最大値",
@@ -2751,7 +2751,7 @@ The River Museum program fits our class goal because students can [ B ].`,
 
   // ── 数学II・B・C 第2問（指数・対数・微分・積分）──────────────────────────
   {
-    id: "ct-m2bc-s2-q4",
+    id: "ct-m2bc-s2-q6",
     subjectId: "math-2bc",
     sectionId: "section-2",
     title: "微分 — 接線の方程式",
@@ -2773,7 +2773,7 @@ The River Museum program fits our class goal because students can [ B ].`,
 
   // ── 数学II・B・C 第3問（数列）────────────────────────────────────────────
   {
-    id: "ct-m2bc-s3-q4",
+    id: "ct-m2bc-s3-q6",
     subjectId: "math-2bc",
     sectionId: "section-3",
     title: "数列 — 等比数列の和",
@@ -2795,7 +2795,7 @@ The River Museum program fits our class goal because students can [ B ].`,
 
   // ── 数学II・B・C 第5問（ベクトル）────────────────────────────────────────
   {
-    id: "ct-m2bc-s5-q4",
+    id: "ct-m2bc-s5-q6",
     subjectId: "math-2bc",
     sectionId: "section-5",
     title: "ベクトル — 2つのベクトルのなす角",
@@ -3057,6 +3057,600 @@ Now I use both: the tablet for long, text-heavy classes, and paper for subjects 
     difficulty: "STANDARD",
     skillTags: ["条件整理", "計算処理", "会話文"],
     sourceStyle: "会話文",
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 満点講義 連携：二次関数 増補（軸と定義域・文字定数・場合分け境界・判別式・読解）
+  // 復習導線：二次関数 満点講義（quadratic-case-split-intensive）の該当章へ戻る。
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // ── 軸と定義域（3問）─────────────────────────────────────────────────────
+  {
+    id: "ct-m1a-s2-mq5",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 軸が定義域内の最小値",
+    statement:
+      "$f(x)=x^2-6x+11$ の $0\\le x\\le 5$ における最小値を求めよ。",
+    type: "single-choice",
+    options: ["$2$", "$6$", "$11$", "$-7$"],
+    correctAnswer: "$2$",
+    explanation:
+      "$f(x)=(x-3)^2+2$ より軸は $x=3$。これは定義域 $0\\le x\\le 5$ の内側にあるので、最小値は頂点の値 $f(3)=2$。",
+    strategy:
+      "まず平方完成で軸を出す。軸が定義域の内側にあれば最小は頂点で確定し、端点を計算する必要はない。2分以内。",
+    trapExplanation:
+      "端点 $f(0)=11$ や $f(5)=6$ を最小値にしてしまうミス。軸が区間内なら最小は必ず頂点。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "条件整理"],
+  },
+  {
+    id: "ct-m1a-s2-mq6",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 定義域内の最大値（端点比較）",
+    statement:
+      "$f(x)=x^2-6x+11$ の $0\\le x\\le 5$ における最大値を求めよ。",
+    type: "single-choice",
+    options: ["$11$", "$6$", "$2$", "$25$"],
+    correctAnswer: "$11$",
+    explanation:
+      "上に凸なので最大値は端点で起こる。$f(0)=11$、$f(5)=6$。軸 $x=3$ は区間の中点 $2.5$ より右にあるので、軸から遠い左端 $x=0$ が最大。最大値は $f(0)=11$。",
+    strategy:
+      "最大値は軸から遠い端点。中点と軸の位置を比べてどちらの端点が遠いかを決め、その端点だけ計算する。2分以内。",
+    trapExplanation:
+      "頂点 $f(3)=2$ を最大にする、あるいは近い端点 $f(5)=6$ を最大にするミス。最大は「遠い端点」。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s2-mq7",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 軸が定義域の右外の最小値",
+    statement:
+      "$f(x)=x^2-10x+1$ の $0\\le x\\le 3$ における最小値を求めよ。",
+    type: "single-choice",
+    options: ["$-20$", "$-24$", "$1$", "$-29$"],
+    correctAnswer: "$-20$",
+    explanation:
+      "$f(x)=(x-5)^2-24$ より軸は $x=5$。これは定義域 $0\\le x\\le 3$ の右外なので、区間上は減少。最小は最も近い右端 $f(3)=9-30+1=-20$。",
+    strategy:
+      "軸が定義域の外なら頂点は使わない。右外なら区間で減少しているので右端が最小。軸の位置を先に確認する。2分以内。",
+    trapExplanation:
+      "頂点の値 $-24$ を最小にしてしまうミスが最頻出。軸が区間外のときは頂点をとらない。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+
+  // ── 文字定数つき最大最小（4問）───────────────────────────────────────────
+  {
+    id: "ct-m1a-s2-mq8",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 文字定数の最小値（軸が外）",
+    statement:
+      "$f(x)=(x-a)^2+2$ の $0\\le x\\le 4$ における最小値を考える。$a=6$ のときの最小値を求めよ。",
+    type: "single-choice",
+    options: ["$6$", "$2$", "$38$", "$18$"],
+    correctAnswer: "$6$",
+    explanation:
+      "軸は $x=a=6$ で定義域 $0\\le x\\le 4$ の右外。最小は最も近い右端 $f(4)=(4-6)^2+2=4+2=6$。",
+    strategy:
+      "文字定数つきは軸の位置で場合分け。$a=6$ は区間の右外と即断し、右端 $x=4$ を代入する。2分以内。",
+    trapExplanation:
+      "頂点の値 $2$ を最小にするミス。軸が区間外にあるので頂点ではなく近い端点が最小。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理", "数式変形"],
+  },
+  {
+    id: "ct-m1a-s2-mq9",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 文字定数の最小値（軸が内）",
+    statement:
+      "$f(x)=x^2-2ax+a^2+3$ の $1\\le x\\le 3$ における最小値を、$a=2$ のとき求めよ。",
+    type: "single-choice",
+    options: ["$3$", "$7$", "$4$", "$2$"],
+    correctAnswer: "$3$",
+    explanation:
+      "$f(x)=(x-a)^2+3$ より軸は $x=a=2$。これは定義域 $1\\le x\\le 3$ の内側なので、最小は頂点の値 $3$。",
+    strategy:
+      "平方完成すると軸 $x=a$、頂点 $(a,\\ 3)$ がすぐ見える。軸が区間内なら最小は頂点。2分以内。",
+    trapExplanation:
+      "端点 $f(1)$ や $f(3)$ を最小にするミス。$a=2$ が区間内にあることを確認する。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["数式変形", "条件整理"],
+  },
+  {
+    id: "ct-m1a-s2-mq10",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 文字定数の最大値（端点比較）",
+    statement:
+      "$f(x)=x^2-2ax+1$ の $0\\le x\\le 2$ における最大値を、$a=2$ のとき求めよ。",
+    type: "single-choice",
+    options: ["$1$", "$-3$", "$-7$", "$5$"],
+    correctAnswer: "$1$",
+    explanation:
+      "軸は $x=a=2$。上に凸なので最大は端点。$f(0)=1$、$f(2)=4-8+1=-3$。軸が区間の中点 $1$ より右にあるので左端 $x=0$ が遠く、最大は $f(0)=1$。",
+    strategy:
+      "最大は両端 $f(0)$ と $f(2)$ を比べて大きい方。軸から遠い端点が最大になることを使うと計算が一つで済む。2分以内。",
+    trapExplanation:
+      "頂点や小さい方の端点 $f(2)=-3$ を最大にするミス。上に凸の最大は必ず端点。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s2-mq11",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 最大値と最小値の差",
+    statement:
+      "$f(x)=x^2-4x+5$ の $0\\le x\\le 3$ における最大値と最小値の差を求めよ。",
+    type: "single-choice",
+    options: ["$4$", "$5$", "$3$", "$1$"],
+    correctAnswer: "$4$",
+    explanation:
+      "$f(x)=(x-2)^2+1$ で軸 $x=2$ は区間内。最小は頂点 $1$。最大は端点で、$f(0)=5$、$f(3)=2$ より $5$（軸から遠い左端）。差は $5-1=4$。",
+    strategy:
+      "最小は頂点、最大は軸から遠い端点。両方を出して差を取る。最小と最大の出どころが違う点に注意。3分以内。",
+    trapExplanation:
+      "最大を $f(3)=2$ にする、最小と最大を取り違えるミス。軸が区間内なら最小は頂点で確定。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理", "数式変形"],
+  },
+
+  // ── 場合分け境界（2問）───────────────────────────────────────────────────
+  {
+    id: "ct-m1a-s2-mq12",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 最小が頂点になる境界",
+    statement:
+      "$f(x)=x^2-2ax+5$ の $0\\le x\\le 4$ における最小値が頂点で与えられるような定数 $a$ の値の範囲を求めよ。",
+    type: "single-choice",
+    options: ["$0\\le a\\le 4$", "$a<0$", "$a>4$", "$0<a<4$"],
+    correctAnswer: "$0\\le a\\le 4$",
+    explanation:
+      "上に凸の放物線の最小値が頂点になるのは、軸 $x=a$ が定義域の内側にあるとき。よって $0\\le a\\le 4$。端点も頂点が最小になるので等号を含む。",
+    strategy:
+      "「最小が頂点」＝「軸が定義域内」と言い換える。境界は定義域の端点 $a=0,\\ 4$。等号を含むかまで確認する。2分以内。",
+    trapExplanation:
+      "不等号の向きを逆にして区間外を選ぶ、または端点を含めず $0<a<4$ とするミス。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "数式変形"],
+  },
+  {
+    id: "ct-m1a-s2-mq13",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 動く定義域が頂点を含む条件",
+    statement:
+      "放物線 $y=(x-1)^2$ を $a\\le x\\le a+2$ の範囲で考える。この区間に頂点が含まれるような定数 $a$ の値の範囲を求めよ。",
+    type: "single-choice",
+    options: ["$-1\\le a\\le 1$", "$0\\le a\\le 2$", "$a\\le 1$", "$-1\\le a\\le 2$"],
+    correctAnswer: "$-1\\le a\\le 1$",
+    explanation:
+      "頂点は $x=1$。これが区間 $a\\le x\\le a+2$ に含まれる条件は $a\\le 1\\le a+2$。左の不等式から $a\\le 1$、右の不等式から $a\\ge -1$。よって $-1\\le a\\le 1$。",
+    strategy:
+      "定義域が動く問題は「頂点が区間に入るか」で場合が分かれる。$a\\le(\\text{頂点})\\le a+2$ を連立で解く。2分以内。",
+    trapExplanation:
+      "区間の幅 $2$ を考えず $a=1$ だけにする、または不等式を片方しか解かないミス。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "数式変形"],
+  },
+
+  // ── 判別式・共有点（2問）─────────────────────────────────────────────────
+  {
+    id: "ct-m1a-s2-mq14",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 異なる2つの実数解",
+    statement:
+      "2次方程式 $x^2+2x+a=0$ が異なる2つの実数解をもつような定数 $a$ の値の範囲を求めよ。",
+    type: "single-choice",
+    options: ["$a<1$", "$a>1$", "$a\\le 1$", "$a<-1$"],
+    correctAnswer: "$a<1$",
+    explanation:
+      "$\\dfrac{D}{4}=1^2-a=1-a$。異なる2つの実数解をもつのは $\\dfrac{D}{4}>0$、すなわち $1-a>0$ より $a<1$。",
+    strategy:
+      "異なる2解は $D>0$。$x$ の係数が偶数なので $D/4$ を使うと軽い。等号を含めない。2分以内。",
+    trapExplanation:
+      "重解も含む $D\\ge 0$ と混同して $a\\le 1$ とするミス。「異なる」は厳密不等号。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "条件整理"],
+  },
+  {
+    id: "ct-m1a-s2-mq15",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — x軸に接する条件",
+    statement:
+      "放物線 $y=x^2-2x+a$ が $x$ 軸に接するとき、定数 $a$ の値を求めよ。",
+    type: "single-choice",
+    options: ["$a=1$", "$a=0$", "$a=-1$", "$a=2$"],
+    correctAnswer: "$a=1$",
+    explanation:
+      "$x$ 軸に接するのは2次方程式 $x^2-2x+a=0$ が重解をもつとき、すなわち $\\dfrac{D}{4}=1-a=0$。よって $a=1$。",
+    strategy:
+      "「接する」＝「重解」＝「$D=0$」と即変換する。$D/4=1-a=0$ を解くだけ。2分以内。",
+    trapExplanation:
+      "$D>0$（2点で交わる）と混同する、または $D/4$ の符号を間違えるミス。接するは等号。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["数式変形", "条件整理"],
+  },
+
+  // ── 共通テスト型読解（1問）───────────────────────────────────────────────
+  {
+    id: "ct-m1a-s2-mq16",
+    subjectId: "math-1a",
+    sectionId: "section-2",
+    title: "2次関数 — 囲いの面積を最大にする",
+    context:
+      "長さ 20 m のロープで、片側が壁になっている長方形の囲いを作る。壁は1辺として使い、残りの3辺にロープを使う。壁と平行な辺の長さを $x$ m とする。",
+    statement:
+      "囲いの面積 $S(x)$ を最大にする $x$ の値を求めよ。ただし $0<x<20$ とする。",
+    type: "single-choice",
+    options: ["$x=10$", "$x=5$", "$x=15$", "$x=20$"],
+    correctAnswer: "$x=10$",
+    explanation:
+      "壁と垂直な2辺の長さの合計は $20-x$ で、それぞれ $\\dfrac{20-x}{2}$。面積は $S(x)=x\\cdot\\dfrac{20-x}{2}=-\\dfrac{1}{2}x^2+10x$。上に凸で軸は $x=10$。$0<x<20$ に含まれるので最大は $x=10$。",
+    strategy:
+      "文章題はまず面積を式にして平方完成（または軸の公式）。上に凸なら最大は頂点。壁を使う分、ロープが3辺である点を式に正しく反映する。4分以内。",
+    trapExplanation:
+      "4辺すべてにロープを使うと誤って立式する、軸の符号を間違えるミス。壁の1辺はロープを使わない。",
+    estimatedMinutes: 4,
+    difficulty: "STANDARD",
+    skillTags: ["誘導読解", "数式変形", "計算処理"],
+    sourceStyle: "日常場面",
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 満点講義 連携：確率 増補（順列組合せ・余事象・包除・条件付き・独立排反・読解）
+  // 復習導線：確率 満点講義（probability-counting-intensive）の該当章へ戻る。
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // ── 順列・組合せ判別（3問）───────────────────────────────────────────────
+  {
+    id: "ct-m1a-s4-mp5",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "場合の数 — 並べる（順列）",
+    statement:
+      "5人の中から3人を選んで一列に並べる並べ方は何通りあるか。",
+    type: "single-choice",
+    options: ["$60$ 通り", "$10$ 通り", "$15$ 通り", "$120$ 通り"],
+    correctAnswer: "$60$ 通り",
+    explanation:
+      "「選んで並べる」ので順序を区別する順列。$5\\times 4\\times 3=60$ 通り。",
+    strategy:
+      "「並べる」「順番がある」は順列。先頭から1人ずつ選ぶ場合の数を掛ける。1分30秒以内。",
+    trapExplanation:
+      "順序を区別しない組合せ $\\binom{5}{3}=10$ と混同するミス。「並べる」なら順列。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-mp6",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "場合の数 — 選ぶ（組合せ）",
+    statement:
+      "8人の中から委員を3人選ぶ選び方は何通りあるか。",
+    type: "single-choice",
+    options: ["$56$ 通り", "$336$ 通り", "$24$ 通り", "$512$ 通り"],
+    correctAnswer: "$56$ 通り",
+    explanation:
+      "役職の区別がなく順序を問わないので組合せ。$\\binom{8}{3}=\\dfrac{8\\times 7\\times 6}{3\\times 2\\times 1}=56$ 通り。",
+    strategy:
+      "「選ぶだけ」「順番に意味がない」は組合せ。割り算を忘れずに。2分以内。",
+    trapExplanation:
+      "順列 ${}_8\\mathrm{P}_3=336$ をそのまま答えるミス。順序を区別しないなら割る。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-mp7",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "場合の数 — 同じものを含む並べ方",
+    statement:
+      "文字 A, A, B, B, B の5文字をすべて使って一列に並べる並べ方は何通りあるか。",
+    type: "single-choice",
+    options: ["$10$ 通り", "$120$ 通り", "$20$ 通り", "$60$ 通り"],
+    correctAnswer: "$10$ 通り",
+    explanation:
+      "同じものを含む順列なので、重複する並べ替えで割る。$\\dfrac{5!}{2!\\,3!}=\\dfrac{120}{2\\times 6}=10$ 通り。",
+    strategy:
+      "同じ文字があるときは、全体の階乗を同じ文字の個数の階乗で割る。2分以内。",
+    trapExplanation:
+      "そのまま $5!=120$ とするミス。A同士・B同士の入れ替えは同じ並びなので割る。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+
+  // ── 余事象（3問）─────────────────────────────────────────────────────────
+  {
+    id: "ct-m1a-s4-mp8",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 少なくとも1枚は表",
+    statement:
+      "3枚の硬貨を同時に投げるとき、少なくとも1枚は表が出る確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{7}{8}$", "$\\dfrac{1}{8}$", "$\\dfrac{3}{8}$", "$\\dfrac{1}{2}$"],
+    correctAnswer: "$\\dfrac{7}{8}$",
+    explanation:
+      "余事象「3枚とも裏」の確率は $\\left(\\dfrac{1}{2}\\right)^3=\\dfrac{1}{8}$。よって少なくとも1枚表は $1-\\dfrac{1}{8}=\\dfrac{7}{8}$。",
+    strategy:
+      "「少なくとも1枚」は余事象（1枚も表が出ない＝全部裏）を引くのが速い。1分30秒以内。",
+    trapExplanation:
+      "直接「表1枚・2枚・3枚」を足して計算しようとして手間取る、全部裏を忘れるミス。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-mp9",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 少なくとも一方が5以上",
+    statement:
+      "2個のサイコロを投げるとき、少なくとも一方が5以上の目になる確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{5}{9}$", "$\\dfrac{4}{9}$", "$\\dfrac{1}{3}$", "$\\dfrac{2}{3}$"],
+    correctAnswer: "$\\dfrac{5}{9}$",
+    explanation:
+      "5以上の目は $\\{5,6\\}$ で確率 $\\dfrac{2}{6}=\\dfrac{1}{3}$。余事象「両方とも4以下」は $\\left(\\dfrac{2}{3}\\right)^2=\\dfrac{4}{9}$。よって $1-\\dfrac{4}{9}=\\dfrac{5}{9}$。",
+    strategy:
+      "「少なくとも一方」は余事象「両方とも〜でない」を使う。各サイコロの『4以下』の確率の積を引く。2分以内。",
+    trapExplanation:
+      "$\\dfrac{1}{3}$ を単純に2倍する、4以下の確率を $\\dfrac{1}{2}$ と取り違えるミス。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-mp10",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 少なくとも1個は白",
+    statement:
+      "袋に赤玉4個、白玉3個が入っている。同時に3個取り出すとき、少なくとも1個が白である確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{31}{35}$", "$\\dfrac{4}{35}$", "$\\dfrac{3}{7}$", "$\\dfrac{18}{35}$"],
+    correctAnswer: "$\\dfrac{31}{35}$",
+    explanation:
+      "全体は $\\binom{7}{3}=35$ 通り。白を1個も含まない（3個とも赤）のは $\\binom{4}{3}=4$ 通り。よって少なくとも1個白は $1-\\dfrac{4}{35}=\\dfrac{31}{35}$。",
+    strategy:
+      "「少なくとも1個」は余事象（1個も白でない＝全部赤）。組合せで全体と余事象を数える。3分以内。",
+    trapExplanation:
+      "直接「白1個・2個・3個」を場合分けして数え漏れる、全部赤の場合を忘れるミス。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+
+  // ── 包除（3問）───────────────────────────────────────────────────────────
+  {
+    id: "ct-m1a-s4-mp11",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 4の倍数または6の倍数",
+    statement:
+      "1 から 40 までの整数から1つを等しい確率で選ぶとき、4の倍数または6の倍数である確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{13}{40}$", "$\\dfrac{16}{40}$", "$\\dfrac{2}{5}$", "$\\dfrac{19}{40}$"],
+    correctAnswer: "$\\dfrac{13}{40}$",
+    explanation:
+      "4の倍数は10個、6の倍数は6個、両方（12の倍数）は3個。包除原理より $10+6-3=13$ 個。確率は $\\dfrac{13}{40}$。",
+    strategy:
+      "「または」で重なりがあるときは包除。重複は最小公倍数 $\\mathrm{lcm}(4,6)=12$ の倍数。2分以内。",
+    trapExplanation:
+      "重複（12の倍数）を引き忘れて $\\dfrac{16}{40}$ とするミス。足したら重なりを1回引く。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-mp12",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "場合の数 — 犬または猫を飼う人数",
+    context:
+      "40人のクラスでペットの調査をしたところ、犬を飼う人が22人、猫を飼う人が15人、犬と猫の両方を飼う人が8人であった。",
+    statement:
+      "犬または猫を飼っている人は何人か。",
+    type: "single-choice",
+    options: ["$29$ 人", "$37$ 人", "$45$ 人", "$21$ 人"],
+    correctAnswer: "$29$ 人",
+    explanation:
+      "包除原理より、犬または猫を飼う人数は $22+15-8=29$ 人。両方を飼う8人を一度だけ数えるために引く。",
+    strategy:
+      "「または」は包除。それぞれの人数を足し、両方に数えた重複分を1回引く。1分30秒以内。",
+    trapExplanation:
+      "重複を引かず $22+15=37$ とする、または両方を2回引くミス。重なりは1回だけ引く。",
+    estimatedMinutes: 2,
+    difficulty: "BASIC",
+    skillTags: ["条件整理", "データ読み取り"],
+  },
+  {
+    id: "ct-m1a-s4-mp13",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "場合の数 — 2でも3でも割れない数",
+    statement:
+      "1 から 100 までの自然数のうち、2の倍数でも3の倍数でもない数は何個あるか。",
+    type: "single-choice",
+    options: ["$33$ 個", "$67$ 個", "$50$ 個", "$17$ 個"],
+    correctAnswer: "$33$ 個",
+    explanation:
+      "2の倍数は50個、3の倍数は33個、6の倍数は16個。2または3の倍数は包除で $50+33-16=67$ 個。どちらでもない数は $100-67=33$ 個。",
+    strategy:
+      "「どちらでもない」は、包除で「2または3の倍数」を数えてから全体100から引く。2分30秒以内。",
+    trapExplanation:
+      "6の倍数を引き忘れる、または全体から引くのを忘れて67としてしまうミス。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+
+  // ── 条件付き確率（3問）───────────────────────────────────────────────────
+  {
+    id: "ct-m1a-s4-mp14",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 母集団を更新する条件付き",
+    statement:
+      "赤玉3個、白玉3個が入った袋から戻さずに2個取り出す。1個目が赤であったとき、2個目も赤である条件付き確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{2}{5}$", "$\\dfrac{1}{2}$", "$\\dfrac{3}{5}$", "$\\dfrac{1}{5}$"],
+    correctAnswer: "$\\dfrac{2}{5}$",
+    explanation:
+      "1個目が赤なので、残りは赤2個・白3個の計5個。2個目が赤である確率は $\\dfrac{2}{5}$。",
+    strategy:
+      "条件付き確率は「その条件が起きた後の状態」で数え直す。戻さない抽出は母集団が変わる。2分以内。",
+    trapExplanation:
+      "元の6個や赤3個のまま分母にするミス。1個減って中身も変わることを反映する。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+  {
+    id: "ct-m1a-s4-mp15",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 検査の条件付き確率",
+    context:
+      "ある病気は集団の10%がかかっている。検査では、病気の人の90%が陽性、病気でない人の20%が陽性と判定される。",
+    statement:
+      "1人を検査して陽性であったとき、その人が実際に病気である確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{1}{3}$", "$\\dfrac{9}{10}$", "$\\dfrac{1}{10}$", "$\\dfrac{2}{3}$"],
+    correctAnswer: "$\\dfrac{1}{3}$",
+    explanation:
+      "病気で陽性は $0.10\\times 0.90=0.09$、病気でなく陽性は $0.90\\times 0.20=0.18$。陽性となる確率は $0.09+0.18=0.27$。求める確率は $\\dfrac{0.09}{0.27}=\\dfrac{1}{3}$。",
+    strategy:
+      "条件付き確率は $\\dfrac{P(\\text{病気かつ陽性})}{P(\\text{陽性})}$。陽性の総数を分母にする。表で4つのマスに分けると速い。4分以内。",
+    trapExplanation:
+      "「病気の人の90%が陽性」をそのまま答えるミス。求めるのは逆向きの $P(\\text{病気}\\mid\\text{陽性})$ で分母が変わる。",
+    estimatedMinutes: 4,
+    difficulty: "HARD",
+    skillTags: ["条件整理", "計算処理", "データ読み取り"],
+  },
+  {
+    id: "ct-m1a-s4-mp16",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — どちらの箱から取ったか",
+    context:
+      "箱Aには赤玉2個・白玉1個、箱Bには赤玉1個・白玉3個が入っている。コインを投げて表ならA、裏ならBの箱から玉を1個取り出す。",
+    statement:
+      "取り出した玉が赤であったとき、それが箱Aから取られた確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{8}{11}$", "$\\dfrac{2}{3}$", "$\\dfrac{3}{11}$", "$\\dfrac{1}{2}$"],
+    correctAnswer: "$\\dfrac{8}{11}$",
+    explanation:
+      "Aで赤は $\\dfrac{1}{2}\\times\\dfrac{2}{3}=\\dfrac{1}{3}$、Bで赤は $\\dfrac{1}{2}\\times\\dfrac{1}{4}=\\dfrac{1}{8}$。赤となる確率は $\\dfrac{1}{3}+\\dfrac{1}{8}=\\dfrac{11}{24}$。求める確率は $\\dfrac{1/3}{11/24}=\\dfrac{8}{11}$。",
+    strategy:
+      "原因をたずねる条件付き（ベイズ）。赤になる全確率を分母に、Aから赤の確率を分子にする。樹形図で2経路に分ける。4分以内。",
+    trapExplanation:
+      "$P(\\text{赤}\\mid A)=\\dfrac{2}{3}$ をそのまま答える、分母を全体1にするミス。赤の中でのAの割合を求める。",
+    estimatedMinutes: 4,
+    difficulty: "HARD",
+    skillTags: ["条件整理", "計算処理"],
+  },
+
+  // ── 独立と排反（2問）─────────────────────────────────────────────────────
+  {
+    id: "ct-m1a-s4-mp17",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 独立と排反の判定（サイコロ）",
+    statement:
+      "1個のサイコロを1回投げる。事象A「4以下の目が出る」、事象B「偶数の目が出る」について、最も適切なものを選べ。",
+    type: "single-choice",
+    options: [
+      "独立だが排反ではない",
+      "排反だが独立ではない",
+      "独立かつ排反である",
+      "独立でも排反でもない",
+    ],
+    correctAnswer: "独立だが排反ではない",
+    explanation:
+      "$P(A)=\\dfrac{4}{6}=\\dfrac{2}{3}$、$P(B)=\\dfrac{3}{6}=\\dfrac{1}{2}$、$A\\cap B=\\{2,4\\}$ で $P(A\\cap B)=\\dfrac{2}{6}=\\dfrac{1}{3}$。$P(A)P(B)=\\dfrac{1}{3}=P(A\\cap B)$ なので独立。2と4が両方に入るので排反ではない。",
+    strategy:
+      "独立は $P(A\\cap B)=P(A)P(B)$、排反は $P(A\\cap B)=0$。別概念なので両方を計算して確認する。3分以内。",
+    trapExplanation:
+      "「条件が違うから排反」と決めつけるミス。2,4が両方に属するので同時に起こり、排反ではない。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "選択肢消去"],
+  },
+  {
+    id: "ct-m1a-s4-mp18",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 独立の判定（2枚のコイン）",
+    statement:
+      "2枚のコインを投げる。事象A「1枚目が表」、事象B「2枚目が裏」について、最も適切なものを選べ。",
+    type: "single-choice",
+    options: [
+      "独立である",
+      "排反である",
+      "独立かつ排反である",
+      "独立でも排反でもない",
+    ],
+    correctAnswer: "独立である",
+    explanation:
+      "1枚目と2枚目は互いに影響しないので独立。実際 $P(A)=\\dfrac{1}{2}$、$P(B)=\\dfrac{1}{2}$、$P(A\\cap B)=\\dfrac{1}{4}=P(A)P(B)$。AとBは同時に起こりうるので排反ではない。",
+    strategy:
+      "別々の試行で互いに影響しないなら独立。同時に起こりうる（表かつ裏）なら排反ではない。2分以内。",
+    trapExplanation:
+      "独立と排反を混同するミス。排反は「同時に起こらない」、独立は「影響し合わない」で別の意味。",
+    estimatedMinutes: 2,
+    difficulty: "STANDARD",
+    skillTags: ["条件整理", "選択肢消去"],
+  },
+
+  // ── 表・樹形図・会話文（1問）─────────────────────────────────────────────
+  {
+    id: "ct-m1a-s4-mp19",
+    subjectId: "math-1a",
+    sectionId: "section-4",
+    title: "確率 — 表から条件を読む",
+    context:
+      "あるクラス40人に、通学手段（バス・自転車）と部活の有無をアンケートした。バス通学は18人で、そのうち部活ありが12人。自転車通学は22人で、そのうち部活ありが10人であった。",
+    statement:
+      "このクラスから1人を選ぶとき、その人が自転車通学で、かつ部活なしである確率を求めよ。",
+    type: "single-choice",
+    options: ["$\\dfrac{3}{10}$", "$\\dfrac{1}{4}$", "$\\dfrac{11}{20}$", "$\\dfrac{1}{2}$"],
+    correctAnswer: "$\\dfrac{3}{10}$",
+    explanation:
+      "自転車通学22人のうち部活ありが10人なので、部活なしは $22-10=12$ 人。求める確率は $\\dfrac{12}{40}=\\dfrac{3}{10}$。",
+    strategy:
+      "会話文や表は、条件を行（通学手段）と列（部活の有無）に分けて整理する。「かつ」は両条件を満たすマスを数える。3分以内。",
+    trapExplanation:
+      "自転車22人や部活なし全体を分母にする、引き算を忘れて10人とするミス。表のどのマスかを特定する。",
+    estimatedMinutes: 3,
+    difficulty: "STANDARD",
+    skillTags: ["データ読み取り", "条件整理", "会話文"],
+    stimulusType: "table",
   },
 ];
 

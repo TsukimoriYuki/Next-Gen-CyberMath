@@ -189,20 +189,22 @@ export function CommonTestHistoryPanel() {
           大問別ドリルの履歴はありません
         </p>
         <p className="text-xs leading-relaxed text-slate-500">
-          大問別演習を解くと、ここに正答率・弱点タグが記録されます。
+          大問別演習を1つ解くと、ここに正答率、弱点タグ、時間超過、自信度が記録されます。
+          <br />
+          初回は数学IAの3問診断から始めるのがおすすめです。所要時間は約10分です。
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href="/common-test/math-1a"
             className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-xs font-bold text-blue-700 transition-colors hover:bg-blue-100"
           >
-            数学IA →
+            数学IAの大問別ドリルを始める →
           </Link>
           <Link
             href="/common-test/english-reading"
             className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-2.5 text-xs font-bold text-emerald-700 transition-colors hover:bg-emerald-100"
           >
-            英語R →
+            英語Rの大問別ドリルを始める →
           </Link>
         </div>
       </div>

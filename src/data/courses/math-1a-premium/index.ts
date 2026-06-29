@@ -6,7 +6,7 @@ function createPremiumUnit(unitId: string, unitTitle: string): CourseUnit {
     unitId,
     subjectId: "math-1a-premium",
     unitTitle,
-    unitDescription: `${unitTitle}の発展講座は準備中です。入試標準から応用レベルまで扱う詳しい解説と実戦例題を追加予定です。`,
+    unitDescription: `${unitTitle}の発展講座は内容設計中です。入試標準から応用レベルまで扱う詳しい解説と実戦例題を追加予定です。`,
     lessons: [],
   };
 }
@@ -19,8 +19,8 @@ export const MATH_1A_PREMIUM_COURSE_SUBJECT: CourseSubject = {
   color: "#db2777",
   courseKind: "premium",
   status: "preparing",
-  statusLabel: "準備中",
-  badges: ["有料版", "準備中"],
+  statusLabel: "内容設計中",
+  badges: ["有料版", "公開予定"],
   units: [
     createPremiumUnit("numbers-sets-logic-advanced", "数と式・集合と論理"),
     QUADRATIC_PREMIUM_UNIT,

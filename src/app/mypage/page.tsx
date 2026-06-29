@@ -113,7 +113,7 @@ export default function MyPage() {
           className="inline-flex items-center gap-1.5 font-mono text-xs text-white/40 transition-colors hover:text-white/70"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
-          CYBER OS
+          Cyber Math
         </Link>
 
         {/* Header */}
@@ -235,8 +235,10 @@ export default function MyPage() {
                 <p className="mb-1 font-display text-lg font-bold text-white">
                   まだ記録がありません
                 </p>
-                <p className="mb-5 text-sm text-white/40">
-                  サイバー模試を受験して採点を確定すると、ここに成長の軌跡が刻まれます。
+                <p className="mb-5 text-sm leading-6 text-white/40">
+                  サイバー模試を受験して採点を確定すると、ここに得点推移と弱点単元が記録されます。
+                  <br />
+                  初回の目安は10〜20分です。
                 </p>
                 <Link
                   href="/mock"
@@ -248,7 +250,7 @@ export default function MyPage() {
                   }}
                 >
                   <Sparkles className="h-4 w-4" />
-                  模試を受ける
+                  数学の模試を始める
                 </Link>
               </div>
             ) : (
@@ -468,9 +470,22 @@ export default function MyPage() {
                   <p className="mb-1 font-display text-base font-bold text-white/70">
                     まだ記録がありません
                   </p>
-                  <p className="text-xs text-white/35">
-                    下のモードに挑戦して答え合わせをすると、ここに成長の軌跡が刻まれます。
+                  <p className="text-xs leading-5 text-white/35">
+                    下のモードに挑戦して答え合わせをすると、正答率と学習時間がここに記録されます。
+                    <br />
+                    まずは3〜5分で終わる速読長文から始められます。
                   </p>
+                  <Link
+                    href="/english/speed-reading"
+                    className="mt-4 inline-flex items-center justify-center rounded-xl px-4 py-2 text-xs font-bold transition-colors"
+                    style={{
+                      background: "rgba(16,185,129,0.12)",
+                      border: "1px solid rgba(16,185,129,0.35)",
+                      color: "#10b981",
+                    }}
+                  >
+                    速読長文を始める
+                  </Link>
                 </div>
               )
             )}

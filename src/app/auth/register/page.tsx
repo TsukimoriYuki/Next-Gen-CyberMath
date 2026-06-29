@@ -36,7 +36,7 @@ export default async function RegisterPage() {
             </div>
             <h2 className="mt-3 font-display text-xl font-bold">入門の儀</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              名前とパスコードを決めてください。師範コードを持っている場合は入力すると、MENTOR 権限で登録されます。
+              名前とパスコードを決めてください。師範コードは許可された指導者のみ入力します。
             </p>
           </div>
           <AuthForm mode="register" />

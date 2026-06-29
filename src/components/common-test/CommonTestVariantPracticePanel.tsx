@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import katex from "katex";
 import { CheckCircle2, RefreshCw, RotateCcw, XCircle } from "lucide-react";
 import { MarkSheetAnswerInput } from "@/components/common-test/MarkSheetAnswerInput";
+import { MathText } from "@/components/math/Math";
 import type { CommonTestGuidedReviewItem } from "@/lib/common-test-guided-review";
 import {
   generateCommonTestVariantPracticeQuestion,
@@ -107,9 +107,9 @@ export function CommonTestVariantPracticePanel({
                   }}
                 >
                   <span className="font-mono text-xs font-bold">{index + 1}</span>
-                  <span className="text-xs leading-relaxed">
-                    <RenderMath text={option} />
-                  </span>
+                  <div className="min-w-0 text-xs leading-relaxed">
+                    <RenderMath text={option} className="text-xs leading-relaxed" />
+                  </div>
                 </button>
               );
             })}
@@ -209,27 +209,16 @@ function ReviewBlock({ label, text }: { label: string; text: string }) {
   );
 }
 
-function RenderMath({ text }: { text: string }) {
-  const parts = text.split(/(\$[^$]+\$)/g);
+function RenderMath({
+  text,
+  className = "text-xs leading-relaxed",
+}: {
+  text: string;
+  className?: string;
+}) {
   return (
-    <>
-      {parts.map((part, i) => {
-        if (part.startsWith("$") && part.endsWith("$") && part.length > 2) {
-          try {
-            return (
-              <span
-                key={i}
-                dangerouslySetInnerHTML={{
-                  __html: katex.renderToString(part.slice(1, -1), { throwOnError: false }),
-                }}
-              />
-            );
-          } catch {
-            return <span key={i}>{part}</span>;
-          }
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </>
+    <MathText className={`space-y-1 [&_p]:my-0 ${className}`}>
+      {text}
+    </MathText>
   );
 }

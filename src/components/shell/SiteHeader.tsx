@@ -70,7 +70,7 @@ export async function SiteHeader() {
                   aria-label="ログアウト"
                 >
                   <LogOut className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">退室</span>
+                  <span className="hidden sm:inline">ログアウト</span>
                 </button>
               </form>
             </div>
@@ -80,7 +80,7 @@ export async function SiteHeader() {
               className="ml-2 inline-flex items-center gap-1 rounded-lg border border-neon-cyan/40 bg-neon-cyan/5 px-3 py-1.5 font-mono text-xs font-semibold text-neon-cyan transition-colors hover:bg-neon-cyan/15"
             >
               <LogIn className="h-3.5 w-3.5" />
-              入室
+              ログイン
             </Link>
           )}
         </nav>

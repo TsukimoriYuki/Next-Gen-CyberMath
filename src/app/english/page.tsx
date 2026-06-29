@@ -363,7 +363,7 @@ export default function EnglishHomePage() {
                 color: "#e879f9",
               }}
             >
-              道場へ入る
+              英語過去問演習を始める
               <ArrowRight className="h-3.5 w-3.5" />
             </div>
           </div>

@@ -336,25 +336,29 @@ export function CommonTestReviewQueue() {
       {allItems.length === 0 && (
         <div className="rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-sm">
           <div className="mb-2 text-sm font-bold text-slate-700">
-            復習キューは空です
-          </div>
-          <p className="text-xs leading-relaxed text-slate-500">
-            本番演習や大問別ドリルで間違えた問題を復習キューに追加すると、ここに表示されます。
+          復習キューはまだ空です
+        </div>
+        <p className="text-xs leading-relaxed text-slate-500">
+            まずは10分ほどの大問別ドリルを解くと、間違えた問題や自信があいまいな問題がここに入ります。
             <br />
-            まずは本番演習を1回受けてみましょう。
+            今日の復習、次回の確認日、危険度を自動で並べ替えます。
           </p>
+          <div className="mt-4 flex flex-wrap justify-center gap-2 text-[11px] font-bold text-slate-500">
+            <span className="rounded-full bg-slate-100 px-2.5 py-1">所要時間: 約10分</span>
+            <span className="rounded-full bg-slate-100 px-2.5 py-1">初回は3問から</span>
+          </div>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
-              href="/common-test/simulator"
+              href="/common-test/math-1a"
               className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700"
             >
-              本番演習を受ける →
+              10分診断を始める →
             </Link>
             <Link
-              href="/common-test"
+              href="/common-test/lectures"
               className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-600 transition-colors hover:border-slate-300"
             >
-              対策室に戻る
+              講義ロードマップを見る
             </Link>
           </div>
         </div>

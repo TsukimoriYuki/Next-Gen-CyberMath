@@ -24,6 +24,11 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const nameInputId = `${mode}-name`;
+  const passcodeInputId = `${mode}-passcode`;
+  const mentorCodeInputId = `${mode}-mentor-code`;
+  const mentorCodeHintId = `${mode}-mentor-code-hint`;
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
@@ -66,10 +71,12 @@ export function AuthForm({ mode }: AuthFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* 名前 */}
       <div className="space-y-1.5">
-        <label className="block font-mono text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+        <label htmlFor={nameInputId} className="block font-mono text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
           名前
         </label>
         <input
+          id={nameInputId}
+          name="name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -82,11 +89,13 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       {/* パスコード */}
       <div className="space-y-1.5">
-        <label className="block font-mono text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+        <label htmlFor={passcodeInputId} className="block font-mono text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
           パスコード
         </label>
         <div className="relative">
           <input
+            id={passcodeInputId}
+            name="passcode"
             type={showPasscode ? "text" : "password"}
             value={passcode}
             onChange={(e) => setPasscode(e.target.value)}
@@ -109,7 +118,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       {/* 師範コード（登録時のみ） */}
       {!isLogin && (
         <div className="space-y-1.5">
-          <label className="flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+          <label htmlFor={mentorCodeInputId} className="flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
             <KeyRound className="h-3 w-3" />
             師範コード
             <span className="ml-1 rounded bg-muted/70 px-1.5 py-0.5 text-[10px] normal-case tracking-normal">
@@ -118,10 +127,13 @@ export function AuthForm({ mode }: AuthFormProps) {
           </label>
           <div className="relative">
             <input
+              id={mentorCodeInputId}
+              name="mentorCode"
               type={showMentorCode ? "text" : "password"}
               value={mentorCode}
               onChange={(e) => setMentorCode(e.target.value)}
               autoComplete="off"
+              aria-describedby={mentorCodeHintId}
               placeholder="師範の資格がある場合のみ"
               className="w-full rounded-xl border border-neon-amber/30 bg-neon-amber/5 px-4 py-3 pr-11 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none transition-colors focus:border-neon-amber/60 focus:ring-1 focus:ring-neon-amber/25"
             />
@@ -129,12 +141,13 @@ export function AuthForm({ mode }: AuthFormProps) {
               type="button"
               onClick={() => setShowMentorCode((v) => !v)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-neon-amber"
+              aria-label={showMentorCode ? "師範コードを隠す" : "師範コードを表示"}
             >
               {showMentorCode ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          <p className="text-[11px] text-muted-foreground/70">
-            正しい師範コードを入力すると、MENTOR 権限でアカウントが作成されます。
+          <p id={mentorCodeHintId} className="text-[11px] text-muted-foreground/70">
+            許可された指導者向けのコードです。生徒アカウントでは入力不要です。
           </p>
         </div>
       )}

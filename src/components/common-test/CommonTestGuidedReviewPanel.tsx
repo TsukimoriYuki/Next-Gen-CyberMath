@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import katex from "katex";
 import {
   AlertTriangle,
   BookOpen,
@@ -13,6 +12,7 @@ import {
   PlusCircle,
   Target,
 } from "lucide-react";
+import { MathText } from "@/components/math/Math";
 import type { CommonTestGuidedReviewItem } from "@/lib/common-test-guided-review";
 import { canGenerateCommonTestVariant } from "@/lib/common-test-variant-generator";
 import { CommonTestVariantPracticePanel } from "@/components/common-test/CommonTestVariantPracticePanel";
@@ -156,7 +156,7 @@ export function CommonTestGuidedReviewPanel({
                     </div>
                     <QuestionMaterial item={item} />
                     <div className="text-[13px] leading-relaxed text-slate-700">
-                      <RenderMath text={item.statement} />
+                      <RenderMath text={item.statement} className="text-[13px] leading-relaxed text-slate-700" />
                     </div>
                     <AnswerLine item={item} />
                   </div>
@@ -176,7 +176,7 @@ export function CommonTestGuidedReviewPanel({
                           {step.label}
                         </div>
                         <div className="text-xs leading-relaxed text-slate-700">
-                          <RenderMath text={step.body} />
+                          <RenderMath text={step.body} className="text-xs leading-relaxed text-slate-700" />
                         </div>
                       </div>
                     ))}
@@ -258,14 +258,17 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
     <div className="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
       {(item.examContext || item.examPassage || item.context || item.passage) && (
         <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-600">
-          <RenderMath text={item.examContext ?? item.examPassage ?? item.context ?? item.passage ?? ""} />
+          <RenderMath
+            text={item.examContext ?? item.examPassage ?? item.context ?? item.passage ?? ""}
+            className="text-xs leading-relaxed text-slate-600"
+          />
         </div>
       )}
       {item.sharedData && (
         <div className="overflow-x-auto rounded border border-slate-200">
           {item.sharedData.title && (
             <div className="border-b border-slate-200 bg-slate-50 px-2 py-1.5 text-[11px] font-bold text-slate-600">
-              <RenderMath text={item.sharedData.title} />
+              <RenderMath text={item.sharedData.title} className="text-[11px] font-bold text-slate-600" />
             </div>
           )}
           {item.sharedData.headers?.length ? (
@@ -274,7 +277,7 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
                 <tr>
                   {item.sharedData.headers.map((header) => (
                     <th key={header} className="border-b border-slate-200 bg-slate-50 px-2 py-1.5 font-bold">
-                      <RenderMath text={header} />
+                      <RenderMath text={header} className="text-[11px] font-bold text-slate-600" />
                     </th>
                   ))}
                 </tr>
@@ -284,7 +287,7 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
                   <tr key={rowIndex}>
                     {row.map((cell, cellIndex) => (
                       <td key={`${rowIndex}-${cellIndex}`} className="border-b border-slate-100 px-2 py-1.5">
-                        <RenderMath text={cell} />
+                        <RenderMath text={cell} className="text-[11px] text-slate-600" />
                       </td>
                     ))}
                   </tr>
@@ -295,9 +298,9 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
           {item.sharedData.notes?.length ? (
             <div className="space-y-1 px-2 py-1.5 text-[11px] text-slate-500">
               {item.sharedData.notes.map((note) => (
-                <p key={note}>
-                  <RenderMath text={note} />
-                </p>
+                <div key={note}>
+                  <RenderMath text={note} className="text-[11px] leading-relaxed text-slate-500" />
+                </div>
               ))}
             </div>
           ) : null}
@@ -305,7 +308,7 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
       )}
       {item.sharedStem && (
         <div className="rounded bg-slate-100 px-2 py-1.5 text-xs leading-relaxed text-slate-600">
-          <RenderMath text={item.sharedStem} />
+          <RenderMath text={item.sharedStem} className="text-xs leading-relaxed text-slate-600" />
         </div>
       )}
     </div>
@@ -320,7 +323,11 @@ function AnswerLine({ item }: { item: CommonTestGuidedReviewItem }) {
           あなたの解答
         </div>
         <div className="mt-1 text-xs font-bold text-slate-700">
-          {item.userAnswerText ? <RenderMath text={item.userAnswerText} /> : "未解答または未記録"}
+          {item.userAnswerText ? (
+            <RenderMath text={item.userAnswerText} className="text-xs font-bold text-slate-700" />
+          ) : (
+            "未解答または未記録"
+          )}
         </div>
       </div>
       <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
@@ -328,7 +335,7 @@ function AnswerLine({ item }: { item: CommonTestGuidedReviewItem }) {
           正答
         </div>
         <div className="mt-1 text-xs font-bold text-emerald-700">
-          <RenderMath text={item.correctAnswerText} />
+          <RenderMath text={item.correctAnswerText} className="text-xs font-bold text-emerald-700" />
         </div>
       </div>
     </div>
@@ -392,27 +399,16 @@ function reviewSortScore(item: CommonTestGuidedReviewItem): number {
   return score;
 }
 
-function RenderMath({ text }: { text: string }) {
-  const parts = text.split(/(\$[^$]+\$)/g);
+function RenderMath({
+  text,
+  className = "text-xs leading-relaxed text-slate-700",
+}: {
+  text: string;
+  className?: string;
+}) {
   return (
-    <>
-      {parts.map((part, i) => {
-        if (part.startsWith("$") && part.endsWith("$") && part.length > 2) {
-          try {
-            return (
-              <span
-                key={i}
-                dangerouslySetInnerHTML={{
-                  __html: katex.renderToString(part.slice(1, -1), { throwOnError: false }),
-                }}
-              />
-            );
-          } catch {
-            return <span key={i}>{part}</span>;
-          }
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </>
+    <MathText className={`space-y-1 [&_p]:my-0 ${className}`}>
+      {text}
+    </MathText>
   );
 }

@@ -4,7 +4,15 @@ import { UnitCard } from "@/components/shell/UnitCard";
 
 export const metadata: Metadata = {
   title: "単元",
-  description: "単元から高校数学の問題と授業を選ぶ。",
+  description: "数学I・Aから発展分野まで、単元から高校数学の問題と授業を選ぶページです。",
+  alternates: {
+    canonical: "/units",
+  },
+  openGraph: {
+    title: "単元 | Cyber Math",
+    description: "単元から高校数学の問題、授業、復習導線へ進むための一覧ページ。",
+    url: "/units",
+  },
 };
 
 export default function UnitsPage() {

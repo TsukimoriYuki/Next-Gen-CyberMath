@@ -5,7 +5,17 @@ import { LectureRoadmapCatalog } from "@/components/lectures/LectureRoadmapCatal
 
 export const metadata: Metadata = {
   title: "特別講義 — 共通テスト数学",
-  description: "共通テスト数学の考え方、公式選択、本番判断を学ぶ特別講義。",
+  description:
+    "共通テスト数学の考え方、公式選択、本番判断、満点講義、時間短縮講義を学ぶ特別講義一覧です。",
+  alternates: {
+    canonical: "/common-test/lectures",
+  },
+  openGraph: {
+    title: "特別講義 | Cyber Math",
+    description:
+      "共通テスト数学の満点講義、判別ドリル、本番判断、時間短縮講義への入口。",
+    url: "/common-test/lectures",
+  },
 };
 
 export default function CommonTestLecturesPage() {

@@ -2,14 +2,39 @@ import type { Metadata } from "next";
 import "katex/dist/katex.min.css";
 import "./globals.css";
 import { SiteHeader } from "@/components/shell/SiteHeader";
+import { SiteFooter } from "@/components/shell/SiteFooter";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
+import { getSiteStructuredData } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "CYBER OS",
-    template: "%s | CYBER OS",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "数学と英語のデュアルコアを備えた、高校生のための次世代総合学習プラットフォーム。",
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: "/",
+    locale: "ja_JP",
+  },
+  twitter: {
+    card: "summary",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -37,14 +62,10 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <JsonLd id="site-json-ld" data={getSiteStructuredData()} />
         <SiteHeader />
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-border/60 py-6 text-center text-xs text-muted-foreground">
-          <p>
-            CYBER OS · 数学 × 英語 デュアルコア学習プラットフォーム ·{" "}
-            <span className="font-mono text-neon-cyan/80">MVP build</span>
-          </p>
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );

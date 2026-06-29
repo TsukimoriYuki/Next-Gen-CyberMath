@@ -19,9 +19,20 @@ export async function generateMetadata({
   const num = parseInt(sectionId.replace("section-", ""), 10);
   const section = SUBJECT.sections.find((s) => s.number === num);
   if (!section) return { title: "Not Found" };
+  const title = `英語R 第${section.number}問 — ${section.title}`;
+  const description = `共通テスト 英語リーディング 第${section.number}問「${section.title}」の大問別ドリル演習。`;
+  const canonical = `/common-test/english-reading/${sectionId}`;
   return {
-    title: `英語R 第${section.number}問 — ${section.title}`,
-    description: `共通テスト 英語リーディング 第${section.number}問「${section.title}」の大問別ドリル演習。`,
+    title,
+    description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+    },
   };
 }
 

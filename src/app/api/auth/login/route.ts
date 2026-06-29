@@ -1,16 +1,28 @@
 import { compare } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signJWT, setSessionCookie } from "@/lib/auth";
+import { getClientIp, rateLimit, rateLimitJson } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   try {
+    const limited = rateLimit(`auth:login:${getClientIp(req)}`, {
+      limit: 12,
+      windowMs: 60_000,
+    });
+    if (!limited.ok) return rateLimitJson(limited.retryAfter);
+
     const { name, passcode } = (await req.json()) ?? {};
 
-    if (!name || !passcode) {
+    if (typeof name !== "string" || typeof passcode !== "string") {
       return Response.json({ ok: false, error: "名前とパスコードを入力してください" }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({ where: { name: String(name).trim() } });
+    const normalizedName = name.trim();
+    if (!normalizedName || !passcode || normalizedName.length > 40 || passcode.length > 128) {
+      return Response.json({ ok: false, error: "名前またはパスコードが正しくありません" }, { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({ where: { name: normalizedName } });
     if (!user) {
       return Response.json({ ok: false, error: "名前またはパスコードが正しくありません" }, { status: 401 });
     }

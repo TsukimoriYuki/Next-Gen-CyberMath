@@ -41,7 +41,7 @@ export function CommonTestMistakeStrategyCards({
                 </Link>
               ) : (
                 <span className="inline-flex rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-bold text-slate-500">
-                  関連講義は準備中
+                  関連講義は無料教材を優先整備中
                 </span>
               )}
             </div>

@@ -5,7 +5,7 @@ function createPremiumUnit(unitId: string, unitTitle: string): CourseUnit {
     unitId,
     subjectId: "math-2bc-premium",
     unitTitle,
-    unitDescription: `${unitTitle}の発展講座は準備中です。無料版より詳しい解説と実戦的な問題を追加予定です。`,
+    unitDescription: `${unitTitle}の発展講座は内容設計中です。無料版より詳しい解説と実戦的な問題を追加予定です。`,
     lessons: [],
   };
 }
@@ -18,8 +18,8 @@ export const MATH_2BC_PREMIUM_COURSE_SUBJECT: CourseSubject = {
   color: "#c2410c",
   courseKind: "premium",
   status: "preparing",
-  statusLabel: "準備中",
-  badges: ["有料版", "準備中"],
+  statusLabel: "内容設計中",
+  badges: ["有料版", "公開予定"],
   units: [
     createPremiumUnit("expression-proof-advanced", "式と証明"),
     createPremiumUnit("complex-equations-advanced", "複素数と方程式"),

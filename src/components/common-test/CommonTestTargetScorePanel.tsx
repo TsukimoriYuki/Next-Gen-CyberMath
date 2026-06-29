@@ -2,6 +2,7 @@
 
 // 目標点の設定・保存つきスコアトラッカー（司令室用）
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Pencil, Check, X } from "lucide-react";
 import {
   COMMON_TEST_SUBJECTS,
@@ -226,6 +227,26 @@ export function CommonTestTargetScorePanel() {
           );
         })}
       </div>
+      {!anyLatest && (
+        <div className="border-t border-amber-100 bg-amber-50/70 px-5 py-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="text-sm font-extrabold text-amber-800">
+                未診断のため仮スコアを表示中
+              </div>
+              <p className="mt-1 text-xs leading-5 text-amber-800/80">
+                診断を受けると、目標点との差、優先単元、今日の演習があなたの履歴に合わせて更新されます。
+              </p>
+            </div>
+            <Link
+              href="/common-test/math-1a"
+              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-amber-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-amber-700"
+            >
+              共通テスト診断を受ける
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

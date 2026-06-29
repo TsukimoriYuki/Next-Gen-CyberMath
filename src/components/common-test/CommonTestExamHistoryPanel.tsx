@@ -66,14 +66,24 @@ export function CommonTestExamHistoryPanel() {
           本番演習の履歴はありません
         </p>
         <p className="text-xs leading-relaxed text-slate-500">
-          本番演習を1回受けると、本番分析・弱点分析・今日の学習メニューがより正確になります。
+          70分の本番形式を1回受けると、本番分析、弱点分析、今日の学習メニューがより正確になります。
+          <br />
+          まとまった時間がない場合は、大問別ドリルで先に現在地を測れます。
         </p>
-        <Link
-          href="/common-test/simulator"
-          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700"
-        >
-          本番演習を受ける →
-        </Link>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/common-test/simulator"
+            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700"
+          >
+            70分の本番演習を始める →
+          </Link>
+          <Link
+            href="/common-test/math-1a"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-600 transition-colors hover:border-slate-300"
+          >
+            10分診断から始める
+          </Link>
+        </div>
       </div>
     );
   }

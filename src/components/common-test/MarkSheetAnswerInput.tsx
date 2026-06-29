@@ -86,6 +86,7 @@ export function MarkSheetAnswerInput({
   const digitValues = useMemo(() => splitDigits(value, slots), [value, slots]);
   const isDigits = answerFormat === "digits";
   const inputMode = answerFormat === "number" ? "decimal" : "text";
+  const helperId = `${id}-helper`;
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -125,7 +126,10 @@ export function MarkSheetAnswerInput({
       </div>
 
       {helperText && (
-        <p className="mb-4 rounded-xl border border-blue-100 bg-blue-50 p-3 text-xs leading-6 text-blue-900">
+        <p
+          id={helperId}
+          className="mb-4 rounded-xl border border-blue-100 bg-blue-50 p-3 text-xs leading-6 text-blue-900"
+        >
           {helperText}
         </p>
       )}
@@ -164,6 +168,8 @@ export function MarkSheetAnswerInput({
             onChange={(e) => onChange(e.target.value)}
             placeholder={answerFormat === "text" ? "短い答え" : "数値"}
             autoComplete="off"
+            aria-label={answerFormat === "text" ? "短答の解答欄" : "数値の解答欄"}
+            aria-describedby={helperText ? helperId : undefined}
             className="h-12 w-full max-w-sm rounded-xl border-2 border-slate-300 bg-white px-4 font-mono text-xl font-bold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100 disabled:bg-slate-100 disabled:text-slate-500"
           />
         </label>

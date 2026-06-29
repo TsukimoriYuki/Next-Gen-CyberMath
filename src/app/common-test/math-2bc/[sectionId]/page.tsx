@@ -19,9 +19,20 @@ export async function generateMetadata({
   const num = parseInt(sectionId.replace("section-", ""), 10);
   const section = SUBJECT.sections.find((s) => s.number === num);
   if (!section) return { title: "Not Found" };
+  const title = `数学II・B・C 第${section.number}問 — ${section.title}`;
+  const description = `共通テスト 数学II・B・C 第${section.number}問「${section.title}」の大問別ドリル演習。`;
+  const canonical = `/common-test/math-2bc/${sectionId}`;
   return {
-    title: `数学II・B・C 第${section.number}問 — ${section.title}`,
-    description: `共通テスト 数学II・B・C 第${section.number}問「${section.title}」の大問別ドリル演習。`,
+    title,
+    description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+    },
   };
 }
 

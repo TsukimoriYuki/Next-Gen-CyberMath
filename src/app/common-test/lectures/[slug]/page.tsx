@@ -24,9 +24,20 @@ export async function generateMetadata({
   const { slug } = await params;
   const lecture = getSpecialLectureBySlug(slug);
   if (!lecture) return { title: "講義が見つかりません" };
+  const title = `${lecture.title} — 特別講義`;
+  const canonical = `/common-test/lectures/${lecture.slug}`;
   return {
-    title: `${lecture.title} — 特別講義`,
+    title,
     description: lecture.description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title,
+      description: lecture.description,
+      url: canonical,
+      type: "article",
+    },
   };
 }
 

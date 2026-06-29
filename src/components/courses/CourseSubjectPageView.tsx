@@ -57,7 +57,7 @@ export function CourseSubjectPageView({ subject }: { subject: CourseSubject }) {
           </p>
           {isPremium ? (
             <div className="mt-5 inline-flex rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-bold text-amber-700">
-              決済機能・ログイン制御は未実装です。現在は近日公開ページとして表示しています。
+              現在は無料教材を優先整備中です。発展講座の公開時期と内容は、決まり次第このページでお知らせします。
             </div>
           ) : null}
         </header>
@@ -88,7 +88,7 @@ export function CourseSubjectPageView({ subject }: { subject: CourseSubject }) {
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-600">
                   <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
-                    {lessonCount > 0 ? `${lessonCount}講座` : "準備中"}
+                    {lessonCount > 0 ? `${lessonCount}講座` : "内容設計中"}
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
                     <Clock className="h-3 w-3" />
@@ -105,7 +105,7 @@ export function CourseSubjectPageView({ subject }: { subject: CourseSubject }) {
                   </Link>
                 ) : (
                   <span className="mt-5 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 py-2.5 text-sm font-bold text-slate-500">
-                    準備中
+                    公開予定を確認
                   </span>
                 )}
               </article>

@@ -157,14 +157,14 @@ export function CommonTestLearningPrescription() {
                 className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 transition hover:border-emerald-300 hover:text-emerald-700"
               >
                 <ClipboardList className="h-3.5 w-3.5" />
-                復習
+                復習キューを開く
               </Link>
               <Link
                 href="/common-test/lectures"
                 className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 transition hover:border-violet-300 hover:text-violet-700"
               >
                 <BookOpen className="h-3.5 w-3.5" />
-                ロードマップ
+                講義ロードマップを見る
               </Link>
             </div>
             <Link
@@ -175,7 +175,9 @@ export function CommonTestLearningPrescription() {
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
             {prescription.lectureStatus === "coming-soon" && (
-              <p className="text-center text-[11px] text-slate-500">関連講義は準備中</p>
+              <p className="text-center text-[11px] leading-5 text-slate-500">
+                関連講義は無料教材を優先整備中です。
+              </p>
             )}
           </div>
         </div>

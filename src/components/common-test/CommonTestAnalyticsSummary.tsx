@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   getCommonTestDrillHistory,
   TAG_RECOMMENDATIONS,
@@ -113,9 +114,16 @@ export function CommonTestAnalyticsSummary() {
   if (analytics.drillCount === 0) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
-        <div className="text-xs text-slate-400">
-          まずは10分診断で現在地を測ると、弱点レポートが表示されます
-        </div>
+        <div className="text-sm font-bold text-slate-700">弱点レポートはまだありません</div>
+        <p className="mx-auto mt-2 max-w-md text-xs leading-5 text-slate-500">
+          まずは10分ほどの大問別ドリルで現在地を測ると、正答率、時間超過、弱点タグがここに表示されます。
+        </p>
+        <Link
+          href="/common-test/math-1a"
+          className="mt-4 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700"
+        >
+          共通テスト診断を受ける
+        </Link>
       </div>
     );
   }

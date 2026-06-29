@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import katex from "katex";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -25,6 +24,7 @@ import {
   isCommonTestAnswerCorrect,
   isCommonTestMarkSheetQuestion,
 } from "@/lib/common-test-answer-normalize";
+import { MathText } from "@/components/math/Math";
 import { MarkSheetAnswerInput } from "./MarkSheetAnswerInput";
 
 interface Props {
@@ -112,14 +112,15 @@ export function CommonTestAnswerPanel({
                 type="button"
                 disabled={isRevealed}
                 onClick={() => onSelect(option)}
+                aria-pressed={isSelected}
                 className={`flex items-start gap-3 rounded-2xl border p-4 text-left shadow-sm transition disabled:cursor-default ${stateClass}`}
               >
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-extrabold ring-1 ring-inset ring-slate-200">
                   {label}
                 </span>
-                <span className="min-w-0 flex-1 text-sm leading-6">
-                  {isMath ? <RenderMath text={option} /> : option}
-                </span>
+                <div className="min-w-0 flex-1 text-sm leading-6">
+                  {isMath ? <RenderMath text={option} className="text-sm leading-6" /> : option}
+                </div>
                 {isRevealed && isCorrect && (
                   <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-600" />
                 )}
@@ -237,6 +238,7 @@ function ConfidencePicker({
               key={option.value}
               type="button"
               onClick={() => onSelect(option.value)}
+              aria-pressed={active}
               className={`rounded-xl border p-3 text-left transition ${
                 active ? option.className : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-white"
               }`}
@@ -307,6 +309,7 @@ function MistakeTagPicker({
               key={tag.id}
               type="button"
               onClick={() => toggle(tag.id)}
+              aria-pressed={active}
               className={`rounded-full border px-3 py-2 text-xs font-bold transition ${
                 active
                   ? (tagRiskMeta?.className ?? "border-blue-200 bg-blue-50 text-blue-700")
@@ -339,10 +342,13 @@ function ExplanationPanel({
   const isCorrect =
     selectedAnswer !== null &&
     isCommonTestAnswerCorrect(selectedAnswer, question.correctAnswer, answerFormat);
+  const correctAnswerText = formatAnswerText(question.correctAnswer);
 
   return (
     <section className="space-y-3">
       <div
+        aria-live="polite"
+        role="status"
         className={`flex items-start gap-3 rounded-2xl border p-4 shadow-sm ${
           isCorrect
             ? "border-emerald-200 bg-emerald-50 text-emerald-900"
@@ -357,8 +363,9 @@ function ExplanationPanel({
         <div>
           <div className="font-extrabold">{isCorrect ? "正解です" : "見直しましょう"}</div>
           {!isCorrect && (
-            <div className="mt-1 text-sm">
-              正答: <span className="font-bold">{question.correctAnswer}</span>
+            <div className="mt-1 flex flex-wrap items-baseline gap-1 text-sm">
+              <span>正答:</span>
+              <RenderMath text={correctAnswerText} className="text-sm font-bold leading-6" />
             </div>
           )}
         </div>
@@ -370,7 +377,7 @@ function ExplanationPanel({
         colorClass="text-blue-700"
       >
         {isMath ? (
-          <RenderMath text={question.explanation} block />
+          <RenderMath text={question.explanation} className="text-sm leading-7 text-slate-700" />
         ) : (
           <p className="text-sm leading-7 text-slate-700">{question.explanation}</p>
         )}
@@ -381,7 +388,11 @@ function ExplanationPanel({
         label="解き方"
         colorClass="text-violet-700"
       >
-        <p className="text-sm leading-7 text-slate-700">{question.strategy}</p>
+        {isMath ? (
+          <RenderMath text={question.strategy} className="text-sm leading-7 text-slate-700" />
+        ) : (
+          <p className="text-sm leading-7 text-slate-700">{question.strategy}</p>
+        )}
       </ExplainBlock>
 
       {question.trapExplanation && (
@@ -390,7 +401,11 @@ function ExplanationPanel({
           label="よくあるミス"
           colorClass="text-amber-700"
         >
-          <p className="text-sm leading-7 text-slate-700">{question.trapExplanation}</p>
+          {isMath ? (
+            <RenderMath text={question.trapExplanation} className="text-sm leading-7 text-slate-700" />
+          ) : (
+            <p className="text-sm leading-7 text-slate-700">{question.trapExplanation}</p>
+          )}
         </ExplainBlock>
       )}
     </section>
@@ -419,47 +434,20 @@ function ExplainBlock({
   );
 }
 
-export function RenderMath({ text, block }: { text: string; block?: boolean }) {
-  if (!block) {
-    const parts = text.split(/(\$[^$]+\$)/g);
-    return (
-      <>
-        {parts.map((part, i) => {
-          if (part.startsWith("$") && part.endsWith("$") && part.length > 2) {
-            try {
-              const html = katex.renderToString(part.slice(1, -1), {
-                throwOnError: false,
-                displayMode: false,
-              });
-              return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />;
-            } catch {
-              return <span key={i}>{part}</span>;
-            }
-          }
-          return <span key={i}>{part}</span>;
-        })}
-      </>
-    );
-  }
+function formatAnswerText(answer: string | string[]): string {
+  return Array.isArray(answer) ? answer.join(" / ") : answer;
+}
 
-  const segments = text.split(/(\$[^$]+\$)/g);
+export function RenderMath({
+  text,
+  className = "text-sm leading-7 text-slate-700",
+}: {
+  text: string;
+  className?: string;
+}) {
   return (
-    <div className="space-y-2 text-sm leading-7 text-slate-700">
-      {segments.map((segment, i) => {
-        if (segment.startsWith("$") && segment.endsWith("$") && segment.length > 2) {
-          try {
-            const html = katex.renderToString(segment.slice(1, -1), {
-              throwOnError: false,
-              displayMode: false,
-            });
-            return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />;
-          } catch {
-            return <span key={i}>{segment}</span>;
-          }
-        }
-        if (!segment.trim()) return null;
-        return <span key={i}>{segment}</span>;
-      })}
-    </div>
+    <MathText className={`space-y-1 [&_p]:my-0 ${className}`}>
+      {text}
+    </MathText>
   );
 }

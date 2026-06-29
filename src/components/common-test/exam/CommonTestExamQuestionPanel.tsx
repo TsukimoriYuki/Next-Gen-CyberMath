@@ -1,8 +1,8 @@
 "use client";
 
 // 試験中の問題表示 — 本物の共通テスト紙面に近いレイアウト
-import katex from "katex";
 import { Flag } from "lucide-react";
+import { MathText } from "@/components/math/Math";
 import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import type { CommonTestTheme } from "@/data/common-test";
 import type { CommonTestConfidence } from "@/lib/common-test-history";
@@ -100,12 +100,16 @@ export function CommonTestExamQuestionPanel({
       {/* Context (table / info / dialogue) */}
       {question.context && (
         <div className="rounded p-4 sm:p-5" style={{ background: "#fafafa", border: "1px solid #e5e7eb" }}>
-          <pre
-            className={`${isMath ? "font-sans" : "font-mono"} text-sm leading-[1.9] whitespace-pre-wrap`}
-            style={{ color: "#1f2937" }}
-          >
-            {isMath ? <RenderMath text={question.context} /> : question.context}
-          </pre>
+          {isMath ? (
+            <RenderMath text={question.context} className="text-sm leading-[1.9] text-slate-800" />
+          ) : (
+            <pre
+              className="font-mono text-sm leading-[1.9] whitespace-pre-wrap"
+              style={{ color: "#1f2937" }}
+            >
+              {question.context}
+            </pre>
+          )}
         </div>
       )}
 
@@ -144,14 +148,14 @@ export function CommonTestExamQuestionPanel({
                 >
                   {circledNumber(idx)}
                 </span>
-                <span
+                <div
                   className={`min-w-0 flex-1 whitespace-normal break-words text-[15px] leading-relaxed ${
                     isEnglishReading ? "sm:text-base sm:leading-7" : ""
                   }`}
                   style={{ color: "#1f2937", fontWeight: isSelected ? 600 : 400 }}
                 >
-                  {isMath ? <RenderMath text={opt} /> : opt}
-                </span>
+                  {isMath ? <RenderMath text={opt} className="text-[15px] leading-relaxed" /> : opt}
+                </div>
               </button>
             );
           })}
@@ -225,7 +229,8 @@ function ExamSharedMaterial({
 
   if (!hasMaterial) return null;
 
-  const renderText = (text: string) => (isMath ? <RenderMath text={text} /> : text);
+  const renderText = (text: string, className?: string) =>
+    isMath ? <RenderMath text={text} className={className} /> : text;
 
   return (
     <div
@@ -238,7 +243,7 @@ function ExamSharedMaterial({
 
       {question.examContext && (
         <div className="text-[14px] leading-[1.9] whitespace-pre-wrap">
-          {renderText(question.examContext)}
+          {renderText(question.examContext, "text-[14px] leading-[1.9]")}
         </div>
       )}
 
@@ -252,7 +257,7 @@ function ExamSharedMaterial({
         <div className="overflow-x-auto rounded border border-slate-200 bg-white">
           {question.sharedData.title && (
             <div className="border-b border-slate-200 px-3 py-2 text-xs font-bold text-slate-600">
-              {renderText(question.sharedData.title)}
+              {renderText(question.sharedData.title, "text-xs font-bold text-slate-600")}
             </div>
           )}
           {question.sharedData.headers?.length ? (
@@ -264,7 +269,7 @@ function ExamSharedMaterial({
                       key={header}
                       className="border-b border-slate-200 bg-slate-50 px-3 py-2 text-left text-xs font-bold text-slate-600"
                     >
-                      {renderText(header)}
+                      {renderText(header, "text-xs font-bold text-slate-600")}
                     </th>
                   ))}
                 </tr>
@@ -277,7 +282,7 @@ function ExamSharedMaterial({
                         key={`${rowIndex}-${cellIndex}`}
                         className="border-b border-slate-100 px-3 py-2 text-slate-800"
                       >
-                        {renderText(cell)}
+                        {renderText(cell, "text-sm text-slate-800")}
                       </td>
                     ))}
                   </tr>
@@ -288,7 +293,7 @@ function ExamSharedMaterial({
           {question.sharedData.notes?.length ? (
             <div className="space-y-1 px-3 py-2 text-xs leading-relaxed text-slate-500">
               {question.sharedData.notes.map((note) => (
-                <p key={note}>{renderText(note)}</p>
+                <div key={note}>{renderText(note, "text-xs leading-relaxed text-slate-500")}</div>
               ))}
             </div>
           ) : null}
@@ -300,36 +305,23 @@ function ExamSharedMaterial({
           className="rounded border border-blue-100 px-3 py-2 text-[13px] leading-relaxed"
           style={{ background: "#eff6ff", color: "#1e3a8a" }}
         >
-          {renderText(question.sharedStem)}
+          {renderText(question.sharedStem, "text-[13px] leading-relaxed")}
         </div>
       )}
     </div>
   );
 }
 
-// ── KaTeX renderer ────────────────────────────────────────────────────────
-function RenderMath({ text }: { text: string }) {
-  const parts = text.split(/(\$[^$]+\$)/g);
+function RenderMath({
+  text,
+  className = "text-sm leading-relaxed",
+}: {
+  text: string;
+  className?: string;
+}) {
   return (
-    <>
-      {parts.map((part, i) => {
-        if (part.startsWith("$") && part.endsWith("$") && part.length > 2) {
-          const math = part.slice(1, -1);
-          try {
-            return (
-              <span
-                key={i}
-                dangerouslySetInnerHTML={{
-                  __html: katex.renderToString(math, { throwOnError: false }),
-                }}
-              />
-            );
-          } catch {
-            return <span key={i}>{part}</span>;
-          }
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </>
+    <MathText className={`space-y-1 [&_p]:my-0 ${className}`}>
+      {text}
+    </MathText>
   );
 }

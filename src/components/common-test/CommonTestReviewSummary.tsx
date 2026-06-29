@@ -94,17 +94,19 @@ export function CommonTestReviewSummary() {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
             復習キュー
-            <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-400">準備中</span>
+            <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
+              ログインで保存
+            </span>
           </div>
           <p className="mt-0.5 text-xs text-slate-400">
-            ログインすると復習キューが使えます
+            ログインすると、間違えた問題と次の復習日を保存できます。
           </p>
         </div>
         <Link
-          href="/login"
+          href="/auth/login"
           className="shrink-0 rounded-lg bg-blue-600 px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700"
         >
-          ログイン
+          ログインして復習を保存
         </Link>
       </div>
     );
@@ -139,7 +141,7 @@ export function CommonTestReviewSummary() {
           href="/common-test/review"
           className="text-xs font-bold text-blue-600 transition-colors hover:text-blue-700"
         >
-          {urgent ? `今日の復習${dueCount}問を解く →` : "復習キューを見る →"}
+          {urgent ? `今日の復習${dueCount}問を解く →` : "復習キューを開く →"}
         </Link>
       </div>
 

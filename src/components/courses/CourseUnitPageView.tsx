@@ -78,7 +78,7 @@ export function CourseUnitPageView({
 
                 {lessons.length === 0 ? (
                   <p className="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
-                    このレベルの講座本文は準備中です。講座データを追加すると、ここに講座カードが表示されます。
+                    現在は無料・基礎講座を優先整備中です。このレベルの講座は、公開内容が固まり次第ここに追加します。
                   </p>
                 ) : (
                   <div className="grid gap-4 md:grid-cols-2">

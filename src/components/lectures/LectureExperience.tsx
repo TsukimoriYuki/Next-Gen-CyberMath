@@ -37,6 +37,38 @@ function stripDollar(text: string): string {
   return text.replace(/\$/g, "").trim();
 }
 
+function conciseLabel(text: string): string {
+  const label = stripDollar(text).replace(/\s+/g, " ").trim();
+  if (!label) return "この章";
+  return label.length > 44 ? `${label.slice(0, 44)}...` : label;
+}
+
+function labelForBlock(block: LectureBlock): string {
+  switch (block.type) {
+    case "heading":
+    case "paragraph":
+    case "callout":
+      return conciseLabel(block.text);
+    case "math":
+      return conciseLabel(block.caption ?? "数式");
+    case "image":
+      return conciseLabel(block.caption ?? block.alt);
+    case "geometryLayers":
+    case "checklist":
+    case "relatedProblems":
+    case "solutionFlow":
+    case "discriminationDrill":
+    case "mistakeRecovery":
+      return conciseLabel(block.title ?? "この章");
+    case "explanationTabs":
+      return "解説タブ";
+    case "expertThinking":
+      return "エキスパート思考";
+    case "problem":
+      return conciseLabel(block.title);
+  }
+}
+
 function scrollToBlock(id: string) {
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -204,7 +236,7 @@ export function LectureExperience({ lecture }: { lecture: Lecture }) {
               const isProblem = block.type === "problem";
               const completed = hydrated && completedSet.has(block.id);
               return (
-                <div key={block.id} id={block.id} data-block-id={block.id} className="scroll-mt-24">
+                <div key={block.id} id={block.id} data-block-id={block.id} className="scroll-mt-32 lg:scroll-mt-28">
                   <LectureBlockView
                     lecture={lecture}
                     block={block}
@@ -215,7 +247,11 @@ export function LectureExperience({ lecture }: { lecture: Lecture }) {
                   />
                   {completable && (
                     <div className="mt-2 flex justify-end">
-                      <CheckToggle completed={completed} onToggle={() => toggleBlock(block.id)} />
+                      <CheckToggle
+                        completed={completed}
+                        label={labelForBlock(block)}
+                        onToggle={() => toggleBlock(block.id)}
+                      />
                     </div>
                   )}
                   {isProblem && completed && (
@@ -238,19 +274,21 @@ export function LectureExperience({ lecture }: { lecture: Lecture }) {
 
         {/* PC: サイド目次 */}
         <aside className="hidden lg:block">
-          <div className="sticky top-6">
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-              <div className="mb-2 flex items-center gap-2 text-xs font-extrabold text-slate-500">
+          <div className="sticky top-24 max-h-[calc(100vh-7rem)]">
+            <div className="flex max-h-[calc(100vh-7rem)] flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="mb-2 flex shrink-0 items-center gap-2 text-xs font-extrabold text-slate-500">
                 <List className="h-3.5 w-3.5" />
                 目次
               </div>
-              <TocList
-                items={tocItems}
-                activeId={activeTocId}
-                completedSet={completedSet}
-                hydrated={hydrated}
-                onJump={jumpTo}
-              />
+              <div className="min-h-0 overflow-y-auto pr-1">
+                <TocList
+                  items={tocItems}
+                  activeId={activeTocId}
+                  completedSet={completedSet}
+                  hydrated={hydrated}
+                  onJump={jumpTo}
+                />
+              </div>
             </div>
           </div>
         </aside>
@@ -302,9 +340,11 @@ function LectureProgressHeader({
 
 function CheckToggle({
   completed,
+  label,
   onToggle,
 }: {
   completed: boolean;
+  label: string;
   onToggle: () => void;
 }) {
   return (
@@ -312,6 +352,7 @@ function CheckToggle({
       type="button"
       onClick={onToggle}
       aria-pressed={completed}
+      aria-label={completed ? `「${label}」を未読に戻す` : `「${label}」を読了にする`}
       className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold transition ${
         completed
           ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300"
@@ -391,17 +432,19 @@ function MobileToc({
   onJump: (id: string) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const mobileTocId = "lecture-mobile-toc";
   return (
     <div className="lg:hidden">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm"
+        className="flex min-h-12 w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm"
         aria-expanded={open}
+        aria-controls={mobileTocId}
       >
         <span className="flex items-center gap-2">
           <List className="h-4 w-4 text-slate-500" />
-          目次を開く
+          {open ? "目次を閉じる" : "目次を開く"}
         </span>
         {open ? (
           <ChevronUp className="h-4 w-4 text-slate-400" />
@@ -410,7 +453,7 @@ function MobileToc({
         )}
       </button>
       {open && (
-        <div className="mt-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+        <div id={mobileTocId} className="mt-2 max-h-[62vh] overflow-y-auto rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
           <TocList
             items={items}
             activeId={activeId}

@@ -10,9 +10,18 @@ import type { CourseSubject } from "@/types/course";
 import type { Lesson } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "講座集 | CYBER OS",
+  title: "講座集",
   description:
     "数学IA・数学II,B,C・数学III,Cの基礎講座と、有料版の発展講座を単元ごとに整理した講座集です。",
+  alternates: {
+    canonical: "/courses",
+  },
+  openGraph: {
+    title: "講座集 | Cyber Math",
+    description:
+      "高校数学の基礎講座と発展講座を単元ごとに整理した講座一覧。",
+    url: "/courses",
+  },
 };
 
 export default function CoursesIndexPage() {
@@ -113,7 +122,7 @@ function CourseSubjectCard({ subject }: { subject: CourseSubject }) {
           {subject.units.length}単元
         </span>
         <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
-          {isPremium && lessonCount === 0 ? "講座本文は準備中" : `${lessonCount}講座`}
+          {isPremium && lessonCount === 0 ? "講座公開予定" : `${lessonCount}講座`}
         </span>
       </div>
       <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-blue-600">

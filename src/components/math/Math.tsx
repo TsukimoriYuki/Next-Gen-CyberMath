@@ -8,8 +8,52 @@ import type { GeometryDiagramType } from "@/lib/geometry-diagrams";
 import type { GraphKey } from "@/lib/types";
 import { WhyPopover } from "@/components/scaffolding/WhyPopover";
 
-// KaTeX renders to an HTML string on the server (no DOM needed), so these
-// stay as server components — zero client JS for static math.
+type MathReadableContent =
+  | string
+  | {
+      text: string;
+      readable?: string;
+      ariaLabel?: string;
+    };
+
+type MathLabelMap = Record<string, string>;
+
+// KaTeX renders to an HTML string on the server (no DOM needed). Frequent
+// formulas get readable labels here; callers can still override them per use.
+const DEFAULT_MATH_LABELS: MathLabelMap = {
+  "x^2-2ax": "エックスの二乗から、二エーエックスを引く式",
+  "\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}":
+    "二次方程式の解の公式。マイナスビー、プラスマイナス、平方根ビー二乗マイナス四エーシー、割る二エー",
+  "\\sin^2\\theta+\\cos^2\\theta=1":
+    "サイン二乗シータとコサイン二乗シータの和は一",
+  "S=\\frac{1}{2}ah": "面積エスは、二分の一かける底辺エーかける高さエイチ",
+  "S=rs": "面積エスは、内接円半径アールかける半周長エス",
+  "a/\\sinA=2R": "辺エー割るサインエーは、外接円の直径二アール",
+  "\\frac{a}{\\sinA}=2R": "辺エー割るサインエーは、外接円の直径二アール",
+  "BD:DC=AB:AC": "ビー ディー 対 ディー シー は、エー ビー 対 エー シー",
+  "AD^2=AB\\cdotAC-BD\\cdotDC":
+    "エー ディー の二乗は、エー ビー かける エー シー から、ビー ディー かける ディー シー を引く",
+  "AM^2=\\frac{2AB^2+2AC^2-BC^2}{4}":
+    "エー エム の二乗は、二エー ビー 二乗プラス二エー シー 二乗マイナスビー シー 二乗、割る四",
+  "P(A\\capB)=P(A)P(B)": "エーかつビーの確率は、エーの確率かけるビーの確率",
+};
+
+function normalizeMathKey(tex: string): string {
+  return tex
+    .replace(/\\dfrac/g, "\\frac")
+    .replace(/\\left|\\right/g, "")
+    .replace(/\s+/g, "");
+}
+
+function resolveMathLabel(
+  tex: string,
+  explicit?: string,
+  labels?: MathLabelMap,
+): string | undefined {
+  if (explicit?.trim()) return explicit.trim();
+  const key = normalizeMathKey(tex);
+  return labels?.[key] ?? DEFAULT_MATH_LABELS[key];
+}
 
 function escapeHtml(value: string): string {
   return value
@@ -28,27 +72,49 @@ function render(tex: string, displayMode: boolean): string {
       throwOnError: false,
       strict: false,
       trust: false,
-      output: "html",
+      output: "htmlAndMathml",
     });
   } catch {
     return `<span class="katex-fallback">${escapeHtml(tex)}</span>`;
   }
 }
 
-export function InlineMath({ math }: { math: string }) {
+export function InlineMath({
+  math,
+  ariaLabel,
+  readable,
+}: {
+  math: string;
+  ariaLabel?: string;
+  readable?: string;
+}) {
+  const label = resolveMathLabel(math, ariaLabel ?? readable);
   return (
     <span
       className="katex-inline inline-block max-w-full overflow-x-auto overflow-y-hidden align-middle"
+      role={label ? "math" : undefined}
+      aria-label={label}
       dangerouslySetInnerHTML={{ __html: render(math, false) }}
     />
   );
 }
 
-export function BlockMath({ math }: { math: string }) {
+export function BlockMath({
+  math,
+  ariaLabel,
+  readable,
+}: {
+  math: string;
+  ariaLabel?: string;
+  readable?: string;
+}) {
   // スマホでも長い数式が見切れないよう、ブロック数式は横スクロール可にする。
+  const label = resolveMathLabel(math, ariaLabel ?? readable);
   return (
     <div
       className="katex-block w-full max-w-full overflow-x-auto overflow-y-hidden"
+      role={label ? "math" : undefined}
+      aria-label={label}
       dangerouslySetInnerHTML={{ __html: render(math, true) }}
     />
   );
@@ -77,7 +143,11 @@ function parseWhy(segment: string): { key: string; label: string } | null {
   return { key: m[1], label: m[2] };
 }
 
-function renderInline(text: string, keyBase: string): React.ReactNode[] {
+function renderInline(
+  text: string,
+  keyBase: string,
+  mathLabels?: MathLabelMap,
+): React.ReactNode[] {
   // まず @@why:...@@ を分割。
   const whyParts = text.split(/(@@why:[a-z0-9-]+\|[^@]+@@)/g);
   return whyParts.flatMap((segment, wi) => {
@@ -92,11 +162,15 @@ function renderInline(text: string, keyBase: string): React.ReactNode[] {
     return parts.map((part, i) => {
       const key = `${keyBase}-${wi}-${i}`;
       if (part.startsWith("$") && part.endsWith("$") && part.length > 2) {
+        const math = part.slice(1, -1);
+        const label = resolveMathLabel(math, undefined, mathLabels);
         return (
           <span
             key={key}
             className="katex-inline inline-block max-w-full overflow-x-auto overflow-y-hidden align-middle"
-            dangerouslySetInnerHTML={{ __html: render(part.slice(1, -1), false) }}
+            role={label ? "math" : undefined}
+            aria-label={label}
+            dangerouslySetInnerHTML={{ __html: render(math, false) }}
           />
         );
       }
@@ -121,15 +195,32 @@ function renderInline(text: string, keyBase: string): React.ReactNode[] {
 
 export function MathText({
   children,
+  text,
   className,
+  ariaLabel,
+  readable,
+  mathLabels,
 }: {
-  children: string;
+  children?: MathReadableContent;
+  text?: MathReadableContent;
   className?: string;
+  ariaLabel?: string;
+  readable?: string;
+  mathLabels?: MathLabelMap;
 }) {
-  const blocks = normalizeMathDelimiters(children.trim()).split(/\n\s*\n/);
+  const content = text ?? children ?? "";
+  const rawText = typeof content === "string" ? content : content.text;
+  const wrapperLabel =
+    ariaLabel ??
+    readable ??
+    (typeof content === "string" ? undefined : content.ariaLabel ?? content.readable);
+  const blocks = normalizeMathDelimiters(rawText.trim()).split(/\n\s*\n/);
 
   return (
-    <div className={cn("space-y-3 leading-relaxed", className)}>
+    <div
+      className={cn("space-y-3 leading-relaxed", className)}
+      aria-label={wrapperLabel}
+    >
       {blocks.map((block, bi) => {
         const trimmed = block.trim();
 
@@ -170,7 +261,7 @@ export function MathText({
                   <span className="absolute left-0 top-0 text-neon-cyan">
                     ▹
                   </span>
-                  {renderInline(l.trim().slice(2), `${bi}-${li}`)}
+                  {renderInline(l.trim().slice(2), `${bi}-${li}`, mathLabels)}
                 </li>
               ))}
             </ul>
@@ -186,11 +277,18 @@ export function MathText({
               const s = seg.trim();
               if (!s) return null;
               if (s.startsWith("$$") && s.endsWith("$$")) {
-                return <BlockMath key={si} math={s.slice(2, -2).trim()} />;
+                const math = s.slice(2, -2).trim();
+                return (
+                  <BlockMath
+                    key={si}
+                    math={math}
+                    ariaLabel={resolveMathLabel(math, undefined, mathLabels)}
+                  />
+                );
               }
               return (
                 <p key={si}>
-                  {renderInline(s.replace(/\n/g, " "), `${bi}-${si}`)}
+                  {renderInline(s.replace(/\n/g, " "), `${bi}-${si}`, mathLabels)}
                 </p>
               );
             })}
