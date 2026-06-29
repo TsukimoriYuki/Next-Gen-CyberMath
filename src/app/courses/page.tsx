@@ -6,20 +6,19 @@ import {
   STANDARD_COURSE_SUBJECTS,
 } from "@/data/course-curriculum";
 import { getLessonsForIndex } from "@/lib/content";
-import type { CourseSubject } from "@/types/course";
 import type { Lesson } from "@/lib/types";
+import type { CourseSubject } from "@/types/course";
 
 export const metadata: Metadata = {
   title: "講座集",
   description:
-    "数学IA・数学II,B,C・数学III,Cの基礎講座と、有料版の発展講座を単元ごとに整理した講座集です。",
+    "数学IA、数学IIBC、数学IIICの基礎講座と発展講座を、単元ごとに整理した講座一覧です。",
   alternates: {
     canonical: "/courses",
   },
   openGraph: {
     title: "講座集 | Cyber Math",
-    description:
-      "高校数学の基礎講座と発展講座を単元ごとに整理した講座一覧。",
+    description: "高校数学の基礎講座と発展講座を単元ごとに整理した講座一覧。",
     url: "/courses",
   },
 };
@@ -35,11 +34,10 @@ export default function CoursesIndexPage() {
             <GraduationCap className="h-3.5 w-3.5" />
             Courses
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-            講座集
-          </h1>
+          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">講座集</h1>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
-            科目から単元、単元から講座へ進める学習用の入口です。受験数学の土台を固める基礎講座と、今後追加予定の発展講座・有料版を分けて表示しています。
+            単元ページから直接開ける通常講座と、共通テスト向けの発展講座を一覧できます。
+            未公開の科目は「準備中」として表示します。
           </p>
         </header>
 
@@ -80,11 +78,9 @@ function CourseSection({
 }
 
 function CourseSubjectCard({ subject }: { subject: CourseSubject }) {
-  const lessonCount = subject.units.reduce(
-    (sum, unit) => sum + unit.lessons.length,
-    0,
-  );
+  const lessonCount = subject.units.reduce((sum, unit) => sum + unit.lessons.length, 0);
   const isPremium = subject.courseKind === "premium";
+  const isPreparing = lessonCount === 0;
 
   return (
     <Link
@@ -102,9 +98,7 @@ function CourseSubjectCard({ subject }: { subject: CourseSubject }) {
         <BookOpen className="h-5 w-5" />
       </div>
       <div className="flex flex-wrap items-start gap-2">
-        <h3 className="text-xl font-extrabold text-slate-950">
-          {subject.subjectName}
-        </h3>
+        <h3 className="text-xl font-extrabold text-slate-950">{subject.subjectName}</h3>
         {subject.badges?.map((badge) => (
           <span
             key={badge}
@@ -115,7 +109,7 @@ function CourseSubjectCard({ subject }: { subject: CourseSubject }) {
         ))}
       </div>
       <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">
-        {subject.description}
+        {isPreparing ? "現在は準備中です。公開予定の講座は順次追加します。" : subject.description}
       </p>
       <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-600">
         <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
@@ -123,20 +117,16 @@ function CourseSubjectCard({ subject }: { subject: CourseSubject }) {
         </span>
         <span
           className={`rounded-full border px-2.5 py-1 ${
-            lessonCount === 0
+            isPreparing
               ? "border-amber-200 bg-amber-50 font-bold text-amber-700"
               : "border-slate-200 bg-slate-50"
           }`}
         >
-          {lessonCount === 0
-            ? isPremium
-              ? "講座公開予定"
-              : "準備中"
-            : `${lessonCount}講座`}
+          {isPreparing ? "準備中" : `${lessonCount}講座`}
         </span>
       </div>
       <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-blue-600">
-        {isPremium ? "予定を見る" : "単元を見る"}
+        {isPreparing ? "公開予定を見る" : isPremium ? "予定を見る" : "単元を見る"}
         <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
       </span>
     </Link>
@@ -158,13 +148,8 @@ function LessonSection({
       </div>
       <div className="space-y-5">
         {groups.map((group) => (
-          <div
-            key={group.unit}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-          >
-            <div className="mb-3 text-sm font-extrabold text-slate-700">
-              {group.unit}
-            </div>
+          <div key={group.unit} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 text-sm font-extrabold text-slate-700">{group.unit}</div>
             <div className="grid gap-3 sm:grid-cols-2">
               {group.lessons.map((lesson) => (
                 <Link

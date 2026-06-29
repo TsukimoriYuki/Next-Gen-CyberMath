@@ -1,17 +1,13 @@
 "use client";
 
-// 目標点の設定・保存つきスコアトラッカー（司令室用）
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Pencil, Check, X } from "lucide-react";
-import {
-  COMMON_TEST_SUBJECTS,
-  type CommonTestSubjectId,
-} from "@/data/common-test";
+import { Check, Pencil, X } from "lucide-react";
+import { COMMON_TEST_SUBJECTS, type CommonTestSubjectId } from "@/data/common-test";
 import {
   getCommonTestTargetScores,
-  saveCommonTestTargetScores,
   normalizeTargetScore,
+  saveCommonTestTargetScores,
   type CommonTestTargetScores,
 } from "@/lib/common-test-targets";
 import { getLatestCommonTestExamScores } from "@/lib/common-test-exam-history";
@@ -24,44 +20,49 @@ export function CommonTestTargetScorePanel() {
   const [feedback, setFeedback] = useState<"saved" | "error" | null>(null);
 
   useEffect(() => {
-    // localStorage はサーバーに存在しないため、hydration mismatch を避けてマウント後に読む
+    // localStorage is only available after mount.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setTargets(getCommonTestTargetScores());
     setLatestScores(getLatestCommonTestExamScores());
   }, []);
 
-  // 推定スコア: 本番演習履歴があればその最新スコア、無ければ初期推定値(mock)
-  const estimateOf = (id: CommonTestSubjectId, mock: number) =>
-    latestScores[id] ?? mock;
-  const hasLatest = (id: CommonTestSubjectId) => id in latestScores;
-
   useEffect(() => {
     if (!feedback) return;
-    const t = setTimeout(() => setFeedback(null), 2500);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setFeedback(null), 2500);
+    return () => clearTimeout(timer);
   }, [feedback]);
 
-  const targetOf = (id: CommonTestSubjectId, fallback: number) =>
-    targets[id] ?? fallback;
+  const targetOf = (id: CommonTestSubjectId, fallback: number) => targets[id] ?? fallback;
+  const hasLatest = (id: CommonTestSubjectId) => id in latestScores;
+  const anyLatest = COMMON_TEST_SUBJECTS.some((subject) => hasLatest(subject.id));
+
+  const totalTarget = COMMON_TEST_SUBJECTS.reduce(
+    (sum, subject) => sum + targetOf(subject.id, subject.targetScoreDefault),
+    0,
+  );
+  const totalCurrent = COMMON_TEST_SUBJECTS.reduce(
+    (sum, subject) => sum + (latestScores[subject.id] ?? 0),
+    0,
+  );
 
   function startEdit() {
-    const d: Record<string, string> = {};
-    for (const s of COMMON_TEST_SUBJECTS) {
-      d[s.id] = String(targetOf(s.id, s.targetScoreDefault));
+    const nextDraft: Record<string, string> = {};
+    for (const subject of COMMON_TEST_SUBJECTS) {
+      nextDraft[subject.id] = String(targetOf(subject.id, subject.targetScoreDefault));
     }
-    setDraft(d);
+    setDraft(nextDraft);
     setEditing(true);
   }
 
   function handleSave() {
     const next: CommonTestTargetScores = { ...targets };
-    for (const s of COMMON_TEST_SUBJECTS) {
-      const v = normalizeTargetScore(draft[s.id]);
-      if (v === null) {
+    for (const subject of COMMON_TEST_SUBJECTS) {
+      const value = normalizeTargetScore(draft[subject.id]);
+      if (value === null) {
         setFeedback("error");
         return;
       }
-      next[s.id] = v;
+      next[subject.id] = value;
     }
     if (saveCommonTestTargetScores(next)) {
       setTargets(next);
@@ -72,24 +73,10 @@ export function CommonTestTargetScorePanel() {
     }
   }
 
-  const totalTarget = COMMON_TEST_SUBJECTS.reduce(
-    (sum, s) => sum + targetOf(s.id, s.targetScoreDefault),
-    0
-  );
-  const totalEstimate = COMMON_TEST_SUBJECTS.reduce(
-    (sum, s) => sum + estimateOf(s.id, s.estimatedScoreMock),
-    0
-  );
-  const totalGap = totalTarget - totalEstimate;
-  const anyLatest = COMMON_TEST_SUBJECTS.some((s) => hasLatest(s.id));
-
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      {/* Panel header */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-5 py-3">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-slate-900">目標点トラッカー</span>
-        </div>
+        <div className="text-sm font-bold text-slate-900">目標点トラッカー</div>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
           {feedback === "saved" && (
             <span className="flex items-center gap-1 text-xs font-bold text-emerald-600">
@@ -98,15 +85,10 @@ export function CommonTestTargetScorePanel() {
             </span>
           )}
           {feedback === "error" && (
-            <span className="text-xs font-bold text-rose-600">
-              0〜100の数値を入力してください
-            </span>
+            <span className="text-xs font-bold text-rose-600">0〜100の数値で入力してください</span>
           )}
-          <span
-            className="text-xs font-bold"
-            style={{ color: totalGap <= 30 ? "#059669" : "#d97706" }}
-          >
-            目標 {totalTarget}点 ／ {anyLatest ? "最新" : "推定"} {totalEstimate}点
+          <span className="text-xs font-bold text-slate-600">
+            目標 {totalTarget}点 / 現在 {anyLatest ? `${totalCurrent}点` : "未測定"}
           </span>
           {editing ? (
             <div className="flex items-center gap-1.5">
@@ -140,110 +122,106 @@ export function CommonTestTargetScorePanel() {
         </div>
       </div>
 
-      {/* Subject status grid */}
       <div className="grid grid-cols-1 gap-0 divide-slate-200 sm:grid-cols-3 sm:divide-x">
         {COMMON_TEST_SUBJECTS.map((subject) => {
-          const { theme, shortTitle, title, estimatedScoreMock } = subject;
-          const estimate = estimateOf(subject.id, estimatedScoreMock);
-          const isLatest = hasLatest(subject.id);
           const target = targetOf(subject.id, subject.targetScoreDefault);
-          const pct =
-            target > 0
-              ? Math.min(100, Math.round((estimate / target) * 100))
-              : 100;
-          const gap = target - estimate;
+          const latest = latestScores[subject.id];
+          const pct = latest === undefined || target <= 0 ? 0 : Math.min(100, Math.round((latest / target) * 100));
+          const gap = latest === undefined ? null : target - latest;
 
           return (
             <div key={subject.id} className="px-5 py-4">
-              {/* Subject label */}
               <div className="mb-1.5 flex items-baseline justify-between">
                 <span className="flex items-center gap-1.5 text-sm font-extrabold text-slate-900">
-                  <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: theme.primary }} />
-                  {shortTitle}
+                  <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: subject.theme.primary }} />
+                  {subject.shortTitle}
                 </span>
-                <span className="text-[10px] text-slate-400">{title}</span>
+                <span className="text-[10px] text-slate-400">{subject.title}</span>
               </div>
 
-              {/* 推定スコアの出所バッジ */}
               <div className="mb-2">
-                {isLatest ? (
-                  <span className="inline-block rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
-                    最新演習スコア反映済み
+                {latest === undefined ? (
+                  <span className="inline-block rounded bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold text-slate-500">
+                    診断前
                   </span>
                 ) : (
-                  <span className="inline-block rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-700">
-                    未診断のため仮スコアを表示中
+                  <span className="inline-block rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
+                    最新結果を反映済み
                   </span>
                 )}
               </div>
 
-              {/* Score row */}
               <div className="mb-2 flex items-baseline gap-2">
-                <span className="font-mono text-xl font-bold text-slate-900">{estimate}</span>
-                <span className="text-xs text-slate-400">／</span>
+                <span className="font-mono text-xl font-bold text-slate-900">
+                  {latest === undefined ? "未測定" : latest}
+                </span>
+                <span className="text-xs text-slate-400">/</span>
                 {editing ? (
                   <input
                     type="number"
                     min={0}
                     max={100}
                     value={draft[subject.id] ?? ""}
-                    onChange={(e) =>
-                      setDraft((prev) => ({ ...prev, [subject.id]: e.target.value }))
+                    onChange={(event) =>
+                      setDraft((prev) => ({ ...prev, [subject.id]: event.target.value }))
                     }
                     className="w-16 rounded-md border border-blue-300 bg-white px-2 py-0.5 font-mono text-sm font-semibold text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                    aria-label={`${title}の目標点`}
+                    aria-label={`${subject.title}の目標点`}
                   />
                 ) : (
                   <span className="font-mono text-sm font-semibold text-slate-500">{target}</span>
                 )}
                 <span className="text-[10px] text-slate-400">点</span>
-                <span
-                  className="ml-auto text-[11px] font-bold"
-                  style={{
-                    color: gap <= 0 ? "#059669" : gap <= 10 ? "#059669" : gap <= 20 ? "#2563eb" : "#d97706",
-                  }}
-                >
-                  {gap <= 0 ? "目標達成圏" : `あと ${gap}点`}
-                </span>
+                {gap !== null && (
+                  <span className="ml-auto text-[11px] font-bold text-blue-600">
+                    {gap <= 0 ? "目標達成" : `あと ${gap}点`}
+                  </span>
+                )}
               </div>
 
-              {/* Progress bar */}
               <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
                 <div
                   className="h-full rounded-full transition-all"
-                  style={{ width: `${pct}%`, background: theme.primary }}
+                  style={{ width: `${pct}%`, background: subject.theme.primary }}
                 />
               </div>
-
               <div className="mt-1 text-right font-mono text-[9px] text-slate-300">
-                目標到達率 {pct}%
+                {latest === undefined ? "診断前" : `目標到達率 ${pct}%`}
               </div>
-              {!isLatest && (
-                <div className="mt-2 text-[11px] font-medium text-slate-500">
-                  まずは10分診断で現在地を測定
-                </div>
-              )}
             </div>
           );
         })}
       </div>
+
       {!anyLatest && (
         <div className="border-t border-amber-100 bg-amber-50/70 px-5 py-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="text-sm font-extrabold text-amber-800">
-                未診断のため仮スコアを表示中
-              </div>
+              <div className="text-sm font-extrabold text-amber-800">診断前です</div>
               <p className="mt-1 text-xs leading-5 text-amber-800/80">
-                診断を受けると、目標点との差、優先単元、今日の演習があなたの履歴に合わせて更新されます。
+                10分診断、大問別ドリル、冊子型模試を解くと、最新スコアと復習キューがここに反映されます。
               </p>
             </div>
-            <Link
-              href="/common-test/math-1a"
-              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-amber-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-amber-700"
-            >
-              共通テスト診断を受ける
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/common-test/math-1a"
+                className="inline-flex shrink-0 items-center justify-center rounded-xl border border-amber-200 bg-white px-4 py-2.5 text-xs font-bold text-amber-700 transition-colors hover:bg-amber-100"
+              >
+                共通テスト対策を始める
+              </Link>
+              <Link
+                href="/common-test/math-1a/section-1"
+                className="inline-flex shrink-0 items-center justify-center rounded-xl border border-amber-200 bg-white px-4 py-2.5 text-xs font-bold text-amber-700 transition-colors hover:bg-amber-100"
+              >
+                大問別ドリルを解く
+              </Link>
+              <Link
+                href="/common-test/simulator/math-1a-paper-001"
+                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-amber-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-amber-700"
+              >
+                冊子型模試を受ける
+              </Link>
+            </div>
           </div>
         </div>
       )}

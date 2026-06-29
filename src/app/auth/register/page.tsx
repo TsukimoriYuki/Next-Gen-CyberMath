@@ -6,13 +6,15 @@ import { AuthForm } from "@/components/auth/AuthForm";
 
 export const metadata: Metadata = {
   title: "新規登録",
-  description: "Cyber Math に学習用アカウントを作成し、演習履歴と復習導線を使い始めるページです。",
+  description:
+    "Cyber Mathに学習用アカウントを作成し、演習履歴と復習導線を使い始めるページです。",
   alternates: {
     canonical: "/auth/register",
   },
   openGraph: {
     title: "新規登録 | Cyber Math",
-    description: "Cyber Math に学習用アカウントを作成し、演習履歴と復習導線を使い始めるページです。",
+    description:
+      "Cyber Mathに学習用アカウントを作成し、演習履歴と復習導線を使い始めるページです。",
     url: "/auth/register",
   },
 };
@@ -24,7 +26,6 @@ export default async function RegisterPage() {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
-        {/* ロゴ */}
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
           <span className="glow-cyan flex h-14 w-14 items-center justify-center rounded-2xl bg-neon-cyan/10 text-neon-cyan">
             <Sigma className="h-7 w-7" strokeWidth={2.2} />
@@ -33,21 +34,18 @@ export default async function RegisterPage() {
             <h1 className="font-display text-2xl font-extrabold tracking-wide">
               CYBER<span className="text-neon-cyan">MATH</span>
             </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              新しい道場生として登録する
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">新しい学習者として登録する</p>
           </div>
         </div>
 
-        {/* カード */}
         <div className="glass rounded-3xl p-8 shadow-xl">
           <div className="mb-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-neon-violet/30 bg-neon-violet/5 px-3 py-1 font-mono text-xs uppercase tracking-[0.2em] text-neon-violet">
               Register
             </div>
-            <h2 className="mt-3 font-display text-xl font-bold">入門の儀</h2>
+            <h2 className="mt-3 font-display text-xl font-bold">アカウント作成</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              名前とパスコードを決めてください。師範コードは許可された指導者のみ入力します。
+              名前とパスコードを決めてください。指導者向け招待コードは、学校・塾などで案内された場合のみ入力します。
             </p>
           </div>
           <AuthForm mode="register" />

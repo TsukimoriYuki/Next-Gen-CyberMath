@@ -7,7 +7,17 @@ import { getSession } from "@/lib/auth";
 export async function GET(request: Request) {
   const session = await getSession();
   if (!session) {
-    return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
+    return Response.json({
+      ok: false,
+      authenticated: false,
+      items: [],
+      meta: {
+        total: 0,
+        todayCount: 0,
+        masteredCount: 0,
+        overdueCount: 0,
+      },
+    });
   }
 
   try {

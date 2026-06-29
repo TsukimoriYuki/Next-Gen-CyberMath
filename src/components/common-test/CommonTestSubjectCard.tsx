@@ -6,12 +6,12 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
   const { theme, route, title, shortTitle, examMinutes, sections, targetScoreDefault } = subject;
   const isSubSubject = subject.id === "english-reading";
   const priority = getPriorityLabel(subject);
-  const examId =
+  const simulatorHref =
     subject.id === "math-1a"
-      ? "math-1a-70"
+      ? "/common-test/simulator/math-1a-paper-001"
       : subject.id === "math-2bc"
-        ? "math-2bc-70"
-        : "english-reading-80";
+        ? "/common-test/simulator/math-2bc-70"
+        : "/common-test/simulator/english-reading-80";
 
   return (
     <article
@@ -22,7 +22,7 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
       <span className="h-1 w-full" style={{ background: theme.primary }} />
 
       <div className="flex flex-1 flex-col gap-4 p-5">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-3">
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-[11px] font-bold text-slate-500">{sections.length}大問構成</span>
@@ -47,7 +47,7 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
             <div className="text-sm font-extrabold text-slate-900">数学対策を優先中</div>
             <p className="mt-1 text-xs leading-5 text-slate-500">
-              読解演習は残しています。必要な日にだけ開ける補助科目です。
+              英語はβ版のサブ科目です。必要な日に開ける補強科目として残しています。
             </p>
           </div>
         ) : (
@@ -68,7 +68,7 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
               </div>
             </div>
             <p className="mt-2 text-[11px] leading-4 text-slate-500">
-              現在地は、演習・模試を解くと「目標点トラッカー」に表示されます。
+              現在地は、診断・ドリル・冊子型模試の結果からマイページへ反映されます。
             </p>
           </div>
         )}
@@ -77,7 +77,7 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
           <Target className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
           <div>
             <div className="text-[11px] font-bold text-blue-700">
-              {isSubSubject ? "扱い" : "最優先"}
+              {isSubSubject ? "扱い" : "優先"}
             </div>
             <p className="mt-0.5 text-xs font-semibold leading-5 text-slate-700">{priority}</p>
           </div>
@@ -98,13 +98,13 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
                 href={`${route}/section-${subject.id === "math-1a" ? "1" : "2"}`}
                 className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700"
               >
-                10分演習を始める
+                10分診断を始める
               </Link>
               <Link
-                href={`/common-test/simulator/${examId}`}
+                href={simulatorHref}
                 className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:border-blue-300 hover:text-blue-700"
               >
-                本番形式で解く
+                冊子型模試を受ける
               </Link>
             </>
           )}
@@ -116,10 +116,10 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
 
 function getPriorityLabel(subject: CommonTestSubject): string {
   if (subject.id === "math-1a") {
-    return "第1問 図形と計量。命題・三角比・誘導読解をまとめて伸ばす。";
+    return "第1問の図形と計量、命題、データ分析を固めると得点が伸びやすいです。";
   }
   if (subject.id === "math-2bc") {
-    return "第2問 微分積分。計算精度と時間配分を同時に確認する。";
+    return "微分積分は短時間で伸ばしやすいので、計算精度と時間配分を同時に確認します。";
   }
-  return "β版 / サブ科目。数学の演習後に読解速度を補強する。";
+  return "数学の演習後に、読解速度と情報照合を補強するためのサブ科目です。";
 }

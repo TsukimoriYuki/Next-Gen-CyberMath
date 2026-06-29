@@ -7,7 +7,7 @@ import { getProblem } from "@/lib/content";
 export async function GET() {
   const session = await getSession();
   if (!session) {
-    return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
+    return Response.json({ ok: false, authenticated: false, items: [] });
   }
 
   try {

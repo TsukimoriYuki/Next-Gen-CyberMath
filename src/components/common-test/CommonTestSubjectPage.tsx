@@ -1,13 +1,6 @@
-// Server Component - 科目別ページの共通レイアウト
 import Link from "next/link";
-import {
-  ArrowLeft,
-  BookOpen,
-  Clock,
-  ClipboardList,
-  LineChart,
-  Target,
-} from "lucide-react";
+import type { ReactNode } from "react";
+import { ArrowLeft, BookOpen, Clock, ClipboardList, LineChart, Target } from "lucide-react";
 import type { CommonTestSubject } from "@/data/common-test";
 import { CommonTestSectionGrid } from "./CommonTestSectionGrid";
 import { getCommonTestExamQuestions } from "@/lib/common-test-exams";
@@ -17,17 +10,7 @@ interface Props {
 }
 
 export function CommonTestSubjectPage({ subject }: Props) {
-  const {
-    theme,
-    title,
-    examMinutes,
-    targetScoreDefault,
-    estimatedScoreMock,
-    description,
-    sections,
-    scoreRoutes,
-  } = subject;
-  const gap = targetScoreDefault - estimatedScoreMock;
+  const { theme, title, examMinutes, targetScoreDefault, description, sections, scoreRoutes } = subject;
   const prioritySection = getPrioritySection(subject);
 
   return (
@@ -46,12 +29,8 @@ export function CommonTestSubjectPage({ subject }: Props) {
             <Badge icon={<BookOpen className="h-3.5 w-3.5" />} color={theme.primary}>
               数学特化の大問攻略
             </Badge>
-            <Badge icon={<Clock className="h-3.5 w-3.5" />}>
-              本番 {examMinutes}分
-            </Badge>
-            <Badge icon={<Target className="h-3.5 w-3.5" />}>
-              目標 {targetScoreDefault}点
-            </Badge>
+            <Badge icon={<Clock className="h-3.5 w-3.5" />}>本番 {examMinutes}分</Badge>
+            <Badge icon={<Target className="h-3.5 w-3.5" />}>目標 {targetScoreDefault}点</Badge>
           </div>
 
           <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_280px] lg:items-end">
@@ -62,37 +41,23 @@ export function CommonTestSubjectPage({ subject }: Props) {
               <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
                 {title}
               </h1>
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600">
-                {description}
-              </p>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600">{description}</p>
             </div>
 
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
-                <span>現在の目安</span>
-                <span>目標との差</span>
+                <span>現在地</span>
+                <span>目標点</span>
               </div>
               <div className="mt-2 flex items-end justify-between">
-                <div className="text-3xl font-extrabold text-slate-950">
-                  {estimatedScoreMock}
-                  <span className="ml-1 text-sm font-semibold text-slate-500">点</span>
-                </div>
-                <div
-                  className={`text-2xl font-extrabold ${
-                    gap > 0 ? "text-amber-600" : "text-emerald-600"
-                  }`}
-                >
-                  {gap > 0 ? `+${gap}` : gap}
-                </div>
+                <div className="text-2xl font-extrabold text-slate-950">未測定</div>
+                <div className="font-mono text-2xl font-extrabold text-blue-600">{targetScoreDefault}点</div>
               </div>
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
-                <div
-                  className="h-full rounded-full bg-blue-600"
-                  style={{ width: `${Math.min(100, estimatedScoreMock)}%` }}
-                />
+                <div className="h-full w-0 rounded-full bg-blue-600" />
               </div>
               <p className="mt-2 text-xs leading-5 text-slate-500">
-                まずは「あと何点」を確認し、最短で埋められる大問から練習します。
+                10分診断、大問別ドリル、冊子型模試を受けると現在地が更新されます。
               </p>
             </div>
           </div>
@@ -103,7 +68,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
             <div>
               <div className="text-xs font-bold text-blue-700">次にやるべき大問</div>
               <h2 className="mt-1 text-lg font-extrabold text-slate-950">
-                第{prioritySection.number}問：{prioritySection.title}
+                第{prioritySection.number}問: {prioritySection.title}
               </h2>
               <p className="mt-1 text-sm leading-6 text-slate-600">
                 {getPriorityReason(subject.id, prioritySection.number)}
@@ -122,7 +87,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
           <SectionTitle
             icon={<ClipboardList className="h-5 w-5" />}
             title="大問別ドリル"
-            description="配点・目標時間・優先度を見て、今の得点差を埋める順に練習します。"
+            description="配点、目標時間、優先度を見て、今の得点差を縮める順に練習します。"
           />
           <CommonTestSectionGrid sections={sections} theme={theme} subjectId={subject.id} />
         </section>
@@ -138,10 +103,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
             />
             <div className="mt-4 space-y-3">
               {scoreRoutes.map((route) => (
-                <div
-                  key={route.targetScore}
-                  className="rounded-xl border border-slate-200 bg-slate-50 p-4"
-                >
+                <div key={route.targetScore} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
                   <div className="flex items-center justify-between gap-3">
                     <div className="font-bold text-slate-900">{route.label}</div>
                     <div
@@ -154,9 +116,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
                       {route.targetScore}点
                     </div>
                   </div>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {route.strategy}
-                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{route.strategy}</p>
                 </div>
               ))}
             </div>
@@ -172,8 +132,8 @@ function Badge({
   icon,
   color = "#2563eb",
 }: {
-  children: React.ReactNode;
-  icon: React.ReactNode;
+  children: ReactNode;
+  icon: ReactNode;
   color?: string;
 }) {
   return (
@@ -197,7 +157,7 @@ function SectionTitle({
   description,
   compact = false,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
   compact?: boolean;
@@ -214,18 +174,21 @@ function SectionTitle({
 }
 
 function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
+  const isMath1A = subject.id === "math-1a";
   const examId =
     subject.id === "math-1a"
-      ? "math-1a-70"
+      ? "math-1a-paper-001"
       : subject.id === "math-2bc"
         ? "math-2bc-70"
         : "english-reading-80";
-  const questions = getCommonTestExamQuestions(examId);
-  const sectionCount = new Set(questions.map((q) => q.sectionId)).size;
+  const href = `/common-test/simulator/${examId}`;
+  const questions = isMath1A ? [] : getCommonTestExamQuestions(examId);
+  const sectionCount = isMath1A ? 4 : new Set(questions.map((question) => question.sectionId)).size;
+  const questionCount = isMath1A ? 22 : questions.length;
 
   return (
     <Link
-      href={`/common-test/simulator/${examId}`}
+      href={href}
       className="group rounded-2xl border border-blue-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md"
     >
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
@@ -234,17 +197,19 @@ function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">
-            本番演習
+            {isMath1A ? "冊子型模試" : "Web本番演習"}
           </p>
           <h2 className="mt-1 text-xl font-extrabold text-slate-950">
-            {subject.examMinutes}分で本番形式を解く
+            {isMath1A ? "冊子型 共通テスト数学IA 第1回を受ける" : `${subject.examMinutes}分で本番形式を解く`}
           </h2>
           <p className="mt-2 text-sm leading-6 text-slate-600">
-            {sectionCount}大問・{questions.length}問を本番形式で解き、時間内スコアと時間外スコアの差を確認します。
+            {isMath1A
+              ? "4大問 / 22小問 / 56マーク / 100点 / 70分。復習導線まで含めて確認します。"
+              : `${sectionCount}大問・${questionCount}問を本番形式で解き、時間配分と弱点を確認します。`}
           </p>
         </div>
         <span className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition group-hover:bg-blue-700">
-          {subject.examMinutes}分で本番演習する
+          {isMath1A ? "冊子型模試を開始" : "本番演習を開始"}
         </span>
       </div>
     </Link>
@@ -252,9 +217,9 @@ function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
 }
 
 function hexToRgb(hex: string): string {
-  const m = hex.match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
-  if (!m) return "37,99,235";
-  return `${parseInt(m[1], 16)},${parseInt(m[2], 16)},${parseInt(m[3], 16)}`;
+  const match = hex.match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+  if (!match) return "37,99,235";
+  return `${parseInt(match[1], 16)},${parseInt(match[2], 16)},${parseInt(match[3], 16)}`;
 }
 
 function getPrioritySection(subject: CommonTestSubject): CommonTestSubject["sections"][number] {
@@ -269,10 +234,10 @@ function getPrioritySection(subject: CommonTestSubject): CommonTestSubject["sect
 
 function getPriorityReason(subjectId: string, sectionNumber: number): string {
   if (subjectId === "math-1a" && sectionNumber === 1) {
-    return "図形と計量・命題は得点効率が高く、誘導読解の練習にもなります。";
+    return "図形と計量、命題は誘導を読めるようになると得点効率が高い大問です。";
   }
   if (subjectId === "math-2bc" && sectionNumber === 2) {
     return "微分積分は時間内に取り切る価値が高く、計算精度の改善が点数に直結します。";
   }
-  return "現在の目標差を埋めるために、短時間で確認しやすい大問です。";
+  return "現在地を測るために、短時間で確認しやすい大問から始めます。";
 }

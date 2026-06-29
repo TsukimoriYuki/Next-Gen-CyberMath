@@ -1,7 +1,7 @@
 export const SITE_NAME = "Cyber Math";
 
 export const SITE_DESCRIPTION =
-  "共通テスト数学IAを中心に、講義・演習・復習導線を一体化した高校数学の学習プラットフォーム。";
+  "共通テスト数学IAを中心に、講義・演習・模試・復習導線を一体化した高校数学の学習プラットフォーム。";
 
 export const PRODUCTION_SITE_URL = "https://next-gen-cyber-math.vercel.app";
 

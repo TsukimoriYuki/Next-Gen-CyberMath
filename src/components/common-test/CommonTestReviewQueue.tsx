@@ -126,7 +126,8 @@ export function CommonTestReviewQueue() {
         fetch("/api/review/list?limit=100"),
       ]);
 
-      setIsLoggedIn(meRes.ok);
+      const meData = meRes.ok ? await meRes.json() : { ok: false };
+      setIsLoggedIn(Boolean(meData.ok));
 
       if (listRes.ok) {
         const data = await listRes.json();

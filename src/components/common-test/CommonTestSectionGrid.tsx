@@ -1,4 +1,3 @@
-// Server Component - 大問別ドリルカード一覧
 import Link from "next/link";
 import { ChevronRight, Timer, TrendingUp } from "lucide-react";
 import type {
@@ -39,7 +38,6 @@ function SectionCard({
 }) {
   const drillHref = `/common-test/${subjectId}/section-${section.number}`;
   const tactic = getSectionTactic(subjectId, section);
-  const growth = Math.max(0, tactic.targetScore - tactic.currentScore);
 
   return (
     <article className="flex min-h-[300px] flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md">
@@ -94,10 +92,8 @@ function SectionCard({
       <div className="mt-5 grid grid-cols-2 gap-2">
         <Metric label="配点" value={`${section.maxScore}点`} />
         <Metric label="目標時間" value={`${section.recommendedMinutes}分`} />
-        <Metric label="現在" value={`${tactic.currentScore}/${section.maxScore}`} />
-        <Metric label="目標" value={`${tactic.targetScore}/${section.maxScore}`} />
-        <Metric label="平均時間" value={`${tactic.averageMinutes}分`} />
-        <Metric label="伸びしろ" value={`+${growth}点`} accent />
+        <Metric label="到達目安" value={tactic.target} />
+        <Metric label="伸ばし方" value={tactic.focus} accent />
       </div>
 
       <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
@@ -109,9 +105,7 @@ function SectionCard({
       </div>
 
       <div className="mt-auto flex flex-col gap-3 pt-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-xs leading-5 text-slate-500">
-          理由：{tactic.reason}
-        </div>
+        <div className="text-xs leading-5 text-slate-500">理由: {tactic.reason}</div>
         <Link
           href={drillHref}
           className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700"
@@ -136,7 +130,7 @@ function Metric({
   return (
     <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
       <div className="text-[10px] font-bold text-slate-500">{label}</div>
-      <div className={`mt-0.5 font-mono text-sm font-extrabold ${accent ? "text-amber-600" : "text-slate-900"}`}>
+      <div className={`mt-0.5 text-sm font-extrabold ${accent ? "text-amber-600" : "text-slate-900"}`}>
         {value}
       </div>
     </div>
@@ -144,119 +138,58 @@ function Metric({
 }
 
 function getSectionTactic(subjectId: CommonTestSubjectId, section: CommonTestSection) {
-  const base = SECTION_TACTICS[`${subjectId}:${section.number}`] ?? {
-    currentScore: Math.max(0, section.maxScore - 7),
-    targetScore: Math.max(1, section.maxScore - 2),
-    averageMinutes: section.recommendedMinutes + 2,
+  return SECTION_TACTICS[`${subjectId}:${section.number}`] ?? {
     priority: "中" as const,
-    reason: "短時間で現在地を測り、復習キューに弱点を残せます。",
-    examGoal: "誘導に乗れる問題を確実に取り、難問は時間を使いすぎない。",
-  };
-
-  return {
-    ...base,
-    targetScore: Math.min(section.maxScore, base.targetScore),
-    currentScore: Math.min(section.maxScore, base.currentScore),
+    target: "満点近く",
+    focus: "読み落とし",
+    reason: "短時間で現在地を測り、復習キューに弱点を残しやすい大問です。",
+    examGoal: "誘導に乗れる設問を確実に取り、時間を使いすぎないことを目標にします。",
   };
 }
 
 const SECTION_TACTICS: Record<
   string,
   {
-    currentScore: number;
-    targetScore: number;
-    averageMinutes: number;
     priority: "高" | "中" | "低";
+    target: string;
+    focus: string;
     reason: string;
     examGoal: string;
   }
 > = {
   "math-1a:1": {
-    currentScore: 18,
-    targetScore: 25,
-    averageMinutes: 23,
     priority: "高",
-    reason: "図形と計量・命題は得点効率が高く、目標80点への差を埋めやすい。",
-    examGoal: "前半を落とさず、図形誘導は途中式まで粘って25点を狙う。",
+    target: "25点以上",
+    focus: "公式判断",
+    reason: "図形と計量、命題は読み方を固めると短期間で伸ばしやすいです。",
+    examGoal: "前半で止まらず、図形条件と誘導式を結びつけて25点以上を狙います。",
   },
   "math-1a:2": {
-    currentScore: 20,
-    targetScore: 24,
-    averageMinutes: 22,
     priority: "中",
-    reason: "二次関数は伸ばしやすい一方、データの分析に時間を吸われすぎない調整が必要。",
-    examGoal: "二次関数を先に固め、データ処理は計算ミスを最小化する。",
+    target: "24点以上",
+    focus: "計算精度",
+    reason: "二次関数とデータ分析は計算の型を決めると安定します。",
+    examGoal: "二次関数を先に固め、データ分析では読み替えミスを減らします。",
   },
   "math-1a:3": {
-    currentScore: 11,
-    targetScore: 16,
-    averageMinutes: 17,
     priority: "高",
-    reason: "図形の性質は定理選択が決まると短時間で得点を伸ばせる。",
-    examGoal: "方べき・メネラウスの使いどころを判断して16点を狙う。",
+    target: "16点以上",
+    focus: "補助線",
+    reason: "図形の性質は定理選択が決まると得点に直結します。",
+    examGoal: "等しい角、辺の比、中心を見つけて、後半設問まで粘ります。",
   },
   "math-1a:4": {
-    currentScore: 12,
-    targetScore: 16,
-    averageMinutes: 16,
     priority: "中",
-    reason: "確率は条件整理の型を作ると安定しやすい。",
-    examGoal: "条件付き確率と数え上げを先に取り、重い設問は深追いしない。",
-  },
-  "math-2bc:1": {
-    currentScore: 9,
-    targetScore: 12,
-    averageMinutes: 13,
-    priority: "中",
-    reason: "図形と三角関数は小問を取り切るだけで安定得点になります。",
-    examGoal: "円と直線・三角関数の基本変形を落とさず12点を狙う。",
+    target: "16点以上",
+    focus: "条件整理",
+    reason: "確率は条件を表に落とす練習で失点を減らせます。",
+    examGoal: "条件付き確率と数え上げを先に取り、重い設問で深追いしすぎないようにします。",
   },
   "math-2bc:2": {
-    currentScore: 8,
-    targetScore: 13,
-    averageMinutes: 15,
     priority: "高",
-    reason: "微分積分は計算精度の改善がそのまま得点に反映されます。",
-    examGoal: "接線・増減・面積の標準処理を時間内に完走する。",
-  },
-  "math-2bc:3": {
-    currentScore: 13,
-    targetScore: 18,
-    averageMinutes: 18,
-    priority: "高",
-    reason: "数列は誘導読解の型ができると大きく伸ばせます。",
-    examGoal: "漸化式の誘導を読み落とさず、前半で確実に点を積む。",
-  },
-  "math-2bc:4": {
-    currentScore: 9,
-    targetScore: 12,
-    averageMinutes: 12,
-    priority: "低",
-    reason: "選択候補として基礎確認に留め、数学本体の必答を優先します。",
-    examGoal: "選ぶ場合は定義確認で失点を減らし、長い計算は深追いしない。",
-  },
-  "math-2bc:5": {
-    currentScore: 10,
-    targetScore: 13,
-    averageMinutes: 12,
-    priority: "中",
-    reason: "ベクトルは得意化できれば選択問題の安定枠になります。",
-    examGoal: "内積・位置ベクトルを素早く処理して13点を狙う。",
-  },
-  "math-2bc:6": {
-    currentScore: 8,
-    targetScore: 11,
-    averageMinutes: 12,
-    priority: "低",
-    reason: "曲線は選択判断が重要。まず取れる設問だけ見極めます。",
-    examGoal: "標準変形を拾い、時間を使いすぎる設問は切る。",
-  },
-  "math-2bc:7": {
-    currentScore: 8,
-    targetScore: 11,
-    averageMinutes: 12,
-    priority: "低",
-    reason: "複素数平面は選択候補として、基本操作の確認に絞ります。",
-    examGoal: "偏角・回転の基本を取り、難しい図形処理は深入りしない。",
+    target: "13点以上",
+    focus: "微積計算",
+    reason: "微分積分は計算精度の改善が得点に反映されやすいです。",
+    examGoal: "接線、増減、面積の標準処理を70分内で走り切ります。",
   },
 };

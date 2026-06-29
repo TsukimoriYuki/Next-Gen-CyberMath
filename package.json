@@ -9,6 +9,7 @@
     "lint": "eslint",
     "audit:course-formulas": "node scripts/audit-course-formulas.mjs",
     "qa:public": "tsx scripts/check-public-quality.ts",
+    "qa:public:live": "tsx scripts/check-live-public-quality.ts",
     "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",

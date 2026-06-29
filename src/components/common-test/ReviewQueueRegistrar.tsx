@@ -47,7 +47,8 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
 
   useEffect(() => {
     fetch("/api/auth/me")
-      .then((r) => setIsLoggedIn(r.ok))
+      .then((r) => r.json())
+      .then((data) => setIsLoggedIn(Boolean(data.ok)))
       .catch(() => setIsLoggedIn(false));
   }, []);
 

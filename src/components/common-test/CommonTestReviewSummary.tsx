@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
-import { Layers, AlertTriangle, Trophy, Flame, LogIn } from "lucide-react";
+import { AlertTriangle, Flame, Layers, LogIn, Trophy } from "lucide-react";
 
 interface ListMeta {
   todayCount: number;
@@ -22,9 +23,11 @@ export function CommonTestReviewSummary() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/auth/me").then((r) => r.ok),
-      fetch("/api/review/list?limit=100").then((r) =>
-        r.ok ? r.json() : { ok: false }
+      fetch("/api/auth/me")
+        .then((response) => response.json())
+        .then((data) => Boolean(data.ok)),
+      fetch("/api/review/list?limit=100").then((response) =>
+        response.ok ? response.json() : { ok: false },
       ),
     ])
       .then(([loggedIn, listData]) => {
@@ -36,7 +39,7 @@ export function CommonTestReviewSummary() {
           setState({ isLoggedIn: true, meta: null, topWeakTag: null });
           return;
         }
-        // Top weak tag from active items
+
         const items = (listData.items ?? []) as {
           itemType: string;
           status: string;
@@ -44,19 +47,19 @@ export function CommonTestReviewSummary() {
           nextReviewAt: string;
         }[];
         const commonTestItems = items.filter(
-          (item) => item.itemType === "common-test-drill" || item.itemType === "common-test-lecture"
+          (item) => item.itemType === "common-test-drill" || item.itemType === "common-test-lecture",
         );
         const now = new Date();
         const meta = {
           total: commonTestItems.length,
           todayCount: commonTestItems.filter(
-            (item) => item.status === "ACTIVE" && new Date(item.nextReviewAt) <= now
+            (item) => item.status === "ACTIVE" && new Date(item.nextReviewAt) <= now,
           ).length,
           overdueCount: commonTestItems.filter(
             (item) =>
               item.status === "ACTIVE" &&
               new Date(item.nextReviewAt) < now &&
-              new Date(item.nextReviewAt).toDateString() !== now.toDateString()
+              new Date(item.nextReviewAt).toDateString() !== now.toDateString(),
           ).length,
           masteredCount: commonTestItems.filter((item) => item.status === "MASTERED").length,
         };
@@ -79,14 +82,10 @@ export function CommonTestReviewSummary() {
       });
   }, []);
 
-  // Loading
   if (state === null) {
-    return (
-      <div className="animate-pulse rounded-2xl border border-slate-200 bg-white p-4" style={{ minHeight: 72 }} />
-    );
+    return <div className="min-h-[72px] animate-pulse rounded-2xl border border-slate-200 bg-white p-4" />;
   }
 
-  // Not logged in
   if (!state.isLoggedIn) {
     return (
       <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -106,7 +105,7 @@ export function CommonTestReviewSummary() {
           href="/auth/login"
           className="shrink-0 rounded-lg bg-blue-600 px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700"
         >
-          ログインして復習を保存
+          ログインする
         </Link>
       </div>
     );
@@ -118,7 +117,6 @@ export function CommonTestReviewSummary() {
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      {/* Header */}
       <div
         className="flex items-center justify-between border-b px-5 py-3"
         style={{
@@ -141,11 +139,10 @@ export function CommonTestReviewSummary() {
           href="/common-test/review"
           className="text-xs font-bold text-blue-600 transition-colors hover:text-blue-700"
         >
-          {urgent ? `今日の復習${dueCount}問を解く →` : "復習キューを開く →"}
+          {urgent ? `今日の復習 ${dueCount}問を解く` : "復習キューを開く"}
         </Link>
       </div>
 
-      {/* Stats grid */}
       <div className="grid grid-cols-2 divide-x divide-y divide-slate-100 sm:grid-cols-4 sm:divide-y-0">
         <SummaryCell
           icon={<AlertTriangle className="h-3.5 w-3.5" />}
@@ -168,7 +165,7 @@ export function CommonTestReviewSummary() {
         <SummaryCell
           icon={<Flame className="h-3.5 w-3.5" />}
           label="最多弱点"
-          value={topWeakTag ?? "—"}
+          value={topWeakTag ?? "-"}
           color="#d97706"
           small
         />
@@ -184,7 +181,7 @@ function SummaryCell({
   color,
   small,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: number | string;
   color: string;

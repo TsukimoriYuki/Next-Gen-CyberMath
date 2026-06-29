@@ -45,9 +45,7 @@ export function PublicInfoPage({
             key={section.title}
             className="rounded-2xl border border-border/70 bg-card/70 p-5"
           >
-            <h2 className="font-display text-lg font-bold text-foreground">
-              {section.title}
-            </h2>
+            <h2 className="font-display text-lg font-bold text-foreground">{section.title}</h2>
             <div className="mt-3 space-y-2 text-sm leading-7 text-muted-foreground">
               {section.body.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
