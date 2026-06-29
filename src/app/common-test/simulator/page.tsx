@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Clock, BookOpen, Zap } from "lucide-react";
 import { getAllCommonTestExamPresets } from "@/data/common-test-exams";
 import type { CommonTestExamPreset } from "@/data/common-test-exams";
-import { getCommonTestExamQuestions } from "@/lib/common-test-exams";
+import { getExamQuestionSummary } from "@/lib/common-test-exams";
 
 export const metadata: Metadata = {
   title: "本番演習 — 共通テスト対策室",
@@ -139,8 +139,7 @@ export default function SimulatorIndexPage() {
 
 function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
   const minutes = preset.examLimitSec / 60;
-  const questions = getCommonTestExamQuestions(preset.id);
-  const sectionCount = new Set(questions.map((q) => q.sectionId)).size;
+  const summary = getExamQuestionSummary(preset);
 
   return (
     <div className={`relative flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-slate-300 hover:shadow-md ${
@@ -185,8 +184,8 @@ function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
       {/* Stats */}
       <div className="flex flex-wrap gap-2">
         <StatPill icon={<Clock className="h-3 w-3" />} label={`${minutes}分`} />
-        <StatPill icon={<BookOpen className="h-3 w-3" />} label={`${sectionCount}大問`} />
-        <StatPill icon={<Zap className="h-3 w-3" />} label={`${questions.length}問`} />
+        <StatPill icon={<BookOpen className="h-3 w-3" />} label={summary.sectionCountLabel} />
+        <StatPill icon={<Zap className="h-3 w-3" />} label={summary.questionCountLabel} />
       </div>
 
       {/* Description */}

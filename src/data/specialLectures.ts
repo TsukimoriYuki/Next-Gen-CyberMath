@@ -1521,8 +1521,8 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
         title: "類題と次の演習",
         items: [
           {
-            title: "数学IA 第3問 確率",
-            href: "/common-test/math-1a/section-3",
+            title: "数学IA 第4問 場合の数と確率",
+            href: "/common-test/math-1a/section-4",
             note: "誘導文を読みながら10分演習",
           },
           {
@@ -1961,8 +1961,8 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
         title: "類題と次の演習",
         items: [
           {
-            title: "数学IA 第4問 図形の性質",
-            href: "/common-test/math-1a/section-4",
+            title: "数学IA 第3問 図形の性質",
+            href: "/common-test/math-1a/section-3",
             note: "補助線と相似を20分練習",
           },
           {

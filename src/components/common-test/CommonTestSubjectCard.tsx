@@ -3,7 +3,7 @@ import { ArrowRight, Clock, Target } from "lucide-react";
 import type { CommonTestSubject } from "@/data/common-test";
 
 export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject }) {
-  const { theme, route, title, shortTitle, examMinutes, sections, estimatedScoreMock, targetScoreDefault } = subject;
+  const { theme, route, title, shortTitle, examMinutes, sections, targetScoreDefault } = subject;
   const isSubSubject = subject.id === "english-reading";
   const priority = getPriorityLabel(subject);
   const examId =
@@ -12,8 +12,6 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
       : subject.id === "math-2bc"
         ? "math-2bc-70"
         : "english-reading-80";
-  const pct = Math.min(100, Math.round((estimatedScoreMock / targetScoreDefault) * 100));
-  const gap = Math.max(0, targetScoreDefault - estimatedScoreMock);
 
   return (
     <article
@@ -56,22 +54,22 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
             <div className="flex items-end justify-between gap-3">
               <div>
-                <div className="text-[11px] font-bold text-slate-500">現在 / 目標</div>
+                <div className="text-[11px] font-bold text-slate-500">目標点</div>
                 <div className="mt-1 font-mono text-2xl font-extrabold text-slate-950">
-                  {estimatedScoreMock}
-                  <span className="mx-1 text-sm text-slate-400">/</span>
-                  <span className="text-base text-slate-600">{targetScoreDefault}</span>
+                  {targetScoreDefault}
                   <span className="ml-1 text-xs text-slate-400">点</span>
                 </div>
               </div>
               <div className="rounded-lg bg-white px-3 py-2 text-right ring-1 ring-slate-200">
-                <div className="text-[10px] font-bold text-slate-500">あと</div>
-                <div className="font-mono text-xl font-extrabold text-amber-600">{gap}点</div>
+                <div className="text-[10px] font-bold text-slate-500">構成</div>
+                <div className="font-mono text-sm font-extrabold text-slate-700">
+                  {sections.length}大問 / {examMinutes}分
+                </div>
               </div>
             </div>
-            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full rounded-full" style={{ width: `${pct}%`, background: theme.primary }} />
-            </div>
+            <p className="mt-2 text-[11px] leading-4 text-slate-500">
+              現在地は、演習・模試を解くと「目標点トラッカー」に表示されます。
+            </p>
           </div>
         )}
 

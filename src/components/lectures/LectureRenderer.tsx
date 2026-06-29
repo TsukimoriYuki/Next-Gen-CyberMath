@@ -101,6 +101,8 @@ export function LectureBlockView({
             <img
               src={block.src}
               alt={block.alt}
+              loading="lazy"
+              decoding="async"
               className="mx-auto block h-auto w-full max-w-[640px] object-contain"
             />
           </div>

@@ -151,7 +151,7 @@ export function AIOracle() {
               className="animate-pulse font-mono text-sm font-semibold"
               style={{ color: "#a78bfa" }}
             >
-              🤖 脳波スキャン中... (Analyzing Data)
+              学習データを分析しています…
             </p>
           </div>
         </div>

@@ -8,6 +8,7 @@ import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import type { CommonTestConfidence } from "@/lib/common-test-history";
 import {
   filterExamQuestionsBySections,
+  getExamQuestionSummary,
   getExamSectionInfos,
 } from "@/lib/common-test-exams";
 import {
@@ -364,12 +365,8 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
       : [];
     const selectCount = preset.optionalSelectCount ?? 0;
     const canStart = !isSelective || selectedOptional.length === selectCount;
-    const activeSectionIds = isSelective
-      ? [...preset.requiredSectionIds!, ...selectedOptional]
-      : preset.sectionIds;
-    const activeQuestionCount = questions.filter((q) =>
-      activeSectionIds.includes(q.sectionId)
-    ).length;
+    // 一覧・詳細で一致させるため、問題数/大問数は単一の定義源から取る。
+    const examSummary = getExamQuestionSummary(preset);
 
     return (
       <div className="relative flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 py-12 text-slate-900">
@@ -419,9 +416,9 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
                 {
                   icon: <BookOpen className="h-4 w-4" />,
                   label: "大問数",
-                  value: isSelective ? `必答${requiredInfos.length}+選択${selectCount}` : `${sectionInfos.length}大問`,
+                  value: examSummary.sectionCountLabel,
                 },
-                { icon: <Zap className="h-4 w-4" />, label: "問題数", value: `${activeQuestionCount}問` },
+                { icon: <Zap className="h-4 w-4" />, label: "問題数", value: examSummary.questionCountLabel },
               ].map((s) => (
                 <div
                   key={s.label}

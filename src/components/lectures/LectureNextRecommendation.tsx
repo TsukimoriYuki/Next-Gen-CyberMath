@@ -67,6 +67,7 @@ export function LectureNextRecommendation({ currentSlug }: { currentSlug: string
         </div>
         <Link
           href={status === "in-progress" ? `/common-test/lectures/${next.slug}?resume=1` : `/common-test/lectures/${next.slug}`}
+          aria-label={`${next.title}を${status === "completed" ? "もう一度復習する" : status === "in-progress" ? "続きから再開" : "講義を受ける"}`}
           className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition ${
             status === "completed"
               ? "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"

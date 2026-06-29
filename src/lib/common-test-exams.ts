@@ -876,3 +876,58 @@ export function getExamSectionInfos(
     })
     .sort((a, b) => a.sectionNumber - b.sectionNumber);
 }
+
+/**
+ * 一覧・詳細・採点で表示する問題数の「単一の定義源」。
+ * 選択制（数IIBC）は、全大問の総数（一覧で見えていた36など）ではなく、
+ * 「必答の小問数」と「選択題数」を分けて表示し、何を数えているかを明確にする。
+ */
+export interface ExamQuestionSummary {
+  /** 大問数（全体） */
+  sectionCount: number;
+  /** 選択制かどうか */
+  isSelective: boolean;
+  /** 必答の大問数 */
+  requiredSectionCount: number;
+  /** 選択候補から選ぶ題数 */
+  optionalSelectCount: number;
+  /** 必答の小問数 */
+  requiredQuestionCount: number;
+  /** 全大問の小問総数（選択候補をすべて含む） */
+  totalQuestionCount: number;
+  /** 一覧・詳細で共通表示する「問題数」ラベル */
+  questionCountLabel: string;
+  /** 一覧・詳細で共通表示する「大問数」ラベル */
+  sectionCountLabel: string;
+}
+
+export function getExamQuestionSummary(preset: CommonTestExamPreset): ExamQuestionSummary {
+  const questions = getCommonTestExamQuestions(preset.id);
+  const sectionCount = preset.sectionIds.length;
+  const isSelective =
+    !!preset.requiredSectionIds &&
+    !!preset.optionalSectionIds &&
+    !!preset.optionalSelectCount;
+  const requiredSectionCount = preset.requiredSectionIds?.length ?? sectionCount;
+  const optionalSelectCount = preset.optionalSelectCount ?? 0;
+  const requiredQuestionCount = preset.requiredSectionIds
+    ? questions.filter((q) => preset.requiredSectionIds!.includes(q.sectionId)).length
+    : questions.length;
+  const totalQuestionCount = questions.length;
+  const sectionCountLabel = isSelective
+    ? `必答${requiredSectionCount}＋選択${optionalSelectCount}大問`
+    : `${sectionCount}大問`;
+  const questionCountLabel = isSelective
+    ? `必答${requiredQuestionCount}問＋選択${optionalSelectCount}題`
+    : `${totalQuestionCount}問`;
+  return {
+    sectionCount,
+    isSelective,
+    requiredSectionCount,
+    optionalSelectCount,
+    requiredQuestionCount,
+    totalQuestionCount,
+    questionCountLabel,
+    sectionCountLabel,
+  };
+}

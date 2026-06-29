@@ -121,8 +121,18 @@ function CourseSubjectCard({ subject }: { subject: CourseSubject }) {
         <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
           {subject.units.length}単元
         </span>
-        <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
-          {isPremium && lessonCount === 0 ? "講座公開予定" : `${lessonCount}講座`}
+        <span
+          className={`rounded-full border px-2.5 py-1 ${
+            lessonCount === 0
+              ? "border-amber-200 bg-amber-50 font-bold text-amber-700"
+              : "border-slate-200 bg-slate-50"
+          }`}
+        >
+          {lessonCount === 0
+            ? isPremium
+              ? "講座公開予定"
+              : "準備中"
+            : `${lessonCount}講座`}
         </span>
       </div>
       <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-blue-600">

@@ -42,14 +42,19 @@ export default function PortalPage() {
       />
 
       {/* Header label */}
-      <div className="relative mb-12 text-center">
+      <div className="relative mb-12 max-w-2xl text-center">
         <p className="font-mono text-xs uppercase tracking-[0.35em] text-white/30">
-          Next-Gen · Education Platform
+          Cyber Math · Next-Gen Education Platform
         </p>
-        <h1 className="mt-3 font-display text-5xl font-extrabold tracking-tight text-white sm:text-7xl">
-          C Y B E R
+        <h1 className="mt-4 font-display text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
+          高校数学・共通テストを、
+          <br className="hidden sm:block" />
+          講義・演習・模試・復習で攻略する
         </h1>
-        <p className="mt-1 font-mono text-sm tracking-[0.5em] text-white/40 uppercase">
+        <p className="mt-4 text-sm leading-relaxed text-white/55 sm:text-base">
+          数学IA・IIBC の講義と共通テスト型演習、復習キュー、本番模試をつなげた学習プラットフォームです。
+        </p>
+        <p className="mt-5 font-mono text-xs uppercase tracking-[0.4em] text-white/30">
           Choose your subject
         </p>
       </div>

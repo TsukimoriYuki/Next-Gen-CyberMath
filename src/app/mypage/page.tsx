@@ -233,25 +233,40 @@ export default function MyPage() {
               >
                 <Sparkles className="mx-auto mb-3 h-8 w-8" style={{ color: "#e879f9" }} />
                 <p className="mb-1 font-display text-lg font-bold text-white">
-                  まだ記録がありません
+                  まだ学習データがありません
                 </p>
-                <p className="mb-5 text-sm leading-6 text-white/40">
-                  サイバー模試を受験して採点を確定すると、ここに得点推移と弱点単元が記録されます。
+                <p className="mb-6 text-sm leading-6 text-white/50">
+                  共通テストの大問別ドリルを1問解くか、サイバー模試を受けて採点を確定すると、
+                  ここに正答率・弱点単元・得点推移・復習予定が表示されます。
                   <br />
                   初回の目安は10〜20分です。
                 </p>
-                <Link
-                  href="/mock"
-                  className="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-display font-bold transition-colors"
-                  style={{
-                    background: "rgba(232,121,249,0.15)",
-                    border: "1px solid rgba(232,121,249,0.4)",
-                    color: "#e879f9",
-                  }}
-                >
-                  <Sparkles className="h-4 w-4" />
-                  数学の模試を始める
-                </Link>
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  <Link
+                    href="/common-test"
+                    className="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-display font-bold transition-colors"
+                    style={{
+                      background: "rgba(96,165,250,0.15)",
+                      border: "1px solid rgba(96,165,250,0.4)",
+                      color: "#93c5fd",
+                    }}
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    大問別ドリルを解く
+                  </Link>
+                  <Link
+                    href="/mock"
+                    className="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-display font-bold transition-colors"
+                    style={{
+                      background: "rgba(232,121,249,0.15)",
+                      border: "1px solid rgba(232,121,249,0.4)",
+                      color: "#e879f9",
+                    }}
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    サイバー模試を始める
+                  </Link>
+                </div>
               </div>
             ) : (
               <div className="space-y-6">

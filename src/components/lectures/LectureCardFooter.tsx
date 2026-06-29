@@ -76,6 +76,7 @@ export function LectureCardFooter({ lecture }: { lecture: Lecture }) {
         </div>
         <Link
           href={cta.href}
+          aria-label={`${lecture.title}を${cta.label}`}
           className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition ${cta.className}`}
         >
           {cta.label}

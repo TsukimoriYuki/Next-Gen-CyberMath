@@ -555,6 +555,118 @@ function checkReviewShortcutRoutes() {
   }
 }
 
+// ── Deep Research P0/P1 リグレッションガード ──────────────────────────────
+
+const PLACEHOLDER_TEXT_PATTERNS = ["脳波スキャン"];
+
+function checkPlaceholderText() {
+  for (const dir of SCAN_DIRS) {
+    for (const file of walk(path.join(ROOT, dir))) {
+      const source = fs.readFileSync(file, "utf8");
+      for (const pattern of PLACEHOLDER_TEXT_PATTERNS) {
+        const index = source.indexOf(pattern);
+        if (index >= 0) {
+          issues.push(`${relative(file)}:${lineOf(source, index)} placeholder-only text "${pattern}"`);
+        }
+      }
+    }
+  }
+}
+
+function checkHomeHeadline() {
+  const file = path.join(ROOT, "src/app/page.tsx");
+  if (!fs.existsSync(file)) {
+    issues.push("missing src/app/page.tsx");
+    return;
+  }
+  const source = fs.readFileSync(file, "utf8");
+  const match = source.match(/<h1[^>]*>([\s\S]*?)<\/h1>/);
+  if (!match) {
+    issues.push("home: no <h1> found on src/app/page.tsx");
+    return;
+  }
+  const text = match[1]
+    .replace(/\{[^}]*\}/g, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!/[぀-ヿ一-龯]/.test(text) || text.replace(/\s/g, "").length < 8) {
+    issues.push(`home H1 should describe the service, not just a wordmark (got: "${text}")`);
+  }
+}
+
+function checkMockNanGuards() {
+  const file = path.join(ROOT, "src/app/mock/page.tsx");
+  if (!fs.existsSync(file)) {
+    issues.push("missing src/app/mock/page.tsx");
+    return;
+  }
+  const source = fs.readFileSync(file, "utf8");
+  if (!source.includes("Number.isFinite")) {
+    issues.push("src/app/mock/page.tsx: computed plan numbers must be guarded with Number.isFinite to avoid NaN");
+  }
+}
+
+function checkExamCountSingleSource() {
+  const files = [
+    "src/app/common-test/simulator/page.tsx",
+    "src/components/common-test/exam/CommonTestExamRunner.tsx",
+  ];
+  for (const rel of files) {
+    const full = path.join(ROOT, rel);
+    if (!fs.existsSync(full)) {
+      issues.push(`missing ${rel}`);
+      continue;
+    }
+    const source = fs.readFileSync(full, "utf8");
+    if (!source.includes("getExamQuestionSummary")) {
+      issues.push(`${rel}: exam 問題数/大問数 must come from getExamQuestionSummary (single source) to keep list and detail consistent`);
+    }
+  }
+}
+
+function checkDemoScoreLeak() {
+  // 未診断なのに「現在地スコア」を静的にでっち上げて表示していないか。
+  const file = path.join(ROOT, "src/components/common-test/CommonTestSubjectCard.tsx");
+  if (!fs.existsSync(file)) return;
+  const source = fs.readFileSync(file, "utf8");
+  if (source.includes("estimatedScoreMock")) {
+    issues.push("CommonTestSubjectCard.tsx: must not render estimatedScoreMock as a current score (undiagnosed demo score)");
+  }
+}
+
+const MATH_1A_SECTION_KEYWORDS: Record<number, string[]> = {
+  1: ["図形と計量", "数と式", "命題", "集合"],
+  2: ["二次関数", "2次関数", "データ"],
+  3: ["図形の性質"],
+  4: ["確率", "場合の数"],
+};
+
+function checkSectionTaxonomy() {
+  for (const lecture of SPECIAL_LECTURES) {
+    for (const block of lecture.blocks) {
+      if (block.type !== "relatedProblems") continue;
+      for (const item of block.items) {
+        const hrefMatch = item.href?.match(/\/common-test\/math-1a\/section-(\d)/);
+        if (!hrefMatch) continue;
+        const sectionNum = parseInt(hrefMatch[1], 10);
+        const numMatch = item.title.match(/第(\d)問/);
+        if (numMatch && parseInt(numMatch[1], 10) !== sectionNum) {
+          issues.push(
+            `${lecture.slug}: relatedProblem "${item.title}" says 第${numMatch[1]}問 but links to section-${sectionNum}`,
+          );
+        }
+        const keywords = MATH_1A_SECTION_KEYWORDS[sectionNum];
+        if (keywords && !keywords.some((k) => item.title.includes(k))) {
+          issues.push(
+            `${lecture.slug}: relatedProblem "${item.title}" does not match 数学IA 第${sectionNum}問 (${keywords[0]})`,
+          );
+        }
+      }
+    }
+  }
+}
+
 async function main() {
   checkSourceFiles();
   checkSiteUrlConfig();
@@ -569,6 +681,12 @@ async function main() {
   checkLectureAnchors();
   checkContentRelations();
   checkReviewShortcutRoutes();
+  checkPlaceholderText();
+  checkHomeHeadline();
+  checkMockNanGuards();
+  checkExamCountSingleSource();
+  checkDemoScoreLeak();
+  checkSectionTaxonomy();
 
   if (issues.length > 0) {
     console.error(`Public quality check failed: ${issues.length} issue(s).`);
