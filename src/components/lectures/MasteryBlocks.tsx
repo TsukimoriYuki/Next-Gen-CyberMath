@@ -19,6 +19,22 @@ type SolutionFlowBlockData = Extract<LectureBlock, { type: "solutionFlow" }>;
 type DiscriminationDrillBlockData = Extract<LectureBlock, { type: "discriminationDrill" }>;
 type MistakeRecoveryBlockData = Extract<LectureBlock, { type: "mistakeRecovery" }>;
 
+function mathLabel(text: string) {
+  return text
+    .replace(/\$/g, "")
+    .replace(/\\le\b/g, "≤")
+    .replace(/\\ge\b/g, "≥")
+    .replace(/\\lt\b/g, "<")
+    .replace(/\\gt\b/g, ">")
+    .replace(/\\cdot\b/g, "×")
+    .replace(/\\times\b/g, "×")
+    .replace(/\\sqrt\b/g, "平方根")
+    .replace(/\\frac\b/g, "分数")
+    .replace(/[{}]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 // ── 解法判別フロー：「何が見えたら、どの道具を選ぶか」 ─────────────────────
 export function SolutionFlowBlock({ block }: { block: SolutionFlowBlockData }) {
   return (
@@ -43,7 +59,7 @@ export function SolutionFlowBlock({ block }: { block: SolutionFlowBlockData }) {
             className="grid gap-2 p-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-4 sm:px-6"
           >
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-              <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-slate-400">
+              <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-slate-600">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-slate-200 text-[9px] font-mono text-slate-600">
                   {i + 1}
                 </span>
@@ -53,10 +69,10 @@ export function SolutionFlowBlock({ block }: { block: SolutionFlowBlockData }) {
             </div>
             <div className="flex items-center justify-center text-blue-400">
               <ArrowRight className="hidden h-5 w-5 sm:block" />
-              <span className="text-xs font-bold text-blue-500 sm:hidden">↓ 道具を選ぶ</span>
+              <span className="text-xs font-bold text-blue-700 sm:hidden">↓ 道具を選ぶ</span>
             </div>
             <div className="rounded-xl border border-blue-200 bg-blue-50 p-3">
-              <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-blue-500">
+              <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-blue-700">
                 <Wrench className="h-3 w-3" />
                 使う道具
               </div>
@@ -175,6 +191,8 @@ export function DiscriminationDrillBlock({
                       data-is-answer={String(isAnswer)}
                       disabled={answered}
                       onClick={() => choose(i, choice)}
+                      aria-label={`選択肢: ${mathLabel(choice)}`}
+                      aria-pressed={isChosen}
                       className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-sm font-bold transition ${
                         showCorrect
                           ? "border-emerald-300 bg-emerald-50 text-emerald-800"

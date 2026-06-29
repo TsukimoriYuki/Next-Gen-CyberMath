@@ -4,7 +4,18 @@ import { Sigma } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { AuthForm } from "@/components/auth/AuthForm";
 
-export const metadata: Metadata = { title: "ログイン" };
+export const metadata: Metadata = {
+  title: "ログイン",
+  description: "Cyber Math の学習履歴と復習キューにアクセスするためのログインページです。",
+  alternates: {
+    canonical: "/auth/login",
+  },
+  openGraph: {
+    title: "ログイン | Cyber Math",
+    description: "Cyber Math の学習履歴と復習キューにアクセスするためのログインページです。",
+    url: "/auth/login",
+  },
+};
 
 export default async function LoginPage() {
   const session = await getSession();

@@ -26,7 +26,8 @@ export async function SiteHeader() {
           {/* ホーム */}
           <Link
             href="/"
-            className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan"
+            aria-label="ホーム"
+            className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <Home className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">ホーム</span>
@@ -35,7 +36,8 @@ export async function SiteHeader() {
           {/* マイページ */}
           <Link
             href="/mypage"
-            className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan"
+            aria-label="マイページ"
+            className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-neon-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <LineChart className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">マイページ</span>
@@ -45,7 +47,8 @@ export async function SiteHeader() {
           {session?.role === "MENTOR" && (
             <Link
               href="/mentor"
-              className="inline-flex items-center gap-1 rounded-md px-3 py-2 font-semibold text-neon-amber transition-colors hover:bg-neon-amber/10"
+              aria-label="師範ページ"
+              className="inline-flex items-center gap-1 rounded-md px-3 py-2 font-semibold text-neon-amber transition-colors hover:bg-neon-amber/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-amber/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <ShieldCheck className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">師範</span>
@@ -77,7 +80,7 @@ export async function SiteHeader() {
           ) : (
             <Link
               href="/auth/login"
-              className="ml-2 inline-flex items-center gap-1 rounded-lg border border-neon-cyan/40 bg-neon-cyan/5 px-3 py-1.5 font-mono text-xs font-semibold text-neon-cyan transition-colors hover:bg-neon-cyan/15"
+              className="ml-2 inline-flex items-center gap-1 rounded-lg border border-neon-cyan/40 bg-neon-cyan/5 px-3 py-1.5 font-mono text-xs font-semibold text-neon-cyan transition-colors hover:bg-neon-cyan/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <LogIn className="h-3.5 w-3.5" />
               ログイン

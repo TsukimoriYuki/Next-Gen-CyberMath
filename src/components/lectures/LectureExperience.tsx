@@ -356,7 +356,7 @@ function CheckToggle({
       className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold transition ${
         completed
           ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300"
-          : "border-slate-200 bg-white text-slate-400 hover:border-slate-300 hover:text-slate-600"
+          : "border-slate-300 bg-white text-slate-600 hover:border-slate-400 hover:text-slate-800"
       }`}
     >
       {completed ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Circle className="h-3.5 w-3.5" />}

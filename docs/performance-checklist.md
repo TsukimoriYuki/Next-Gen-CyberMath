@@ -46,6 +46,17 @@ Cyber Math の公開前 Lighthouse / Core Web Vitals 確認手順です。
 | --- | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- | --- |
 | 2026-06-29 | `/` | Mobile |  |  |  |  |  |  |  |  |
 
+## 2026-06-29 実測結果
+
+最終QAゲートの Lighthouse mobile 実測結果は `docs/release-qa-results.md` に記録済み。
+
+主な残課題:
+
+- `/courses` と長い特別講義ページは Performance が目標未満。
+- 特別講義ページは MathText / KaTeX と長いインタラクティブブロックの影響で TBT が大きい。
+- CLS は全対象で目標内。
+- 公開直前に人間が Chrome DevTools Lighthouse で代表ページを1回再測定する。
+
 ## 手動表示確認
 
 - ファーストビューで主要CTAが見える。

@@ -58,6 +58,8 @@ const IMPORTANT_METADATA_ROUTES = [
   "/terms",
   "/contact",
   "/licenses",
+  "/auth/login",
+  "/auth/register",
 ];
 const REQUIRED_SITEMAP_ROUTES = [
   "/",
@@ -74,6 +76,12 @@ const REQUIRED_SITEMAP_ROUTES = [
   "/licenses",
   "/common-test/lectures/math-1a-shortcut-formulas",
   "/common-test/lectures/quadratic-case-split-intensive",
+];
+const REQUIRED_QA_DOCS = [
+  "docs/performance-checklist.md",
+  "docs/release-checklist.md",
+  "docs/accessibility-backlog.md",
+  "docs/release-qa-results.md",
 ];
 
 const MOJIBAKE_PATTERNS = [
@@ -392,6 +400,20 @@ function checkSecurityHeaders() {
   }
 }
 
+function checkQaDocs() {
+  for (const file of REQUIRED_QA_DOCS) {
+    const fullPath = path.join(ROOT, file);
+    if (!fs.existsSync(fullPath)) {
+      issues.push(`missing QA document ${file}`);
+      continue;
+    }
+    const source = fs.readFileSync(fullPath, "utf8");
+    if (!source.trim()) {
+      issues.push(`empty QA document ${file}`);
+    }
+  }
+}
+
 function checkSiteUrlConfig() {
   const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   const siteUrl = getSiteUrl();
@@ -539,6 +561,7 @@ async function main() {
   checkPublicRoutesAndFooter();
   checkMetadataCoverage();
   checkSecurityHeaders();
+  checkQaDocs();
   checkSitemapAndRobots();
   await checkRepresentativeDynamicMetadata();
   checkDuplicateStaticIds();

@@ -94,6 +94,13 @@ Cyber Math 公開前の最終確認リストです。
 - LCP 2.5秒未満を目標
 - INP 200ms未満を目標
 
+2026-06-29 final QA の mobile 実測結果は `docs/release-qa-results.md` に記録済み。
+公開直前に人間が再確認する項目:
+
+- [ ] Chrome DevTools Lighthouse で `/`, `/common-test`, `/courses`, 長い特別講義1本を再測定
+- [ ] Tab順と focus ring を実機操作で確認
+- [ ] 長い特別講義ページの Performance 低下を既知課題として許容するか判断
+
 ## Release Notes
 
 - [ ] 既知の残課題を記録した
