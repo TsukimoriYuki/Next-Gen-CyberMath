@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Clock, BookOpen, Zap } from "lucide-react";
+import { ArrowLeft, Clock, BookOpen, FileText, Zap } from "lucide-react";
 import { getAllCommonTestExamPresets } from "@/data/common-test-exams";
 import type { CommonTestExamPreset } from "@/data/common-test-exams";
+import {
+  MATH_1A_PAPER_001,
+  MATH_1A_SECTION_2_PAPER_SAMPLE,
+  getExamPaperStats,
+} from "@/data/exam-papers";
 import { getExamQuestionSummary } from "@/lib/common-test-exams";
 
 export const metadata: Metadata = {
@@ -24,6 +29,8 @@ const SUBJECT_NAMES: Record<string, string> = {
 };
 
 export default function SimulatorIndexPage() {
+  const fullPaperStats = getExamPaperStats(MATH_1A_PAPER_001);
+  const samplePaperStats = getExamPaperStats(MATH_1A_SECTION_2_PAPER_SAMPLE);
   const presets = [...getAllCommonTestExamPresets()].sort((a, b) => {
     const sa = SUBJECT_ORDER[a.subjectId] ?? 9;
     const sb = SUBJECT_ORDER[b.subjectId] ?? 9;
@@ -101,6 +108,60 @@ export default function SimulatorIndexPage() {
           </div>
         </header>
 
+        <section className="mb-8 grid gap-4">
+          <div className="rounded-2xl border border-blue-200 bg-white p-5 shadow-sm ring-1 ring-blue-50">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700">
+                  <FileText className="h-3.5 w-3.5" />
+                  新形式：冊子型 共通テスト数学IA 第1回
+                </div>
+                <h2 className="mt-3 text-xl font-extrabold text-slate-950">
+                  問題冊子画像 + Webマークシートで70分演習
+                </h2>
+                <p className="mt-1 text-sm leading-6 text-slate-600">
+                  {fullPaperStats.sectionCount}大問 / {fullPaperStats.questionCount}小問 /{" "}
+                  {fullPaperStats.answerSlotCount}マーク / {MATH_1A_PAPER_001.durationMin}分。
+                  提出後に大問別得点、マーク単位の正誤、復習導線を確認できます。
+                </p>
+              </div>
+              <Link
+                href="/common-test/simulator/math-1a-paper-001"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-extrabold text-white transition hover:bg-blue-700"
+              >
+                <FileText className="h-4 w-4" />
+                第1回を開始する
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600">
+                  <FileText className="h-3.5 w-3.5 text-blue-600" />
+                  新形式：冊子型サンプル
+                </div>
+                <h2 className="mt-3 text-lg font-extrabold text-slate-950">
+                  数学IA 第2問だけで操作を試す
+                </h2>
+                <p className="mt-1 text-sm leading-6 text-slate-600">
+                  {samplePaperStats.sectionCount}大問 / {samplePaperStats.questionCount}小問 /{" "}
+                  {samplePaperStats.answerSlotCount}マーク / {MATH_1A_SECTION_2_PAPER_SAMPLE.durationMin}分。
+                  冊子画像とマーク欄を分けたUIの軽い確認用です。
+                </p>
+              </div>
+              <Link
+                href="/common-test/simulator/paper-sample"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-extrabold text-white transition hover:bg-slate-800"
+              >
+                <FileText className="h-4 w-4" />
+                サンプルを開く
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Exam preset cards — 科目ごと */}
         {subjectIds.map((subjectId) => {
           const isSubSubject = subjectId === "english-reading";
@@ -169,6 +230,9 @@ function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
 
       {/* Title */}
       <div>
+        <div className="mb-1 inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">
+          旧形式：Web大問演習
+        </div>
         <div className="text-base font-extrabold leading-tight text-slate-900">
           {preset.subjectId === "math-1a"
             ? "数学IA"

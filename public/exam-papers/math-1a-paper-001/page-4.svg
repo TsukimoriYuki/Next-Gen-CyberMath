@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1320" viewBox="0 0 960 1320">
+  <rect width="960" height="1320" fill="#ffffff"/>
+  <rect x="64" y="64" width="832" height="1192" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <text x="96" y="122" font-family="Yu Gothic, Meiryo, sans-serif" font-size="28" font-weight="800" fill="#0f172a">第2問　続き</text>
+  <line x1="96" y1="148" x2="864" y2="148" stroke="#cbd5e1"/>
+
+  <text x="96" y="204" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[4] 8日間の学習時間と得点</text>
+  <rect x="120" y="240" width="720" height="250" fill="#f8fafc" stroke="#cbd5e1"/>
+  <line x1="120" y1="290" x2="840" y2="290" stroke="#cbd5e1"/>
+  <line x1="120" y1="340" x2="840" y2="340" stroke="#cbd5e1"/>
+  <line x1="120" y1="390" x2="840" y2="390" stroke="#cbd5e1"/>
+  <line x1="240" y1="240" x2="240" y2="490" stroke="#cbd5e1"/>
+  <text x="150" y="272" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" font-weight="700" fill="#0f172a">日</text>
+  <text x="275" y="272" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#334155">1  2  3  4  5  6  7  8</text>
+  <text x="150" y="322" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" font-weight="700" fill="#0f172a">時間</text>
+  <text x="275" y="322" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#334155">2  3  3  4  5  5  6  8</text>
+  <text x="150" y="372" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" font-weight="700" fill="#0f172a">得点</text>
+  <text x="275" y="372" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#334155">54 58 62 66 70 73 75 82</text>
+  <text x="150" y="442" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#334155">学習時間の中央値は [ハ]、範囲は [ヒ]、相関の向きは [フ] で選べ。</text>
+  <text x="140" y="520" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[ハ] 0:4.5　1:5.0　2:5.5　3:6.0　4:8.0　　[フ] 0:負の相関　1:正の相関　2:相関なし　3:因果が確定</text>
+
+  <text x="96" y="602" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[5] 散布図とモデルの読み取り</text>
+  <rect x="140" y="640" width="410" height="300" fill="#ffffff" stroke="#334155"/>
+  <line x1="170" y1="900" x2="520" y2="900" stroke="#334155"/>
+  <line x1="170" y1="900" x2="170" y2="675" stroke="#334155"/>
+  <circle cx="210" cy="850" r="6" fill="#2563eb"/>
+  <circle cx="245" cy="820" r="6" fill="#2563eb"/>
+  <circle cx="284" cy="812" r="6" fill="#2563eb"/>
+  <circle cx="328" cy="770" r="6" fill="#2563eb"/>
+  <circle cx="368" cy="742" r="6" fill="#2563eb"/>
+  <circle cx="402" cy="725" r="6" fill="#2563eb"/>
+  <circle cx="446" cy="704" r="6" fill="#2563eb"/>
+  <circle cx="500" cy="682" r="6" fill="#2563eb"/>
+  <text x="590" y="686" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#334155">散布図から、相関の強さを [ヘ]、</text>
+  <text x="590" y="720" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#334155">因果についての判断を [ホ] で選べ。</text>
+  <text x="590" y="772" font-family="Yu Gothic, Meiryo, sans-serif" font-size="14" fill="#64748b">[ヘ] 0:弱い負　1:弱い正</text>
+  <text x="590" y="800" font-family="Yu Gothic, Meiryo, sans-serif" font-size="14" fill="#64748b">2:強い正　3:相関なし</text>
+  <text x="590" y="838" font-family="Yu Gothic, Meiryo, sans-serif" font-size="14" fill="#64748b">[ホ] 0:因果は断定できない</text>
+  <text x="590" y="866" font-family="Yu Gothic, Meiryo, sans-serif" font-size="14" fill="#64748b">1:必ず因果あり　2:平均のみ必要　3:外れ値のみ</text>
+
+  <text x="96" y="1006" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[6] 外挿の判断</text>
+  <text x="120" y="1042" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">観測範囲は2時間から8時間である。12時間の得点を同じ直線で予測する場合、</text>
+  <text x="120" y="1072" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">注意すべき判断を [マ], [ミ] で選べ。</text>
+  <text x="140" y="1110" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[マ] 0:必ず正しい　1:範囲外なので慎重に使う　2:中央値だけで決まる　3:因果を証明する</text>
+  <text x="140" y="1140" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[ミ] 0:単位を消す　1:軸を見る　2:三角比へ戻る　3:相関と因果を区別する</text>
+  <text x="480" y="1238" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="18" fill="#64748b">ページ 4</text>
+</svg>

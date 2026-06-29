@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1320" viewBox="0 0 960 1320">
+  <rect width="960" height="1320" fill="#ffffff"/>
+  <rect x="64" y="64" width="832" height="1192" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <text x="96" y="122" font-family="Yu Gothic, Meiryo, sans-serif" font-size="28" font-weight="800" fill="#0f172a">第2問　二次関数・データの分析</text>
+  <text x="792" y="122" text-anchor="end" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" fill="#475569">30点</text>
+  <line x1="96" y1="148" x2="864" y2="148" stroke="#cbd5e1"/>
+
+  <text x="96" y="204" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[1] ボールの高さのモデル</text>
+  <text x="120" y="240" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">時刻t秒後の高さを f(t)=-(t-4)^2+25 とする。ただし 0≦t≦8 で考える。</text>
+  <text x="120" y="270" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">軸は t=[チ]、最大値は [ツ][テ] である。</text>
+  <path d="M170 620 C260 360 430 310 640 620" fill="none" stroke="#2563eb" stroke-width="4"/>
+  <line x1="150" y1="620" x2="680" y2="620" stroke="#334155" stroke-width="2"/>
+  <line x1="170" y1="640" x2="170" y2="330" stroke="#334155" stroke-width="2"/>
+  <line x1="405" y1="620" x2="405" y2="342" stroke="#f97316" stroke-width="3" stroke-dasharray="8 8"/>
+  <text x="425" y="365" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#f97316">軸 t=4</text>
+
+  <text x="96" y="704" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[2] 定義域を変えたとき</text>
+  <text x="120" y="740" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">観測範囲を 1≦t≦6 に変える。この範囲では最大値を決める理由は [ト]、</text>
+  <text x="120" y="770" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">最小値をとる時刻は [ナ] で選ぶ。最小値は 1[ニ] である。</text>
+  <text x="140" y="802" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[ト] 0:軸が範囲内　1:右端だけ見る　2:左端だけ見る　3:範囲外　4:不明</text>
+  <text x="140" y="830" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[ナ] 0:t=4　1:t=1　2:t=6　3:t=0　4:t=8</text>
+
+  <text x="96" y="910" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[3] 会話文</text>
+  <rect x="120" y="946" width="720" height="170" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="148" y="992" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">A「軸が範囲に入るかを見てから、端点を比べるんだね。」</text>
+  <text x="148" y="1034" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">B「t=7を代入すると、高さは [ネ][ノ] になったよ。」</text>
+  <text x="148" y="1076" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">この会話の方針として最も適切なものを [ヌ] で選べ。</text>
+  <text x="140" y="1140" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[ヌ] 0:頂点だけ見る　1:端点だけ見る　2:軸と端点を同じ数直線で比べる　3:平均を使う</text>
+  <text x="480" y="1238" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="18" fill="#64748b">ページ 3</text>
+</svg>

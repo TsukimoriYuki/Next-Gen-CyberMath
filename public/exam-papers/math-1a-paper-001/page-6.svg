@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1320" viewBox="0 0 960 1320">
+  <rect width="960" height="1320" fill="#ffffff"/>
+  <rect x="64" y="64" width="832" height="1192" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <text x="96" y="122" font-family="Yu Gothic, Meiryo, sans-serif" font-size="28" font-weight="800" fill="#0f172a">第4問　場合の数と確率</text>
+  <text x="792" y="122" text-anchor="end" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" fill="#475569">20点</text>
+  <line x1="96" y1="148" x2="864" y2="148" stroke="#cbd5e1"/>
+
+  <text x="96" y="204" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">問題設定</text>
+  <text x="120" y="238" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">赤3枚、青2枚、白1枚のカードがある。同じ色のカードは区別しない。</text>
+  <rect x="150" y="292" width="88" height="112" rx="12" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+  <rect x="268" y="292" width="88" height="112" rx="12" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+  <rect x="386" y="292" width="88" height="112" rx="12" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+  <rect x="504" y="292" width="88" height="112" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <rect x="622" y="292" width="88" height="112" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <rect x="740" y="292" width="88" height="112" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+  <text x="194" y="358" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="24" font-weight="800" fill="#b91c1c">赤</text>
+  <text x="312" y="358" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="24" font-weight="800" fill="#b91c1c">赤</text>
+  <text x="430" y="358" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="24" font-weight="800" fill="#b91c1c">赤</text>
+  <text x="548" y="358" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="24" font-weight="800" fill="#1d4ed8">青</text>
+  <text x="666" y="358" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="24" font-weight="800" fill="#1d4ed8">青</text>
+  <text x="784" y="358" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="24" font-weight="800" fill="#475569">白</text>
+
+  <text x="96" y="492" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[1] 並べ方</text>
+  <text x="120" y="526" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">6枚を横一列に並べる。並べ方は [ヲ]0 通りである。</text>
+  <text x="120" y="556" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">この数え方で最初に確認することを [ン] で選べ。</text>
+  <text x="140" y="586" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[ン] 0:同じ色を区別しない　1:すべて区別する　2:順序を無視する　3:確率にしない</text>
+
+  <text x="96" y="656" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[2] 少なくとも1枚が赤</text>
+  <text x="120" y="690" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">6枚から2枚を同時に取り出す。少なくとも1枚が赤である確率を求める。</text>
+  <text x="120" y="720" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">有効な方針は [A]、確率は 4/[B] である。</text>
+  <text x="140" y="750" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[A] 0:直接全列挙　1:余事象　2:平均　3:独立　4:中線</text>
+
+  <text x="96" y="820" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[3] 条件付き確率</text>
+  <rect x="120" y="856" width="720" height="170" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="148" y="902" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">2枚のうち少なくとも1枚が青であると分かった。</text>
+  <text x="148" y="944" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">この条件のもとで、赤が含まれる確率を考える。</text>
+  <text x="148" y="986" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">分母の更新を [C] で選び、確率を [D] で選べ。</text>
+  <text x="140" y="1060" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[C] 0:15のまま　1:赤だけ　2:条件を満たす9通り　3:6通り　4:平均</text>
+  <text x="140" y="1090" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[D] 0:1/3　1:1/2　2:3/5　3:2/3</text>
+
+  <text x="96" y="1160" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[4] 独立・排反の判断は次ページへ続く。</text>
+  <text x="480" y="1238" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="18" fill="#64748b">ページ 6</text>
+</svg>

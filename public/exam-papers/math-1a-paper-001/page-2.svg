@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1320" viewBox="0 0 960 1320">
+  <rect width="960" height="1320" fill="#ffffff"/>
+  <rect x="64" y="64" width="832" height="1192" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <text x="96" y="122" font-family="Yu Gothic, Meiryo, sans-serif" font-size="28" font-weight="800" fill="#0f172a">第1問　数と式・図形と計量</text>
+  <text x="792" y="122" text-anchor="end" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" fill="#475569">30点</text>
+  <line x1="96" y1="148" x2="864" y2="148" stroke="#cbd5e1"/>
+
+  <text x="96" y="198" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[1] 根号を含む式</text>
+  <text x="120" y="232" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">a=√3+√2, b=√3-√2 とする。ab=[ア], a^2+b^2=[イ][ウ] である。</text>
+  <text x="120" y="262" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">また、命題 p:a+b&gt;3, q:a-b&lt;3 について正しいものを [エ] で選べ。</text>
+  <text x="140" y="292" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[エ] 0:pのみ真　1:qのみ真　2:p,qとも真　3:p,qとも偽</text>
+
+  <text x="96" y="350" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[2] 集合と命題</text>
+  <text x="120" y="384" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">全体集合を1から12までの整数とする。Pを12の正の約数、Qを偶数全体とする。</text>
+  <text x="120" y="414" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">正しい記述を [オ] で選び、P∩Q の要素数を [カ] に入れよ。</text>
+  <text x="140" y="444" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[オ] 0:PはQに含まれる　1:P∩Q={2,4,6,12}　2:QはPに含まれる　3:P∩Qは空集合</text>
+
+  <text x="96" y="510" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[3] 面積から高さを逆算する</text>
+  <polygon points="190,720 540,720 305,540" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+  <line x1="305" y1="540" x2="305" y2="720" stroke="#2563eb" stroke-width="4"/>
+  <path d="M305 720 L326 720 L326 699" fill="none" stroke="#2563eb" stroke-width="2"/>
+  <text x="184" y="748" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">B</text>
+  <text x="545" y="748" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">C</text>
+  <text x="299" y="523" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">A</text>
+  <text x="120" y="770" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">BC=14, 三角形ABCの面積を294とする。AからBCへ下ろした高さは [キ][ク] である。</text>
+
+  <text x="96" y="836" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[4] 三角比で高さを出す</text>
+  <text x="120" y="870" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">AC=12, ∠A=30° のとき、CからABへ下ろした高さは [ケ] である。</text>
+  <text x="120" y="900" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">この高さを出すために直接使う三角比を [コ] で選べ。</text>
+  <text x="140" y="930" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[コ] 0:sin　1:cos　2:tan　3:中線　4:外接円</text>
+
+  <text x="96" y="990" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[5] [6] 内接円・外接円・空間断面</text>
+  <text x="120" y="1024" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">三辺が13,14,15の三角形では、面積S=84, 半周長s=21である。</text>
+  <text x="120" y="1054" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">内接円半径rを求める式を [サ] で選ぶと、r=[シ] である。</text>
+  <text x="140" y="1084" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[サ] 0:S/R　1:S/s　2:a/(2sinA)　3:底辺×高さ</text>
+  <text x="120" y="1136" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">BC=6, ∠A=30° なら外接円半径R=[ス]。使う式は [セ] である。</text>
+  <text x="140" y="1166" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[セ] 0:S=rs　1:余弦定理　2:a/(2sinA)　3:中線公式　4:ピトー</text>
+  <text x="120" y="1204" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#334155">空間で高さを出すとき、まず見る断面は [ソ]、斜めの辺と角から高さを出す三角比は [タ]。</text>
+  <text x="140" y="1234" font-family="Yu Gothic, Meiryo, sans-serif" font-size="14" fill="#64748b">[ソ] 0:垂線を含む断面 1:底面のみ 2:展開図 3:正面図　[タ] 0:余弦 1:内接円 2:面積比 3:sin</text>
+</svg>

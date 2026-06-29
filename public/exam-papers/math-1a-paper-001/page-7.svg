@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1320" viewBox="0 0 960 1320">
+  <rect width="960" height="1320" fill="#ffffff"/>
+  <rect x="64" y="64" width="832" height="1192" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <text x="96" y="122" font-family="Yu Gothic, Meiryo, sans-serif" font-size="28" font-weight="800" fill="#0f172a">第4問　続き</text>
+  <line x1="96" y1="148" x2="864" y2="148" stroke="#cbd5e1"/>
+
+  <text x="96" y="204" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[4] 独立・排反の判断</text>
+  <text x="120" y="240" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">1枚目が赤である事象をX、2枚目が青である事象をYとする。</text>
+  <text x="120" y="270" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">カードを戻して2回引く場合、XとYの関係は [E]。戻さずに2回引く場合、関係は [F]。</text>
+  <text x="140" y="304" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">0:独立　1:独立でない　2:排反　3:同じ事象</text>
+
+  <text x="96" y="386" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[5] 会話文による方針選択</text>
+  <rect x="120" y="424" width="720" height="290" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="148" y="474" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">A「少なくとも、という言葉なら反対側を数える方が速いね。」</text>
+  <text x="148" y="520" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">B「条件が付いたら、条件を満たす場合だけを分母にするんだね。」</text>
+  <text x="148" y="566" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">C「同時に起こらないことと、確率が変わらないことは別だね。」</text>
+  <text x="148" y="630" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">この会話をもとに、次の方針を [G], [H], [I], [J] で選べ。</text>
+  <text x="140" y="760" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">0:余事象　1:排反　2:条件付き確率の母集団更新　3:独立</text>
+  <text x="120" y="820" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">[G]「少なくとも1枚」　[H]「分かった後の確率」</text>
+  <text x="120" y="858" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">[I]「同時に起こらない」　[J]「一方が起きても確率が変わらない」</text>
+
+  <rect x="150" y="960" width="660" height="170" fill="#ffffff" stroke="#cbd5e1" stroke-dasharray="10 10"/>
+  <text x="180" y="1008" font-family="Yu Gothic, Meiryo, sans-serif" font-size="18" font-weight="700" fill="#334155">計算用余白</text>
+  <text x="180" y="1056" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#64748b">分母を固定する、余事象を使う、条件で母集団を絞る、の順に確認する。</text>
+  <text x="480" y="1238" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="18" fill="#64748b">ページ 7</text>
+</svg>

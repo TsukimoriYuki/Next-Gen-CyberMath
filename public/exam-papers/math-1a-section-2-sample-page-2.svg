@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1320" viewBox="0 0 960 1320" role="img" aria-labelledby="title desc">
+  <title id="title">Cyber Math 共通テスト型模試 数学IA 第2問サンプル 2ページ</title>
+  <desc id="desc">二次関数モデルの利用とデータ解釈を問う問題冊子サンプル。</desc>
+  <rect width="960" height="1320" fill="#f8fafc"/>
+  <rect x="48" y="48" width="864" height="1224" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="96" y="108" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0f172a">数学IA 第2問 続き</text>
+  <line x1="96" y1="146" x2="864" y2="146" stroke="#94a3b8" stroke-width="2"/>
+  <text x="96" y="210" font-family="Arial, sans-serif" font-size="18" fill="#111827">問4　モデル f(x)=-3(x-3)^2+67 に x=1 を代入する。</text>
+  <text x="128" y="258" font-family="Arial, sans-serif" font-size="17" fill="#111827">f(1)=[ サ ][ シ ] である。また、x=5 の値との比較として、</text>
+  <text x="128" y="298" font-family="Arial, sans-serif" font-size="17" fill="#111827">正しい判断の番号を [ ス ]、理由の番号を [ セ ] で答えよ。</text>
+  <text x="128" y="354" font-family="Arial, sans-serif" font-size="16" fill="#111827">0: f(1) と f(5) は等しい。</text>
+  <text x="128" y="390" font-family="Arial, sans-serif" font-size="16" fill="#111827">1: f(1) の方が大きい。</text>
+  <text x="128" y="426" font-family="Arial, sans-serif" font-size="16" fill="#111827">2: f(5) の方が大きい。</text>
+  <text x="128" y="462" font-family="Arial, sans-serif" font-size="16" fill="#111827">3: 値は計算できない。</text>
+  <text x="96" y="548" font-family="Arial, sans-serif" font-size="18" fill="#111827">問5　学習時間が2時間から4時間の範囲で、得点が60点以上となる</text>
+  <text x="128" y="588" font-family="Arial, sans-serif" font-size="17" fill="#111827">生徒の人数と得点合計を考える。該当する人数は [ ソ ] 人で、</text>
+  <text x="128" y="628" font-family="Arial, sans-serif" font-size="17" fill="#111827">得点合計は [ タ ][ チ ][ ツ ] 点である。</text>
+  <text x="96" y="714" font-family="Arial, sans-serif" font-size="18" fill="#111827">問6　このモデルを40時間の学習にそのまま使ってよいか。</text>
+  <text x="128" y="762" font-family="Arial, sans-serif" font-size="17" fill="#111827">もっとも適切な判断の番号を [ テ ]、理由の番号を [ ト ] で答えよ。</text>
+  <text x="128" y="814" font-family="Arial, sans-serif" font-size="16" fill="#111827">0: 必ず使ってよい。</text>
+  <text x="128" y="850" font-family="Arial, sans-serif" font-size="16" fill="#111827">1: 観測範囲外なので、追加データなしには断定できない。</text>
+  <text x="128" y="886" font-family="Arial, sans-serif" font-size="16" fill="#111827">2: 得点は必ず100点になる。</text>
+  <text x="128" y="922" font-family="Arial, sans-serif" font-size="16" fill="#111827">3: 平均点だけから判断できる。</text>
+  <text x="128" y="996" font-family="Arial, sans-serif" font-size="17" fill="#111827">この大問のマーク欄は、問題数6に対して合計 [ ナ ][ ニ ] 欄ある。</text>
+  <text x="128" y="1036" font-family="Arial, sans-serif" font-size="17" fill="#111827">採点は小問数ではなく、[ ヌ ][ ネ ] 欄ごとに行う。</text>
+  <text x="96" y="1162" font-family="Arial, sans-serif" font-size="15" fill="#64748b">注意: この冊子はCyber Mathのオリジナル教材です。公式過去問の転載ではありません。</text>
+  <text x="732" y="1228" font-family="Arial, sans-serif" font-size="14" fill="#64748b">2 / 2</text>
+</svg>

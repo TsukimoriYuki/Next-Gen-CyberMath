@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1320" viewBox="0 0 960 1320">
+  <rect width="960" height="1320" fill="#ffffff"/>
+  <rect x="64" y="64" width="832" height="1192" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <rect x="96" y="112" width="768" height="104" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="128" y="155" font-family="Yu Gothic, Meiryo, sans-serif" font-size="24" font-weight="700" fill="#1d4ed8">Cyber Math 共通テスト型模試</text>
+  <text x="128" y="190" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" fill="#334155">これはCyber Math独自制作の模試です。公式試験・実在模試の転載ではありません。</text>
+  <text x="128" y="306" font-family="Yu Gothic, Meiryo, sans-serif" font-size="48" font-weight="800" fill="#0f172a">数学IA 70分模試 第1回</text>
+  <text x="128" y="360" font-family="Yu Gothic, Meiryo, sans-serif" font-size="24" fill="#475569">4大問 / 22小問 / 56マーク / 100点</text>
+  <line x1="128" y1="410" x2="832" y2="410" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="128" y="475" font-family="Yu Gothic, Meiryo, sans-serif" font-size="24" font-weight="700" fill="#0f172a">注意</text>
+  <text x="150" y="520" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" fill="#334155">1. 解答はWebマークシートの各欄に入力すること。</text>
+  <text x="150" y="562" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" fill="#334155">2. 問題冊子には途中計算を書き込むつもりで読んでよい。</text>
+  <text x="150" y="604" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" fill="#334155">3. 試験中はヒント・解説・正答は表示されない。</text>
+  <text x="150" y="646" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" fill="#334155">4. 提出後に大問別得点とマーク単位の正誤を確認できる。</text>
+  <rect x="128" y="735" width="704" height="230" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="158" y="780" font-family="Yu Gothic, Meiryo, sans-serif" font-size="22" font-weight="700" fill="#0f172a">大問構成</text>
+  <text x="158" y="828" font-family="Yu Gothic, Meiryo, sans-serif" font-size="19" fill="#334155">第1問　数と式・図形と計量　30点</text>
+  <text x="158" y="870" font-family="Yu Gothic, Meiryo, sans-serif" font-size="19" fill="#334155">第2問　二次関数・データの分析　30点</text>
+  <text x="158" y="912" font-family="Yu Gothic, Meiryo, sans-serif" font-size="19" fill="#334155">第3問　図形の性質　20点</text>
+  <text x="158" y="954" font-family="Yu Gothic, Meiryo, sans-serif" font-size="19" fill="#334155">第4問　場合の数と確率　20点</text>
+  <text x="480" y="1160" text-anchor="middle" font-family="Yu Gothic, Meiryo, sans-serif" font-size="18" fill="#64748b">ページ 1</text>
+</svg>

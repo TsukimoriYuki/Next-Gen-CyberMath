@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1320" viewBox="0 0 960 1320" role="img" aria-labelledby="title desc">
+  <title id="title">Cyber Math 共通テスト型模試 数学IA 第2問サンプル 1ページ</title>
+  <desc id="desc">二次関数とデータの分析の問題冊子サンプル。公式過去問ではない。</desc>
+  <rect width="960" height="1320" fill="#f8fafc"/>
+  <rect x="48" y="48" width="864" height="1224" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="96" y="108" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#0f172a">Cyber Math 共通テスト型模試</text>
+  <text x="96" y="146" font-family="Arial, sans-serif" font-size="18" fill="#475569">数学IA 第2問 二次関数・データの分析</text>
+  <line x1="96" y1="178" x2="864" y2="178" stroke="#94a3b8" stroke-width="2"/>
+  <text x="96" y="226" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#111827">第2問</text>
+  <text x="96" y="266" font-family="Arial, sans-serif" font-size="18" fill="#111827">あるクラスの小テスト結果と学習時間の関係を考える。</text>
+  <text x="96" y="302" font-family="Arial, sans-serif" font-size="18" fill="#111827">5人の学習時間 x 時間と得点 y 点は、次の表の通りである。</text>
+  <rect x="126" y="350" width="708" height="150" fill="#ffffff" stroke="#334155" stroke-width="2"/>
+  <line x1="126" y1="400" x2="834" y2="400" stroke="#334155" stroke-width="2"/>
+  <line x1="126" y1="450" x2="834" y2="450" stroke="#334155" stroke-width="2"/>
+  <line x1="256" y1="350" x2="256" y2="500" stroke="#334155" stroke-width="2"/>
+  <line x1="372" y1="350" x2="372" y2="500" stroke="#334155" stroke-width="2"/>
+  <line x1="488" y1="350" x2="488" y2="500" stroke="#334155" stroke-width="2"/>
+  <line x1="604" y1="350" x2="604" y2="500" stroke="#334155" stroke-width="2"/>
+  <line x1="720" y1="350" x2="720" y2="500" stroke="#334155" stroke-width="2"/>
+  <text x="156" y="383" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">生徒</text>
+  <text x="302" y="383" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">A</text>
+  <text x="418" y="383" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">B</text>
+  <text x="534" y="383" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">C</text>
+  <text x="650" y="383" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">D</text>
+  <text x="766" y="383" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">E</text>
+  <text x="146" y="433" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">x 時間</text>
+  <text x="304" y="433" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">0</text>
+  <text x="420" y="433" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">1</text>
+  <text x="536" y="433" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">2</text>
+  <text x="652" y="433" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">3</text>
+  <text x="768" y="433" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">4</text>
+  <text x="146" y="483" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">y 点</text>
+  <text x="294" y="483" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">40</text>
+  <text x="410" y="483" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">55</text>
+  <text x="526" y="483" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">64</text>
+  <text x="642" y="483" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">67</text>
+  <text x="758" y="483" font-family="Arial, sans-serif" font-size="16" fill="#0f172a">64</text>
+  <text x="96" y="570" font-family="Arial, sans-serif" font-size="18" fill="#111827">問1　得点の平均を求め、中央値を読み取れ。</text>
+  <text x="128" y="616" font-family="Arial, sans-serif" font-size="17" fill="#111827">平均は [ ア ][ イ ] 点、中央値は [ ウ ][ エ ] 点である。</text>
+  <text x="96" y="690" font-family="Arial, sans-serif" font-size="18" fill="#111827">問2　散らばり方について、正しい組合せを選べ。</text>
+  <text x="128" y="734" font-family="Arial, sans-serif" font-size="16" fill="#111827">0: 範囲は27で、最大値は67である。</text>
+  <text x="128" y="770" font-family="Arial, sans-serif" font-size="16" fill="#111827">1: 範囲は27で、最大値は64である。</text>
+  <text x="128" y="806" font-family="Arial, sans-serif" font-size="16" fill="#111827">2: 範囲は27で、最小値は40である。</text>
+  <text x="128" y="842" font-family="Arial, sans-serif" font-size="16" fill="#111827">3: 範囲は24で、最小値は55である。</text>
+  <text x="128" y="892" font-family="Arial, sans-serif" font-size="17" fill="#111827">正しいものを [ オ ][ カ ] から選べ。</text>
+  <text x="96" y="966" font-family="Arial, sans-serif" font-size="18" fill="#111827">問3　モデル f(x)=-3(x-3)^2+67 を考える。</text>
+  <text x="128" y="1012" font-family="Arial, sans-serif" font-size="17" fill="#111827">軸は x=[ キ ][ ク ]、最大値は [ ケ ][ コ ] である。</text>
+  <text x="732" y="1228" font-family="Arial, sans-serif" font-size="14" fill="#64748b">1 / 2</text>
+</svg>

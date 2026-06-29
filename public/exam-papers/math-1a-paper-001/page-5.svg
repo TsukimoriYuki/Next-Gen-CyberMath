@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1320" viewBox="0 0 960 1320">
+  <rect width="960" height="1320" fill="#ffffff"/>
+  <rect x="64" y="64" width="832" height="1192" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <text x="96" y="122" font-family="Yu Gothic, Meiryo, sans-serif" font-size="28" font-weight="800" fill="#0f172a">第3問　図形の性質</text>
+  <text x="792" y="122" text-anchor="end" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" fill="#475569">20点</text>
+  <line x1="96" y1="148" x2="864" y2="148" stroke="#cbd5e1"/>
+
+  <text x="96" y="202" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[1] 中心の判別</text>
+  <text x="120" y="236" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">点Iは三辺から等距離、点Oは三頂点から等距離である。Iを [ム]、Oを [メ] で選べ。</text>
+  <text x="140" y="266" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">0:重心　1:外心　2:内心　3:垂心　4:傍心</text>
+
+  <text x="96" y="328" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[2] 角の二等分線定理</text>
+  <polygon points="190,610 560,610 330,355" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <line x1="330" y1="355" x2="412" y2="610" stroke="#2563eb" stroke-width="4"/>
+  <text x="184" y="640" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">B</text>
+  <text x="565" y="640" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">C</text>
+  <text x="326" y="338" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">A</text>
+  <text x="418" y="640" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">D</text>
+  <text x="120" y="684" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">AB=6, AC=9, BC=10。角Aの二等分線がBCとDで交わる。</text>
+  <text x="120" y="714" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">BD:DC を [モ] で選び、DC=[ヤ] とする。</text>
+  <text x="140" y="744" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[モ] 0:1:1　1:3:2　2:3:4　3:2:3　4:4:5</text>
+
+  <text x="96" y="810" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[3] 二等分線の長さ</text>
+  <text x="120" y="844" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">AB=8, AC=12, BC=10で、角Aの二等分線がBCを4と6に分ける。</text>
+  <text x="120" y="874" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">AD^2=AB×AC-BD×DC より、AD=[ユ]×[ヨ] である。</text>
+  <text x="140" y="904" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[ヨ] 0:√3　1:√5　2:√2　3:2　4:√7</text>
+
+  <text x="96" y="966" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[4] 中線の長さ</text>
+  <text x="120" y="1000" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">AB=5, AC=7, BC=8。BCの中点をMとすると、中線AMについて AM^2=[ラ]1。</text>
+  <text x="120" y="1030" font-family="Yu Gothic, Meiryo, sans-serif" font-size="17" fill="#334155">このとき使う公式を [リ] で選べ。</text>
+  <text x="140" y="1060" font-family="Yu Gothic, Meiryo, sans-serif" font-size="15" fill="#64748b">[リ] 0:二等分線定理　1:方べき　2:余事象　3:中線の長さ公式　4:正弦定理</text>
+
+  <text x="96" y="1120" font-family="Yu Gothic, Meiryo, sans-serif" font-size="20" font-weight="700" fill="#0f172a">[5] 補助線の選択</text>
+  <text x="120" y="1152" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#334155">三頂点から等距離なら[ル]、頂点と対辺の中点なら[レ]、円と弦の角なら[ロ]、</text>
+  <text x="120" y="1180" font-family="Yu Gothic, Meiryo, sans-serif" font-size="16" fill="#334155">対辺の比が隣の二辺の比なら[ワ]を選べ。</text>
+  <text x="140" y="1210" font-family="Yu Gothic, Meiryo, sans-serif" font-size="14" fill="#64748b">0:垂直二等分線　1:円周角・方べき　2:中線　3:角の二等分線</text>
+</svg>

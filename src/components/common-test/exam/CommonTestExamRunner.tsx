@@ -158,21 +158,6 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
     }));
   }, [currentIdx, activeQuestions]);
 
-  const handleSetConfidence = useCallback(
-    (c: CommonTestConfidence) => {
-      const qId = activeQuestions[currentIdx]?.id;
-      if (!qId) return;
-      setQuestionStates((prev) => ({
-        ...prev,
-        [qId]: {
-          ...prev[qId],
-          confidence: prev[qId]?.confidence === c ? null : c,
-        },
-      }));
-    },
-    [currentIdx, activeQuestions]
-  );
-
   const handleNavigate = useCallback((idx: number) => {
     setCurrentIdx(idx);
   }, []);
@@ -628,11 +613,9 @@ export function CommonTestExamRunner({ preset, questions }: Props) {
                 totalQuestions={activeQuestions.length}
                 selectedAnswer={currentQState.selectedAnswer}
                 markedForReview={currentQState.markedForReview}
-                confidence={currentQState.confidence}
                 theme={preset.theme}
                 onAnswer={handleAnswer}
                 onToggleFlag={handleToggleFlag}
-                onSetConfidence={handleSetConfidence}
               />
             )}
 

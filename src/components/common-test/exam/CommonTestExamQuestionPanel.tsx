@@ -5,7 +5,6 @@ import { Flag } from "lucide-react";
 import { MathText } from "@/components/math/Math";
 import type { CommonTestDrillQuestion } from "@/data/common-test-drills";
 import type { CommonTestTheme } from "@/data/common-test";
-import type { CommonTestConfidence } from "@/lib/common-test-history";
 import { isCommonTestMarkSheetQuestion } from "@/lib/common-test-answer-normalize";
 import { MarkSheetAnswerInput } from "@/components/common-test/MarkSheetAnswerInput";
 
@@ -15,19 +14,10 @@ interface Props {
   totalQuestions: number;
   selectedAnswer: string | null;
   markedForReview: boolean;
-  confidence: CommonTestConfidence | null;
   theme: CommonTestTheme;
   onAnswer: (answer: string) => void;
   onToggleFlag: () => void;
-  onSetConfidence: (c: CommonTestConfidence) => void;
 }
-
-const CONFIDENCE_OPTIONS: { value: CommonTestConfidence; label: string }[] = [
-  { value: "confident", label: "自信あり" },
-  { value: "unsure", label: "少し不安" },
-  { value: "guessed", label: "勘で解答" },
-  { value: "blank", label: "わからない" },
-];
 
 /** ①②③… のマーク番号（共通テストのマークシート風） */
 function circledNumber(idx: number): string {
@@ -40,10 +30,8 @@ export function CommonTestExamQuestionPanel({
   questionNumber,
   selectedAnswer,
   markedForReview,
-  confidence,
   onAnswer,
   onToggleFlag,
-  onSetConfidence,
 }: Props) {
   const isMath = question.subjectId !== "english-reading";
   const isEnglishReading = question.subjectId === "english-reading";
@@ -64,7 +52,6 @@ export function CommonTestExamQuestionPanel({
           <span className="text-sm" style={{ color: "#4b5563" }}>
             問{questionNumber}
           </span>
-          <ExamStageBadge question={question} />
         </div>
 
         {/* Flag button */}
@@ -124,7 +111,6 @@ export function CommonTestExamQuestionPanel({
           question={question}
           value={selectedAnswer ?? ""}
           onChange={onAnswer}
-          helperText="本番演習中は、入力した内容がそのまま答案として保存されます。"
         />
       ) : (
         <div className={isEnglishReading ? "space-y-3" : "space-y-2"}>
@@ -162,55 +148,7 @@ export function CommonTestExamQuestionPanel({
         </div>
       )}
 
-      {/* Confidence picker */}
-      <div className="pt-2" style={{ borderTop: "1px solid #f3f4f6" }}>
-        <div className="text-[11px] mb-2" style={{ color: "#9ca3af" }}>
-          手応えを記録（任意・採点後の分析に使われます）
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {CONFIDENCE_OPTIONS.map((opt) => {
-            const isSelected = confidence === opt.value;
-            return (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => onSetConfidence(opt.value)}
-                className="rounded px-3 py-1.5 text-xs transition-all hover:opacity-75 active:scale-95"
-                style={{
-                  background: isSelected ? "#374151" : "#ffffff",
-                  border: isSelected ? "1px solid #374151" : "1px solid #d1d5db",
-                  color: isSelected ? "#ffffff" : "#6b7280",
-                  fontWeight: isSelected ? 700 : 400,
-                }}
-              >
-                {opt.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
     </div>
-  );
-}
-
-function ExamStageBadge({ question }: { question: CommonTestDrillQuestion }) {
-  if (!question.subQuestionIndex && !question.difficultyStage) return null;
-
-  const stageLabel = {
-    basic: "基本確認",
-    standard: "標準",
-    guided: "誘導",
-    advanced: "応用",
-  }[question.difficultyStage ?? "standard"];
-
-  return (
-    <span
-      className="rounded-full px-2.5 py-1 text-[11px] font-bold"
-      style={{ background: "#f3f4f6", border: "1px solid #e5e7eb", color: "#374151" }}
-    >
-      {question.subQuestionIndex ? `小問${question.subQuestionIndex}` : "小問"}・{stageLabel}
-      {question.dependsOnPrevious ? "・前問利用" : ""}
-    </span>
   );
 }
 
@@ -224,7 +162,6 @@ function ExamSharedMaterial({
   const hasMaterial =
     question.examContext ||
     question.examPassage ||
-    question.sharedStem ||
     question.sharedData;
 
   if (!hasMaterial) return null;
@@ -300,14 +237,6 @@ function ExamSharedMaterial({
         </div>
       )}
 
-      {question.sharedStem && (
-        <div
-          className="rounded border border-blue-100 px-3 py-2 text-[13px] leading-relaxed"
-          style={{ background: "#eff6ff", color: "#1e3a8a" }}
-        >
-          {renderText(question.sharedStem, "text-[13px] leading-relaxed")}
-        </div>
-      )}
     </div>
   );
 }
