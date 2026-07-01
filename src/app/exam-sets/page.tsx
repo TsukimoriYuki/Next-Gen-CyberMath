@@ -117,17 +117,15 @@ function CategoryCard({ category }: { category: ExamSetCategory }) {
 
       <p className="mt-4 text-sm leading-7 text-slate-600">{category.description}</p>
 
-      {isAvailable ? (
-        <Link
-          href={`/exam-sets/${category.id}`}
-          className={`mt-5 inline-flex items-center gap-2 text-sm font-extrabold ${category.accentTextClass}`}
-        >
-          科目を選ぶ
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      ) : (
-        <div className="mt-5 text-sm font-bold text-slate-400">公開準備中</div>
-      )}
+      <Link
+        href={`/exam-sets/${category.id}`}
+        className={`mt-5 inline-flex items-center gap-2 text-sm font-extrabold ${
+          isAvailable ? category.accentTextClass : "text-slate-500"
+        }`}
+      >
+        {isAvailable ? "科目を選ぶ" : "準備中 — 公開状況を見る"}
+        <ArrowRight className="h-4 w-4" />
+      </Link>
     </article>
   );
 }

@@ -113,6 +113,22 @@ export function JsxBoard({
       });
 
       initRef.current(board, JXG);
+
+      // JSXGraph renders slider widgets as real, focusable <input type="range">
+      // elements but never gives them an accessible name — axe-core flags this
+      // as a critical "label" violation. Label each one here, centrally, once,
+      // rather than patching every individual lab file that creates a slider.
+      const labelSliders = () => {
+        if (!hostRef.current) return;
+        const sliders = hostRef.current.querySelectorAll('input[type="range"]');
+        sliders.forEach((el, i) => {
+          if (!el.hasAttribute("aria-label")) {
+            el.setAttribute("aria-label", `${ariaLabel} — 操作用スライダー ${i + 1}`);
+          }
+        });
+      };
+      labelSliders();
+      requestAnimationFrame(labelSliders);
     })();
 
     return () => {

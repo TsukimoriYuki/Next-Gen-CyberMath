@@ -35,6 +35,9 @@ const LEVELS: { level: EnglishLevel; order: string; tagline: string }[] = [
 
 export default function SpeedReadingPage() {
   const allIds = SPEED_READING_PROBLEMS.map((p) => p.id);
+  const firstAvailableLevel = LEVELS.find((l) =>
+    SPEED_READING_PROBLEMS.some((p) => p.level === l.level),
+  );
 
   return (
     <div className="english-academic relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
@@ -149,8 +152,21 @@ export default function SpeedReadingPage() {
                 </div>
 
                 {locked ? (
-                  <div className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold text-slate-400">
-                    COMING SOON
+                  <div className="mt-5 text-xs font-semibold text-slate-500">
+                    準備中です。
+                    {firstAvailableLevel && (
+                      <>
+                        {" "}
+                        先に
+                        <Link
+                          href={`/english/speed-reading/level/${ENGLISH_LEVEL_SLUG[firstAvailableLevel.level]}`}
+                          className="relative z-10 mx-1 font-bold text-emerald-600 underline underline-offset-2 hover:text-emerald-500"
+                        >
+                          {ENGLISH_LEVEL_META[firstAvailableLevel.level].label}
+                        </Link>
+                        で練習を進められます。
+                      </>
+                    )}
                   </div>
                 ) : (
                   <div className="mt-5 flex items-center gap-2 font-mono text-xs font-semibold transition-all duration-300 group-hover:gap-3">

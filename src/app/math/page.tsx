@@ -8,8 +8,10 @@ import {
   getProblem,
   formatDateJP,
 } from "@/lib/content";
+import { PROBLEMS } from "@/data/problems";
 import { DIFFICULTY_META, DIFFICULTY_ORDER, type Problem } from "@/lib/types";
 import { DailyTriple } from "@/components/daily/DailyTriple";
+import { RepresentativeProblemShowcase } from "@/components/math/RepresentativeProblemShowcase";
 import { EmergencyMissionPanel } from "@/components/mission/EmergencyMissionPanel";
 import { MessageBar } from "@/components/messages/MessageBar";
 import { prisma } from "@/lib/prisma";
@@ -114,6 +116,9 @@ export default async function MathHomePage() {
           {[...DIFFICULTY_ORDER].reverse().map((d, i) => {
             const meta = DIFFICULTY_META[d];
             const count = all.filter((p) => p.difficulty === d).length;
+            const abyssOnlyCount = PROBLEMS.filter(
+              (p) => p.difficulty === d && p.tier === "ABYSS",
+            ).length;
             const width = 52 + (i * 48) / (DIFFICULTY_ORDER.length - 1);
             return (
               <div
@@ -134,13 +139,32 @@ export default async function MathHomePage() {
                   {meta.name}
                 </span>
                 <span className="font-mono text-xs text-muted-foreground">
-                  {count} 問
+                  {count > 0 ? `${count} 問` : ""}
+                  {abyssOnlyCount > 0 && (
+                    <span className={count > 0 ? "ml-1 text-muted-foreground/60" : ""}>
+                      {count > 0 ? `＋ガチャ限定${abyssOnlyCount}問` : `ガチャ限定${abyssOnlyCount}問`}
+                    </span>
+                  )}
                 </span>
               </div>
             );
           })}
         </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          「ガチャ限定」は単元一覧・タグ検索には出さず、
+          <Link href="/abyss" className="text-neon-cyan hover:underline">
+            特異点ガチャ
+          </Link>
+          からのみ到達できる超難問です。公開中の問題数（{all.length}問）は
+          <Link href="/units" className="ml-1 text-neon-cyan hover:underline">
+            単元一覧
+          </Link>
+          の合算と一致します。
+        </p>
       </section>
+
+      {/* Representative problem showcase */}
+      <RepresentativeProblemShowcase />
 
       {/* Daily triple */}
       <section className="mt-16" id="daily">

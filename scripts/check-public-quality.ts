@@ -263,7 +263,7 @@ function checkQualityAndContactPages() {
     "公開前QA",
     "模試品質レビュー",
     "誤り報告",
-    "2026年6月30日",
+    "2026年7月1日",
   ]) {
     if (!quality.includes(text)) {
       issues.push(`src/app/quality/page.tsx: should include "${text}"`);

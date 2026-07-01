@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 type InfoSection = {
   title: string;
   body: string[];
+  links?: { label: string; href: string }[];
 };
 
 export function PublicInfoPage({
@@ -51,6 +52,20 @@ export function PublicInfoPage({
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
+            {section.links && section.links.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {section.links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="inline-flex items-center gap-1 rounded-full border border-neon-cyan/30 bg-neon-cyan/5 px-3 py-1 text-xs font-semibold text-neon-cyan transition hover:bg-neon-cyan/10"
+                  >
+                    {link.label}
+                    <ArrowLeft className="h-3 w-3 rotate-180" />
+                  </Link>
+                ))}
+              </div>
+            )}
           </section>
         ))}
       </div>

@@ -8,6 +8,10 @@ import {
   MATH_1A_SECTION_2_PAPER_SAMPLE,
   getExamPaperStats,
 } from "@/data/exam-papers";
+import {
+  COMMON_TEST_MATH_1A_MOCK_001,
+  getCommonTestMockExamStats,
+} from "@/data/common-test-mock-exams";
 import { getExamQuestionSummary } from "@/lib/common-test-exams";
 
 export const metadata: Metadata = {
@@ -29,6 +33,7 @@ const SUBJECT_NAMES: Record<string, string> = {
 };
 
 export default function SimulatorIndexPage() {
+  const newMockStats = getCommonTestMockExamStats(COMMON_TEST_MATH_1A_MOCK_001);
   const fullPaperStats = getExamPaperStats(MATH_1A_PAPER_001);
   const samplePaperStats = getExamPaperStats(MATH_1A_SECTION_2_PAPER_SAMPLE);
   const presets = [...getAllCommonTestExamPresets()].sort((a, b) => {
@@ -109,28 +114,56 @@ export default function SimulatorIndexPage() {
         </header>
 
         <section className="mb-8 grid gap-4">
-          <div className="rounded-2xl border border-blue-200 bg-white p-5 shadow-sm ring-1 ring-blue-50">
+          <div className="rounded-2xl border border-blue-300 bg-white p-5 shadow-sm ring-1 ring-blue-100">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700">
                   <FileText className="h-3.5 w-3.5" />
-                  新形式：冊子型 共通テスト数学IA 第1回
+                  新形式：共通テスト数学IA 本番模試 第1回
                 </div>
                 <h2 className="mt-3 text-xl font-extrabold text-slate-950">
-                  問題冊子画像 + Webマークシートで70分演習
+                  図表・誘導・空欄補充まで含む70分本番演習
                 </h2>
                 <p className="mt-1 text-sm leading-6 text-slate-600">
-                  {fullPaperStats.sectionCount}大問 / {fullPaperStats.questionCount}小問 /{" "}
-                  {fullPaperStats.answerSlotCount}マーク / {MATH_1A_PAPER_001.durationMin}分。
-                  提出後に大問別得点、マーク単位の正誤、復習導線を確認できます。
+                  {newMockStats.sectionCount}大問 / {newMockStats.questionCount}小問 /{" "}
+                  {newMockStats.answerSlotCount}解答欄 / {COMMON_TEST_MATH_1A_MOCK_001.durationMinutes}分 /{" "}
+                  {COMMON_TEST_MATH_1A_MOCK_001.totalPoints}点。目標平均
+                  {COMMON_TEST_MATH_1A_MOCK_001.targetAverage.min}〜
+                  {COMMON_TEST_MATH_1A_MOCK_001.targetAverage.max}点に合わせた、完全オリジナルの本番型模試です。
                 </p>
               </div>
               <Link
-                href="/common-test/simulator/math-1a-paper-001"
+                href="/common-test/simulator/common-test-math-1a-mock-001"
                 className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-extrabold text-white transition hover:bg-blue-700"
               >
                 <FileText className="h-4 w-4" />
                 第1回を開始する
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600">
+                  <FileText className="h-3.5 w-3.5 text-slate-500" />
+                  旧版：冊子画像型 数学IA 第1回
+                </div>
+                <h2 className="mt-3 text-lg font-extrabold text-slate-950">
+                  旧UIの動作確認用として残しています
+                </h2>
+                <p className="mt-1 text-sm leading-6 text-slate-600">
+                  {fullPaperStats.sectionCount}大問 / {fullPaperStats.questionCount}小問 /{" "}
+                  {fullPaperStats.answerSlotCount}マーク / {MATH_1A_PAPER_001.durationMin}分。
+                  問題本文が画像側にあるため、品質QAと復習導線は新形式を優先します。
+                </p>
+              </div>
+              <Link
+                href="/common-test/simulator/math-1a-paper-001"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-slate-700 px-4 py-3 text-sm font-extrabold text-white transition hover:bg-slate-800"
+              >
+                <FileText className="h-4 w-4" />
+                旧版を開く
               </Link>
             </div>
           </div>

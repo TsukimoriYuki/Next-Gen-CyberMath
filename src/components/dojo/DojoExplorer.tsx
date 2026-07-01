@@ -256,6 +256,7 @@ function DeviationRangeSlider({
         min={0}
         max={steps}
         value={minIdx}
+        aria-label={`偏差値レンジの下限（現在 ${value[0]}）`}
         onChange={(e) => {
           const ni = Number(e.target.value);
           if (ni <= maxIdx) onChange([vals[ni], value[1]]);
@@ -268,6 +269,7 @@ function DeviationRangeSlider({
         min={0}
         max={steps}
         value={maxIdx}
+        aria-label={`偏差値レンジの上限（現在 ${value[1]}）`}
         onChange={(e) => {
           const ni = Number(e.target.value);
           if (ni >= minIdx) onChange([value[0], vals[ni]]);

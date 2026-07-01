@@ -14,6 +14,7 @@ export function getSiteUrl(): string {
 export const PUBLIC_INFO_LINKS = [
   { href: "/about", label: "Cyber Mathについて" },
   { href: "/quality", label: "教材・品質方針" },
+  { href: "/quality/checklist", label: "公開QAチェックリスト" },
   { href: "/privacy", label: "プライバシー" },
   { href: "/terms", label: "利用規約" },
   { href: "/contact", label: "お問い合わせ" },

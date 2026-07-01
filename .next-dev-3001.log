@@ -1,10 +1,12 @@
 
 > cyber-math@0.1.0 dev
-> next dev --port 3001
+> next dev -p 3001
 
 ▲ Next.js 16.2.7 (Turbopack)
 - Local:         http://localhost:3001
 - Network:       http://192.168.0.133:3001
 - Environments: .env
-✓ Ready in 762ms
-[?25h
+✓ Ready in 903ms
+
+○ Compiling /common-test/simulator/common-test-math-1a-mock-001 ...
+ GET /common-test/simulator/common-test-math-1a-mock-001 200 in 4.1s (next.js: 3.5s, application-code: 605ms)

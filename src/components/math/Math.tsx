@@ -92,6 +92,7 @@ export function InlineMath({
   return (
     <span
       className="katex-inline inline-block max-w-full overflow-x-auto overflow-y-hidden align-middle"
+      tabIndex={0}
       role={label ? "math" : undefined}
       aria-label={label}
       dangerouslySetInnerHTML={{ __html: render(math, false) }}
@@ -113,6 +114,7 @@ export function BlockMath({
   return (
     <div
       className="katex-block w-full max-w-full overflow-x-auto overflow-y-hidden"
+      tabIndex={0}
       role={label ? "math" : undefined}
       aria-label={label}
       dangerouslySetInnerHTML={{ __html: render(math, true) }}
@@ -168,6 +170,7 @@ function renderInline(
           <span
             key={key}
             className="katex-inline inline-block max-w-full overflow-x-auto overflow-y-hidden align-middle"
+            tabIndex={0}
             role={label ? "math" : undefined}
             aria-label={label}
             dangerouslySetInnerHTML={{ __html: render(math, false) }}
