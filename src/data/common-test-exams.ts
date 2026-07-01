@@ -21,6 +21,30 @@ export interface CommonTestExamPreset {
   optionalSectionIds?: string[];
   /** 選択候補から選ぶ題数（選択制プリセットのみ） */
   optionalSelectCount?: number;
+  /**
+   * 公開状態。"public" のみ一覧・導線に表示してよい。省略時は "draft" 扱い。
+   * この EXAM SIMULATOR プリセット群は、手動作成PDF正本の模試とは別物の
+   * ドリル束であり、本番模試として見せないため既定を "draft" にしている。
+   */
+  status?: "public" | "draft";
+  /** データの出自。省略時は legacy-preset 扱い。 */
+  source?: "manual-pdf" | "manual-reviewed" | "legacy-preset" | "ai-prototype" | "auto-generated";
+  /** 人間による内容レビュー済みか。省略時は false 扱い。 */
+  manualReviewed?: boolean;
+  /** 表示上の扱い。本番模試として見せてよいのは full-mock-pdf 系のみ。省略時は practice-only 扱い。 */
+  publicMode?: "full-mock-pdf" | "full-mock-legacy" | "practice-only";
+}
+
+/** 個々のプリセットにメタ情報が無い場合の既定値（= 旧プリセット束は本番模試扱いにしない）。 */
+const EXAM_PRESET_DEFAULTS = {
+  status: "draft" as const,
+  source: "legacy-preset" as const,
+  manualReviewed: false,
+  publicMode: "practice-only" as const,
+};
+
+export function resolveExamPresetMeta(preset: CommonTestExamPreset) {
+  return { ...EXAM_PRESET_DEFAULTS, ...preset };
 }
 
 export const COMMON_TEST_EXAM_PRESETS: CommonTestExamPreset[] = [

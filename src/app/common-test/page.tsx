@@ -124,7 +124,7 @@ export default function CommonTestPage() {
           <section className="order-4 sm:order-7">
             <SectionLabel ja="本番演習" icon={<Zap className="h-4 w-4 text-blue-600" />} />
             <Link
-              href="/common-test/simulator/math-1a-paper-001"
+              href="/common-test/simulator/common-test-math-1a-manual-001"
               className="group flex flex-col gap-4 rounded-2xl border border-blue-200 bg-white p-5 shadow-sm transition-all hover:border-blue-300 hover:shadow-md sm:flex-row sm:items-center"
             >
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 ring-1 ring-blue-100">
@@ -132,14 +132,14 @@ export default function CommonTestPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 text-base font-bold text-slate-900">
-                  冊子型 共通テスト数学IA 第1回を受ける
+                  手動作成版 共通テスト数学IA 第1回を受ける
                 </div>
                 <p className="text-xs leading-relaxed text-slate-500">
-                  4大問 / 22小問 / 56マーク / 100点 / 70分。大問をまたぐ本番の時間配分まで確認できます。
+                  PDF本文を正本として転記した4大問 / 100点 / 70分の本番型模試です。
                 </p>
               </div>
               <span className="inline-flex shrink-0 items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-colors group-hover:bg-blue-700">
-                冊子型模試を開始
+                手動版模試を開始
               </span>
             </Link>
           </section>

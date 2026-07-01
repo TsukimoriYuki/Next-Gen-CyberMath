@@ -15,6 +15,10 @@ export const STANDARD_PRIVATE_MATH_1A_001: ExamSet = {
   expectedAverage: "35〜45点",
   format: "全問穴埋め・選択肢なし・式入力なし",
   status: "available",
+  source: "manual-unreviewed",
+  manualReviewed: false,
+  qualityNote:
+    "手動作成の私大標準レベル演習です。共通テスト本番模試とは別物で、第三者による内容監修は未了です。",
   sections: [
     {
       id: "section-1",

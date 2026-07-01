@@ -191,7 +191,7 @@ export function CommonTestHistoryPanel() {
         <p className="text-xs leading-relaxed text-slate-500">
           大問別演習を1つ解くと、ここに正答率、弱点タグ、時間超過、自信度が記録されます。
           <br />
-          初回は数学IAの3問診断から始めるのがおすすめです。所要時間は約10分です。
+          初回は数学IAの大問別ドリルから始めるのがおすすめです。
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link

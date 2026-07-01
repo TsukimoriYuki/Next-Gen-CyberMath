@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { ArrowLeft, BookOpen, Clock, ClipboardList, LineChart, Target } from "lucide-react";
 import type { CommonTestSubject } from "@/data/common-test";
 import { CommonTestSectionGrid } from "./CommonTestSectionGrid";
-import { getCommonTestExamQuestions } from "@/lib/common-test-exams";
+import { findPublicExperience } from "@/data/common-test-experiences";
 
 interface Props {
   subject: CommonTestSubject;
@@ -57,7 +57,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
                 <div className="h-full w-0 rounded-full bg-blue-600" />
               </div>
               <p className="mt-2 text-xs leading-5 text-slate-500">
-                10分診断、大問別ドリル、冊子型模試を受けると現在地が更新されます。
+                ミニ診断、大問別ドリル、冊子型模試を受けると現在地が更新されます。
               </p>
             </div>
           </div>
@@ -174,42 +174,45 @@ function SectionTitle({
 }
 
 function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
-  const isMath1A = subject.id === "math-1a";
-  const examId =
-    subject.id === "math-1a"
-      ? "math-1a-paper-001"
-      : subject.id === "math-2bc"
-        ? "math-2bc-70"
-        : "english-reading-80";
-  const href = `/common-test/simulator/${examId}`;
-  const questions = isMath1A ? [] : getCommonTestExamQuestions(examId);
-  const sectionCount = isMath1A ? 4 : new Set(questions.map((question) => question.sectionId)).size;
-  const questionCount = isMath1A ? 22 : questions.length;
+  const fullMock = findPublicExperience(subject.id, "full-mock-pdf");
+
+  if (!fullMock) {
+    return (
+      <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+          本番模試（PDF冊子版）
+        </p>
+        <h2 className="mt-1 text-xl font-extrabold text-slate-700">
+          {subject.title}の本番模試は準備中です
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-slate-500">
+          手動作成PDFを正本とした本番模試は、数学I・数学Aから先行公開しています。他科目は準備が整い次第、同じ形式で追加します。
+        </p>
+      </div>
+    );
+  }
 
   return (
     <Link
-      href={href}
+      href={fullMock.targetUrl}
       className="group rounded-2xl border border-blue-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md"
     >
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-sm font-extrabold text-blue-700">
-          {subject.examMinutes}分
+          {fullMock.durationMinutes}分
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">
-            {isMath1A ? "冊子型模試" : "Web本番演習"}
+            手動作成版模試
           </p>
-          <h2 className="mt-1 text-xl font-extrabold text-slate-950">
-            {isMath1A ? "冊子型 共通テスト数学IA 第1回を受ける" : `${subject.examMinutes}分で本番形式を解く`}
-          </h2>
+          <h2 className="mt-1 text-xl font-extrabold text-slate-950">{fullMock.title}を受ける</h2>
           <p className="mt-2 text-sm leading-6 text-slate-600">
-            {isMath1A
-              ? "4大問 / 22小問 / 56マーク / 100点 / 70分。復習導線まで含めて確認します。"
-              : `${sectionCount}大問・${questionCount}問を本番形式で解き、時間配分と弱点を確認します。`}
+            PDF本文を正本として転記した{fullMock.sectionCount}大問 / {fullMock.totalPoints}点 /{" "}
+            {fullMock.durationMinutes}分の本番型模試です。
           </p>
         </div>
         <span className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition group-hover:bg-blue-700">
-          {isMath1A ? "冊子型模試を開始" : "本番演習を開始"}
+          手動版模試を開始
         </span>
       </div>
     </Link>

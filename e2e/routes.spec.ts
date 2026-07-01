@@ -19,6 +19,7 @@ const CORE_ROUTES = [
   "/units",
   "/common-test",
   "/common-test/simulator",
+  "/common-test/simulator/common-test-math-1a-manual-001",
   "/exam-sets",
   "/courses",
   "/calc-drill",
@@ -115,4 +116,25 @@ test("/admin/lectures — 未認証では管理画面が開けない", async ({ 
 test("/admin/lectures/new — 未認証では管理画面が開けない", async ({ page }) => {
   await page.goto("/admin/lectures/new", { waitUntil: "domcontentloaded" });
   expect(new URL(page.url()).pathname).not.toBe("/admin/lectures/new");
+});
+
+test("/common-test/simulator/math-1a-70 — 旧プリセットは手動PDF版へリダイレクトされる", async ({ page }) => {
+  await page.goto("/common-test/simulator/math-1a-70", { waitUntil: "domcontentloaded" });
+  expect(new URL(page.url()).pathname).toBe("/common-test/simulator/common-test-math-1a-manual-001");
+});
+
+test("/common-test/simulator/math-2bc-70 — 旧プリセットは非公開notice を表示する", async ({ page }) => {
+  await page.goto("/common-test/simulator/math-2bc-70");
+  const bodyText = await page.locator("body").innerText();
+  expect(bodyText).toContain("旧試作版のため非公開です");
+});
+
+test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文を再構成していない", async ({ page, request }) => {
+  await page.goto("/common-test/simulator/common-test-math-1a-manual-001");
+  const iframeCount = await page.locator("iframe").count();
+  expect(iframeCount, "manual mock page should embed the PDF via <iframe>").toBeGreaterThan(0);
+
+  const pdfResponse = await request.get("/mock-exams/math1a/common-test-math-1a-manual-001.pdf");
+  expect(pdfResponse.status()).toBe(200);
+  expect(pdfResponse.headers()["content-type"]).toContain("application/pdf");
 });

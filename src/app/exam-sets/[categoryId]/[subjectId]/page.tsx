@@ -61,8 +61,14 @@ export default async function ExamSetSubjectPage({ params }: Props) {
                     {exam.description}
                   </p>
                 </div>
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                  公開中
+                <span
+                  className={
+                    exam.manualReviewed
+                      ? "rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700"
+                      : "rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600"
+                  }
+                >
+                  {exam.manualReviewed ? "監修済み・公開中" : "手動作成・監修中"}
                 </span>
               </div>
               <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-slate-600">
@@ -77,6 +83,9 @@ export default async function ExamSetSubjectPage({ params }: Props) {
                   想定平均 {exam.expectedAverage}
                 </span>
               </div>
+              {exam.qualityNote && (
+                <p className="mt-3 text-xs leading-6 text-amber-700">{exam.qualityNote}</p>
+              )}
               <span className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-blue-600">
                 模試を開く
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />

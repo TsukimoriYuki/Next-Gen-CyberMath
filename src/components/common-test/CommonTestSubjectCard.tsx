@@ -1,17 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, Clock, Target } from "lucide-react";
 import type { CommonTestSubject } from "@/data/common-test";
+import { findPublicExperience } from "@/data/common-test-experiences";
 
 export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject }) {
   const { theme, route, title, shortTitle, examMinutes, sections, targetScoreDefault } = subject;
   const isSubSubject = subject.id === "english-reading";
   const priority = getPriorityLabel(subject);
-  const simulatorHref =
-    subject.id === "math-1a"
-      ? "/common-test/simulator/math-1a-paper-001"
-      : subject.id === "math-2bc"
-        ? "/common-test/simulator/math-2bc-70"
-        : "/common-test/simulator/english-reading-80";
+  const diagnosis = findPublicExperience(subject.id, "diagnosis");
+  const fullMock = findPublicExperience(subject.id, "full-mock-pdf");
 
   return (
     <article
@@ -94,18 +91,26 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
             </Link>
           ) : (
             <>
-              <Link
-                href={`${route}/section-${subject.id === "math-1a" ? "1" : "2"}`}
-                className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700"
-              >
-                10分診断を始める
-              </Link>
-              <Link
-                href={simulatorHref}
-                className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:border-blue-300 hover:text-blue-700"
-              >
-                冊子型模試を受ける
-              </Link>
+              {diagnosis && (
+                <Link
+                  href={diagnosis.targetUrl}
+                  className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700"
+                >
+                  {diagnosis.publicCta}
+                </Link>
+              )}
+              {fullMock ? (
+                <Link
+                  href={fullMock.targetUrl}
+                  className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:border-blue-300 hover:text-blue-700"
+                >
+                  冊子型模試を受ける
+                </Link>
+              ) : (
+                <div className="inline-flex items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-500">
+                  本番模試（PDF冊子版）は準備中です
+                </div>
+              )}
             </>
           )}
         </div>

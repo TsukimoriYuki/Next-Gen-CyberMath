@@ -16,8 +16,7 @@ const REQUIRED_PAGE_ROUTES = [
   "/common-test",
   "/common-test/math-1a",
   "/common-test/simulator",
-  "/common-test/simulator/math-1a-70",
-  "/common-test/simulator/math-1a-paper-001",
+  "/common-test/simulator/common-test-math-1a-manual-001",
   "/mock",
   "/quality",
   "/privacy",
@@ -35,7 +34,7 @@ const REQUIRED_SITEMAP_ROUTES = [
   "/units",
   "/common-test",
   "/common-test/simulator",
-  "/common-test/simulator/math-1a-paper-001",
+  "/common-test/simulator/common-test-math-1a-manual-001",
   "/quality",
   "/privacy",
   "/terms",
@@ -233,17 +232,27 @@ function checkCommonTestRouting() {
 
   for (const [file, source] of [
     ["src/app/common-test/page.tsx", commonTestPage],
-    ["src/components/common-test/CommonTestSubjectCard.tsx", subjectCard],
-    ["src/components/common-test/CommonTestSubjectPage.tsx", subjectPage],
     ["src/data/specialLectures.ts", specialLectures],
   ] as const) {
-    if (!source.includes("math-1a-paper-001")) {
-      issues.push(`${file}: main math IA exam route should point to math-1a-paper-001`);
+    if (!source.includes("common-test-math-1a-manual-001")) {
+      issues.push(`${file}: main math IA exam route should point to common-test-math-1a-manual-001`);
     }
   }
 
-  if (!commonTestPage.includes("4大問 / 22小問 / 56マーク / 100点 / 70分")) {
-    issues.push("src/app/common-test/page.tsx: booklet mock specs should be visible in the main CTA");
+  // CommonTestSubjectCard / CommonTestSubjectPage now resolve the math-1a mock link through the
+  // common-test-experiences registry instead of hardcoding the id — check they use the registry
+  // (correctness of the registry's resolution itself is covered by qa:common-test-routing).
+  for (const [file, source] of [
+    ["src/components/common-test/CommonTestSubjectCard.tsx", subjectCard],
+    ["src/components/common-test/CommonTestSubjectPage.tsx", subjectPage],
+  ] as const) {
+    if (!source.includes("common-test-experiences") || !source.includes("findPublicExperience")) {
+      issues.push(`${file}: main math IA exam route should resolve via the common-test-experiences registry (findPublicExperience)`);
+    }
+  }
+
+  if (!commonTestPage.includes("PDF本文を正本として転記した4大問 / 100点 / 70分")) {
+    issues.push("src/app/common-test/page.tsx: manual PDF mock specs should be visible in the main CTA");
   }
 
   const math1ABlock = commonData.split('id: "math-1a"')[1]?.split('id: "math-2bc"')[0] ?? "";

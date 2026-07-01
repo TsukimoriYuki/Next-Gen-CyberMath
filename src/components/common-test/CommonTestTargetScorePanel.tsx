@@ -199,7 +199,7 @@ export function CommonTestTargetScorePanel() {
             <div>
               <div className="text-sm font-extrabold text-amber-800">診断前です</div>
               <p className="mt-1 text-xs leading-5 text-amber-800/80">
-                10分診断、大問別ドリル、冊子型模試を解くと、最新スコアと復習キューがここに反映されます。
+                ミニ診断、大問別ドリル、冊子型模試を解くと、最新スコアと復習キューがここに反映されます。
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -216,7 +216,7 @@ export function CommonTestTargetScorePanel() {
                 大問別ドリルを解く
               </Link>
               <Link
-                href="/common-test/simulator/math-1a-paper-001"
+                href="/common-test/simulator/common-test-math-1a-manual-001"
                 className="inline-flex shrink-0 items-center justify-center rounded-xl bg-amber-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-amber-700"
               >
                 冊子型模試を受ける

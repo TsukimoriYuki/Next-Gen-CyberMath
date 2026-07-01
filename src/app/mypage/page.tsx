@@ -264,7 +264,7 @@ function NoMathData() {
           大問別ドリルを解く
         </Link>
         <Link
-          href="/common-test/simulator/math-1a-paper-001"
+          href="/common-test/simulator/common-test-math-1a-manual-001"
           className="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-display font-bold transition-colors"
           style={{ background: "rgba(232,121,249,0.15)", border: "1px solid rgba(232,121,249,0.4)", color: "#e879f9" }}
         >

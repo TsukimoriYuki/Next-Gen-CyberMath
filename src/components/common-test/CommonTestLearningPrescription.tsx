@@ -54,7 +54,7 @@ export function CommonTestLearningPrescription() {
     : "まずは数学IAの現在地を測りましょう";
   const reason = hasHistory
     ? "解いた大問の履歴があるため、復習キューと冊子型模試をつなぐと弱点が残りにくくなります。"
-    : "診断前は仮スコアを出さず、10分診断または冊子型模試の結果から現在地を作ります。";
+    : "診断前は仮スコアを出さず、ミニ診断または冊子型模試の結果から現在地を作ります。";
   const primaryHref = hasHistory ? "/common-test/review" : "/common-test/math-1a";
   const primaryLabel = hasHistory ? "復習キューを開く" : "共通テスト対策を始める";
 
@@ -119,7 +119,7 @@ export function CommonTestLearningPrescription() {
               </Link>
             </div>
             <Link
-              href="/common-test/simulator/math-1a-paper-001"
+              href="/common-test/simulator/common-test-math-1a-manual-001"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs font-bold text-amber-700 transition hover:bg-amber-100"
             >
               冊子型模試を受ける

@@ -106,6 +106,12 @@ export type CommonTestMockExam = {
     max: number;
   };
   sections: CommonTestSection[];
+  /**
+   * PDF冊子の public 配下URL。存在する場合、本番導線はこのPDFをそのまま表示する
+   * （問題本文をReactで再構成しない）。採点・解説はこのファイルとは独立して
+   * sections/questions のデータから行う。
+   */
+  pdfUrl?: string;
   source: "manual-pdf" | "ai-prototype";
   status: "published" | "draft";
   devOnly?: boolean;

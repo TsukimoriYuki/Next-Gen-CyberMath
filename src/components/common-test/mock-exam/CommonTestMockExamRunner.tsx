@@ -390,7 +390,9 @@ function QuestionBlock({
   );
 }
 
-function AnswerInput({
+// PDF冊子ビューア (CommonTestPdfMockViewer) からも解答入力欄を再利用するため export する。
+// 問題本文の再構成（prompt / 図解）はこのファイル固有のままにし、入力欄だけ共有する。
+export function AnswerInput({
   question,
   answer,
   submitted,

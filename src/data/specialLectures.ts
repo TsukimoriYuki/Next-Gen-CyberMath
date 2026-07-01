@@ -831,7 +831,7 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
           },
           {
             title: "数学IA 本番演習",
-            href: "/common-test/simulator/math-1a-paper-001",
+            href: "/common-test/simulator/common-test-math-1a-manual-001",
             note: "時間内スコアとの差を見る",
           },
         ],

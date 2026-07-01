@@ -340,12 +340,12 @@ export function CommonTestReviewQueue() {
           復習キューはまだ空です
         </div>
         <p className="text-xs leading-relaxed text-slate-500">
-            まずは10分ほどの大問別ドリルを解くと、間違えた問題や自信があいまいな問題がここに入ります。
+            まずは大問別ドリルを1つ解くと、間違えた問題や自信があいまいな問題がここに入ります。
             <br />
             今日の復習、次回の確認日、危険度を自動で並べ替えます。
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-2 text-[11px] font-bold text-slate-500">
-            <span className="rounded-full bg-slate-100 px-2.5 py-1">所要時間: 約10分</span>
+            <span className="rounded-full bg-slate-100 px-2.5 py-1">所要時間: 大問1つあたり10〜20分</span>
             <span className="rounded-full bg-slate-100 px-2.5 py-1">初回は3問から</span>
           </div>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -353,7 +353,7 @@ export function CommonTestReviewQueue() {
               href="/common-test/math-1a"
               className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700"
             >
-              10分診断を始める →
+              ミニ診断を始める →
             </Link>
             <Link
               href="/common-test/lectures"

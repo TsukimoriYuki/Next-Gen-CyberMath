@@ -47,6 +47,12 @@ export type ExamSet = {
   format: string;
   status: ExamSetStatus;
   sections: ExamSetSection[];
+  /** 出自。手動作成/人間監修済み/未監修などを明示する。省略時は "unreviewed" 扱い。 */
+  source?: "manual-reviewed" | "manual-unreviewed" | "auto-generated";
+  /** 人間による内容レビュー済みか。省略時は false 扱い。 */
+  manualReviewed?: boolean;
+  /** 公開一覧・詳細ページに表示する品質メモ（監修状況など）。 */
+  qualityNote?: string;
 };
 
 export type ExamSetCategory = {

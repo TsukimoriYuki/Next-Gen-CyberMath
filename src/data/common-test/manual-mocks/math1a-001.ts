@@ -89,6 +89,7 @@ export const COMMON_TEST_MATH_1A_MANUAL_001: CommonTestMockExam = {
   durationMinutes: 70,
   totalPoints: 100,
   targetAverage: { min: 45, max: 60 },
+  pdfUrl: "/mock-exams/math1a/common-test-math-1a-manual-001.pdf",
   source: "manual-pdf",
   status: "published",
   sections: [

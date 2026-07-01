@@ -11,8 +11,7 @@ const REQUIRED_ROUTES = [
   "/common-test",
   "/common-test/math-1a",
   "/common-test/simulator",
-  "/common-test/simulator/math-1a-70",
-  "/common-test/simulator/math-1a-paper-001",
+  "/common-test/simulator/common-test-math-1a-manual-001",
   "/mock",
   "/quality",
   "/privacy",
@@ -57,14 +56,14 @@ async function main() {
   assertExcludes("/", home, "C Y B E R");
 
   const commonTest = pages.get("/common-test") ?? "";
-  assertIncludes("/common-test", commonTest, "math-1a-paper-001");
+  assertIncludes("/common-test", commonTest, "common-test-math-1a-manual-001");
   assertIncludes("/common-test", commonTest, "math-1a");
   for (const bad of ["64/80", "57/75", "70/85", "Analyzing Data"]) {
     assertExcludes("/common-test", commonTest, bad);
   }
 
   const math1a = pages.get("/common-test/math-1a") ?? "";
-  assertIncludes("/common-test/math-1a", math1a, "math-1a-paper-001");
+  assertIncludes("/common-test/math-1a", math1a, "common-test-math-1a-manual-001");
   assertIncludes("/common-test/math-1a", math1a, "math-1a/section-1");
 
   const courses = pages.get("/courses") ?? "";
@@ -82,12 +81,12 @@ async function main() {
     assertIncludes("/contact", contact, text);
   }
 
-  const paper = pages.get("/common-test/simulator/math-1a-paper-001") ?? "";
-  assertIncludes("/common-test/simulator/math-1a-paper-001", paper, "56");
-  assertExcludes("/common-test/simulator/math-1a-paper-001", paper, "Invalid Date");
+  const paper = pages.get("/common-test/simulator/common-test-math-1a-manual-001") ?? "";
+  assertIncludes("/common-test/simulator/common-test-math-1a-manual-001", paper, "70分");
+  assertExcludes("/common-test/simulator/common-test-math-1a-manual-001", paper, "Invalid Date");
 
   const sitemap = await fetchText("/sitemap.xml");
-  assertIncludes("/sitemap.xml", sitemap, "/common-test/simulator/math-1a-paper-001");
+  assertIncludes("/sitemap.xml", sitemap, "/common-test/simulator/common-test-math-1a-manual-001");
 
   if (issues.length > 0) {
     console.error(`Live public quality check failed for ${baseUrl}: ${issues.length} issue(s).`);

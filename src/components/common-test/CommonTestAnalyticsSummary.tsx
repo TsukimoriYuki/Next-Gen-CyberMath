@@ -116,7 +116,7 @@ export function CommonTestAnalyticsSummary() {
       <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
         <div className="text-sm font-bold text-slate-700">弱点レポートはまだありません</div>
         <p className="mx-auto mt-2 max-w-md text-xs leading-5 text-slate-500">
-          まずは10分ほどの大問別ドリルで現在地を測ると、正答率、時間超過、弱点タグがここに表示されます。
+          まずは大問別ドリルを1つ解いて現在地を測ると、正答率、時間超過、弱点タグがここに表示されます。
         </p>
         <Link
           href="/common-test/math-1a"
