@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, CalendarDays, History, Layers, Zap } from "lucide-react";
 import { CommonTestDailyPlaylistPanel } from "@/components/common-test/CommonTestDailyPlaylistPanel";
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "今日の学習メニュー — 共通テスト対策室",
@@ -122,7 +123,7 @@ export default function CommonTestDailyPage() {
 
         {/* Footer */}
         <p className="mt-16 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
-          CYBER OS · 共通テスト対策室
+          {SITE_NAME} · 共通テスト対策室
         </p>
       </div>
     </div>

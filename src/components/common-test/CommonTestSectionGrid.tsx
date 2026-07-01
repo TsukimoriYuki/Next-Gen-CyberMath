@@ -51,7 +51,10 @@ function SectionCard({
                 color: theme.primary,
               }}
             >
-              第{section.number}問
+              第{section.number}問 相当
+            </span>
+            <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-500">
+              技能分解ドリル
             </span>
             {section.isElective && (
               <span className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700 ring-1 ring-amber-200">

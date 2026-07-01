@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Sigma } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { AuthForm } from "@/components/auth/AuthForm";
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "ログイン",
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
     canonical: "/auth/login",
   },
   openGraph: {
-    title: "ログイン | Cyber Math",
+    title: `ログイン | ${SITE_NAME}`,
     description: "Cyber Math の学習履歴と復習キューにアクセスするためのログインページです。",
     url: "/auth/login",
   },

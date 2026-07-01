@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     canonical: "/common-test",
   },
   openGraph: {
-    title: "共通テスト数学 対策室 | Cyber Math",
+    title: "共通テスト数学 対策室 | Cyber Math Next-Gen",
     description:
       "大問別ドリル、復習キュー、講義、冊子型模試で共通テスト数学の現在地と次の一手を確認します。",
     url: "/common-test",

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     canonical: "/common-test/simulator/paper-sample",
   },
   openGraph: {
-    title: "PDF冊子型サンプル演習 | Cyber Math",
+    title: "PDF冊子型サンプル演習 | Cyber Math Next-Gen",
     description:
       "問題冊子画像とWebマークシート入力を分けた共通テスト型模試の最小実装サンプル。",
     url: "/common-test/simulator/paper-sample",

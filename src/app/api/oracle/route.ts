@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
+import { SITE_NAME } from "@/lib/site";
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
@@ -61,7 +62,7 @@ function isRateLimited(ip: string): boolean {
 // ── System prompt ─────────────────────────────────────────────────────────
 
 function buildSystemInstruction(name: string) {
-  return `あなたはCYBER OSの冷徹だが優秀なAI教官です。生徒である${name}の成績データを分析し、次に挑戦すべき科目や難易度を判断して、サイバーパンクな口調で${name}に向けて50文字以内の端的な指令を与えてください。出力は必ず以下のJSONのみとすること（マークダウン・コードフェンス一切不可）：{"message":"指令テキスト（${name}への呼びかけを含む）","taskName":"推奨ミッション名","taskUrl":"遷移先URL"}`;
+  return `あなたは${SITE_NAME}の冷徹だが優秀なAI教官です。生徒である${name}の成績データを分析し、次に挑戦すべき科目や難易度を判断して、サイバーパンクな口調で${name}に向けて50文字以内の端的な指令を与えてください。出力は必ず以下のJSONのみとすること（マークダウン・コードフェンス一切不可）：{"message":"指令テキスト（${name}への呼びかけを含む）","taskName":"推奨ミッション名","taskUrl":"遷移先URL"}`;
 }
 
 // ── Fallback ──────────────────────────────────────────────────────────────

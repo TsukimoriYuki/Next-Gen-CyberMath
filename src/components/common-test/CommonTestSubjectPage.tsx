@@ -86,8 +86,8 @@ export function CommonTestSubjectPage({ subject }: Props) {
         <section className="mt-8">
           <SectionTitle
             icon={<ClipboardList className="h-5 w-5" />}
-            title="大問別ドリル"
-            description="配点、目標時間、優先度を見て、今の得点差を縮める順に練習します。"
+            title="大問別ドリル（技能分解ドリル）"
+            description="本番大問を分解した技能練習です。配点、目標時間、優先度を見て、今の得点差を縮める順に練習します。文章量・誘導・時間配分まで含めた本番演習は、冊子型模試で確認してください。"
           />
           <CommonTestSectionGrid sections={sections} theme={theme} subjectId={subject.id} />
         </section>

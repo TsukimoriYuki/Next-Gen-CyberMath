@@ -15,7 +15,7 @@ export async function generateMetadata({
   const { lessonId } = await params;
   const lesson = getCourseLesson("math-1a", "quadratic", lessonId);
   return {
-    title: lesson ? `${lesson.lessonTitle} | CYBER OS` : "講座 | CYBER OS",
+    title: lesson ? lesson.lessonTitle : "講座",
   };
 }
 

@@ -4,7 +4,7 @@ import { getCourseSubject, getCourseUnit } from "@/data/course-curriculum";
 import { CourseUnitPageView } from "@/components/courses/CourseUnitPageView";
 
 export const metadata: Metadata = {
-  title: "二次関数 講座一覧 | CYBER OS",
+  title: "二次関数 講座一覧",
   description: "数学IA 二次関数の講座一覧です。",
 };
 

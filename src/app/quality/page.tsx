@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     canonical: "/quality",
   },
   openGraph: {
-    title: "教材・品質方針 | Cyber Math",
+    title: "教材・品質方針 | Cyber Math Next-Gen",
     description:
       "Cyber Mathの教材制作、数学的正確性、数式表示、公開前QA、誤り報告への対応方針。",
     url: "/quality",
@@ -63,6 +63,14 @@ export default function QualityPage() {
             "冊子型模試は、問題ごとの採点対象、選択肢、配点、解説、復習先をレビューします。",
             "レビュー記録と公開前チェックはdocs配下に残し、後から問題修正の理由を追えるようにします。",
           ],
+        },
+        {
+          title: "手動作成ロードマップ",
+          body: [
+            "鉄緑会級の教材密度を目指すために次に必要なのは、機能追加ではなく中核教材の手動監修だと考えています。",
+            "冊子型模試の追加回、単元別の中核講義、大問型の手動演習、既存教材の人間レビューを優先順位付きで公開しています。",
+          ],
+          links: [{ label: "教材ロードマップを見る", href: "/quality/roadmap" }],
         },
         {
           title: "誤り報告",

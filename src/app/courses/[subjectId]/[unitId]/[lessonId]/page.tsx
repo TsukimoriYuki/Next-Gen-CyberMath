@@ -16,7 +16,7 @@ export async function generateMetadata({
   const { subjectId, unitId, lessonId } = await params;
   const lesson = getCourseLesson(subjectId, unitId, lessonId);
   return {
-    title: lesson ? `${lesson.lessonTitle} | CYBER OS` : "講座 | CYBER OS",
+    title: lesson ? lesson.lessonTitle : "講座",
   };
 }
 

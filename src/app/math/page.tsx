@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     canonical: "/math",
   },
   openGraph: {
-    title: "数学トップ | Cyber Math",
+    title: "数学トップ | Cyber Math Next-Gen",
     description:
       "今日の問題、過去問道場、模試、単元別講座へ進める高校数学の学習入口。",
     url: "/math",

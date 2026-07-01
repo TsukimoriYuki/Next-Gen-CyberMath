@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ShieldAlert, History, Layers, CalendarDays } from "lucide-react";
 import { CommonTestWeaknessBossPanel } from "@/components/common-test/CommonTestWeaknessBossPanel";
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "弱点攻略 — 共通テスト対策室",
@@ -86,7 +87,7 @@ export default function CommonTestWeaknessPage() {
 
         {/* Footer */}
         <p className="mt-16 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
-          CYBER OS · 共通テスト対策室
+          {SITE_NAME} · 共通テスト対策室
         </p>
       </div>
     </div>

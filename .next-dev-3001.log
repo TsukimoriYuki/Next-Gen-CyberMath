@@ -40,3 +40,7 @@
  GET /common-test/simulator/common-test-math-1a-manual-001 200 in 110ms (next.js: 5ms, application-code: 104ms)
  HEAD /common-test/simulator/math-1a-70 307 in 79ms (next.js: 13ms, application-code: 66ms)
 ✓ Finished filesystem cache database compaction in 10.0s
+✓ Compiled in 352ms
+✓ Compiled in 208ms
+✓ Compiled in 186ms
+✓ Compiled in 175ms

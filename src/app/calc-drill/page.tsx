@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronLeft, Target } from "lucide-react";
 import { CalcDrillGame } from "@/components/calc/CalcDrillGame";
 
-export const metadata: Metadata = { title: "計算ドリル | CYBER OS" };
+export const metadata: Metadata = { title: "計算ドリル" };
 
 export default function CalcDrillPage() {
   return (

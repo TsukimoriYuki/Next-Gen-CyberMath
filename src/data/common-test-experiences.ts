@@ -20,6 +20,12 @@ export type CommonTestExperienceMode =
   | "section-drill"
   | "full-mock-pdf"
   | "full-mock-legacy"
+  /**
+   * 予定: 大問1問分を通し演習として手動作成したもの（誘導・文章量・配点を本番同等に
+   * 再現する）。現時点ではデータが存在しないため、このモードの experience はまだ無い。
+   * 手動作成ロードマップ（/quality/roadmap）参照。
+   */
+  | "full-section-manual"
   | "fixed-exam"
   | "practice";
 
@@ -73,6 +79,30 @@ function buildDiagnosisEntries(): CommonTestExperience[] {
       manualReviewed: true,
     } satisfies CommonTestExperience;
   });
+}
+
+// ── 大問別ドリル（技能分解ドリル）全件。本番大問そのものではない。 ─────────
+// 「第N問」を名乗るが、実体は本番大問を分解した技能練習であることを
+// mode: "section-drill" として明示する。full-mock-pdf/fixed-exam と混同しない。
+function buildSectionDrillEntries(): CommonTestExperience[] {
+  return COMMON_TEST_SUBJECTS.filter((s) => s.id !== "english-reading").flatMap((subject) =>
+    subject.sections.map((section): CommonTestExperience => ({
+      id: `${subject.id}-section-${section.number}-drill`,
+      title: `${subject.shortTitle} 第${section.number}問 技能分解ドリル（${section.title}）`,
+      subject: subject.id,
+      mode: "section-drill",
+      status: "public",
+      source: "manual-reviewed",
+      durationMinutes: section.recommendedMinutes,
+      questionCount: undefined,
+      targetUrl: `${subject.route}/section-${section.number}`,
+      label: `第${section.number}問 技能分解ドリル`,
+      publicCta: `第${section.number}問のドリルを解く`,
+      manualReviewed: true,
+      qualityNote:
+        "本番大問を分解した技能練習です。文章量・誘導・時間配分まで含めた本番演習は、full-mock-pdf（冊子型模試）で確認してください。",
+    })),
+  );
 }
 
 // ── 手動作成PDF正本の本番模試 / AI試作版 ────────────────────────────────
@@ -179,6 +209,7 @@ export function getCommonTestExperiences(): CommonTestExperience[] {
   if (!cache) {
     cache = [
       ...buildDiagnosisEntries(),
+      ...buildSectionDrillEntries(),
       ...buildFullMockEntries(),
       ...buildLegacyPresetEntries(),
       ...buildFixedExamEntries(),

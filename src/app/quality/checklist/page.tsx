@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Cyber Mathが公開前・公開後に実行しているQAスクリプトの一覧と、現在の公開問題数を示すページです。",
   alternates: { canonical: "/quality/checklist" },
   openGraph: {
-    title: "公開QAチェックリスト | Cyber Math",
+    title: "公開QAチェックリスト | Cyber Math Next-Gen",
     description: "実行しているQAスクリプトの一覧と、現在の公開問題数。",
     url: "/quality/checklist",
   },

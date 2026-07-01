@@ -11,7 +11,7 @@ export async function generateMetadata({
   const { subjectId } = await params;
   const subject = getCourseSubject(subjectId);
   return {
-    title: subject ? `${subject.subjectName} 講座 | CYBER OS` : "講座 | CYBER OS",
+    title: subject ? `${subject.subjectName} 講座` : "講座",
   };
 }
 

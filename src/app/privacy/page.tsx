@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     canonical: "/privacy",
   },
   openGraph: {
-    title: "プライバシーポリシー | Cyber Math",
+    title: "プライバシーポリシー | Cyber Math Next-Gen",
     description: "学習データ、アカウント情報、Cookieの利用方針について。",
     url: "/privacy",
   },

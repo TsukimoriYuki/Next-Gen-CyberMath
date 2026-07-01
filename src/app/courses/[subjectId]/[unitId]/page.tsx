@@ -11,7 +11,7 @@ export async function generateMetadata({
   const { subjectId, unitId } = await params;
   const unit = getCourseUnit(subjectId, unitId);
   return {
-    title: unit ? `${unit.unitTitle} 講座一覧 | CYBER OS` : "講座一覧 | CYBER OS",
+    title: unit ? `${unit.unitTitle} 講座一覧` : "講座一覧",
   };
 }
 

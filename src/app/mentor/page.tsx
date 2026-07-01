@@ -14,6 +14,7 @@ import {
   Zap,
 } from "lucide-react";
 import { getSession } from "@/lib/auth";
+import { SITE_NAME } from "@/lib/site";
 import { getAllProblems } from "@/lib/content";
 import { prisma } from "@/lib/prisma";
 import { WeakTagStats } from "@/components/mentor/WeakTagStats";
@@ -214,7 +215,7 @@ export default async function MentorPage({
       <header className="mb-8">
         <div className="inline-flex items-center gap-2 rounded-full border border-neon-amber/30 bg-neon-amber/5 px-3 py-1 font-mono text-xs uppercase tracking-[0.2em] text-neon-amber">
           <ShieldCheck className="h-3.5 w-3.5" />
-          Mentor Dashboard · CYBER OS
+          Mentor Dashboard · {SITE_NAME}
         </div>
         <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight">
           師範の間

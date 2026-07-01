@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     canonical: "/courses",
   },
   openGraph: {
-    title: "講座集 | Cyber Math",
+    title: "講座集 | Cyber Math Next-Gen",
     description: "高校数学の基礎講座と発展講座を単元ごとに整理した講座一覧。",
     url: "/courses",
   },

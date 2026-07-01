@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     canonical: "/licenses",
   },
   openGraph: {
-    title: "教材とライセンス | Cyber Math",
+    title: "教材とライセンス | Cyber Math Next-Gen",
     description: "Cyber Mathの教材、図解、利用ライブラリ、ライセンス表記について。",
     url: "/licenses",
   },

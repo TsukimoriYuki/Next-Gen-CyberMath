@@ -30,6 +30,7 @@ const CORE_ROUTES = [
   "/quality",
   "/quality/checklist",
   "/quality/changelog",
+  "/quality/roadmap",
   "/privacy",
   "/terms",
   "/contact",
