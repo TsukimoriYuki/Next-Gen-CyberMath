@@ -186,7 +186,7 @@ function ExamSharedMaterial({
 
       {question.examPassage && (
         <div className="text-[14px] leading-[1.9] whitespace-pre-wrap">
-          {question.examPassage}
+          {renderText(question.examPassage, "text-[14px] leading-[1.9]")}
         </div>
       )}
 

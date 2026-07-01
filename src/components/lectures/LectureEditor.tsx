@@ -221,7 +221,7 @@ export function LectureEditor({ lectureId }: Props) {
 
         <header className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold text-blue-700">特別講義エディタMVP</p>
+            <p className="text-xs font-bold text-blue-700">管理者向け</p>
             <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
               {lecture.title || "新しい講義"}
             </h1>
@@ -1170,7 +1170,7 @@ function AdminLectureList() {
               特別講義管理
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              DB・認証なしのMVPです。作成した講義はlocalStorageに保存し、JSONとしてエクスポートできます。
+              作成した講義はブラウザのlocalStorageに保存し、JSONとしてエクスポートできます（DB・認証は未接続）。
             </p>
           </div>
           <Link href="/admin/lectures/new" className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white hover:bg-blue-700">

@@ -11,7 +11,7 @@ export const EXPANSION_PACK_1: Problem[] = [
   {
     slug: "exp1-vieta-formulas-chain",
     title: "解と係数の関係による連鎖問題",
-    unit: "二次方程式",
+    unit: "2次関数",
     difficulty: "A",
     statement:
       "二次方程式 $x^2 + ax + b = 0$ の2つの解が $3$ と $-1$ であるとき、定数 $a, b$ の値を求めよ。" +
@@ -80,7 +80,7 @@ export const EXPANSION_PACK_1: Problem[] = [
   {
     slug: "exp1-quadratic-min-moving-axis",
     title: "軸が動く二次関数の最小値",
-    unit: "二次関数",
+    unit: "2次関数",
     difficulty: "B",
     statement:
       "$f(x) = x^2 - 2ax + a$ を定義域 $0 \\leq x \\leq 1$ で考える。" +
@@ -301,7 +301,7 @@ export const EXPANSION_PACK_1: Problem[] = [
   {
     slug: "exp1-cosine-sine-area",
     title: "余弦定理・正弦定理の総合問題",
-    unit: "三角比",
+    unit: "図形と計量",
     difficulty: "C",
     statement:
       "三角形 $\\mathrm{ABC}$ において $\\cos A = \\dfrac{1}{3}$, $b = \\sqrt{3}$, $c = 3\\sqrt{3}$ のとき、" +

@@ -189,7 +189,10 @@ export function ExamSetRunner({ examSet }: { examSet: ExamSet }) {
             <Meta label="制限時間" value={`${examSet.durationMin}分`} />
             <Meta label="満点" value={`${examSet.totalScore}点`} />
             <Meta label="形式" value={examSet.format} />
-            <Meta label="小問数" value={`${examSet.problemCount}問`} />
+            <Meta
+              label="小問数"
+              value={`${examSet.sections.reduce((sum, s) => sum + s.problems.length, 0)}問`}
+            />
           </div>
         </header>
 

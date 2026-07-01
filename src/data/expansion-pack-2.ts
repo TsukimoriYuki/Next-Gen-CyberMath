@@ -11,7 +11,7 @@ export const EXPANSION_PACK_2: Problem[] = [
   {
     slug: "exp2-set-inclusion-exclusion",
     title: "集合の要素の個数と包除原理",
-    unit: "集合と論理",
+    unit: "集合と命題",
     difficulty: "A",
     statement:
       "全体集合を $U = \\{1, 2, 3, \\ldots, 30\\}$ とし、" +
@@ -79,7 +79,7 @@ export const EXPANSION_PACK_2: Problem[] = [
   {
     slug: "exp2-binomial-prob-maximize",
     title: "反復試行の確率と最大化",
-    unit: "確率",
+    unit: "場合の数と確率",
     difficulty: "B",
     statement:
       "表が出る確率が $p$（$0 < p < 1$）のコインを $4$ 回投げるとき、" +
@@ -154,7 +154,7 @@ export const EXPANSION_PACK_2: Problem[] = [
   {
     slug: "exp2-quadratic-ineq-integer-count",
     title: "二次不等式の整数解の個数",
-    unit: "二次不等式",
+    unit: "2次関数",
     difficulty: "C",
     statement:
       "$a$ を実数の定数とする。二次不等式 $x^2 - 5x + a < 0$ を満たす整数 $x$ が" +
@@ -228,7 +228,7 @@ export const EXPANSION_PACK_2: Problem[] = [
   {
     slug: "exp2-dice-discriminant-prob",
     title: "サイコロと二次方程式の判別式",
-    unit: "確率",
+    unit: "場合の数と確率",
     difficulty: "C",
     statement:
       "1 個のサイコロを 2 回投げ、1 回目に出た目を $a$、2 回目に出た目を $b$ とする。" +
@@ -304,7 +304,7 @@ export const EXPANSION_PACK_2: Problem[] = [
   {
     slug: "exp2-trig-double-angle-equation",
     title: "2倍角公式を使った三角方程式",
-    unit: "三角比",
+    unit: "三角関数",
     difficulty: "C",
     statement:
       "$0 \\leq \\theta \\leq 2\\pi$ において、方程式 $\\sin 2\\theta + \\sin \\theta = 0$ を解け。",

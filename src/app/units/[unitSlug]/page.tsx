@@ -20,7 +20,17 @@ export async function generateMetadata({
   const { unitSlug } = await params;
   const unit = getProblemsByUnitSlug(unitSlug);
   if (!unit) return { title: "単元が見つかりません" };
-  return { title: unit.name, description: unit.description || `${unit.name} の問題` };
+  const description = unit.description || `${unit.name} の問題`;
+  return {
+    title: unit.name,
+    description,
+    alternates: { canonical: `/units/${unitSlug}` },
+    openGraph: {
+      title: `${unit.name} | Cyber Math`,
+      description,
+      url: `/units/${unitSlug}`,
+    },
+  };
 }
 
 export default async function UnitDetailPage({

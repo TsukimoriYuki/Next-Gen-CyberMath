@@ -24,7 +24,6 @@ export interface CommonTestSubject {
   examMinutes: number;
   theme: CommonTestTheme;
   targetScoreDefault: number;
-  estimatedScoreMock: number;
   description: string;
   sections: CommonTestSection[];
   scoreRoutes: ScoreRoute[];
@@ -62,7 +61,6 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
       glowRgb: "0,210,255",
     },
     targetScoreDefault: 80,
-    estimatedScoreMock: 0,
     description:
       "数と式、二次関数、図形、データの分析、場合の数と確率を大問別に練習します。大問ごとの読み方と時間配分を固め、冊子型模試で本番の70分運用まで確認します。",
     sections: [
@@ -131,7 +129,6 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
       glowRgb: "168,85,247",
     },
     targetScoreDefault: 75,
-    estimatedScoreMock: 0,
     description:
       "図形と方程式、三角関数、指数・対数、微分積分、数列、統計、ベクトル、平面上の曲線、複素数平面を大問別に練習します。必答問題と選択問題の判断を分けて鍛えます。",
     sections: [
@@ -225,9 +222,8 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
       glowRgb: "16,185,129",
     },
     targetScoreDefault: 85,
-    estimatedScoreMock: 0,
     description:
-      "β版のサブ科目です。数学対策を優先しつつ、余力がある日に読解速度と情報照合を補強します。",
+      "先行公開中のサブ科目です。数学対策を優先しつつ、余力がある日に読解速度と情報照合を補強します。",
     sections: [
       {
         number: 1,

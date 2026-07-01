@@ -36,7 +36,7 @@ export default function ComprehensionPage() {
   const handleSelect = useCallback((level: EnglishLevel) => {
     const pool = COMPREHENSION_PROBLEMS.filter((p) => p.level === level);
     if (pool.length === 0) {
-      alert("該当レベルのデータが未実装です。別のレベルを選択してください。");
+      alert("このレベルの問題は準備中です。別のレベルを選択してください。");
       return;
     }
     const pick = pool[Math.floor(Math.random() * pool.length)];

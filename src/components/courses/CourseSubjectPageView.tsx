@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, Clock, Layers } from "lucide-react";
 import type { CourseSubject } from "@/types/course";
+import { STANDARD_COURSE_SUBJECTS } from "@/data/courses";
 
 const PREMIUM_PAGE_DESCRIPTIONS: Record<string, string> = {
   "math-1a-premium":
@@ -11,7 +12,13 @@ const PREMIUM_PAGE_DESCRIPTIONS: Record<string, string> = {
 
 export function CourseSubjectPageView({ subject }: { subject: CourseSubject }) {
   const isPremium = subject.courseKind === "premium";
+  const isPreparing = isPremium || subject.status === "preparing" || subject.status === "coming-soon";
   const pageDescription = PREMIUM_PAGE_DESCRIPTIONS[subject.subjectId] ?? subject.description;
+  const availableAlternatives = isPreparing
+    ? STANDARD_COURSE_SUBJECTS.filter(
+        (s) => s.subjectId !== subject.subjectId && s.units.some((u) => u.lessons.length > 0),
+      )
+    : [];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -55,14 +62,31 @@ export function CourseSubjectPageView({ subject }: { subject: CourseSubject }) {
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
             {pageDescription}
           </p>
-          {isPremium ? (
+          {isPreparing ? (
             <div className="mt-5 inline-flex rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-bold text-amber-700">
-              現在は無料教材を優先整備中です。発展講座の公開時期と内容は、決まり次第このページでお知らせします。
+              {isPremium
+                ? "現在は無料教材を優先整備中です。発展講座の公開時期と内容は、決まり次第このページでお知らせします。"
+                : "現在準備中の講座です。公開時期と内容は、決まり次第このページでお知らせします。"}
+            </div>
+          ) : null}
+          {availableAlternatives.length > 0 ? (
+            <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
+              <span className="text-slate-500">今すぐ学べる講座:</span>
+              {availableAlternatives.map((alt) => (
+                <Link
+                  key={alt.subjectId}
+                  href={`/courses/${alt.subjectId}`}
+                  className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 font-bold text-blue-700 transition hover:bg-blue-100"
+                >
+                  {alt.subjectName}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              ))}
             </div>
           ) : null}
         </header>
 
-        {isPremium ? (
+        {isPreparing ? (
           <div className="mb-4">
             <h2 className="text-xl font-extrabold text-slate-950">表示する予定単元</h2>
           </div>

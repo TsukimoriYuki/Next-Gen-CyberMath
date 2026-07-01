@@ -30,9 +30,12 @@ export function CourseStepBlock({ steps }: { steps: StepItem[] }) {
             )}
             {/* 注記 */}
             {s.annotation && (
-              <p className="mt-1 rounded bg-white px-2 py-1 text-[10px] italic text-slate-500 border border-emerald-100">
-                {s.annotation}
-              </p>
+              <div className="mt-1 rounded border border-emerald-100 bg-white px-2 py-1">
+                <CourseBodyRenderer
+                  body={s.annotation}
+                  className="text-[10px] italic text-slate-500"
+                />
+              </div>
             )}
           </div>
         </div>

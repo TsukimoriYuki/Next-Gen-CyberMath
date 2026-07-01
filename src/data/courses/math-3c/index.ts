@@ -11,6 +11,9 @@ export const MATH_3C_COURSE_SUBJECT: CourseSubject = {
   description:
     "極限、微分法、積分法、複素数平面、式と曲線を単元ごとに整理します。",
   color: "#0891b2",
+  status: "preparing",
+  statusLabel: "準備中",
+  badges: ["公開予定"],
   units: [
     LIMITS_UNIT,
     DIFFERENTIAL_CALCULUS_UNIT,

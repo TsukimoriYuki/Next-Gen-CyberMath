@@ -45,7 +45,6 @@ export type ExamSet = {
   totalScore: number;
   expectedAverage: string;
   format: string;
-  problemCount: number;
   status: ExamSetStatus;
   sections: ExamSetSection[];
 };

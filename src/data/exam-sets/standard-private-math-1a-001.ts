@@ -14,7 +14,6 @@ export const STANDARD_PRIVATE_MATH_1A_001: ExamSet = {
   totalScore: 100,
   expectedAverage: "35〜45点",
   format: "全問穴埋め・選択肢なし・式入力なし",
-  problemCount: 20,
   status: "available",
   sections: [
     {

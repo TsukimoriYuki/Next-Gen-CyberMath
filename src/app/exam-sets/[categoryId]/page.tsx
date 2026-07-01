@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, BookOpen, Trophy } from "lucide-react";
-import { getExamSetCategory, getExamSetSubjects } from "@/data/exam-sets";
+import { EXAM_SET_CATEGORIES, getExamSetCategory, getExamSetSubjects } from "@/data/exam-sets";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -50,7 +50,27 @@ export default async function ExamSetCategoryPage({ params }: Props) {
         <section className="mt-8 grid gap-4 sm:grid-cols-2">
           {subjects.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-sm text-slate-500">
-              このカテゴリの模試は準備中です。
+              <p>このカテゴリの模試は準備中です。</p>
+              {(() => {
+                const otherAvailable = EXAM_SET_CATEGORIES.filter(
+                  (c) => c.id !== category.id && getExamSetSubjects(c.id).length > 0,
+                );
+                if (otherAvailable.length === 0) return null;
+                return (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {otherAvailable.map((c) => (
+                      <Link
+                        key={c.id}
+                        href={`/exam-sets/${c.id}`}
+                        className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 transition hover:bg-blue-100"
+                      >
+                        {c.title}
+                        <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
           ) : (
             subjects.map((subject) => (

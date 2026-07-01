@@ -16,9 +16,12 @@ import {
 } from "@/lib/types";
 
 // 公開系（単元一覧・タグ検索・トップ等）で見せる問題集合。
-// isMockOnly:true の「初見殺し」を除外する。詳細解決(getProblem)と SSG 生成
-// (getAllSlugs) はフルの PROBLEMS を使い、模試・履歴復習からの直リンクは生かす。
-const PUBLIC_PROBLEMS: Problem[] = PROBLEMS.filter((p) => !p.isMockOnly);
+// isMockOnly:true の「初見殺し」と tier:"ABYSS"（特異点ガチャ専用プール）を除外する。
+// 詳細解決(getProblem)と SSG 生成 (getAllSlugs) はフルの PROBLEMS を使い、
+// 模試・履歴復習・ガチャからの直リンクは生かす。
+const PUBLIC_PROBLEMS: Problem[] = PROBLEMS.filter(
+  (p) => !p.isMockOnly && p.tier !== "ABYSS",
+);
 
 const UNIT_SLUG_ALIASES: Record<string, string> = {
   probability: "counting-probability",

@@ -157,6 +157,24 @@ export default async function MathHomePage() {
         </p>
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {/* 共通テスト対策室 */}
+          <Link href="/common-test" className="washi washi-hover group block rounded-2xl p-6">
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 transition-transform group-hover:scale-105">
+                <Layers className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="font-display text-lg font-bold text-foreground">共通テスト対策室</div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  数学IAの大問別ドリルと、70分・100点・56マークの冊子型模試。提出後に採点・解説・復習導線まで。
+                </div>
+                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-emerald-400">
+                  共通テスト対策を見る <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
           {/* 道場 */}
           <Link href="/dojo" className="washi washi-hover group block rounded-2xl p-6">
             <div className="flex items-start gap-4">

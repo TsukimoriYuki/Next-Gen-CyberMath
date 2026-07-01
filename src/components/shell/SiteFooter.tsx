@@ -18,7 +18,7 @@ export function SiteFooter() {
               共通テスト数学IAを中心に、講義・演習・復習導線をつなぐ学習プラットフォームです。
             </p>
             <p className="mt-2 font-mono text-[11px] text-muted-foreground/70">
-              © {new Date().getFullYear()} {SITE_NAME}. MVP build.
+              © {new Date().getFullYear()} {SITE_NAME}. 先行公開中 — 内容は順次追加されます。
             </p>
           </div>
         </div>

@@ -11,7 +11,7 @@ export const PRIVATE_MATH_PACK_1: Problem[] = [
   {
     slug: "private-prob-card-product-even",
     title: "カードの積が偶数になる確率",
-    unit: "確率",
+    unit: "場合の数と確率",
     difficulty: "B",
     universityGroup: "NITTOMASEN",
     university: "日東駒専（類題）",

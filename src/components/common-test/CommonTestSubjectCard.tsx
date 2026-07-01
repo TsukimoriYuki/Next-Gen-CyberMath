@@ -28,7 +28,7 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
               <span className="text-[11px] font-bold text-slate-500">{sections.length}大問構成</span>
               {isSubSubject && (
                 <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-100">
-                  β版 / サブ科目
+                  先行公開 / サブ科目
                 </span>
               )}
             </div>
@@ -47,7 +47,7 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
             <div className="text-sm font-extrabold text-slate-900">数学対策を優先中</div>
             <p className="mt-1 text-xs leading-5 text-slate-500">
-              英語はβ版のサブ科目です。必要な日に開ける補強科目として残しています。
+              英語は先行公開中のサブ科目です。必要な日に開ける補強科目として提供しています。
             </p>
           </div>
         ) : (

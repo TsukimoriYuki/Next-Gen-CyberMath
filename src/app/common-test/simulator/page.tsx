@@ -176,7 +176,7 @@ export default function SimulatorIndexPage() {
                 {SUBJECT_NAMES[subjectId] ?? subjectId}
                 {isSubSubject && (
                   <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-100">
-                    β版 / サブ科目
+                    先行公開 / サブ科目
                   </span>
                 )}
               </h2>
@@ -255,7 +255,7 @@ function ExamPresetCard({ preset }: { preset: CommonTestExamPreset }) {
       {/* Description */}
       <p className="flex-1 text-[11px] leading-relaxed text-slate-500">
         {preset.subjectId === "english-reading"
-          ? "β版のサブ科目です。数学演習後の補強として利用します。"
+          ? "先行公開中のサブ科目です。数学演習後の補強として利用します。"
           : preset.description}
       </p>
 
