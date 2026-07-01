@@ -17,6 +17,7 @@ const REQUIRED_PAGE_ROUTES = [
   "/common-test/math-1a",
   "/common-test/simulator",
   "/common-test/simulator/common-test-math-1a-manual-001",
+  "/common-test/simulator/common-test-math-1a-manual-002",
   "/mock",
   "/quality",
   "/privacy",
@@ -35,6 +36,7 @@ const REQUIRED_SITEMAP_ROUTES = [
   "/common-test",
   "/common-test/simulator",
   "/common-test/simulator/common-test-math-1a-manual-001",
+  "/common-test/simulator/common-test-math-1a-manual-002",
   "/quality",
   "/privacy",
   "/terms",
@@ -253,6 +255,16 @@ function checkCommonTestRouting() {
 
   if (!commonTestPage.includes("PDF本文を正本として転記した4大問 / 100点 / 70分")) {
     issues.push("src/app/common-test/page.tsx: manual PDF mock specs should be visible in the main CTA");
+  }
+  if (!commonTestPage.includes("common-test-math-1a-manual-002")) {
+    issues.push("src/app/common-test/page.tsx: manual 002 should be visible as additional practice");
+  }
+  if (
+    !subjectPage.includes("getPublicCommonTestExperiences") ||
+    !subjectPage.includes("additionalMocks") ||
+    !subjectPage.includes("追加演習")
+  ) {
+    issues.push("src/components/common-test/CommonTestSubjectPage.tsx: additional public PDF mocks should be shown as additional practice");
   }
 
   const math1ABlock = commonData.split('id: "math-1a"')[1]?.split('id: "math-2bc"')[0] ?? "";

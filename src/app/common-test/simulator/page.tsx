@@ -9,7 +9,7 @@ import {
 export const metadata: Metadata = {
   title: "共通テスト型本番模試",
   description:
-    "共通テスト型の本番模試一覧です。数学I・数学Aは手動作成PDFを正本とした第1回を公開しています。",
+    "共通テスト型の本番模試一覧です。数学I・数学Aは手動作成PDFを正本とした第1回・第2回を公開しています。",
 };
 
 export default function SimulatorIndexPage() {
@@ -52,7 +52,7 @@ export default function SimulatorIndexPage() {
                   <div>
                     <div className="inline-flex items-center gap-2 border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700">
                       <FileText className="h-3.5 w-3.5" />
-                      手動作成版 第1回
+                      {mock.id.endsWith("002") ? "追加演習 / 手動作成版 第2回" : "手動作成版 第1回"}
                     </div>
                     <h2 className="mt-3 text-xl font-black tracking-normal">{mock.title}</h2>
                     <div className="mt-2 flex flex-wrap gap-2 text-xs font-bold text-slate-600">
@@ -72,8 +72,9 @@ export default function SimulatorIndexPage() {
                       </span>
                     </div>
                     <p className="mt-3 text-sm leading-7 text-slate-600">
-                      全問必答。第1問: 数と式・図形と計量、第2問: 二次関数・データの分析、
-                      第3問: 図形の性質、第4問: 場合の数と確率。
+                      {mock.id.endsWith("002")
+                        ? "全問必答。第1問: 集合と命題・図形と計量、第2問: 二次関数・データの分析、第3問: 図形の性質、第4問: 場合の数と確率。"
+                        : "全問必答。第1問: 数と式・図形と計量、第2問: 二次関数・データの分析、第3問: 図形の性質、第4問: 場合の数と確率。"}
                     </p>
                   </div>
                   <Link
@@ -81,7 +82,7 @@ export default function SimulatorIndexPage() {
                     className="inline-flex shrink-0 items-center justify-center gap-2 rounded bg-blue-700 px-4 py-3 text-sm font-extrabold text-white hover:bg-blue-800"
                   >
                     <FileText className="h-4 w-4" />
-                    模試を開始
+                    {mock.id.endsWith("002") ? "第2回に進む" : "模試を開始"}
                   </Link>
                 </div>
               </article>

@@ -69,6 +69,14 @@ export const QA_CHECK_DESCRIPTIONS: QaCheckDescription[] = [
 
 export const QUALITY_CHANGELOG: { date: string; items: string[] }[] = [
   {
+    date: "2026-07-02",
+    items: [
+      "共通テスト型本番模試 数学I・数学A 手動作成版 第2回を追加しました。PDF冊子を正本として表示し、採点・解説データだけを構造化しています。",
+      "第2回は追加演習として /common-test、/common-test/math-1a、/common-test/simulator、sitemap、experience registry に追加しました。数学IAのメインCTAは第1回のまま維持しています。",
+      "qa:pdf-mock、qa:manual-mock、qa:manual-common-test、qa:common-test-routing、qa:experience-consistency を第2回対応に更新しました。",
+    ],
+  },
+  {
     date: "2026-07-01",
     items: [
       "管理画面（/admin/lectures）に認証・権限ガードを追加し、一般公開されない状態にしました。",

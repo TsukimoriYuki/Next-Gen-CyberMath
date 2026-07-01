@@ -135,7 +135,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
             <Metric label="得点" value={`${score.totalScore} / ${exam.totalPoints}点`} />
             <Metric label="正答数" value={`${score.correctCount} / ${score.totalQuestions}`} />
             <Metric label="未解答" value={`${score.unansweredCount}`} />
-            {score.sectionScores.slice(0, 1).map((s) => (
+            {score.sectionScores.map((s) => (
               <Metric key={s.sectionId} label={s.title} value={`${s.score} / ${s.maxScore}点`} />
             ))}
           </div>

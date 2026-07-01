@@ -65,6 +65,21 @@ check(
   "getPublicCommonTestExperiences() returned a non-public entry",
 );
 check(
+  publicList.some((e) => e.id === "common-test-math-1a-manual-001" && e.mode === "full-mock-pdf"),
+  "manual 001 should be present in the public experience list",
+);
+check(
+  publicList.some((e) => e.id === "common-test-math-1a-manual-002" && e.mode === "full-mock-pdf"),
+  "manual 002 should be present in the public experience list",
+);
+check(
+  publicList
+    .filter((e) => e.subject === "math-1a" && e.mode === "full-mock-pdf")
+    .map((e) => e.id)
+    .join(",") === "common-test-math-1a-manual-001,common-test-math-1a-manual-002",
+  "math-1a public PDF mock experiences should be ordered as manual 001 then 002",
+);
+check(
   experiences.some((e) => e.status !== "public"),
   "expected at least one non-public experience (legacy presets) — registry may be missing them",
 );

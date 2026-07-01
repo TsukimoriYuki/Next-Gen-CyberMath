@@ -20,6 +20,7 @@ const CORE_ROUTES = [
   "/common-test",
   "/common-test/simulator",
   "/common-test/simulator/common-test-math-1a-manual-001",
+  "/common-test/simulator/common-test-math-1a-manual-002",
   "/exam-sets",
   "/courses",
   "/calc-drill",
@@ -138,4 +139,12 @@ test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文
   const pdfResponse = await request.get("/mock-exams/math1a/common-test-math-1a-manual-001.pdf");
   expect(pdfResponse.status()).toBe(200);
   expect(pdfResponse.headers()["content-type"]).toContain("application/pdf");
+
+  await page.goto("/common-test/simulator/common-test-math-1a-manual-002");
+  const iframeCount002 = await page.locator("iframe").count();
+  expect(iframeCount002, "manual 002 page should embed the PDF via <iframe>").toBeGreaterThan(0);
+
+  const pdfResponse002 = await request.get("/mock-exams/math1a/common-test-math-1a-manual-002.pdf");
+  expect(pdfResponse002.status()).toBe(200);
+  expect(pdfResponse002.headers()["content-type"]).toContain("application/pdf");
 });

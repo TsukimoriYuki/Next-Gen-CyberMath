@@ -46,6 +46,18 @@ check(
   `math-1a's public full-mock-pdf experience should be common-test-math-1a-manual-001, got ${math1aFullMock?.id}`,
 );
 check(
+  getCommonTestExperiences().some(
+    (e) =>
+      e.id === "common-test-math-1a-manual-002" &&
+      e.subject === "math-1a" &&
+      e.mode === "full-mock-pdf" &&
+      e.status === "public" &&
+      e.source === "manual-pdf" &&
+      e.targetUrl === "/common-test/simulator/common-test-math-1a-manual-002",
+  ),
+  "manual 002 should exist in the experience registry as a public math-1a full-mock-pdf entry",
+);
+check(
   findPublicExperience("math-2bc", "full-mock-pdf") === undefined,
   "math-2bc should not have a public full-mock-pdf experience yet (no manual PDF exists)",
 );
@@ -63,6 +75,10 @@ check(
 // ── /common-test/simulator の公開一覧が旧AI/旧プリセットを含まないか ────────
 const publicMocks = getPublicCommonTestMockExams();
 check(publicMocks.every((m) => m.source === "manual-pdf"), "public mock list should only contain manual-pdf mocks");
+check(
+  publicMocks.map((m) => m.id).join(",") === "common-test-math-1a-manual-001,common-test-math-1a-manual-002",
+  `public mock list should contain manual 001 then 002, got ${publicMocks.map((m) => m.id).join(",")}`,
+);
 check(
   !publicMocks.some((m) => m.id.includes("mock-001") || m.id.includes("ai")),
   "public mock list should not contain the AI prototype",

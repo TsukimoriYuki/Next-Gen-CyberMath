@@ -1,4 +1,5 @@
 import { COMMON_TEST_MATH_1A_MANUAL_001 } from "@/data/common-test/manual-mocks/math1a-001";
+import { COMMON_TEST_MATH_1A_MANUAL_002 } from "@/data/common-test/manual-mocks/math1a-002";
 
 export type CommonTestMockSubject = "math-1a";
 
@@ -174,6 +175,7 @@ export const COMMON_TEST_MATH_1A_MOCK_001 = COMMON_TEST_MATH_1A_MANUAL_001;
 
 export const COMMON_TEST_MOCK_EXAMS: CommonTestMockExam[] = [
   COMMON_TEST_MATH_1A_MANUAL_001,
+  COMMON_TEST_MATH_1A_MANUAL_002,
 ];
 
 export const COMMON_TEST_MOCK_EXAM_DRAFTS: CommonTestMockExam[] = [

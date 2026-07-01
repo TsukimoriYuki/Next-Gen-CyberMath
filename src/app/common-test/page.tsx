@@ -142,6 +142,13 @@ export default function CommonTestPage() {
                 手動版模試を開始
               </span>
             </Link>
+            <Link
+              href="/common-test/simulator/common-test-math-1a-manual-002"
+              className="mt-3 inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-xs font-bold text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-50"
+            >
+              <Zap className="h-3.5 w-3.5" />
+              追加演習: 手動作成版 第2回に進む
+            </Link>
           </section>
 
           <section className="order-8">

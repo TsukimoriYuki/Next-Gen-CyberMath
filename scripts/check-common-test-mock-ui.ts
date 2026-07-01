@@ -8,6 +8,7 @@ const files = {
   runner: join(root, "src/components/common-test/mock-exam/CommonTestMockExamRunner.tsx"),
   pdfViewer: join(root, "src/components/common-test/mock-exam/CommonTestPdfMockViewer.tsx"),
   manualRoute: join(root, "src/app/common-test/simulator/common-test-math-1a-manual-001/page.tsx"),
+  manualRoute002: join(root, "src/app/common-test/simulator/common-test-math-1a-manual-002/page.tsx"),
   prototypeRoute: join(
     root,
     "src/app/common-test/simulator/common-test-math-1a-manual-001/structured-prototype/page.tsx",
@@ -15,7 +16,9 @@ const files = {
   oldRoute: join(root, "src/app/common-test/simulator/common-test-math-1a-mock-001/page.tsx"),
   index: join(root, "src/app/common-test/simulator/page.tsx"),
   commonTestHome: join(root, "src/app/common-test/page.tsx"),
+  math1aPage: join(root, "src/components/common-test/CommonTestSubjectPage.tsx"),
   data: join(root, "src/data/common-test/manual-mocks/math1a-001.ts"),
+  data002: join(root, "src/data/common-test/manual-mocks/math1a-002.ts"),
 };
 
 function check(condition: boolean, message: string) {
@@ -35,11 +38,14 @@ function main() {
   const runner = read(files.runner);
   const pdfViewer = read(files.pdfViewer);
   const manualRoute = read(files.manualRoute);
+  const manualRoute002 = read(files.manualRoute002);
   const prototypeRoute = read(files.prototypeRoute);
   const oldRoute = read(files.oldRoute);
   const index = read(files.index);
   const commonTestHome = read(files.commonTestHome);
+  const math1aPage = read(files.math1aPage);
   const data = read(files.data);
+  const data002 = read(files.data002);
 
   // 構造化データ版（旧実装）— devOnlyの参照実装としてコード自体は残す。
   check(runner.includes('"use client"'), "mock runner should be a Client Component");
@@ -71,6 +77,7 @@ function main() {
   check(pdfViewer.includes("提出する"), "PDF mock viewer should include a submit flow");
   check(pdfViewer.includes("解説を見る"), "PDF mock viewer should include explanations");
   check(pdfViewer.includes("scoreCommonTestMockExam"), "PDF mock viewer should score from structured data, not the PDF");
+  check(!pdfViewer.includes("score.sectionScores.slice(0, 1)"), "PDF mock viewer should show all section scores, not only section 1");
   check(
     !/question\.prompt|<TowerElevationDiagram|<SpherePlaneDiagram|<CircleTangentDiagram/.test(pdfViewer),
     "PDF mock viewer must not re-render problem prompts/diagrams — those come from the PDF",
@@ -80,17 +87,32 @@ function main() {
   check(!manualRoute.includes("CommonTestMockExamRunner"), "manual route should not render the old React-reconstructed runner directly");
   check(manualRoute.includes("COMMON_TEST_MATH_1A_MANUAL_001"), "manual route should use manual PDF exam");
   check(manualRoute.includes("common-test-math-1a-manual-001"), "manual route should have canonical manual URL");
+  check(manualRoute002.includes("CommonTestPdfMockViewer"), "manual 002 route should render the PDF booklet viewer");
+  check(manualRoute002.includes("COMMON_TEST_MATH_1A_MANUAL_002"), "manual 002 route should use manual 002 PDF exam");
+  check(manualRoute002.includes("common-test-math-1a-manual-002"), "manual 002 route should have canonical manual URL");
   check(oldRoute.includes("試作版・非公開"), "old AI route should be marked non-public/prototype");
   check(oldRoute.includes("common-test-math-1a-manual-001"), "old AI route should link to manual version");
   check(!oldRoute.includes("CommonTestMockExamRunner"), "old AI route should not launch the runner");
 
   check(index.includes("getPublicCommonTestMockExams"), "index should read public mock registry");
   check(index.includes("手動作成版 第1回"), "index should show manual mock");
+  check(index.includes("手動作成版 第2回"), "index should show manual 002 mock");
+  check(index.includes("第2回に進む"), "index should present manual 002 as an additional run");
   check(index.includes("common-test-math-1a-mock-001") === false, "index should not link to old AI mock");
   check(index.includes("配点 30,30,20,20"), "index should show section point structure");
   check(
     commonTestHome.includes("/common-test/simulator/common-test-math-1a-manual-001"),
     "common-test home should link the main exam CTA to the manual PDF mock",
+  );
+  check(
+    commonTestHome.includes("/common-test/simulator/common-test-math-1a-manual-002"),
+    "common-test home should include manual 002 as additional practice",
+  );
+  check(
+    math1aPage.includes("getPublicCommonTestExperiences") &&
+      math1aPage.includes("additionalMocks") &&
+      math1aPage.includes("追加演習"),
+    "math-1a page should include additional public PDF mocks as additional practice",
   );
   check(
     !commonTestHome.includes('/common-test/simulator/math-1a-paper-001"'),
@@ -108,6 +130,12 @@ function main() {
   check(data.includes('variant: "circle-tangent"'), "data should contain tangent diagram");
   check(data.includes('answerFormat: "multi-choice"'), "data should contain [ヒ] as multi-choice");
   check(data.includes('answer: ["1", "2", "3", "4"]'), "[ヒ] answer should be 1,2,3,4");
+  check(data002.includes('id: "common-test-math-1a-manual-002"'), "manual 002 data should expose manual 002 exam id");
+  check(data002.includes("pdfUrl:"), "manual 002 data should declare a pdfUrl");
+  check(data002.includes('source: "manual-pdf"'), "manual 002 data should mark source as manual-pdf");
+  check(data002.includes('status: "published"'), "manual 002 data should be published");
+  check(data002.includes("PDF冊子の第1問を正本"), "manual 002 data should not reconstruct the full problem body");
+  check(data002.includes('"テト": "10"'), "manual 002 data should include the [テト] denominator answer 10");
 
   report();
 }

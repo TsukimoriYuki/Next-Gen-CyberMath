@@ -3,7 +3,10 @@ import type { ReactNode } from "react";
 import { ArrowLeft, BookOpen, Clock, ClipboardList, LineChart, Target } from "lucide-react";
 import type { CommonTestSubject } from "@/data/common-test";
 import { CommonTestSectionGrid } from "./CommonTestSectionGrid";
-import { findPublicExperience } from "@/data/common-test-experiences";
+import {
+  findPublicExperience,
+  getPublicCommonTestExperiences,
+} from "@/data/common-test-experiences";
 
 interface Props {
   subject: CommonTestSubject;
@@ -175,6 +178,12 @@ function SectionTitle({
 
 function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
   const fullMock = findPublicExperience(subject.id, "full-mock-pdf");
+  const additionalMocks = getPublicCommonTestExperiences().filter(
+    (experience) =>
+      experience.subject === subject.id &&
+      experience.mode === "full-mock-pdf" &&
+      experience.id !== fullMock?.id,
+  );
 
   if (!fullMock) {
     return (
@@ -193,29 +202,49 @@ function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
   }
 
   return (
-    <Link
-      href={fullMock.targetUrl}
-      className="group rounded-2xl border border-blue-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md"
-    >
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-sm font-extrabold text-blue-700">
-          {fullMock.durationMinutes}分
+    <div className="space-y-3">
+      <Link
+        href={fullMock.targetUrl}
+        className="group block rounded-2xl border border-blue-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md"
+      >
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-sm font-extrabold text-blue-700">
+            {fullMock.durationMinutes}分
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">
+              手動作成版模試
+            </p>
+            <h2 className="mt-1 text-xl font-extrabold text-slate-950">{fullMock.title}を受ける</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              PDF本文を正本として転記した{fullMock.sectionCount}大問 / {fullMock.totalPoints}点 /{" "}
+              {fullMock.durationMinutes}分の本番型模試です。
+            </p>
+          </div>
+          <span className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition group-hover:bg-blue-700">
+            手動版模試を開始
+          </span>
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">
-            手動作成版模試
-          </p>
-          <h2 className="mt-1 text-xl font-extrabold text-slate-950">{fullMock.title}を受ける</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600">
-            PDF本文を正本として転記した{fullMock.sectionCount}大問 / {fullMock.totalPoints}点 /{" "}
-            {fullMock.durationMinutes}分の本番型模試です。
-          </p>
-        </div>
-        <span className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition group-hover:bg-blue-700">
-          手動版模試を開始
-        </span>
-      </div>
-    </Link>
+      </Link>
+      {additionalMocks.map((mock) => (
+        <Link
+          key={mock.id}
+          href={mock.targetUrl}
+          className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm transition hover:border-blue-200 hover:bg-blue-50"
+        >
+          <span>
+            <span className="block text-xs font-bold text-blue-700">追加演習</span>
+            <span className="font-bold text-slate-900">{mock.title}</span>
+            <span className="mt-0.5 block text-xs text-slate-500">
+              {mock.sectionCount}大問 / {mock.totalPoints}点 / {mock.durationMinutes}分 / PDF冊子型
+            </span>
+          </span>
+          <span className="shrink-0 rounded-lg border border-blue-200 px-3 py-1.5 text-xs font-bold text-blue-700">
+            第2回に進む
+          </span>
+        </Link>
+      ))}
+    </div>
   );
 }
 

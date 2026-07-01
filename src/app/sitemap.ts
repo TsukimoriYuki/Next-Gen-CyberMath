@@ -27,6 +27,7 @@ const STATIC_ROUTES = [
   "/common-test",
   "/common-test/simulator",
   "/common-test/simulator/common-test-math-1a-manual-001",
+  "/common-test/simulator/common-test-math-1a-manual-002",
   "/common-test/simulator/paper-sample",
   "/common-test/lectures",
   "/common-test/math-1a",

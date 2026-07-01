@@ -12,6 +12,7 @@ const REQUIRED_ROUTES = [
   "/common-test/math-1a",
   "/common-test/simulator",
   "/common-test/simulator/common-test-math-1a-manual-001",
+  "/common-test/simulator/common-test-math-1a-manual-002",
   "/mock",
   "/quality",
   "/privacy",
@@ -57,6 +58,7 @@ async function main() {
 
   const commonTest = pages.get("/common-test") ?? "";
   assertIncludes("/common-test", commonTest, "common-test-math-1a-manual-001");
+  assertIncludes("/common-test", commonTest, "common-test-math-1a-manual-002");
   assertIncludes("/common-test", commonTest, "math-1a");
   for (const bad of ["64/80", "57/75", "70/85", "Analyzing Data"]) {
     assertExcludes("/common-test", commonTest, bad);
@@ -64,6 +66,7 @@ async function main() {
 
   const math1a = pages.get("/common-test/math-1a") ?? "";
   assertIncludes("/common-test/math-1a", math1a, "common-test-math-1a-manual-001");
+  assertIncludes("/common-test/math-1a", math1a, "common-test-math-1a-manual-002");
   assertIncludes("/common-test/math-1a", math1a, "math-1a/section-1");
 
   const courses = pages.get("/courses") ?? "";
@@ -84,9 +87,13 @@ async function main() {
   const paper = pages.get("/common-test/simulator/common-test-math-1a-manual-001") ?? "";
   assertIncludes("/common-test/simulator/common-test-math-1a-manual-001", paper, "70分");
   assertExcludes("/common-test/simulator/common-test-math-1a-manual-001", paper, "Invalid Date");
+  const paper002 = pages.get("/common-test/simulator/common-test-math-1a-manual-002") ?? "";
+  assertIncludes("/common-test/simulator/common-test-math-1a-manual-002", paper002, "70分");
+  assertExcludes("/common-test/simulator/common-test-math-1a-manual-002", paper002, "Invalid Date");
 
   const sitemap = await fetchText("/sitemap.xml");
   assertIncludes("/sitemap.xml", sitemap, "/common-test/simulator/common-test-math-1a-manual-001");
+  assertIncludes("/sitemap.xml", sitemap, "/common-test/simulator/common-test-math-1a-manual-002");
 
   if (issues.length > 0) {
     console.error(`Live public quality check failed for ${baseUrl}: ${issues.length} issue(s).`);
