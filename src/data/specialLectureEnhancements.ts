@@ -938,6 +938,286 @@ const geometryMeasurementCenterAltitudeBlocks: LectureBlock[] = [
   },
 ];
 
+const geometryMeasurementCoreTextbookBlocks: LectureBlock[] = [
+  {
+    id: "geometry-measurement-core-scope",
+    type: "heading",
+    level: 2,
+    text: "中核講義：図形と計量で何を扱うか",
+  },
+  {
+    id: "geometry-measurement-core-scope-text",
+    type: "paragraph",
+    text:
+      "図形と計量は、角度・長さ・面積を同じ三角形の中で翻訳する単元です。直角三角形なら三角比、一般の三角形なら正弦定理・余弦定理、面積が絡むなら $S=\\dfrac{1}{2}ab\\sin C$、高さが見えないなら垂線か面積から逆算します。共通テストでは、公式そのものを問うよりも、仰角・水平距離・断面・会話文の誘導を読み、どの三角形へ落とすかを選ばせます。",
+  },
+  {
+    id: "geometry-measurement-core-importance",
+    type: "callout",
+    tone: "info",
+    title: "なぜ共通テストで重要か",
+    text:
+      "図形と計量は第1問の中で短時間に出やすく、1つの読み違いが連鎖します。仰角を水平線との角として読めない、地面上の距離と斜距離を混ぜる、2辺と挟角なのに正弦定理へ行く、面積公式でどの辺を底辺にしたか曖昧にする。この4つを潰すだけで、冊子型模試の第1回・第2回の測量問題はかなり安定します。",
+  },
+  {
+    id: "geometry-measurement-formula-list-heading",
+    type: "heading",
+    level: 2,
+    text: "公式一覧：暗記ではなく条件とセットで持つ",
+  },
+  {
+    id: "geometry-measurement-formula-list",
+    type: "checklist",
+    title: "図形と計量の公式セット",
+    items: [
+      "直角三角形: $\\sin\\theta=\\dfrac{\\text{対辺}}{\\text{斜辺}}$, $\\cos\\theta=\\dfrac{\\text{隣辺}}{\\text{斜辺}}$, $\\tan\\theta=\\dfrac{\\text{対辺}}{\\text{隣辺}}$",
+      "面積: $S=\\dfrac{1}{2}ah=\\dfrac{1}{2}ab\\sin C$。高さは $h=\\dfrac{2S}{a}$ と逆算できる",
+      "正弦定理: $\\dfrac{a}{\\sin A}=\\dfrac{b}{\\sin B}=\\dfrac{c}{\\sin C}=2R$。辺と向かいの角が1組あるときに使う",
+      "余弦定理: $a^2=b^2+c^2-2bc\\cos A$。2辺と挟角、または3辺から角を出すときに使う",
+      "相互関係: $\\sin^2 A+\\cos^2 A=1$。三角形の内角では $\\sin A>0$、鈍角では $\\cos A<0$",
+      "測量: 仰角・俯角は水平線との角。高さは水平距離に $\\tan$ を掛ける形をまず疑う",
+      "空間図形: 立体のまま解かず、求めたい長さを含む平面断面へ落とす",
+    ],
+  },
+  {
+    id: "geometry-measurement-derivation-heading",
+    type: "heading",
+    level: 2,
+    text: "公式の導出：なぜその式になるか",
+  },
+  {
+    id: "geometry-measurement-area-derivation",
+    type: "paragraph",
+    text:
+      "面積公式 $S=\\dfrac{1}{2}ab\\sin C$ は、高さの作り方から出ます。辺 $a$ を底辺にすると、もう一方の辺 $b$ から底辺へ下ろした高さは $b\\sin C$ です。したがって $S=\\dfrac{1}{2}\\times a\\times b\\sin C$。この導出を知っていると、面積から高さを戻す問題で、どの辺を底辺にしたかを見失いません。",
+  },
+  {
+    id: "geometry-measurement-area-math",
+    type: "math",
+    expression: "h=b\\sin C\\quad\\Longrightarrow\\quad S=\\frac{1}{2}ah=\\frac{1}{2}ab\\sin C",
+    caption: "高さは「辺に対する垂直距離」。鈍角三角形で垂足が外に出ても、底辺の直線への距離として同じ式を使う。",
+  },
+  {
+    id: "geometry-measurement-cosine-derivation",
+    type: "paragraph",
+    text:
+      "余弦定理は、1つの頂点から垂線を下ろして、底辺方向の射影を使うと導けます。辺 $b$ の底辺方向の成分が $b\\cos A$、高さ方向の成分が $b\\sin A$ なので、三平方の定理で $a^2=(c-b\\cos A)^2+(b\\sin A)^2$。展開すると $a^2=b^2+c^2-2bc\\cos A$ になります。",
+  },
+  {
+    id: "geometry-measurement-cosine-derivation-math",
+    type: "math",
+    expression: "a^2=(c-b\\cos A)^2+(b\\sin A)^2=b^2+c^2-2bc\\cos A",
+    caption: "余弦定理は三平方の定理の拡張。$A=90^\\circ$ なら $\\cos A=0$ で三平方そのものになる。",
+  },
+  {
+    id: "geometry-measurement-sine-derivation",
+    type: "paragraph",
+    text:
+      "正弦定理は、外接円の半径 $R$ と円周角から出ます。辺 $a$ は角 $A$ の向かいの弦です。中心角を使って弦の長さを読むと $a=2R\\sin A$。これを変形すると $\\dfrac{a}{\\sin A}=2R$ です。だから正弦定理は、辺と向かいの角を外接円半径という同じ物差しへそろえる公式です。",
+  },
+  {
+    id: "geometry-measurement-sine-derivation-math",
+    type: "math",
+    expression: "a=2R\\sin A\\quad\\Longleftrightarrow\\quad \\frac{a}{\\sin A}=2R",
+    caption: "辺と隣の角ではなく、辺と向かいの角を必ずセットにする。",
+  },
+  {
+    id: "geometry-measurement-master-flow",
+    type: "solutionFlow",
+    title: "公式選択の判別フロー",
+    intro:
+      "図を見た瞬間に公式を決めない。まず条件の形を読み、上から順に止まるところを探します。",
+    steps: [
+      {
+        condition: "直角三角形がすでにある、または垂線を下ろせば作れる",
+        tool: "三角比",
+        reason: "高さなら sin、水平距離なら cos、斜辺を使わない高さと水平距離の比なら tan。",
+      },
+      {
+        condition: "2辺とその間の角がある",
+        tool: "余弦定理",
+        reason: "第三辺を作れる。面積も同じ2辺と挟角からすぐ出せる。",
+      },
+      {
+        condition: "1辺とその向かいの角の組がある",
+        tool: "正弦定理",
+        reason: "別の辺・角・外接円半径へ情報を運べる。",
+      },
+      {
+        condition: "面積が絡む、または高さ・sinを逆算したい",
+        tool: "面積公式",
+        reason: "$S=\\dfrac12 ab\\sin C$ または $S=\\dfrac12 ah$ を解き直す。",
+      },
+      {
+        condition: "3辺だけがある",
+        tool: "余弦定理で cos を出してから sin へ",
+        reason: "角を直接求めず、$\\sin=\\sqrt{1-\\cos^2}$ で面積・高さへ進む。",
+      },
+      {
+        condition: "仰角・俯角・塔・観測点がある",
+        tool: "水平面と鉛直面に分ける",
+        reason: "仰角は水平線との角。地面上の距離と斜距離を分けてから式を立てる。",
+      },
+      {
+        condition: "空間図形で距離・高さ・断面円が出る",
+        tool: "必要な平面断面へ落とす",
+        reason: "断面上の直角三角形で三平方・三角比へ戻す。",
+      },
+    ],
+  },
+  {
+    id: "geometry-measurement-height-priority-flow",
+    type: "solutionFlow",
+    title: "高さを求める優先順位",
+    intro:
+      "高さは、いきなり垂線を引く前に「もう面積から戻せないか」を見ると速くなります。",
+    steps: [
+      {
+        condition: "面積と底辺が分かっている",
+        tool: "面積公式から高さを逆算",
+        reason: "$h=\\dfrac{2S}{a}$。最短で、鈍角でも使える。",
+      },
+      {
+        condition: "底辺に対する斜辺と角がある",
+        tool: "直角三角形を作る",
+        reason: "高さ方向は $\\sin$、水平方向は $\\cos$。仰角なら $\\tan$ が第一候補。",
+      },
+      {
+        condition: "一辺と対角の組があり、別の辺や角へ運べる",
+        tool: "正弦定理",
+        reason: "必要な辺を作ってから高さや面積へ戻す。",
+      },
+      {
+        condition: "3辺、または2辺と挟角から角の情報が必要",
+        tool: "余弦定理で cos を出し sin へ変換",
+        reason: "三角形の内角では $\\sin>0$。鈍角なら $\\cos<0$ を落とさない。",
+      },
+      {
+        condition: "補角・円周角で角が移せる",
+        tool: "sin は同じ、cos は符号反転",
+        reason: "$\\sin(180^\\circ-\\theta)=\\sin\\theta$、$\\cos(180^\\circ-\\theta)=-\\cos\\theta$。",
+      },
+      {
+        condition: "空間図形で高さを求める",
+        tool: "高さを含む断面に切る",
+        reason: "立体ではなく、断面の直角三角形として処理する。",
+      },
+    ],
+  },
+  {
+    id: "geometry-measurement-common-test-cautions",
+    type: "checklist",
+    title: "共通テスト型で落としやすい注意点",
+    items: [
+      "問題文の図をそのまま信じすぎない。長さや角は、本文の条件を自分で書き込んで確定する",
+      "仰角は水平線との角。塔や木との角、視線と地面の角を混同しない",
+      "距離が地面上の水平距離か、視線の斜距離かを必ず区別する",
+      "観測点が一直線上か、平面上でずれているかを確認する。ずれていれば水平面の三角形を作る",
+      "$\\sin$ から $\\cos$ を出すとき、鋭角か鈍角かで $\\cos$ の符号が変わる",
+      "面積公式で高さを出すとき、どの辺を底辺にしたかを答案に残す",
+      "空間図形は、まず平面断面へ落とす。断面に出た直角三角形で処理する",
+    ],
+  },
+  {
+    id: "geometry-measurement-example-1",
+    type: "problem",
+    title: "代表例題1：面積から高さを求める",
+    prompt:
+      "三角形ABCの面積は 24、辺BCの長さは 8 である。頂点Aから直線BCに下ろした高さを求めよ。また、この問題で三角比を使わずに済む理由を説明せよ。",
+    choices: ["高さは6。面積と底辺がそろうので h=2S/BC を使う", "高さは3。面積を底辺で割ればよい", "高さは8。底辺と同じ長さになる", "高さは12。面積を2倍しない"],
+    answer: "高さは6。面積と底辺がそろうので h=2S/BC を使う",
+    points: 6,
+    mistakeTags: ["公式選択ミス", "計算ミス"],
+  },
+  {
+    id: "geometry-measurement-example-1-tabs",
+    type: "explanationTabs",
+    tabs: [
+      { label: "方針", body: "高さを聞かれたら、まず面積と底辺がそろっているかを見る。そろっていれば $S=\\dfrac12 ah$ を高さについて解く。" },
+      { label: "詳しい解説", body: "底辺を $BC=8$、高さを $h$ とすると、$24=\\dfrac12\\cdot8\\cdot h=4h$。よって $h=6$。ここでは角度も斜辺も不要なので、三角比を使うより面積公式から逆算するのが最短です。" },
+      { label: "最速解法", body: "$h=\\dfrac{2S}{a}=\\dfrac{48}{8}=6$。底辺と面積が見えた瞬間にこの1行で終わる。" },
+      { label: "よくあるミス", body: "面積を底辺で割って $3$ とするミスが多い。面積公式には $\\dfrac12$ があるので、必ず $2S$ を底辺で割る。垂足が辺BCの外に出る図でも、直線BCへの距離として同じ式を使う。" },
+      { label: "類題", body: "三角形の面積が $15\\sqrt3$、底辺が $10$ のとき、高さは $3\\sqrt3$。底辺を変えたら高さも変わるので、どの辺を底辺にしたかを明記する。" },
+    ],
+  },
+  {
+    id: "geometry-measurement-example-2",
+    type: "problem",
+    title: "代表例題2：余弦定理・面積公式・正弦定理をつなぐ",
+    prompt:
+      "三角形ABCで、AB=6、AC=8、角A=60度とする。\n(1) BCの2乗を求めよ。\n(2) 面積Sを求めよ。\n(3) sinBを求めよ。\nどの条件でどの公式を使ったかも述べよ。",
+    choices: [
+      "$BC^2=52$, $S=12\\sqrt3$, $\\sin B=\\dfrac{4\\sqrt3}{\\sqrt{52}}$",
+      "$BC^2=28$, $S=12\\sqrt3$, $\\sin B=\\dfrac{4\\sqrt3}{\\sqrt{28}}$",
+      "$BC^2=52$, $S=24\\sqrt3$, $\\sin B=\\dfrac{8\\sqrt3}{\\sqrt{52}}$",
+      "$BC^2=100$, $S=24\\sqrt3$, $\\sin B=\\dfrac{4\\sqrt3}{10}$",
+    ],
+    answer: "$BC^2=52$, $S=12\\sqrt3$, $\\sin B=\\dfrac{4\\sqrt3}{\\sqrt{52}}$",
+    points: 9,
+    mistakeTags: ["公式選択ミス", "計算ミス", "条件見落とし"],
+  },
+  {
+    id: "geometry-measurement-example-2-tabs",
+    type: "explanationTabs",
+    tabs: [
+      { label: "方針", body: "2辺と挟角があるので、まず余弦定理で $BC^2$。同じ2辺と挟角から面積公式。最後に、辺ACは角Bの向かいなので正弦定理で $\\sin B$ へ運ぶ。" },
+      { label: "詳しい解説", body: "$BC^2=6^2+8^2-2\\cdot6\\cdot8\\cos60^\\circ=36+64-48=52$。\n\n$S=\\dfrac12\\cdot6\\cdot8\\sin60^\\circ=24\\cdot\\dfrac{\\sqrt3}{2}=12\\sqrt3$。\n\n正弦定理より $\\dfrac{AC}{\\sin B}=\\dfrac{BC}{\\sin A}$。したがって $\\sin B=\\dfrac{8\\sin60^\\circ}{\\sqrt{52}}=\\dfrac{4\\sqrt3}{\\sqrt{52}}$。" },
+      { label: "最速解法", body: "挟角60度なので $BC^2=100-48=52$、面積は $24\\times\\dfrac{\\sqrt3}{2}=12\\sqrt3$。最後は $\\sin B=\\dfrac{8\\sin60^\\circ}{BC}$ と置く。" },
+      { label: "よくあるミス", body: "正弦定理で $AB=6$ を角Bの向かいとして使ってしまう。角Bの向かいはAC=8。余弦定理では $2\\cdot6\\cdot8\\cos60^\\circ$ の $\\cos60^\\circ=\\dfrac12$ まで入れる。" },
+      { label: "類題", body: "別解として、(2)の面積と $S=\\dfrac12\\cdot BC\\cdot AC\\sin B$ を使って $\\sin B=\\dfrac{2S}{BC\\cdot AC}$ と出してもよい。面積からsinを逆算する見方です。" },
+    ],
+  },
+  {
+    id: "geometry-measurement-example-3",
+    type: "problem",
+    title: "代表例題3：共通テスト型の測量",
+    prompt:
+      "高さh mの塔の真下をTとする。地点Aから塔の頂点Pを見上げる仰角は30度、地点Bからの仰角は45度である。A, T, B は一直線上にあり、AはBより塔から遠く、AB=20 mである。\n(1) AT, BTをhで表せ。\n(2) hを求めよ。\n(3) この問題で水平距離と斜距離を混同しないために、最初に図へ書くべき角を述べよ。",
+    choices: [
+      "$AT=\\sqrt3h$, $BT=h$, $h=10(\\sqrt3+1)$。仰角は水平線との角として書く",
+      "$AT=h/\\sqrt3$, $BT=h$, $h=10(\\sqrt3-1)$。仰角は塔との角として書く",
+      "$AT=\\sqrt3h$, $BT=h$, $h=20$。ABを斜距離として使う",
+      "$AT=2h$, $BT=h$, $h=20$。30度をsinで処理する",
+    ],
+    answer: "$AT=\\sqrt3h$, $BT=h$, $h=10(\\sqrt3+1)$。仰角は水平線との角として書く",
+    points: 10,
+    mistakeTags: ["問題文の読み違い", "公式選択ミス", "図の見落とし"],
+  },
+  {
+    id: "geometry-measurement-example-3-tabs",
+    type: "explanationTabs",
+    tabs: [
+      { label: "方針", body: "測量は、水平距離と高さで直角三角形を2つ作る。仰角は水平線との角なので、$\\tan$ を使って高さと水平距離を結ぶ。" },
+      { label: "詳しい解説", body: "地点Aでは $\\tan30^\\circ=\\dfrac{h}{AT}$。よって $AT=\\dfrac{h}{\\tan30^\\circ}=\\sqrt3h$。\n\n地点Bでは $\\tan45^\\circ=\\dfrac{h}{BT}=1$。よって $BT=h$。\n\nAはBより遠いので $AB=AT-BT=(\\sqrt3-1)h=20$。したがって $h=\\dfrac{20}{\\sqrt3-1}=10(\\sqrt3+1)$。" },
+      { label: "最速解法", body: "仰角30度なら水平距離は $\\sqrt3h$、仰角45度なら水平距離は $h$。差が20なので $(\\sqrt3-1)h=20$。有理化して $h=10(\\sqrt3+1)$。" },
+      { label: "よくあるミス", body: "仰角を塔との角だと思って $\\tan30^\\circ=AT/h$ と逆にする。ABを視線の長さとして使う。A, T, B が一直線上か、平面上でずれているかを確認せずに差を取る。" },
+      { label: "類題", body: "第1回冊子型模試の後半のように、観測点が一直線上でなく $\\angle ATB$ が与えられる場合は、$AT$ と $BT$ を $h$ で表してから三角形ATBに余弦定理を使う。一直線なら差、ずれていれば余弦定理です。" },
+    ],
+  },
+  {
+    id: "geometry-measurement-advanced-connection",
+    type: "callout",
+    tone: "success",
+    title: "発展への接続",
+    text:
+      "この単元の本質は、長さを成分に分解することです。数学IIの三角関数では単位円で sin・cos を座標として扱い、数学B・Cのベクトルでは内積が余弦定理の一般化として再登場します。空間図形を断面へ落とす発想は、ベクトル・空間座標・立体の最短距離にもそのままつながります。",
+  },
+  {
+    id: "geometry-measurement-core-recovery",
+    type: "mistakeRecovery",
+    title: "冊子型模試から戻る復習先",
+    intro:
+      "第1回・第2回の図形と計量で落とした場合は、失点の症状ごとに戻る場所を変えます。",
+    items: [
+      { symptom: "第1回のタワー問題で、仰角から距離をhで表せなかった", action: "代表例題3と高さの優先順位へ戻る", href: "#geometry-measurement-example-3" },
+      { symptom: "第1回の2地点がずれた設定で、余弦定理に接続できなかった", action: "公式選択の判別フローを確認する", href: "#geometry-measurement-master-flow" },
+      { symptom: "第2回の測量で、観測点・水平距離・仰角の図示が崩れた", action: "共通テスト型の注意点と代表例題3へ戻る", href: "#geometry-measurement-common-test-cautions" },
+      { symptom: "高さをどこから出すか迷った", action: "高さを求める優先順位へ戻る", href: "#geometry-measurement-height-priority-flow" },
+      { symptom: "面積・正弦定理・余弦定理の順番が混ざった", action: "代表例題2の別解まで確認する", href: "#geometry-measurement-example-2" },
+    ],
+  },
+];
+
 const geometryPropertiesCentersBlocks: LectureBlock[] = [
   {
     id: "geometry-properties-centers-flow",
@@ -1620,6 +1900,7 @@ const lectureEnhancements: Record<string, LectureEnhancement> = {
         text:
           "辺と角の対応、面積からsinへの逆算、外接円R、内接円r、補角・円周角、測量、空間断面、図形の性質との融合までを、判別ドリルと本番形式演習で確認します。",
       },
+      ...geometryMeasurementCoreTextbookBlocks,
       ...geometryMeasurementCenterAltitudeBlocks,
       geometryMeasurementDrill,
       ...finalProblemBlocks["geometry-measurement-intensive"],
