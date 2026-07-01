@@ -1,22 +1,48 @@
 import type { Metadata } from "next";
-import { COMMON_TEST_MATH_1A_MOCK_001 } from "@/data/common-test-mock-exams";
-import { CommonTestMockExamRunner } from "@/components/common-test/mock-exam/CommonTestMockExamRunner";
+import Link from "next/link";
+import { ArrowLeft, FileText, FlaskConical } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Cyber Math 共通テスト数学IA 本番模試 第1回",
+  title: "共通テスト型 数学I・数学A 試作版",
   description:
-    "70分・100点満点・5大問構成の共通テスト数学IA本番模試。図表、グラフ、会話文、空欄補充、選択肢、復習用解説を含む完全オリジナル問題です。",
-  alternates: {
-    canonical: "/common-test/simulator/common-test-math-1a-mock-001",
-  },
-  openGraph: {
-    title: "Cyber Math 共通テスト数学IA 本番模試 第1回",
-    description:
-      "目標平均38〜45点の本番型数学IA模試。提出後に大問別得点と弱点タグを確認できます。",
-    url: "/common-test/simulator/common-test-math-1a-mock-001",
+    "このAI生成試作版は公開導線から外しています。共通テスト型本番模試は手動作成版 第1回を利用してください。",
+  robots: {
+    index: false,
+    follow: false,
   },
 };
 
-export default function CommonTestMath1AMock001Page() {
-  return <CommonTestMockExamRunner exam={COMMON_TEST_MATH_1A_MOCK_001} />;
+export default function CommonTestMath1APrototypePage() {
+  return (
+    <main className="min-h-screen bg-stone-50 px-4 py-10 text-slate-950">
+      <div className="mx-auto max-w-2xl border border-stone-300 bg-white p-6 shadow-sm">
+        <Link
+          href="/common-test/simulator"
+          className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-900"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          模試一覧へ戻る
+        </Link>
+
+        <div className="mt-6 inline-flex items-center gap-2 border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs font-extrabold text-amber-800">
+          <FlaskConical className="h-4 w-4" />
+          試作版・非公開
+        </div>
+        <h1 className="mt-4 text-2xl font-black tracking-normal">
+          このAI生成模試は公開用の本番模試ではありません
+        </h1>
+        <p className="mt-3 text-sm leading-7 text-slate-600">
+          旧URLの `common-test-math-1a-mock-001` は、低品質なAI生成試作版として公開導線から外しました。
+          共通テスト型本番模試として最初に触れるページは、PDF本文を正本として転記した手動作成版 第1回です。
+        </p>
+        <Link
+          href="/common-test/simulator/common-test-math-1a-manual-001"
+          className="mt-6 inline-flex items-center justify-center gap-2 rounded bg-blue-700 px-4 py-3 text-sm font-extrabold text-white hover:bg-blue-800"
+        >
+          <FileText className="h-4 w-4" />
+          手動作成版 第1回へ進む
+        </Link>
+      </div>
+    </main>
+  );
 }

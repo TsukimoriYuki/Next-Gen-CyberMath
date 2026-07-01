@@ -1,68 +1,23 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import {
+  COMMON_TEST_MATH_1A_AI_PROTOTYPE_001,
   COMMON_TEST_MATH_1A_MOCK_001,
+  COMMON_TEST_MOCK_EXAMS,
+  getPublicCommonTestMockExams,
   type CommonTestMockExam,
   type CommonTestQuestion,
 } from "../src/data/common-test-mock-exams";
+import { COMMON_TEST_MATH_1A_MANUAL_001 } from "../src/data/common-test/manual-mocks/math1a-001";
 import {
   isCommonTestMockQuestionCorrect,
   scoreCommonTestMockExam,
   type CommonTestMockAnswers,
 } from "../src/lib/common-test-mock-scoring";
 
-const exam = COMMON_TEST_MATH_1A_MOCK_001;
 const issues: string[] = [];
-
-const ALLOWED_TAGS = new Set([
-  "絶対値",
-  "不等式",
-  "条件整理",
-  "平方完成",
-  "二次式",
-  "最小値",
-  "集合",
-  "必要十分条件",
-  "反例選択",
-  "反例",
-  "命題",
-  "整数",
-  "二次関数",
-  "頂点",
-  "最大最小",
-  "定義域",
-  "グラフ読解",
-  "データ読み取り",
-  "外れ値",
-  "相関",
-  "データの解釈",
-  "相関と因果",
-  "選択肢消去",
-  "余弦定理",
-  "角度判定",
-  "図形読解",
-  "面積",
-  "ヘロンの公式",
-  "計算処理",
-  "内接円",
-  "前問利用",
-  "接線の長さ",
-  "線分比",
-  "組合せ",
-  "同様に確からしい",
-  "場合の数",
-  "確率",
-  "場合分け",
-  "条件付き確率",
-  "母集団整理",
-  "重複カウント",
-  "余事象",
-  "得点条件",
-  "最大公約数",
-  "互除法",
-  "最小公倍数",
-  "周期",
-  "余り",
-  "包除原理",
-]);
+const root = process.cwd();
+const exam = COMMON_TEST_MATH_1A_MANUAL_001;
 
 function check(condition: boolean, message: string) {
   if (!condition) issues.push(message);
@@ -78,98 +33,120 @@ function buildPerfectAnswers(questions: CommonTestQuestion[]): CommonTestMockAns
   return answers;
 }
 
-function main() {
-  const questions = allQuestions(exam);
-  const blankLabels = new Set<string>();
-  const questionIds = new Set<string>();
+function routeExists(href: string) {
+  if (href.startsWith("/courses/math-1a/")) {
+    return existsSync(join(root, "src/app/courses/[subjectId]/[unitId]/page.tsx"));
+  }
+  if (href.startsWith("/common-test/simulator/")) {
+    const slug = href.split("/").pop();
+    return !!slug && existsSync(join(root, `src/app/common-test/simulator/${slug}/page.tsx`));
+  }
+  return existsSync(join(root, `src/app${href}/page.tsx`));
+}
 
-  check(exam.id === "common-test-math-1a-mock-001", "mock exam id should be stable and dedicated");
-  check(exam.durationMinutes === 70, `duration should be 70, got ${exam.durationMinutes}`);
-  check(exam.totalPoints === 100, `totalPoints should be 100, got ${exam.totalPoints}`);
-  check(exam.targetAverage.min === 38 && exam.targetAverage.max === 45, "targetAverage should be 38-45");
-  check(exam.sections.length === 5, `sections should be 5, got ${exam.sections.length}`);
+function checkQuestion(question: CommonTestQuestion, blankIds: Set<string>, labels: Map<string, string>) {
+  check(question.id.startsWith("m1a-manual-001-"), `${question.id} should use manual id prefix`);
+  check(question.prompt.trim().length > 30, `${question.id} prompt is too short`);
+  check(question.explanation.includes("方針:"), `${question.id} explanation missing 方針`);
+  check(question.explanation.includes("計算過程:"), `${question.id} explanation missing 計算過程`);
+  check(question.explanation.includes("答え:"), `${question.id} explanation missing 答え`);
+  check(question.explanation.includes("よくあるミス:"), `${question.id} explanation missing よくあるミス`);
+  check(question.explanation.includes("時短ポイント:"), `${question.id} explanation missing 時短ポイント`);
+  check(question.explanation.includes("復習リンク:"), `${question.id} explanation missing 復習リンク`);
+  check((question.reviewLinks?.length ?? 0) > 0, `${question.id} reviewLinks missing`);
+  for (const href of question.reviewLinks ?? []) {
+    check(routeExists(href), `${question.id} reviewLink does not resolve to a known route: ${href}`);
+  }
+  check(!/\\\(|\\\)|\\\[|\\\]/.test(question.prompt), `${question.id} contains raw TeX delimiters`);
+  check(!question.prompt.includes("0 5 x 5 4"), `${question.id} contains broken 0≦x≦4 text`);
 
-  const sectionPointSum = exam.sections.reduce((sum, section) => sum + section.points, 0);
-  const questionPointSum = questions.reduce((sum, question) => sum + question.points, 0);
-  const estimatedMinutes = exam.sections.reduce((sum, section) => sum + section.estimatedMinutes, 0);
-  check(sectionPointSum === 100, `section point sum should be 100, got ${sectionPointSum}`);
-  check(questionPointSum === 100, `question point sum should be 100, got ${questionPointSum}`);
-  check(estimatedMinutes >= 68 && estimatedMinutes <= 72, `estimated minutes should be near 70, got ${estimatedMinutes}`);
-
-  const assetTypes = new Set(exam.sections.flatMap((section) => section.assets?.map((asset) => asset.type) ?? []));
-  check(assetTypes.has("table"), "at least one table asset is required");
-  check(assetTypes.has("diagram"), "at least one diagram asset is required");
-  check(assetTypes.has("graph"), "at least one graph asset is required");
-  check(assetTypes.has("conversation"), "at least one conversation asset is required");
-
-  for (const section of exam.sections) {
-    const sectionQuestionPoints = section.questions.reduce((sum, question) => sum + question.points, 0);
-    check(section.leadText.trim().length >= 40, `${section.id} leadText is too short`);
-    check(section.questions.length >= 2, `${section.id} should have at least 2 questions`);
-    check(sectionQuestionPoints === section.points, `${section.id} question points ${sectionQuestionPoints} != section points ${section.points}`);
-    check(section.theme.trim().length > 0, `${section.id} theme is missing`);
-
-    for (const question of section.questions) {
-      check(!questionIds.has(question.id), `duplicate question id ${question.id}`);
-      questionIds.add(question.id);
-      check(question.id.startsWith("m1a-mock-001-"), `question id should not reuse legacy ids: ${question.id}`);
-      check(question.prompt.trim().length >= 25, `${question.id} prompt is too short`);
-      check(question.points > 0, `${question.id} points should be positive`);
-      check(question.explanation.trim().length >= 120, `${question.id} explanation is too short`);
-      check(!!question.answer, `${question.id} answer is missing`);
-      check(question.skillTags.length > 0, `${question.id} skillTags missing`);
-      check(question.commonMistakes.length > 0, `${question.id} commonMistakes missing`);
-      check((question.reviewLinks?.length ?? 0) > 0, `${question.id} reviewLinks missing`);
-      check(question.measuredAbility.trim().length > 0, `${question.id} measuredAbility missing`);
-      check(question.timeSavingTip.trim().length > 0, `${question.id} timeSavingTip missing`);
-
-      for (const tag of question.skillTags) {
-        check(ALLOWED_TAGS.has(tag), `${question.id} has out-of-scope or unknown tag "${tag}"`);
+  if (question.blanks) {
+    const answerRecord =
+      typeof question.answer === "object" && !Array.isArray(question.answer) ? question.answer : {};
+    check(
+      question.blanks.length === Object.keys(answerRecord).length,
+      `${question.id} blank count and answer key count differ`,
+    );
+    for (const blank of question.blanks) {
+      check(!blankIds.has(blank.id), `duplicate blank id ${blank.id}`);
+      blankIds.add(blank.id);
+      check(blank.label.trim().length > 0, `${question.id} has empty blank label`);
+      check(answerRecord[blank.id] === blank.correctAnswer, `${question.id} answer data mismatch for [${blank.label}]`);
+      labels.set(blank.label, blank.correctAnswer);
+      if (blank.label.length > 1) {
+        check(blank.id in answerRecord, `${question.id} multi-character blank [${blank.label}] is not one answer slot`);
       }
-
-      if (question.blanks) {
-        for (const blank of question.blanks) {
-          check(!blankLabels.has(blank.label), `duplicate blank label [${blank.label}]`);
-          blankLabels.add(blank.label);
-          check(blank.correctAnswer.trim().length > 0, `${question.id} blank ${blank.label} correctAnswer missing`);
-        }
-        const answerRecord = typeof question.answer === "object" && !Array.isArray(question.answer)
-          ? question.answer
-          : {};
-        check(
-          question.blanks.length === Object.keys(answerRecord).length,
-          `${question.id} blank count and answer data count differ`,
-        );
-      }
-
-      if (question.choices) {
-        const correctChoices = question.choices.filter((choice) => choice.isCorrect);
-        check(correctChoices.length > 0, `${question.id} choice question has no correct choice`);
-        if (question.answerFormat === "choice") {
-          check(correctChoices.length === 1, `${question.id} single choice should have exactly 1 correct choice`);
-          check(correctChoices[0]?.id === question.answer, `${question.id} answer does not match correct choice id`);
-        }
-      }
-
-      check(
-        !/[ＤD]\+|EX|∞|math-2bc|math-3c/.test(`${question.prompt} ${question.explanation} ${question.skillTags.join(" ")}`),
-        `${question.id} contains unsupported labels or out-of-scope subject text`,
-      );
-      check(!/\\\(|\\\)|\\\[|\\\]/.test(question.prompt), `${question.id} contains raw TeX delimiters`);
     }
   }
 
-  const difficultyPoints = questions.reduce<Record<string, number>>((acc, question) => {
-    acc[question.difficulty] = (acc[question.difficulty] ?? 0) + question.points;
-    return acc;
-  }, {});
-  const approachable = (difficultyPoints.basic ?? 0) + (difficultyPoints.standard ?? 0);
-  const hardSide =
-    (difficultyPoints.hard ?? 0) +
-    (difficultyPoints.trap ?? 0) +
-    (difficultyPoints["time-consuming"] ?? 0);
-  check(approachable >= 40 && approachable <= 50, `basic+standard points should be 40-50 for 38-45 average, got ${approachable}`);
-  check(hardSide >= 50, `hard/trap/time-consuming points should be at least 50, got ${hardSide}`);
+  if (question.choices) {
+    const correctChoices = question.choices.filter((choice) => choice.isCorrect);
+    check(correctChoices.length > 0, `${question.id} has no correct choice`);
+    for (const choice of question.choices) {
+      check(choice.id === choice.label, `${question.id} choice id and label differ for ${choice.label}`);
+    }
+    if (question.answerFormat === "choice") {
+      check(correctChoices.length === 1, `${question.id} single choice should have exactly one correct choice`);
+      check(question.answer === correctChoices[0]?.id, `${question.id} choice answer does not match correct choice`);
+    }
+    if (question.answerFormat === "multi-choice") {
+      check(Array.isArray(question.answer), `${question.id} multi-choice answer should be an array`);
+      check(
+        JSON.stringify([...(question.answer as string[])].sort()) ===
+          JSON.stringify(correctChoices.map((choice) => choice.id).sort()),
+        `${question.id} multi-choice answer does not match correct choices`,
+      );
+    }
+  }
+}
+
+function main() {
+  const questions = allQuestions(exam);
+  const blankIds = new Set<string>();
+  const labels = new Map<string, string>();
+
+  check(exam.id === "common-test-math-1a-manual-001", `manual exam id mismatch: ${exam.id}`);
+  check(COMMON_TEST_MATH_1A_MOCK_001.id === exam.id, "public mock alias should point to manual PDF version");
+  check(exam.source === "manual-pdf", "manual exam source should be manual-pdf");
+  check(exam.status === "published", "manual exam should be published");
+  check(exam.durationMinutes === 70, `duration should be 70, got ${exam.durationMinutes}`);
+  check(exam.totalPoints === 100, `totalPoints should be 100, got ${exam.totalPoints}`);
+  check(exam.sections.length === 4, `sections should be 4, got ${exam.sections.length}`);
+  check(
+    exam.sections.map((section) => section.points).join(",") === "30,30,20,20",
+    `section points should be 30,30,20,20, got ${exam.sections.map((section) => section.points).join(",")}`,
+  );
+
+  const sectionPointSum = exam.sections.reduce((sum, section) => sum + section.points, 0);
+  const questionPointSum = questions.reduce((sum, question) => sum + question.points, 0);
+  check(sectionPointSum === 100, `section point sum should be 100, got ${sectionPointSum}`);
+  check(questionPointSum === 100, `question point sum should be 100, got ${questionPointSum}`);
+
+  for (const section of exam.sections) {
+    check(section.leadText.trim().length > 0, `${section.id} leadText missing`);
+    check(section.questions.length > 0, `${section.id} questions missing`);
+    const points = section.questions.reduce((sum, question) => sum + question.points, 0);
+    check(points === section.points, `${section.id} question points ${points} != section points ${section.points}`);
+    for (const asset of section.assets ?? []) {
+      if (asset.type === "diagram") check(asset.alt.trim().length > 0, `${asset.id} diagram alt missing`);
+    }
+    for (const question of section.questions) checkQuestion(question, blankIds, labels);
+  }
+
+  check(labels.get("キク") === "52", "[キク] should be one blank with answer 52");
+  check(labels.get("ケコサシス") === "10084", "[ケコサシス] should be one blank with answer 10084");
+  check(labels.get("セソタチツ") === "10083", "[セソタチツ] should be one blank with answer 10083");
+  check(labels.get("ナ") === "0", "[ナ] should be 0 for the added x outlier check");
+  check(labels.get("キ") === "2", "[キ] should be choice number 2");
+  check(labels.get("クケコ") === "169", "[クケコ] should be 169");
+
+  const multi = questions.find((question) => question.id === "m1a-manual-001-s4-multi");
+  check(!!multi, "multi-choice question [ヒ] missing");
+  if (multi) {
+    check(isCommonTestMockQuestionCorrect(multi, ["1", "2", "3", "4"]), "[ヒ] correct set should score correct");
+    check(!isCommonTestMockQuestionCorrect(multi, ["0", "1", "2", "3", "4"]), "[ヒ] with option 0 should score wrong");
+    check(!isCommonTestMockQuestionCorrect(multi, ["1", "2", "3", "4", "5"]), "[ヒ] with option 5 should score wrong");
+  }
 
   for (const question of questions) {
     check(isCommonTestMockQuestionCorrect(question, question.answer), `${question.id} stored answer does not score correct`);
@@ -183,21 +160,24 @@ function main() {
   check(empty.totalScore === 0, `empty score should be 0, got ${empty.totalScore}`);
   check(empty.unansweredCount === questions.length, `empty unanswered should be ${questions.length}, got ${empty.unansweredCount}`);
 
-  report(difficultyPoints);
+  const publicMocks = getPublicCommonTestMockExams();
+  check(publicMocks[0]?.id === "common-test-math-1a-manual-001", "manual PDF mock should be first public mock");
+  check(!publicMocks.some((item) => item.id === "common-test-math-1a-mock-001"), "AI prototype should not be public");
+  check(COMMON_TEST_MOCK_EXAMS.length === 1, "public mock registry should only contain the PDF manual mock");
+  check(COMMON_TEST_MATH_1A_AI_PROTOTYPE_001.status === "draft", "AI prototype should be draft");
+  check(COMMON_TEST_MATH_1A_AI_PROTOTYPE_001.devOnly === true, "AI prototype should be devOnly");
+
+  report();
 }
 
-function report(difficultyPoints: Record<string, number>) {
+function report() {
   if (issues.length > 0) {
-    console.error(`common-test mock QA FAILED: ${issues.length} issue(s).`);
+    console.error(`manual common-test mock QA FAILED: ${issues.length} issue(s).`);
     for (const issue of issues) console.error(`- ${issue}`);
     process.exitCode = 1;
     return;
   }
-
-  console.log(
-    `common-test mock QA passed: ${exam.durationMinutes}min / ${exam.totalPoints}pt / ${exam.sections.length} sections / target average ${exam.targetAverage.min}-${exam.targetAverage.max}.`,
-  );
-  console.log(`difficulty points: ${JSON.stringify(difficultyPoints)}`);
+  console.log("manual common-test mock QA passed: 70min / 100pt / 4 sections / manual PDF public version.");
 }
 
 main();

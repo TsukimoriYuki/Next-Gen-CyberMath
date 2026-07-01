@@ -6,9 +6,10 @@ const issues: string[] = [];
 
 const files = {
   runner: join(root, "src/components/common-test/mock-exam/CommonTestMockExamRunner.tsx"),
-  route: join(root, "src/app/common-test/simulator/common-test-math-1a-mock-001/page.tsx"),
+  manualRoute: join(root, "src/app/common-test/simulator/common-test-math-1a-manual-001/page.tsx"),
+  oldRoute: join(root, "src/app/common-test/simulator/common-test-math-1a-mock-001/page.tsx"),
   index: join(root, "src/app/common-test/simulator/page.tsx"),
-  data: join(root, "src/data/common-test-mock-exams.ts"),
+  data: join(root, "src/data/common-test/manual-mocks/math1a-001.ts"),
 };
 
 function check(condition: boolean, message: string) {
@@ -23,51 +24,62 @@ function main() {
   for (const [name, path] of Object.entries(files)) {
     check(existsSync(path), `${name} file is missing: ${path}`);
   }
-
   if (issues.length > 0) return report();
 
   const runner = read(files.runner);
-  const route = read(files.route);
+  const manualRoute = read(files.manualRoute);
+  const oldRoute = read(files.oldRoute);
   const index = read(files.index);
   const data = read(files.data);
 
   check(runner.includes('"use client"'), "mock runner should be a Client Component");
   check(runner.includes("残り時間"), "runner should display remaining time");
-  check(runner.includes("時間外演習"), "runner should distinguish overtime practice");
-  check(runner.includes("見直しフラグ") || runner.includes("見直し"), "runner should support review flags");
-  check(runner.includes("解答状況"), "runner should show answer status");
-  check(runner.includes("大問一覧"), "runner should show section navigation");
+  check(runner.includes("未解答"), "runner should display unanswered count");
+  check(runner.includes("見直しフラグ"), "runner should support review flags");
+  check(runner.includes("大問ジャンプ"), "runner should show section navigation");
   check(runner.includes("提出する"), "runner should include submit flow");
-  check(runner.includes("復習モード"), "runner should include review mode");
-  check(runner.includes("QuadraticGraph"), "runner should render a graph component");
-  check(runner.includes("TriangleDiagram"), "runner should render a diagram component");
-  check(runner.includes("<table"), "runner should render table assets");
-  check(runner.includes("conversation") || runner.includes("speaker"), "runner should render conversation assets");
+  check(runner.includes("解説を見る") || runner.includes("解説表示"), "runner should include explanations");
+  check(runner.includes("TowerElevationDiagram"), "runner should render tower SVG");
+  check(runner.includes("SpherePlaneDiagram"), "runner should render sphere-plane SVG");
+  check(runner.includes("CircleTangentDiagram"), "runner should render tangent SVG");
+  check(runner.includes('answerFormat === "multi-choice"'), "runner should support multi-choice toggling");
+  check(runner.includes("aria-label={alt}"), "SVG diagrams should use alt text as aria-label");
+  check(runner.includes("md:grid-cols-4"), "result score grid should support 4 sections");
+  check(!runner.includes("md:grid-cols-5"), "runner should not assume 5 sections in result grid");
 
-  check(route.includes("COMMON_TEST_MATH_1A_MOCK_001"), "route should use the new structured mock exam");
-  check(index.includes("/common-test/simulator/common-test-math-1a-mock-001"), "simulator index should link to new mock first");
-  check(index.indexOf("新形式：共通テスト数学IA 本番模試 第1回") < index.indexOf("旧版：冊子画像型"), "new mock card should appear before legacy paper card");
+  check(manualRoute.includes("COMMON_TEST_MATH_1A_MANUAL_001"), "manual route should use manual PDF exam");
+  check(manualRoute.includes("common-test-math-1a-manual-001"), "manual route should have canonical manual URL");
+  check(oldRoute.includes("試作版・非公開"), "old AI route should be marked non-public/prototype");
+  check(oldRoute.includes("common-test-math-1a-manual-001"), "old AI route should link to manual version");
+  check(!oldRoute.includes("CommonTestMockExamRunner"), "old AI route should not launch the runner");
 
-  check(data.includes("targetAverage: { min: 38, max: 45 }"), "data should expose target average");
-  check(data.includes('type: "graph"'), "data should contain graph asset");
-  check(data.includes('type: "diagram"'), "data should contain diagram asset");
-  check(data.includes('type: "table"'), "data should contain table asset");
-  check(data.includes('type: "conversation"'), "data should contain conversation asset");
+  check(index.includes("getPublicCommonTestMockExams"), "index should read public mock registry");
+  check(index.includes("手動作成版 第1回"), "index should show manual mock");
+  check(index.includes("common-test-math-1a-mock-001") === false, "index should not link to old AI mock");
+  check(index.includes("配点 30,30,20,20"), "index should show section point structure");
 
-  check(!/gradient|from-|to-|via-/.test(runner), "mock UI should avoid decorative gradient styling");
-  check(!/rounded-3xl|rounded-full/.test(runner), "mock UI should avoid overly rounded decorative controls");
+  check(data.includes('id: "common-test-math-1a-manual-001"'), "data should expose manual exam id");
+  check(data.includes('source: "manual-pdf"'), "data should mark source as manual-pdf");
+  check(data.includes('status: "published"'), "data should be published");
+  check(data.includes("0≦x≦4"), "data should preserve 0≦x≦4 text");
+  check(!data.includes("0 5 x 5 4"), "data should not contain broken inequality text");
+  check(data.includes('variant: "tower-elevation"'), "data should contain tower diagram");
+  check(data.includes('variant: "sphere-plane"'), "data should contain sphere-plane diagram");
+  check(data.includes('variant: "circle-tangent"'), "data should contain tangent diagram");
+  check(data.includes('answerFormat: "multi-choice"'), "data should contain [ヒ] as multi-choice");
+  check(data.includes('answer: ["1", "2", "3", "4"]'), "[ヒ] answer should be 1,2,3,4");
 
   report();
 }
 
 function report() {
   if (issues.length > 0) {
-    console.error(`common-test mock UI QA FAILED: ${issues.length} issue(s).`);
+    console.error(`manual common-test mock UI QA FAILED: ${issues.length} issue(s).`);
     for (const issue of issues) console.error(`- ${issue}`);
     process.exitCode = 1;
     return;
   }
-  console.log("common-test mock UI QA passed: route, first-card link, paper-like runner, assets, timer, flags, submit, review.");
+  console.log("manual common-test mock UI QA passed: manual route, public index, old draft route, diagrams, timer, flags, submit, review.");
 }
 
 main();

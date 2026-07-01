@@ -10,3 +10,9 @@
 
 ○ Compiling /common-test/simulator/common-test-math-1a-mock-001 ...
  GET /common-test/simulator/common-test-math-1a-mock-001 200 in 4.1s (next.js: 3.5s, application-code: 605ms)
+✓ Compiled in 312ms
+✓ Compiled in 727ms
+✓ Compiled in 259ms
+○ Compiling /common-test/simulator/common-test-math-1a-manual-001 ...
+ GET /common-test/simulator/common-test-math-1a-manual-001 200 in 4.1s (next.js: 3.7s, application-code: 396ms)
+ GET /common-test/simulator/common-test-math-1a-manual-001 200 in 150ms (next.js: 5ms, application-code: 145ms)

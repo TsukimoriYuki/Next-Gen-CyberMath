@@ -29,7 +29,9 @@ function normalize(value: string | number | null | undefined) {
     .trim()
     .replace(/\s+/g, "")
     .replace(/[０-９]/g, (ch) => String(ch.charCodeAt(0) - 0xff10))
-    .replace(/−/g, "-");
+    .replace(/[−ー－]/g, "-")
+    .replace(/sqrt/gi, "√")
+    .replace(/√\((\d+)\)/g, "√$1");
 }
 
 function normalizeArray(value: string[] | string | undefined) {
@@ -96,9 +98,7 @@ export function scoreCommonTestMockExam(exam: CommonTestMockExam, answers: Commo
       questionResults.find((result) => result.question.id === question.id)!,
     );
     const wrongOrBlank = results.filter((result) => !result.isCorrect);
-    const weakTags = [
-      ...new Set(wrongOrBlank.flatMap((result) => result.question.skillTags)),
-    ].slice(0, 5);
+    const weakTags = [...new Set(wrongOrBlank.flatMap((result) => result.question.skillTags))].slice(0, 5);
     return {
       sectionId: section.id,
       title: section.title,
