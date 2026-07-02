@@ -55,6 +55,29 @@ export function CourseUnitPageView({
           </p>
         </header>
 
+        {subject.subjectId === "math-1a" && unit.unitId === "counting-probability" ? (
+          <Link
+            href="/common-test/lectures/probability-guided-reading"
+            className="mb-8 flex flex-col gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-5 shadow-sm transition hover:border-blue-300 hover:bg-white sm:flex-row sm:items-center sm:justify-between"
+          >
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                Core Lecture
+              </p>
+              <h2 className="mt-1 text-lg font-extrabold text-slate-950">
+                確率 guided reading 中核講義
+              </h2>
+              <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                冊子型模試の第4問で崩れやすい、分母の決め方・余事象・包除・条件付き確率をまとめて復習できます。
+              </p>
+            </div>
+            <span className="inline-flex items-center gap-1 text-sm font-bold text-blue-700">
+              講義へ戻る
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          </Link>
+        ) : null}
+
         <div className="space-y-8">
           {levelsToShow.map((level) => {
             const meta = COURSE_LEVEL_META[level];

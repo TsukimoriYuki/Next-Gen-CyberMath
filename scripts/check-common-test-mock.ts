@@ -45,6 +45,9 @@ function routeExists(href: string) {
     const slug = href.split("/").pop();
     return !!slug && existsSync(join(root, `src/app/common-test/simulator/${slug}/page.tsx`));
   }
+  if (href.startsWith("/common-test/lectures/")) {
+    return existsSync(join(root, "src/app/common-test/lectures/[slug]/page.tsx"));
+  }
   return existsSync(join(root, `src/app${href}/page.tsx`));
 }
 

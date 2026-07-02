@@ -10,7 +10,7 @@ const course = {
   quadratic: "/courses/math-1a/quadratic",
   data: "/courses/math-1a/data-analysis",
   geometry: "/courses/math-1a/geometry-properties",
-  probability: "/courses/math-1a/counting-probability",
+  probability: "/common-test/lectures/probability-guided-reading",
 };
 
 function blank(label: string, correctAnswer: string, width = Math.max(3, label.length + 2)): ExamBlank {
