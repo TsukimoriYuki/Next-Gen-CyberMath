@@ -105,6 +105,27 @@ export const MASTERY_LECTURE_GUIDES: MasteryLectureGuide[] = [
       "第3問で、条件整理、表や樹形図、余事象を誘導文に沿って選ばせる形で出ます。",
     targetMinutes: 6,
   },
+  {
+    lectureSlug: "data-analysis-quartiles-outliers",
+    legacySlugs: [],
+    unitNames: ["データの分析"],
+    unitSlugs: ["data-analysis"],
+    title: "データの分析 四分位数・外れ値講義",
+    shortTitle: "データの分析",
+    description:
+      "中央値、Q1、Q3、IQR、外れ値、平均値と中央値の変化、箱ひげ図の読み取りを模試復習用に整理します。",
+    ctaLabel: "データの分析 中核講義へ",
+    masteryFocus: "データ数・中央位置・外れ値境界を順に固定する",
+    weapons: ["四分位数を位置で決める", "IQRから外れ値境界を判定する", "平均値は合計、中央値は位置で読む"],
+    recoveryLinks: [
+      { symptom: "四分位数がずれた", label: "四分位数の流儀", href: "/common-test/lectures/data-analysis-quartiles-outliers#data-analysis-quartile-method" },
+      { symptom: "外れ値判定を間違えた", label: "代表例題3", href: "/common-test/lectures/data-analysis-quartiles-outliers#data-analysis-example-3" },
+      { symptom: "平均値と中央値を混同した", label: "平均値と中央値の違い", href: "/common-test/lectures/data-analysis-quartiles-outliers#data-analysis-mean-median" },
+    ],
+    commonTestAppearance:
+      "第2問後半で、表や会話文に沿って四分位数、外れ値、外れ値除去後の平均値・中央値、追加後の判定として出ます。",
+    targetMinutes: 6,
+  },
 ];
 
 const GUIDE_BY_CANONICAL_SLUG = new Map(
@@ -195,14 +216,16 @@ const UNIT_CONTEXT_GUIDES: UnitContextGuide[] = [
   },
   {
     unitNames: ["データの分析"],
-    masteryFocus: "代表値・分散・相関係数・仮説検定の意味を、公式の暗記ではなくデータの解釈として使う",
-    weapons: ["分散・標準偏差の変形計算", "相関係数の符号と散布図の対応", "仮説検定の判断基準の運用"],
-    commonTestContext: "実データの表やグラフを読み取り、代表値・散布図・仮説検定を選択形式で判断させる形で出やすい",
-    advancedContext: "統計的な考え方そのものを問う発展問題で、公式の適用条件や検定の解釈の妥当性を吟味させる",
+    masteryFocus: "データ数・中央値・四分位数・外れ値境界を、並び順と位置から正確に読み取る",
+    weapons: ["中央値と四分位数の位置決定", "IQRによる外れ値判定", "平均値と中央値の変化の比較"],
+    commonTestContext: "第2問後半で、四分位数、箱ひげ図、外れ値、外れ値除去後の平均値・中央値を会話文に沿って判断させる形で出やすい",
+    advancedContext: "発展問題では、箱ひげ図と代表値の違い、外れ値を含むデータの頑健性、統計量の変化を吟味させる",
     recoveryLinks: [
-      { symptom: "分散・標準偏差の計算でミスした", label: "データの分析の問題に戻る", href: "/units/data-analysis" },
-      { symptom: "相関係数の解釈を誤った", label: "データの分析の単元ページ", href: "/units/data-analysis" },
+      { symptom: "四分位数の求め方でミスした", label: "データの分析 中核講義", href: "/common-test/lectures/data-analysis-quartiles-outliers#data-analysis-quartile-method" },
+      { symptom: "外れ値の境界を読み違えた", label: "外れ値判定の代表例題", href: "/common-test/lectures/data-analysis-quartiles-outliers#data-analysis-example-3" },
+      { symptom: "平均値と中央値の変化を混同した", label: "平均値と中央値の違い", href: "/common-test/lectures/data-analysis-quartiles-outliers#data-analysis-mean-median" },
     ],
+    lectureSlug: "data-analysis-quartiles-outliers",
   },
   {
     unitNames: ["整数の性質"],

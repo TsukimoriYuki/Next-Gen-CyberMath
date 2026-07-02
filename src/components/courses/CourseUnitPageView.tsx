@@ -41,6 +41,13 @@ export function CourseUnitPageView({
             description:
               "冊子型模試の第2問で崩れやすい、平方完成・軸と定義域・端点比較・合成関数をまとめて復習できます。",
           }
+        : subject.subjectId === "math-1a" && unit.unitId === "data-analysis"
+          ? {
+              href: "/common-test/lectures/data-analysis-quartiles-outliers",
+              title: "データの分析 四分位数・外れ値 中核講義",
+              description:
+                "冊子型模試の第2問後半で崩れやすい、中央値・四分位数・外れ値・平均値と中央値の変化をまとめて復習できます。",
+            }
         : null;
 
   return (

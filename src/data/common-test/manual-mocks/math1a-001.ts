@@ -9,7 +9,7 @@ const course = {
   numbers: "/courses/math-1a/numbers-and-expressions",
   measurement: "/courses/math-1a/figures-and-measurement",
   quadratic: "/common-test/lectures/quadratic-case-split-intensive",
-  data: "/courses/math-1a/data-analysis",
+  data: "/common-test/lectures/data-analysis-quartiles-outliers",
   geometry: "/courses/math-1a/geometry-properties",
   probability: "/common-test/lectures/probability-guided-reading",
 };

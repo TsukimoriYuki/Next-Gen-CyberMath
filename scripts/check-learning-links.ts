@@ -51,6 +51,11 @@ const UNIT_FAMILY_VOCAB: { family: string; units: string[]; forbiddenElsewhere: 
     units: ["図形の性質"],
     forbiddenElsewhere: ["円周角・相似・方べき", "チェバ", "メネラウス"],
   },
+  {
+    family: "データの分析",
+    units: ["データの分析"],
+    forbiddenElsewhere: ["四分位数・外れ値", "IQRによる外れ値判定", "平均値と中央値の変化"],
+  },
 ];
 
 const problems = getAllProblems();
@@ -79,10 +84,10 @@ for (const problem of problems) {
     // getMasteryLectureGuideForUnit は unit名の完全一致でのみ解決するため、
     // ここでは「講義が存在する = 単元が一致している」という設計上の前提を
     // 直接データ突き合わせで再確認する。
-    const known = ["図形と計量", "図形の性質", "2次関数", "二次関数", "場合の数と確率", "確率"];
+    const known = ["図形と計量", "図形の性質", "2次関数", "二次関数", "場合の数と確率", "確率", "データの分析"];
     check(
       known.includes(problem.unit),
-      `"${problem.slug}" (unit: ${problem.unit}) has a specialLecture (${guide.lecture.lectureSlug}) but its unit is not one of the 4 units with a real lecture — check for a mismatch`,
+      `"${problem.slug}" (unit: ${problem.unit}) has a specialLecture (${guide.lecture.lectureSlug}) but its unit is not one of the units with a real lecture — check for a mismatch`,
     );
   }
 
