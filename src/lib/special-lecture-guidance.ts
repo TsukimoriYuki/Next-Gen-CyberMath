@@ -65,7 +65,7 @@ export const MASTERY_LECTURE_GUIDES: MasteryLectureGuide[] = [
     lectureSlug: "quadratic-case-split-intensive",
     legacySlugs: [],
     unitNames: ["2次関数", "二次関数"],
-    unitSlugs: ["quadratic-functions"],
+    unitSlugs: ["quadratic-functions", "quadratic"],
     title: "二次関数 場合分け満点講義",
     shortTitle: "二次関数",
     description:

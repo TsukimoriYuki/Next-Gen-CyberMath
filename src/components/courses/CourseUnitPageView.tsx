@@ -26,6 +26,22 @@ export function CourseUnitPageView({
   const levelsToShow = isPremium && unit.lessons.length > 0
     ? LEVELS.filter((level) => unit.lessons.some((lesson) => lesson.level === level))
     : LEVELS;
+  const coreLecture =
+    subject.subjectId === "math-1a" && unit.unitId === "counting-probability"
+      ? {
+          href: "/common-test/lectures/probability-guided-reading",
+          title: "確率 guided reading 中核講義",
+          description:
+            "冊子型模試の第4問で崩れやすい、分母の決め方・余事象・包除・条件付き確率をまとめて復習できます。",
+        }
+      : subject.subjectId === "math-1a" && unit.unitId === "quadratic"
+        ? {
+            href: "/common-test/lectures/quadratic-case-split-intensive",
+            title: "二次関数 場合分け完全攻略 中核講義",
+            description:
+              "冊子型模試の第2問で崩れやすい、平方完成・軸と定義域・端点比較・合成関数をまとめて復習できます。",
+          }
+        : null;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -55,9 +71,9 @@ export function CourseUnitPageView({
           </p>
         </header>
 
-        {subject.subjectId === "math-1a" && unit.unitId === "counting-probability" ? (
+        {coreLecture ? (
           <Link
-            href="/common-test/lectures/probability-guided-reading"
+            href={coreLecture.href}
             className="mb-8 flex flex-col gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-5 shadow-sm transition hover:border-blue-300 hover:bg-white sm:flex-row sm:items-center sm:justify-between"
           >
             <div>
@@ -65,10 +81,10 @@ export function CourseUnitPageView({
                 Core Lecture
               </p>
               <h2 className="mt-1 text-lg font-extrabold text-slate-950">
-                確率 guided reading 中核講義
+                {coreLecture.title}
               </h2>
               <p className="mt-1 text-sm leading-relaxed text-slate-600">
-                冊子型模試の第4問で崩れやすい、分母の決め方・余事象・包除・条件付き確率をまとめて復習できます。
+                {coreLecture.description}
               </p>
             </div>
             <span className="inline-flex items-center gap-1 text-sm font-bold text-blue-700">

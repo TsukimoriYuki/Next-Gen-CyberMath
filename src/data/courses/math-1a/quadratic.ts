@@ -122,6 +122,7 @@ hint: "係数cではなく係数aを見る。",
 ],
 relatedPracticeLinks: [
 { label: "二次関数 基礎演習", href: "/units/quadratic-functions", description: "大問別ドリル" },
+{ label: "二次関数 場合分け完全攻略", href: "/common-test/lectures/quadratic-case-split-intensive", description: "軸・定義域・端点比較の中核講義" },
 { label: "共通テスト 数学IA 演習", href: "/common-test/math-1a", description: "共通テスト対策" },
 ],
 qualityTags: ["概念理解", "図解あり", "比較表あり", "よくあるミスあり", "確認問題3問"],
@@ -256,6 +257,7 @@ hint: "最初に $-1$ でくくる。",
 ],
 relatedPracticeLinks: [
 { label: "平方完成 演習", href: "/units/quadratic-functions", description: "難易度A問題から" },
+{ label: "二次関数 場合分け完全攻略", href: "/common-test/lectures/quadratic-case-split-intensive", description: "平方完成から最大最小へ接続" },
 { label: "共通テスト 数学IA 演習", href: "/common-test/math-1a", description: "共通テスト対策" },
 ],
 qualityTags: ["途中式あり", "図解あり", "手順分解あり", "よくあるミスあり", "確認問題3問"],
@@ -406,6 +408,7 @@ hint: "すでに頂点形式になっているので、平方完成は不要。"
 ],
 relatedPracticeLinks: [
 { label: "最大・最小 演習", href: "/units/quadratic-functions", description: "難易度A〜B問題" },
+{ label: "二次関数 場合分け完全攻略", href: "/common-test/lectures/quadratic-case-split-intensive", description: "最大最小の判別フロー" },
 { label: "共通テスト 数学IA", href: "/common-test/math-1a" },
 ],
 qualityTags: ["途中式あり", "図解あり", "最大最小", "よくあるミスあり", "確認問題3問"],
@@ -552,6 +555,7 @@ const QUADRATIC_STANDARD: CourseLesson[] = [
     ],
     relatedPracticeLinks: [
       { label: "定義域つき最大最小 演習", href: "/units/quadratic-functions" },
+      { label: "二次関数 場合分け完全攻略", href: "/common-test/lectures/quadratic-case-split-intensive", description: "軸と定義域の位置関係" },
       { label: "共通テスト 数学IA", href: "/common-test/math-1a" },
     ],
     qualityTags: ["場合分け", "端点比較", "途中式あり", "よくあるミスあり", "確認問題3問", "旧帝大準備"],
@@ -680,6 +684,7 @@ const QUADRATIC_STANDARD: CourseLesson[] = [
     ],
     relatedPracticeLinks: [
       { label: "文字係数 二次関数 演習", href: "/units/quadratic-functions" },
+      { label: "二次関数 場合分け完全攻略", href: "/common-test/lectures/quadratic-case-split-intensive", description: "パラメータ場合分けの境界" },
       { label: "共通テスト 数学IA", href: "/common-test/math-1a" },
     ],
     qualityTags: ["場合分け", "パラメータ", "端点比較", "途中式あり", "確認問題3問", "旧帝大準備"],
@@ -802,6 +807,7 @@ const QUADRATIC_STANDARD: CourseLesson[] = [
     ],
     relatedPracticeLinks: [
       { label: "二次方程式・不等式 演習", href: "/units/quadratic-functions" },
+      { label: "二次関数 場合分け完全攻略", href: "/common-test/lectures/quadratic-case-split-intensive", description: "判別式と軸・端点の接続" },
       { label: "共通テスト 数学IA 本番演習", href: "/common-test/simulator" },
     ],
     qualityTags: ["判別式", "不等式", "解の配置", "最大最小との接続", "確認問題3問", "旧帝大準備"],
@@ -948,6 +954,7 @@ hint: "軸の条件は、$a$ と $b$ の関係式になる。",
 ],
 relatedPracticeLinks: [
 { label: "二次関数の決定 演習", href: "/units/quadratic-functions" },
+{ label: "二次関数 場合分け完全攻略", href: "/common-test/lectures/quadratic-case-split-intensive", description: "値域と最大最小の復習" },
 { label: "共通テスト 数学IA 本番演習", href: "/common-test/simulator" },
 { label: "過去問道場（二次関数）", href: "/dojo" },
 ],
@@ -1089,6 +1096,7 @@ hint: "動いているのは軸ではなく定義域。",
 ],
 relatedPracticeLinks: [
 { label: "発展問題 演習", href: "/units/quadratic-functions" },
+{ label: "二次関数 場合分け完全攻略", href: "/common-test/lectures/quadratic-case-split-intensive", description: "動く軸・動く定義域の復習" },
 { label: "共通テスト 本番演習", href: "/common-test/simulator" },
 { label: "段階復習キュー", href: "/common-test/review" },
 ],
@@ -1211,6 +1219,7 @@ hint: "存在条件は、最小値が条件を満たすかで考える。",
 ],
 relatedPracticeLinks: [
 { label: "発展・難問 演習", href: "/units/quadratic-functions" },
+{ label: "二次関数 場合分け完全攻略", href: "/common-test/lectures/quadratic-case-split-intensive", description: "共通テスト型の最大最小・合成関数" },
 { label: "過去問道場", href: "/dojo" },
 { label: "共通テスト 本番演習", href: "/common-test/simulator" },
 { label: "段階復習・類題演習", href: "/common-test/review" },
@@ -1289,4 +1298,3 @@ export function getCourseSubject(subjectId: string): CourseSubject | undefined {
 export function getCourseUnit(subjectId: string, unitId: string): CourseUnit | undefined {
   return getCourseSubject(subjectId)?.units.find((u) => u.unitId === unitId);
 }
-
