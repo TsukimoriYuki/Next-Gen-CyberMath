@@ -139,7 +139,7 @@ export function CourseUnitPageView({
                         </h3>
                         {isPremium ? (
                           <div className="mt-2 flex flex-wrap gap-1.5">
-                            {["有料版", "Premium", "難関大レベル"].map((badge) => (
+                            {["発展編", "難関大レベル"].map((badge) => (
                               <span
                                 key={badge}
                                 className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700"

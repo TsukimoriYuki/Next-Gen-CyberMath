@@ -126,6 +126,48 @@ export const MASTERY_LECTURE_GUIDES: MasteryLectureGuide[] = [
       "第2問後半で、表や会話文に沿って四分位数、外れ値、外れ値除去後の平均値・中央値、追加後の判定として出ます。",
     targetMinutes: 6,
   },
+  {
+    lectureSlug: "numbers-expressions-core-skills",
+    legacySlugs: [],
+    unitNames: ["数と式"],
+    unitSlugs: ["numbers-and-expressions"],
+    title: "数と式 徹底講義",
+    shortTitle: "数と式",
+    description:
+      "有理化、対称式、整数部分・小数部分、絶対値の場合分けを、第1問前半の誘導に合わせて整理します。",
+    ctaLabel: "数と式 中核講義へ",
+    masteryFocus: "有理化・対称式・整数部分の判断を1本の流れでつなぐ",
+    weapons: ["分母の共役で有理化する", "和と積だけで対称式の次数を上げる", "整数で挟み撃ちして整数部分を出す"],
+    recoveryLinks: [
+      { symptom: "有理化の符号を間違えた", label: "平方根と有理化の章", href: "/common-test/lectures/numbers-expressions-core-skills#na-radical-heading" },
+      { symptom: "整数部分・小数部分がずれた", label: "代表例題2", href: "/common-test/lectures/numbers-expressions-core-skills#na-example-2" },
+      { symptom: "絶対値の場合分けで区間を間違えた", label: "代表例題3", href: "/common-test/lectures/numbers-expressions-core-skills#na-example-3" },
+    ],
+    commonTestAppearance:
+      "第1問〔1〕で、有理化・対称式・整数部分と小数部分を1本の誘導でつなげて出します。",
+    targetMinutes: 7,
+  },
+  {
+    lectureSlug: "sets-logic-necessary-sufficient",
+    legacySlugs: [],
+    unitNames: ["集合と命題"],
+    unitSlugs: ["sets-and-logic"],
+    title: "集合と命題 判定講義",
+    shortTitle: "集合と命題",
+    description:
+      "必要条件・十分条件・逆裏対偶・ド・モルガンの法則を、判定の向きを間違えないように整理します。",
+    ctaLabel: "集合と命題 中核講義へ",
+    masteryFocus: "「PならばQ」の向きから必要条件・十分条件・対偶を機械的に判定する",
+    weapons: ["PならばQの真偽を反例で確認する", "十分条件と必要条件を1組で言い換える", "対偶で証明しにくい命題を示す"],
+    recoveryLinks: [
+      { symptom: "必要条件・十分条件の向きを逆にした", label: "必要条件・十分条件の章", href: "/common-test/lectures/sets-logic-necessary-sufficient#sl-necessary-sufficient-heading" },
+      { symptom: "逆と対偶を混同した", label: "逆・裏・対偶の章", href: "/common-test/lectures/sets-logic-necessary-sufficient#sl-inverse-contrapositive-heading" },
+      { symptom: "集合の要素数で重複分を引き忘れた", label: "代表例題3", href: "/common-test/lectures/sets-logic-necessary-sufficient#sl-example-3" },
+    ],
+    commonTestAppearance:
+      "第1問〔1〕で、集合の包含・命題の判定を会話文に沿って選ばせる形で出ます。",
+    targetMinutes: 7,
+  },
 ];
 
 const GUIDE_BY_CANONICAL_SLUG = new Map(
@@ -194,25 +236,29 @@ export interface UnitContextGuide {
 const UNIT_CONTEXT_GUIDES: UnitContextGuide[] = [
   {
     unitNames: ["数と式"],
-    masteryFocus: "展開・因数分解・絶対値・根号の式を、同値性を保ったまま整理して最初の一手を選ぶ",
-    weapons: ["因数分解の型の識別", "絶対値を含む場合分け", "根号を含む式の有理化"],
-    commonTestContext: "第1問前半で、式変形や絶対値・不等式の場合分けを短時間で正確に処理させる形で出やすい",
+    masteryFocus: "有理化・対称式・整数部分の判断を1本の流れでつなぎ、絶対値の式を場合分けで整理する",
+    weapons: ["分母の共役で有理化する", "和と積だけで対称式の次数を上げる", "整数で挟み撃ちして整数部分を出す"],
+    commonTestContext: "第1問〔1〕で、有理化・対称式・整数部分と小数部分を1本の誘導でつなげて出やすい",
     advancedContext: "式変形の厳密さと同値性の意識を鍛える基礎固めの問題として位置づく",
     recoveryLinks: [
-      { symptom: "因数分解の型を見抜けなかった", label: "数と式の問題に戻る", href: "/units/numbers-and-expressions" },
-      { symptom: "絶対値の場合分けが崩れた", label: "数と式の単元ページ", href: "/units/numbers-and-expressions" },
+      { symptom: "有理化の符号を間違えた", label: "数と式 中核講義", href: "/common-test/lectures/numbers-expressions-core-skills#na-radical-heading" },
+      { symptom: "整数部分・小数部分がずれた", label: "整数部分・小数部分の代表例題", href: "/common-test/lectures/numbers-expressions-core-skills#na-example-2" },
+      { symptom: "絶対値の場合分けが崩れた", label: "絶対値の代表例題", href: "/common-test/lectures/numbers-expressions-core-skills#na-example-3" },
     ],
+    lectureSlug: "numbers-expressions-core-skills",
   },
   {
     unitNames: ["集合と命題", "集合と論理"],
-    masteryFocus: "必要条件・十分条件・命題の否定を、集合の包含関係に置き換えて整理する",
-    weapons: ["ベン図による包含関係の可視化", "対偶・背理法の使い分け", "ド・モルガンの法則による否定"],
-    commonTestContext: "必要十分条件の判定や命題の真偽を、具体例と反例を使い分けて判断させる形で出やすい",
+    masteryFocus: "「PならばQ」の向きから必要条件・十分条件・逆裏対偶を機械的に判定する",
+    weapons: ["PならばQの真偽を反例で確認する", "十分条件と必要条件を1組で言い換える", "対偶で証明しにくい命題を示す"],
+    commonTestContext: "第1問〔1〕で、集合の包含・命題の判定を会話文に沿って選ばせる形で出やすい",
     advancedContext: "論理の構造そのものを問う出題で、証明の型（対偶・背理法）を正確に運用できるかが問われる",
     recoveryLinks: [
-      { symptom: "必要・十分を取り違えた", label: "集合と命題の問題に戻る", href: "/units/sets-and-logic" },
-      { symptom: "命題の否定でミスした", label: "集合と命題の単元ページ", href: "/units/sets-and-logic" },
+      { symptom: "必要・十分を取り違えた", label: "必要条件・十分条件の章", href: "/common-test/lectures/sets-logic-necessary-sufficient#sl-necessary-sufficient-heading" },
+      { symptom: "逆と対偶を混同した", label: "逆・裏・対偶の章", href: "/common-test/lectures/sets-logic-necessary-sufficient#sl-inverse-contrapositive-heading" },
+      { symptom: "集合の要素数で重複分を引き忘れた", label: "集合の要素数の代表例題", href: "/common-test/lectures/sets-logic-necessary-sufficient#sl-example-3" },
     ],
+    lectureSlug: "sets-logic-necessary-sufficient",
   },
   {
     unitNames: ["データの分析"],

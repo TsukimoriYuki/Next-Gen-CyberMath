@@ -6,11 +6,14 @@ import type {
 } from "@/data/common-test-mock-exams";
 
 const course = {
-  numbers: "/courses/math-1a/numbers-and-expressions",
-  measurement: "/courses/math-1a/figures-and-measurement",
+  numbers: "/common-test/lectures/numbers-expressions-core-skills",
+  measurement: "/common-test/lectures/geometry-measurement-intensive",
   quadratic: "/common-test/lectures/quadratic-case-split-intensive",
   data: "/common-test/lectures/data-analysis-quartiles-outliers",
-  geometry: "/courses/math-1a/geometry-properties",
+  geometry: "/common-test/lectures/geometry-properties-auxiliary-lines",
+  // 第3問（図形の性質）は、性質で辺を作ったあとに計量へ渡す融合が多いため、
+  // 計算量の多い設問ではこちらも合わせて復習リンクに含める。
+  geometryMeasurement: "/common-test/lectures/geometry-measurement-intensive",
   probability: "/common-test/lectures/probability-guided-reading",
 };
 
@@ -498,7 +501,7 @@ export const COMMON_TEST_MATH_1A_MANUAL_001: CommonTestMockExam = {
             shortcut: "球の断面は毎回 $断面半径^2+距離^2=球半径^2$。",
             link: course.geometry,
           }),
-          reviewLinks: [course.geometry],
+          reviewLinks: [course.geometry, course.geometryMeasurement],
           dependsOnPrevious: true,
         }),
       ],

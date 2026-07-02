@@ -1,0 +1,303 @@
+import type { CommonTestMockExam } from "@/data/common-test-mock-exams";
+import { blank, choices, explanation, q } from "./helpers";
+
+const lecture = "/common-test/lectures/sets-logic-necessary-sufficient";
+
+// 大問型演習1：約数の集合による必要条件・十分条件の判定。
+export const SETS_LOGIC_PRACTICE_1: CommonTestMockExam = {
+  id: "practice-sets-logic-01",
+  title: "集合と命題 大問型演習1：約数の集合と必要十分条件",
+  subject: "math-1a",
+  durationMinutes: 16,
+  totalPoints: 26,
+  targetAverage: { min: 12, max: 18 },
+  source: "manual-section-practice",
+  status: "published",
+  lectureLinks: [{ label: "集合と命題 判定講座", href: lecture }],
+  sections: [
+    {
+      id: "section-1",
+      title: "大問1",
+      unit: "集合と命題",
+      points: 26,
+      estimatedMinutes: 16,
+      theme: "約数の集合、必要条件・十分条件の判定",
+      leadText:
+        "自然数 $x$ に関する条件 $P$：「$x$は12の約数である」、条件 $Q_a$：「$x$は自然数 $a$ の約数である」とする。次の問いに、この順番で答えよ。（配点26）",
+      questions: [
+        q({
+          id: "prac-sl1-q1",
+          prompt: "(1) $P$を満たす $x$ をすべて求め、その個数を答えよ。",
+          answerFormat: "blank",
+          blanks: [blank("ア", "6")],
+          points: 6,
+          difficulty: "basic",
+          skillTags: ["集合", "約数"],
+          answer: { ア: "6" },
+          shortSolution: "12の約数は $1,2,3,4,6,12$ の6個。",
+          explanation: explanation({
+            plan: "12を割り切る自然数をすべて書き出す。",
+            work: "$12=2^2\\times3$ の約数は $1,2,3,4,6,12$ の6個。",
+            answer: "ア=6",
+            mistake: "12自身を約数に含め忘れる、または1を除いてしまう。",
+            shortcut: "$12=2^2\\times3$ の約数の個数は $(2+1)(1+1)=6$ と素因数分解からも確認できる。",
+            link: lecture,
+          }),
+          reviewLinks: [lecture],
+        }),
+        q({
+          id: "prac-sl1-q2",
+          prompt:
+            "(2) $P$が$Q_a$であるための十分条件となるような自然数 $a$ の条件を求めよ。",
+          answerFormat: "choice",
+          choices: choices([
+            { text: "$a$ が12の倍数であること", correct: true },
+            { text: "$a$ が12の約数であること" },
+            { text: "$a$ が12であること" },
+            { text: "$a$ がどんな自然数でもよい" },
+          ]),
+          points: 10,
+          difficulty: "standard",
+          skillTags: ["必要条件", "十分条件", "包含関係"],
+          answer: "0",
+          shortSolution: "12の約数がすべて $a$ の約数になるのは、$a$ が12の倍数のとき。",
+          explanation: explanation({
+            plan: "$P\\Rightarrow Q_a$（12の約数はすべて $a$ の約数）が成り立つ条件を、集合の包含関係として考える。",
+            work: "$P$ の要素（12の約数）がすべて $Q_a$ の要素（$a$ の約数）に含まれるためには、12自身が $a$ の約数であればよい。12が $a$ の約数であれば、12の約数はすべて $a$ の約数にもなる。したがって条件は「$a$ が12の倍数」。",
+            answer: "aが12の倍数であること",
+            mistake: "「12の約数」と「12の倍数」を逆にして、$a$ を12の約数だと答えてしまう。",
+            shortcut: "「Pの集合がQの集合に含まれる」という言葉を、そのまま「12の約数の集合 $\\subset$ aの約数の集合」に翻訳する。",
+            link: lecture,
+          }),
+          reviewLinks: [lecture],
+          dependsOnPrevious: true,
+        }),
+        q({
+          id: "prac-sl1-q3",
+          prompt:
+            "(3) $a=36$ のとき、$P$は$Q_{36}$であるための何条件か。また$Q_{36}$は$P$であるための何条件か。",
+          answerFormat: "choice",
+          choices: choices([
+            { text: "PはQ₃₆の十分条件（必要条件ではない）、Q₃₆はPの必要条件（十分条件ではない）", correct: true },
+            { text: "PとQ₃₆は必要十分条件" },
+            { text: "PはQ₃₆の必要条件、Q₃₆はPの十分条件" },
+            { text: "PとQ₃₆はどちらの条件でもない" },
+          ]),
+          points: 10,
+          difficulty: "hard",
+          skillTags: ["必要条件", "十分条件", "向きの言い換え"],
+          answer: "0",
+          shortSolution: "36は12の倍数なので(2)の条件を満たし、PはQ₃₆の十分条件。逆にQ₃₆はPの必要条件。",
+          explanation: explanation({
+            plan: "36が12の倍数かどうかを確認し、(2)の結果を使う。十分条件が分かれば、必要条件は自動的に決まる。",
+            work: "$36=12\\times3$ なので12の倍数。よって(2)より $P$ は $Q_{36}$ の十分条件。36の約数は $1,2,3,4,6,9,12,18,36$ で、$9,18,36$ など12の約数でないものを含むので $Q_{36}\\subset P$ は成り立たず、$P$ は $Q_{36}$ の必要条件ではない。$P\\Rightarrow Q_{36}$ が真であることから、$Q_{36}$ は $P$ の必要条件だと自動的に言える。",
+            answer: "PはQ₃₆の十分条件（必要条件ではない）、Q₃₆はPの必要条件（十分条件ではない）",
+            mistake: "(2)の結果を使わず、36の約数をゼロから書き出して確認しようとして時間を使う。",
+            shortcut: "十分条件と必要条件は1組の言い換えなので、片方を確認すればもう片方は考え直さなくてよい。",
+            link: lecture,
+          }),
+          reviewLinks: [lecture],
+          dependsOnPrevious: true,
+        }),
+      ],
+    },
+  ],
+};
+
+// 大問型演習2：命題の真偽と逆、ド・モルガンの法則。
+export const SETS_LOGIC_PRACTICE_2: CommonTestMockExam = {
+  id: "practice-sets-logic-02",
+  title: "集合と命題 大問型演習2：命題の真偽と逆、ド・モルガンの法則",
+  subject: "math-1a",
+  durationMinutes: 14,
+  totalPoints: 24,
+  targetAverage: { min: 10, max: 16 },
+  source: "manual-section-practice",
+  status: "published",
+  lectureLinks: [{ label: "集合と命題 判定講座", href: lecture }],
+  sections: [
+    {
+      id: "section-1",
+      title: "大問1",
+      unit: "集合と命題",
+      points: 24,
+      estimatedMinutes: 14,
+      theme: "命題の真偽判定、逆の判定、ド・モルガンの法則",
+      leadText:
+        "自然数 $n$ に関する命題「$n$が15の倍数ならば、$n$は3の倍数かつ5の倍数である」を考える。次の問いに、この順番で答えよ。（配点24）",
+      questions: [
+        q({
+          id: "prac-sl2-q1",
+          prompt: "(1) この命題は真か偽か判定せよ。",
+          answerFormat: "choice",
+          choices: choices([
+            { text: "真", correct: true },
+            { text: "偽" },
+          ]),
+          points: 6,
+          difficulty: "basic",
+          skillTags: ["命題", "真偽判定"],
+          answer: "0",
+          shortSolution: "$n=15k$ は $3\\times5k$ なので3の倍数かつ5の倍数。真。",
+          explanation: explanation({
+            plan: "$n$ が15の倍数であるとして、実際に3の倍数・5の倍数になるかを確認する。",
+            work: "$n$ が15の倍数なら $n=15k$（$k$は自然数）と書け、$15k=3\\times(5k)=5\\times(3k)$ なので、$n$ は3の倍数でも5の倍数でもある。よって真。",
+            answer: "真",
+            mistake: "反例を探そうとして時間を使うが、この命題自体は真である。",
+            shortcut: "15=3×5 なので、15の倍数は自動的に3の倍数かつ5の倍数になる。",
+            link: lecture,
+          }),
+          reviewLinks: [lecture],
+        }),
+        q({
+          id: "prac-sl2-q2",
+          prompt:
+            "(2) 逆「$n$が3の倍数かつ5の倍数ならば、$n$は15の倍数である」は真か偽か判定せよ。",
+          answerFormat: "choice",
+          choices: choices([
+            { text: "真", correct: true },
+            { text: "偽" },
+          ]),
+          points: 8,
+          difficulty: "standard",
+          skillTags: ["逆", "真偽判定"],
+          answer: "0",
+          shortSolution: "3と5は互いに素なので、両方の倍数なら15の倍数になる。真。",
+          explanation: explanation({
+            plan: "逆が常に偽だと決めつけず、3と5の関係（互いに素）を確認して判定する。",
+            work: "$n$ が3の倍数かつ5の倍数のとき、3と5は互いに素（共通の素因数を持たない）なので、$n$ は $3\\times5=15$ の倍数になる。したがって逆も真。",
+            answer: "真",
+            mistake: "「逆は基本的に偽になりやすい」という思い込みで、確認せずに偽と答えてしまう。",
+            shortcut: "2つの数が互いに素なら、両方の倍数であることと積の倍数であることは同値になる。",
+            link: lecture,
+          }),
+          reviewLinks: [lecture],
+          dependsOnPrevious: true,
+        }),
+        q({
+          id: "prac-sl2-q3",
+          prompt:
+            "(3) 条件「$n$が3の倍数かつ5の倍数」の否定を、ド・モルガンの法則を使って述べよ。",
+          answerFormat: "choice",
+          choices: choices([
+            { text: "$n$が3の倍数でない、または$n$が5の倍数でない", correct: true },
+            { text: "$n$が3の倍数でない、かつ$n$が5の倍数でない" },
+            { text: "$n$が3の倍数である、または$n$が5の倍数である" },
+            { text: "$n$が15の倍数でない" },
+          ]),
+          points: 10,
+          difficulty: "standard",
+          skillTags: ["ド・モルガンの法則", "命題の否定"],
+          answer: "0",
+          shortSolution: "「かつ」の否定は「または」に変わり、それぞれの条件も否定される。",
+          explanation: explanation({
+            plan: "ド・モルガンの法則 $\\overline{A\\cap B}=\\overline A\\cup\\overline B$ をそのまま適用する。",
+            work: "「3の倍数」を $A$、「5の倍数」を $B$ とすると、「$A$かつ$B$」の否定は $\\overline A\\cup\\overline B$、つまり「3の倍数でない、または5の倍数でない」。",
+            answer: "nが3の倍数でない、または5の倍数でない",
+            mistake: "「かつ」の否定を「かつ」のまま、それぞれの条件だけ否定してしまう（「または」に変えるのを忘れる）。",
+            shortcut: "「かつ」⇄「または」の入れ替えと、各条件の否定はセットで行う。",
+            link: lecture,
+          }),
+          reviewLinks: [lecture],
+          dependsOnPrevious: true,
+        }),
+      ],
+    },
+  ],
+};
+
+// 大問型演習3：会話文形式での集合の要素数とド・モルガンの法則。
+export const SETS_LOGIC_PRACTICE_3: CommonTestMockExam = {
+  id: "practice-sets-logic-03",
+  title: "集合と命題 大問型演習3：会話文と集合の要素数",
+  subject: "math-1a",
+  durationMinutes: 15,
+  totalPoints: 26,
+  targetAverage: { min: 12, max: 18 },
+  source: "manual-section-practice",
+  status: "published",
+  lectureLinks: [{ label: "集合と命題 判定講座", href: lecture }],
+  sections: [
+    {
+      id: "section-1",
+      title: "大問1",
+      unit: "集合と命題",
+      points: 26,
+      estimatedMinutes: 15,
+      theme: "会話文、集合の要素数、ド・モルガンの法則の応用",
+      leadText:
+        "全体集合を $U=\\{1,2,\\ldots,30\\}$ とし、$A$ を4の倍数の集合、$B$ を6の倍数の集合とする。\n\n太郎「AとBの共通部分は、4と6の最小公倍数の倍数だね。」\n花子「じゃあ、AでもBでもない数の個数も求められるね。」\n\n次の問いに、この順番で答えよ。（配点26）",
+      questions: [
+        q({
+          id: "prac-sl3-q1",
+          prompt: "(1) $n(A),\\ n(B),\\ n(A\\cap B)$ を求めよ。",
+          answerFormat: "blank",
+          blanks: [blank("ア", "7"), blank("イ", "5"), blank("ウ", "2")],
+          points: 9,
+          difficulty: "basic",
+          skillTags: ["集合", "要素数", "最小公倍数"],
+          answer: { ア: "7", イ: "5", ウ: "2" },
+          shortSolution: "$n(A)=7,\\ n(B)=5,\\ n(A\\cap B)=2$（12の倍数）。",
+          explanation: explanation({
+            plan: "1〜30の中の倍数の個数を、割り算の商（切り捨て）で数える。共通部分は最小公倍数の倍数。",
+            work: "4の倍数は $\\lfloor30/4\\rfloor=7$個（4,8,...,28）。6の倍数は $\\lfloor30/6\\rfloor=5$個（6,12,...,30）。4と6の最小公倍数は12なので、共通部分は $\\lfloor30/12\\rfloor=2$個（12,24）。",
+            answer: "ア=7、イ=5、ウ=2",
+            mistake: "共通部分を「4の倍数×6の倍数」のように積の倍数だと勘違いする（正しくは最小公倍数の倍数）。",
+            shortcut: "$30\\div$ 各数の商を切り捨てるだけで、倍数の個数がすぐ出る。",
+            link: lecture,
+          }),
+          reviewLinks: [lecture],
+        }),
+        q({
+          id: "prac-sl3-q2",
+          prompt: "(2) $n(A\\cup B)$ を求めよ。",
+          answerFormat: "blank",
+          blanks: [blank("エ", "10")],
+          points: 7,
+          difficulty: "basic",
+          skillTags: ["和集合", "要素数"],
+          answer: { エ: "10" },
+          shortSolution: "$n(A\\cup B)=n(A)+n(B)-n(A\\cap B)=7+5-2=10$。",
+          explanation: explanation({
+            plan: "和集合の要素数の公式に(1)の結果を代入する。",
+            work: "$n(A\\cup B)=n(A)+n(B)-n(A\\cap B)=7+5-2=10$。",
+            answer: "エ=10",
+            mistake: "共通部分を引かずに $n(A)+n(B)=12$ としてしまい、重複分を二重に数える。",
+            shortcut: "「AまたはB」は、足してから重なりを1回引くだけ。",
+            link: lecture,
+          }),
+          reviewLinks: [lecture],
+          dependsOnPrevious: true,
+        }),
+        q({
+          id: "prac-sl3-q3",
+          prompt:
+            "(3) 花子の発言のとおり、「AでもBでもない数」の個数を求めよ。またこの個数は、ド・モルガンの法則を使うと $n(\\overline A\\cap\\overline B)$ とも表せることを確認せよ。",
+          answerFormat: "blank",
+          blanks: [blank("オ", "20")],
+          points: 10,
+          difficulty: "standard",
+          skillTags: ["ド・モルガンの法則", "補集合", "要素数"],
+          answer: { オ: "20" },
+          shortSolution: "$n(\\overline{A\\cup B})=30-10=20$。ド・モルガンより $\\overline A\\cap\\overline B$ と同じ値。",
+          explanation: explanation({
+            plan: "「AでもBでもない」を $\\overline{A\\cup B}$ として、全体からn(A∪B)を引く。",
+            work: "全体は30個、$n(A\\cup B)=10$ なので、$n(\\overline{A\\cup B})=30-10=20$。ド・モルガンの法則 $\\overline{A\\cup B}=\\overline A\\cap\\overline B$ より、これは「4の倍数でない、かつ6の倍数でない」数の個数とも一致する。",
+            answer: "オ=20",
+            mistake: "「AでもBでもない」を「AかつBでない」（$\\overline{A\\cap B}$）と混同し、$30-2=28$ のように誤って計算する。",
+            shortcut: "「でも〜でもない」は必ず和集合の補集合。全体から $n(A\\cup B)$ を引くだけで求まる。",
+            link: lecture,
+          }),
+          reviewLinks: [lecture],
+          dependsOnPrevious: true,
+        }),
+      ],
+    },
+  ],
+};
+
+export const SETS_LOGIC_PRACTICES: CommonTestMockExam[] = [
+  SETS_LOGIC_PRACTICE_1,
+  SETS_LOGIC_PRACTICE_2,
+  SETS_LOGIC_PRACTICE_3,
+];

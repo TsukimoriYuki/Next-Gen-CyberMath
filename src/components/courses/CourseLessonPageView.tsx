@@ -60,7 +60,7 @@ export function CourseLessonPageView({
                 約{lesson.estimatedMinutes}分
               </span>
               {isPremium
-                ? ["有料版", "Premium", "難関大レベル"].map((badge) => (
+                ? ["発展編", "難関大レベル"].map((badge) => (
                     <span
                       key={badge}
                       className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700"

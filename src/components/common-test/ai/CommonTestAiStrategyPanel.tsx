@@ -1,7 +1,7 @@
 "use client";
 
 // ── 共通テスト 本番分析パネル ───────────────────────────────────────────
-// 外枠はCYBER OS風、講評本文は自然な受験指導の日本語カードで表示する。
+// 外枠はサイバー風のUI、講評本文は自然な受験指導の日本語カードで表示する。
 // ログイン不要。/api/common-test/oracle を叩き、結果を localStorage にキャッシュする。
 
 import { useState, useEffect, useCallback } from "react";

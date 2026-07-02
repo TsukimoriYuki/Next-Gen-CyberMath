@@ -14,7 +14,7 @@ export const QUADRATIC_PREMIUM_PLANNED_LESSON_IDS = [
   "quadratic-premium-exam-practice",
 ] as const;
 
-const premiumTags = ["有料版", "Premium", "難関大レベル"];
+const premiumTags = ["発展編", "難関大レベル"];
 
 const QUADRATIC_PREMIUM_LESSONS: CourseLesson[] = [
   {
@@ -35,7 +35,7 @@ const QUADRATIC_PREMIUM_LESSONS: CourseLesson[] = [
         kind: "intro",
         title: "この単元で何を学ぶか",
         body:
-          "有料版の二次関数では、公式を増やすのではなく、**どの場面でどの見方を使うか**を鍛えます。\n\n二次関数の問題は、見た目は似ていても、求めているものが違うだけで使う道具が変わります。最大値・最小値を聞かれているのか、方程式の解の個数を聞かれているのか、直線との共有点を聞かれているのか、あるいは日本語の条件を式に直す問題なのか。ここを読み違えると、計算は合っていても方針が外れます。",
+          "発展編の二次関数では、公式を増やすのではなく、**どの場面でどの見方を使うか**を鍛えます。\n\n二次関数の問題は、見た目は似ていても、求めているものが違うだけで使う道具が変わります。最大値・最小値を聞かれているのか、方程式の解の個数を聞かれているのか、直線との共有点を聞かれているのか、あるいは日本語の条件を式に直す問題なのか。ここを読み違えると、計算は合っていても方針が外れます。",
       },
       {
         kind: "comparisonTable",
@@ -428,7 +428,7 @@ const QUADRATIC_PREMIUM_LESSONS: CourseLesson[] = [
 export const QUADRATIC_PREMIUM_UNIT: CourseUnit = {
   unitId: "quadratic-advanced",
   subjectId: "math-1a-premium",
-  unitTitle: "二次関数 有料版",
+  unitTitle: "二次関数 発展編",
   unitDescription:
     "二次関数を、グラフ・方程式・不等式・最大最小・場合分けの接続まで深く扱う発展講座です。まずは入試標準から難関大レベルへ進むための5講座を公開しています。",
   lessons: QUADRATIC_PREMIUM_LESSONS,

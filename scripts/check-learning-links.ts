@@ -56,6 +56,16 @@ const UNIT_FAMILY_VOCAB: { family: string; units: string[]; forbiddenElsewhere: 
     units: ["データの分析"],
     forbiddenElsewhere: ["四分位数・外れ値", "IQRによる外れ値判定", "平均値と中央値の変化"],
   },
+  {
+    family: "数と式",
+    units: ["数と式"],
+    forbiddenElsewhere: ["分母の共役で有理化", "和と積だけで対称式", "整数で挟み撃ちして整数部分"],
+  },
+  {
+    family: "集合と命題",
+    units: ["集合と命題", "集合と論理"],
+    forbiddenElsewhere: ["PならばQの真偽を反例", "十分条件と必要条件を1組で言い換える", "対偶で証明しにくい命題"],
+  },
 ];
 
 const problems = getAllProblems();
@@ -84,7 +94,18 @@ for (const problem of problems) {
     // getMasteryLectureGuideForUnit は unit名の完全一致でのみ解決するため、
     // ここでは「講義が存在する = 単元が一致している」という設計上の前提を
     // 直接データ突き合わせで再確認する。
-    const known = ["図形と計量", "図形の性質", "2次関数", "二次関数", "場合の数と確率", "確率", "データの分析"];
+    const known = [
+      "図形と計量",
+      "図形の性質",
+      "2次関数",
+      "二次関数",
+      "場合の数と確率",
+      "確率",
+      "データの分析",
+      "数と式",
+      "集合と命題",
+      "集合と論理",
+    ];
     check(
       known.includes(problem.unit),
       `"${problem.slug}" (unit: ${problem.unit}) has a specialLecture (${guide.lecture.lectureSlug}) but its unit is not one of the units with a real lecture — check for a mismatch`,

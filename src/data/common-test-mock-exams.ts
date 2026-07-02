@@ -100,8 +100,13 @@ export type CommonTestMockExam = {
   id: string;
   title: string;
   subject: CommonTestMockSubject;
-  durationMinutes: 70;
-  totalPoints: 100;
+  /**
+   * 手動作成PDF正本の本番模試（4大問・70分・100点）は必ず 70/100。
+   * 大問1問分の単独演習（source: "manual-section-practice"）は、その大問の
+   * 実際の所要時間・配点をそのまま入れる（70分・100点固定ではない）。
+   */
+  durationMinutes: number;
+  totalPoints: number;
   targetAverage: {
     min: number;
     max: number;
@@ -113,9 +118,17 @@ export type CommonTestMockExam = {
    * sections/questions のデータから行う。
    */
   pdfUrl?: string;
-  source: "manual-pdf" | "ai-prototype";
+  /**
+   * "manual-section-practice": 大問1問分を通し演習として手動作成したもの。
+   * PDF冊子は存在しないため、問題本文を CommonTestMockExamRunner でそのまま表示する
+   * （これは PDF が正本の模試を Reactで再構成しているのではなく、そもそも PDF を
+   * 持たない単独演習を最初から HTML/React で作っているため、正本を隠していない）。
+   */
+  source: "manual-pdf" | "ai-prototype" | "manual-section-practice";
   status: "published" | "draft";
   devOnly?: boolean;
+  /** 解いた後に戻るべき中核講義（主に manual-section-practice 用）。 */
+  lectureLinks?: { label: string; href: string }[];
 };
 
 export function choices(items: { text: string; correct?: boolean; trap?: string }[]): ExamChoice[] {

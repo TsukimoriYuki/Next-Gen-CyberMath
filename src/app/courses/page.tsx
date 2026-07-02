@@ -43,7 +43,7 @@ export default function CoursesIndexPage() {
 
         <CourseSection title="基礎講座" subjects={STANDARD_COURSE_SUBJECTS} />
         <CourseSection
-          title="発展講座・有料版"
+          title="発展編"
           subjects={PREMIUM_COURSE_SUBJECTS}
           className="mt-10"
         />

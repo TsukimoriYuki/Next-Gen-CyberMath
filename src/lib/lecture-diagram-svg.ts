@@ -239,3 +239,36 @@ export function createPowerOfPointSvg(): string {
 </svg>`;
   return toDataUri(svg);
 }
+
+// ---------------------------------------------------------------------------
+// 集合と命題：PがQの十分条件であることを、P⊂Qのベン図で見せる。
+// ---------------------------------------------------------------------------
+
+export function createVennInclusionSvg(): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="320" viewBox="0 0 520 320" preserveAspectRatio="xMidYMid meet">
+  <defs><style>
+    .v-frame { fill: #f8fafc; stroke: #e2e8f0; }
+    .v-heading { font: 700 15px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #0f172a; }
+    .v-outer { fill: #eef2ff; stroke: #7c3aed; stroke-width: 3; }
+    .v-inner { fill: #dbeafe; stroke: #2563eb; stroke-width: 3; }
+    .v-label-q { font: 800 20px system-ui, sans-serif; fill: #7c3aed; }
+    .v-label-p { font: 800 20px system-ui, sans-serif; fill: #2563eb; }
+    .v-note { font: 700 14px system-ui, sans-serif; fill: #334155; }
+    .v-arrow { stroke: #0f172a; stroke-width: 2; marker-end: url(#v-arrowhead); fill: none; }
+  </style>
+  <marker id="v-arrowhead" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+    <path d="M0,0 L8,4 L0,8 Z" fill="#0f172a"/>
+  </marker>
+  </defs>
+  <rect width="520" height="320" rx="16" class="v-frame"/>
+  <text x="20" y="30" class="v-heading">P⊂Q なら「PならばQ」が成り立つ → PはQであるための十分条件</text>
+  <ellipse cx="300" cy="185" rx="170" ry="105" class="v-outer"/>
+  <text x="410" y="110" class="v-label-q">Q</text>
+  <ellipse cx="230" cy="200" rx="80" ry="55" class="v-inner"/>
+  <text x="230" y="205" text-anchor="middle" class="v-label-p">P</text>
+  <path d="M120,270 C160,300 200,300 220,262" class="v-arrow"/>
+  <text x="60" y="292" class="v-note">Pの要素はすべてQの要素</text>
+  <text x="330" y="300" class="v-note">QにはPでない要素もある（PはQの必要条件ではない）</text>
+</svg>`;
+  return toDataUri(svg);
+}

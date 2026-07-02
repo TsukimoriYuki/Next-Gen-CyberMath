@@ -5,11 +5,14 @@ import type {
 } from "@/data/common-test-mock-exams";
 
 const course = {
-  logic: "/courses/math-1a/sets-and-logic",
-  measurement: "/courses/math-1a/figures-and-measurement",
+  logic: "/common-test/lectures/sets-logic-necessary-sufficient",
+  measurement: "/common-test/lectures/geometry-measurement-intensive",
   quadratic: "/common-test/lectures/quadratic-case-split-intensive",
   data: "/common-test/lectures/data-analysis-quartiles-outliers",
-  geometry: "/courses/math-1a/geometry-properties",
+  geometry: "/common-test/lectures/geometry-properties-auxiliary-lines",
+  // 第3問（図形の性質）は、性質で辺を作ったあとに計量へ渡す融合が多いため、
+  // 計算量の多い設問ではこちらも合わせて復習リンクに含める。
+  geometryMeasurement: "/common-test/lectures/geometry-measurement-intensive",
   probability: "/common-test/lectures/probability-guided-reading",
 };
 
@@ -295,7 +298,7 @@ export const COMMON_TEST_MATH_1A_MANUAL_002: CommonTestMockExam = {
             shortcut: "接線が出たら、まず半径との直角と方べきの2つを候補にする。",
             link: course.geometry,
           }),
-          reviewLinks: [course.geometry],
+          reviewLinks: [course.geometry, course.geometryMeasurement],
         }),
         q({
           id: "m1a-manual-002-s3-sphere-section",
@@ -316,7 +319,7 @@ export const COMMON_TEST_MATH_1A_MANUAL_002: CommonTestMockExam = {
             shortcut: "球の断面は、中心から平面へ垂線を下ろすと必ず直角三角形になる。",
             link: course.geometry,
           }),
-          reviewLinks: [course.geometry],
+          reviewLinks: [course.geometry, course.geometryMeasurement],
         }),
         q({
           id: "m1a-manual-002-s3-plane-circle",

@@ -14,6 +14,7 @@ import {
 } from "./common-test-mock-exams";
 import { getAllCommonTestExamPresets, resolveExamPresetMeta } from "./common-test-exams";
 import { EXAM_SET_CATEGORIES } from "./exam-sets";
+import { SECTION_PRACTICE_EXAMS } from "./common-test/section-practice";
 
 export type CommonTestExperienceMode =
   | "diagnosis"
@@ -21,9 +22,10 @@ export type CommonTestExperienceMode =
   | "full-mock-pdf"
   | "full-mock-legacy"
   /**
-   * 予定: 大問1問分を通し演習として手動作成したもの（誘導・文章量・配点を本番同等に
-   * 再現する）。現時点ではデータが存在しないため、このモードの experience はまだ無い。
-   * 手動作成ロードマップ（/quality/roadmap）参照。
+   * 大問1問分を通し演習として手動作成したもの（誘導・文章量を本番同等に再現するが、
+   * 70分・100点の4大問構成ではない）。PDF冊子は持たず、問題本文は最初からReactで
+   * 作られている。第1問前半（数と式・集合と命題）の演習として src/data/common-test/
+   * section-practice/ にデータがある。
    */
   | "full-section-manual"
   | "fixed-exam"
@@ -103,6 +105,30 @@ function buildSectionDrillEntries(): CommonTestExperience[] {
         "本番大問を分解した技能練習です。文章量・誘導・時間配分まで含めた本番演習は、full-mock-pdf（冊子型模試）で確認してください。",
     })),
   );
+}
+
+// ── 大問1問分の単独演習（大問型演習）。PDF冊子を持たない手動作成コンテンツ。 ──
+function buildSectionPracticeEntries(): CommonTestExperience[] {
+  return SECTION_PRACTICE_EXAMS.map((exam): CommonTestExperience => {
+    const stats = getCommonTestMockExamStats(exam);
+    return {
+      id: exam.id,
+      title: exam.title,
+      subject: exam.subject,
+      mode: "full-section-manual",
+      status: exam.status === "published" && !exam.devOnly ? "public" : "draft",
+      source: "manual-reviewed",
+      durationMinutes: exam.durationMinutes,
+      totalPoints: stats.totalPoints,
+      sectionCount: stats.sectionCount,
+      questionCount: stats.questionCount,
+      targetUrl: `/common-test/practice/${exam.id}`,
+      label: exam.title,
+      publicCta: `誘導つきの大問演習（約${exam.durationMinutes}分）`,
+      manualReviewed: true,
+      qualityNote: "大問1問分の単独演習。PDF正本の70分模試とは別物で、第1問前半の反復練習として使う。",
+    };
+  });
 }
 
 // ── 手動作成PDF正本の本番模試 / AI試作版 ────────────────────────────────
@@ -210,6 +236,7 @@ export function getCommonTestExperiences(): CommonTestExperience[] {
     cache = [
       ...buildDiagnosisEntries(),
       ...buildSectionDrillEntries(),
+      ...buildSectionPracticeEntries(),
       ...buildFullMockEntries(),
       ...buildLegacyPresetEntries(),
       ...buildFixedExamEntries(),
