@@ -49,15 +49,17 @@ export const MASTERY_LECTURE_GUIDES: MasteryLectureGuide[] = [
       "円・比・相似・方べき・チェバ・メネラウスの使い分けと、補助線を引く基準を鍛えます。",
     ctaLabel: "図形の性質 満点講義へ",
     masteryFocus: "円周角・相似・方べきから補助線を判断する",
-    weapons: ["円周角で角を移す", "相似で辺の比を作る", "方べきで線分の積を立てる"],
+    weapons: ["円周角・接弦定理で角を移す", "相似・方べきで辺の比や積を作る", "球は断面円に落として平面図形として処理する"],
     recoveryLinks: [
       { symptom: "方べきに気づかなかった", label: "円の章", href: "/common-test/lectures/geometry-properties-auxiliary-lines#gp-circle-heading" },
       { symptom: "チェバとメネラウスを取り違えた", label: "比の章", href: "/common-test/lectures/geometry-properties-auxiliary-lines#gp-ratio-heading" },
       { symptom: "補助線が思いつかなかった", label: "図形レイヤー", href: "/common-test/lectures/geometry-properties-auxiliary-lines#geometry-properties-layer" },
+      { symptom: "接線の長さの相等や半径との垂直に気づかなかった", label: "円と接線の判断", href: "/common-test/lectures/geometry-properties-auxiliary-lines#gp-core-circle-tangent-heading" },
+      { symptom: "球の断面で直角三角形を作れなかった", label: "球の断面への接続", href: "/common-test/lectures/geometry-properties-auxiliary-lines#gp-core-sphere-heading" },
     ],
     commonTestAppearance:
-      "図形と計量との融合で、辺を作る前段階として円周角・相似・方べきが使われます。",
-    targetMinutes: 7,
+      "冊子型模試の第3問で、円・接線・方べき・球の断面として単独で出るほか、図形と計量との融合で辺を作る前段階として円周角・相似・方べきが使われます。",
+    targetMinutes: 8,
   },
   {
     lectureSlug: "quadratic-case-split-intensive",

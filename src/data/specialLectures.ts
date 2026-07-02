@@ -97,7 +97,7 @@ export type LectureBlock =
   | { id: string; type: "mistakeRecovery"; title?: string; intro?: string; items: MistakeRecoveryItem[] };
 
 export interface ExplanationTab {
-  label: "ヒント" | "方針" | "詳しい解説" | "最速解法" | "よくあるミス" | "類題";
+  label: "ヒント" | "方針" | "詳しい解説" | "別解" | "最速解法" | "よくあるミス" | "類題";
   body: string;
 }
 

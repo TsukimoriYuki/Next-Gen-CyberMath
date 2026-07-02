@@ -10,7 +10,9 @@ export type GeometryDiagramType =
   | "angle-bisector-length"
   | "median-length"
   | "spatial-section"
-  | "auxiliary-line-choice";
+  | "auxiliary-line-choice"
+  | "tangent-radius-equal-length"
+  | "sphere-cross-section";
 
 type DiagramMeta = {
   title: string;
@@ -78,6 +80,16 @@ export const GEOMETRY_DIAGRAM_META: Record<GeometryDiagramType, DiagramMeta> = {
     title: "補助線選択の比較",
     alt: "高さ、半径、中線と二等分線を条件から選ぶ比較模式図",
     point: "面積なら高さ、等距離なら半径、中点や比なら中線・二等分線を優先して疑う。",
+  },
+  "tangent-radius-equal-length": {
+    title: "接線と半径・接線の長さの相等",
+    alt: "円外の点Pから引いた2本の接線PT1, PT2が、それぞれ接点で半径と垂直になり、長さが等しいことを示す模式図",
+    point: "接線は接点で半径と垂直になる。同じ点Pから引いた接線の長さPT1とPT2は必ず等しい。",
+  },
+  "sphere-cross-section": {
+    title: "球の断面円",
+    alt: "球の中心Oから平面へ下ろした垂線の足をCとし、断面円の半径ρ・距離d・球の半径Rが直角三角形OCPを作る模式図",
+    point: "球の中心O、断面円の中心C、断面円上の点Pで直角三角形ができ、ρ²+d²=R²が成り立つ。",
   },
 };
 
@@ -329,6 +341,59 @@ function auxiliaryLineChoice() {
   return base(c, "補助線選択の比較");
 }
 
+type Vec2Local = { x: number; y: number };
+
+function tangentRadiusEqualLength() {
+  const o: Vec2Local = { x: 320, y: 200 };
+  const r = 92;
+  const p: Vec2Local = { x: 320, y: 40 };
+  // Pから円への接点。直角三角形OTPで cos(∠TOP)=r/OP となることを使って作図する。
+  const dOP = Math.hypot(p.x - o.x, p.y - o.y);
+  const phi = Math.acos(r / dOP);
+  const angleOP = Math.atan2(p.y - o.y, p.x - o.x);
+  const t1 = { x: o.x + r * Math.cos(angleOP + phi), y: o.y + r * Math.sin(angleOP + phi) };
+  const t2 = { x: o.x + r * Math.cos(angleOP - phi), y: o.y + r * Math.sin(angleOP - phi) };
+  const R = (n: number) => Math.round(n * 10) / 10;
+  const c = `
+    <circle cx="${o.x}" cy="${o.y}" r="${r}" fill="#ffffff" stroke="${SLATE}" stroke-width="2.5"/>
+    ${line(o.x, o.y, R(t1.x), R(t1.y), CYAN, 3, "5 5")}
+    ${line(o.x, o.y, R(t2.x), R(t2.y), CYAN, 3, "5 5")}
+    ${line(p.x, p.y, R(t1.x), R(t1.y), BLUE, 3)}
+    ${line(p.x, p.y, R(t2.x), R(t2.y), BLUE, 3)}
+    ${rightAngle(Math.round(t1.x), Math.round(t1.y), "tl", ROSE)}
+    ${dot(o.x, o.y, "O", SLATE, -14, 5)}
+    ${dot(p.x, p.y, "P", ROSE, 0, -14)}
+    ${dot(R(t1.x), R(t1.y), "T₁", BLUE, -18, -4)}
+    ${dot(R(t2.x), R(t2.y), "T₂", BLUE, 18, 10)}
+    ${text(70, 56, "接点で半径⊥接線、PT₁=PT₂", SLATE, 16, "start")}
+  `;
+  return base(c, "接線と半径・接線の長さの相等");
+}
+
+function sphereCrossSection() {
+  const o: Vec2Local = { x: 320, y: 108 };
+  const cPoint: Vec2Local = { x: 320, y: 236 };
+  const pPoint: Vec2Local = { x: 452, y: 236 };
+  const sphereR = 148;
+  const crossR = 132;
+  const c = `
+    <circle cx="${o.x}" cy="${o.y}" r="${sphereR}" fill="#eef2ff" opacity="0.55" stroke="${VIOLET}" stroke-width="3"/>
+    <ellipse cx="${cPoint.x}" cy="${cPoint.y}" rx="${crossR}" ry="30" fill="#ecfeff" opacity="0.85" stroke="${CYAN}" stroke-width="3"/>
+    ${line(o.x, o.y, cPoint.x, cPoint.y, ROSE, 4)}
+    ${line(cPoint.x, cPoint.y, pPoint.x, pPoint.y, CYAN, 4)}
+    ${line(o.x, o.y, pPoint.x, pPoint.y, SLATE, 3, "6 5")}
+    ${rightAngle(cPoint.x, cPoint.y, "tl", SLATE)}
+    ${dot(o.x, o.y, "O（球の中心）", VIOLET, 0, -16)}
+    ${dot(cPoint.x, cPoint.y, "C", CYAN, -16, 20)}
+    ${dot(pPoint.x, pPoint.y, "P", CYAN, 18, 6)}
+    ${text(cPoint.x - 44, (o.y + cPoint.y) / 2 + 6, "d", ROSE, 18, "start")}
+    ${text((cPoint.x + pPoint.x) / 2, cPoint.y + 26, "ρ", CYAN, 18, "middle")}
+    ${text((o.x + pPoint.x) / 2 + 30, (o.y + pPoint.y) / 2 - 10, "R", SLATE, 18, "start")}
+    ${text(60, 50, "断面円は平面αとの交わり。OC⊥α、ρ²+d²=R²", SLATE, 16, "start")}
+  `;
+  return base(c, "球の断面円");
+}
+
 const renderers: Record<GeometryDiagramType, () => string> = {
   "altitude-basic": altitudeBasic,
   "area-height-reverse": areaHeightReverse,
@@ -342,6 +407,8 @@ const renderers: Record<GeometryDiagramType, () => string> = {
   "median-length": medianLength,
   "spatial-section": spatialSection,
   "auxiliary-line-choice": auxiliaryLineChoice,
+  "tangent-radius-equal-length": tangentRadiusEqualLength,
+  "sphere-cross-section": sphereCrossSection,
 };
 
 export function createGeometryDiagramSvg(type: GeometryDiagramType): string {

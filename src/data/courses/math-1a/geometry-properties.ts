@@ -209,6 +209,11 @@ const GEOMETRY_PROPERTIES_BEGINNER: CourseLesson[] = [
     ],
     relatedPracticeLinks: [
       {
+        label: "図形の性質 中核講義",
+        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        description: "円周角・接弦定理・方べきの判別フローと代表例題を復習する",
+      },
+      {
         label: "図形と計量 講座",
         href: "/courses/math-1a",
         description: "正弦定理・余弦定理とつなげて図形総合に強くなる",
@@ -425,6 +430,11 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
     ],
     relatedPracticeLinks: [
       {
+        label: "図形の性質 中核講義",
+        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        description: "チェバ・メネラウス・面積比の使い分けを代表例題で復習する",
+      },
+      {
         label: "図形と計量 講座",
         href: "/courses/math-1a/figures-and-measurement",
         description: "比・相似・三角比を組み合わせて図形問題を強化する",
@@ -632,6 +642,11 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
     ],
     relatedPracticeLinks: [
       {
+        label: "図形の性質 中核講義",
+        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        description: "接線・割線・球の断面まで、方べきの3つの形を代表例題で復習する",
+      },
+      {
         label: "円周角と接弦角",
         href: "/courses/math-1a/geometry-properties/geometry-properties-inscribed-angle-tangent-chord",
         description: "方べきの導出にも関わる円周角・接弦定理を復習する",
@@ -837,6 +852,11 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
       },
     ],
     relatedPracticeLinks: [
+      {
+        label: "図形の性質 中核講義",
+        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        description: "五心と補助線の判別を、判別フローと代表例題で復習する",
+      },
       {
         label: "チェバ・メネラウスの定理",
         href: "/courses/math-1a/geometry-properties/geometry-properties-ceva-menelaus",
@@ -1052,6 +1072,11 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
       },
     ],
     relatedPracticeLinks: [
+      {
+        label: "図形の性質 中核講義",
+        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        description: "内接四角形・接弦定理・円周角を代表例題2で復習する",
+      },
       {
         label: "円周角と接弦角",
         href: "/courses/math-1a/geometry-properties/geometry-properties-inscribed-angle-tangent-chord",

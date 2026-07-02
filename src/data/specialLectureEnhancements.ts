@@ -1218,6 +1218,426 @@ const geometryMeasurementCoreTextbookBlocks: LectureBlock[] = [
   },
 ];
 
+const geometryPropertiesCoreTextbookBlocks: LectureBlock[] = [
+  {
+    id: "gp-core-scope",
+    type: "heading",
+    level: 2,
+    text: "中核講義：図形の性質で何を扱うか",
+  },
+  {
+    id: "gp-core-scope-text",
+    type: "paragraph",
+    text:
+      "図形の性質は、円・比・内接四角形という3つの形から、角と長さを翻訳する単元です。円が出れば円周角・接弦定理・方べき、比が出ればチェバ・メネラウス・角の二等分線、内接四角形が出れば対角の和とトレミー。共通テストでは、これらを単独で問うより、図形と計量（正弦・余弦定理）へ辺や角を渡す前段階として使わせる出方が多くなります。",
+  },
+  {
+    id: "gp-core-importance",
+    type: "callout",
+    tone: "info",
+    title: "なぜ共通テストで重要か",
+    text:
+      "冊子型模試の第3問は、円・接線・方べき・球の断面のように、図形の性質が単独の大問として出ます。ここで使う定理の候補が多いため、「今見えている形」から定理を1つに絞れないと、時間だけが減っていきます。円・接線・比・内接四角形のどれが主役かを最初の30秒で判断できるかどうかが、この大問の得点を大きく左右します。",
+  },
+  {
+    id: "gp-core-theorem-list-heading",
+    type: "heading",
+    level: 2,
+    text: "定理一覧：条件とセットで持つ",
+  },
+  {
+    id: "gp-core-theorem-list",
+    type: "checklist",
+    title: "図形の性質の定理セット",
+    items: [
+      "円周角の定理: 同じ弧に対する円周角は等しい。中心角はその弧に対する円周角の2倍",
+      "接弦定理: 接線と弦のなす角は、その弦に対する反対側の弧の円周角に等しい",
+      "接線の性質: 接点で半径と接線は垂直。同じ外部の点から引いた2本の接線の長さは等しい",
+      "方べきの定理（接線・割線型）: $PT^2=PA\\cdot PB$",
+      "方べきの定理（2本の割線型・円内交点型）: $PA\\cdot PB=PC\\cdot PD$",
+      "内接四角形の性質: 向かい合う角の和は $180^\\circ$",
+      "トレミーの定理: 内接四角形で $AC\\cdot BD=AB\\cdot CD+AD\\cdot BC$",
+      "チェバの定理: 三角形の内部で3本の線分が1点に集まるとき、対応する比の積は1",
+      "メネラウスの定理: 1本の直線が三角形の3辺（延長を含む）を横切るとき、対応する比の積は1",
+      "角の二等分線定理: $BD:DC=AB:AC$",
+      "中点連結定理: 2辺の中点を結ぶ線分は、残りの辺に平行で長さは半分",
+      "球の断面: 球を平面で切ると断面は円。断面円の半径 $\\rho$、中心から平面までの距離 $d$、球の半径 $R$ について $\\rho^2+d^2=R^2$",
+    ],
+  },
+  {
+    id: "gp-core-usage-heading",
+    type: "heading",
+    level: 2,
+    text: "定理の意味・使いどころ：どの条件でどの定理を使うか",
+  },
+  {
+    id: "gp-core-circle-tangent-heading",
+    type: "heading",
+    level: 3,
+    text: "1. 円と接線の判断",
+  },
+  {
+    id: "gp-core-circle-tangent-text",
+    type: "paragraph",
+    text:
+      "接線が出たら、まず接点における半径と接線の垂直を図に書き込みます。同じ外部の点から2本の接線が引かれているなら、その長さは必ず等しいので、片方が分かればもう片方も分かります。接線と割線がセットで見えたら方べきの定理、接線と弦のなす角が見えたら接弦定理で円周角へ変換します。円の外部の点から伸びる長さの関係は、まず「同じ点を基準にした距離」として整理すると式が立てやすくなります。",
+  },
+  geometryDiagramBlock("gp-core-tangent-diagram", "tangent-radius-equal-length"),
+  {
+    id: "gp-core-power-heading",
+    type: "heading",
+    level: 3,
+    text: "2. 方べきの定理：3つの形",
+  },
+  {
+    id: "gp-core-power-text",
+    type: "paragraph",
+    text:
+      "方べきの定理には3つの形があります。外部の点から接線と割線が出る「接線・割線型」、外部の点から2本の割線が出る「2本の割線型」、円の内部で2本の弦が交わる「円内交点型」です。どの形でも、同じ基準点（外部点、または弦の交点）から円へ伸びる線分の積をそろえるのが目的です。共通テストでは長さの穴埋めとして出やすく、割線では「近い方の点×遠い方の点」を必ずセットにします。近い方と遠い方を取り違えると符号や大小が崩れるので、まずどちらが近いかを図に書き込みます。",
+  },
+  {
+    id: "gp-core-power-math",
+    type: "math",
+    expression: "PT^2=PA\\cdot PB\\qquad(\\text{接線・割線型})\\qquad\\qquad PA\\cdot PB=PC\\cdot PD\\qquad(\\text{2本の割線型・円内交点型})",
+    caption: "$PA, PC$ を基準点に近い方、$PB, PD$ を遠い方にそろえて式を立てる。",
+  },
+  {
+    id: "gp-core-ceva-menelaus-heading",
+    type: "heading",
+    level: 3,
+    text: "3. チェバ・メネラウス：比の追跡",
+  },
+  {
+    id: "gp-core-ceva-menelaus-text",
+    type: "paragraph",
+    text:
+      "三角形の内部で3頂点からの線分が1点に集まっていればチェバの定理、1本の直線が三角形の3辺（またはその延長）を横切っていればメネラウスの定理です。どちらも対応する比の積が1になる点は同じですが、図の向きと延長線の扱いが違います。共通テストでは、定理名を答えさせるより「比を追跡する」形で出ることが多く、辺の比が直接出しにくい場面では、頂点を共有し底辺が同一直線上にある三角形どうしの面積比で代用できることもあります。",
+  },
+  {
+    id: "gp-core-ceva-menelaus-math",
+    type: "math",
+    expression: "\\frac{BD}{DC}\\cdot\\frac{CE}{EA}\\cdot\\frac{AF}{FB}=1",
+    caption: "チェバ（内部の交点）もメネラウス（横切る直線）も式の形は同じ。図で内分か延長かを先に判定する。",
+  },
+  {
+    id: "gp-core-cyclic-heading",
+    type: "heading",
+    level: 3,
+    text: "4. 内接四角形・円周角",
+  },
+  {
+    id: "gp-core-cyclic-text",
+    type: "paragraph",
+    text:
+      "四角形が円に内接していれば、向かい合う角の和は $180^\\circ$ です。対角線と辺の積を結びたいときはトレミーの定理を使います。角が等しいことから逆に「4点は同一円周上にある」と判断する使い方（逆利用）もあり、これは補角・錯角・同位角の関係と組み合わせて考えます。図を見ただけで角が等しいと決めつけず、同じ弧を見ているか、対角の関係かを毎回確認します。",
+  },
+  {
+    id: "gp-core-flow-heading",
+    type: "heading",
+    level: 2,
+    text: "解法判別フロー：図形の性質",
+  },
+  {
+    id: "gp-core-flow",
+    type: "solutionFlow",
+    title: "図形の性質 判別フロー",
+    intro:
+      "円→接線・割線、角度、比、球や空間図形の順に「今どれを求めたいか」で使う定理を絞ります。",
+    steps: [
+      {
+        condition: "円があり、接線が見える",
+        tool: "半径⊥接線を書き込み、接線の長さの相等・方べきを疑う",
+        reason: "接点での半径⊥接線と、同じ外部点からの接線の長さの相等が、まず使える2つの武器になる。",
+      },
+      {
+        condition: "円があり、割線（2本の割線、または円内で交わる弦）が見える",
+        tool: "方べきの定理",
+        reason: "基準点から円へ伸びる線分の積 $PA\\cdot PB=PC\\cdot PD$（接線なら $PT^2=PA\\cdot PB$）をそろえる。",
+      },
+      {
+        condition: "角度を求めたい",
+        tool: "円周角・内接四角形の対角・接弦定理",
+        reason: "同じ弧の円周角、対角の和 $180^\\circ$、接線と弦の角の変換のいずれかへ、求めたい角を移す。",
+      },
+      {
+        condition: "比を求めたい",
+        tool: "チェバ・メネラウス・面積比",
+        reason: "1点に集まればチェバ、一直線ならメネラウス。辺の比が出しにくいときは面積比で代用できることもある。",
+      },
+      {
+        condition: "球や空間図形が出てきた",
+        tool: "断面円に落として、平面図形として処理する",
+        reason: "球の中心から平面へ下ろした垂線の足を中心とする断面円を考えれば、あとは平面上の円の性質がそのまま使える。",
+      },
+    ],
+  },
+  {
+    id: "gp-core-sphere-heading",
+    type: "heading",
+    level: 2,
+    text: "球の断面への接続",
+  },
+  {
+    id: "gp-core-sphere-text",
+    type: "paragraph",
+    text:
+      "球を平面で切ると、切り口（断面）は必ず円になります。この断面円の中心は、球の中心から平面へ下ろした垂線の足です。断面円の中では、平面上の円の性質（円周角・接弦定理・方べき）がそのまま使えます。つまり球の問題は、断面を取り出した瞬間に「円の問題」に変わります。断面円の半径 $\\rho$、球の半径 $R$、中心から平面までの距離 $d$ は、球の中心・断面円の中心・断面円上の点を結ぶ直角三角形でつながっており、$\\rho^2+d^2=R^2$ が成り立ちます。",
+  },
+  geometryDiagramBlock("gp-core-sphere-diagram", "sphere-cross-section"),
+  {
+    id: "gp-core-sphere-math",
+    type: "math",
+    expression: "\\rho^2+d^2=R^2",
+    caption: "球の半径 $R$、中心から平面までの距離 $d$、断面円の半径 $\\rho$。どれか2つが分かれば残り1つが出る。",
+  },
+  {
+    id: "gp-core-example1-heading",
+    type: "heading",
+    level: 2,
+    text: "代表例題1：接線と方べきの基本",
+  },
+  {
+    id: "gp-core-example1",
+    type: "problem",
+    title: "代表例題1：接線と方べきの基本",
+    prompt:
+      "円Oの半径は5、円外の点Pについて $OP=13$ とする。点Pから円Oに接線を引き、接点をTとする。また、点Pを通る直線が円Oと2点A, B（$PA<PB$）で交わり、$PA=8$ である。\n\n(1) $PT$ の長さを求めよ。\n(2) $PB$ の長さを求めよ。\n(3) 円周上に別の接点 $T'$ をとり、$PT'$ を接線とするとき、$PT'$ の長さを、計算し直さずに答えよ。",
+    choices: [
+      "$PT=12$、$PB=18$、$PT'=12$",
+      "$PT=12$、$PB=10$、$PT'=13$",
+      "$PT=8$、$PB=18$、$PT'=8$",
+      "$PT=12$、$PB=18$、$PT'=13$",
+    ],
+    answer: "$PT=12$、$PB=18$、$PT'=12$",
+    points: 10,
+    mistakeTags: ["公式選択ミス", "計算ミス", "図の見落とし"],
+  },
+  {
+    id: "gp-core-example1-tabs",
+    type: "explanationTabs",
+    tabs: [
+      {
+        label: "方針",
+        body: "接線が出たらまず半径⊥接線。直角三角形OTPで $OT=5$、$OP=13$ から $PT$ を三平方で出す。次に接線と割線がセットなので方べきの定理 $PT^2=PA\\cdot PB$ を使う。",
+      },
+      {
+        label: "詳しい解説",
+        body:
+          "(1) 三角形OTPは $\\angle OTP=90^\\circ$ の直角三角形。$OT=5$、$OP=13$ なので $PT=\\sqrt{13^2-5^2}=\\sqrt{144}=12$。\n\n(2) 方べきの定理より $PT^2=PA\\cdot PB$。$144=8\\cdot PB$ なので $PB=18$。\n\n(3) 同じ外部の点Pから引いた接線の長さはすべて等しいので、$PT'=PT=12$。計算し直す必要はない。",
+      },
+      {
+        label: "別解",
+        body: "(2) は方べきの定理を暗記していなくても、三角形PTAと三角形PBTが相似であることから導ける。接弦定理より $\\angle PTA=\\angle PBT$（接線と弦のなす角＝反対側の円周角）で、$\\angle P$ は共通。よって $\\triangle PTA\\sim\\triangle PBT$ より $PT:PB=PA:PT$、すなわち $PT^2=PA\\cdot PB$。公式を丸暗記するのではなく、相似から毎回導ける状態にしておくと忘れにくい。",
+      },
+      {
+        label: "最速解法",
+        body: "直角三角形の3辺 $5,12,13$ は超頻出。$13^2-5^2=169-25=144=12^2$ を覚えておけば(1)は一瞬。(2)は $144\\div8=18$。(3)は計算せず「同じ点からの接線は等しい」の一言で終わる。",
+      },
+      {
+        label: "よくあるミス",
+        body: "$OP=13$ をそのまま接線の長さだと思ってしまう（$OP$ は斜辺、$PT$ は直角三角形のもう1辺）。$PA\\cdot PB$ の代わりに $AB\\cdot PB$ を使ってしまう。同じ点からの接線でも長さが変わると思い込み、(3)を再計算しようとする。",
+      },
+      {
+        label: "類題",
+        body: "円の半径が9、$OP=15$ のとき、$PT$ の長さと、$PA=5$ のときの $PB$ を同じ流れで求めてみてください。$15^2-9^2=144=12^2$ になることを確認します。",
+      },
+    ],
+  },
+  {
+    id: "gp-core-example1-takeaway",
+    type: "callout",
+    tone: "success",
+    title: "この問題から何を学ぶか",
+    text:
+      "接線が出たら「半径⊥接線」で直角三角形を作り、複数の接線が出たら「長さの相等」を使い、割線が絡めば「方べき」を使う。3つの武器を同じ図の中で順番に使う練習です。",
+  },
+  {
+    id: "gp-core-example2-heading",
+    type: "heading",
+    level: 2,
+    text: "代表例題2：内接四角形・接弦定理・円周角",
+  },
+  {
+    id: "gp-core-example2",
+    type: "problem",
+    title: "代表例題2：内接四角形・接弦定理・円周角",
+    prompt:
+      "円Oに内接する四角形ABCDが、この順に周上に並んでいる。$\\angle ABC=100^\\circ$、$\\angle CAD=30^\\circ$ とする。点Aにおける円Oの接線を引き、この接線と弦ADのなす角のうち、四角形の内部（辺AB, BCのある側）とは反対側にできる角を $\\angle x$ とする。\n\n(1) $\\angle ADC$ を求めよ。\n(2) $\\angle ACD$ を求めよ。\n(3) 接弦定理を用いて $\\angle x$ を求めよ。",
+    choices: [
+      "$\\angle ADC=80^\\circ$、$\\angle ACD=70^\\circ$、$\\angle x=70^\\circ$",
+      "$\\angle ADC=100^\\circ$、$\\angle ACD=50^\\circ$、$\\angle x=50^\\circ$",
+      "$\\angle ADC=80^\\circ$、$\\angle ACD=100^\\circ$、$\\angle x=30^\\circ$",
+      "$\\angle ADC=80^\\circ$、$\\angle ACD=70^\\circ$、$\\angle x=100^\\circ$",
+    ],
+    answer: "$\\angle ADC=80^\\circ$、$\\angle ACD=70^\\circ$、$\\angle x=70^\\circ$",
+    points: 10,
+    mistakeTags: ["公式選択ミス", "図の見落とし", "条件見落とし"],
+  },
+  {
+    id: "gp-core-example2-tabs",
+    type: "explanationTabs",
+    tabs: [
+      {
+        label: "方針",
+        body: "(1)は内接四角形の対角の和 $180^\\circ$。(2)は三角形ACDの内角の和。(3)は接弦定理で、接線と弦ADのなす角を反対側の円周角へ移す。",
+      },
+      {
+        label: "詳しい解説",
+        body:
+          "(1) 内接四角形の対角の和より $\\angle ADC=180^\\circ-\\angle ABC=180^\\circ-100^\\circ=80^\\circ$。\n\n(2) 三角形ACDの内角の和より $\\angle ACD=180^\\circ-\\angle ADC-\\angle CAD=180^\\circ-80^\\circ-30^\\circ=70^\\circ$。\n\n(3) 接弦定理より、接線と弦ADのなす角（B, C側と反対）は、弦ADに対してB, Cのある側の円周角に等しい。B, Cは弦ADに対して同じ側の弧上にあるので、その円周角の代表として $\\angle ACD$ が使え、$\\angle x=\\angle ACD=70^\\circ$。",
+      },
+      {
+        label: "別解",
+        body: "(3)は $\\angle ACD$ の代わりに $\\angle ABD$ を使っても同じ値になります。B, Cは弦ADに対して同じ弧上にあるので、同じ弧に対する円周角として $\\angle ABD=\\angle ACD$ が成り立ちます（円周角の定理の反復適用）。どちらの頂点を使っても $70^\\circ$ に一致することを確認すると、接弦定理の理解が深まります。",
+      },
+      {
+        label: "最速解法",
+        body: "「対角の和180°」→「三角形の内角の和180°」→「接弦定理で反対側の円周角へ」の3段を、この順番のまま覚えておく。角度問題の多くは、この3段の組み合わせで閉じます。",
+      },
+      {
+        label: "よくあるミス",
+        body: "接弦定理の「反対側」を取り違えて、$\\angle x$ を $\\angle ABC=100^\\circ$ など無関係な角と一致させてしまう。内接四角形の対角の和を「隣り合う角の和」と勘違いする。三角形ACDの内角の和を使わずに(2)を止めてしまう。",
+      },
+      {
+        label: "類題",
+        body: "同じ四角形で $\\angle ABC=112^\\circ$、$\\angle CAD=25^\\circ$ に変えたとき、$\\angle ADC$、$\\angle ACD$、接線と弦ADのなす角を同じ手順で求めてみてください。",
+      },
+    ],
+  },
+  {
+    id: "gp-core-example2-takeaway",
+    type: "callout",
+    tone: "success",
+    title: "この問題から何を学ぶか",
+    text:
+      "角度を求める問題では、求めたい角を「同じ弧の円周角」「対角の補角」「接弦定理の変換角」のどれかへ移すことを考えます。移した先で三角形の内角の和を使えば計算が閉じます。",
+  },
+  {
+    id: "gp-core-example3-heading",
+    type: "heading",
+    level: 2,
+    text: "代表例題3：チェバ・メネラウス・面積比",
+  },
+  {
+    id: "gp-core-example3",
+    type: "problem",
+    title: "代表例題3：チェバ・メネラウス・面積比",
+    prompt:
+      "三角形ABCの辺BC上に点D、辺CA上に点Eがあり、$BD:DC=2:1$、$CE:EA=3:2$ である。\n\n(1) 線分AD, BE, CFが1点で交わるように辺AB上に点Fをとるとき、チェバの定理を用いて $AF:FB$ を求めよ。\n(2) 同じ比 $BD:DC=2:1$、$CE:EA=3:2$ を保ったまま、点Fを辺ABの延長上にとり、D, E, Fが一直線上に並ぶようにする。メネラウスの定理を用いて $AF:FB$ を求めよ。\n(3) (1)の設定で、三角形ABDと三角形ACDの面積比を使って $BD:DC=2:1$ を別の方法で確認せよ。",
+    choices: [
+      "(1) $AF:FB=1:3$、(2) $AF:FB=1:3$（Fは延長上）、(3) 面積比は底辺の比に等しい",
+      "(1) $AF:FB=3:1$、(2) $AF:FB=1:3$、(3) 面積比は高さの比に等しい",
+      "(1) $AF:FB=1:3$、(2) $AF:FB=3:1$、(3) 面積比は底辺の比に等しい",
+      "(1) $AF:FB=2:3$、(2) $AF:FB=2:3$、(3) 面積比は角の比に等しい",
+    ],
+    answer: "(1) $AF:FB=1:3$、(2) $AF:FB=1:3$（Fは延長上）、(3) 面積比は底辺の比に等しい",
+    points: 10,
+    mistakeTags: ["公式選択ミス", "図の見落とし", "場合分け不足"],
+  },
+  {
+    id: "gp-core-example3-tabs",
+    type: "explanationTabs",
+    tabs: [
+      {
+        label: "方針",
+        body: "(1)はAD, BE, CFが1点に集まるのでチェバ。(2)はD, E, Fが一直線なのでメネラウス。どちらも比の積は1になるが、Fの位置（内分か延長上か）が変わる。(3)は頂点を共有し底辺が同一直線上にある三角形の面積比を使う。",
+      },
+      {
+        label: "詳しい解説",
+        body:
+          "(1) チェバの定理より $\\dfrac{BD}{DC}\\cdot\\dfrac{CE}{EA}\\cdot\\dfrac{AF}{FB}=1$。$\\dfrac{2}{1}\\cdot\\dfrac{3}{2}\\cdot\\dfrac{AF}{FB}=1$ より $3\\cdot\\dfrac{AF}{FB}=1$、$AF:FB=1:3$。\n\n(2) メネラウスの定理でも同じ形の式 $\\dfrac{BD}{DC}\\cdot\\dfrac{CE}{EA}\\cdot\\dfrac{AF}{FB}=1$ が成り立ち、数値上は同じ $AF:FB=1:3$ になる。ただし今度はFが辺ABの延長上（外分点）にある点が(1)と異なる。\n\n(3) 三角形ABDと三角形ACDは頂点Aを共有し、底辺BD, DCが同一直線BC上にあるので、頂点Aから直線BCへの高さが共通。したがって面積比は底辺の比に等しく、$S_{\\triangle ABD}:S_{\\triangle ACD}=BD:DC=2:1$。逆に面積比が2:1と分かっていれば、$BD:DC=2:1$ が言える。",
+      },
+      {
+        label: "別解",
+        body: "(3)の面積比は、三角形ABCの面積を $S$ として $S_{\\triangle ABD}=\\dfrac{BD}{BC}S$、$S_{\\triangle ACD}=\\dfrac{DC}{BC}S$ と表しても同じ結論になる。共通因数 $S/BC$ をくくり出せば $S_{\\triangle ABD}:S_{\\triangle ACD}=BD:DC$ がすぐ出る、という比例式からの別ルートです。",
+      },
+      {
+        label: "最速解法",
+        body: "「1点に集まる→チェバ」「一直線→メネラウス」を式より先に図で判定する。比の積の式自体はどちらも同じ形なので、暗記の負担は1つで済みます。",
+      },
+      {
+        label: "よくあるミス",
+        body: "チェバとメネラウスを「比の式が同じだから同じ図」と思い込み、内部の1点か一直線かを確認しない。メネラウスで外分点を辺の内側だと勘違いする。面積比を使うときに「頂点を共有し、底辺が同一直線上にある」という条件を確認しない。",
+      },
+      {
+        label: "類題",
+        body: "$BD:DC=3:2$、$CE:EA=4:3$ に変えて、チェバでの $AF:FB$ と、面積比 $S_{\\triangle ABD}:S_{\\triangle ACD}$ を同じ手順で求めてみてください。",
+      },
+    ],
+  },
+  {
+    id: "gp-core-example3-takeaway",
+    type: "callout",
+    tone: "success",
+    title: "この問題から何を学ぶか",
+    text:
+      "比の問題では、まず「1点に集まるか、一直線か」を図で判別してから式を立てます。式の形が同じでも、内分か外分かという図の意味は別物として扱います。",
+  },
+  {
+    id: "gp-core-cautions-heading",
+    type: "heading",
+    level: 2,
+    text: "共通テスト型の注意点",
+  },
+  {
+    id: "gp-core-cautions",
+    type: "checklist",
+    title: "図形の性質で落としやすい注意点",
+    items: [
+      "問題文の図が正確とは限らない。長さや角は本文の条件で確定する",
+      "円の中心、接点、交点の位置を必ず確認する",
+      "接線があれば、半径との垂直をその場で図に書き込む",
+      "方べきの定理では「どの点を基準にした積か」を確認する",
+      "割線の近い点・遠い点を取り違えない",
+      "チェバとメネラウスを図の雰囲気だけで選ばない。1点に集まるか一直線かを確認する",
+      "球の断面は、平面上の円として見直す",
+      "空間図形は、まず断面図を書いてから考える",
+    ],
+  },
+  {
+    id: "gp-core-advanced-connection",
+    type: "callout",
+    tone: "success",
+    title: "発展への接続",
+    text:
+      "円周角・方べき・比の性質は、数学Bの空間座標やベクトルで、内積や位置ベクトルとして再登場します。断面円の発想はそのまま、空間ベクトルでの球面や外接球の問題につながります。図形の性質で作った辺や角は、最後に図形と計量（正弦・余弦定理）へ渡して長さや角を仕上げる、という二段構えを覚えておくと発展問題にも対応しやすくなります。",
+  },
+  {
+    id: "gp-core-mock-recovery",
+    type: "mistakeRecovery",
+    title: "冊子型模試 第1回・第2回 第3問から戻る復習先",
+    intro:
+      "第1回・第2回の第3問（円・接線・方べき・球の断面）で失点した場合は、症状ごとに戻る場所を変えます。",
+    items: [
+      {
+        symptom: "球の断面で、断面半径をどの直角三角形から出すか迷った",
+        action: "球の断面への接続へ戻る",
+        href: "#gp-core-sphere-heading",
+      },
+      {
+        symptom: "方べきで、どの点を基準にした積か分からなくなった",
+        action: "方べきの定理：3つの形へ戻る",
+        href: "#gp-core-power-heading",
+      },
+      {
+        symptom: "接線の長さを求める前に、半径との垂直を書かなかった",
+        action: "円と接線の判断へ戻る",
+        href: "#gp-core-circle-tangent-heading",
+      },
+      {
+        symptom: "チェバとメネラウスを図の雰囲気で選んだ",
+        action: "代表例題3で1点集中か一直線かを確認する",
+        href: "#gp-core-example3",
+      },
+      {
+        symptom: "接弦定理でどちら側の円周角に移すか迷った",
+        action: "代表例題2で角の移し方を確認する",
+        href: "#gp-core-example2",
+      },
+    ],
+  },
+];
+
 const geometryPropertiesCentersBlocks: LectureBlock[] = [
   {
     id: "geometry-properties-centers-flow",
@@ -1913,6 +2333,9 @@ const lectureEnhancements: Record<string, LectureEnhancement> = {
       "既存は補助線発見の流れはあるが、接弦定理・トレミー・比から定理を選ぶ反復量が不足していた。",
       "本番形式演習が1題で、チェバとメネラウスの切り替え、円から計量への融合が足りなかった。",
       "ミス回収が図形の見落とし中心で、接線・方べき・相似補助線の戻り先が粗かった。",
+      "中核講義テンプレート適用（2026-07-02）: 定理一覧、判別フロー、接線の長さの相等、方べき3形態、",
+      "球の断面への接続、代表例題3題（接線と方べき／内接四角形と接弦定理／チェバ・メネラウス・面積比）、",
+      "各例題の別解、共通テスト型の注意点、冊子型模試 第1回・第2回 第3問からの復習導線を追加した。",
     ],
     blocks: [
       {
@@ -1923,6 +2346,7 @@ const lectureEnhancements: Record<string, LectureEnhancement> = {
         text:
           "内部で交わるならチェバ、一直線ならメネラウス、接線なら接弦定理か方べき、内接四角形なら円周角・補角・トレミーを候補にします。",
       },
+      ...geometryPropertiesCoreTextbookBlocks,
       ...geometryPropertiesCentersBlocks,
       geometryPropertiesDrill,
       ...finalProblemBlocks["geometry-properties-auxiliary-lines"],

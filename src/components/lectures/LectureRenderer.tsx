@@ -27,6 +27,7 @@ const TAB_ORDER: ExplanationTab["label"][] = [
   "ヒント",
   "方針",
   "詳しい解説",
+  "別解",
   "最速解法",
   "よくあるミス",
   "類題",
