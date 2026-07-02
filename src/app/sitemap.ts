@@ -7,6 +7,7 @@ import {
 } from "@/lib/content";
 import { SPECIAL_LECTURES } from "@/data/specialLectures";
 import { SECTION_PRACTICE_EXAMS } from "@/data/common-test/section-practice";
+import { COMMON_TEST_PROBLEM_LECTURES } from "@/data/common-test/problem-lectures";
 import { getSiteUrl } from "@/lib/site";
 
 const STATIC_ROUTES = [
@@ -32,6 +33,7 @@ const STATIC_ROUTES = [
   "/common-test/simulator/paper-sample",
   "/common-test/lectures",
   "/common-test/practice",
+  "/common-test/problem-lectures",
   "/common-test/math-1a",
   "/common-test/math-2bc",
 ] as const;
@@ -59,6 +61,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
   for (const exam of SECTION_PRACTICE_EXAMS) {
     routes.add(`/common-test/practice/${exam.id}`);
+  }
+  for (const lecture of COMMON_TEST_PROBLEM_LECTURES) {
+    routes.add(`/common-test/problem-lectures/${lecture.id}`);
   }
 
   return Array.from(routes)

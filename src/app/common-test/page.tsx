@@ -3,9 +3,11 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import {
   ArrowLeft,
+  ArrowRight,
   BookOpen,
   Brain,
   CalendarDays,
+  FileText,
   GraduationCap,
   History,
   RefreshCw,
@@ -14,6 +16,7 @@ import {
   Zap,
 } from "lucide-react";
 import { COMMON_TEST_SUBJECTS, DAILY_MISSIONS } from "@/data/common-test";
+import { COMMON_TEST_PROBLEM_LECTURES } from "@/data/common-test/problem-lectures";
 import { CommonTestAnalyticsSummary } from "@/components/common-test/CommonTestAnalyticsSummary";
 import { CommonTestLearningPrescription } from "@/components/common-test/CommonTestLearningPrescription";
 import { CommonTestMissionCard } from "@/components/common-test/CommonTestMissionCard";
@@ -98,6 +101,34 @@ export default function CommonTestPage() {
           <section className="order-6 sm:order-4">
             <SectionLabel ja="特別講義" icon={<GraduationCap className="h-4 w-4 text-violet-600" />} />
             <CommonTestLectureSpotlight />
+          </section>
+
+          <section className="order-6 sm:order-4">
+            <SectionLabel ja="問題解体型講座" icon={<FileText className="h-4 w-4 text-blue-600" />} />
+            <div className="rounded-2xl border border-border/70 bg-card/70 p-5">
+              <p className="text-sm leading-6 text-muted-foreground">
+                オリジナル問題PDFを画面上部に固定表示しながら、大問ごとに見るべきポイント・
+                本番での思考順・よくあるミスを整理する講座です。
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {COMMON_TEST_PROBLEM_LECTURES.slice(0, 4).map((lecture) => (
+                  <Link
+                    key={lecture.id}
+                    href={`/common-test/problem-lectures/${lecture.id}`}
+                    className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 hover:bg-blue-100"
+                  >
+                    {lecture.targetSection}
+                  </Link>
+                ))}
+              </div>
+              <Link
+                href="/common-test/problem-lectures"
+                className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-neon-cyan hover:underline"
+              >
+                全{COMMON_TEST_PROBLEM_LECTURES.length}講座を見る
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
           </section>
 
           <section className="order-7 sm:order-5">
