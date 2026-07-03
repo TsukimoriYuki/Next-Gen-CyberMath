@@ -4,7 +4,8 @@ import { CommonTestPdfMockViewer } from "@/components/common-test/mock-exam/Comm
 
 export const metadata: Metadata = {
   title: `${COMMON_TEST_MATH_1A_MANUAL_002.title} | Cyber Math`,
-  description: "PDF冊子を正本として表示する、共通テスト型本番模試 数学I・数学A 手動作成版 第2回です。",
+  description:
+    "PDF冊子を正本として表示する、共通テスト型本番模試 数学I・数学A 手動作成版 第2回です。70分、100点満点、4大問構成。",
   alternates: {
     canonical: "/common-test/simulator/common-test-math-1a-manual-002",
   },

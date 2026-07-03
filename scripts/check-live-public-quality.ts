@@ -33,7 +33,8 @@ async function fetchText(route: string) {
 }
 
 function assertIncludes(route: string, html: string, text: string) {
-  if (!html.includes(text)) {
+  const htmlWithoutComments = html.replace(/<!--[\s\S]*?-->/g, "");
+  if (!html.includes(text) && !htmlWithoutComments.includes(text)) {
     issues.push(`${route}: expected to include "${text}"`);
   }
 }
