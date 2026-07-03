@@ -24,7 +24,6 @@ import { CommonTestReviewSummary } from "@/components/common-test/CommonTestRevi
 import { CommonTestSubjectCard } from "@/components/common-test/CommonTestSubjectCard";
 import { CommonTestTargetScorePanel } from "@/components/common-test/CommonTestTargetScorePanel";
 import { CommonTestWeaknessBossPanel } from "@/components/common-test/CommonTestWeaknessBossPanel";
-import { CommonTestLectureSpotlight } from "@/components/lectures/CommonTestLectureSpotlight";
 
 export const metadata: Metadata = {
   title: "共通テスト数学 対策室",
@@ -84,31 +83,26 @@ export default function CommonTestPage() {
         </header>
 
         <div className="mt-8 flex flex-col gap-8">
-          <section className="order-1">
+          <section className="order-5">
             <CommonTestLearningPrescription />
           </section>
 
-          <section className="order-5 sm:order-2">
+          <section className="order-6">
             <SectionLabel ja="目標点との差" icon={<Target className="h-4 w-4 text-blue-600" />} />
             <CommonTestTargetScorePanel />
           </section>
 
-          <section className="order-2 sm:order-3">
+          <section className="order-7">
             <SectionLabel ja="今日の復習" icon={<RefreshCw className="h-4 w-4 text-emerald-600" />} />
             <CommonTestReviewSummary />
           </section>
 
-          <section className="order-6 sm:order-4">
-            <SectionLabel ja="特別講義" icon={<GraduationCap className="h-4 w-4 text-violet-600" />} />
-            <CommonTestLectureSpotlight />
-          </section>
-
-          <section className="order-6 sm:order-4">
+          <section className="order-2">
             <SectionLabel ja="問題解体型講座" icon={<FileText className="h-4 w-4 text-blue-600" />} />
-            <div className="rounded-2xl border border-border/70 bg-card/70 p-5">
+            <div className="rounded-2xl border border-blue-200 bg-white p-5 shadow-sm">
               <p className="text-sm leading-6 text-muted-foreground">
-                オリジナル問題PDFを画面上部に固定表示しながら、大問ごとに見るべきポイント・
-                本番での思考順・よくあるミスを整理する講座です。
+                オリジナル問題PDFをPCでは左に固定表示し、スマホでは上部に置きながら、
+                大問ごとに見るべきポイント・本番での思考順・よくあるミスを整理する講座です。
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {COMMON_TEST_PROBLEM_LECTURES.slice(0, 4).map((lecture) => (
@@ -131,12 +125,12 @@ export default function CommonTestPage() {
             </div>
           </section>
 
-          <section className="order-7 sm:order-5">
+          <section className="order-8">
             <SectionLabel ja="弱点分析と次の一手" icon={<ShieldAlert className="h-4 w-4 text-rose-600" />} />
             <CommonTestWeaknessBossPanel compact showFullLink={false} />
           </section>
 
-          <section className="order-3 sm:order-6">
+          <section className="order-3">
             <SectionLabel ja="科目別練習" icon={<BookOpen className="h-4 w-4 text-blue-600" />} />
             <div className="grid gap-4 sm:grid-cols-2">
               {mathSubjects.map((subject) => (
@@ -152,7 +146,7 @@ export default function CommonTestPage() {
             )}
           </section>
 
-          <section className="order-4 sm:order-7">
+          <section className="order-1">
             <SectionLabel ja="本番演習" icon={<Zap className="h-4 w-4 text-blue-600" />} />
             <Link
               href="/common-test/simulator/common-test-math-1a-manual-001"
@@ -182,7 +176,7 @@ export default function CommonTestPage() {
             </Link>
           </section>
 
-          <section className="order-8">
+          <section className="order-4">
             <SectionLabel ja="短時間ドリル" icon={<CalendarDays className="h-4 w-4 text-blue-600" />} />
             <p className="-mt-2 mb-4 text-xs text-slate-500">
               図形、微積分、確率を中心に、今日の練習候補を3つ表示します。

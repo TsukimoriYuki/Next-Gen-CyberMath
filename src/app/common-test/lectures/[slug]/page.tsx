@@ -29,6 +29,16 @@ export async function generateMetadata({
   return {
     title,
     description: lecture.description,
+    robots: lecture.noindex
+      ? {
+          index: false,
+          follow: false,
+          googleBot: {
+            index: false,
+            follow: false,
+          },
+        }
+      : undefined,
     alternates: {
       canonical,
     },

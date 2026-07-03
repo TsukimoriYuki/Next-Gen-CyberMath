@@ -356,7 +356,7 @@ export function CommonTestReviewQueue() {
               ミニ診断を始める →
             </Link>
             <Link
-              href="/common-test/lectures"
+              href="/common-test/problem-lectures"
               className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-600 transition-colors hover:border-slate-300"
             >
               講義ロードマップを見る

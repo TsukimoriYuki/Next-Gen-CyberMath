@@ -465,9 +465,8 @@ function buildPrescription({
       reason: `${getCommonTestMistakeTagLabel(focusTag)}が目立っています。まず何を見るかを復習しましょう。`,
       priority: "高",
       estimatedMinutes: 15,
-      ctaLabel: "特別講義を見る",
-      href: "/common-test/lectures/geometry-measurement-intensive",
-      lectureStatus: "available",
+      ctaLabel: "問題解体型講座を見る",
+      href: "/common-test/problem-lectures/ct-ia-q1-back-geometry-measurement",
     };
   }
 
@@ -477,9 +476,8 @@ function buildPrescription({
       reason: "条件見落としが増えています。事象の言い換えと条件整理を講義で確認しましょう。",
       priority: "高",
       estimatedMinutes: 15,
-      ctaLabel: "特別講義を見る",
-      href: "/common-test/lectures/probability-guided-reading",
-      lectureStatus: "available",
+      ctaLabel: "問題解体型講座を見る",
+      href: "/common-test/problem-lectures/ct-ia-q4-probability",
     };
   }
 
@@ -489,9 +487,8 @@ function buildPrescription({
       reason: "図の見落としが目立っています。同じ角・円周角・補助線の見る順番を復習しましょう。",
       priority: "高",
       estimatedMinutes: 15,
-      ctaLabel: "特別講義を見る",
-      href: "/common-test/lectures/geometry-properties-auxiliary-lines",
-      lectureStatus: "available",
+      ctaLabel: "問題解体型講座を見る",
+      href: "/common-test/problem-lectures/ct-ia-q3-plane-geometry",
     };
   }
 
@@ -512,9 +509,8 @@ function buildPrescription({
       reason: "場合分け不足が増えています。軸・端点・境界値を先に出す型を確認しましょう。",
       priority: "高",
       estimatedMinutes: 15,
-      ctaLabel: "特別講義を見る",
-      href: "/common-test/lectures/quadratic-case-split-intensive",
-      lectureStatus: "available",
+      ctaLabel: "問題解体型講座を見る",
+      href: "/common-test/problem-lectures/ct-ia-q2-front-quadratic-1",
     };
   }
 

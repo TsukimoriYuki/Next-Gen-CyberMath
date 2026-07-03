@@ -42,6 +42,8 @@ export interface Lecture {
   tags: string[];
   publishedAt: string;
   blocks: LectureBlock[];
+  isPublished?: boolean;
+  noindex?: boolean;
 }
 
 export interface SpecialLectureRoadmapStep {
@@ -3741,7 +3743,11 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
   SHORTCUT_FORMULAS_LECTURE,
 ];
 
-export const SPECIAL_LECTURES: Lecture[] = enhanceSpecialLectures(BASE_SPECIAL_LECTURES);
+export const SPECIAL_LECTURES: Lecture[] = enhanceSpecialLectures(BASE_SPECIAL_LECTURES).map((lecture) => ({
+  ...lecture,
+  isPublished: false,
+  noindex: true,
+}));
 
 export function getSpecialLectureBySlug(slug: string): Lecture | undefined {
   const canonicalSlug = canonicalLectureSlug(slug);

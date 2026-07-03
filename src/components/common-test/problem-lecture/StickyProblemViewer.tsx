@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useState } from "react";
 import {
   ChevronDown,
@@ -12,23 +13,20 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/**
- * 問題PDFを画面上部に固定表示するビューア。
- *
- * - 展開時: PC で高さ40vh程度、スマホで30〜35vh程度（Tailwindのレスポンシブ高さで対応）
- * - 最小化時: タイトルバーだけを表示し、iframeは高さ0で保持（スクロール位置を保つ）
- * - 別タブで開く／ダウンロード／全画面表示（アプリ内オーバーレイ）のボタンを備える
- * - すべてのボタンに aria-label を付ける
- */
+type StickyProblemViewerVariant = "top" | "side";
+
 export function StickyProblemViewer({
   pdfUrl,
   title,
+  variant = "top",
 }: {
   pdfUrl: string;
   title: string;
+  variant?: StickyProblemViewerVariant;
 }) {
   const [minimized, setMinimized] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const isSide = variant === "side";
 
   const frame = (
     <iframe
@@ -46,7 +44,7 @@ export function StickyProblemViewer({
           pdfUrl={pdfUrl}
           minimized={false}
           fullscreen
-          onToggleMinimize={() => setMinimized((v) => !v)}
+          onToggleMinimize={() => setMinimized((value) => !value)}
           onToggleFullscreen={() => setFullscreen(false)}
         />
         <div className="min-h-0 flex-1 bg-white">{frame}</div>
@@ -55,19 +53,30 @@ export function StickyProblemViewer({
   }
 
   return (
-    <div className="sticky top-16 z-40 border-b border-slate-200 bg-white shadow-sm">
+    <div
+      className={cn(
+        isSide
+          ? "flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+          : "sticky top-16 z-40 border-b border-slate-200 bg-white shadow-sm",
+        isSide && (minimized ? "h-auto" : "h-full"),
+      )}
+    >
       <ViewerToolbar
         title={title}
         pdfUrl={pdfUrl}
         minimized={minimized}
         fullscreen={false}
-        onToggleMinimize={() => setMinimized((v) => !v)}
+        onToggleMinimize={() => setMinimized((value) => !value)}
         onToggleFullscreen={() => setFullscreen(true)}
       />
       <div
         className={cn(
-          "overflow-hidden transition-[height] duration-200",
-          minimized ? "h-0" : "h-[30vh] sm:h-[35vh] lg:h-[40vh]",
+          "overflow-hidden bg-white transition-[height] duration-200",
+          minimized
+            ? "h-0"
+            : isSide
+              ? "min-h-0 flex-1"
+              : "h-[30vh] sm:h-[35vh] lg:h-[40vh]",
         )}
         aria-hidden={minimized}
       >
@@ -93,11 +102,11 @@ function ViewerToolbar({
   onToggleFullscreen: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between gap-2 px-3 py-2 sm:px-4">
+    <div className="flex items-center justify-between gap-2 border-b border-slate-100 px-3 py-2 sm:px-4">
       <div className="flex min-w-0 items-center gap-2">
         <FileText className="h-4 w-4 shrink-0 text-blue-600" />
         <span className="truncate text-xs font-bold text-slate-700 sm:text-sm">
-          {title}（問題PDF）
+          {title}・問題PDF
         </span>
       </div>
       <div className="flex shrink-0 items-center gap-1">
@@ -148,7 +157,7 @@ function ToolbarButton({
 }: {
   label: string;
   onClick: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <button

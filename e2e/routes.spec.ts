@@ -21,8 +21,6 @@ const CORE_ROUTES = [
   "/common-test/simulator",
   "/common-test/simulator/common-test-math-1a-manual-001",
   "/common-test/simulator/common-test-math-1a-manual-002",
-  "/common-test/lectures/numbers-expressions-core-skills",
-  "/common-test/lectures/sets-logic-necessary-sufficient",
   "/common-test/practice",
   "/common-test/practice/practice-numbers-expressions-01",
   "/common-test/practice/practice-sets-logic-01",

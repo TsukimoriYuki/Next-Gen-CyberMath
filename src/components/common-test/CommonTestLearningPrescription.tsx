@@ -111,7 +111,7 @@ export function CommonTestLearningPrescription() {
                 大問別ドリル
               </Link>
               <Link
-                href="/common-test/lectures"
+                href="/common-test/problem-lectures"
                 className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 transition hover:border-violet-300 hover:text-violet-700"
               >
                 <BookOpen className="h-3.5 w-3.5" />

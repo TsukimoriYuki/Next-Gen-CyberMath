@@ -5,7 +5,6 @@ import {
   getAllTagNames,
   getUnitSlugs,
 } from "@/lib/content";
-import { SPECIAL_LECTURES } from "@/data/specialLectures";
 import { SECTION_PRACTICE_EXAMS } from "@/data/common-test/section-practice";
 import { COMMON_TEST_PROBLEM_LECTURES } from "@/data/common-test/problem-lectures";
 import { getSiteUrl } from "@/lib/site";
@@ -31,7 +30,6 @@ const STATIC_ROUTES = [
   "/common-test/simulator/common-test-math-1a-manual-001",
   "/common-test/simulator/common-test-math-1a-manual-002",
   "/common-test/simulator/paper-sample",
-  "/common-test/lectures",
   "/common-test/practice",
   "/common-test/problem-lectures",
   "/common-test/math-1a",
@@ -56,9 +54,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const slug of getAllLessonSlugs()) routes.add(`/lessons/${slug}`);
   for (const problem of getAllProblems()) routes.add(`/problems/${problem.slug}`);
   for (const tag of getAllTagNames()) routes.add(`/tags/${encodeURIComponent(tag)}`);
-  for (const lecture of SPECIAL_LECTURES) {
-    routes.add(`/common-test/lectures/${lecture.slug}`);
-  }
   for (const exam of SECTION_PRACTICE_EXAMS) {
     routes.add(`/common-test/practice/${exam.id}`);
   }

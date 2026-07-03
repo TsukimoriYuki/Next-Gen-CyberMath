@@ -43,7 +43,8 @@ const REQUIRED_SITEMAP_ROUTES = [
   "/contact",
   "/about",
   "/licenses",
-  "/common-test/lectures/math-1a-shortcut-formulas",
+  "/common-test/problem-lectures",
+  "/common-test/problem-lectures/ct-ia-q1-front-algebra-logic-abs",
 ];
 
 const TARGETED_MOJIBAKE_FILES = [
@@ -152,6 +153,10 @@ async function checkSitemap() {
     if (!urls.includes(expected)) {
       issues.push(`sitemap missing ${expected}`);
     }
+  }
+  const specialLectureUrls = urls.filter((url) => url.includes("/common-test/lectures"));
+  if (specialLectureUrls.length > 0) {
+    issues.push(`sitemap should not include unpublished special lectures: ${specialLectureUrls.join(", ")}`);
   }
 }
 
@@ -275,6 +280,26 @@ function checkCommonTestRouting() {
   }
 }
 
+function checkSpecialLecturesAreNoindex() {
+  const specialLectures = read("src/data/specialLectures.ts");
+  const lectureIndexPage = read("src/app/common-test/lectures/page.tsx");
+  const lectureDetailPage = read("src/app/common-test/lectures/[slug]/page.tsx");
+  const problemLectureIndexPage = read("src/app/common-test/problem-lectures/page.tsx");
+
+  if (!specialLectures.includes("isPublished: false") || !specialLectures.includes("noindex: true")) {
+    issues.push("src/data/specialLectures.ts: unpublished special lectures should be flagged isPublished:false and noindex:true");
+  }
+  if (!lectureIndexPage.includes("robots") || !lectureIndexPage.includes("index: false")) {
+    issues.push("src/app/common-test/lectures/page.tsx: special lecture index should export noindex metadata");
+  }
+  if (!lectureDetailPage.includes("lecture.noindex") || !lectureDetailPage.includes("index: false")) {
+    issues.push("src/app/common-test/lectures/[slug]/page.tsx: special lecture detail metadata should respect lecture.noindex");
+  }
+  if (problemLectureIndexPage.includes("index: false")) {
+    issues.push("src/app/common-test/problem-lectures/page.tsx: problem lectures must remain indexable");
+  }
+}
+
 function checkQualityAndContactPages() {
   const quality = read("src/app/quality/page.tsx");
   for (const text of [
@@ -337,6 +362,7 @@ async function main() {
   checkCoursesPage();
   checkMyPageNoDataState();
   checkCommonTestRouting();
+  checkSpecialLecturesAreNoindex();
   checkQualityAndContactPages();
   checkRegisterMentorCodeWording();
   checkRawMathInUiText();

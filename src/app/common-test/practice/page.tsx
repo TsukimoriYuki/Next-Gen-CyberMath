@@ -88,15 +88,15 @@ export default function SectionPracticeIndexPage() {
       ))}
 
       <section className="mt-10 rounded-2xl border border-border/70 bg-card/70 p-5">
-        <h2 className="font-display text-lg font-bold text-foreground">対応する中核講義</h2>
+        <h2 className="font-display text-lg font-bold text-foreground">対応するMATH講座</h2>
         <p className="mt-2 text-sm leading-7 text-muted-foreground">
           判断フローや代表例題を先に確認したい場合は、
-          <Link href="/common-test/lectures/numbers-expressions-core-skills" className="mx-1 text-neon-cyan hover:underline">
-            数と式 徹底講座
+          <Link href="/courses/math-1a/numbers-and-expressions" className="mx-1 text-neon-cyan hover:underline">
+            数と式 講座
           </Link>
           、
-          <Link href="/common-test/lectures/sets-logic-necessary-sufficient" className="mx-1 text-neon-cyan hover:underline">
-            集合と命題 判定講座
+          <Link href="/courses/math-1a/sets-and-logic" className="mx-1 text-neon-cyan hover:underline">
+            集合と命題 講座
           </Link>
           を先に読んでから演習に進むこともできます。
         </p>

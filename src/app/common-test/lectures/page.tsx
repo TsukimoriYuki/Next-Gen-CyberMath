@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   title: "特別講義 — 共通テスト数学",
   description:
     "共通テスト数学の考え方、公式選択、本番判断、満点講義、時間短縮講義を学ぶ特別講義一覧です。",
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
   alternates: {
     canonical: "/common-test/lectures",
   },
