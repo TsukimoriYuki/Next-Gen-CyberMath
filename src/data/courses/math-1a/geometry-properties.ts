@@ -1113,10 +1113,315 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
   },
 ];
 
+type GeometryPropertiesEnhancement = {
+  leadBlocks: CourseLesson["lessonBlocks"];
+  aftercareBlocks: CourseLesson["lessonBlocks"];
+  links: CourseLesson["relatedPracticeLinks"];
+  tags: string[];
+};
+
+const GEOMETRY_PROPERTIES_COMMON_LINKS: CourseLesson["relatedPracticeLinks"] = [
+  {
+    label: "問題解体型講座：第3問A 図形の性質",
+    href: "/common-test/problem-lectures/ct-ia-q3-plane-geometry",
+    description: "円周角・接線・方べき・比の読み替えをPDF問題で確認する",
+  },
+  {
+    label: "問題解体型講座：第3問B 空間図形",
+    href: "/common-test/problem-lectures/ct-ia-q3-space-geometry",
+    description: "空間図形を断面へ落とし、平面図形の性質へ戻す練習",
+  },
+  {
+    label: "共通テスト数学IA対策トップ",
+    href: "/common-test/math-1a",
+    description: "冊子型模試・問題解体型講座・大問別演習へ戻る",
+  },
+  {
+    label: "図形の性質 大問別演習",
+    href: "/units/geometry-properties",
+    description: "円・比・五心の基本手順を短い演習で固める",
+  },
+];
+
+const GEOMETRY_PROPERTIES_MOCK_LINKS: CourseLesson["relatedPracticeLinks"] = [
+  {
+    label: "共通テスト型本番模試 第1回 第3問",
+    href: "/common-test/simulator/common-test-math-1a-manual-001",
+    description: "方べき・接線・断面円を本番形式で復習する",
+  },
+  {
+    label: "共通テスト型本番模試 第2回 第3問",
+    href: "/common-test/simulator/common-test-math-1a-manual-002",
+    description: "図形の性質を冊子型PDFで確認する",
+  },
+];
+
+const GEOMETRY_PROPERTIES_ENHANCEMENTS: Record<string, GeometryPropertiesEnhancement> = {
+  "geometry-properties-inscribed-angle-tangent-chord": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "円が見えたら、まず角を追い始めるのではなく、同じ弧、中心、接線、半径、相似の順に条件を棚卸しします。勝ち筋は、図の見た目で角を決めることではなく、「同じ弧を見ている角か」「接線と弦の角を反対側の円周角へ移せるか」を言葉で確定することです。\n\n5秒で見るポイントは次の4つです。1つ目は、同じ弧を見ている円周角があるか。2つ目は、中心 $O$ があり、中心角と円周角を2倍・半分でつなげられるか。3つ目は、接線があり、接弦定理だけでなく半径と接線の垂直も使えるか。4つ目は、角が2組そろって相似へ進めるかです。\n\n絶対に避けるミスは、円周上の角を「なんとなく等しそう」で処理することです。等しい理由を、同じ弧、直径、接線、内接四角形のどれかで説明できる状態にしてから式へ進みます。",
+        emphasis: "円が見えたら、同じ弧 → 中心角 → 接線と半径垂直 → 相似・方べきの順に確認する。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "円が見えたときの本番判断表",
+        body: "円の問題では、条件を見た瞬間に使う道具を絞ります。最初から全部の角を書き込むと、同じ弧を見失いやすくなります。",
+        columns: ["見えた条件", "最初に疑うこと", "狙う結論"],
+        rows: [
+          { cells: ["同じ2点を結ぶ弦がある", "円周角の定理", "角を別の場所へ移す"], highlight: true },
+          { cells: ["中心 $O$ がある", "中心角は円周角の2倍", "角を2倍・半分で確定する"], highlight: true },
+          { cells: ["接線がある", "接弦定理と半径垂直", "角を移す、または直角三角形を作る"], highlight: true },
+          { cells: ["接線と割線がある", "方べき", "長さの積を作る"], highlight: true },
+          { cells: ["角が2組そろう", "相似", "辺の比・長さへ進む"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：接線がある円の角度を最短で読む",
+        body: "**問題**：円周上の点 $A,B,C$ があり、点 $A$ における接線と弦 $AB$ のなす角が48度である。点 $C$ は弦 $AB$ の反対側の円周上にある。$∠ACB$ を求めよ。\n\n**標準解答**：接線と弦 $AB$ の角は、反対側の弧 $AB$ を見る円周角に等しい。よって $∠ACB=48度$。\n\n**別解**：中心 $O$ を通る半径 $OA$ を引くと、接線と半径は垂直。三角形 $AOB$ の二等辺性から底角を経由し、中心角を出してから円周角を半分にしてもよい。\n\n**捨てるべき方針**：図から $∠ACB$ を読み取る、全ての角を片っ端から書き込む、接線があるのに半径垂直を見ない、の3つは遠回りです。\n\n**検算方法**：接線と弦の角、反対側の円周角、中心角の関係が矛盾しないかを確認します。中心角を使うなら $96度$ になり、円周角 $48度$ と対応します。",
+      },
+      {
+        kind: "commonMistake",
+        title: "捨てるべき方針：とりあえず角度追い",
+        body: "円の問題で最初に全角度を書き込むと、同じ弧を見ている角を見失いやすくなります。まず「どの弧を見る角か」を決め、接線があれば「接弦定理」と「半径と接線は垂直」を同時に確認します。\n\n誤答分析として多いのは、接弦定理を使う角の反対側を取り違えることです。接線と弦 $AB$ の角なら、見るべき円周角は弦 $AB$ の反対側にある角です。隣の弧や接点の近くの角へ飛ばさないようにします。",
+        emphasis: "角度追いは、弧・接線・半径垂直を確認してから始める。",
+      },
+      {
+        kind: "checkpoint",
+        title: "共通テスト大問との接続",
+        body: "冊子型模試の第3問や問題解体型講座では、円周角だけで終わらず、接線、方べき、相似へ連結する形で出ます。円が見えたら、角だけでなく「長さの積にできるか」「相似で比へ移れるか」まで見るのが本番の判断順です。",
+      },
+    ],
+    links: [...GEOMETRY_PROPERTIES_COMMON_LINKS, ...GEOMETRY_PROPERTIES_MOCK_LINKS],
+    tags: ["勝ち筋あり", "5秒ポイントあり", "本番判断順あり", "問題解体型講座接続あり"],
+  },
+  "geometry-properties-ceva-menelaus": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "比が線分上に並んだら、まず三角形を1つ固定します。3本の線が1点で交わるならチェバ、3点が一直線に並ぶならメネラウスです。勝ち筋は、公式名を思い出すことではなく、「1点共点」か「3点一直線」かを図の条件から確定することです。\n\n5秒で見るポイントは、線が三角形の内部で交わるのか、横切る直線があるのか、辺上の比が3か所そろっているのか、外分点が混ざっているのか、の4点です。外分点があるときは、符号や見かけに引っ張られず、積が1になる形へ落とします。\n\n絶対に避けるミスは、一直線の問題にチェバを使うこと、共点の問題にメネラウスを使うことです。先に構図を判定すれば、計算はほぼ自動になります。",
+        emphasis: "比が出たら、三角形を固定 → 共点ならチェバ、一直線ならメネラウス。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "比が見えたときの判断表",
+        body: "線分比の問題は、角度よりも構図の判定が先です。次の表で使う道具を絞ります。",
+        columns: ["図の特徴", "疑う道具", "捨てるべき方針"],
+        rows: [
+          { cells: ["3本の線分が1点で交わる", "チェバ", "角度追いから入る"], highlight: true },
+          { cells: ["3点が一直線上に並ぶ", "メネラウス", "チェバを機械的に使う"], highlight: true },
+          { cells: ["平行線や等角がある", "相似", "座標を置いて全計算する"] },
+          { cells: ["中線・面積比が見える", "面積比", "公式名だけで押し切る"] },
+          { cells: ["外分点が混ざる", "向きと全体の辺を確認", "内分と同じ感覚で比を書く"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：同じ図でチェバとメネラウスを分ける",
+        body: "**問題**：三角形 $ABC$ で、$D$ は辺 $BC$ 上、$E$ は辺 $CA$ 上にあり、$BD:DC=2:3$、$CE:EA=3:4$ とする。直線 $AD$ と $BE$ の交点を通る直線が $AB$ と交わる点を $F$ とするとき $AF:FB$ を求めよ。また、直線 $DE$ が $AB$ の延長と交わる点を $H$ とするとき $AH:HB$ を求めよ。\n\n**標準解答**：$AD,BE,CF$ が1点で交わるのでチェバを使う。$(BD/DC)×(CE/EA)×(AF/FB)=1$ より、$(2/3)×(3/4)×(AF/FB)=1$。したがって $AF:FB=2:1$。\n\n次に $D,E,H$ は一直線上なのでメネラウスを使う。同じ比の積で $AH:HB=2:1$ になる。ただし $H$ は延長上の点なので、内分点のように図の内部に置かない。\n\n**別解**：チェバ部分は面積比でも確認できます。共通の高さを持つ三角形の面積比に置き換えると、$BD:DC$ と $CE:EA$ がそのまま面積比に反映されます。\n\n**検算方法**：チェバもメネラウスも、対応する3つの比の積が1になるかを最後に確認します。$2/3×3/4×2=1$ なので整合します。",
+      },
+      {
+        kind: "commonMistake",
+        title: "誤答分析：共点と一直線を混同する",
+        body: "チェバとメネラウスの失点は、計算よりも入り口で起こります。3本の線が1点で交わる条件を使うのがチェバ、3点が一直線に並ぶ条件を使うのがメネラウスです。\n\nとりあえず補助線を増やす、とりあえず相似を探す、とりあえず座標化する、という方針は、比が3か所そろっている問題では時間を使いすぎます。まず構図を判定し、公式で全体像を固定してから必要なら相似や面積比へ戻ります。",
+        emphasis: "チェバは1点共点、メネラウスは3点一直線。ここを外すと計算が全部ずれる。",
+      },
+      {
+        kind: "checkpoint",
+        title: "共通テスト大問との接続",
+        body: "共通テストの図形の性質では、比だけを単独で聞くより、円・相似・角の二等分線と混ざって出ます。比が線分上に並んだら、チェバ・メネラウスを候補に入れつつ、円があるなら円周角や方べきとの接続も確認します。",
+      },
+    ],
+    links: [...GEOMETRY_PROPERTIES_COMMON_LINKS, ...GEOMETRY_PROPERTIES_MOCK_LINKS],
+    tags: ["勝ち筋あり", "5秒ポイントあり", "別解あり", "検算あり", "問題解体型講座接続あり"],
+  },
+  "geometry-properties-power-of-a-point": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "円と2本の直線が見えたら、角度を追う前に方べきを疑います。勝ち筋は、交点が円の内側か外側か、接線があるかを一瞬で分け、長さの積へ変換することです。\n\n5秒で見るポイントは、交わる2弦、外部点からの2割線、接線と割線の3型です。接線があるなら $PT^2$、割線なら「外側×全体」です。とくに外部点の問題で、外側部分と円内部分だけを掛けるミスを避けます。\n\n絶対に避けるミスは、接線があるのに接弦定理だけへ進むことです。角が欲しいなら接弦定理、長さが欲しいなら方べき、直角が欲しいなら半径垂直を優先します。",
+        emphasis: "円 + 2直線 + 長さなら、まず方べき。接線なら $PT^2$ を疑う。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "方べき・相似・接線の選択表",
+        body: "同じ円の図でも、求めたい量によって選ぶ道具は変わります。",
+        columns: ["見えた条件", "使う道具", "注意点"],
+        rows: [
+          { cells: ["円内で2本の弦が交わる", "方べき", "交点から4端点までの積を作る"], highlight: true },
+          { cells: ["外部点から2本の割線", "方べき", "外側×全体を掛ける"], highlight: true },
+          { cells: ["接線と割線", "方べき", "接線長は2乗になる"], highlight: true },
+          { cells: ["角を求めたい", "円周角・接弦定理", "長さの積へ急がない"] },
+          { cells: ["比を求めたい", "相似またはチェバ", "円の条件から等角を作る"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：接線と割線の方べき",
+        body: "**問題**：円の外部点 $P$ から接線 $PT$ を引き、別の直線が円と $A,B$ の順に交わる。$PA=4$、$AB=12$ のとき、接線長 $PT$ を求めよ。\n\n**標準解答**：割線の全体は $PB=PA+AB=16$。接線と割線の方べきより $PT^2=PA×PB=4×16=64$。よって $PT=8$。\n\n**別解**：接点と割線の交点を結び、接弦定理から相似な三角形を作っても、対応辺の比から $PT^2=PA×PB$ が出ます。\n\n**捨てるべき方針**：$PA×AB$ とするのは誤りです。外部点からの割線では「外側×全体」を使います。\n\n**検算方法**：接線長は正の長さなので $PT=8$。また $PT^2=64$ が $PA×PB=64$ と一致するか確認します。",
+      },
+      {
+        kind: "commonMistake",
+        title: "誤答分析：外側×内側で掛けてしまう",
+        body: "外部点から割線を引く型では、掛けるのは外側部分と全体です。$PA=4$、$AB=12$ なら、全体は $PB=16$ です。$4×12$ としてしまうと、円の中の部分だけを見ており、外部点から見た方べきになっていません。\n\nまた、接線があると接弦定理へ飛びつきがちですが、長さを求める問題では $PT^2$ を最優先で疑います。角なら接弦定理、長さなら方べき、直角なら半径垂直です。",
+        emphasis: "外部割線は外側×全体。接線は2乗。",
+      },
+      {
+        kind: "checkpoint",
+        title: "共通テスト大問との接続",
+        body: "冊子型模試第1回・第2回の第3問では、方べきが単独ではなく、接線の長さや断面円の半径と結びつきます。円と直線が複数見えたら、まず方べきで長さの関係を固定し、その後に相似・三平方・断面へつなげます。",
+      },
+    ],
+    links: [...GEOMETRY_PROPERTIES_COMMON_LINKS, ...GEOMETRY_PROPERTIES_MOCK_LINKS],
+    tags: ["勝ち筋あり", "5秒ポイントあり", "別解あり", "検算あり", "共通テスト第3問接続あり"],
+  },
+  "geometry-properties-triangle-centers": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "五心は名前で覚えるのではなく、「どの線の交点か」「何が等しいか」で判断します。勝ち筋は、条件を中心名へ翻訳することです。頂点から等距離なら外心、辺から等距離なら内心、中線なら重心、高さなら垂心、外角の二等分線なら傍心です。\n\n5秒で見るポイントは、等距離の相手が頂点か辺か、線が中線か角の二等分線か高さか、比が $2:1$ になっているか、外角が絡むかです。\n\n絶対に避けるミスは、五心の名前だけを暗記して、使える性質を言えないまま進むことです。共通テストでは、中心名そのものよりも、等距離・垂直・二等分・比が問われます。",
+        emphasis: "五心は「線の交点」と「等しいもの」で判定する。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "五心の本番判断表",
+        body: "中心名を聞かれていなくても、次の条件が出たら五心の性質を使えます。",
+        columns: ["条件", "中心", "使えること"],
+        rows: [
+          { cells: ["3頂点から等距離", "外心", "外接円の中心、垂直二等分線の交点"], highlight: true },
+          { cells: ["3辺から等距離", "内心", "内接円の中心、角の二等分線の交点"], highlight: true },
+          { cells: ["3本の中線が交わる", "重心", "頂点側から $2:1$ に分ける"], highlight: true },
+          { cells: ["3本の高さが交わる", "垂心", "直角・垂線を作る"] },
+          { cells: ["外角の二等分線が絡む", "傍心", "外側の接円、辺からの距離が等しい"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：性質から中心名を判定する",
+        body: "**問題**：三角形 $ABC$ の点 $P,Q,R$ について、$PA=PB=PC$、点 $Q$ から3辺までの距離が等しい、点 $R$ は中線 $AD$ 上にあり $AR:RD=2:1$ である。$P,Q,R$ はそれぞれ何か。\n\n**標準解答**：$P$ は3頂点から等距離なので外心。$Q$ は3辺から等距離なので内心。$R$ は中線を頂点側から $2:1$ に分けるので重心です。\n\n**別解**：作図の線から見てもよい。外心は垂直二等分線の交点、内心は角の二等分線の交点、重心は中線の交点です。\n\n**捨てるべき方針**：中心名を先に思い出そうとして迷うより、「何から等距離か」「どの線の上か」を読む方が速いです。\n\n**検算方法**：外心なら外接円が描ける、内心なら内接円が描ける、重心なら中線上で $2:1$ になっている、という実体に戻して確認します。",
+      },
+      {
+        kind: "commonMistake",
+        title: "誤答分析：頂点から等距離と辺から等距離を混同する",
+        body: "外心と内心の混同が最も多いです。外心は3つの頂点からの距離が等しく、円は三角形の外側を通ります。内心は3つの辺からの距離が等しく、円は三角形の内側で辺に接します。\n\nまた、重心の $2:1$ は頂点側が2です。中点側を2にすると、面積比や座標計算が逆になります。垂心は高さの交点なので、直角や垂線の情報がなければ無理に使いません。",
+        emphasis: "等距離の相手が頂点なら外心、辺なら内心。",
+      },
+      {
+        kind: "checkpoint",
+        title: "共通テスト大問との接続",
+        body: "第3問の図形問題では、五心が名前で出るよりも、角の二等分線、垂直二等分線、中線、高さとして隠れます。空間図形でも、断面に落とすと三角形の中心や垂線の性質へ戻ることがあります。",
+      },
+    ],
+    links: [...GEOMETRY_PROPERTIES_COMMON_LINKS, ...GEOMETRY_PROPERTIES_MOCK_LINKS],
+    tags: ["勝ち筋あり", "5秒ポイントあり", "別解あり", "五心判断表あり", "問題解体型講座接続あり"],
+  },
+  "geometry-properties-cyclic-quadrilateral": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "円と四角形が見えたら、4点が本当に同一円周上にあるかを最初に確認します。勝ち筋は、内接四角形だと確定してから、対角の和、外角、同じ弧を見る円周角へ進むことです。\n\n5秒で見るポイントは、4点が同じ円に乗っているか、対角の和が180度になるか、辺の延長で外角ができているか、同じ弧を見る角があるかです。\n\n絶対に避けるミスは、円が近くに描いてあるだけで内接四角形として扱うことです。4点が同一円周上という条件が必要です。",
+        emphasis: "内接四角形は、4点が同一円周上にあると確定してから使う。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "内接四角形で使う道具の選択表",
+        body: "内接四角形では、欲しい角の位置によって使う性質を選びます。",
+        columns: ["欲しい情報", "見る場所", "使う性質"],
+        rows: [
+          { cells: ["向かい合う角", "対角", "和が180度"], highlight: true },
+          { cells: ["延長してできる角", "外角", "向かいの内角に等しい"], highlight: true },
+          { cells: ["同じ弧を見る角", "弦の両端", "円周角が等しい"], highlight: true },
+          { cells: ["接線が追加される", "接点と弦", "接弦定理へ接続"] },
+          { cells: ["長さが絡む", "割線・接線", "方べきへ接続"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：内接四角形から角を2段で求める",
+        body: "**問題**：四角形 $ABCD$ は円に内接している。$∠ABC=112度$、$∠ADB=38度$ のとき、$∠ADC$ と $∠ACB$ を求めよ。\n\n**標準解答**：内接四角形なので、対角の和より $∠ADC=180度-112度=68度$。また $∠ADB$ と $∠ACB$ は同じ弧 $AB$ を見る円周角なので、$∠ACB=38度$。\n\n**別解**：先に同じ弧を見る角を移し、その後に三角形の内角和から残りを確認してもよい。ただし、内接四角形の対角和を使う方が短いです。\n\n**捨てるべき方針**：図で隣の角を補角と決めつけるのは危険です。対角か、外角か、同じ弧かを必ず言葉で確認します。\n\n**検算方法**：$112度+68度=180度$。また $∠ADB$ と $∠ACB$ がどちらも弧 $AB$ を見ているかを確認します。",
+      },
+      {
+        kind: "commonMistake",
+        title: "誤答分析：内接していない四角形に対角和を使う",
+        body: "対角の和が180度になるのは、四角形が円に内接しているときです。円が近くにある、3点だけが円周上にある、補助線で円が描けそう、というだけでは使えません。\n\nまた、外角と等しいのは隣の内角ではなく、向かいの内角です。延長線の向きまで見て、どの角に対応するかを確認します。",
+        emphasis: "4点が同一円周上。対角。外角。弧。この4語で根拠を固定する。",
+      },
+      {
+        kind: "checkpoint",
+        title: "共通テスト大問との接続",
+        body: "問題解体型講座の第3問Aでは、内接四角形・円周角・接線・方べきが連続して使われます。内接四角形で角を移したあと、相似や方べきで長さへつなぐ流れまで意識すると、本番の図形融合問題に対応しやすくなります。",
+      },
+    ],
+    links: [...GEOMETRY_PROPERTIES_COMMON_LINKS, ...GEOMETRY_PROPERTIES_MOCK_LINKS],
+    tags: ["勝ち筋あり", "5秒ポイントあり", "別解あり", "検算あり", "問題解体型講座接続あり"],
+  },
+};
+
+function mergeUniqueLinks(
+  baseLinks: CourseLesson["relatedPracticeLinks"],
+  extraLinks: CourseLesson["relatedPracticeLinks"],
+): CourseLesson["relatedPracticeLinks"] {
+  const linksByHref = new Map<string, CourseLesson["relatedPracticeLinks"][number]>();
+  for (const link of [...baseLinks, ...extraLinks]) {
+    if (!linksByHref.has(link.href)) linksByHref.set(link.href, link);
+  }
+  return Array.from(linksByHref.values());
+}
+
+function insertGeometryPropertiesBlocks(
+  lessonBlocks: CourseLesson["lessonBlocks"],
+  enhancement: GeometryPropertiesEnhancement,
+): CourseLesson["lessonBlocks"] {
+  const leadInsertIndex = Math.max(
+    1,
+    lessonBlocks.findIndex((block) => block.kind !== "intro"),
+  );
+  const withLeadBlocks = [
+    ...lessonBlocks.slice(0, leadInsertIndex),
+    ...enhancement.leadBlocks,
+    ...lessonBlocks.slice(leadInsertIndex),
+  ];
+  const nextStepIndex = withLeadBlocks.findIndex((block) => block.kind === "nextStep");
+  if (nextStepIndex === -1) return [...withLeadBlocks, ...enhancement.aftercareBlocks];
+  return [
+    ...withLeadBlocks.slice(0, nextStepIndex),
+    ...enhancement.aftercareBlocks,
+    ...withLeadBlocks.slice(nextStepIndex),
+  ];
+}
+
+function enhanceGeometryPropertiesLesson(lesson: CourseLesson): CourseLesson {
+  const enhancement = GEOMETRY_PROPERTIES_ENHANCEMENTS[lesson.lessonId];
+  if (!enhancement) return lesson;
+  return {
+    ...lesson,
+    lessonBlocks: insertGeometryPropertiesBlocks(lesson.lessonBlocks, enhancement),
+    relatedPracticeLinks: mergeUniqueLinks(lesson.relatedPracticeLinks, enhancement.links),
+    qualityTags: Array.from(new Set([...lesson.qualityTags, ...enhancement.tags])),
+  };
+}
+
 const GEOMETRY_PROPERTIES_ALL_LESSONS: CourseLesson[] = [
   ...GEOMETRY_PROPERTIES_BEGINNER,
   ...GEOMETRY_PROPERTIES_STANDARD,
-];
+].map(enhanceGeometryPropertiesLesson);
 
 function getGeometryPropertiesLesson(lessonId: string): CourseLesson {
   const lesson = GEOMETRY_PROPERTIES_ALL_LESSONS.find((item) => item.lessonId === lessonId);
