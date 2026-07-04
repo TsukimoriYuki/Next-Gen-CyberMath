@@ -871,15 +871,203 @@ qualityTags: ["旧帝大準備", "融合問題", "条件付き確率", "余事�
 },
 ];
 
+type CountingProbabilityEnhancement = {
+leadBlocks: CourseLesson["lessonBlocks"];
+aftercareBlocks: CourseLesson["lessonBlocks"];
+links: CourseLesson["relatedPracticeLinks"];
+tags: string[];
+};
+
+const COUNTING_PROBABILITY_COMMON_LINKS: CourseLesson["relatedPracticeLinks"] = [
+{ label: "問題解体型講座：第4問 場合の数と確率", href: "/common-test/problem-lectures/ct-ia-q4-probability", description: "条件付き確率・独立・反復試行をPDF問題で確認する" },
+{ label: "共通テスト数学IA対策トップ", href: "/common-test/math-1a", description: "冊子型模試・問題解体型講座・大問別演習へ戻る" },
+{ label: "場合の数と確率 大問別演習", href: "/units/counting-probability", description: "順列・組合せ・余事象・条件付き確率を短い演習で固める" },
+{ label: "共通テスト型本番模試 第1回 第4問", href: "/common-test/simulator/common-test-math-1a-manual-001", description: "辞書式順序・条件付き確率・複数選択を本番形式で復習する" },
+{ label: "共通テスト型本番模試 第2回 第4問", href: "/common-test/simulator/common-test-math-1a-manual-002", description: "場合の数と確率を冊子型PDFで確認する" },
+];
+
+const COUNTING_PROBABILITY_ENHANCEMENTS: Record<string, CountingProbabilityEnhancement> = {
+"counting-what-is": {
+leadBlocks: [
+{ kind: "strategy", title: "この講座の勝ち筋・5秒で見るポイント", body: "場合の数の勝ち筋は、数える前に「何を1通りとするか」を固定することです。共通テストでは文章が長いため、実験・操作・条件・求める量を分けて読むだけで事故がかなり減ります。\n\n5秒で見るポイントは、順序があるか、役割があるか、同じものを含むか、少なくとも・または・条件のもとでがあるか、の4つです。ここで分母の単位を決めてから、樹形図・表・式のどれで処理するかを選びます。\n\n絶対に避けるミスは、とりあえず全部書き出すことです。場合数が小さい確認なら樹形図でよいですが、本番では「何を固定し、何を分け、何を余事象に回すか」を先に決めます。", emphasis: "最初に分母の単位を固定する。数える対象が曖昧なまま計算しない。" },
+{ kind: "comparisonTable", title: "求めたい量別の判断表", body: "問題文の聞き方から、最初に疑う道具を決めます。", columns: ["求めたい量", "最初に見ること", "主な道具"], rows: [
+{ cells: ["何通り", "順序・役割・重複の有無", "和の法則、積の法則、順列、組合せ"], highlight: true },
+{ cells: ["確率", "分母が同様に確からしいか", "分子/分母、余事象、包除"], highlight: true },
+{ cells: ["条件付き確率", "条件後の世界は何か", "$P(A\\mid B)$、表、ベン図"], highlight: true },
+{ cells: ["少なくとも", "反対側が簡単か", "余事象"] },
+{ cells: ["ちょうどk回", "成功回数・失敗回数・並び方", "反復試行、組合せ"] },
+{ cells: ["順序あり", "並び・役割・何回目が意味を持つか", "順列、重複順列、樹形図"] },
+{ cells: ["順序なし", "選ぶだけか", "組合せ、表"] },
+] },
+{ kind: "comparisonTable", title: "樹形図・表・ベン図・式処理の使い分け", body: "道具は丁寧さのために使います。すべてを樹形図にする必要はありません。", columns: ["道具", "使う場面", "避けたい使い方"], rows: [
+{ cells: ["樹形図", "段階が少なく、分岐を見たい", "枝が多すぎる問題で全列挙する"], highlight: true },
+{ cells: ["表", "2つの量の組、得点分布、条件付き確率", "行と列の意味を決めずに埋める"], highlight: true },
+{ cells: ["ベン図", "AまたはB、Aでない条件のもとでB", "排反でない事象を足すだけにする"], highlight: true },
+{ cells: ["式処理", "順列・組合せ・反復試行が明確", "分母の単位を決めずに公式代入する"] },
+] },
+],
+aftercareBlocks: [
+{ kind: "workedExample", title: "代表例題：表で分母を固定する", body: "**問題**：1から4までの数字から異なる2個を選んで左から順に並べる。2桁の数が偶数になる場合は何通りか。\n\n**標準解答**：左から順に並べるので分母の単位は順序ありの並び。偶数になるには一の位が2または4。先に一の位を固定すると2通り、十の位は残り3通り。よって $2×3=6$ 通り。\n\n**別解**：全体 $4P2=12$ 通りを書き、末尾が1または3の奇数を引く。奇数末尾は2通り、十の位は3通りなので $12-6=6$。\n\n**捨てる方針**：2個を選ぶだけとして $4C2$ から始めるのは不可です。今回は左から順に並べるため、順序が意味を持ちます。\n\n**検算**：一の位2のとき十の位は1,3,4の3通り。一の位4のとき十の位は1,2,3の3通り。合計6通り。" },
+{ kind: "commonMistake", title: "誤答分析：分母の単位を途中で変える", body: "確率でも場合の数でも、最初に決めた単位を途中で変えると破綻します。順序ありで分母を作ったなら、分子も順序ありで数えます。組合せで分母を作ったなら、分子も組合せで数えます。\n\nとりあえず樹形図、とりあえず公式代入、という入り方は、単位が曖昧なまま進みやすいです。まず「1通りとは何か」を日本語で言えるか確認します。", emphasis: "分母と分子は同じ単位で数える。" },
+{ kind: "checkpoint", title: "共通テスト大問との接続", body: "第4問では、文章中の操作が複数段階になります。まず実験、操作、条件、求める確率を分離し、分母の単位を固定してから場合分けします。問題解体型講座では、この読み方をPDF問題で確認できます。" },
+],
+links: COUNTING_PROBABILITY_COMMON_LINKS,
+tags: ["勝ち筋あり", "5秒ポイントあり", "分母固定あり", "樹形図表比較あり", "問題解体型講座接続あり"],
+},
+"permutation-combination-basic": {
+leadBlocks: [
+{ kind: "strategy", title: "この講座の勝ち筋・5秒で見るポイント", body: "順列・組合せの勝ち筋は、公式を選ぶ前に「順序や役割が意味を持つか」を読むことです。1位2位、委員長と副委員長、左から並べる、何回目に出る、は順序ありです。代表を選ぶ、手札を作る、集合として選ぶ、は順序なしです。\n\n5秒で見るポイントは、並べるか、選ぶだけか、同じものがあるか、何回でも使えるかです。これで順列・組合せ・重複順列・重複組合せの入口が決まります。\n\n絶対に避けるミスは、「選ぶ」という日本語だけで組合せに飛ぶことです。選んだ後に役割を与えるなら順列です。", emphasis: "順序・役割・再使用の有無で公式を選ぶ。" },
+{ kind: "comparisonTable", title: "順列・組合せ・重複順列・重複組合せの判断表", body: "公式名ではなく、問題文の動詞から判断します。", columns: ["型", "問題文のサイン", "典型処理"], rows: [
+{ cells: ["順列", "並べる、順位、役職、順序を区別", "$nPr$"], highlight: true },
+{ cells: ["組合せ", "選ぶだけ、代表、手札", "$nCr$"], highlight: true },
+{ cells: ["重複順列", "同じものを何度でも使って並べる", "$n^r$"], highlight: true },
+{ cells: ["重複組合せ", "同じ種類を何個でも選ぶ", "仕切り・整数解"] },
+{ cells: ["同じものを含む順列", "同じ文字・同じ色がある", "重複分で割る"] },
+] },
+],
+aftercareBlocks: [
+{ kind: "workedExample", title: "代表例題：順序ありと順序なしを同じ設定で比べる", body: "**問題**：6人から3人を選ぶ。代表3人を選ぶだけなら何通りか。また、委員長・副委員長・書記を決めるなら何通りか。\n\n**標準解答**：代表3人を選ぶだけなら順序なしなので $6C3=20$ 通り。役職を決めるなら順序・役割があるので $6P3=6×5×4=120$ 通り。\n\n**別解**：まず代表3人を選び、その3人に役職を割り当てると $6C3×3!=20×6=120$ 通り。順列と一致します。\n\n**捨てる方針**：どちらも「選ぶ」と書いてあるから $6C3$ とするのは危険です。役割があるかを読みます。\n\n**検算**：役職ありは、代表だけの場合の $3!$ 倍になるはずです。$20×6=120$ で一致します。" },
+{ kind: "commonMistake", title: "誤答分析：順序ありの分母に組合せを使う", body: "取り出した順序を区別する、左から並べる、1回目と2回目が意味を持つ、という条件があるなら順列です。組合せで数えると、$(A,B)$ と $(B,A)$ を同じものにしてしまい、分母が小さくなります。\n\n本番では、問題文に「順序を区別する」と明記されることがあります。この一文は必ず線を引くつもりで読みます。", emphasis: "順序を区別するなら、分母も分子も順列で数える。" },
+{ kind: "checkpoint", title: "共通テスト大問との接続", body: "第4問では、数字列・座席・カード・玉の取り出しなどで順序の有無が得点差になります。問題解体型講座の第4問では、順序を区別する設定を分母に反映する練習ができます。" },
+],
+links: COUNTING_PROBABILITY_COMMON_LINKS,
+tags: ["勝ち筋あり", "5秒ポイントあり", "順列組合せ判断表あり", "別解あり", "検算あり"],
+},
+"probability-meaning-basic": {
+leadBlocks: [
+{ kind: "strategy", title: "この講座の勝ち筋・5秒で見るポイント", body: "確率の勝ち筋は、最初に分母を固定することです。分母は「全体の並べ方」なのか、「条件を満たす全体」なのかを必ず区別します。同様に確からしい単位を決めないまま分数を作ると、正しく見える誤答になります。\n\n5秒で見るポイントは、全事象、条件、求める事象、同様に確からしい単位です。分母と分子を同じ単位で数えられるときだけ、場合の数の比で確率を出します。\n\n絶対に避けるミスは、サイコロの和のように同様に確からしくない値を分母にすることです。和2から12までの11通りは同様に確からしくありません。", emphasis: "確率では、分子より先に分母を決める。" },
+{ kind: "comparisonTable", title: "和の法則・積の法則・余事象・包除の使い分け", body: "確率の前に、場合の数の処理を選びます。", columns: ["表現", "使う考え方", "注意点"], rows: [
+{ cells: ["AまたはBで重ならない", "和の法則", "排反か確認"], highlight: true },
+{ cells: ["AをしてからB", "積の法則", "各段階の選択肢が変わるか確認"], highlight: true },
+{ cells: ["少なくとも1つ", "余事象", "1つもないを数える"], highlight: true },
+{ cells: ["AまたはBで重なる", "包除原理", "AかつBを引く"] },
+{ cells: ["Aでない条件のもとでB", "条件付き確率", "分母をAでない世界へ変える"] },
+] },
+],
+aftercareBlocks: [
+{ kind: "workedExample", title: "代表例題：同様に確からしい分母を選ぶ", body: "**問題**：2個のサイコロを投げる。目の和が7である確率を求めよ。\n\n**標準解答**：分母は和の値11通りではなく、2個のサイコロの出目の組 $6×6=36$ 通り。和が7になるのは $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ の6通り。よって $6/36=1/6$。\n\n**別解**：表を作り、行を1個目、列を2個目にする。斜めに並ぶ6マスが和7です。\n\n**捨てる方針**：和が2から12までだから11分の1、とするのは不可です。和は同様に確からしくありません。\n\n**検算**：和7は最も出やすい和の1つなので、$1/11$ より大きい $1/6$ になっても自然です。" },
+{ kind: "commonMistake", title: "誤答分析：分母を値の種類で数える", body: "確率の分母は、値の種類ではなく、同様に確からしい結果の数です。サイコロ2個なら出目の組36通り、コイン5回なら表裏の列32通り、順序を区別する玉の取り出しなら順列です。\n\n分母が決まれば、分子も同じ単位で数えます。値の種類で分子を作り、出目の組で分母を作るような混在は避けます。", emphasis: "同様に確からしい単位で分母を作る。" },
+{ kind: "checkpoint", title: "共通テスト大問との接続", body: "共通テスト第4問では、袋・サイコロ・カードなどで、同様に確からしい単位が途中で変わります。最初に分母を固定し、条件付き確率では分母を更新する、という流れを徹底します。" },
+],
+links: COUNTING_PROBABILITY_COMMON_LINKS,
+tags: ["勝ち筋あり", "5秒ポイントあり", "分母固定あり", "余事象包除あり", "検算あり"],
+},
+"complement-and-repeated-trials": {
+leadBlocks: [
+{ kind: "strategy", title: "この講座の勝ち筋・5秒で見るポイント", body: "余事象と反復試行の勝ち筋は、直接数えるより反対側や成功回数で整理した方が速い場面を見抜くことです。「少なくとも1つ」は余事象、「ちょうどk回」は成功回数・失敗回数・並び方の3点で見ます。\n\n5秒で見るポイントは、少なくとも、1回もない、ちょうど、独立に繰り返す、成功確率が毎回同じ、の語です。反復試行では、成功する回を選ぶ組合せを忘れないことが最重要です。\n\n絶対に避けるミスは、成功確率と失敗確率を掛けただけで、並び方を掛け忘れることです。", emphasis: "少なくともは余事象。ちょうどk回は、成功回数・失敗回数・並び方。" },
+{ kind: "comparisonTable", title: "余事象・反復試行の判断表", body: "直接数えるか、余事象にするか、反復試行にするかを問題文から決めます。", columns: ["表現", "最初に疑う道具", "確認すること"], rows: [
+{ cells: ["少なくとも1つ", "余事象", "1つもない方が簡単か"], highlight: true },
+{ cells: ["一度も起こらない", "直接または余事象の核", "全失敗の確率"], highlight: true },
+{ cells: ["ちょうどk回", "反復試行", "成功回数・失敗回数・並び方"], highlight: true },
+{ cells: ["各回が影響しない", "独立な反復", "確率を掛けてよいか"] },
+{ cells: ["前回が次回に影響する", "状態遷移・条件付き", "反復試行公式を使わない"] },
+] },
+],
+aftercareBlocks: [
+{ kind: "workedExample", title: "代表例題：少なくとも1回とちょうど2回", body: "**問題**：当たり確率が $1/3$ のくじを5回引く。各回は独立である。少なくとも1回当たる確率と、ちょうど2回当たる確率を求めよ。\n\n**標準解答**：少なくとも1回は余事象で考える。1回も当たらない確率は $(2/3)^5=32/243$。よって $1-32/243=211/243$。\n\nちょうど2回は、当たり2回、外れ3回、当たりの位置の選び方を考える。$5C2(1/3)^2(2/3)^3=10×1/9×8/27=80/243$。\n\n**別解**：少なくとも1回を、1回・2回・3回・4回・5回で足してもよいですが、本番では計算量が多すぎます。\n\n**検算**：どちらも0から1の間。ちょうど2回 $80/243$ は、少なくとも1回 $211/243$ より小さいので自然です。" },
+{ kind: "commonMistake", title: "誤答分析：反復試行で組合せを落とす", body: "ちょうど2回当たる確率を $(1/3)^2(2/3)^3$ だけにすると、最初の2回だけが当たり、残り3回が外れという1通りの並びしか数えていません。実際には、5回のうちどの2回が当たりかを選ぶ $5C2$ が必要です。\n\n一方、「少なくとも1回」を直接足す方針は間違いではありませんが、本番では重くなります。1回も当たらない方を引くのが速いです。", emphasis: "反復試行は確率の積だけでなく、並び方を掛ける。" },
+{ kind: "checkpoint", title: "共通テスト大問との接続", body: "第4問の後半では、ゲームを2回行う、得点の合計を考える、という形で反復試行が出ます。独立なら積、得点の組なら表、少なくともなら余事象をまず疑います。" },
+],
+links: COUNTING_PROBABILITY_COMMON_LINKS,
+tags: ["勝ち筋あり", "5秒ポイントあり", "余事象あり", "反復試行あり", "検算あり"],
+},
+"conditional-probability-basic": {
+leadBlocks: [
+{ kind: "strategy", title: "この講座の勝ち筋・5秒で見るポイント", body: "条件付き確率の勝ち筋は、条件がついた瞬間に分母を変えることです。$P(A\\mid B)$ は「Bが起きた世界の中でAを見る」確率であり、$P(B\\mid A)$ とは一般に違います。\n\n5秒で見るポイントは、「分かっている」「条件のもとで」「ただし」「Aが起こったとき」という表現です。これらが出たら、全事象ではなく条件事象を分母にします。\n\n絶対に避けるミスは、分母を最初の全体のままにすることです。条件付き確率では、分母こそが答えの意味を決めます。", emphasis: "$P(A\\mid B)$ は分母が $B$。$P(B\\mid A)$ と取り違えない。" },
+{ kind: "comparisonTable", title: "排反・独立・条件付き確率の違い", body: "似た言葉ですが、意味は全く違います。", columns: ["概念", "意味", "確認式"], rows: [
+{ cells: ["排反", "同時に起こらない", "$A\\cap B$ が空"], highlight: true },
+{ cells: ["独立", "一方が起きても他方の確率が変わらない", "$P(A\\cap B)=P(A)P(B)$"], highlight: true },
+{ cells: ["条件付き確率", "条件後の世界で割合を見る", "$P(A\\mid B)=P(A\\cap B)/P(B)$"], highlight: true },
+{ cells: ["排反かつ両方が起こりうる事象", "独立ではないことが多い", "片方が起きたらもう片方は起きない"] },
+] },
+],
+aftercareBlocks: [
+{ kind: "workedExample", title: "代表例題：P(A|B) と P(B|A) を比べる", body: "**問題**：1から10までの整数から1つ選ぶ。$A$ を「偶数」、$B$ を「3の倍数」とする。$P(A\\mid B)$ と $P(B\\mid A)$ を求めよ。\n\n**標準解答**：$B$ は3,6,9の3個。その中で偶数は6だけなので $P(A\\mid B)=1/3$。$A$ は2,4,6,8,10の5個。その中で3の倍数は6だけなので $P(B\\mid A)=1/5$。\n\n**別解**：表で、偶数/奇数と3の倍数/そうでないものを整理する。共通部分は1個だが、分母が3個と5個で違うため答えも違います。\n\n**捨てる方針**：$A\\cap B$ が同じだから条件付き確率も同じ、と考えるのは誤りです。\n\n**検算**：分母が条件事象になっているかを確認します。$P(A\\mid B)$ の分母は $B$、$P(B\\mid A)$ の分母は $A$ です。" },
+{ kind: "commonMistake", title: "誤答分析：条件の向きを逆にする", body: "$P(A\\mid B)$ と $P(B\\mid A)$ は、分子の共通部分は同じでも分母が違います。共通テストでは「Aが起こったもとでB」なのか「Bが起こったもとでA」なのかを、文章の順番でなく意味で読む必要があります。\n\nまた、独立は「関係なさそう」という感覚では判断できません。条件付き確率が元の確率と同じか、または $P(A\\cap B)=P(A)P(B)$ で確認します。", emphasis: "条件付き確率は分母の読み替え。独立は式で確認。" },
+{ kind: "checkpoint", title: "共通テスト大問との接続", body: "冊子型模試第1回・第2回の第4問では、条件付き確率と独立性判定がセットで出ます。前問で求めた値を分母・分子に再利用し、条件後の世界に絞ってから確率を出します。" },
+],
+links: COUNTING_PROBABILITY_COMMON_LINKS,
+tags: ["勝ち筋あり", "5秒ポイントあり", "条件付き確率あり", "独立排反比較あり", "問題解体型講座接続あり"],
+},
+"casework-and-double-counting": {
+leadBlocks: [
+{ kind: "strategy", title: "この講座の勝ち筋・5秒で見るポイント", body: "場合分けの勝ち筋は、重ならない軸で切ることです。Aだけ、Bだけ、AもBも、どちらでもない、のように排反な箱へ分ければ、足し算で処理できます。\n\n5秒で見るポイントは、または、少なくとも、隣り合う、隣り合わない、同じものを含む、条件が複数ある、の語です。重複が起こるなら包除、反対側が簡単なら余事象、場所の制約なら固定やすき間を疑います。\n\n絶対に避けるミスは、条件Aの場合と条件Bの場合を足して、AかつBを二重に数えることです。", emphasis: "場合分けは排反に切る。重なるなら包除か余事象。" },
+{ kind: "comparisonTable", title: "場合分け・余事象・包除の選択表", body: "直接数える前に、条件の重なり方を確認します。", columns: ["条件の形", "選ぶ方針", "検算"], rows: [
+{ cells: ["AまたはB", "包除原理", "AかつBを引いたか"], highlight: true },
+{ cells: ["少なくとも1つ", "余事象", "1つもないを引いたか"], highlight: true },
+{ cells: ["隣り合う", "かたまり", "かたまり内の並びを掛けたか"], highlight: true },
+{ cells: ["隣り合わない", "すき間または余事象", "隣り合う場合を引けるか"] },
+{ cells: ["複数条件", "排反な軸で場合分け", "漏れと重複を表で確認"] },
+] },
+],
+aftercareBlocks: [
+{ kind: "workedExample", title: "代表例題：AまたはBを包除で数える", body: "**問題**：1から30までの整数のうち、2の倍数または3の倍数は何個あるか。\n\n**標準解答**：2の倍数は15個、3の倍数は10個。両方に含まれる6の倍数は5個。したがって $15+10-5=20$ 個。\n\n**別解**：余事象で、2の倍数でも3の倍数でもない数を数えて30から引いてもよい。ただし直接の包除の方が短いです。\n\n**捨てる方針**：15個と10個を足して25個とするのは、6の倍数を二重に数えています。\n\n**検算**：6個ごとに、1から6の中で該当するのは2,3,4,6の4個。30までは5セットなので $4×5=20$ 個。" },
+{ kind: "commonMistake", title: "誤答分析：場合分けが重なっている", body: "場合分けは、各場合が重ならないときだけ足せます。Aの場合、Bの場合と分けたつもりでも、AかつBが存在するなら二重に数えています。\n\n隣り合う・隣り合わないでは、かたまりにした後の内部の並びを忘れるミスも多いです。かたまりを1つのものとして並べた後、かたまりの中の順番を掛けるか確認します。", emphasis: "足す前に、場合が排反かを確認する。" },
+{ kind: "checkpoint", title: "共通テスト大問との接続", body: "第4問では、条件が複数重なる選択肢判定が出ます。正しいものをすべて選ぶ形式では、各選択肢について分母・条件・重複を独立に確認し、雰囲気でまとめて判断しないことが重要です。" },
+],
+links: COUNTING_PROBABILITY_COMMON_LINKS,
+tags: ["勝ち筋あり", "5秒ポイントあり", "包除あり", "余事象あり", "検算あり"],
+},
+"counting-probability-exam-standard": {
+leadBlocks: [
+{ kind: "strategy", title: "この講座の勝ち筋・5秒で見るポイント", body: "融合問題の勝ち筋は、最初に読解を分解することです。実験、操作、条件、求める確率を分け、分母を固定し、必要なら前問の値を分母・分子に再利用します。\n\n5秒で見るポイントは、全体の単位、条件付きか、少なくともか、独立か、反復試行か、表にすべき得点分布か、です。複数の袋・ルール・ゲームが出たら、全確率や表による整理を疑います。\n\n絶対に避けるミスは、文章が長いからといって最初から式を立てることです。まず世界を分け、何を1回として数えているかを決めます。", emphasis: "融合問題は、実験・操作・条件・求める確率を分離してから式へ進む。" },
+{ kind: "comparisonTable", title: "本番での判断順", body: "共通テスト型の長文確率では、次の順に読みます。", columns: ["順番", "確認すること", "目的"], rows: [
+{ cells: ["1", "1回の試行は何か", "標本空間を決める"], highlight: true },
+{ cells: ["2", "順序を区別するか", "順列/組合せを決める"], highlight: true },
+{ cells: ["3", "条件付きか", "分母を条件後の世界に変える"], highlight: true },
+{ cells: ["4", "少なくとも・またはがあるか", "余事象/包除を選ぶ"] },
+{ cells: ["5", "独立か反復か", "積・表・反復試行を選ぶ"] },
+{ cells: ["6", "前問の値を再利用できるか", "計算量を減らす"] },
+] },
+],
+aftercareBlocks: [
+{ kind: "workedExample", title: "代表例題：条件付き確率と表を組み合わせる", body: "**問題**：あるゲームを1回行うと、0点が確率 $1/2$、1点が確率 $1/3$、2点が確率 $1/6$ で出る。独立に2回行う。合計が2点以上である確率と、その条件のもとで1回目が2点である確率を求めよ。\n\n**標準解答**：2回の得点の組を表で考える。合計2点以上は $(0,2),(1,1),(1,2),(2,0),(2,1),(2,2)$。確率は $1/2×1/6+1/3×1/3+1/3×1/6+1/6×1/2+1/6×1/3+1/6×1/6=5/12$。\n\nそのうち1回目が2点なのは $(2,0),(2,1),(2,2)$ で、確率は $1/6×(1/2+1/3+1/6)=1/6$。したがって条件付き確率は $(1/6)/(5/12)=2/5$。\n\n**別解**：合計が2点未満、つまり $(0,0),(0,1),(1,0)$ を余事象として引くと、$1-(1/4+1/6+1/6)=5/12$。\n\n**検算**：得点分布 $1/2+1/3+1/6=1$。条件付き確率の分母は合計2点以上の $5/12$ になっているか確認します。" },
+{ kind: "commonMistake", title: "誤答分析：表を作らずに対称な組を落とす", body: "2回の得点では、$(0,2)$ と $(2,0)$ は別の結果です。頭の中だけで数えると、片方を落としたり、逆に重複して数えたりしやすくなります。\n\nまた、条件付き確率では、最後の分母を1に戻してはいけません。「合計2点以上と分かっている世界」に絞っているので、分母はその確率です。", emphasis: "融合問題ほど表で検算する。条件付きなら分母を更新する。" },
+{ kind: "checkpoint", title: "問題解体型講座への導線", body: "問題解体型講座の第4問では、袋の選択、順序ありの取り出し、条件付き確率、独立性判定、2回のゲームの得点表が連続します。この講座で判断順を確認したら、PDF問題で同じ順番を再現してください。" },
+],
+links: COUNTING_PROBABILITY_COMMON_LINKS,
+tags: ["勝ち筋あり", "5秒ポイントあり", "本番判断順あり", "表で検算あり", "問題解体型講座接続あり"],
+},
+};
+
+function mergeCountingProbabilityLinks(baseLinks: CourseLesson["relatedPracticeLinks"], extraLinks: CourseLesson["relatedPracticeLinks"]): CourseLesson["relatedPracticeLinks"] {
+const linksByHref = new Map<string, CourseLesson["relatedPracticeLinks"][number]>();
+for (const link of [...baseLinks, ...extraLinks]) {
+if (!linksByHref.has(link.href)) linksByHref.set(link.href, link);
+}
+return Array.from(linksByHref.values());
+}
+
+function insertCountingProbabilityBlocks(lessonBlocks: CourseLesson["lessonBlocks"], enhancement: CountingProbabilityEnhancement): CourseLesson["lessonBlocks"] {
+const leadInsertIndex = Math.max(1, lessonBlocks.findIndex((block) => block.kind !== "intro"));
+const withLeadBlocks = [...lessonBlocks.slice(0, leadInsertIndex), ...enhancement.leadBlocks, ...lessonBlocks.slice(leadInsertIndex)];
+const summaryIndex = withLeadBlocks.findIndex((block) => block.kind === "summary");
+if (summaryIndex === -1) return [...withLeadBlocks, ...enhancement.aftercareBlocks];
+return [...withLeadBlocks.slice(0, summaryIndex), ...enhancement.aftercareBlocks, ...withLeadBlocks.slice(summaryIndex)];
+}
+
+function enhanceCountingProbabilityLesson(lesson: CourseLesson): CourseLesson {
+const enhancement = COUNTING_PROBABILITY_ENHANCEMENTS[lesson.lessonId];
+if (!enhancement) return lesson;
+return {
+...lesson,
+lessonBlocks: insertCountingProbabilityBlocks(lesson.lessonBlocks, enhancement),
+relatedPracticeLinks: mergeCountingProbabilityLinks(lesson.relatedPracticeLinks, enhancement.links),
+qualityTags: Array.from(new Set([...lesson.qualityTags, ...enhancement.tags])),
+};
+}
+
+const COUNTING_PROBABILITY_ALL_LESSONS: CourseLesson[] = [
+...COUNTING_PROBABILITY_BEGINNER,
+...COUNTING_PROBABILITY_STANDARD,
+...COUNTING_PROBABILITY_ADVANCED,
+].map(enhanceCountingProbabilityLesson);
+
 export const COUNTING_PROBABILITY_UNIT: CourseUnit = {
 unitId: "counting-probability",
 subjectId: "math-1a",
 unitTitle: "場合の数と確率",
 unitDescription:
 "数え上げ、順列・組合せ、確率の基本から難関大レベルの融合問題まで体系的に学ぶ単元です。",
-lessons: [
-...COUNTING_PROBABILITY_BEGINNER,
-...COUNTING_PROBABILITY_STANDARD,
-...COUNTING_PROBABILITY_ADVANCED,
-],
+lessons: COUNTING_PROBABILITY_ALL_LESSONS,
 };
