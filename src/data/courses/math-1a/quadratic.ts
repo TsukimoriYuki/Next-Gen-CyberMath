@@ -1228,6 +1228,333 @@ qualityTags: ["旧帝大レベル", "解の配置", "判別式", "存在条件",
 },
 ];
 
+type QuadraticEnhancement = {
+  leadBlocks: CourseLesson["lessonBlocks"];
+  aftercareBlocks: CourseLesson["lessonBlocks"];
+  links: CourseLesson["relatedPracticeLinks"];
+  tags: string[];
+};
+
+const QUADRATIC_COMMON_LINKS: CourseLesson["relatedPracticeLinks"] = [
+  { label: "問題解体型講座：第2問前半 二次関数", href: "/common-test/problem-lectures/ct-ia-q2-front-quadratic-1", description: "軸・定義域・端点比較・必要十分条件をPDF問題で確認する" },
+  { label: "問題解体型講座：第2問前半 台形面積と二次関数", href: "/common-test/problem-lectures/ct-ia-q2-front-quadratic-trapezoid", description: "図形量を二次関数へ翻訳する練習" },
+  { label: "共通テスト数学IA対策トップ", href: "/common-test/math-1a", description: "冊子型模試・問題解体型講座・大問別演習へ戻る" },
+  { label: "二次関数 大問別演習", href: "/units/quadratic-functions", description: "平方完成・最大最小・判別式・不等式を短い演習で固める" },
+  { label: "共通テスト型本番模試 第1回 第2問", href: "/common-test/simulator/common-test-math-1a-manual-001", description: "最大最小・合成関数・パラメータを本番形式で復習する" },
+  { label: "共通テスト型本番模試 第2回 第2問", href: "/common-test/simulator/common-test-math-1a-manual-002", description: "二次関数を冊子型PDFで確認する" },
+];
+
+const QUADRATIC_ENHANCEMENTS: Record<string, QuadraticEnhancement> = {
+  "quadratic-what-is": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "二次関数の勝ち筋は、式を見る前にグラフの開き方、軸、頂点、定義域を分けて読むことです。共通テストでは、式変形そのものより「どの条件を見れば方針が決まるか」で差がつきます。\n\n5秒で見るポイントは、$x^2$ の係数、平方完成できる形か、定義域があるか、聞かれているのが最大値・最小値・解の個数・不等式のどれか、の4つです。\n\n絶対に避けるミスは、とりあえず展開して形を複雑にすることです。頂点や軸が欲しいなら平方完成、共有点や実数解の個数が欲しいなら判別式、範囲上の最大最小なら軸と端点を優先します。",
+        emphasis: "二次関数は、開き方・軸・頂点・定義域・問いの種類を先に見る。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "平方完成・判別式・解の公式・グラフ読解の使い分け",
+        body: "道具は目的で選びます。全部を展開する必要はありません。",
+        columns: ["道具", "使う場面", "避けたい使い方"],
+        rows: [
+          { cells: ["平方完成", "頂点・軸・最大最小・値域", "解の個数だけを見たい場面で重計算する"], highlight: true },
+          { cells: ["判別式", "共有点の個数・実数解の個数・接する条件", "定義域つき最大最小にいきなり使う"], highlight: true },
+          { cells: ["解の公式", "具体的な解が必要", "個数だけでよいのに最後まで解く"], highlight: true },
+          { cells: ["グラフ読解", "軸・端点・上下関係・不等式", "根拠なく図の見た目だけで決める"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：問いの種類で道具を選ぶ",
+        body: "**問題**：$f(x)=x^2-4x+1$ について、頂点、軸、最小値、方程式 $f(x)=0$ の実数解の個数を答えよ。\n\n**標準解答**：頂点と最小値は平方完成で見る。$f(x)=(x-2)^2-3$ なので、軸は $x=2$、頂点は $(2,-3)$、最小値は $-3$。実数解の個数は判別式で $D=(-4)^2-4×1×1=12>0$ より2個。\n\n**別解**：実数解の個数も、頂点の $y$ 座標が負で上に開くグラフだから $x$ 軸と2点で交わる、と読めます。\n\n**捨てる方針**：頂点を求める前に解の公式へ進むのは遠回りです。解の個数だけなら判別式かグラフで十分です。\n\n**検算**：上に開き、頂点が $y=-3$ なので、確かに $x$ 軸と2回交わります。",
+      },
+      {
+        kind: "commonMistake",
+        title: "誤答分析：全部を同じ道具で解こうとする",
+        body: "二次関数では、平方完成・判別式・解の公式がそれぞれ別の役割を持ちます。頂点が欲しいのに判別式を使う、接する条件が欲しいのに平方完成だけで押す、最大最小なのに端点を見ない、というミスが多いです。\n\nまず問いを「形」「値」「個数」「範囲」に分類すると、使う道具が自然に決まります。",
+        emphasis: "道具は問いで選ぶ。式変形を先に始めない。",
+      },
+      { kind: "checkpoint", title: "共通テスト大問との接続", body: "第2問では、頂点を出して終わりではなく、定義域・端点・条件付きのパラメータ判断へ進みます。問題解体型講座で、同じ読み順をPDF問題上で確認してください。" },
+    ],
+    links: QUADRATIC_COMMON_LINKS,
+    tags: ["勝ち筋あり", "5秒ポイントあり", "道具比較あり", "問題解体型講座接続あり"],
+  },
+  "quadratic-completing-square": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "平方完成の勝ち筋は、式をきれいにすることではなく、軸と頂点を読むことです。$a(x-p)^2+q$ の形になれば、軸は $x=p$、頂点は $(p,q)$、開き方は $a$ の符号で決まります。\n\n5秒で見るポイントは、$x^2$ の係数が正か負か、$x$ の係数から軸が読めるか、定義域があるか、最大最小を聞かれているかです。\n\n絶対に避けるミスは、平方完成後に定義域を見ないことです。頂点が定義域の外なら、頂点の値はその区間での最大最小になりません。",
+        emphasis: "平方完成は、軸・頂点・開き方を読むための変形。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "求めたい量別の判断表",
+        body: "平方完成した後、何を読むかを分けます。",
+        columns: ["求めたい量", "見る場所", "注意点"],
+        rows: [
+          { cells: ["頂点", "$a(x-p)^2+q$ の $(p,q)$", "符号を逆にしない"], highlight: true },
+          { cells: ["軸", "$x=p$", "頂点の $x$ 座標"], highlight: true },
+          { cells: ["最小値", "上に開くなら頂点または近い端点", "定義域を確認"], highlight: true },
+          { cells: ["最大値", "下に開くなら頂点、上に開く区間なら端点", "端点比較を忘れない"] },
+          { cells: ["値域", "最小値・最大値から区間で表す", "開区間/閉区間に注意"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：平方完成から軸と頂点を読む",
+        body: "**問題**：$f(x)=2x^2-8x+5$ の軸、頂点、最小値を求めよ。\n\n**標準解答**：$f(x)=2(x^2-4x)+5=2\\{(x-2)^2-4\\}+5=2(x-2)^2-3$。軸は $x=2$、頂点は $(2,-3)$。上に開くので最小値は $-3$。\n\n**別解**：軸は $x=-b/(2a)=8/4=2$。$f(2)=-3$ から頂点を出してもよい。\n\n**捨てる方針**：展開形のまま表を作って探すのは時間がかかります。\n\n**検算**：$x=1$ と $x=3$ は軸から同じ距離なので、$f(1)=f(3)=-1$ になることを確認できます。",
+      },
+      { kind: "commonMistake", title: "誤答分析：頂点の符号を逆にする", body: "$2(x-2)^2-3$ の頂点は $(2,-3)$ です。$( -2,-3)$ ではありません。括弧の中が $x-p$ なら軸は $x=p$ です。\n\nまた、平方完成で最小値が出るのは、定義域に頂点が入っている場合です。定義域つき問題では、必ず軸が区間内か外かを見ます。", emphasis: "$x-p$ の形なら軸は $x=p$。" },
+      { kind: "checkpoint", title: "共通テスト大問との接続", body: "冊子型模試第1回・第2回の第2問では、平方完成で軸を読み、定義域との位置関係で最大最小を判断します。ここは後続のパラメータ問題の土台です。" },
+    ],
+    links: QUADRATIC_COMMON_LINKS,
+    tags: ["勝ち筋あり", "5秒ポイントあり", "平方完成判断表あり", "検算あり"],
+  },
+  "quadratic-max-min-basic": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "最大最小の勝ち筋は、上に凸か下に凸か、定義域があるかを最初に分けることです。定義域がない上に凸の二次関数は最小値だけを持ち、下に凸なら最大値だけを持ちます。定義域があるなら、最大値も最小値も区間内で必ず端点や頂点に現れます。\n\n5秒で見るポイントは、開き方、軸、定義域、端点です。上に凸で最小値なら軸、最大値なら端点。下に凸ならその逆です。\n\n絶対に避けるミスは、頂点だけを見て最大値も決めることです。上に凸の区間最大は端点比較です。",
+        emphasis: "最大最小は、開き方・軸・定義域・端点で決まる。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "最大最小における軸・端点・頂点の判断表",
+        body: "定義域つき問題に進む前の基本判断です。",
+        columns: ["状況", "最小値", "最大値"],
+        rows: [
+          { cells: ["上に凸・定義域なし", "頂点", "なし"], highlight: true },
+          { cells: ["下に凸・定義域なし", "なし", "頂点"], highlight: true },
+          { cells: ["上に凸・閉区間", "軸が入れば頂点、外なら近い端点", "端点比較"], highlight: true },
+          { cells: ["下に凸・閉区間", "端点比較", "軸が入れば頂点、外なら近い端点"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：上に凸の区間最大を端点で見る",
+        body: "**問題**：$f(x)=x^2-2x+3$ を $0\\leqq x\\leqq4$ で考える。最大値と最小値を求めよ。\n\n**標準解答**：$f(x)=(x-1)^2+2$。軸は $x=1$ で定義域内なので最小値は $2$。最大値は端点比較で、$f(0)=3$、$f(4)=11$ より最大値は $11$。\n\n**別解**：軸からの距離で見ると、端点0は軸から1、端点4は軸から3離れている。上に凸なので遠い端点4の方が大きい。\n\n**捨てる方針**：上に凸だから頂点で最大、とするのは誤りです。\n\n**検算**：区間内で軸に近いほど小さく、遠いほど大きい。端点4が最も遠いので最大値11は自然です。",
+      },
+      { kind: "commonMistake", title: "誤答分析：最大値と最小値で見る場所を同じにする", body: "上に凸では、頂点は最小の候補です。最大値は定義域の端点に現れます。下に凸なら逆になります。\n\n最大最小の問題では、まず開き方を見て、次に軸と定義域の位置関係を確認します。頂点だけで両方を決めないようにします。", emphasis: "上に凸の最大は端点比較。下に凸の最小も端点比較。" },
+      { kind: "checkpoint", title: "共通テスト大問との接続", body: "第2問では、最小値と最大値を同時に扱う場面が多く、見る場所が変わります。軸を見る問題と端点比較の問題を分けることが本番の時短になります。" },
+    ],
+    links: QUADRATIC_COMMON_LINKS,
+    tags: ["勝ち筋あり", "5秒ポイントあり", "最大最小判断表あり", "端点比較あり"],
+  },
+  "quadratic-max-min-domain": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "定義域つき最大最小の勝ち筋は、まず軸が定義域内か外かを見ることです。上に凸なら、軸が定義域内なら最小値は頂点、外なら軸に近い端点です。最大値は端点比較で決めます。\n\n5秒で見るポイントは、軸、左端、右端、開き方です。軸が動くなら、軸が左端・右端と一致する値が場合分けの境界になります。\n\n絶対に避けるミスは、端点比較を忘れることです。最小値だけ出して最大値も分かった気になると、第2問で崩れます。",
+        emphasis: "最大最小はまず「軸が定義域内か外か」。最大値は端点比較。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "定義域つき最大最小の判断表",
+        body: "上に凸の二次関数を閉区間 $l\\leqq x\\leqq r$ で見る基本表です。",
+        columns: ["軸の位置", "最小値", "最大値"],
+        rows: [
+          { cells: ["軸が左端より左", "左端", "右端"], highlight: true },
+          { cells: ["軸が区間内", "頂点", "端点比較"], highlight: true },
+          { cells: ["軸が右端より右", "右端", "左端"], highlight: true },
+          { cells: ["軸が区間の中央", "頂点", "左右端点が同値"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：軸が動く最大最小",
+        body: "**問題**：$f(x)=(x-a)^2+1$ を $0\\leqq x\\leqq4$ で考える。最小値を $a$ で場合分けして求めよ。\n\n**標準解答**：軸は $x=a$。$a<0$ なら軸は区間の左外なので最小は左端 $x=0$、値は $a^2+1$。$0\\leqq a\\leqq4$ なら軸が区間内なので最小値は $1$。$a>4$ なら軸は右外なので最小は右端 $x=4$、値は $(4-a)^2+1$。\n\n**別解**：区間 $[0,4]$ から点 $a$ までの距離の最小値を考える。$a$ が区間内なら距離0、外なら近い端点までの距離です。\n\n**境界値確認**：$a=0$ では $a^2+1=1$、$a=4$ では $(4-a)^2+1=1$ なので、等号を中央の場合に含めても式がつながります。\n\n**検算**：$a=10$ なら軸は右遠方、区間内では右端4が最も近いので $(4-10)^2+1=37$ が最小です。",
+      },
+      { kind: "commonMistake", title: "誤答分析：境界値の等号を落とす", body: "軸が端点に一致する $a=0,4$ は、区間内に軸がある場合へ含めるのが自然です。ただし、隣の式に入れても同じ値になるため、最後に境界値で両側の式が一致するか検算できます。\n\n場合分けでは、境界値を作ってから、各区間に等号をどう入れるか決めます。感覚で $<$ と $\\leqq$ を置かないようにします。", emphasis: "境界値を先に作り、境界で式がつながるか確認する。" },
+      { kind: "checkpoint", title: "共通テスト大問との接続", body: "冊子型模試の第2問では、定義域 $0\\leqq x\\leqq4$ と動く軸の位置関係が中心になります。最小値は軸、最大値は端点比較、という分担を崩さないことが重要です。" },
+    ],
+    links: QUADRATIC_COMMON_LINKS,
+    tags: ["勝ち筋あり", "5秒ポイントあり", "定義域つき最大最小あり", "境界値確認あり"],
+  },
+  "quadratic-param-function": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "パラメータ問題の勝ち筋は、計算を始める前に境界値を出すことです。軸が端点に一致する値、端点の値が等しくなる値、判別式が0になる値、条件が等号になる値が境界です。\n\n5秒で見るポイントは、何が動くかです。軸が動くのか、定義域が動くのか、グラフの上下が動くのか、条件の範囲が動くのかを分けます。\n\n絶対に避けるミスは、$a$ を具体的な1つの数のように扱うことです。$a$ は位置関係を変える量なので、境界をまたぐと答えの形が変わります。",
+        emphasis: "パラメータ問題は、先に境界値を出してから場合分けする。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "パラメータ問題の境界値判断表",
+        body: "境界値を作る場所を先に洗い出します。",
+        columns: ["変わるもの", "境界値の作り方", "意味"],
+        rows: [
+          { cells: ["軸の位置", "軸 = 左端、軸 = 右端", "最小値の式が変わる"], highlight: true },
+          { cells: ["最大を与える端点", "左端の値 = 右端の値", "最大端点が切り替わる"], highlight: true },
+          { cells: ["共有点の個数", "判別式 = 0", "接する境目"], highlight: true },
+          { cells: ["不等式条件", "条件式が等号成立", "範囲の端"] },
+          { cells: ["定義域そのもの", "動く端点同士・軸との一致", "見る区間が変わる"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：最大値を与える端点が変わる境界",
+        body: "**問題**：$f(x)=x^2-2ax$ を $0\\leqq x\\leqq4$ で考える。最大値を $a$ で場合分けして求めよ。\n\n**標準解答**：上に凸なので最大値は端点比較。$f(0)=0$、$f(4)=16-8a$。$f(0)\\geqq f(4)$ は $0\\geqq16-8a$ より $a\\geqq2$。したがって $a\\geqq2$ なら最大値0、$a<2$ なら最大値 $16-8a$。\n\n**別解**：軸は $x=a$。上に凸では軸から遠い端点が最大を与える。区間の中央は2なので、$a<2$ なら右端4が遠く、$a>2$ なら左端0が遠い。境界 $a=2$ では両端が同じ。\n\n**境界値確認**：$a=2$ では $f(0)=0$、$f(4)=0$ で一致します。\n\n**捨てる方針**：軸だけで最大値を決めるのは不可です。上に凸の最大は端点比較です。",
+      },
+      { kind: "commonMistake", title: "誤答分析：最小値の境界と最大値の境界を混同する", body: "最小値の境界は、軸が定義域に入るかどうかで決まることが多いです。一方、上に凸の最大値は端点比較で決まるので、左右端点の値が等しくなる場所が境界になります。\n\n同じ二次関数でも、最小値と最大値で境界値が違うことがあります。問いの種類を先に確認します。", emphasis: "最小は軸、最大は端点比較。境界の作り方が違う。" },
+      { kind: "checkpoint", title: "共通テスト大問との接続", body: "問題解体型講座の第2問では、会話文のヒントから境界値を予測し、式で確認する流れが出ます。境界値を先に出す癖がそのまま時短になります。" },
+    ],
+    links: QUADRATIC_COMMON_LINKS,
+    tags: ["勝ち筋あり", "5秒ポイントあり", "パラメータ境界表あり", "端点比較あり"],
+  },
+  "quadratic-case-analysis": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "方程式・不等式・共有点の勝ち筋は、二次関数のグラフに翻訳することです。判別式は、共有点の個数、実数解の個数、接する条件で使います。不等式は、グラフが $x$ 軸の上か下かを見る問題です。\n\n5秒で見るポイントは、等号か不等号か、解の個数か具体的な解か、接する条件か、指定区間があるかです。\n\n絶対に避けるミスは、とりあえず判別式に飛びつくことです。最大最小や区間内の符号条件では、軸・端点・値域を見る方が速い場面があります。",
+        emphasis: "判別式は、実数解の個数・共有点の個数・接する条件で使う。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "方程式・不等式・共有点・値域の接続表",
+        body: "同じ二次関数でも、問いによって見る場所が変わります。",
+        columns: ["問い", "見るもの", "主な道具"],
+        rows: [
+          { cells: ["実数解の個数", "$x$ 軸との共有点", "判別式"], highlight: true },
+          { cells: ["接する条件", "共有点が1個", "$D=0$"], highlight: true },
+          { cells: ["不等式の解", "グラフが上/下にある範囲", "因数分解、解の公式、グラフ"], highlight: true },
+          { cells: ["値域", "最大値・最小値", "平方完成、軸、端点"] },
+          { cells: ["パラメータ範囲", "境界で等号成立", "判別式、端点、軸"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：判別式を使う場面と使わない場面",
+        body: "**問題**：方程式 $x^2-2kx+3=0$ が実数解をもつような $k$ の範囲を求めよ。また、不等式 $x^2-2kx+3\\geqq0$ がすべての実数 $x$ で成り立つ条件を求めよ。\n\n**標準解答**：実数解をもつ条件は判別式 $D=(-2k)^2-12\\geqq0$ より $4k^2-12\\geqq0$、つまり $k\\leqq-\\sqrt3$ または $k\\geqq\\sqrt3$。\n\n一方、不等式がすべての実数で成り立つには、上に凸で $x$ 軸より下に出ないことが必要。これは実数解をもたないか接する条件なので $D\\leqq0$。よって $-\\sqrt3\\leqq k\\leqq\\sqrt3$。\n\n**別解**：平方完成して $(x-k)^2+3-k^2$ と見れば、最小値 $3-k^2$ が0以上である条件から $-\sqrt3\\leqq k\\leqq\sqrt3$ が出ます。\n\n**捨てる方針**：不等式の向きを見ずに、どちらも $D\\geqq0$ とするのは誤りです。\n\n**検算**：$k=0$ なら $x^2+3\\geqq0$ は常に真。これは $D<0$ 側なので、不等式の条件は $D\\leqq0$ で自然です。",
+      },
+      { kind: "commonMistake", title: "誤答分析：グラフの上下と不等式の向きを混同する", body: "$f(x)\\geqq0$ はグラフが $x$ 軸以上にある範囲です。上に凸で2つの実数解をもつなら、外側が $\\geqq0$、内側が $\\leqq0$ になります。\n\nまた、接する条件は $D=0$ ですが、常に非負や常に非正の条件では $D\\leqq0$ や開き方も合わせて見る必要があります。", emphasis: "判別式の符号だけでなく、開き方と不等式の向きを見る。" },
+      { kind: "checkpoint", title: "共通テスト大問との接続", body: "共通テストの二次関数では、判別式が単独で出るより、最大最小や値域とつながることがあります。解の個数なら判別式、値域なら平方完成と端点、という役割分担を崩さないでください。" },
+    ],
+    links: QUADRATIC_COMMON_LINKS,
+    tags: ["勝ち筋あり", "5秒ポイントあり", "判別式あり", "不等式接続表あり", "検算あり"],
+  },
+  "quadratic-max-min-no-guidance": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "誘導なし最大最小の勝ち筋は、境界値を自分で作ることです。軸が端点に一致する値、端点の値が等しい値、頂点の値が指定値になる値、定義域の端が入れ替わる値を先に洗い出します。\n\n5秒で見るポイントは、何が動くか、何を最大最小にするか、端点比較が必要か、境界で等号を含むかです。\n\n絶対に避けるミスは、1つの式で全範囲を押し切ることです。動く軸や動く区間では、範囲ごとに見る場所が変わります。",
+        emphasis: "誘導なし問題ほど、先に境界値を作る。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "誘導なし場合分けの境界値表",
+        body: "境界値を先に作れば、場合分けが作業になります。",
+        columns: ["境界", "方程式", "確認すること"],
+        rows: [
+          { cells: ["軸が左端に一致", "軸 = 左端", "最小候補が切り替わる"], highlight: true },
+          { cells: ["軸が右端に一致", "軸 = 右端", "最小候補が切り替わる"], highlight: true },
+          { cells: ["端点値が一致", "左端の値 = 右端の値", "最大候補が切り替わる"], highlight: true },
+          { cells: ["指定値に接する", "最小値 = 指定値 または $D=0$", "存在条件の境目"] },
+          { cells: ["絶対値の中身が0", "中身 = 0", "式の形が変わる"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：境界値を先に並べる",
+        body: "**問題**：$f_a(x)=(x-a)^2$ を $-1\\leqq x\\leqq3$ で考える。最大値を与える端点を $a$ で判定せよ。\n\n**標準解答**：上に凸なので最大値は端点比較。左端値は $f_a(-1)=(-1-a)^2$、右端値は $f_a(3)=(3-a)^2$。等しくなる境界は $(-1-a)^2=(3-a)^2$。これは軸 $x=a$ が区間の中央 $x=1$ にあるときなので $a=1$。$a<1$ なら右端3が遠く、$a>1$ なら左端-1が遠い。$a=1$ では両端で同じ最大値。\n\n**別解**：軸から端点までの距離だけで判断する。最大値は軸から遠い端点で出ます。\n\n**境界値確認**：$a=1$ では $f(-1)=4$、$f(3)=4$。\n\n**捨てる方針**：軸が区間内かどうかだけで最大値を決めるのは不十分です。最大値は端点同士の比較です。",
+      },
+      { kind: "commonMistake", title: "誤答分析：境界を作らずに感覚で場合分けする", body: "誘導なしでは、境界値を作らない場合分けが最も危険です。どこで式が変わるのかを方程式として出し、その境界を含むかどうかを確認します。\n\n境界では、左右の式を代入して同じ値になるかを検算します。同じにならないなら、境界の作り方か等号の入れ方が間違っています。", emphasis: "境界値では必ず左右の式を代入して確認する。" },
+      { kind: "checkpoint", title: "共通テスト大問との接続", body: "第2問のパラメータ問題では、会話文が境界値のヒントをくれることがあります。誘導が薄い問題でも、軸・端点・指定条件から境界を自分で作れば同じ手順で解けます。" },
+    ],
+    links: QUADRATIC_COMMON_LINKS,
+    tags: ["勝ち筋あり", "5秒ポイントあり", "誘導なし場合分けあり", "境界値確認あり"],
+  },
+  "quadratic-exam-standard": {
+    leadBlocks: [
+      {
+        kind: "strategy",
+        title: "この講座の勝ち筋・5秒で見るポイント",
+        body: "融合問題の勝ち筋は、問いを分解して道具を対応させることです。最大最小なら軸と端点、実数解の個数なら判別式、不等式ならグラフの上下、パラメータなら境界値です。\n\n5秒で見るポイントは、定義域、軸、端点、判別式、境界値、前問の再利用です。共通テストでは、前問で出した頂点や値域を次の設問の分母のように使うことがあります。\n\n絶対に避けるミスは、合成関数やパラメータ問題をいきなり展開することです。$f(f(x))$ はまず $t=f(x)$ と置き、内側の値域を外側の定義域として扱います。",
+        emphasis: "融合問題は、問いごとに道具を分ける。合成関数はいきなり展開しない。",
+      },
+      {
+        kind: "comparisonTable",
+        title: "本番での判断順",
+        body: "第2問型では、次の順番で処理します。",
+        columns: ["順番", "確認すること", "目的"],
+        rows: [
+          { cells: ["1", "平方完成して軸と頂点を読む", "グラフの基準を作る"], highlight: true },
+          { cells: ["2", "定義域を見る", "軸が入るか判定する"], highlight: true },
+          { cells: ["3", "最大か最小かを分ける", "頂点か端点かを決める"], highlight: true },
+          { cells: ["4", "パラメータの境界値を出す", "場合分けを作る"] },
+          { cells: ["5", "合成関数なら内側の値域を出す", "外側の定義域にする"] },
+          { cells: ["6", "方程式・不等式なら判別式やグラフ上下へ接続", "解の個数・範囲を決める"] },
+        ],
+      },
+    ],
+    aftercareBlocks: [
+      {
+        kind: "workedExample",
+        title: "代表例題：合成関数を値域で処理する",
+        body: "**問題**：$f(x)=x^2-2x$、$0\\leqq x\\leqq4$ とする。$f(f(x))$ の最小値を求めよ。\n\n**標準解答**：いきなり展開せず、$t=f(x)$ と置く。$f(x)=(x-1)^2-1$ なので、$0\\leqq x\\leqq4$ で最小値は $-1$、端点値は $f(0)=0$、$f(4)=8$。よって $t$ の範囲は $-1\\leqq t\\leqq8$。求めるのは $f(t)=t^2-2t=(t-1)^2-1$ の $-1\\leqq t\\leqq8$ における最小値。軸 $t=1$ が範囲内なので最小値は $-1$。\n\n**別解**：展開して4次式にしても解けますが、範囲管理が難しくなります。本番では値域で処理する方が速く安全です。\n\n**捨てる方針**：$f(f(x))$ を最初から展開する方針は、計算量が増え、内側の値域制約を見落としやすいです。\n\n**検算**：$t=1$ を作れるか確認します。$f(x)=1$ は $x^2-2x=1$、つまり $(x-1)^2=2$ で、$x=1+\\sqrt2$ は $[0,4]$ 内。したがって最小値 $-1$ は実現します。",
+      },
+      { kind: "commonMistake", title: "誤答分析：値域外のtを使う", body: "合成関数では、外側の変数 $t$ は自由に全実数を動くわけではありません。必ず内側 $f(x)$ の値域に制限されます。\n\nまた、最大最小・方程式・不等式が混ざる問題では、同じ式を展開し続けるより、どの設問がどの道具を求めているかを分ける方が安全です。", emphasis: "$f(f(x))$ は、まず内側の値域を出す。" },
+      { kind: "checkpoint", title: "問題解体型講座への導線", body: "問題解体型講座の第2問では、最大最小、必要十分条件、会話文による境界値の誘導、図形量の関数化が出ます。この講座で判断順を確認したら、PDF問題で同じ順番を再現してください。" },
+    ],
+    links: QUADRATIC_COMMON_LINKS,
+    tags: ["勝ち筋あり", "5秒ポイントあり", "合成関数あり", "本番判断順あり", "問題解体型講座接続あり"],
+  },
+};
+
+function mergeQuadraticLinks(baseLinks: CourseLesson["relatedPracticeLinks"], extraLinks: CourseLesson["relatedPracticeLinks"]): CourseLesson["relatedPracticeLinks"] {
+  const linksByHref = new Map<string, CourseLesson["relatedPracticeLinks"][number]>();
+  for (const link of [...baseLinks, ...extraLinks]) {
+    if (!linksByHref.has(link.href)) linksByHref.set(link.href, link);
+  }
+  return Array.from(linksByHref.values());
+}
+
+function insertQuadraticBlocks(lessonBlocks: CourseLesson["lessonBlocks"], enhancement: QuadraticEnhancement): CourseLesson["lessonBlocks"] {
+  const leadInsertIndex = Math.max(1, lessonBlocks.findIndex((block) => block.kind !== "intro"));
+  const withLeadBlocks = [...lessonBlocks.slice(0, leadInsertIndex), ...enhancement.leadBlocks, ...lessonBlocks.slice(leadInsertIndex)];
+  const summaryIndex = withLeadBlocks.findIndex((block) => block.kind === "summary");
+  if (summaryIndex === -1) return [...withLeadBlocks, ...enhancement.aftercareBlocks];
+  return [...withLeadBlocks.slice(0, summaryIndex), ...enhancement.aftercareBlocks, ...withLeadBlocks.slice(summaryIndex)];
+}
+
+function enhanceQuadraticLesson(lesson: CourseLesson): CourseLesson {
+  const enhancement = QUADRATIC_ENHANCEMENTS[lesson.lessonId];
+  if (!enhancement) return lesson;
+  return {
+    ...lesson,
+    lessonBlocks: insertQuadraticBlocks(lesson.lessonBlocks, enhancement),
+    relatedPracticeLinks: mergeQuadraticLinks(lesson.relatedPracticeLinks, enhancement.links),
+    qualityTags: Array.from(new Set([...lesson.qualityTags, ...enhancement.tags])),
+  };
+}
+
+const QUADRATIC_ALL_LESSONS: CourseLesson[] = [
+  ...QUADRATIC_BEGINNER,
+  ...QUADRATIC_STANDARD,
+  ...QUADRATIC_ADVANCED,
+].map(enhanceQuadraticLesson);
+
 
 const QUADRATIC_UNIT: CourseUnit = {
   unitId: "quadratic",
@@ -1235,11 +1562,7 @@ const QUADRATIC_UNIT: CourseUnit = {
   unitTitle: "二次関数",
   unitDescription:
     "放物線の形から旧帝大レベルの融合問題まで。共通テスト・入試で最頻出の単元を3段階で完全攻略する。",
-  lessons: [
-    ...QUADRATIC_BEGINNER,
-    ...QUADRATIC_STANDARD,
-    ...QUADRATIC_ADVANCED,
-  ],
+  lessons: QUADRATIC_ALL_LESSONS,
 };
 
 // ─── 数学IA 科目 ────────────────────────────────────────────────────────────
