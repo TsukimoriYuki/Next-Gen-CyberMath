@@ -10,7 +10,7 @@ export const CT_Q1_BACK_GEOMETRY_MEASUREMENT: CommonTestProblemLecture = {
   subjectLabel: "数学I・数学A",
   concepts: ["図形と計量", "高さ判断", "三平方の定理", "余弦定理", "面積", "外接円半径"],
   difficulty: "共通テスト標準",
-  estimatedTime: "12〜15分",
+  estimatedTime: "20〜25分",
   goals: [
     "三辺が与えられた三角形で、まず高さ・面積・角・外接円半径のどれが必要かを見分ける",
     "垂線の足を置き、三平方の2式を引いて高さを確定する",
@@ -148,7 +148,7 @@ export const CT_Q1_BACK_GEOMETRY_MEASUREMENT: CommonTestProblemLecture = {
         "この問題で一番危ないのは、計算ミスよりも入口の選び間違いである。図から $BD,DC$ を読まない。垂線の足が内側にあると決めつけない。高さを出す前に角度計算へ走らない。$\\sin$ だけで鋭角・鈍角を決めない。外接円半径を出すために不要な角を求め直さない。\n\nミスをしたときは、答えだけを直すのではなく、どの判断を飛ばしたかを戻って確認する。三辺を見たのに高さ・面積へつなげなかったのか。垂線の足の内外を確認しなかったのか。求めたい量ごとの道具選択を固定してしまったのか。下のミス回収表で、自分のつまずきを講義・MATH講座に戻す。",
       mathCourseLink: {
         label: "図形と計量 中核講義：ミス回収",
-        href: `${measurement}#common-mistakes`,
+        href: `${measurement}#mistake-recovery`,
       },
     },
     {
@@ -166,7 +166,7 @@ export const CT_Q1_BACK_GEOMETRY_MEASUREMENT: CommonTestProblemLecture = {
       mistake: "図から $BD,DC$ を読み取ってしまう",
       cause:
         "図は配置を理解するための補助であり、縮尺が正しいとは限らない。長さは $BD=x,\\ DC=y$ と置いて、条件から確定する。",
-      returnTo: { label: "図形と計量 中核講義：高さ判断", href: `${measurement}#height-flow` },
+      returnTo: { label: "図形と計量 中核講義：公式選択フロー", href: `${measurement}#tool-flow` },
     },
     {
       mistake: "垂線の足が内側にあると決めつける",
