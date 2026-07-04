@@ -43,6 +43,28 @@ export const metadata: Metadata = {
 export default function CommonTestPage() {
   const mathSubjects = COMMON_TEST_SUBJECTS.filter((subject) => subject.id !== "english-reading");
   const subSubjects = COMMON_TEST_SUBJECTS.filter((subject) => subject.id === "english-reading");
+  const coreMathLinks = [
+    {
+      title: "二次関数",
+      href: "/units/quadratic-functions",
+      body: "軸・定義域・端点比較・場合分けを確認する",
+    },
+    {
+      title: "図形と計量",
+      href: "/units/measurement-trigonometry",
+      body: "三角比・正弦定理・余弦定理・面積を確認する",
+    },
+    {
+      title: "図形の性質",
+      href: "/units/geometry-properties",
+      body: "円周角・接線・方べき・補助線判断を確認する",
+    },
+    {
+      title: "場合の数と確率",
+      href: "/units/counting-probability",
+      body: "順列組合せ・余事象・条件付き確率を確認する",
+    },
+  ];
 
   return (
     <div className="relative min-h-screen bg-slate-50 text-slate-900">
@@ -144,6 +166,30 @@ export default function CommonTestPage() {
                 ))}
               </div>
             )}
+          </section>
+
+          <section className="order-3">
+            <SectionLabel ja="間違えたら戻るMATH中核講義" icon={<GraduationCap className="h-4 w-4 text-blue-600" />} />
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-sm leading-6 text-slate-600">
+                冊子型模試や問題解体型講座で止まった単元は、MATH側の中核講義に戻って判断順を立て直せます。
+              </p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {coreMathLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="group rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:border-blue-200 hover:bg-blue-50"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="text-sm font-extrabold text-slate-950">{link.title}</h3>
+                      <ArrowRight className="h-4 w-4 shrink-0 text-blue-600 transition group-hover:translate-x-0.5" />
+                    </div>
+                    <p className="mt-1 text-xs leading-5 text-slate-600">{link.body}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </section>
 
           <section className="order-1">

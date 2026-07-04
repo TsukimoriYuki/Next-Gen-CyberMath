@@ -44,7 +44,7 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
             <div className="text-sm font-extrabold text-slate-900">数学対策を優先中</div>
             <p className="mt-1 text-xs leading-5 text-slate-600">
-              英語は先行公開中のサブ科目です。必要な日に開ける補強科目として提供しています。
+              英語は公開範囲を整理しながら拡充中のサブ科目です。必要な日に開ける補強科目として提供しています。
             </p>
           </div>
         ) : (
@@ -121,7 +121,7 @@ export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject 
 
 function getPriorityLabel(subject: CommonTestSubject): string {
   if (subject.id === "math-1a") {
-    return "第1問の図形と計量、命題、データ分析を固めると得点が伸びやすいです。";
+    return "二次関数・図形と計量・図形の性質・場合の数と確率まで、模試後に戻れるMATH中核講義を整備しています。";
   }
   if (subject.id === "math-2bc") {
     return "微分積分は短時間で伸ばしやすいので、計算精度と時間配分を同時に確認します。";

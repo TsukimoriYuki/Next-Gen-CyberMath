@@ -390,7 +390,7 @@ export default function MockExamPage() {
         {/* printable test sheet */}
         <div className="print-sheet">
           <div className="mb-6 hidden print:block">
-            <h1 className="text-center text-xl font-bold">Next-Gen Cyber Math — 確認テスト</h1>
+            <h1 className="text-center text-xl font-bold">Cyber Math Next-Gen — 確認テスト</h1>
             <div className="mt-2 flex justify-between text-sm">
               <span>氏名 ____________________</span>
               <span>制限時間 {minutes} 分 / {problems.length} 問</span>

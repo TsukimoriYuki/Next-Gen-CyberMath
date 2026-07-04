@@ -8,7 +8,7 @@ export interface QaCheckDescription {
   description: string;
 }
 
-export const LAST_FULL_QA_RUN = "2026-07-01";
+export const LAST_FULL_QA_RUN = "2026-07-05";
 
 export const QA_CHECK_DESCRIPTIONS: QaCheckDescription[] = [
   {
@@ -68,6 +68,14 @@ export const QA_CHECK_DESCRIPTIONS: QaCheckDescription[] = [
 ];
 
 export const QUALITY_CHANGELOG: { date: string; items: string[] }[] = [
+  {
+    date: "2026-07-05",
+    items: [
+      "MATH中核講義の主要4単元（図形と計量、図形の性質、場合の数と確率、二次関数）を、問題解体型講座と接続する形で強化しました。",
+      "共通テスト対策室から、模試後に戻るべきMATH中核講義へ進める復習導線を追加しました。",
+      "公開UIのブランド表記と未完成感の強い文言を見直し、正式ブランドをCyber Math Next-Genに統一しました。",
+    ],
+  },
   {
     date: "2026-07-02",
     items: [

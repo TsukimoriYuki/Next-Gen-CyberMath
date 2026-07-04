@@ -223,7 +223,7 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
     },
     targetScoreDefault: 85,
     description:
-      "先行公開中のサブ科目です。数学対策を優先しつつ、余力がある日に読解速度と情報照合を補強します。",
+      "公開範囲を整理しながら拡充中のサブ科目です。数学対策を優先しつつ、余力がある日に読解速度と情報照合を補強します。",
     sections: [
       {
         number: 1,
