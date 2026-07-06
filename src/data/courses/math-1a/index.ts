@@ -9,6 +9,8 @@ import { getCourseUnit } from "./quadratic";
 import { SETS_AND_LOGIC_UNIT } from "./sets-and-logic";
 
 const quadraticUnit = getCourseUnit("math-1a", "quadratic");
+const QUADRATIC_UNIT_DESCRIPTION =
+  "二次関数は、平方完成や判別式を覚えるだけの単元ではありません。最大最小、共有点・解の個数、文字の場合分け、解の配置、整数条件、絶対値・平方根・分数の定義条件を、問題文に応じて選び分ける単元です。基礎講座で軸・頂点・グラフを固め、完全攻略講座で初手・分岐・例外・検算まで判断できる状態を目指します。";
 
 export const MATH_1A_COURSE_SUBJECT: CourseSubject = {
   subjectId: "math-1a",
@@ -25,8 +27,7 @@ export const MATH_1A_COURSE_SUBJECT: CourseSubject = {
             ...quadraticUnit,
             subjectId: "math-1a",
             unitTitle: "二次関数",
-            unitDescription:
-              "放物線の基本、平方完成、最大・最小、定義域つき問題まで段階的に学ぶ単元です。",
+            unitDescription: QUADRATIC_UNIT_DESCRIPTION,
           },
         ]
       : []),

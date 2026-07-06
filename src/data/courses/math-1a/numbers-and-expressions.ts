@@ -821,15 +821,379 @@ qualityTags: ["旧帝大準備", "式変形", "不等式", "置き換え", "確�
 },
 ];
 
+type NumbersExpressionsEnhancement = {
+leadBlocks?: CourseLesson["lessonBlocks"];
+tailBlocks?: CourseLesson["lessonBlocks"];
+links: CourseLesson["relatedPracticeLinks"];
+};
+
+const NUMBERS_EXPRESSIONS_COMMON_LINKS: CourseLesson["relatedPracticeLinks"] = [
+{ label: "問題解体型講座：第1問前半 数と式・命題融合", href: "/common-test/problem-lectures/ct-ia-q1-front-algebra-logic-abs", description: "有理化・対称式・整数部分・絶対値・命題をPDF問題で確認する" },
+{ label: "共通テスト数学IA対策トップ", href: "/common-test/math-1a", description: "冊子型模試・問題解体型講座・大問別演習へ戻る" },
+{ label: "数と式 演習", href: "/units/numbers-and-expressions", description: "公開問題で展開・因数分解・根号・絶対値を確認する" },
+{ label: "共通テスト型本番模試 第1回 第1問", href: "/common-test/simulator/common-test-math-1a-manual-001", description: "有理化・対称式・整数部分を本番形式で復習する" },
+{ label: "共通テスト型本番模試 第2回 第1問", href: "/common-test/simulator/common-test-math-1a-manual-002", description: "数と式から命題・図形へ接続する流れを確認する" },
+];
+
+const NUMBERS_EXPRESSIONS_ENHANCEMENTS: Record<string, NumbersExpressionsEnhancement> = {
+"polynomial-basics": {
+leadBlocks: [
+{
+kind: "strategy",
+title: "この講座の勝ち筋：式を計算対象ではなく構造として読む",
+body: "5秒で見るポイントは、項・次数・係数・定数項です。計算を始める前に、何次式か、どの文字について整理するのか、同類項があるかを確認します。\n\n絶対に避けるミスは、文字が同じというだけで $x^2$ と $x$ をまとめることです。数と式の本番力は、いきなり計算する力ではなく、まず式の部品を正しく分ける力から始まります。",
+},
+{
+kind: "checkpoint",
+title: "本番での判断順",
+body: "共通テスト第1問前半では、長い式でもまず 1. 文字の種類、2. 次数、3. 同類項、4. 使えそうなかたまり、5. 条件式との対応を見ます。ここを飛ばして展開すると、後半の対称式・整数部分・命題判定で方針が見えなくなります。",
+},
+],
+tailBlocks: [
+{
+kind: "commonMistake",
+title: "捨てるべき方針：見えた順に項を動かす",
+body: "項を見えた順に移動すると、符号を落としやすくなります。次数ごとに縦に並べる、または同じ文字部分に印を付ける方が安全です。検算は、簡単な値（例：$x=1$）を代入して、整理前後で値が一致するかを見ると速いです。",
+},
+],
+links: NUMBERS_EXPRESSIONS_COMMON_LINKS,
+},
+"expansion-formulas-basic": {
+leadBlocks: [
+{
+kind: "comparisonTable",
+title: "展開・因数分解・置換・対称式の使い分け",
+body: "式変形は、手を動かす前に目的を決めます。",
+columns: ["道具", "使う場面", "避けたい使い方"],
+rows: [
+{ cells: ["展開", "括弧を外して係数比較・同類項整理をしたい", "かたまりが見えているのに全部ばらす"], highlight: true },
+{ cells: ["因数分解", "方程式を解く、符号を見る、共通因数を外す", "展開形のまま無理に解こうとする"] },
+{ cells: ["置換", "同じかたまりが2回以上出る", "置いた文字の範囲を忘れる"] },
+{ cells: ["対称式", "$a+b$ と $ab$ が与えられている", "先に $a,b$ 個別を解こうとする"] },
+],
+},
+],
+tailBlocks: [
+{
+kind: "workedExample",
+title: "代表例題：展開する前に目的を確認する",
+body: "問題：$(x+2)^2-(x-2)^2$ を簡単にせよ。\n\n標準解答：それぞれ展開すると、$(x^2+4x+4)-(x^2-4x+4)=8x$。\n\n別解：$A^2-B^2=(A+B)(A-B)$ と見て、$A=x+2$、$B=x-2$ と置く。すると $A+B=2x$、$A-B=4$ なので $8x$。\n\n捨てる方針：二乗を暗算で $x^2+4$ のように処理すること。真ん中の項が消えるかどうかを検算するため、$x=1$ を代入して左右が一致するか確認します。",
+},
+{
+kind: "checkpoint",
+title: "本番ならどこまで計算するか",
+body: "選択肢問題では、完全展開より先に形を見ます。和と差の積、二乗の差、共通因数が見えたら、展開量を減らす方が速いです。展開した場合も、最後に $x=0$ や $x=1$ で検算します。",
+},
+],
+links: NUMBERS_EXPRESSIONS_COMMON_LINKS,
+},
+"factorization-basic": {
+leadBlocks: [
+{
+kind: "strategy",
+title: "この講座の勝ち筋：まず共通因数、次に公式型",
+body: "5秒で見るポイントは、全項に共通する数・文字、定数項の符号、平方の形です。因数分解では、とりあえず足して掛ける2数を探す前に、共通因数を外せないかを確認します。\n\n絶対に避けるミスは、先頭係数や共通因数を無視して $(x+p)(x+q)$ 型に押し込むことです。",
+},
+{
+kind: "comparisonTable",
+title: "因数分解の判断表",
+body: "因数分解は上から順に試すと漏れが減ります。",
+columns: ["最初に見るもの", "使う道具", "検算"],
+rows: [
+{ cells: ["全項に共通する因数", "共通因数でくくる", "展開して全項に戻るか"], highlight: true },
+{ cells: ["平方の差", "$a^2-b^2=(a+b)(a-b)$", "真ん中の項が本当にないか"] },
+{ cells: ["完全平方", "$a^2\\pm2ab+b^2$", "真ん中が $2ab$ か"] },
+{ cells: ["二次式", "足して一次係数、掛けて定数項", "符号を掛け算と足し算の両方で確認"] },
+],
+},
+],
+tailBlocks: [
+{
+kind: "checkpoint",
+title: "誤答分析：因数分解後は必ず展開して戻す",
+body: "因数分解の検算は展開です。特に符号が混ざる式では、候補を作ったら必ず展開して、一次係数と定数項が元の式に戻るか確認します。本番では全展開しなくても、真ん中の項と定数項だけ確認すれば多くのミスを回収できます。",
+},
+],
+links: NUMBERS_EXPRESSIONS_COMMON_LINKS,
+},
+"real-numbers-and-radicals": {
+leadBlocks: [
+{
+kind: "comparisonTable",
+title: "根号計算・有理化・二乗の使い分け",
+body: "根号は、何を消したいかで道具を選びます。",
+columns: ["状況", "優先する道具", "注意点"],
+rows: [
+{ cells: ["根号の中に平方数がある", "平方数を外へ出す", "$\\sqrt{a+b}$ を分解しない"], highlight: true },
+{ cells: ["分母に $\\sqrt{a}$ がある", "同じ $\\sqrt{a}$ をかけて有理化", "分子にも必ず同じものをかける"] },
+{ cells: ["分母が $a+\\sqrt{b}$ 型", "共役 $a-\\sqrt{b}$ をかける", "符号を逆にする場所を間違えない"] },
+{ cells: ["両辺に根号がある方程式", "必要なら二乗", "二乗後は必ず元の式に代入して検算"] },
+],
+},
+{
+kind: "strategy",
+title: "有理化の勝ち筋：分母を消したあと符号と分母を検算する",
+body: "共通テスト第1問では、有理化した後の式を対称式や整数部分へつなげることがあります。分母が消えたか、共役の符号が合っているか、分母が正しく $a^2-b$ になっているかを確認します。\n\nとりあえず両辺二乗は捨てるべき方針です。二乗は同値性を壊すことがあるので、根号の符号条件と代入検算をセットにします。",
+},
+],
+tailBlocks: [
+{
+kind: "workedExample",
+title: "代表例題：共役で有理化する",
+body: "問題：$\\frac{1}{2-\\sqrt{3}}$ を有理化せよ。\n\n標準解答：分母の共役 $2+\\sqrt{3}$ を分子分母にかける。$\\frac{1}{2-\\sqrt{3}}=\\frac{2+\\sqrt{3}}{(2-\\sqrt{3})(2+\\sqrt{3})}=2+\\sqrt{3}$。\n\n別解：$a=\\frac{1}{2-\\sqrt{3}}$ と置き、分母を払って $a(2-\\sqrt{3})=1$ と見るより、共役を使う方が短い。\n\n検算：$(2+\\sqrt{3})(2-\\sqrt{3})=1$ なので、逆数として正しい。",
+},
+{
+kind: "commonMistake",
+title: "よくある誤答：共役の符号を片方だけ変える",
+body: "$2-\\sqrt{3}$ の共役は $2+\\sqrt{3}$ です。$-2+\\sqrt{3}$ ではありません。共役は根号部分の符号だけを変えます。分母が1になるタイプでは、最後に元の分母と掛けて1に戻るか検算します。",
+},
+],
+links: NUMBERS_EXPRESSIONS_COMMON_LINKS,
+},
+"linear-equations-inequalities": {
+leadBlocks: [
+{
+kind: "strategy",
+title: "この講座の勝ち筋：同値変形を壊さない",
+body: "方程式・不等式では、解集合を変えない操作だけを使います。計算する前に、両辺に何をしているか、負の数で割る場面があるか、分母が0にならないかを確認します。\n\n共通テストでは、式変形そのものよりも「この条件からどの範囲が残るか」が問われます。範囲は数直線に置くとミスが減ります。",
+},
+{
+kind: "comparisonTable",
+title: "求めたい量別の判断表",
+body: "数と式の第1問では、問いの種類で見る場所が変わります。",
+columns: ["求めたいもの", "最初に見る条件", "使う道具"],
+rows: [
+{ cells: ["式の値", "条件式と求めたい式の共通部分", "展開・因数分解・置換"], highlight: true },
+{ cells: ["範囲", "不等式の向きと端点", "同値変形・数直線"] },
+{ cells: ["整数部分", "上下から挟む整数", "評価・平方・有理化"] },
+{ cells: ["小数部分", "値−整数部分", "整数部分の検算"] },
+],
+},
+],
+tailBlocks: [
+{
+kind: "checkpoint",
+title: "検算方法：境界値を代入する",
+body: "不等式の答えを出したら、境界値とその少し内側・外側を代入します。負の数で割ったときの向き、等号を含むかどうか、分母が0になっていないかを確認すると、選択肢番号ミスも減ります。",
+},
+],
+links: NUMBERS_EXPRESSIONS_COMMON_LINKS,
+},
+"absolute-value-basic": {
+leadBlocks: [
+{
+kind: "comparisonTable",
+title: "絶対値を外す・場合分けする・グラフで見る判断表",
+body: "絶対値は中身の符号で処理します。距離として見た方が速い場面もあります。",
+columns: ["状況", "優先方針", "注意点"],
+rows: [
+{ cells: ["$|x-a|=r$", "数直線で距離 $r$ の2点", "$r<0$ なら解なし"], highlight: true },
+{ cells: ["$|x-a|<r$", "$a-r<x<a+r$", "不等号の向きと等号を確認"] },
+{ cells: ["複数の絶対値", "中身が0になる点で区間分け", "区間ごとの符号表を作る"] },
+{ cells: ["関数や面積と融合", "グラフで折れ点を見る", "折れ点を定義域外に置かない"] },
+],
+},
+{
+kind: "strategy",
+title: "絶対値の勝ち筋：中身が0になる点を先に出す",
+body: "絶対値は、外側の記号ではなく中身の符号で決まります。$|x-2|$ なら最初に $x=2$ を境界にします。複数あれば境界を小さい順に並べ、区間ごとに中身の符号を決めます。\n\n捨てるべき方針は、とりあえず絶対値を外してしまうことです。符号確認なしに外すと、方程式も不等式も別物になります。",
+},
+],
+tailBlocks: [
+{
+kind: "workedExample",
+title: "代表例題：絶対値不等式を区間で処理する",
+body: "問題：$|x-1|+|x-4|\\leq5$ を解け。\n\n標準解答：境界は $x=1,4$。$x<1$、$1\\leq x<4$、$4\\leq x$ に分ける。真ん中では $(x-1)+(4-x)=3$ なので常に成り立つ。左では $-(x-1)+(4-x)=5-2x\\leq5$ より $x\\geq0$、合わせて $0\\leq x<1$。右では $(x-1)+(x-4)=2x-5\\leq5$ より $x\\leq5$、合わせて $4\\leq x\\leq5$。答えは $0\\leq x\\leq5$。\n\n別解：数直線上で1と4からの距離の和を見る。区間 $[1,4]$ では距離の和は3で最小、外側へ出ると1ずつ増えるので、端は0と5。",
+},
+{
+kind: "checkpoint",
+title: "本番ならどこまで手計算するか",
+body: "選択肢がある場合は、境界点 $1,4$ と端の候補だけ代入して、範囲の形を先に予想します。ただし等号を含むかは必ず元の式に代入して確認します。",
+},
+],
+links: NUMBERS_EXPRESSIONS_COMMON_LINKS,
+},
+"expression-transformation-strategy": {
+leadBlocks: [
+{
+kind: "strategy",
+title: "この講座の勝ち筋：条件式と求めたい式を見比べる",
+body: "5秒で見るポイントは、同じかたまり、対称性、次数、平方の形です。計算する前に、展開・因数分解・置換・対称式のどれが目的に近いかを決めます。\n\n対称式では、まず $a+b$ と $ab$ を見ます。$a^2+b^2$、$a^3+b^3$、$\\frac{1}{a}+\\frac{1}{b}$ は、和と積で表せることが多いです。",
+},
+{
+kind: "comparisonTable",
+title: "対称式・置換の判断表",
+body: "個別に値を求めるより、和と積で進む方が短い場面があります。",
+columns: ["見える条件", "方針", "検算"],
+rows: [
+{ cells: ["$a+b$ と $ab$", "対称式に変形", "式が $a,b$ を入れ替えても同じか"], highlight: true },
+{ cells: ["同じかたまりが反復", "$X=$ かたまり と置く", "戻した後の解を確認"] },
+{ cells: ["平方の形", "平方完成", "最小値・非負性につながるか"] },
+{ cells: ["根号と共役", "有理化・和積の利用", "符号と分母を確認"] },
+],
+},
+],
+tailBlocks: [
+{
+kind: "commonMistake",
+title: "捨てるべき方針：とりあえず代入して個別に解く",
+body: "$a+b$ と $ab$ だけで足りる問題で、先に $a,b$ を個別に求めると遠回りです。対称式かどうかを確認し、必要な情報が和と積で足りるなら、そのまま式変形します。",
+},
+{
+kind: "checkpoint",
+title: "共通テスト第1問前半との接続",
+body: "第1問前半では、有理化で作った2つの数の和と積から、累乗和や整数部分へ誘導されることがあります。式変形の目的を「きれいにする」ではなく「次の空欄に必要な形へ近づける」と決めるのが本番の時短ポイントです。",
+},
+],
+links: NUMBERS_EXPRESSIONS_COMMON_LINKS,
+},
+"inequality-strategy-basic": {
+leadBlocks: [
+{
+kind: "comparisonTable",
+title: "命題・集合・必要十分条件の対応表",
+body: "不等式で出した範囲は、命題判定では集合として読み替えます。",
+columns: ["表現", "集合で見ると", "判断"],
+rows: [
+{ cells: ["$P\\Rightarrow Q$", "$P$ の集合が $Q$ の集合に含まれる", "$P$ は $Q$ の十分条件"], highlight: true },
+{ cells: ["$Q\\Rightarrow P$", "$Q$ の集合が $P$ の集合に含まれる", "$P$ は $Q$ の必要条件"] },
+{ cells: ["反例", "$P$ に入るが $Q$ に入らない要素", "矢印を壊す1点を探す"] },
+{ cells: ["条件の否定", "補集合を取る", "かつ・またはの入れ替えに注意"] },
+],
+},
+{
+kind: "strategy",
+title: "必要条件・十分条件の判断順",
+body: "まず命題を $P\\Rightarrow Q$ の形に直します。次に、$P$ を満たす集合と $Q$ を満たす集合を数直線やベン図で比べます。文字だけで考えるより、包含関係で見る方が向きを間違えにくくなります。",
+},
+],
+tailBlocks: [
+{
+kind: "workedExample",
+title: "代表例題：不等式の範囲から必要十分条件を判定する",
+body: "問題：条件 $p: x>3$、条件 $q: x>1$ について、$p$ は $q$ であるための何条件か。\n\n標準解答：$x>3$ なら必ず $x>1$ なので $p\\Rightarrow q$ は真。一方、$x=2$ は $q$ を満たすが $p$ を満たさないので $q\\Rightarrow p$ は偽。したがって $p$ は $q$ であるための十分条件だが必要条件ではない。\n\n別解：集合で見ると、$p$ の集合は $q$ の集合に含まれる。小さい集合は大きい集合の十分条件になります。",
+},
+{
+kind: "commonMistake",
+title: "よくある誤答：強い条件を必要条件と呼ぶ",
+body: "$x>3$ は $x>1$ より強い条件です。強い条件は、そこから弱い条件を導けるので十分条件です。名前の印象で判断せず、必ず矢印を書いて確認します。",
+},
+],
+links: [
+...NUMBERS_EXPRESSIONS_COMMON_LINKS,
+{ label: "集合と命題 講座", href: "/courses/math-1a/sets-and-logic", description: "必要条件・十分条件を単元として復習する" },
+],
+},
+"numbers-expressions-exam-standard": {
+leadBlocks: [
+{
+kind: "strategy",
+title: "共通テスト第1問前半の判断順",
+body: "本番では、1. 根号・有理化、2. 対称式、3. 整数部分・小数部分、4. 絶対値、5. 集合・命題の順に、前問の結果を使い回せないかを見ます。式変形そのものより「次に何を見れば選択肢が消えるか」を重視します。",
+},
+{
+kind: "comparisonTable",
+title: "求めたい量別の判断表",
+body: "第1問前半でよく問われる量を、最初に見る条件と対応させます。",
+columns: ["求めたい量", "最初に見るもの", "時短ポイント"],
+rows: [
+{ cells: ["式の値", "条件式と同じかたまり", "展開前に置換できるか見る"], highlight: true },
+{ cells: ["整数部分", "上下から挟める平方数・整数", "近い整数を先に予想する"] },
+{ cells: ["小数部分", "値−整数部分", "必ず $0\\leq$ 小数部分 $<1$ を確認"] },
+{ cells: ["条件の否定", "かつ・または、等号の有無", "ド・モルガンを先に書く"] },
+{ cells: ["必要条件", "逆向きの矢印", "大きい集合か確認"] },
+{ cells: ["十分条件", "その条件から相手が言えるか", "反例がないか確認"] },
+{ cells: ["反例", "片方だけ満たす値", "境界値を優先して試す"] },
+{ cells: ["範囲", "不等式の端点と符号", "数直線に落とす"] },
+],
+},
+],
+tailBlocks: [
+{
+kind: "workedExample",
+title: "代表例題：有理化から整数部分へつなぐ",
+body: "問題：$a=\\frac{1}{2-\\sqrt{3}}$ とする。$a$ の整数部分と小数部分を求めよ。\n\n標準解答：有理化して $a=2+\\sqrt{3}$。$1<\\sqrt{3}<2$ より $3<a<4$。したがって整数部分は $3$、小数部分は $a-3=\\sqrt{3}-1$。\n\n別解：$\\sqrt{3}\\approx1.7$ と見積もって $a\\approx3.7$ と予想し、最後に $1<\\sqrt{3}<2$ で厳密化する。\n\n捨てる方針：小数近似だけで答えを決めること。マーク式では近似で候補を絞っても、整数で挟む不等式で確定します。",
+},
+{
+kind: "commonMistake",
+title: "ミス回収：小数部分が1以上になっていないか",
+body: "小数部分は必ず $0$ 以上 $1$ 未満です。答えが $\\sqrt{3}$ や $2-\\sqrt{3}$ のように出たら、範囲を確認します。今回の $\\sqrt{3}-1$ は $0<\\sqrt{3}-1<1$ なので妥当です。",
+},
+{
+kind: "checkpoint",
+title: "問題解体型講座への戻り方",
+body: "第1問前半で、有理化、対称式、整数部分、絶対値、必要十分条件のどこで止まったかを分けます。まとめて確認するときは、問題解体型講座「第1問前半 数と式・絶対値・命題融合」に戻ると、PDF問題を見ながら判断順を復習できます。",
+},
+],
+links: [
+...NUMBERS_EXPRESSIONS_COMMON_LINKS,
+{ label: "集合と命題 講座", href: "/courses/math-1a/sets-and-logic", description: "命題・条件・反例を追加で確認する" },
+],
+},
+};
+
+function mergeNumbersExpressionLinks(
+baseLinks: CourseLesson["relatedPracticeLinks"],
+extraLinks: CourseLesson["relatedPracticeLinks"],
+): CourseLesson["relatedPracticeLinks"] {
+const linksByHref = new Map<string, CourseLesson["relatedPracticeLinks"][number]>();
+for (const link of [...baseLinks, ...extraLinks]) {
+linksByHref.set(link.href, link);
+}
+return [...linksByHref.values()];
+}
+
+function insertNumbersExpressionBlocks(
+blocks: CourseLesson["lessonBlocks"],
+leadBlocks: CourseLesson["lessonBlocks"] = [],
+tailBlocks: CourseLesson["lessonBlocks"] = [],
+): CourseLesson["lessonBlocks"] {
+const introIndex = blocks.findIndex((block) => block.kind === "intro");
+const withLead =
+introIndex >= 0
+? [
+...blocks.slice(0, introIndex + 1),
+...leadBlocks,
+...blocks.slice(introIndex + 1),
+]
+: [...leadBlocks, ...blocks];
+const nextSummaryIndex = withLead.findIndex((block) => block.kind === "summary");
+if (nextSummaryIndex >= 0) {
+return [
+...withLead.slice(0, nextSummaryIndex),
+...tailBlocks,
+...withLead.slice(nextSummaryIndex),
+];
+}
+return [...withLead, ...tailBlocks];
+}
+
+function enhanceNumbersExpressionLesson(lesson: CourseLesson): CourseLesson {
+const enhancement = NUMBERS_EXPRESSIONS_ENHANCEMENTS[lesson.lessonId];
+if (!enhancement) return lesson;
+return {
+...lesson,
+estimatedMinutes: lesson.estimatedMinutes + 8,
+lessonBlocks: insertNumbersExpressionBlocks(
+lesson.lessonBlocks,
+enhancement.leadBlocks,
+enhancement.tailBlocks,
+),
+relatedPracticeLinks: mergeNumbersExpressionLinks(lesson.relatedPracticeLinks, enhancement.links),
+};
+}
+
+const NUMBERS_EXPRESSIONS_ALL_LESSONS: CourseLesson[] = [
+...NUMBERS_EXPRESSIONS_BEGINNER,
+...NUMBERS_EXPRESSIONS_STANDARD,
+...NUMBERS_EXPRESSIONS_ADVANCED,
+].map(enhanceNumbersExpressionLesson);
+
 export const NUMBERS_AND_EXPRESSIONS_UNIT: CourseUnit = {
 unitId: "numbers-and-expressions",
 subjectId: "math-1a",
 unitTitle: "数と式",
 unitDescription:
 "整式、展開、因数分解、実数、平方根、不等式、絶対値、式変形の戦略まで体系的に学ぶ単元です。",
-lessons: [
-...NUMBERS_EXPRESSIONS_BEGINNER,
-...NUMBERS_EXPRESSIONS_STANDARD,
-...NUMBERS_EXPRESSIONS_ADVANCED,
-],
+lessons: NUMBERS_EXPRESSIONS_ALL_LESSONS,
 };
