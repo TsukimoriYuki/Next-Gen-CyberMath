@@ -835,6 +835,258 @@ const NUMBERS_EXPRESSIONS_COMMON_LINKS: CourseLesson["relatedPracticeLinks"] = [
 { label: "共通テスト型本番模試 第2回 第1問", href: "/common-test/simulator/common-test-math-1a-manual-002", description: "数と式から命題・図形へ接続する流れを確認する" },
 ];
 
+const NUMBERS_EXPRESSIONS_LEARNING_MAP_LINK: CourseLesson["relatedPracticeLinks"] = [
+{ label: "数と式：問題タイプ別ロードマップ", href: "/courses/math-1a/numbers-and-expressions/numbers-expressions-learning-map", description: "初学者・共通テスト・上位対策・苦手別の戻り方を確認する" },
+];
+
+const NUMBERS_EXPRESSIONS_EQUIVALENCE_EXCLUSION_LINK: CourseLesson["relatedPracticeLinks"] = [
+{ label: "同値変形・除外値完全攻略", href: "/courses/math-1a/numbers-and-expressions/numbers-expressions-equivalence-exclusion", description: "分母0、両辺二乗、根号条件、絶対値の事故をまとめて回収する" },
+];
+
+const NUMBERS_EXPRESSIONS_EQUIVALENCE_BRIDGE_LESSON_IDS = new Set([
+"real-numbers-and-radicals",
+"linear-equations-inequalities",
+"absolute-value-basic",
+"expression-transformation-strategy",
+"numbers-expressions-exam-standard",
+]);
+
+const NUMBERS_EXPRESSIONS_LEARNING_MAP: CourseLesson = {
+lessonId: "numbers-expressions-learning-map",
+lessonTitle: "数と式：問題タイプ別ロードマップ",
+lessonDescription: "数と式を、公式暗記ではなく問題タイプごとの判断順として整理する導入講座。",
+level: "beginner",
+estimatedMinutes: 35,
+prerequisites: ["正負の数", "文字式の基本"],
+goals: [
+"数と式で学ぶ道具の全体像を説明できる",
+"初学者・共通テスト・上位対策の学習順を選べる",
+"苦手な問題タイプから戻るべき講座を判断できる",
+"式変形で保存する条件と確認する条件を意識できる",
+],
+lessonBlocks: [
+{
+kind: "intro",
+title: "数と式は計算公式の単元ではない",
+body: "数と式は、公式を覚えて計算量を増やす単元ではありません。\n\n本質は、式変形で何が保存され、どこで条件が増減し、どこで余分な解や除外値が発生するかを管理することです。\n\nこの単元では、展開・因数分解・有理化・絶対値・平方根・不等式・命題を、問題文を見た瞬間にどの道具で処理するか判断できる状態を目指します。",
+emphasis: "式を変える前に、何を保存し、何を確認するかを決める。",
+},
+{
+kind: "comparisonTable",
+title: "4フェーズで見る数と式",
+body: "単元全体を、基礎計算から本番判断まで段階化します。",
+columns: ["フェーズ", "扱う内容", "到達目標"],
+rows: [
+{ cells: ["Phase 1 Core", "式の計算、展開、因数分解、平方根、絶対値", "式の部品を読み、基本処理を安全に実行する"], highlight: true },
+{ cells: ["Phase 2 Main Problem Types", "式の値、置き換え、不等式、集合と命題、必要十分条件", "条件を見て使う道具を選ぶ"] },
+{ cells: ["Phase 3 Advanced Traps", "同値変形、分母0、両辺二乗、根号条件、絶対値の場合分け", "答え候補から余分な解と除外値を落とす"] },
+{ cells: ["Phase 4 Synthesis", "共通テスト接続、入試標準の融合問題、ミス防止チェック", "複数の道具を順番に選び、最後まで検算する"] },
+],
+},
+{
+kind: "comparisonTable",
+title: "目的別の学習ルート",
+body: "同じ単元でも、目的によって優先順位が変わります。",
+columns: ["目的", "進む順番", "戻る基準"],
+rows: [
+{ cells: ["初学者ルート", "式の計算 → 展開・因数分解 → 平方根 → 絶対値", "計算の意味や符号で止まるならCoreに戻る"], highlight: true },
+{ cells: ["共通テスト対策ルート", "式の値 → 不等式 → 集合と命題 → 条件判断 → 共通テスト接続", "選択肢を消せないなら判断表に戻る"] },
+{ cells: ["私大・上位対策ルート", "対称式 → 置き換え → 根号・絶対値融合 → 整数部分・小数部分 → 総合問題", "式の形を選べないなら式変形の戦略に戻る"] },
+{ cells: ["苦手別ルート", "因数分解、根号、絶対値、不等式、命題、除外値を症状別に戻る", "ミスの種類を1つに分けてから復習する"] },
+],
+},
+{
+kind: "stepByStep",
+title: "初学者ルート",
+body: "まずは計算が止まらない状態を作ります。",
+steps: [
+{ step: 1, label: "式の見方", body: "項・係数・次数を読み、何について整理する式かを確認する。" },
+{ step: 2, label: "展開", body: "分配法則と乗法公式で、括弧を安全に外す。" },
+{ step: 3, label: "因数分解", body: "共通因数、平方の差、完全平方、二次式の順に試す。" },
+{ step: 4, label: "平方根", body: "平方数を外す、有理化する、根号の中身の条件を見る。" },
+{ step: 5, label: "絶対値", body: "中身が0になる点を境界にして、符号で場合分けする。" },
+],
+},
+{
+kind: "stepByStep",
+title: "共通テスト対策ルート",
+body: "第1問前半では、計算そのものより、次に使う条件を読む力が問われます。",
+steps: [
+{ step: 1, label: "式の値", body: "条件式と求めたい式の共通部分を見つける。" },
+{ step: 2, label: "不等式", body: "端点・符号・等号の有無を数直線に落とす。" },
+{ step: 3, label: "集合と命題", body: "条件を集合として見て、矢印と包含関係を比べる。" },
+{ step: 4, label: "条件判断", body: "必要条件・十分条件・反例を、境界値で確認する。" },
+{ step: 5, label: "本番接続", body: "中核講義や模試第1問で、有理化・対称式・整数部分・命題をまとめて確認する。" },
+],
+},
+{
+kind: "strategy",
+title: "苦手別の戻り先",
+body: "- 因数分解で止まる人：因数分解の基本、式変形の戦略\n- 平方根でミスる人：実数と平方根、同値変形・除外値完全攻略\n- 絶対値が苦手な人：絶対値と場合分け、同値変形・除外値完全攻略\n- 不等式で符号を間違える人：一次方程式と一次不等式、不等式の考え方と証明\n- 命題が苦手な人：集合と命題講座、必要条件・十分条件の判断表\n- 余分な解を出す人：同値変形・除外値完全攻略",
+},
+{
+kind: "checkpoint",
+title: "本番での5秒確認",
+body: "問題文を読んだら、1. 求めたいもの、2. 与えられた条件、3. 使えそうな形、4. 変形で条件が増減する場所、5. 最後に代入検算できる場所、の順に見ます。\n\n共通テストでは、正攻法で全部計算する前に、どの条件を使えば選択肢が消えるかを考えます。",
+},
+{
+kind: "summary",
+title: "まとめ",
+body: "- 数と式は、式変形と条件管理の単元\n- 初学者はCoreを順番に固める\n- 共通テスト対策では、式の値・不等式・命題を条件判断としてつなぐ\n- 上位対策では、対称式・置き換え・根号・絶対値を融合して扱う\n- 分母0、両辺二乗、根号条件、絶対値の境界は必ず確認する",
+},
+{
+kind: "nextStep",
+title: "次はCoreへ",
+body: "最初に読むなら「式の見方と整式の基本」へ進みます。すでに基礎計算ができる人は「式変形の戦略」から入り、余分な解や除外値が多い人は「同値変形・除外値完全攻略」に戻ってください。",
+},
+],
+checkQuestions: [
+{
+question: "数と式で、計算前にまず確認したいことを1つ答えよ。",
+answer: "求めたいもの、与えられた条件、使えそうな式の形、条件が増減する変形の有無などを確認する。",
+hint: "手を動かす前の判断を答える。",
+},
+{
+question: "両辺二乗を使った後に必ず行う確認は何か。",
+answer: "二乗前の元の式に代入して、余分な解が混ざっていないか確認する。",
+hint: "二乗は解候補を増やすことがある。",
+},
+{
+question: "必要条件・十分条件を判断するとき、式だけで迷ったら何として見るとよいか。",
+answer: "条件を満たす集合として見て、包含関係と矢印を確認する。",
+hint: "集合と命題への接続。",
+},
+],
+relatedPracticeLinks: [
+{ label: "式の見方と整式の基本", href: "/courses/math-1a/numbers-and-expressions/polynomial-basics", description: "初学者ルートの入口" },
+{ label: "式変形の戦略", href: "/courses/math-1a/numbers-and-expressions/expression-transformation-strategy", description: "対称式・置き換え・式の値を整理する" },
+...NUMBERS_EXPRESSIONS_EQUIVALENCE_EXCLUSION_LINK,
+{ label: "集合と命題 講座", href: "/courses/math-1a/sets-and-logic", description: "必要条件・十分条件を単元として復習する" },
+{ label: "数と式 演習", href: "/units/numbers-and-expressions", description: "公開問題で学習ルートを確認する" },
+],
+qualityTags: ["学習ルート", "問題タイプ別", "共通テスト接続", "苦手別ルート", "確認問題3問"],
+};
+
+const NUMBERS_EXPRESSIONS_EQUIVALENCE_EXCLUSION: CourseLesson = {
+lessonId: "numbers-expressions-equivalence-exclusion",
+lessonTitle: "数と式：同値変形・除外値完全攻略",
+lessonDescription: "分母0、両辺二乗、根号条件、絶対値の場合分けで余分な解や除外値を出さないための上級整理。",
+level: "advanced",
+estimatedMinutes: 70,
+prerequisites: ["一次方程式と一次不等式", "実数と平方根", "絶対値と場合分け", "式変形の戦略"],
+goals: [
+"同値変形と非同値変形の違いを説明できる",
+"分母0や根号の中身など、式変形前の条件を置ける",
+"両辺二乗で出る余分な解を元の式で落とせる",
+"絶対値の場合分けで境界値の抜け漏れを防げる",
+"共通テスト・私大標準で最後に検算すべき場所を判断できる",
+],
+lessonBlocks: [
+{
+kind: "intro",
+title: "式変形は解集合を管理する作業",
+body: "方程式や不等式の式変形では、見た目をきれいにするだけでは不十分です。\n\n両辺に同じ数を足すような操作は、解集合をそのまま保存します。一方、分母を払う、両辺を二乗する、根号や絶対値を外す操作では、条件が増えたり、余分な解が混ざったりします。\n\n本番で大切なのは、変形のたびに「これは同値か」「除外値はあるか」「最後に元の式へ戻す必要があるか」を確認することです。",
+emphasis: "式変形の安全性は、解集合が変わっていないかで判断する。",
+},
+{
+kind: "comparisonTable",
+title: "変形ごとの保存・増減チェック",
+body: "同じ式変形でも、条件の扱いが違います。",
+columns: ["操作", "保存されるもの", "事故る条件", "最後の確認"],
+rows: [
+{ cells: ["両辺に同じ式を足す・引く", "解集合は保存される", "移項時の符号ミス", "代入して符号を確認"], highlight: true },
+{ cells: ["0でない数で掛ける・割る", "解集合は保存される", "割るものが0かもしれない", "0の場合を先に分ける"], highlight: true },
+{ cells: ["分母を払う", "分母0を除けば同値", "除外値を答えに戻す", "分母が0にならないか確認"] },
+{ cells: ["両辺二乗", "解候補が増えることがある", "符号が違う解も残る", "必ず元の式に代入する"] },
+{ cells: ["根号を外す", "中身の非負条件が必要", "右辺が負のまま二乗する", "中身と右辺の範囲を確認"] },
+{ cells: ["絶対値を外す", "区間ごとなら同値", "境界値の抜け・重複", "中身が0の点を数直線で確認"] },
+],
+},
+{
+kind: "stepByStep",
+title: "安全な式変形の手順",
+body: "事故が起こる問題では、次の順番で処理します。",
+steps: [
+{ step: 1, label: "定義域を置く", body: "分母が0でない、根号の中身が0以上、絶対値の境界などを先に書く。" },
+{ step: 2, label: "変形の種類を判定する", body: "同値変形か、解候補を増やす変形か、条件を追加する変形かを分ける。" },
+{ step: 3, label: "計算する", body: "展開・因数分解・置き換え・二乗など、目的に合う形へ変形する。" },
+{ step: 4, label: "条件に戻す", body: "置換した文字の範囲、分母0、根号条件、場合分けの範囲へ候補を戻す。" },
+{ step: 5, label: "元の式で検算する", body: "特に両辺二乗、分母払い、絶対値外しの後は、元の式や元の不等式に代入する。" },
+],
+},
+{
+kind: "workedExample",
+title: "例1：両辺二乗で余分な解を落とす",
+body: "問題：$\\sqrt{x+1}=x-1$ を解け。\n\nまず、根号の中身より $x+1\\geq0$、右辺が根号の値なので $x-1\\geq0$。したがって $x\\geq1$ が必要です。\n\n両辺を二乗すると、$x+1=(x-1)^2=x^2-2x+1$。整理して $x^2-3x=0$、つまり $x=0,3$。\n\nただし $x\\geq1$ を満たすのは $x=3$ だけです。さらに元の式に代入すると、左辺 $\\sqrt4=2$、右辺 $3-1=2$ なので成立します。\n\n答えは $x=3$ です。$x=0$ は二乗後の候補ですが、元の条件に合いません。",
+},
+{
+kind: "workedExample",
+title: "例2：分母を払う前に除外値を置く",
+body: "問題：$\\frac{1}{x-2}=\\frac{3}{x^2-4}$ を解け。\n\n分母より、$x\\neq2$、$x\\neq-2$ を先に置きます。$x^2-4=(x-2)(x+2)$ なので、両辺に $(x-2)(x+2)$ を掛けると、$x+2=3$。\n\nよって $x=1$。これは除外値 $2,-2$ ではないので採用できます。\n\n分母を払うときは、先に除外値を書いておけば、最後に答えへ混ぜずに済みます。",
+},
+{
+kind: "commonMistake",
+title: "よくあるミス：変形後の式だけで答えを確定する",
+body: "両辺二乗や分母払いの後に出た値は、まだ答え候補です。元の式で成り立つか、定義域から外れていないかを確認して初めて答えになります。\n\n特に、根号方程式では右辺が負の候補、分数方程式では分母を0にする候補、絶対値方程式では区間外の候補が混ざりやすいです。",
+},
+{
+kind: "comparisonTable",
+title: "事故パターン別の戻り先",
+body: "ミスの種類ごとに戻る講座を分けます。",
+columns: ["症状", "戻る講座", "見るポイント"],
+rows: [
+{ cells: ["因数分解で止まる", "因数分解の基本", "共通因数、平方の差、完全平方の順に試す"], highlight: true },
+{ cells: ["根号で余分な解が出る", "実数と平方根", "中身と右辺の非負条件を書く"] },
+{ cells: ["絶対値の範囲がずれる", "絶対値と場合分け", "中身が0になる点を境界にする"] },
+{ cells: ["不等式で向きを間違える", "一次方程式と一次不等式", "負の数で掛ける・割る場面を見る"] },
+{ cells: ["必要十分条件が逆になる", "集合と命題講座", "集合の包含と矢印を対応させる"] },
+],
+},
+{
+kind: "checkpoint",
+title: "本番のミス防止チェックリスト",
+body: "- 分母があるなら、分母0を先に除外したか\n- 根号があるなら、中身が0以上か\n- 根号方程式で二乗したなら、元の式へ代入したか\n- 絶対値があるなら、中身が0になる点で区間分けしたか\n- 文字で割ったなら、その文字が0の場合を分けたか\n- 置き換えたなら、置いた文字の範囲を最後に戻したか\n- 不等式で負の式を掛ける・割る可能性を確認したか",
+},
+{
+kind: "summary",
+title: "まとめ",
+body: "- 同値変形は解集合を保存する\n- 分母払いでは除外値を先に置く\n- 両辺二乗では余分な解が混ざることがある\n- 根号方程式では中身と右辺の非負条件を見る\n- 絶対値は中身が0になる点で場合分けする\n- 最後は元の式・元の条件・置換前の範囲へ戻す",
+},
+{
+kind: "nextStep",
+title: "融合問題へ進む",
+body: "除外値と余分な解の確認ができると、数と式の融合問題で崩れにくくなります。次は「数と式の融合問題」で、式の値・整数部分・不等式・命題をまとめて処理します。",
+},
+],
+checkQuestions: [
+{
+question: "$\\sqrt{x}=a$ の形で両辺を二乗する前に確認したい条件を答えよ。",
+answer: "$x\\geq0$ と $a\\geq0$ を確認する。二乗後に出た候補は元の式へ代入する。",
+hint: "根号の値は負にならない。",
+},
+{
+question: "$\\frac{x}{x-1}=2$ を解くとき、最初に書くべき除外値は何か。",
+answer: "分母が0にならないように、$x\\neq1$ を先に書く。",
+hint: "分母を見る。",
+},
+{
+question: "$|x-3|=x-3$ が成り立つための条件を答えよ。",
+answer: "$x-3\\geq0$、つまり $x\\geq3$。",
+hint: "絶対値の中身が非負ならそのまま外せる。",
+},
+],
+relatedPracticeLinks: [
+...NUMBERS_EXPRESSIONS_LEARNING_MAP_LINK,
+{ label: "式変形の戦略", href: "/courses/math-1a/numbers-and-expressions/expression-transformation-strategy", description: "対称式・置き換え・式の値の判断に戻る" },
+{ label: "実数と平方根", href: "/courses/math-1a/numbers-and-expressions/real-numbers-and-radicals", description: "根号条件と有理化を復習する" },
+{ label: "絶対値と場合分け", href: "/courses/math-1a/numbers-and-expressions/absolute-value-basic", description: "絶対値の境界と区間処理を復習する" },
+{ label: "数と式の融合問題", href: "/courses/math-1a/numbers-and-expressions/numbers-expressions-exam-standard", description: "共通テスト・入試標準の総合問題へ進む" },
+{ label: "数と式 演習", href: "/units/numbers-and-expressions", description: "公開問題で除外値チェックを確認する" },
+{ label: "共通テスト数学IA対策トップ", href: "/common-test/math-1a", description: "第1問前半の演習へ戻る" },
+],
+qualityTags: ["同値変形", "除外値", "余分な解", "平方根条件", "確認問題3問"],
+};
+
 const NUMBERS_EXPRESSIONS_ENHANCEMENTS: Record<string, NumbersExpressionsEnhancement> = {
 "polynomial-basics": {
 leadBlocks: [
@@ -1170,7 +1422,17 @@ return [...withLead, ...tailBlocks];
 
 function enhanceNumbersExpressionLesson(lesson: CourseLesson): CourseLesson {
 const enhancement = NUMBERS_EXPRESSIONS_ENHANCEMENTS[lesson.lessonId];
-if (!enhancement) return lesson;
+const equivalenceLinks = NUMBERS_EXPRESSIONS_EQUIVALENCE_BRIDGE_LESSON_IDS.has(lesson.lessonId)
+? NUMBERS_EXPRESSIONS_EQUIVALENCE_EXCLUSION_LINK
+: [];
+if (!enhancement) {
+if (equivalenceLinks.length === 0) return lesson;
+return {
+...lesson,
+relatedPracticeLinks: mergeNumbersExpressionLinks(lesson.relatedPracticeLinks, equivalenceLinks),
+qualityTags: Array.from(new Set([...lesson.qualityTags, "除外値チェック"])),
+};
+}
 return {
 ...lesson,
 estimatedMinutes: lesson.estimatedMinutes + 8,
@@ -1179,21 +1441,58 @@ lesson.lessonBlocks,
 enhancement.leadBlocks,
 enhancement.tailBlocks,
 ),
-relatedPracticeLinks: mergeNumbersExpressionLinks(lesson.relatedPracticeLinks, enhancement.links),
+relatedPracticeLinks: mergeNumbersExpressionLinks(lesson.relatedPracticeLinks, [
+...enhancement.links,
+...equivalenceLinks,
+]),
+qualityTags: Array.from(new Set([
+...lesson.qualityTags,
+...(equivalenceLinks.length > 0 ? ["除外値チェック"] : []),
+])),
 };
 }
 
+const NUMBERS_EXPRESSIONS_LESSON_PHASE_ORDER = [
+// Phase 1: Core
+"numbers-expressions-learning-map",
+"polynomial-basics",
+"expansion-formulas-basic",
+"factorization-basic",
+"real-numbers-and-radicals",
+"absolute-value-basic",
+// Phase 2: Main Problem Types
+"expression-transformation-strategy",
+"linear-equations-inequalities",
+"inequality-strategy-basic",
+// Phase 3: Advanced Traps
+"numbers-expressions-equivalence-exclusion",
+// Phase 4: Synthesis
+"numbers-expressions-exam-standard",
+];
+
+const NUMBERS_EXPRESSIONS_LESSON_PHASE_ORDER_INDEX = new Map(
+NUMBERS_EXPRESSIONS_LESSON_PHASE_ORDER.map((lessonId, index) => [lessonId, index]),
+);
+
 const NUMBERS_EXPRESSIONS_ALL_LESSONS: CourseLesson[] = [
+NUMBERS_EXPRESSIONS_LEARNING_MAP,
 ...NUMBERS_EXPRESSIONS_BEGINNER,
 ...NUMBERS_EXPRESSIONS_STANDARD,
 ...NUMBERS_EXPRESSIONS_ADVANCED,
-].map(enhanceNumbersExpressionLesson);
+NUMBERS_EXPRESSIONS_EQUIVALENCE_EXCLUSION,
+]
+.map(enhanceNumbersExpressionLesson)
+.sort((a, b) => {
+const aIndex = NUMBERS_EXPRESSIONS_LESSON_PHASE_ORDER_INDEX.get(a.lessonId) ?? Number.MAX_SAFE_INTEGER;
+const bIndex = NUMBERS_EXPRESSIONS_LESSON_PHASE_ORDER_INDEX.get(b.lessonId) ?? Number.MAX_SAFE_INTEGER;
+return aIndex - bIndex;
+});
 
 export const NUMBERS_AND_EXPRESSIONS_UNIT: CourseUnit = {
 unitId: "numbers-and-expressions",
 subjectId: "math-1a",
 unitTitle: "数と式",
 unitDescription:
-"整式、展開、因数分解、実数、平方根、不等式、絶対値、式変形の戦略まで体系的に学ぶ単元です。",
+"数と式は、計算公式を覚えるだけの単元ではありません。式変形で何が保存され、どこで条件が増減し、どこで余分な解や除外値が発生するかを管理する単元です。展開・因数分解・有理化・絶対値・平方根・不等式・命題を、問題文に応じて選び分ける状態を目指します。",
 lessons: NUMBERS_EXPRESSIONS_ALL_LESSONS,
 };
