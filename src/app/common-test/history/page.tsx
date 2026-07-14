@@ -7,6 +7,7 @@ import { CommonTestExamHistoryPanel } from "@/components/common-test/CommonTestE
 export const metadata: Metadata = {
   title: "共通テスト演習履歴",
   description: "共通テスト対策ドリルの演習履歴と自信度分析",
+  robots: { index: false, follow: true },
 };
 
 export default function CommonTestHistoryPage() {

@@ -6,6 +6,7 @@ import { CommonTestReviewQueue } from "@/components/common-test/CommonTestReview
 export const metadata: Metadata = {
   title: "共通テスト復習キュー",
   description: "共通テスト対策の間隔反復復習キュー。弱点問題を自動スケジューリングして反復演習する。",
+  robots: { index: false, follow: true },
 };
 
 export default function CommonTestReviewPage() {

@@ -68,6 +68,18 @@ test("legacy challenge URL redirects to the descriptive public route", async ({ 
   await expect(page.getByRole("heading", { level: 1, name: "挑戦問題" })).toBeVisible();
 });
 
+for (const privateStateRoute of [
+  "/mypage",
+  "/mock/history",
+  "/common-test/history",
+  "/common-test/review",
+] as const) {
+  test(`${privateStateRoute} is excluded from search indexing`, async ({ page }) => {
+    await page.goto(privateStateRoute);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  });
+}
+
 for (const width of [375, 390]) {
   test(`mobile navigation is operable at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
