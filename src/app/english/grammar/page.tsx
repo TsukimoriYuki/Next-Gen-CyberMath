@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronLeft, PenLine } from "lucide-react";
 import { GrammarDrillGame } from "@/components/english/GrammarDrillGame";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
-export const metadata: Metadata = { title: "文法ドリル | CYBER English" };
+export const metadata: Metadata = createPublicMetadata({
+  title: "文法ドリル | CYBER English",
+  description: "共通テストや大学入試で問われる英文法を反復するドリルです。",
+  path: "/english/grammar",
+});
 
 export default function GrammarPage() {
   return (

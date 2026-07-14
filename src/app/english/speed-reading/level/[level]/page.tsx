@@ -13,6 +13,7 @@ import {
   getSpeedReadingWordCount,
   type EnglishLevel,
 } from "@/lib/english-types";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
 /** レベルごとの説明文（目標WPMの考え方を1行で添える） */
 const LEVEL_DESCRIPTION: Record<EnglishLevel, string> = {
@@ -39,8 +40,13 @@ export async function generateMetadata({
 }) {
   const { level: slug } = await params;
   const level = getEnglishLevelBySlug(slug);
-  if (!level) return {};
-  return { title: `${ENGLISH_LEVEL_META[level].label} 速読長文` };
+  if (!level) return { robots: { index: false, follow: false } };
+  const label = ENGLISH_LEVEL_META[level].label;
+  return createPublicMetadata({
+    title: `${label} 速読長文`,
+    description: `${label}レベルの英文で読解速度と正確さを鍛える速読問題一覧です。`,
+    path: `/english/speed-reading/level/${slug}`,
+  });
 }
 
 export default async function SpeedReadingLevelListPage({

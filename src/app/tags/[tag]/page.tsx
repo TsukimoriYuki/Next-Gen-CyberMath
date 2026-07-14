@@ -3,12 +3,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, BookOpen, ArrowUpRight, Hash } from "lucide-react";
 import {
+  getAllTags,
   getAllTagNames,
   getProblemsByTag,
   getLessonsByTag,
 } from "@/lib/content";
 import { ProblemCard } from "@/components/shell/ProblemCard";
 import { tagColor, tagFromSlug } from "@/data/tags";
+import { createPublicMetadata } from "@/lib/public-metadata";
+import { getTagIndexingDecision } from "@/lib/tag-indexing";
 
 export function generateStaticParams() {
   // 非ASCII タグはデコード済み文字列を返す（Next が経路生成時にエンコード）。
@@ -20,7 +23,17 @@ export async function generateMetadata({
 }: PageProps<"/tags/[tag]">): Promise<Metadata> {
   const { tag: raw } = await params;
   const tag = tagFromSlug(raw);
-  return { title: `#${tag}`, description: `タグ「${tag}」の問題と授業` };
+  const tagSummary = getAllTags().find((entry) => entry.tag === tag);
+  if (!tagSummary) {
+    return { title: `#${tag}`, robots: { index: false, follow: false } };
+  }
+  const decision = getTagIndexingDecision(tag, tagSummary.total);
+  return createPublicMetadata({
+    title: `#${tag}`,
+    description: `タグ「${tag}」の問題と授業`,
+    path: `/tags/${encodeURIComponent(tag)}`,
+    index: decision.index,
+  });
 }
 
 export default async function TagPage({ params }: PageProps<"/tags/[tag]">) {

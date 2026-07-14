@@ -4,6 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
 import { ComprehensionViewer } from "@/components/english/ComprehensionViewer";
 import { ENGLISH_LEVEL_META } from "@/lib/english-types";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
 export function generateStaticParams() {
   return COMPREHENSION_PROBLEMS.map((p) => ({ id: p.id }));
@@ -16,8 +17,13 @@ export async function generateMetadata({
 }) {
   const { id } = await params;
   const problem = COMPREHENSION_PROBLEMS.find((p) => p.id === id);
-  if (!problem) return {};
-  return { title: problem.title };
+  if (!problem) return { robots: { index: false, follow: false } };
+  return createPublicMetadata({
+    title: problem.title,
+    description: `${problem.title}の英文構造と論旨を読み解く精読問題です。`,
+    path: `/english/comprehension/${id}`,
+    openGraphType: "article",
+  });
 }
 
 export default async function ComprehensionProblemPage({

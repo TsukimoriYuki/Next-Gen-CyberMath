@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { getJstCalendarDate } from "@/lib/jst-calendar-date";
 
 // GET /api/mentor/stats
 // 全体分析: weakTags 集計 + 直近の模試スコア
@@ -37,7 +38,7 @@ export async function GET() {
   // 直近 30 件のスコア推移
   const recentScores = attempts.slice(0, 30).map((a) => ({
     score: a.totalCount > 0 ? Math.round((a.score / a.totalCount) * 100) : 0,
-    date: a.createdAt.toISOString().slice(0, 10),
+    date: getJstCalendarDate(a.createdAt),
     userId: a.userId,
   }));
 

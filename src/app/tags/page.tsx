@@ -3,11 +3,13 @@ import Link from "next/link";
 import { Hash } from "lucide-react";
 import { getAllTags } from "@/lib/content";
 import { tagColor, tagSlug } from "@/data/tags";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPublicMetadata({
   title: "概念タグ",
   description: "概念タグで問題と授業を横断する。知識のネットワーク。",
-};
+  path: "/tags",
+});
 
 export default function TagsIndexPage() {
   const tags = getAllTags();

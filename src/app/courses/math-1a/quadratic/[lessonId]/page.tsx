@@ -6,6 +6,7 @@ import {
   getCourseUnit,
 } from "@/data/course-curriculum";
 import { CourseLessonPageView } from "@/components/courses/CourseLessonPageView";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
 export async function generateMetadata({
   params,
@@ -14,9 +15,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lessonId } = await params;
   const lesson = getCourseLesson("math-1a", "quadratic", lessonId);
-  return {
-    title: lesson ? lesson.lessonTitle : "講座",
-  };
+  if (!lesson) {
+    return { title: "講座", robots: { index: false, follow: false } };
+  }
+  return createPublicMetadata({
+    title: lesson.lessonTitle,
+    description: lesson.lessonDescription,
+    path: `/courses/math-1a/quadratic/${lessonId}`,
+    openGraphType: "article",
+  });
 }
 
 export function generateStaticParams() {
@@ -36,4 +43,3 @@ export default async function MathIAQuadraticLessonPage({
   if (!subject || !unit || !lesson) notFound();
   return <CourseLessonPageView subject={subject} unit={unit} lesson={lesson} />;
 }
-

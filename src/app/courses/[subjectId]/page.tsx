@@ -6,6 +6,7 @@ import {
   isPublicCourseSubject,
 } from "@/data/course-curriculum";
 import { CourseSubjectPageView } from "@/components/courses/CourseSubjectPageView";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
 export async function generateMetadata({
   params,
@@ -14,10 +15,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { subjectId } = await params;
   const subject = getCourseSubject(subjectId);
-  return {
-    title: subject ? `${subject.subjectName} 講座` : "講座",
-    robots: subject && !isPublicCourseSubject(subject) ? { index: false, follow: false } : undefined,
-  };
+  if (!subject || !isPublicCourseSubject(subject)) {
+    return { title: subject ? `${subject.subjectName} 講座` : "講座", robots: { index: false, follow: false } };
+  }
+  return createPublicMetadata({
+    title: `${subject.subjectName} 講座`,
+    description: subject.description,
+    path: `/courses/${subjectId}`,
+  });
 }
 
 export function generateStaticParams() {

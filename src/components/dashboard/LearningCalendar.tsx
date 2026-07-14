@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import type { EnglishAttempt } from "@/lib/english-history";
+import { getJstCalendarDate, shiftCalendarDate } from "@/lib/jst-calendar-date";
 
 interface MathAttempt {
   createdAt: string;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 function toDateKey(iso: string): string {
-  return iso.slice(0, 10); // "YYYY-MM-DD"
+  return getJstCalendarDate(iso);
 }
 
 export function LearningCalendar({ mathAttempts, englishAttempts }: Props) {
@@ -23,14 +24,11 @@ export function LearningCalendar({ mathAttempts, englishAttempts }: Props) {
     for (const a of englishAttempts) counts.set(toDateKey(a.completedAt), (counts.get(toDateKey(a.completedAt)) ?? 0) + 1);
 
     // 今日から過去 105 日 (15 週) 分のセルを生成
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = getJstCalendarDate();
     const DAYS = 105;
     const cells: { date: string; count: number }[] = [];
     for (let i = DAYS - 1; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(today.getDate() - i);
-      const key = d.toISOString().slice(0, 10);
+      const key = shiftCalendarDate(today, -i);
       cells.push({ date: key, count: counts.get(key) ?? 0 });
     }
 

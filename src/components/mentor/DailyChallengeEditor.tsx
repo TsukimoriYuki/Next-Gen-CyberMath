@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { CalendarDays, Save, Loader2, CheckCircle2, XCircle, Search } from "lucide-react";
 import type { Problem } from "@/lib/types";
 import { difficultyColor } from "@/lib/utils";
+import { getJstCalendarDate } from "@/lib/jst-calendar-date";
 
 interface SlotEntry {
   slot: number;
@@ -15,7 +16,7 @@ interface DailyChallengeEditorProps {
 }
 
 function today(): string {
-  return new Date().toISOString().slice(0, 10);
+  return getJstCalendarDate();
 }
 
 export function DailyChallengeEditor({ allProblems }: DailyChallengeEditorProps) {

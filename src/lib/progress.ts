@@ -1,6 +1,8 @@
 // Client-side progress: completed problems + daily streak, in localStorage.
 // No auth in the MVP — this lives entirely in the browser.
 
+import { getJstCalendarDate } from "@/lib/jst-calendar-date";
+
 export const PROGRESS_KEY = "cyber-math:progress:v1";
 /** Same-tab change notification (the `storage` event only fires cross-tab). */
 export const PROGRESS_EVENT = "cyber-math:progress-changed";
@@ -20,10 +22,7 @@ export const EMPTY_PROGRESS: ProgressState = {
 };
 
 export function todayKey(date: Date = new Date()): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  return getJstCalendarDate(date);
 }
 
 function diffInDays(a: string, b: string): number {

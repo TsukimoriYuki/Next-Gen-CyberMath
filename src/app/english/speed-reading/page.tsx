@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, Gauge, Lock, Timer } from "lucide-react";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
@@ -9,6 +10,13 @@ import {
   type EnglishLevel,
 } from "@/lib/english-types";
 import React from "react";
+import { createPublicMetadata } from "@/lib/public-metadata";
+
+export const metadata: Metadata = createPublicMetadata({
+  title: "英語速読",
+  description: "レベル別の英文で読解速度と正確さを鍛える速読トレーニングです。",
+  path: "/english/speed-reading",
+});
 
 const LEVELS: { level: EnglishLevel; order: string; tagline: string }[] = [
   {

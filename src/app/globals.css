@@ -154,6 +154,23 @@
   }
 }
 
+/* On the PDF exam route the global header remains in document flow. The exam
+   controls then become the sole sticky header after scrolling, avoiding two
+   overlapping top-0 layers and preserving vertical room on short screens. */
+body:has([data-exam-shell]) > header {
+  position: static;
+}
+
+html:has([data-exam-shell]) {
+  scroll-padding-top: calc(12rem + env(safe-area-inset-top));
+}
+
+@media (min-width: 1024px) {
+  html:has([data-exam-shell]) {
+    scroll-padding-top: calc(7rem + env(safe-area-inset-top));
+  }
+}
+
 @layer components {
   /* Frosted glass surface — translucent white over the grid (Glassmorphism). */
   .glass {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -21,7 +21,12 @@ import {
 } from "@/lib/common-test-mock-scoring";
 import { AnswerInput } from "./CommonTestMockExamRunner";
 import { cn } from "@/lib/utils";
-import { getSessionId } from "@/lib/exam";
+import { getSessionId, nowMs } from "@/lib/exam";
+import {
+  getExamClockSnapshot,
+  startExamClockController,
+  type ExamClockSnapshot,
+} from "@/lib/exam-clock";
 
 type Mode = "taking" | "submitted" | "review";
 
@@ -32,32 +37,43 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
   const [mode, setMode] = useState<Mode>("taking");
   const [answers, setAnswers] = useState<CommonTestMockAnswers>({});
   const [elapsedSec, setElapsedSec] = useState(0);
+  const startedAtRef = useRef<number | null>(null);
+  const answersRef = useRef<CommonTestMockAnswers>({});
+  const hasSubmittedRef = useRef(false);
 
   const score = useMemo(() => scoreCommonTestMockExam(exam, answers), [exam, answers]);
-  const remainingSec = Math.max(0, exam.durationMinutes * 60 - elapsedSec);
+  const durationSec = exam.durationMinutes * 60;
+  const remainingSec = Math.max(0, durationSec - elapsedSec);
   const isOvertime = remainingSec === 0 && mode === "taking";
 
-  useEffect(() => {
-    if (mode !== "taking") return;
-    const timer = window.setInterval(() => setElapsedSec((v) => v + 1), 1000);
-    return () => window.clearInterval(timer);
-  }, [mode]);
-
   function setQuestionAnswer(questionId: string, value: CommonTestMockAnswerValue) {
-    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+    setAnswers((prev) => {
+      const next = { ...prev, [questionId]: value };
+      answersRef.current = next;
+      return next;
+    });
   }
   function setBlankAnswer(questionId: string, blank: ExamBlank, value: string) {
     setAnswers((prev) => {
       const current = prev[questionId];
       const next = current && typeof current === "object" && !Array.isArray(current) ? { ...current } : {};
       next[blank.id] = value;
-      return { ...prev, [questionId]: next };
+      const nextAnswers = { ...prev, [questionId]: next };
+      answersRef.current = nextAnswers;
+      return nextAnswers;
     });
   }
 
-  function submitExam() {
+  const submitExam = useCallback((clockSnapshot?: ExamClockSnapshot) => {
+    if (hasSubmittedRef.current) return;
+    hasSubmittedRef.current = true;
+    const submittedAtMs = nowMs();
+    const startedAtMs = startedAtRef.current ?? submittedAtMs;
+    const finalClock =
+      clockSnapshot ?? getExamClockSnapshot({ startedAtMs, nowMs: submittedAtMs, durationSec });
+    setElapsedSec(finalClock.elapsedSec);
     setMode("submitted");
-    const submittedAnswers = Object.entries(answers)
+    const submittedAnswers = Object.entries(answersRef.current)
       .filter((entry): entry is [string, CommonTestMockAnswerValue] => entry[1] !== undefined)
       .map(([questionId, value]) =>
         typeof value === "object" && !Array.isArray(value)
@@ -76,11 +92,43 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
       body: JSON.stringify({
         examId: exam.id,
         sessionId: getSessionId(),
-        durationSec: elapsedSec,
+        durationSec: finalClock.elapsedSec,
         answers: submittedAnswers,
       }),
     }).catch(() => {});
-  }
+  }, [durationSec, exam.id]);
+
+  useEffect(() => {
+    if (mode !== "taking") return;
+    // Reloading intentionally starts a fresh attempt, matching the existing behavior.
+    const startedAtMs = startedAtRef.current ?? nowMs();
+    startedAtRef.current = startedAtMs;
+
+    return startExamClockController({
+      startedAtMs,
+      durationSec,
+      now: nowMs,
+      schedule: (callback, intervalMs) => window.setInterval(callback, intervalMs),
+      cancel: (timer) => window.clearInterval(timer as number),
+      onTick: (snapshot) => {
+        setElapsedSec((current) =>
+          current === snapshot.elapsedSec ? current : snapshot.elapsedSec,
+        );
+      },
+      onExpire: submitExam,
+      subscribeVisibility: (sync) => {
+        const onVisibilityChange = () => {
+          if (document.visibilityState === "visible") sync();
+        };
+        document.addEventListener("visibilitychange", onVisibilityChange);
+        return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+      },
+      subscribeFocus: (sync) => {
+        window.addEventListener("focus", sync);
+        return () => window.removeEventListener("focus", sync);
+      },
+    });
+  }, [durationSec, mode, submitExam]);
 
   if (!pdfUrl) {
     return (
@@ -97,8 +145,11 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
   }
 
   return (
-    <main className="min-h-screen bg-[#f4f1ea] text-slate-950">
-      <header className="sticky top-0 z-40 border-b border-stone-300 bg-white">
+    <main data-exam-shell className="min-h-screen bg-[#f4f1ea] text-slate-950">
+      <header
+        data-testid="exam-header"
+        className="sticky top-[env(safe-area-inset-top)] z-40 border-b border-stone-300 bg-white"
+      >
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="min-w-0">
             <Link
@@ -137,7 +188,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
             {mode === "taking" ? (
               <button
                 type="button"
-                onClick={submitExam}
+                onClick={() => submitExam()}
                 className="inline-flex items-center gap-2 rounded border border-slate-950 bg-slate-950 px-4 py-3 text-sm font-extrabold text-white hover:bg-slate-800"
               >
                 <Send className="h-4 w-4" />

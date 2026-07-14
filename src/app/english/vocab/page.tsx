@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronLeft, BookOpen } from "lucide-react";
 import { VocabFlashcardGame } from "@/components/english/VocabFlashcardGame";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
-export const metadata: Metadata = { title: "英単語フラッシュカード | CYBER English" };
+export const metadata: Metadata = createPublicMetadata({
+  title: "英単語フラッシュカード | CYBER English",
+  description: "入試頻出英単語を反復して定着させるフラッシュカードです。",
+  path: "/english/vocab",
+});
 
 export default function VocabPage() {
   return (

@@ -14,6 +14,7 @@ import {
   type Problem,
   type UnitMeta,
 } from "@/lib/types";
+import { calendarDateToEpochDay, getJstCalendarDate } from "@/lib/jst-calendar-date";
 
 // 公開系（単元一覧・タグ検索・トップ等）で見せる問題集合。
 // isMockOnly:true の「初見殺し」と tier:"ABYSS"（特異点ガチャ専用プール）を除外する。
@@ -229,9 +230,7 @@ export function getLessonsByTag(tag: string): Lesson[] {
 // rotate. Pure function of the date, so server and client agree.
 
 function dayNumber(date: Date): number {
-  // Days since the Unix epoch in the host's local date.
-  const utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-  return Math.floor(utc / 86_400_000);
+  return calendarDateToEpochDay(getJstCalendarDate(date));
 }
 
 export function getDailyTriple(date: Date = new Date()): Problem[] {

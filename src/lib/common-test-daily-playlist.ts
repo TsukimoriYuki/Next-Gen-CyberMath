@@ -7,6 +7,7 @@ import type { CommonTestSubjectId } from "@/data/common-test";
 import type { CommonTestDrillHistoryItem } from "@/lib/common-test-history";
 import type { CommonTestExamHistoryItem } from "@/lib/common-test-exam-history";
 import type { CommonTestTargetScores } from "@/lib/common-test-targets";
+import { getJstCalendarDate } from "@/lib/jst-calendar-date";
 
 // ── 公開型 ────────────────────────────────────────────────────────────────
 
@@ -484,7 +485,7 @@ export function buildCommonTestDailyPlaylist(
   }
 
   return {
-    date: new Date().toISOString().slice(0, 10),
+    date: getJstCalendarDate(),
     mode: input.mode,
     totalMinutes,
     summary: generateSummary(input),

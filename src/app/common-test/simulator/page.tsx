@@ -5,12 +5,14 @@ import {
   getCommonTestMockExamStats,
   getPublicCommonTestMockExams,
 } from "@/data/common-test-mock-exams";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPublicMetadata({
   title: "共通テスト型本番模試",
   description:
     "共通テスト型の本番模試一覧です。数学I・数学Aは手動作成PDFを正本とした第1回・第2回を公開しています。",
-};
+  path: "/common-test/simulator",
+});
 
 export default function SimulatorIndexPage() {
   const publicMocks = getPublicCommonTestMockExams();

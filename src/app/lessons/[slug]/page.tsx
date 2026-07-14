@@ -19,6 +19,7 @@ import {
 import { LessonRenderer } from "@/components/lessons/LessonRenderer";
 import { DifficultyBadge } from "@/components/shell/DifficultyBadge";
 import { TagList } from "@/components/shell/TagChip";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
 export function generateStaticParams() {
   return getAllLessonSlugs().map((slug) => ({ slug }));
@@ -29,8 +30,15 @@ export async function generateMetadata({
 }: PageProps<"/lessons/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const lesson = getLesson(slug);
-  if (!lesson) return { title: "講座が見つかりません" };
-  return { title: lesson.title, description: lesson.summary ?? `${lesson.unit} の講座` };
+  if (!lesson) {
+    return { title: "講座が見つかりません", robots: { index: false, follow: false } };
+  }
+  return createPublicMetadata({
+    title: lesson.title,
+    description: lesson.summary ?? `${lesson.unit} の講座`,
+    path: `/lessons/${slug}`,
+    openGraphType: "article",
+  });
 }
 
 // ─────────────────────────────────────────────────────────────

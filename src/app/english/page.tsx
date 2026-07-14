@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, Timer, BookOpen, Layers, PenLine, CreditCard, GraduationCap } from "lucide-react";
+import { createPublicMetadata } from "@/lib/public-metadata";
+
+export const metadata: Metadata = createPublicMetadata({
+  title: "CYBER English",
+  description: "速読・精読・複数資料・文法・語彙を横断して学ぶ英語学習ページです。",
+  path: "/english",
+});
 
 export default function EnglishHomePage() {
   return (

@@ -18,12 +18,14 @@ import {
   getSpeedReadingTargetWpm,
   getSpeedReadingTimeLimitSeconds,
 } from "@/lib/english-types";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPublicMetadata({
   title: "英語 過去問道場",
   description:
     "私立文系（日東駒専・産近甲龍・MARCH・関関同立）英語過去問対策。速読・精読・文法の3科目横断で英語力を徹底強化。",
-};
+  path: "/english/dojo",
+});
 
 const ACCENT = "#e879f9";
 

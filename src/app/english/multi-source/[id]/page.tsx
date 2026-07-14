@@ -4,6 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
 import { MultiSourceViewer } from "@/components/english/MultiSourceViewer";
 import { ENGLISH_LEVEL_META } from "@/lib/english-types";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
 export function generateStaticParams() {
   return MULTI_SOURCE_PROBLEMS.map((p) => ({ id: p.id }));
@@ -16,8 +17,13 @@ export async function generateMetadata({
 }) {
   const { id } = await params;
   const problem = MULTI_SOURCE_PROBLEMS.find((p) => p.id === id);
-  if (!problem) return {};
-  return { title: problem.title };
+  if (!problem) return { robots: { index: false, follow: false } };
+  return createPublicMetadata({
+    title: problem.title,
+    description: `${problem.title}で複数資料の情報を統合する英語読解問題です。`,
+    path: `/english/multi-source/${id}`,
+    openGraphType: "article",
+  });
 }
 
 export default async function MultiSourceProblemPage({

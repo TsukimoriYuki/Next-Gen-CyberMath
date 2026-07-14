@@ -6,7 +6,7 @@ export async function SiteHeader() {
   const session = await getSession();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 backdrop-blur-xl">
+    <header data-testid="site-header" className="sticky top-0 z-50 border-b border-border/60 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="group flex items-center gap-2.5">
           <span className="glow-cyan flex h-9 w-9 items-center justify-center rounded-lg bg-neon-cyan/10 text-neon-cyan transition-transform group-hover:scale-105">

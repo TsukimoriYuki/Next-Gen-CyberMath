@@ -159,9 +159,12 @@ async function checkSitemap() {
       issues.push(`sitemap missing ${expected}`);
     }
   }
-  const specialLectureUrls = urls.filter((url) => url.includes("/common-test/lectures"));
-  if (specialLectureUrls.length > 0) {
-    issues.push(`sitemap should not include unpublished special lectures: ${specialLectureUrls.join(", ")}`);
+  const nonIndexableLectureUrls = SPECIAL_LECTURES.filter(
+    (lecture) => lecture.isPublished !== true || lecture.noindex === true,
+  ).map((lecture) => `${getSiteUrl()}/common-test/lectures/${lecture.slug}`);
+  const leakedLectureUrls = nonIndexableLectureUrls.filter((url) => urls.includes(url));
+  if (leakedLectureUrls.length > 0) {
+    issues.push(`sitemap should not include unpublished special lectures: ${leakedLectureUrls.join(", ")}`);
   }
 }
 

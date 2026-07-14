@@ -20,16 +20,12 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    url: "/",
     locale: "ja_JP",
   },
   twitter: {
     card: "summary",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-  },
-  alternates: {
-    canonical: "/",
   },
   robots: {
     index: true,

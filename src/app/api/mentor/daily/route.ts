@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { getJstCalendarDate } from "@/lib/jst-calendar-date";
 
 // GET /api/mentor/daily?date=YYYY-MM-DD
 // 指定日の DailyChallenge を取得
@@ -10,7 +11,7 @@ export async function GET(req: Request) {
   }
 
   const { searchParams } = new URL(req.url);
-  const dateStr = searchParams.get("date") ?? new Date().toISOString().slice(0, 10);
+  const dateStr = searchParams.get("date") ?? getJstCalendarDate();
   const date = new Date(`${dateStr}T00:00:00.000Z`);
 
   const challenges = await prisma.dailyChallenge.findMany({
