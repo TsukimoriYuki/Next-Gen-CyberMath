@@ -1,18 +1,3 @@
-// 公開ページのブランド表記・開発者向け文言を検査する。
-// npm run qa:public-branding
-//
-// Deep Research評価で、フッターの「MVP build」と、"Cyber Math" / "CYBER OS" の
-// ブランド混線が指摘された。公開ブランドは "Cyber Math Next-Gen"（src/lib/site.ts の
-// SITE_NAME）に統一し、"CYBER OS" は公開ページの主見出し・titleに出さない。
-//
-// 検査内容:
-//  - src/lib/site.ts の SITE_NAME が "Cyber Math Next-Gen" である
-//  - 公開ソース（src/app, src/components）に "MVP build" が出ない
-//  - 公開ソースの独立した "MVP" 表記（開発者向け表現）が出ない
-//    ("MVP" が正当な文脈で使われるコード内コメントは対象外)
-//  - "CYBER OS" が公開ページ（title/見出し/OGタイトル）に出ない
-//  - "デュアルコア学習プラットフォーム" が公開ページに出ない
-
 import fs from "node:fs";
 import path from "node:path";
 import { SITE_NAME } from "../src/lib/site";
@@ -20,58 +5,93 @@ import { SITE_NAME } from "../src/lib/site";
 const ROOT = process.cwd();
 const issues: string[] = [];
 
+const RETIRED_PUBLIC_TERMS = [
+  "MVP build",
+  "CYBER OS",
+  "Cyber OS",
+  "COMMAND CENTER",
+  "サイバー模試",
+  "サイバー計算",
+  "CYBER English",
+  "Singularity",
+  "特異点",
+  "深淵",
+  "ガチャ",
+  "手動作成版",
+  "AI生成版",
+  "攻略OS",
+  "HACK MODE",
+  "MISSION CLEARED",
+  "Cyber Oracle",
+  "AI教官",
+  "Next-Gen",
+  "共通テスト対策室",
+  "学習処方箋",
+  "弱点攻略",
+] as const;
+
+// These routes are intentionally non-public and are covered by publication/route QA.
+const NON_PUBLIC_SOURCE_FILES = new Set([
+  "src/app/common-test/simulator/paper-sample/page.tsx",
+  "src/app/common-test/simulator/common-test-math-1a-mock-001/page.tsx",
+  "src/app/common-test/simulator/common-test-math-1a-manual-001/structured-prototype/page.tsx",
+]);
+
 function check(condition: boolean, message: string) {
   if (!condition) issues.push(message);
 }
 
 function listFilesRecursive(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  return entries.flatMap((entry) => {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) return listFilesRecursive(full);
-    return [full];
+    return entry.isDirectory() ? listFilesRecursive(full) : [full];
   });
 }
 
-check(SITE_NAME === "Cyber Math Next-Gen", `SITE_NAME should be "Cyber Math Next-Gen", got "${SITE_NAME}"`);
+function normalizeRelativePath(file: string): string {
+  return path.relative(ROOT, file).replaceAll("\\", "/");
+}
 
-const scanDirs = [path.join(ROOT, "src/app"), path.join(ROOT, "src/components")];
-const files = scanDirs.flatMap(listFilesRecursive).filter((f) => f.endsWith(".ts") || f.endsWith(".tsx"));
+function stripComments(source: string): string {
+  return source
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/^\s*\/\/.*$/gm, "");
+}
 
-for (const file of files) {
-  const rel = path.relative(ROOT, file);
-  const content = fs.readFileSync(file, "utf8");
-  const lines = content.split("\n");
+check(SITE_NAME === "Cyber Math", `SITE_NAME should be "Cyber Math", got "${SITE_NAME}"`);
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const isComment = /^\s*(\/\/|\*|\/\*)/.test(line);
-    if (isComment) continue; // コード内コメントは開発者向けメモとして許容する
+const publicUiFiles = [
+  ...listFilesRecursive(path.join(ROOT, "src/app")),
+  ...listFilesRecursive(path.join(ROOT, "src/components")),
+  path.join(ROOT, "src/lib/site.ts"),
+  path.join(ROOT, "src/data/subjects.ts"),
+  path.join(ROOT, "src/data/common-test/manual-mocks/math1a-001.ts"),
+  path.join(ROOT, "src/data/common-test/manual-mocks/math1a-002.ts"),
+].filter((file) => {
+  const relative = normalizeRelativePath(file);
+  return (
+    (file.endsWith(".ts") || file.endsWith(".tsx")) &&
+    !NON_PUBLIC_SOURCE_FILES.has(relative)
+  );
+});
 
-    if (line.includes("MVP build")) {
-      issues.push(`${rel}:${i + 1} contains "MVP build" in rendered/user-facing code`);
-    }
-    if (/\bMVP\b/.test(line) && !line.includes("MVP build")) {
-      issues.push(`${rel}:${i + 1} contains a bare "MVP" reference outside a comment — check it isn't rendered to users`);
-    }
-    if (line.includes("CYBER OS") || line.includes("Cyber OS")) {
-      issues.push(`${rel}:${i + 1} contains "CYBER OS" — public branding should use ${SITE_NAME}`);
-    }
-    if (line.includes("デュアルコア学習プラットフォーム")) {
-      issues.push(`${rel}:${i + 1} contains "デュアルコア学習プラットフォーム" — should not be the public-facing brand tagline`);
+for (const file of publicUiFiles) {
+  const relative = normalizeRelativePath(file);
+  const source = stripComments(fs.readFileSync(file, "utf8"));
+  for (const term of RETIRED_PUBLIC_TERMS) {
+    if (source.includes(term)) {
+      issues.push(`${relative} contains retired public term "${term}"`);
     }
   }
 }
 
-report();
-
-function report() {
-  if (issues.length > 0) {
-    console.error(`public-branding check FAILED: ${issues.length} issue(s).`);
-    for (const issue of issues) console.error(`- ${issue}`);
-    process.exitCode = 1;
-  } else {
-    console.log(`public-branding check passed (SITE_NAME="${SITE_NAME}", no MVP/CYBER OS/デュアルコア leaks found).`);
-  }
+if (issues.length > 0) {
+  console.error(`public-branding check FAILED: ${issues.length} issue(s).`);
+  for (const issue of issues) console.error(`- ${issue}`);
+  process.exitCode = 1;
+} else {
+  console.log(
+    `public-branding check passed: SITE_NAME="${SITE_NAME}" and ${RETIRED_PUBLIC_TERMS.length} retired terms are absent from public UI sources.`,
+  );
 }

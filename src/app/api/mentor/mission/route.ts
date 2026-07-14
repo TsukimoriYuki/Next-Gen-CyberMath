@@ -53,6 +53,6 @@ export async function POST(req: Request) {
     return Response.json({ ok: true, id: mission.id });
   } catch (e) {
     console.error("mission create error:", e);
-    return Response.json({ ok: false, error: "発令に失敗しました" }, { status: 500 });
+    return Response.json({ ok: false, error: "課題の割り当てに失敗しました" }, { status: 500 });
   }
 }

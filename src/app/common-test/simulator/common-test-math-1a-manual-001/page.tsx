@@ -4,9 +4,9 @@ import { CommonTestPdfMockViewer } from "@/components/common-test/mock-exam/Comm
 import { createPublicMetadata } from "@/lib/public-metadata";
 
 export const metadata: Metadata = createPublicMetadata({
-  title: "共通テスト型本番模試 数学I・数学A 手動作成版 第1回",
+  title: "共通テスト数学I・数学A オリジナル模試 第1回",
   description:
-    "手動作成PDFを正本として表示する、数学I・数学Aの共通テスト型本番模試です。70分、100点満点、4大問構成。",
+    "オリジナルPDFを正本として表示する、数学I・数学Aの共通テスト型本番模試です。70分、100点満点、4大問構成。",
   path: "/common-test/simulator/common-test-math-1a-manual-001",
 });
 

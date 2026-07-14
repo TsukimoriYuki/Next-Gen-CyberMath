@@ -7,6 +7,7 @@ import { LIMITS_UNIT } from "./limits";
 
 export const MATH_3C_COURSE_SUBJECT: CourseSubject = {
   subjectId: "math-3c",
+  parentSubjectId: "math",
   subjectName: "数学III・C",
   description:
     "極限、微分法、積分法、複素数平面、式と曲線を単元ごとに整理します。",

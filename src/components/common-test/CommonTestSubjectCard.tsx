@@ -1,130 +1,40 @@
 import Link from "next/link";
 import { ArrowRight, Clock, Target } from "lucide-react";
 import type { CommonTestSubject } from "@/data/common-test";
-import { findPublicExperience } from "@/data/common-test-experiences";
 
 export function CommonTestSubjectCard({ subject }: { subject: CommonTestSubject }) {
-  const { theme, route, title, shortTitle, examMinutes, sections, targetScoreDefault } = subject;
-  const isSubSubject = subject.id === "english-reading";
-  const priority = getPriorityLabel(subject);
-  const diagnosis = findPublicExperience(subject.id, "diagnosis");
-  const fullMock = findPublicExperience(subject.id, "full-mock-pdf");
+  const { theme, route, title, examMinutes, sections, targetScoreDefault, description } = subject;
 
   return (
-    <article
-      className={`relative flex flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-all duration-200 hover:shadow-md ${
-        isSubSubject ? "border-slate-200 opacity-85" : "border-slate-200 hover:border-blue-200"
-      }`}
-    >
-      <span className="h-1 w-full" style={{ background: theme.primary }} />
-
-      <div className="flex flex-1 flex-col gap-4 p-5">
+    <article className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:border-blue-200">
+      <span className="h-1 w-full" style={{ background: theme.primary }} aria-hidden="true" />
+      <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-bold text-slate-500">{sections.length}大問構成</span>
-              {isSubSubject && (
-                <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 ring-1 ring-emerald-100">
-                  先行公開 / サブ科目
-                </span>
-              )}
-            </div>
-            <h2 className="mt-1 flex items-center gap-2 font-display text-2xl font-extrabold text-slate-900">
-              <span className="inline-block h-3 w-3 rounded-full" style={{ background: theme.primary }} />
-              {isSubSubject ? shortTitle : title}
-            </h2>
+            <p className="text-xs font-semibold text-slate-500">{sections.length}大問構成</p>
+            <h3 className="mt-1 text-xl font-bold text-slate-950">{title}</h3>
           </div>
-          <div className="flex shrink-0 items-center gap-1 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[11px] font-medium text-slate-600 ring-1 ring-slate-200">
-            <Clock className="h-3 w-3" />
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-600">
+            <Clock className="h-3.5 w-3.5" aria-hidden="true" />
             {examMinutes}分
-          </div>
+          </span>
         </div>
 
-        {isSubSubject ? (
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-            <div className="text-sm font-extrabold text-slate-900">数学対策を優先中</div>
-            <p className="mt-1 text-xs leading-5 text-slate-600">
-              英語は公開範囲を整理しながら拡充中のサブ科目です。必要な日に開ける補強科目として提供しています。
-            </p>
-          </div>
-        ) : (
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-            <div className="flex items-end justify-between gap-3">
-              <div>
-                <div className="text-[11px] font-bold text-slate-500">目標点</div>
-                <div className="mt-1 font-mono text-2xl font-extrabold text-slate-950">
-                  {targetScoreDefault}
-                  <span className="ml-1 text-xs text-slate-400">点</span>
-                </div>
-              </div>
-              <div className="rounded-lg bg-white px-3 py-2 text-right ring-1 ring-slate-200">
-                <div className="text-[10px] font-bold text-slate-500">構成</div>
-                <div className="font-mono text-sm font-extrabold text-slate-700">
-                  {sections.length}大問 / {examMinutes}分
-                </div>
-              </div>
-            </div>
-            <p className="mt-2 text-[11px] leading-4 text-slate-500">
-              現在地は、診断・ドリル・冊子型模試の結果からマイページへ反映されます。
-            </p>
-          </div>
-        )}
+        <p className="mt-3 text-sm leading-6 text-slate-600">{description}</p>
 
-        <div className="flex items-start gap-2 rounded-xl border border-blue-100 bg-blue-50 p-3">
-          <Target className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
-          <div>
-            <div className="text-[11px] font-bold text-blue-700">
-              {isSubSubject ? "扱い" : "優先"}
-            </div>
-            <p className="mt-0.5 text-xs font-semibold leading-5 text-slate-700">{priority}</p>
-          </div>
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 p-3">
+          <Target className="h-4 w-4 text-blue-700" aria-hidden="true" />
+          <span className="text-sm font-semibold text-slate-700">標準目標 {targetScoreDefault}点</span>
         </div>
 
-        <div className={isSubSubject ? "mt-auto" : "mt-auto grid gap-2 sm:grid-cols-2"}>
-          {isSubSubject ? (
-            <Link
-              href={route}
-              className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700"
-            >
-              英語Rを開く
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          ) : (
-            <>
-              {diagnosis && (
-                <Link
-                  href={diagnosis.targetUrl}
-                  className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700"
-                >
-                  {diagnosis.publicCta}
-                </Link>
-              )}
-              {fullMock ? (
-                <Link
-                  href={fullMock.targetUrl}
-                  className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:border-blue-300 hover:text-blue-700"
-                >
-                  冊子型模試を受ける
-                </Link>
-              ) : (
-                <div className="inline-flex items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-500">
-                  本番模試（PDF冊子版）は準備中です
-                </div>
-              )}
-            </>
-          )}
-        </div>
+        <Link
+          href={route}
+          className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+        >
+          {title}の対策を開く
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
       </div>
     </article>
   );
-}
-
-function getPriorityLabel(subject: CommonTestSubject): string {
-  if (subject.id === "math-1a") {
-    return "二次関数・図形と計量・図形の性質・場合の数と確率まで、模試後に戻れるMATH中核講義を整備しています。";
-  }
-  if (subject.id === "math-2bc") {
-    return "微分積分は短時間で伸ばしやすいので、計算精度と時間配分を同時に確認します。";
-  }
-  return "数学の演習後に、読解速度と情報照合を補強するためのサブ科目です。";
 }

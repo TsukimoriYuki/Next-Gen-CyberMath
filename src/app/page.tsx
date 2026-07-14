@@ -1,16 +1,36 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Cpu } from "lucide-react";
+import Link from "next/link";
+import {
+  BookOpen,
+  ClipboardCheck,
+  FileCheck2,
+  LibraryBig,
+  RefreshCw,
+  Route,
+  ShieldCheck,
+  Target,
+} from "lucide-react";
+import { getSession } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
+import { HOME_PRIMARY_ACTIONS, PRIMARY_NAVIGATION } from "@/data/navigation";
+import { PUBLIC_SUBJECTS } from "@/data/subjects";
+import {
+  LearningActionGrid,
+  LearningPage,
+  LearningPageContainer,
+  LearningPageHero,
+  LearningSection,
+  SubjectCard,
+  type LearningAction,
+} from "@/components/learning/LearningPage";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: {
-    absolute: SITE_NAME,
-  },
+  title: { absolute: SITE_NAME },
   description: SITE_DESCRIPTION,
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
@@ -18,333 +38,190 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PortalPage() {
+const LEARNING_PATHS: readonly LearningAction[] = [
+  {
+    title: "学ぶ",
+    description: "単元ごとの講座で、定義・考え方・解法の選び方を理解します。",
+    href: "/learn",
+    label: "公開中の講座を見る",
+    icon: BookOpen,
+  },
+  {
+    title: "問題を解く",
+    description: "単元別・目的別の演習で、理解した内容を使える知識に変えます。",
+    href: "/practice",
+    label: "問題演習を選ぶ",
+    icon: Target,
+  },
+  {
+    title: "模試・入試対策",
+    description: "本番形式の模試や入試レベルの良問で、時間配分と判断力を確認します。",
+    href: "/exams",
+    label: "公開中の模試を見る",
+    icon: ClipboardCheck,
+  },
+  {
+    title: "復習する",
+    description: "間違えた問題と学習履歴を見直し、次に取り組む内容を決めます。",
+    href: "/review",
+    label: "復習キューを開く",
+    icon: RefreshCw,
+  },
+];
+
+const PUBLIC_LEARNING_PATHS = LEARNING_PATHS.filter((path) =>
+  PRIMARY_NAVIGATION.some((item) => item.href === path.href),
+);
+
+type LearningRecommendation = Readonly<{
+  label: string;
+  href: "/math" | "/english" | "/review";
+}>;
+
+async function getLearningRecommendation(): Promise<LearningRecommendation | null> {
+  const session = await getSession();
+  if (!session) return null;
+  try {
+    const now = new Date();
+    const [mathAttempt, englishAttempt, dueReview, latestReview] = await Promise.all([
+      prisma.examAttempt.findFirst({
+        where: { userId: session.sub },
+        orderBy: { createdAt: "desc" },
+        select: { createdAt: true },
+      }),
+      prisma.englishAttempt.findFirst({
+        where: { userId: session.sub },
+        orderBy: { createdAt: "desc" },
+        select: { createdAt: true },
+      }),
+      prisma.reviewItem.findFirst({
+        where: {
+          userId: session.sub,
+          status: "ACTIVE",
+          nextReviewAt: { lte: now },
+        },
+        orderBy: { nextReviewAt: "asc" },
+        select: { id: true },
+      }),
+      prisma.reviewItem.findFirst({
+        where: { userId: session.sub },
+        orderBy: { updatedAt: "desc" },
+        select: { updatedAt: true },
+      }),
+    ]);
+
+    if (dueReview) return { label: "今日のおすすめ：復習", href: "/review" };
+
+    const candidates: Array<LearningRecommendation & { updatedAt: Date }> = [];
+    if (mathAttempt) {
+      candidates.push({ label: "今日のおすすめ：数学", href: "/math", updatedAt: mathAttempt.createdAt });
+    }
+    if (englishAttempt) {
+      candidates.push({ label: "今日のおすすめ：英語", href: "/english", updatedAt: englishAttempt.createdAt });
+    }
+    if (latestReview) {
+      candidates.push({ label: "今日のおすすめ：復習", href: "/review", updatedAt: latestReview.updatedAt });
+    }
+    return candidates.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export default async function HomePage() {
+  const recommendation = await getLearningRecommendation();
+  const actions = recommendation
+    ? [
+        { label: "前回の続き", href: "/mypage" as const, primary: true },
+        recommendation,
+      ]
+    : HOME_PRIMARY_ACTIONS.map((action, index) => ({
+        ...action,
+        primary: index === 0,
+      }));
+
   return (
-    <div className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center bg-black px-4 py-16 overflow-hidden">
-
-      {/* Ambient grid lines */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* Radial glow center */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(20,20,40,0.8) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Header label */}
-      <div className="relative mb-12 max-w-2xl text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.35em] text-white/30">
-          Cyber Math · Next-Gen Education Platform
-        </p>
-        <h1 className="mt-4 font-display text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
-          高校数学・共通テストを、
-          <br className="hidden sm:block" />
-          講義・演習・模試・復習で攻略する
-        </h1>
-        <p className="mt-4 text-sm leading-relaxed text-white/55 sm:text-base">
-          数学IA・IIBC の講義と共通テスト型演習、復習キュー、本番模試をつなげた学習プラットフォームです。
-        </p>
-        <p className="mt-5 font-mono text-xs uppercase tracking-[0.4em] text-white/30">
-          Choose your subject
-        </p>
-      </div>
-
-      {/* Subject panels */}
-      <div className="relative w-full max-w-4xl">
-        <div className="grid gap-5 sm:grid-cols-2">
-
-          {/* ── CYBER MATH ───────────────────────────────── */}
-          <Link
-            href="/math"
-            aria-label="数学トップを開く"
-            className="group relative block overflow-hidden rounded-3xl transition-all duration-500 hover:[box-shadow:var(--math-hover-shadow)] hover:[border-color:rgba(0,210,255,0.5)]"
-            style={{
-              background:
-                "linear-gradient(145deg, rgba(0,210,255,0.06) 0%, rgba(0,0,0,0.5) 50%, rgba(255,0,170,0.05) 100%)",
-              border: "1px solid rgba(0,210,255,0.2)",
-              boxShadow: "0 0 0 0 rgba(0,210,255,0)",
-              "--math-hover-shadow": "0 0 60px rgba(0,210,255,0.18), 0 0 120px rgba(255,0,170,0.08)",
-            } as React.CSSProperties}
-          >
-            {/* Shimmer sweep */}
-            <span
-              className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, rgba(0,210,255,0.08), transparent)",
-              }}
-            />
-
-            <div className="relative flex flex-col items-center gap-6 px-8 py-14 text-center">
-              {/* Icon */}
-              <div
-                className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-bold transition-transform duration-300 group-hover:scale-110"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(0,210,255,0.15), rgba(255,0,170,0.1))",
-                  border: "1px solid rgba(0,210,255,0.3)",
-                  color: "#00d2ff",
-                  fontFamily: "var(--font-display, 'Orbitron', sans-serif)",
-                  textShadow: "0 0 20px rgba(0,210,255,0.6)",
-                }}
-              >
-                Σ
-              </div>
-
-              {/* Label */}
-              <div>
-                <div className="font-mono text-xs uppercase tracking-[0.3em] text-white/40">
-                  Subject 01
-                </div>
-                <h2
-                  className="mt-2 font-display text-4xl font-extrabold tracking-tight"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #00d2ff 0%, #ffffff 50%, #ff00aa 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  MATH
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-white/50">
-                  数学の美しさと真の理解を追求する。
-                  <br />
-                  基礎 A から深淵 OLYMPIAD まで。
-                </p>
-              </div>
-
-              {/* CTA */}
-              <div
-                className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-sm font-semibold transition-all duration-300 group-hover:gap-3"
-                style={{
-                  background: "rgba(0,210,255,0.1)",
-                  border: "1px solid rgba(0,210,255,0.35)",
-                  color: "#00d2ff",
-                }}
-              >
-                数学トップを開く
-                <ArrowRight className="h-4 w-4" />
-              </div>
+    <LearningPage>
+      <LearningPageContainer>
+        <LearningPageHero
+          eyebrow="高校生・大学受験生のための学習サービス"
+          title="講義、問題演習、模試、復習を一つにつなぐ。"
+          description="Cyber Mathは、学んだ内容を問題で確かめ、結果を次の復習につなげる受験学習サービスです。現在は数学と英語の公開済み教材を利用できます。"
+          actions={actions}
+          supporting={
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+              <Route className="h-5 w-5 text-blue-700" aria-hidden="true" />
+              <h2 className="mt-3 text-base font-bold text-slate-950">迷わない学習の流れ</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                教科を選び、講座で理解し、問題で確認し、間違いを復習する順に進めます。
+              </p>
             </div>
-          </Link>
+          }
+        />
 
-          {/* ── CYBER ENGLISH ────────────────────────────── */}
-          <Link
-            href="/english"
-            aria-label="英語トレーニングを開く"
-            className="group relative block overflow-hidden rounded-3xl transition-all duration-500 hover:[box-shadow:var(--en-hover-shadow)] hover:[border-color:rgba(16,185,129,0.5)]"
-            style={{
-              background:
-                "linear-gradient(145deg, rgba(16,185,129,0.06) 0%, rgba(0,0,0,0.5) 50%, rgba(250,204,21,0.05) 100%)",
-              border: "1px solid rgba(16,185,129,0.2)",
-              boxShadow: "0 0 0 0 rgba(16,185,129,0)",
-              "--en-hover-shadow": "0 0 60px rgba(16,185,129,0.18), 0 0 120px rgba(250,204,21,0.08)",
-            } as React.CSSProperties}
-          >
-            {/* Shimmer sweep */}
-            <span
-              className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, rgba(16,185,129,0.08), transparent)",
-              }}
-            />
-
-            <div className="relative flex flex-col items-center gap-6 px-8 py-14 text-center">
-              {/* Icon */}
-              <div
-                className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-bold transition-transform duration-300 group-hover:scale-110"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(250,204,21,0.1))",
-                  border: "1px solid rgba(16,185,129,0.3)",
-                  color: "#10b981",
-                  fontFamily: "var(--font-display, 'Orbitron', sans-serif)",
-                  textShadow: "0 0 20px rgba(16,185,129,0.6)",
-                  fontSize: "1.8rem",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                En
-              </div>
-
-              {/* Label */}
-              <div>
-                <div className="font-mono text-xs uppercase tracking-[0.3em] text-white/40">
-                  Subject 02
-                </div>
-                <h2
-                  className="mt-2 font-display text-4xl font-extrabold tracking-tight"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #10b981 0%, #ffffff 50%, #facc15 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  ENGLISH
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-white/50">
-                  速読から精読まで、英語力を解体して再構築。
-                  <br />
-                  Reading · Grammar · Comprehension
-                </p>
-              </div>
-
-              {/* CTA */}
-              <div
-                className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-sm font-semibold transition-all duration-300 group-hover:gap-3"
-                style={{
-                  background: "rgba(16,185,129,0.1)",
-                  border: "1px solid rgba(16,185,129,0.35)",
-                  color: "#10b981",
-                }}
-              >
-                英語トレーニングを開く
-                <ArrowRight className="h-4 w-4" />
-              </div>
-            </div>
-          </Link>
-        </div>
-
-        {/* ── COMMON TEST COMMAND CENTER (full-width mega card) ─────────── */}
-        <Link
-          href="/common-test"
-          aria-label="共通テスト対策室を開く"
-          className="group relative mt-5 block overflow-hidden rounded-3xl transition-all duration-500"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(251,191,36,0.08) 0%, rgba(0,0,0,0.6) 40%, rgba(34,211,238,0.06) 70%, rgba(168,85,247,0.06) 100%)",
-            border: "1px solid rgba(251,191,36,0.22)",
-            boxShadow: "0 0 0 0 rgba(251,191,36,0)",
-          }}
+        <LearningSection
+          id="subjects"
+          title="教科を選ぶ"
+          description="教材と学習機能が公開されている教科だけを表示しています。"
         >
-          {/* Shimmer */}
-          <span
-            className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
-            style={{ background: "linear-gradient(90deg, transparent, rgba(251,191,36,0.08), rgba(34,211,238,0.05), transparent)" }}
-          />
-
-          {/* Holographic scan lines */}
-          <div
-            className="pointer-events-none absolute inset-0 opacity-20"
-            style={{
-              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(251,191,36,0.06) 3px, rgba(251,191,36,0.06) 4px)",
-            }}
-          />
-
-          {/* Glowing corner dots */}
-          <span
-            className="pointer-events-none absolute top-4 right-5 h-2 w-2 rounded-full animate-pulse"
-            style={{ background: "#fbbf24", boxShadow: "0 0 10px #fbbf24, 0 0 20px rgba(251,191,36,0.5)" }}
-          />
-          <span
-            className="pointer-events-none absolute bottom-4 left-5 h-1.5 w-1.5 rounded-full"
-            style={{ background: "#22d3ee", boxShadow: "0 0 8px #22d3ee" }}
-          />
-
-          <div className="relative flex flex-col items-center gap-5 px-8 py-10 text-center sm:flex-row sm:text-left sm:items-center">
-
-            {/* Icon */}
-            <div
-              className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
-              style={{
-                background: "linear-gradient(135deg, rgba(251,191,36,0.15), rgba(34,211,238,0.10), rgba(168,85,247,0.10))",
-                border: "1px solid rgba(251,191,36,0.3)",
-                boxShadow: "0 0 20px rgba(251,191,36,0.15), inset 0 0 20px rgba(251,191,36,0.05)",
-              }}
-            >
-              <Cpu className="h-9 w-9" style={{ color: "#fbbf24", filter: "drop-shadow(0 0 8px rgba(251,191,36,0.8))" }} />
-            </div>
-
-            {/* Text block */}
-            <div className="flex-1">
-              <div className="font-mono text-xs uppercase tracking-[0.3em] text-white/35">
-                Exam Strategy · Phase 1
-              </div>
-              <h2
-                className="mt-2 font-display text-3xl font-extrabold tracking-tight sm:text-4xl"
-                style={{
-                  background: "linear-gradient(135deg, #fbbf24 0%, #ffffff 45%, #22d3ee 80%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                COMMON TEST
-              </h2>
-              <p
-                className="mt-0.5 font-mono text-xs tracking-[0.18em]"
-                style={{ color: "rgba(251,191,36,0.55)" }}
-              >
-                COMMAND CENTER
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-white/45 max-w-lg">
-                数学IA · 数学II/B/C · 英語Rを統合管理。大問別演習から本番再現まで、
-                共通テストを完全攻略する戦術プラットフォーム。
-              </p>
-
-              {/* Subject chips */}
-              <div className="mt-3 flex flex-wrap gap-2 justify-center sm:justify-start">
-                {[
-                  { label: "数学IA", color: "#00d2ff" },
-                  { label: "数学II・B・C", color: "#a855f7" },
-                  { label: "英語R", color: "#10b981" },
-                ].map(({ label, color }) => (
-                  <span
-                    key={label}
-                    className="rounded-full px-2.5 py-0.5 font-mono text-[10px] font-semibold"
-                    style={{
-                      background: `rgba(${hexToRgb(color)},0.10)`,
-                      border: `1px solid rgba(${hexToRgb(color)},0.28)`,
-                      color,
-                    }}
-                  >
-                    {label}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA */}
-            <div
-              className="shrink-0 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-mono text-sm font-semibold transition-all duration-300 group-hover:gap-3"
-              style={{
-                background: "rgba(251,191,36,0.10)",
-                border: "1px solid rgba(251,191,36,0.35)",
-                color: "#fbbf24",
-              }}
-            >
-              共通テスト対策室を開く
-              <ArrowRight className="h-4 w-4" />
-            </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {PUBLIC_SUBJECTS.map((subject) => (
+              <SubjectCard key={subject.id} subject={subject} />
+            ))}
           </div>
-        </Link>
+        </LearningSection>
 
-        {/* Bottom tagline */}
-        <p className="mt-10 text-center font-mono text-xs tracking-[0.2em] text-white/20 uppercase">
-          Select a subject · start the session · exceed your limits
-        </p>
-      </div>
-    </div>
+        <LearningSection
+          id="paths"
+          title="目的から始める"
+          description="教科をまたいで、今したい学習から入口を選べます。"
+        >
+          <LearningActionGrid actions={PUBLIC_LEARNING_PATHS} />
+        </LearningSection>
+
+        <LearningSection title="教材を安心して使うために">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="grid gap-6 md:grid-cols-3">
+              <TrustItem
+                icon={FileCheck2}
+                title="解答と採点を検証"
+                description="数式、解答、模試の配点と採点処理を自動QAと重点確認で継続的に検査します。"
+              />
+              <TrustItem
+                icon={LibraryBig}
+                title="公開済み教材だけを案内"
+                description="中身のない教科や準備段階の教材は、主要な学習導線へ表示しません。"
+              />
+              <TrustItem
+                icon={ShieldCheck}
+                title="品質方針を公開"
+                description="教材制作、数式表示、誤り報告、公開前QAの考え方を確認できます。"
+              />
+            </div>
+            <Link href="/quality" className="mt-6 inline-flex text-sm font-bold text-blue-700 hover:underline">
+              教材・品質方針を見る
+            </Link>
+          </div>
+        </LearningSection>
+      </LearningPageContainer>
+    </LearningPage>
   );
 }
 
-function hexToRgb(hex: string): string {
-  const m = hex.match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
-  if (!m) return "255,255,255";
-  return `${parseInt(m[1], 16)},${parseInt(m[2], 16)},${parseInt(m[3], 16)}`;
+function TrustItem({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: typeof FileCheck2;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div>
+      <Icon className="h-5 w-5 text-blue-700" aria-hidden="true" />
+      <h3 className="mt-3 font-bold text-slate-950">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
 }

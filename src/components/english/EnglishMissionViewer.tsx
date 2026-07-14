@@ -91,7 +91,7 @@ export function EnglishMissionViewer({ mode, problem, mission }: Props) {
               className="font-display text-sm font-bold"
               style={{ color: "oklch(0.8 0.15 350)" }}
             >
-              師範からのコメント
+              指導者からのコメント
             </div>
             <div
               className="font-mono text-xs"

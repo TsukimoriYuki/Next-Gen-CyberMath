@@ -2,18 +2,19 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="mx-auto flex max-w-xl flex-col items-center px-6 py-32 text-center">
-      <div className="font-display text-7xl font-extrabold text-neon-magenta text-glow-12">
-        404
-      </div>
-      <p className="mt-4 text-muted-foreground">
-        この座標に問題は存在しません。定義域の外にいるようです。
+    <div className="page-container flex max-w-xl flex-col items-center py-24 text-center sm:py-32">
+      <p className="text-sm font-bold tracking-wide text-blue-700">404</p>
+      <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+        ページが見つかりません
+      </h1>
+      <p className="mt-4 max-w-md text-base leading-7 text-slate-600">
+        URLが変更されたか、現在は公開されていないページです。ホームから公開中の教材を選び直してください。
       </p>
       <Link
         href="/"
-        className="mt-8 inline-flex items-center gap-2 rounded-xl border border-neon-cyan/40 px-5 py-3 text-sm font-semibold text-neon-cyan transition-colors hover:bg-neon-cyan/10"
+        className="button-primary mt-8"
       >
-        原点 (ホーム) に戻る
+        ホームへ戻る
       </Link>
     </div>
   );

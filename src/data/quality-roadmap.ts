@@ -17,7 +17,7 @@ export const QUALITY_ROADMAP: RoadmapItem[] = [
     priority: 1,
     title: "共通テスト数学IA 冊子型模試 第2回",
     summary:
-      "第1回（手動作成版・PDF正本）と同じ品質基準で、第2回のPDF冊子と採点・解説データを追加済み。",
+      "第1回（オリジナル模試・PDF正本）と同じ品質基準で、第2回のPDF冊子と採点・解説データを追加済み。",
     status: "done",
     category: "冊子型模試",
   },

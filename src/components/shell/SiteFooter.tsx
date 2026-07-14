@@ -4,31 +4,29 @@ import { PUBLIC_INFO_LINKS, SITE_NAME } from "@/lib/site";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border/60 bg-background/80">
-      <div className="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-8 text-sm text-muted-foreground sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+    <footer className="border-t border-slate-200 bg-white">
+      <div className="page-container flex flex-col gap-6 py-9 text-sm text-slate-600 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-start gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-neon-cyan/10 text-neon-cyan">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700 ring-1 ring-blue-100">
             <Sigma className="h-5 w-5" strokeWidth={2.4} />
           </span>
           <div>
-            <p className="font-display text-sm font-bold tracking-widest text-foreground">
-              CYBER<span className="text-neon-cyan">MATH</span>
+            <p className="text-sm font-bold text-slate-950">{SITE_NAME}</p>
+            <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500">
+              高校数学と英語の講義、問題演習、試験対策、復習をつなぐ学習サービスです。
             </p>
-            <p className="mt-1 max-w-xl text-xs leading-5">
-              共通テスト数学IAを中心に、講義・演習・復習導線をつなぐ学習プラットフォームです。
-            </p>
-            <p className="mt-2 font-mono text-[11px] text-muted-foreground/70">
-              © {new Date().getFullYear()} {SITE_NAME}. 教材を継続改善しながら公開中。
+            <p className="mt-2 text-xs text-slate-600">
+              © {new Date().getFullYear()} {SITE_NAME}
             </p>
           </div>
         </div>
 
-        <nav className="flex flex-wrap gap-x-4 gap-y-2 text-xs" aria-label="公開情報">
+        <nav className="flex flex-wrap gap-x-4 gap-y-3 text-xs" aria-label="サイト情報">
           {PUBLIC_INFO_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="transition-colors hover:text-neon-cyan"
+              className="transition-colors hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
             >
               {link.label}
             </Link>

@@ -17,8 +17,8 @@ export function WeakTagStats({ topTags, totalAttempts, studentCount, mentorCount
       {/* 数値サマリ */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: "門下生", value: studentCount, accent: "var(--neon-cyan)" },
-          { label: "師範", value: mentorCount, accent: "var(--neon-amber)" },
+          { label: "生徒", value: studentCount, accent: "var(--neon-cyan)" },
+          { label: "指導者", value: mentorCount, accent: "var(--neon-amber)" },
           { label: "模試回数", value: totalAttempts, accent: "var(--neon-magenta)" },
         ].map(({ label, value, accent }) => (
           <div

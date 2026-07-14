@@ -61,10 +61,10 @@ export async function generateMetadata({
   if (!mission) return { title: "ミッション" };
   if (mission.problemSlug.startsWith("english/")) {
     const info = resolveEnglishProblem(mission.problemSlug);
-    return { title: `緊急ミッション — ${info?.title ?? mission.problemSlug}` };
+    return { title: `個別課題 — ${info?.title ?? mission.problemSlug}` };
   }
   const problem = getProblem(mission.problemSlug);
-  return { title: `緊急ミッション — ${problem?.title ?? mission.problemSlug}` };
+  return { title: `個別課題 — ${problem?.title ?? mission.problemSlug}` };
 }
 
 // ── Page ───────────────────────────────────────────────────────────────────
@@ -132,7 +132,7 @@ export default async function MissionPage({
               }}
             >
               <Flame className="h-3.5 w-3.5 animate-pulse" />
-              Emergency Mission — 特命 · English
+              個別課題 · 英語
             </div>
 
             <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -175,7 +175,7 @@ export default async function MissionPage({
                   className="h-3.5 w-3.5"
                   style={{ color: "oklch(0.65 0.18 350)" }}
                 />
-                送り手：師範
+                送り手：指導者
               </span>
               <span>→ {mission.user.name}</span>
               <span style={{ color: "oklch(0.45 0.05 265)" }}>
@@ -252,7 +252,7 @@ export default async function MissionPage({
             }}
           >
             <Flame className="h-3.5 w-3.5 animate-pulse" />
-            Emergency Mission — 特命
+            個別課題 · 数学
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -292,7 +292,7 @@ export default async function MissionPage({
           >
             <span className="flex items-center gap-1.5">
               <Swords className="h-3.5 w-3.5" style={{ color: "oklch(0.65 0.18 350)" }} />
-              送り手：師範
+              送り手：指導者
             </span>
             <span>→ {mission.user.name}</span>
             <span style={{ color: "oklch(0.45 0.05 265)" }}>

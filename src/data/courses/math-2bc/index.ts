@@ -12,6 +12,7 @@ import { VECTORS_UNIT } from "./vectors";
 
 export const MATH_2BC_COURSE_SUBJECT: CourseSubject = {
   subjectId: "math-2bc",
+  parentSubjectId: "math",
   subjectName: "数学II・B・C",
   description:
     "式と証明、複素数と方程式、図形と方程式、三角関数、指数・対数関数、微分・積分、数列、統計、ベクトルを単元ごとに整理します。",

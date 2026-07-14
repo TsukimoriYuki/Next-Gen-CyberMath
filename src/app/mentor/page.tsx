@@ -28,7 +28,7 @@ import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
 import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
 import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
 
-export const metadata: Metadata = { title: "師範ダッシュボード" };
+export const metadata: Metadata = { title: "指導者ダッシュボード" };
 export const dynamic = "force-dynamic";
 
 export default async function MentorPage({
@@ -218,10 +218,10 @@ export default async function MentorPage({
           Mentor Dashboard · {SITE_NAME}
         </div>
         <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight">
-          師範の間
+          指導者メニュー
         </h1>
         <p className="mt-2 text-muted-foreground">
-          ようこそ、{session.name} 師範。門下生の状況と本日の挑戦状を管理します。
+          ようこそ、{session.name}さん。生徒の学習状況と本日の課題を管理します。
         </p>
       </header>
 
@@ -255,7 +255,7 @@ export default async function MentorPage({
           <section>
             <div className="mb-4 flex items-center gap-2">
               <Users className="h-5 w-5 text-neon-cyan" />
-              <h2 className="font-display text-xl font-bold">B. 門下生名簿</h2>
+              <h2 className="font-display text-xl font-bold">B. 生徒一覧</h2>
             </div>
             <div className="glass rounded-2xl p-6">
               <StudentRoster students={students} />
@@ -280,11 +280,11 @@ export default async function MentorPage({
           <section>
             <div className="mb-4 flex items-center gap-2">
               <Flame className="h-5 w-5 text-neon-magenta" />
-              <h2 className="font-display text-xl font-bold">D. 緊急ミッション発令</h2>
+              <h2 className="font-display text-xl font-bold">D. 個別課題の割り当て</h2>
             </div>
             <div className="glass rounded-2xl p-6">
               <p className="mb-6 text-sm text-muted-foreground">
-                特定の門下生に「緊急ミッション」を発令します。科目・カテゴリ・問題を段階的に選択してください。
+                生徒に個別課題を割り当てます。科目・カテゴリ・問題を順に選択してください。
               </p>
               <EmergencyMissionEditor
                 students={students}
@@ -303,7 +303,7 @@ export default async function MentorPage({
             </div>
             <div className="glass rounded-2xl p-6">
               <p className="mb-6 text-sm text-muted-foreground">
-                特定の門下生への DM、または全員への一斉通知を送信します。
+                特定の生徒へのメッセージ、または全員へのお知らせを送信します。
                 メッセージはホーム画面のインボックスバナーに表示されます。
               </p>
               <MessageEditor students={students.filter((s) => s.role === "STUDENT")} />
@@ -321,7 +321,7 @@ export default async function MentorPage({
           <section>
             <div className="mb-4 flex items-center gap-2">
               <Activity className="h-5 w-5" style={{ color: "#10b981" }} />
-              <h2 className="font-display text-xl font-bold">A. 英語学習分析（門下生）</h2>
+              <h2 className="font-display text-xl font-bold">A. 英語学習分析（生徒）</h2>
             </div>
             <div className="glass rounded-2xl p-6 space-y-5">
 
@@ -420,11 +420,11 @@ export default async function MentorPage({
           <section>
             <div className="mb-4 flex items-center gap-2">
               <Flame className="h-5 w-5 text-neon-magenta" />
-              <h2 className="font-display text-xl font-bold">B. 英語緊急ミッション発令</h2>
+              <h2 className="font-display text-xl font-bold">B. 英語の個別課題</h2>
             </div>
             <div className="glass rounded-2xl p-6">
               <p className="mb-6 text-sm text-muted-foreground">
-                英語の問題を門下生にアサインします。速読長文・精読長文・マルチソースから選択してください。
+                英語の問題を生徒へ割り当てます。速読長文・精読長文・複数資料から選択してください。
               </p>
               <EmergencyMissionEditor
                 students={students}
@@ -455,9 +455,9 @@ export default async function MentorPage({
       <div className="mt-12 flex items-start gap-2 rounded-xl border border-neon-amber/20 bg-neon-amber/5 p-4 text-xs text-muted-foreground">
         <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-neon-amber/70" />
         <span>
-          師範ダッシュボードはセッション中のみ表示されます。
+          指導者ダッシュボードはログイン中のみ表示されます。
           <code className="mx-1 rounded bg-muted/70 px-1 py-0.5 font-mono text-[10px]">MENTOR_PASSCODE</code>
-          を知る者のみが師範として登録できます。
+          を知る許可済みの利用者だけが指導者として登録できます。
         </span>
       </div>
     </div>

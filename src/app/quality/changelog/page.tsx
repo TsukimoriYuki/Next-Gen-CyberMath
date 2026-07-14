@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Cyber Mathの品質・表示に関する修正履歴です。",
   alternates: { canonical: "/quality/changelog" },
   openGraph: {
-    title: "更新履歴 | Cyber Math Next-Gen",
+    title: "更新履歴",
     description: "品質・表示に関する修正履歴。",
     url: "/quality/changelog",
   },

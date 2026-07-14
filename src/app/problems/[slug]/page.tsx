@@ -92,7 +92,7 @@ export default async function ProblemPage({
 
       {/* Statement */}
       <section className="glass mt-8 rounded-2xl p-6">
-        <div className="mb-3 flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-neon-cyan/80">
+        <div className="mb-3 flex items-center gap-2 text-xs font-semibold tracking-wide text-blue-800">
           <span className="inline-block h-2 w-2 rounded-full bg-neon-cyan" />
           問題
         </div>

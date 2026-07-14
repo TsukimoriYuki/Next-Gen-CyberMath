@@ -6,7 +6,7 @@ import { ArrowLeft, FileText, FlaskConical } from "lucide-react";
 export const metadata: Metadata = {
   title: "共通テスト型 数学I・数学A 試作版",
   description:
-    "このAI生成試作版は公開導線から外しています。共通テスト型本番模試は手動作成版 第1回を利用してください。",
+    "この旧試作版は公開導線から外しています。共通テスト型本番模試はオリジナル模試 第1回を利用してください。",
   robots: {
     index: false,
     follow: false,
@@ -37,14 +37,14 @@ export default function CommonTestMath1APrototypePage() {
         </h1>
         <p className="mt-3 text-sm leading-7 text-slate-600">
           旧URLの `common-test-math-1a-mock-001` は、低品質なAI生成試作版として公開導線から外しました。
-          共通テスト型本番模試として最初に触れるページは、PDF本文を正本として転記した手動作成版 第1回です。
+          共通テスト型本番模試として最初に触れるページは、PDF本文を正本として転記したオリジナル模試 第1回です。
         </p>
         <Link
           href="/common-test/simulator/common-test-math-1a-manual-001"
           className="mt-6 inline-flex items-center justify-center gap-2 rounded bg-blue-700 px-4 py-3 text-sm font-extrabold text-white hover:bg-blue-800"
         >
           <FileText className="h-4 w-4" />
-          手動作成版 第1回へ進む
+          オリジナル模試 第1回へ進む
         </Link>
       </div>
     </main>

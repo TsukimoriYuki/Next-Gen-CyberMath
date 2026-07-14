@@ -44,7 +44,7 @@ export function MessageBarClient({ id, content, dateStr, isDM }: MessageBarClien
           className="font-mono text-xs font-bold uppercase tracking-[0.18em]"
           style={{ color: "var(--neon-violet)" }}
         >
-          {isDM ? "師範からの DM" : "師範からの全体通知"}
+          {isDM ? "指導者からのメッセージ" : "指導者からのお知らせ"}
         </span>
         <span className="ml-auto font-mono text-[10px] text-muted-foreground">{dateStr}</span>
         <button

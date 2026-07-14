@@ -64,7 +64,7 @@ export function CommonTestLearningPrescription() {
         <div className="border-b border-blue-100 bg-blue-50 px-5 py-3">
           <div className="flex items-center gap-2 text-sm font-extrabold text-blue-800">
             <Stethoscope className="h-4 w-4" />
-            今日の学習処方箋
+            今日の学習プラン
           </div>
         </div>
 

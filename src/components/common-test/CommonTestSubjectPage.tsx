@@ -15,22 +15,23 @@ interface Props {
 export function CommonTestSubjectPage({ subject }: Props) {
   const { theme, title, examMinutes, targetScoreDefault, description, sections, scoreRoutes } = subject;
   const prioritySection = getPrioritySection(subject);
+  const hasFullMock = Boolean(findPublicExperience(subject.id, "full-mock-pdf"));
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
         <Link
           href="/common-test"
           className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-sm transition hover:border-blue-200 hover:text-blue-700"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          共通テスト対策室に戻る
+          共通テスト対策に戻る
         </Link>
 
         <header className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
           <div className="flex flex-wrap items-center gap-2">
             <Badge icon={<BookOpen className="h-3.5 w-3.5" />} color={theme.primary}>
-              数学特化の大問攻略
+              大問別対策
             </Badge>
             <Badge icon={<Clock className="h-3.5 w-3.5" />}>本番 {examMinutes}分</Badge>
             <Badge icon={<Target className="h-3.5 w-3.5" />}>目標 {targetScoreDefault}点</Badge>
@@ -60,7 +61,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
                 <div className="h-full w-0 rounded-full bg-blue-600" />
               </div>
               <p className="mt-2 text-xs leading-5 text-slate-500">
-                ミニ診断、大問別ドリル、冊子型模試を受けると現在地が更新されます。
+                大問別ドリルの結果を保存すると、現在地と復習候補を確認できます。
               </p>
             </div>
           </div>
@@ -95,7 +96,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
           <CommonTestSectionGrid sections={sections} theme={theme} subjectId={subject.id} />
         </section>
 
-        <section className="mt-8 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <section className={hasFullMock ? "mt-8 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]" : "mt-8"}>
           <ExamSimulatorCard subject={subject} />
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <SectionTitle
@@ -126,7 +127,7 @@ export function CommonTestSubjectPage({ subject }: Props) {
           </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -186,19 +187,7 @@ function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
   );
 
   if (!fullMock) {
-    return (
-      <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-          本番模試（PDF冊子版）
-        </p>
-        <h2 className="mt-1 text-xl font-extrabold text-slate-700">
-          {subject.title}の本番模試は準備中です
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-500">
-          手動作成PDFを正本とした本番模試は、数学I・数学Aから先行公開しています。他科目は準備が整い次第、同じ形式で追加します。
-        </p>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -213,7 +202,7 @@ function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-600">
-              手動作成版模試
+              オリジナル模試
             </p>
             <h2 className="mt-1 text-xl font-extrabold text-slate-950">{fullMock.title}を受ける</h2>
             <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -222,7 +211,7 @@ function ExamSimulatorCard({ subject }: { subject: CommonTestSubject }) {
             </p>
           </div>
           <span className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition group-hover:bg-blue-700">
-            手動版模試を開始
+            模試を開始
           </span>
         </div>
       </Link>

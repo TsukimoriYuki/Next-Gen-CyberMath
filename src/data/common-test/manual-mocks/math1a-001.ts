@@ -89,7 +89,7 @@ function q(base: Omit<CommonTestQuestion, "measuredAbility" | "timeSavingTip" | 
 
 export const COMMON_TEST_MATH_1A_MANUAL_001: CommonTestMockExam = {
   id: "common-test-math-1a-manual-001",
-  title: "共通テスト型本番模試 数学I・数学A 手動作成版 第1回",
+  title: "共通テスト数学I・数学A オリジナル模試 第1回",
   subject: "math-1a",
   durationMinutes: 70,
   totalPoints: 100,

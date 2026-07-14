@@ -1,3 +1,5 @@
+import type { SubjectId } from "@/data/subjects";
+
 // Course system types — Phase 19 / Phase 20.0
 // 講座は DB ではなく静的 TypeScript データで管理する。
 
@@ -193,6 +195,7 @@ export interface CourseUnit {
 
 export interface CourseSubject {
   subjectId: string;
+  parentSubjectId: SubjectId;
   subjectName: string;
   description: string;
   color: string;

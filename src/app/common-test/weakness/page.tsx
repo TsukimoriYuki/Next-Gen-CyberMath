@@ -5,7 +5,7 @@ import { CommonTestWeaknessBossPanel } from "@/components/common-test/CommonTest
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "弱点攻略 — 共通テスト対策室",
+  title: "弱点分析 — 共通テスト対策",
   description:
     "共通テスト対策の弱点一覧。演習履歴・目標点差・時間超過をもとにルールベースで弱点を自動検出し、克服条件と次のアクションを提示します。",
 };
@@ -38,14 +38,14 @@ export default function CommonTestWeaknessPage() {
         <header className="mt-8 mb-8">
           <div className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3.5 py-1.5">
             <ShieldAlert className="h-4 w-4 text-rose-600" />
-            <span className="text-xs font-semibold text-rose-700">弱点攻略</span>
+            <span className="text-xs font-semibold text-rose-700">弱点分析</span>
             <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-rose-400">
               Weakness
             </span>
           </div>
 
           <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-            弱点攻略
+            弱点分析
           </h1>
 
           <p className="mt-3 text-sm text-slate-600">
@@ -87,7 +87,7 @@ export default function CommonTestWeaknessPage() {
 
         {/* Footer */}
         <p className="mt-16 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
-          {SITE_NAME} · 共通テスト対策室
+          {SITE_NAME} · 共通テスト対策
         </p>
       </div>
     </div>

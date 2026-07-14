@@ -179,7 +179,7 @@ test("公開一覧 — 空講座・範囲外講義・空模試カテゴリへの
   expect(new URL(page.url()).pathname).toBe("/mock");
 });
 
-test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文を再構成していない", async ({ page, request }) => {
+test("オリジナルPDF模試 — PDFがそのまま配信され、問題本文を再構成していない", async ({ page, request }) => {
   const pageResponse = await page.goto("/common-test/simulator/common-test-math-1a-manual-001");
   expect(pageResponse?.headers()["x-frame-options"]).toBe("DENY");
   const iframeCount = await page.locator("iframe").count();

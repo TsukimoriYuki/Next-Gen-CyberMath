@@ -267,8 +267,7 @@ export function SpeedSupportReader({
                   {sentence.text}
                   {isCurrent ? (
                     <span
-                      className="ml-1 rounded-full border border-cyan-500 bg-cyan-700 px-1.5 py-0.5 align-middle font-mono text-[10px] text-white"
-                      style={{ color: "#fff", WebkitTextFillColor: "#fff" }}
+                      className="speed-support-current-marker ml-1 rounded-full border border-cyan-500 bg-cyan-700 px-2 py-0.5 align-middle font-mono text-xs text-white"
                     >
                       現在の目安
                     </span>

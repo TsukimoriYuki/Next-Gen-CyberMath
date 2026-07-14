@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     canonical: "/units",
   },
   openGraph: {
-    title: "単元 | Cyber Math Next-Gen",
+    title: "数学の単元・問題",
     description: "単元から高校数学の問題、授業、復習導線へ進むための一覧ページ。",
     url: "/units",
   },

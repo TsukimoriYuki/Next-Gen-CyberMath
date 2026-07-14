@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronLeft, Target } from "lucide-react";
 import { CalcDrillGame } from "@/components/calc/CalcDrillGame";
 
-export const metadata: Metadata = { title: "計算ドリル" };
+export const metadata: Metadata = { title: "計算トレーニング・分野別モード" };
 
 export default function CalcDrillPage() {
   return (
@@ -24,7 +24,7 @@ export default function CalcDrillPage() {
           className="inline-flex items-center gap-1.5 font-mono text-xs text-white/40 transition-colors hover:text-white/70"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
-          CYBER MATH
+          数学トップ
         </Link>
 
         <header className="mt-6 mb-8">
@@ -37,7 +37,7 @@ export default function CalcDrillPage() {
             }}
           >
             <Target className="h-3.5 w-3.5" />
-            Calculation Drill · 計算ドリル
+            計算トレーニング・分野別モード
           </div>
           <h1
             className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl"
@@ -48,10 +48,10 @@ export default function CalcDrillPage() {
               backgroundClip: "text",
             }}
           >
-            計算筋力を鍛えよ
+            分野を選んで計算を練習する
           </h1>
           <p className="mt-2 font-mono text-sm text-white/40">
-            展開・因数分解・有理化・対数・三角関数 — 30秒4択で計算速度を磨く
+            展開・因数分解・有理化・対数・三角関数を、30秒の4択問題で確認します。
           </p>
         </header>
 

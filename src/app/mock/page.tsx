@@ -146,20 +146,20 @@ export default function MockExamPage() {
         <header>
           <div className="inline-flex items-center gap-2 rounded-full border border-neon-magenta/30 bg-neon-magenta/5 px-3 py-1 text-xs font-mono uppercase tracking-[0.2em] text-neon-magenta">
             <Sparkles className="h-3.5 w-3.5" />
-            Mock Exam Generator
+            条件指定型の問題演習
           </div>
           <h1 className="mt-5 font-display text-3xl font-extrabold tracking-tight">
-            サイバー模試・特訓モード
+            カスタム演習
           </h1>
           <p className="mt-2 text-muted-foreground">
-            条件を選んでオリジナル模試を生成。提出後に厳密解で自己採点し、弱点を講座で補強します。
+            範囲、難度、時間を選んで問題セットを作成します。提出後に解答を確認し、弱点を関連講座で補強できます。
           </p>
           <Link
             href="/mock/history"
             className="mt-4 inline-flex items-center gap-2 rounded-lg border border-neon-cyan/40 bg-neon-cyan/5 px-3 py-2 text-sm font-semibold text-neon-cyan transition-colors hover:bg-neon-cyan/15"
           >
             <LineChart className="h-4 w-4" />
-            成長の軌跡・弱点分析を見る
+            演習履歴と弱点を見る
           </Link>
         </header>
 
@@ -349,7 +349,7 @@ export default function MockExamPage() {
             }
             className="glow-magenta w-full rounded-xl bg-neon-magenta/15 py-4 font-display text-lg font-bold text-neon-magenta transition-colors hover:bg-neon-magenta/25 disabled:opacity-40"
           >
-            模試を生成して開始
+            問題セットを作成して開始
           </button>
         </div>
       </div>
@@ -384,7 +384,7 @@ export default function MockExamPage() {
         {/* printable test sheet */}
         <div className="print-sheet">
           <div className="mb-6 hidden print:block">
-            <h1 className="text-center text-xl font-bold">Cyber Math Next-Gen — 確認テスト</h1>
+            <p className="text-center text-xl font-bold">Cyber Math — カスタム演習</p>
             <div className="mt-2 flex justify-between text-sm">
               <span>氏名 ____________________</span>
               <span>制限時間 {minutes} 分 / {problems.length} 問</span>
@@ -484,7 +484,7 @@ export default function MockExamPage() {
             onClick={reset}
             className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-neon-cyan"
           >
-            <RotateCcw className="h-4 w-4" /> 新しい模試
+            <RotateCcw className="h-4 w-4" /> 新しい問題セット
           </button>
         </div>
       </header>

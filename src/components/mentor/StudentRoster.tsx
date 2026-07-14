@@ -122,7 +122,7 @@ export function StudentRoster({ students }: StudentRosterProps) {
             {sorted.length === 0 && (
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
-                  該当する門下生がいません
+                  該当する生徒がいません
                 </td>
               </tr>
             )}

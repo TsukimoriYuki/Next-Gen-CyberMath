@@ -101,7 +101,7 @@ function LegacyPresetNotice({
           className="mt-4 flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-bold text-blue-700 hover:bg-blue-100"
         >
           <FileText className="h-4 w-4" />
-          数学I・数学Aの本番模試（手動作成版）を見る
+          数学I・数学Aのオリジナル模試を見る
         </Link>
       </div>
     </main>

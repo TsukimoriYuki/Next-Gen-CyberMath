@@ -5,7 +5,7 @@ import { GrammarDrillGame } from "@/components/english/GrammarDrillGame";
 import { createPublicMetadata } from "@/lib/public-metadata";
 
 export const metadata: Metadata = createPublicMetadata({
-  title: "文法ドリル | CYBER English",
+  title: "英文法ドリル",
   description: "共通テストや大学入試で問われる英文法を反復するドリルです。",
   path: "/english/grammar",
 });
@@ -29,7 +29,7 @@ export default function GrammarPage() {
           className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 hover:text-emerald-400 transition-colors"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
-          CYBER English
+          英語
         </Link>
 
         <header className="mt-6 mb-8">

@@ -205,14 +205,11 @@ function checkBadPublicText() {
 
 function checkHomeHeadline() {
   const source = read("src/app/page.tsx");
-  const h1 = source.match(/<h1[^>]*>([\s\S]*?)<\/h1>/);
-  if (!h1) {
-    issues.push("src/app/page.tsx: missing H1");
-    return;
-  }
-  const text = h1[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
-  if (text.includes("C Y B E R") || !text.includes("高校数学")) {
-    issues.push(`home H1 should be a descriptive service headline, got "${text}"`);
+  if (
+    !source.includes('title="講義、問題演習、模試、復習を一つにつなぐ。"') ||
+    !source.includes("<LearningPageHero")
+  ) {
+    issues.push("src/app/page.tsx: shared hero must receive a descriptive service headline");
   }
 }
 
@@ -227,8 +224,8 @@ function checkCoursesPage() {
   if (PUBLIC_COURSE_SUBJECTS.some((subject) => subject.units.some((unit) => unit.lessons.length === 0))) {
     issues.push("public course registry contains an empty unit");
   }
-  if (!source.includes('title: "講座集"')) {
-    issues.push("src/app/courses/page.tsx: metadata title should be 講座集");
+  if (!source.includes('title: "講座一覧"')) {
+    issues.push("src/app/courses/page.tsx: metadata title should be 講座一覧");
   }
 }
 
@@ -248,32 +245,16 @@ function checkCommonTestRouting() {
   const commonData = read("src/data/common-test.ts");
   const specialLectures = read("src/data/specialLectures.ts");
 
-  for (const [file, source] of [
-    ["src/app/common-test/page.tsx", commonTestPage],
-    ["src/data/specialLectures.ts", specialLectures],
-  ] as const) {
-    if (!source.includes("common-test-math-1a-manual-001")) {
-      issues.push(`${file}: main math IA exam route should point to common-test-math-1a-manual-001`);
-    }
+  if (!specialLectures.includes("common-test-math-1a-manual-001")) {
+    issues.push("src/data/specialLectures.ts: math IA exam route should point to the published PDF mock");
   }
 
-  // CommonTestSubjectCard / CommonTestSubjectPage now resolve the math-1a mock link through the
-  // common-test-experiences registry instead of hardcoding the id — check they use the registry
-  // (correctness of the registry's resolution itself is covered by qa:common-test-routing).
-  for (const [file, source] of [
-    ["src/components/common-test/CommonTestSubjectCard.tsx", subjectCard],
-    ["src/components/common-test/CommonTestSubjectPage.tsx", subjectPage],
-  ] as const) {
-    if (!source.includes("common-test-experiences") || !source.includes("findPublicExperience")) {
-      issues.push(`${file}: main math IA exam route should resolve via the common-test-experiences registry (findPublicExperience)`);
-    }
+  if (!subjectCard.includes("href={route}")) {
+    issues.push("src/components/common-test/CommonTestSubjectCard.tsx: subject card should link to its subject hub");
   }
 
-  if (!commonTestPage.includes("PDF本文を正本として転記した4大問 / 100点 / 70分")) {
-    issues.push("src/app/common-test/page.tsx: manual PDF mock specs should be visible in the main CTA");
-  }
-  if (!commonTestPage.includes("common-test-math-1a-manual-002")) {
-    issues.push("src/app/common-test/page.tsx: manual 002 should be visible as additional practice");
+  if (!commonTestPage.includes('href: "/common-test/simulator"')) {
+    issues.push("src/app/common-test/page.tsx: exam CTA should point to the public mock index");
   }
   if (
     !subjectPage.includes("getPublicCommonTestExperiences") ||

@@ -95,18 +95,14 @@ function main() {
   check(!oldRoute.includes("CommonTestMockExamRunner"), "old AI route should not launch the runner");
 
   check(index.includes("getPublicCommonTestMockExams"), "index should read public mock registry");
-  check(index.includes("手動作成版 第1回"), "index should show manual mock");
-  check(index.includes("手動作成版 第2回"), "index should show manual 002 mock");
+  check(index.includes("オリジナル模試 第1回"), "index should show original mock 001");
+  check(index.includes("オリジナル模試 第2回"), "index should show original mock 002");
   check(index.includes("第2回に進む"), "index should present manual 002 as an additional run");
   check(index.includes("common-test-math-1a-mock-001") === false, "index should not link to old AI mock");
   check(index.includes("配点 30,30,20,20"), "index should show section point structure");
   check(
-    commonTestHome.includes("/common-test/simulator/common-test-math-1a-manual-001"),
-    "common-test home should link the main exam CTA to the manual PDF mock",
-  );
-  check(
-    commonTestHome.includes("/common-test/simulator/common-test-math-1a-manual-002"),
-    "common-test home should include manual 002 as additional practice",
+    commonTestHome.includes('href: "/common-test/simulator"'),
+    "common-test home should link once to the public mock index",
   );
   check(
     math1aPage.includes("getPublicCommonTestExperiences") &&

@@ -62,7 +62,7 @@ export default function ComprehensionPage() {
           className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 hover:text-emerald-400 transition-colors"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
-          CYBER English
+          英語
         </Link>
 
         {/* Header */}

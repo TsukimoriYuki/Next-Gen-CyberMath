@@ -58,7 +58,7 @@ export async function EmergencyMissionPanel() {
           <div className="mb-4 flex flex-wrap items-center gap-3">
             <div className="inline-flex items-center gap-2 rounded-full border border-neon-magenta/40 bg-neon-magenta/10 px-3 py-1 font-mono text-xs uppercase tracking-[0.2em] text-neon-magenta">
               <Flame className="h-3.5 w-3.5 animate-pulse" />
-              緊急ミッション — 師範からの特命
+              指導者からの個別課題
             </div>
             {missions.length > 1 && (
               <span
@@ -69,7 +69,7 @@ export async function EmergencyMissionPanel() {
                   color: "oklch(0.55 0.22 350)",
                 }}
               >
-                {missions.length} 件未クリア
+                {missions.length}件未完了
               </span>
             )}
           </div>
@@ -92,7 +92,7 @@ export async function EmergencyMissionPanel() {
             }}
           >
             <Flame className="h-5 w-5" />
-            特命を受ける
+            課題を開く
             <ArrowRight className="h-4 w-4" />
           </Link>
 
@@ -103,7 +103,7 @@ export async function EmergencyMissionPanel() {
                 className="font-mono text-[10px] uppercase tracking-[0.2em]"
                 style={{ color: "oklch(0.55 0.22 350 / 0.7)" }}
               >
-                その他の未クリアミッション
+                その他の未完了課題
               </p>
               {rest.map((m) => {
                 const title = resolveTitle(m.problemSlug);

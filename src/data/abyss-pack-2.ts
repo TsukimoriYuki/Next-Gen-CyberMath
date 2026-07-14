@@ -6,7 +6,7 @@ export const ABYSS_PACK_2: Problem[] = [
   // ─── 1. IMO 1995 不等式 ───────────────────────────────────────────────
   {
     slug: "abyss-imo1995-inequality",
-    title: "特異点：絶対不等式の深淵",
+    title: "絶対不等式と等号成立条件",
     unit: "式と証明",
     difficulty: "EX",
     tier: "ABYSS",
@@ -89,7 +89,7 @@ $$
   // ─── 2. アイゼンシュタインの既約判定法 ───────────────────────────────
   {
     slug: "abyss-eisenstein-shift",
-    title: "特異点：素数と多項式の絶対非分解",
+    title: "素数と多項式の絶対非分解",
     unit: "高次方程式",
     difficulty: "EX",
     tier: "ABYSS",
@@ -156,7 +156,7 @@ $$
   // ─── 3. オイラーの対数正弦積分 ────────────────────────────────────────
   {
     slug: "abyss-euler-log-sine",
-    title: "特異点：オイラーの対数正弦積分",
+    title: "オイラーの対数正弦積分",
     unit: "積分法",
     difficulty: "EX",
     tier: "ABYSS",

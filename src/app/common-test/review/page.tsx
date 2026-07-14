@@ -4,7 +4,7 @@ import { ArrowLeft, Layers } from "lucide-react";
 import { CommonTestReviewQueue } from "@/components/common-test/CommonTestReviewQueue";
 
 export const metadata: Metadata = {
-  title: "復習キュー — 共通テスト数学 攻略OS",
+  title: "共通テスト復習キュー",
   description: "共通テスト対策の間隔反復復習キュー。弱点問題を自動スケジューリングして反復演習する。",
 };
 

@@ -10,7 +10,7 @@ import { createPublicMetadata } from "@/lib/public-metadata";
 export const metadata: Metadata = createPublicMetadata({
   title: "共通テスト型本番模試",
   description:
-    "共通テスト型の本番模試一覧です。数学I・数学Aは手動作成PDFを正本とした第1回・第2回を公開しています。",
+    "共通テスト型の本番模試一覧です。数学I・数学AはオリジナルPDFを正本とした第1回・第2回を公開しています。",
   path: "/common-test/simulator",
 });
 
@@ -37,7 +37,7 @@ export default function SimulatorIndexPage() {
             数学I・数学Aの本番形式を70分で解く
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            公開中の本番模試は、手動作成PDFを正本として転記した版です。問題本文は新規生成せず、
+            公開中の本番模試は、オリジナルPDFを正本としてWeb解答欄を対応させた教材です。問題本文は新規生成せず、
             大問構成・空欄・選択肢・図をPDFに合わせて実装しています。
           </p>
         </header>
@@ -54,7 +54,7 @@ export default function SimulatorIndexPage() {
                   <div>
                     <div className="inline-flex items-center gap-2 border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700">
                       <FileText className="h-3.5 w-3.5" />
-                      {mock.id.endsWith("002") ? "追加演習 / 手動作成版 第2回" : "手動作成版 第1回"}
+                      {mock.id.endsWith("002") ? "追加演習 / オリジナル模試 第2回" : "オリジナル模試 第1回"}
                     </div>
                     <h2 className="mt-3 text-xl font-black tracking-normal">{mock.title}</h2>
                     <div className="mt-2 flex flex-wrap gap-2 text-xs font-bold text-slate-600">

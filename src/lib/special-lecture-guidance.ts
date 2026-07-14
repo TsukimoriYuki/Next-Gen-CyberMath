@@ -414,7 +414,7 @@ const UNIT_CONTEXT_GUIDES: UnitContextGuide[] = [
     commonTestContext: "共通テストでは扱われない、競技数学・数学的探究の領域",
     advancedContext: "共通テスト直接対策ではなく、競技数学・数学的探究として発想力・証明力を鍛える拡張問題として位置づく",
     recoveryLinks: [
-      { symptom: "発想の糸口が見えなかった", label: "特異点ガチャで類題を探す", href: "/abyss" },
+      { symptom: "発想の糸口が見えなかった", label: "挑戦問題から発展問題を探す", href: "/abyss" },
       { symptom: "議論の構成でつまずいた", label: "過去問道場で類題を探す", href: "/dojo" },
     ],
   },

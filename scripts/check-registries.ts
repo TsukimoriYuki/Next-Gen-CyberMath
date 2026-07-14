@@ -3,6 +3,7 @@ import { EXAM_SET_CATEGORIES } from "../src/data/exam-sets";
 import { LESSONS, LESSONS_BY_SLUG } from "../src/data/lessons";
 import { PROBLEMS } from "../src/data/problems";
 import { SPECIAL_LECTURES } from "../src/data/specialLectures";
+import { SUBJECTS } from "../src/data/subjects";
 import {
   assertUniqueRegistryKeys,
   indexByUniqueRegistryKey,
@@ -27,6 +28,8 @@ function expectDuplicateThrow(label: string, operation: () => void) {
 }
 
 function main() {
+  assertUniqueRegistryKeys(SUBJECTS, (subject) => subject.id, "subject ID registry");
+  assertUniqueRegistryKeys(SUBJECTS, (subject) => subject.href, "subject route registry");
   assertUniqueRegistryKeys(LESSONS, (lesson) => lesson.slug, "concept lesson slug registry");
   assertUniqueRegistryKeys(PROBLEMS, (problem) => problem.slug, "problem slug registry");
   assertUniqueRegistryKeys(SPECIAL_LECTURES, (lecture) => lecture.id, "special lecture ID registry");

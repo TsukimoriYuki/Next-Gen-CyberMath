@@ -1,42 +1,160 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { ArrowRight, Sparkles, Swords, FileText, Zap, LineChart, Layers, Skull, Target, GraduationCap } from "lucide-react";
+import { notFound } from "next/navigation";
 import {
-  getAllProblems,
-  getChallengeProblems,
-  getProblem,
-  formatDateJP,
-} from "@/lib/content";
-import { PROBLEMS } from "@/data/problems";
-import { DIFFICULTY_META, DIFFICULTY_ORDER, type Problem } from "@/lib/types";
+  BarChart3,
+  BookOpen,
+  Calculator,
+  ClipboardCheck,
+  FileText,
+  GraduationCap,
+  Layers3,
+  RefreshCw,
+  Route,
+  Shuffle,
+  Target,
+  Trophy,
+} from "lucide-react";
+import { getChallengeProblems, getProblem, formatDateJP } from "@/lib/content";
+import type { Problem } from "@/lib/types";
+import { prisma } from "@/lib/prisma";
+import { createPublicMetadata } from "@/lib/public-metadata";
+import { PUBLIC_COURSE_SUBJECTS } from "@/data/course-curriculum";
+import { isVisibleSubject, requireSubject } from "@/data/subjects";
 import { DailyTriple } from "@/components/daily/DailyTriple";
-import { RepresentativeProblemShowcase } from "@/components/math/RepresentativeProblemShowcase";
 import { EmergencyMissionPanel } from "@/components/mission/EmergencyMissionPanel";
 import { MessageBar } from "@/components/messages/MessageBar";
-import { prisma } from "@/lib/prisma";
+import {
+  LearningActionGrid,
+  LearningPage,
+  LearningPageContainer,
+  LearningPageHero,
+  LearningSection,
+  type LearningAction,
+} from "@/components/learning/LearningPage";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "数学トップ",
-  description:
-    "高校数学の今日の問題、過去問道場、模試、単元別講座へ進めるCyber Mathの数学トップページです。",
-  alternates: {
-    canonical: "/math",
+const MATH_SUBJECT = requireSubject("math");
+
+export const metadata: Metadata = isVisibleSubject(MATH_SUBJECT)
+  ? createPublicMetadata({
+      title: MATH_SUBJECT.name,
+      description: MATH_SUBJECT.description,
+      path: MATH_SUBJECT.href,
+    })
+  : { title: MATH_SUBJECT.name, robots: { index: false, follow: false } };
+
+function getPublishedUnitCount(subjectId: string): number {
+  return PUBLIC_COURSE_SUBJECTS.find((subject) => subject.subjectId === subjectId)?.units.length ?? 0;
+}
+
+const LEARN_ACTIONS: readonly LearningAction[] = [
+  {
+    title: "数学IAの講座",
+    description: "数と式、二次関数、図形、データ、確率を単元順に学びます。",
+    href: "/courses/math-1a",
+    label: "数学IAを学ぶ",
+    icon: BookOpen,
+    meta: `${getPublishedUnitCount("math-1a")}単元を公開中`,
   },
-  openGraph: {
-    title: "数学トップ | Cyber Math Next-Gen",
-    description:
-      "今日の問題、過去問道場、模試、単元別講座へ進める高校数学の学習入口。",
-    url: "/math",
+  {
+    title: "数学II・B・Cの講座",
+    description: "式、三角関数、指数・対数、微積分、数列、統計、ベクトルを学びます。",
+    href: "/courses/math-2bc",
+    label: "数学II・B・Cを学ぶ",
+    icon: GraduationCap,
+    meta: `${getPublishedUnitCount("math-2bc")}単元を公開中`,
   },
-};
+];
+
+const PRACTICE_ACTIONS: readonly LearningAction[] = [
+  {
+    title: "単元別演習",
+    description: "学習したい単元と難度を選び、解説つきの問題に取り組みます。",
+    href: "/units",
+    label: "単元を選ぶ",
+    icon: Layers3,
+  },
+  {
+    title: "カスタム演習",
+    description: "学習範囲、難度、制限時間を選び、自分用の問題セットを作ります。",
+    href: "/mock",
+    label: "演習条件を設定する",
+    icon: Shuffle,
+  },
+  {
+    title: "計算トレーニング",
+    description: "正確性を重視するモードと、時間内の処理速度を鍛えるモードを選べます。",
+    href: "/math/calculation",
+    label: "計算モードを選ぶ",
+    icon: Calculator,
+  },
+  {
+    title: "挑戦問題",
+    description: "発展・最難関レベルの問題から、ランダムに1問を選んで取り組みます。",
+    href: "/challenge-problems",
+    label: "挑戦問題を選ぶ",
+    icon: Target,
+  },
+];
+
+const EXAM_ACTIONS: readonly LearningAction[] = [
+  {
+    title: "入試良問演習",
+    description: "大学入試の典型テーマをもとにしたオリジナル類題を、複数解法で学びます。",
+    href: "/dojo",
+    label: "良問演習を始める",
+    icon: Trophy,
+  },
+  {
+    title: "共通テスト数学IA",
+    description: "大問別練習、問題解体型講座、70分のオリジナル模試を利用できます。",
+    href: "/common-test/math-1a",
+    label: "数学IA対策を開く",
+    icon: ClipboardCheck,
+  },
+  {
+    title: "共通テスト数学II・B・C",
+    description: "必答・選択大問を分け、単元別に時間配分と判断順を練習します。",
+    href: "/common-test/math-2bc",
+    label: "数学II・B・C対策を開く",
+    icon: Route,
+  },
+  {
+    title: "問題解体型講座",
+    description: "問題PDFを見ながら、最初に見る条件、解法選択、誤答、検算を確認します。",
+    href: "/common-test/problem-lectures",
+    label: "講座を選ぶ",
+    icon: FileText,
+  },
+  {
+    title: "オリジナル模試",
+    description: "PDF冊子とWeb解答欄を使い、部分点を含む採点と復習まで行えます。",
+    href: "/common-test/simulator",
+    label: "公開中の模試を見る",
+    icon: ClipboardCheck,
+  },
+];
+
+const REVIEW_ACTIONS: readonly LearningAction[] = [
+  {
+    title: "今日の復習",
+    description: "間違えた問題と自信がなかった問題を、復習タイミングに合わせて確認します。",
+    href: "/common-test/review",
+    label: "復習キューを開く",
+    icon: RefreshCw,
+  },
+  {
+    title: "学習レポート",
+    description: "数学と英語の演習履歴、得点推移、弱点、復習状況をまとめて確認します。",
+    href: "/mypage",
+    label: "マイページを見る",
+    icon: BarChart3,
+  },
+];
 
 async function getDailyProblems(now: Date): Promise<Problem[]> {
-  const todayUTC = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
-  );
+  const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
   try {
     const challenges = await prisma.dailyChallenge.findMany({
       where: { date: todayUTC },
@@ -45,326 +163,84 @@ async function getDailyProblems(now: Date): Promise<Problem[]> {
     });
     if (challenges.length === 3) {
       const problems = challenges
-        .map((c) => getProblem(c.problem.slug))
-        .filter((p): p is Problem => p !== undefined);
+        .map((challenge) => getProblem(challenge.problem.slug))
+        .filter((problem): problem is Problem => problem !== undefined);
       if (problems.length === 3) return problems;
     }
   } catch {
-    // DB unavailable — fall through to static fallback
+    // Static fallback keeps the public page available without a database.
   }
   return getChallengeProblems(now);
 }
 
 export default async function MathHomePage() {
+  if (!isVisibleSubject(MATH_SUBJECT)) notFound();
   const now = new Date();
-  const daily = await getDailyProblems(now);
-  const all = getAllProblems();
+  const daily = MATH_SUBJECT.capabilities.problems
+    ? await getDailyProblems(now)
+    : [];
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-      {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl">
-        <div className="glass rounded-3xl px-6 py-14 sm:px-12 sm:py-20">
-          <div className="inline-flex items-center gap-2 rounded-full border border-neon-cyan/30 bg-neon-cyan/5 px-3 py-1 text-xs font-mono uppercase tracking-[0.2em] text-neon-cyan">
-            <Sparkles className="h-3.5 w-3.5" />
-            高校数学 · 次世代学習プラットフォーム
-          </div>
-
-          <h1 className="mt-6 max-w-3xl font-display text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
-            数学の<span className="text-neon-cyan text-glow-12">美しさ</span>と
-            <br className="hidden sm:block" />
-            真の<span className="text-neon-magenta text-glow-12">理解</span>を、
-            極限まで。
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            動くグラフで実験し、論理を一段ずつ自分の手で開く。基礎{" "}
-            <span className="font-mono text-neon-lime">A</span> から、発想に感動のある超難問{" "}
-            <span className="font-mono text-neon-magenta">D+</span>{" "}
-            まで攻略する、サイバー学習体験。
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="#daily"
-              className="glow-magenta inline-flex items-center gap-2 rounded-xl bg-neon-magenta/15 px-5 py-3 text-sm font-semibold text-neon-magenta transition-colors hover:bg-neon-magenta/25"
-            >
-              今日の問題を解く
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/dojo"
-              className="inline-flex items-center gap-2 rounded-xl border border-neon-amber/40 bg-neon-amber/5 px-5 py-3 text-sm font-semibold text-neon-amber transition-colors hover:bg-neon-amber/15"
-            >
-              <Swords className="h-4 w-4" />
-              問題演習を始める
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Difficulty pyramid */}
-      <section className="mt-16">
-        <h2 className="font-display text-xl font-bold tracking-wide">
-          難易度ピラミッド
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          A から D+ へ。上に行くほど、解法そのものが美しくなる。
-        </p>
-
-        <div className="mt-6 flex w-full max-w-full flex-col items-center gap-2 overflow-hidden">
-          {[...DIFFICULTY_ORDER].reverse().map((d, i) => {
-            const meta = DIFFICULTY_META[d];
-            const count = all.filter((p) => p.difficulty === d).length;
-            const abyssOnlyCount = PROBLEMS.filter(
-              (p) => p.difficulty === d && p.tier === "ABYSS",
-            ).length;
-            const width = 52 + (i * 48) / (DIFFICULTY_ORDER.length - 1);
-            return (
-              <div
-                key={d}
-                className="glass glass-hover flex w-full max-w-full items-center justify-between rounded-xl px-5 py-3"
-                style={{
-                  width: `${width}%`,
-                  borderColor: `color-mix(in oklch, ${meta.accent} 35%, transparent)`,
-                }}
-              >
-                <span
-                  className="font-display text-lg font-bold"
-                  style={{ color: meta.accent }}
-                >
-                  {meta.label}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {meta.name}
-                </span>
-                <span className="font-mono text-xs text-muted-foreground">
-                  {count > 0 ? `${count} 問` : ""}
-                  {abyssOnlyCount > 0 && (
-                    <span className={count > 0 ? "ml-1 text-muted-foreground/60" : ""}>
-                      {count > 0 ? `＋ガチャ限定${abyssOnlyCount}問` : `ガチャ限定${abyssOnlyCount}問`}
-                    </span>
-                  )}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-        <p className="mt-3 text-xs text-muted-foreground">
-          「ガチャ限定」は単元一覧・タグ検索には出さず、
-          <Link href="/abyss" className="text-neon-cyan hover:underline">
-            特異点ガチャ
-          </Link>
-          からのみ到達できる超難問です。公開中の問題数（{all.length}問）は
-          <Link href="/units" className="ml-1 text-neon-cyan hover:underline">
-            単元一覧
-          </Link>
-          の合算と一致します。
-        </p>
-      </section>
-
-      {/* Representative problem showcase */}
-      <RepresentativeProblemShowcase />
-
-      {/* Daily triple */}
-      <section className="mt-16" id="daily">
-        <DailyTriple problems={daily} dateLabel={formatDateJP(now)} />
-      </section>
-
-      {/* Navigation panels */}
-      <section className="mt-16">
-        <h2 className="font-display text-xl font-bold tracking-wide">
-          道場への扉
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          目的に合わせて入り口を選べ。
-        </p>
-
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {/* 共通テスト対策室 */}
-          <Link href="/common-test" className="washi washi-hover group block rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 transition-transform group-hover:scale-105">
-                <Layers className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">共通テスト対策室</div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  数学IAの大問別ドリルと、70分・100点・56マークの冊子型模試。提出後に採点・解説・復習導線まで。
-                </div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-emerald-400">
-                  共通テスト対策を見る <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
+    <LearningPage>
+      <LearningPageContainer>
+        <MessageBar />
+        <LearningPageHero
+          eyebrow="数学"
+          title="理解したことを、解ける力につなげる。"
+          description="講座で考え方を学び、単元別演習と模試で確かめ、間違いを復習します。基礎から入試最難関まで、目的に合う入口を選べます。"
+          actions={[
+            ...(MATH_SUBJECT.capabilities.problems
+              ? [{ label: "今日の3問を解く", href: "#daily" as const, primary: true }]
+              : []),
+            ...(MATH_SUBJECT.capabilities.courses
+              ? [{ label: "講座を選ぶ", href: "#learn" as const }]
+              : []),
+          ]}
+          supporting={
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+              <p className="text-xs font-bold text-blue-700">おすすめの進め方</p>
+              <ol className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+                <li>1. 講座で考え方を確認する</li>
+                <li>2. 単元別演習で使ってみる</li>
+                <li>3. 模試と復習で定着を確かめる</li>
+              </ol>
             </div>
-          </Link>
+          }
+        />
 
-          {/* 道場 */}
-          <Link href="/dojo" className="washi washi-hover group block rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-amber/10 text-neon-amber transition-transform group-hover:scale-105">
-                <Swords className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">過去問道場</div>
-                <div className="mt-1 text-sm text-muted-foreground">大学入試の精選問題を、論理ステップで完全攻略する。</div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-amber">
-                  過去問演習を始める <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
+        {MATH_SUBJECT.capabilities.problems && (
+          <>
+            <div className="mt-14 sm:mt-16">
+              <DailyTriple problems={daily} dateLabel={formatDateJP(now)} />
             </div>
-          </Link>
+            <EmergencyMissionPanel />
+          </>
+        )}
 
-          {/* サイバー模試 */}
-          <Link href="/mock" className="washi washi-hover group block rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-magenta/10 text-neon-magenta transition-transform group-hover:scale-105">
-                <FileText className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">サイバー模試</div>
-                <div className="mt-1 text-sm text-muted-foreground">タグ・難易度・時間を自在にカスタムした本番形式テスト。</div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-magenta">
-                  模試を作成する <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
+        {MATH_SUBJECT.capabilities.courses && (
+          <LearningSection id="learn" title="学ぶ" description="新課程の単元順に、公開済みの体系講座から選べます。">
+            <LearningActionGrid actions={LEARN_ACTIONS} />
+          </LearningSection>
+        )}
 
-          {/* 計算特訓 */}
-          <Link href="/drill" className="washi washi-hover group block rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-cyan/10 text-neon-cyan transition-transform group-hover:scale-105">
-                <Zap className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">計算特訓</div>
-                <div className="mt-1 text-sm text-muted-foreground">速度と精度を鍛える反復計算ドリル。毎日の習慣に。</div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-cyan">
-                  計算特訓を始める <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
+        {MATH_SUBJECT.capabilities.problems && (
+          <LearningSection id="practice" title="問題を解く" description="単元、目的、時間に合わせて演習方法を選びます。">
+            <LearningActionGrid actions={PRACTICE_ACTIONS} />
+          </LearningSection>
+        )}
 
-          {/* 計算ドリル 4択 */}
-          <Link href="/calc-drill" className="washi washi-hover group block rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-cyan/10 text-neon-cyan transition-transform group-hover:scale-105">
-                <Target className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">計算ドリル</div>
-                <div className="mt-1 text-sm text-muted-foreground">展開・因数分解・対数・三角関数を30秒4択で高速演習。</div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-cyan">
-                  30秒ドリルを始める <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
+        {MATH_SUBJECT.capabilities.exams && (
+          <LearningSection id="exam" title="模試・入試対策" description="本番形式の演習と、問題の読み方を学ぶ講座をまとめています。">
+            <LearningActionGrid actions={EXAM_ACTIONS} />
+          </LearningSection>
+        )}
 
-          {/* 弱点診断 */}
-          <Link href="/mock/history" className="washi washi-hover group block rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-lime/10 text-neon-lime transition-transform group-hover:scale-105">
-                <LineChart className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">弱点診断</div>
-                <div className="mt-1 text-sm text-muted-foreground">過去の模試結果から弱点タグを分析し、学習戦略を立てる。</div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-lime">
-                  模試履歴で弱点を見る <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* 講座 */}
-          <Link href="/courses" className="washi washi-hover group block rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 transition-transform group-hover:scale-105">
-                <GraduationCap className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">講座</div>
-                <div className="mt-1 text-sm text-muted-foreground">初学者・中級者・上級者の3段階。二次関数から始まり、概念のつながりをたどって体系的に学ぶ。</div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-blue-400">
-                  講座を選ぶ <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* 単元一覧 */}
-          <Link href="/units" className="washi washi-hover group block rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-violet/10 text-neon-violet transition-transform group-hover:scale-105">
-                <Layers className="h-6 w-6" />
-              </span>
-              <div>
-                <div className="font-display text-lg font-bold text-foreground">単元一覧</div>
-                <div className="mt-1 text-sm text-muted-foreground">単元から問題を探す。カリキュラム順に体系的に攻略する。</div>
-                <div className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-semibold text-neon-violet">
-                  単元一覧を見る <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-
-        {/* 特異点 - Singularity - パネル */}
-        <div className="mt-5">
-          <Link
-            href="/abyss"
-            className="group relative block overflow-hidden rounded-2xl transition-all duration-300"
-            style={{
-              background: "linear-gradient(135deg, rgba(168,85,247,0.08) 0%, rgba(0,0,0,0.6) 50%, rgba(234,179,8,0.06) 100%)",
-              border: "1px solid rgba(168,85,247,0.25)",
-              boxShadow: "0 0 40px rgba(168,85,247,0.06)",
-            }}
-          >
-            <span
-              className="pointer-events-none absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
-              style={{ background: "linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.12) 50%, transparent 100%)" }}
-            />
-            <div className="relative flex items-center gap-5 px-6 py-5">
-              <span
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
-                style={{ background: "rgba(168,85,247,0.12)", border: "1px solid rgba(168,85,247,0.3)", color: "#a855f7" }}
-              >
-                <Skull className="h-6 w-6" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span
-                    className="font-display text-lg font-bold bg-clip-text text-transparent"
-                    style={{ backgroundImage: "linear-gradient(135deg, #a855f7, #eab308)" }}
-                  >
-                    特異点 — Singularity
-                  </span>
-                  <span className="rounded-full border border-purple-700/40 bg-purple-900/20 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-purple-500">
-                    Phase 4
-                  </span>
-                </div>
-                <div className="mt-0.5 text-sm text-gray-500">深淵の超難問をランダム召喚。解けるなら、挑め。</div>
-              </div>
-              <ArrowRight className="h-4 w-4 shrink-0 text-purple-600 transition-transform group-hover:translate-x-1" />
-            </div>
-          </Link>
-        </div>
-
-        {/* 緊急ミッション */}
-        <Suspense fallback={null}>
-          <EmergencyMissionPanel />
-        </Suspense>
-
-        {/* 師範からのメッセージ */}
-        <Suspense fallback={null}>
-          <div className="mt-5">
-            <MessageBar />
-          </div>
-        </Suspense>
-      </section>
-    </div>
+        {MATH_SUBJECT.capabilities.review && (
+          <LearningSection id="review" title="復習・学習レポート" description="結果を見直し、次に取り組む内容へつなげます。">
+            <LearningActionGrid actions={REVIEW_ACTIONS} />
+          </LearningSection>
+        )}
+      </LearningPageContainer>
+    </LearningPage>
   );
 }

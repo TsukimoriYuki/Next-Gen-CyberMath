@@ -21,7 +21,7 @@ export function DifficultyBadge({
     >
       <span className="font-display tracking-wider">{meta.label}</span>
       {withName && (
-        <span className="text-[10px] font-normal opacity-80">{meta.name}</span>
+        <span className="text-xs font-medium">{meta.name}</span>
       )}
     </span>
   );

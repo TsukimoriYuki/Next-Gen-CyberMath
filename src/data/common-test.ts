@@ -1,3 +1,9 @@
+import {
+  isVisibleSubject,
+  SUBJECTS_BY_ID,
+  type SubjectId,
+} from "@/data/subjects";
+
 export type CommonTestSubjectId = "math-1a" | "math-2bc" | "english-reading";
 export type MissionDifficulty = "STANDARD" | "HARD" | "SPRINT";
 
@@ -18,6 +24,7 @@ export interface CommonTestTheme {
 
 export interface CommonTestSubject {
   id: CommonTestSubjectId;
+  parentSubjectId: SubjectId;
   title: string;
   shortTitle: string;
   route: string;
@@ -51,6 +58,7 @@ export interface DailyMission {
 export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
   {
     id: "math-1a",
+    parentSubjectId: "math",
     title: "数学IA",
     shortTitle: "数学IA",
     route: "/common-test/math-1a",
@@ -119,6 +127,7 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
   },
   {
     id: "math-2bc",
+    parentSubjectId: "math",
     title: "数学II・B・C",
     shortTitle: "数学IIBC",
     route: "/common-test/math-2bc",
@@ -212,6 +221,7 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
   },
   {
     id: "english-reading",
+    parentSubjectId: "english",
     title: "英語リーディング",
     shortTitle: "英語R",
     route: "/common-test/english-reading",
@@ -223,7 +233,7 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
     },
     targetScoreDefault: 85,
     description:
-      "公開範囲を整理しながら拡充中のサブ科目です。数学対策を優先しつつ、余力がある日に読解速度と情報照合を補強します。",
+      "短文・案内文から論説文、複数資料の統合まで、大問別に読解速度と根拠確認を練習します。情報を探す順番と時間配分を整えます。",
     sections: [
       {
         number: 1,
@@ -307,6 +317,15 @@ export const COMMON_TEST_SUBJECTS: CommonTestSubject[] = [
     ],
   },
 ];
+
+export const PUBLIC_COMMON_TEST_SUBJECTS = COMMON_TEST_SUBJECTS.filter((subject) => {
+  const parentSubject = SUBJECTS_BY_ID[subject.parentSubjectId];
+  return Boolean(
+    parentSubject &&
+      isVisibleSubject(parentSubject) &&
+      parentSubject.capabilities.exams,
+  );
+});
 
 export const COMMON_TEST_SUBJECTS_MAP: Record<CommonTestSubjectId, CommonTestSubject> =
   Object.fromEntries(COMMON_TEST_SUBJECTS.map((subject) => [subject.id, subject])) as Record<

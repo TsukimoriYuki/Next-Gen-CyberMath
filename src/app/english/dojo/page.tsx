@@ -21,9 +21,9 @@ import {
 import { createPublicMetadata } from "@/lib/public-metadata";
 
 export const metadata: Metadata = createPublicMetadata({
-  title: "英語 過去問道場",
+  title: "英語 入試良問演習",
   description:
-    "私立文系（日東駒専・産近甲龍・MARCH・関関同立）英語過去問対策。速読・精読・文法の3科目横断で英語力を徹底強化。",
+    "私立文系（日東駒専・産近甲龍・MARCH・関関同立）の傾向を参考にしたオリジナル英語演習。速読・精読・文法を横断して学びます。",
   path: "/english/dojo",
 });
 
@@ -57,7 +57,7 @@ export default function EnglishDojoPage() {
           style={{ color: "rgba(232,121,249,0.7)" }}
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          CYBER Englishへ戻る
+          英語トップへ戻る
         </Link>
 
         {/* Header */}
@@ -79,10 +79,10 @@ export default function EnglishDojoPage() {
               backgroundClip: "text",
             }}
           >
-            英語 過去問道場
+            英語 入試良問演習
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-slate-600">
-            私立文系の英語入試傾向を科目横断で攻略する。速読・精読・文法を一カ所に集約。
+            私立文系の英語入試傾向を参考にしたオリジナル問題で、速読・精読・文法を横断して確認します。
           </p>
         </header>
 

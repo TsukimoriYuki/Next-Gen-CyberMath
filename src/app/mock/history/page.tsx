@@ -57,7 +57,7 @@ export default function MockHistoryPage() {
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-neon-cyan"
       >
         <ArrowLeft className="h-4 w-4" />
-        模試に戻る
+        カスタム演習に戻る
       </Link>
 
       <header className="mt-6">
@@ -66,10 +66,10 @@ export default function MockHistoryPage() {
           Analytics Dashboard
         </div>
         <h1 className="mt-5 font-display text-3xl font-extrabold tracking-tight">
-          成長の軌跡・弱点分析
+          演習履歴・弱点分析
         </h1>
         <p className="mt-2 text-muted-foreground">
-          過去の模試の記録から、スコア推移・単元別の正答率・弱点タグを集計します。
+          過去のカスタム演習から、スコア推移・単元別の正答率・弱点タグを集計します。
         </p>
       </header>
 
@@ -81,14 +81,14 @@ export default function MockHistoryPage() {
           <Sparkles className="mx-auto mb-3 h-8 w-8 text-neon-magenta" />
           <p className="mb-1 font-display text-lg font-bold">まだ記録がありません</p>
           <p className="mb-5 text-sm text-muted-foreground">
-            サイバー模試を受験して採点を確定すると、ここに成長の軌跡が刻まれます。
+            カスタム演習を採点すると、ここに学習履歴が表示されます。
           </p>
           <Link
             href="/mock"
             className="glow-magenta inline-flex items-center gap-2 rounded-xl bg-neon-magenta/15 px-5 py-3 font-display font-bold text-neon-magenta transition-colors hover:bg-neon-magenta/25"
           >
             <Sparkles className="h-4 w-4" />
-            模試を受ける
+            カスタム演習を始める
           </Link>
         </div>
       ) : (
@@ -110,7 +110,7 @@ export default function MockHistoryPage() {
               className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-neon-cyan"
             >
               <RotateCcw className="h-4 w-4" />
-              新しい模試を受ける
+              新しい問題セットを作る
             </Link>
             <button
               type="button"

@@ -25,7 +25,7 @@ export function DrillSectionPageShell({
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
         <nav className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
           <Link href="/common-test" className="hover:text-blue-700">
-            共通テスト対策室
+            共通テスト対策
           </Link>
           <span>/</span>
           <Link href={subject.route} className="hover:text-blue-700">

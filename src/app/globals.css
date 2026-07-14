@@ -9,8 +9,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-orbitron);
-  --font-display: var(--font-orbitron);
+  --font-heading: var(--font-sans);
+  --font-display: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -41,7 +41,7 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  /* --- Cyber neon palette --- */
+  /* Legacy aliases retained for deep learning views during migration. */
   --color-neon-cyan: var(--neon-cyan);
   --color-neon-magenta: var(--neon-magenta);
   --color-neon-violet: var(--neon-violet);
@@ -57,42 +57,36 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/*
- * Clean Sci-Fi (Light Cyber). A white / near-white research-lab surface with
- * a fine blue grid texture. Neon hues are kept but darkened so they read with
- * high contrast on white — graphs (JSXGraph black ink) and KaTeX stay crisp.
- */
-:root,
-.dark {
-  /* Font stacks. The real webfonts (Geist / Orbitron) are loaded via a
-     <link> in the layout when the network is available; these stacks are
-     the always-present fallback so the build never depends on a fetch. */
+/* Neutral academic foundation. */
+:root {
+  /* The webfont is optional; the system stack keeps builds network-independent. */
   --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, sans-serif;
   --font-geist-mono: "Geist Mono", ui-monospace, "SFMono-Regular", "Menlo",
     "Consolas", monospace;
-  --font-orbitron: "Orbitron", "Geist", ui-sans-serif, system-ui, sans-serif;
+  /* Restrained compatibility colours for existing content components. */
+  --neon-cyan: oklch(0.45 0.11 215);
+  --neon-magenta: oklch(0.44 0.18 350);
+  --neon-violet: oklch(0.43 0.16 290);
+  --neon-lime: oklch(0.41 0.12 150);
+  --neon-amber: oklch(0.45 0.1 70);
 
-  /* Accent hues, darkened for AA contrast on white surfaces. */
-  --neon-cyan: oklch(0.58 0.13 215);
-  --neon-magenta: oklch(0.55 0.22 350);
-  --neon-violet: oklch(0.52 0.2 290);
-  --neon-lime: oklch(0.55 0.15 150);
-  --neon-amber: oklch(0.6 0.13 70);
-
-  /* The faint blue used for the grid lines + panel borders. */
-  --grid-line: oklch(0.55 0.08 240 / 0.1);
-  --grid-line-strong: oklch(0.55 0.08 240 / 0.16);
-
-  --background: oklch(0.99 0.004 240);
-  --foreground: oklch(0.22 0.03 265);
+  --background: oklch(0.985 0.003 250);
+  --foreground: oklch(0.22 0.025 260);
+  --surface: #ffffff;
+  --surface-subtle: #f8fafc;
+  --surface-muted: #f1f5f9;
+  --border-strong: #cbd5e1;
+  --content-width: 72rem;
+  --content-wide: 80rem;
+  --shadow-subtle: 0 1px 2px rgb(15 23 42 / 0.05);
 
   --card: oklch(1 0 0 / 0.72);
   --card-foreground: oklch(0.22 0.03 265);
   --popover: oklch(1 0 0 / 0.92);
   --popover-foreground: oklch(0.22 0.03 265);
 
-  --primary: var(--neon-cyan);
+  --primary: oklch(0.52 0.18 255);
   --primary-foreground: oklch(0.99 0.004 240);
   --secondary: oklch(0.95 0.01 240);
   --secondary-foreground: oklch(0.28 0.03 265);
@@ -105,7 +99,7 @@
 
   --border: oklch(0.55 0.08 240 / 0.18);
   --input: oklch(0.55 0.08 240 / 0.24);
-  --ring: var(--neon-cyan);
+  --ring: oklch(0.52 0.18 255);
 
   --chart-1: var(--neon-cyan);
   --chart-2: var(--neon-magenta);
@@ -135,22 +129,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* Clean-lab background: whisper-soft neon wash + fine blue grid lines. */
-    background-image:
-      radial-gradient(
-        ellipse 80% 55% at 50% -10%,
-        oklch(0.72 0.25 330 / 0.05),
-        transparent
-      ),
-      radial-gradient(
-        ellipse 70% 50% at 100% 8%,
-        oklch(0.62 0.15 215 / 0.06),
-        transparent
-      ),
-      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px),
-      linear-gradient(to right, var(--grid-line) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 44px 44px, 44px 44px;
-    background-attachment: fixed;
+    background-image: none;
   }
 }
 
@@ -172,17 +151,11 @@ html:has([data-exam-shell]) {
 }
 
 @layer components {
-  /* Frosted glass surface — translucent white over the grid (Glassmorphism). */
+  /* Compatibility surface used by existing problem and dashboard components. */
   .glass {
-    background: linear-gradient(
-      135deg,
-      oklch(1 0 0 / 0.78),
-      oklch(1 0 0 / 0.6)
-    );
-    backdrop-filter: blur(14px) saturate(120%);
-    -webkit-backdrop-filter: blur(14px) saturate(120%);
-    border: 1px solid oklch(0.58 0.1 215 / 0.22);
-    box-shadow: 0 1px 2px oklch(0.4 0.05 250 / 0.05);
+    background: var(--surface);
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--shadow-subtle);
   }
 
   /**
@@ -224,38 +197,139 @@ html:has([data-exam-shell]) {
       transform 0.25s ease;
   }
   .glass-hover:hover {
-    border-color: oklch(0.58 0.13 215 / 0.5);
-    box-shadow:
-      0 0 0 1px oklch(0.58 0.13 215 / 0.25),
-      0 6px 20px oklch(0.4 0.05 250 / 0.08);
-    transform: translateY(-2px);
+    border-color: #93c5fd;
+    box-shadow: var(--shadow-subtle);
   }
 
   .input {
     @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-300 focus:ring-2 focus:ring-blue-100;
   }
+
+  .page-container {
+    width: min(100% - 2rem, var(--content-wide));
+    margin-inline: auto;
+  }
+
+  .learning-page {
+    min-height: 100%;
+    background: var(--surface-subtle);
+    color: #0f172a;
+  }
+
+  .page-hero {
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    background: var(--surface);
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .eyebrow {
+    color: #1d4ed8;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .button-primary,
+  .button-secondary,
+  .header-account-link,
+  .header-utility-link {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+
+  .button-primary,
+  .header-account-link {
+    border: 1px solid #1d4ed8;
+    background: #1d4ed8;
+    color: #ffffff;
+  }
+
+  .button-primary:hover,
+  .header-account-link:hover {
+    background: #1e40af;
+  }
+
+  .button-secondary,
+  .header-utility-link {
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #334155;
+  }
+
+  .button-secondary:hover,
+  .header-utility-link:hover {
+    border-color: #93c5fd;
+    color: #1d4ed8;
+  }
+
+  .button-primary:focus-visible,
+  .button-secondary:focus-visible,
+  .header-account-link:focus-visible,
+  .header-utility-link:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+  }
+
+  .action-card {
+    display: flex;
+    min-width: 0;
+    gap: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    background: #ffffff;
+    padding: 1.25rem;
+    box-shadow: var(--shadow-subtle);
+    transition: border-color 160ms ease, background-color 160ms ease;
+  }
+
+  .action-card:hover {
+    border-color: #93c5fd;
+    background: #fefefe;
+  }
+
+  .action-card:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 3px;
+  }
+
+  .icon-tile {
+    display: inline-flex;
+    height: 2.75rem;
+    width: 2.75rem;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dbeafe;
+    border-radius: 0.75rem;
+    background: #eff6ff;
+    color: #1d4ed8;
+  }
 }
 
-/* Glow is intentionally restrained on the light theme: a crisp ring rather
-   than a strong neon bloom. */
+/* Legacy utilities now render as quiet outlines instead of bloom effects. */
 @utility text-glow-* {
-  text-shadow: 0 0 calc(--value(integer) * 0.4px)
-    color-mix(in oklch, currentColor 30%, transparent);
+  text-shadow: none;
 }
 
 @utility glow-cyan {
-  box-shadow:
-    0 0 0 1px oklch(0.58 0.13 215 / 0.3),
-    0 6px 18px oklch(0.58 0.13 215 / 0.1);
+  box-shadow: 0 0 0 1px oklch(0.58 0.13 215 / 0.25);
 }
 
 @utility glow-magenta {
-  box-shadow:
-    0 0 0 1px oklch(0.55 0.22 350 / 0.3),
-    0 6px 18px oklch(0.55 0.22 350 / 0.1);
+  box-shadow: 0 0 0 1px oklch(0.55 0.22 350 / 0.22);
 }
 
-/* CYBER English academic UI override.
+/* English academic UI override.
    Scoped to /english pages so legacy dark exercise components can be softened
    without touching scoring, question data, or API behavior. */
 .english-academic {
@@ -270,6 +344,64 @@ html:has([data-exam-shell]) {
 
 .english-academic [class*="text-white"] {
   color: #0f172a !important;
+}
+
+.english-academic .speed-support-current-marker {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff;
+}
+
+/* The learning dashboard still contains legacy inline chart colors. This
+   scoped bridge keeps data visualizations intact while moving its shell and
+   empty states onto the neutral public design system. */
+.mypage-academic {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+.mypage-academic .mypage-grid-bg {
+  display: none;
+}
+
+.mypage-academic [class*="text-white"] {
+  color: #475569 !important;
+}
+
+.mypage-academic [class*="bg-blue-"][class*="text-white"],
+.mypage-academic [class*="bg-cyan-"][class*="text-white"],
+.mypage-academic [class*="bg-emerald-"][class*="text-white"],
+.mypage-academic [class*="bg-red-"][class*="text-white"] {
+  color: #fff !important;
+}
+
+.mypage-academic [class*="border-white"] {
+  border-color: #e2e8f0 !important;
+}
+
+.mypage-academic [style*="background: rgba(255, 255, 255"],
+.mypage-academic [style*="background: rgba(255,255,255"],
+.mypage-academic [style*="background: rgba(0, 0, 0"],
+.mypage-academic [style*="background: rgba(0,0,0"] {
+  background: #fff !important;
+}
+
+.mypage-academic [style*="border: 1px solid rgba(255, 255, 255"],
+.mypage-academic [style*="border: 1px solid rgba(255,255,255"],
+.mypage-academic [style*="border-color: rgba(255, 255, 255"],
+.mypage-academic [style*="border-color: rgba(255,255,255"],
+.mypage-academic [style*="border-bottom: 1px solid rgba(255, 255, 255"],
+.mypage-academic [style*="border-bottom: 1px solid rgba(255,255,255"] {
+  border-color: #e2e8f0 !important;
+}
+
+.mypage-academic [style*="color: rgba(255, 255, 255"],
+.mypage-academic [style*="color: rgba(255,255,255"] {
+  color: #64748b !important;
+}
+
+.mypage-academic [class*="text-[10px]"],
+.mypage-academic [class*="text-[11px]"] {
+  font-size: 0.75rem !important;
 }
 
 .english-academic [class*="text-emerald-400"],

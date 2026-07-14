@@ -5,7 +5,7 @@ import {
   getAllTags,
   getUnitSlugs,
 } from "@/lib/content";
-import { COMMON_TEST_SUBJECTS } from "@/data/common-test";
+import { PUBLIC_COMMON_TEST_SUBJECTS } from "@/data/common-test";
 import { SECTION_PRACTICE_EXAMS } from "@/data/common-test/section-practice";
 import { COMMON_TEST_PROBLEM_LECTURES } from "@/data/common-test/problem-lectures";
 import { getPublicCommonTestMockExams } from "@/data/common-test-mock-exams";
@@ -17,8 +17,10 @@ import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
 import { ENGLISH_LEVEL_SLUG } from "@/lib/english-types";
 import { getTagIndexingDecision } from "@/lib/tag-indexing";
 import { getSiteUrl } from "@/lib/site";
+import { PUBLIC_SUBJECTS } from "@/data/subjects";
+import { PRIMARY_NAVIGATION } from "@/data/navigation";
 
-const STATIC_ROUTES = [
+const GLOBAL_STATIC_ROUTES = [
   "/",
   "/about",
   "/quality",
@@ -29,25 +31,37 @@ const STATIC_ROUTES = [
   "/terms",
   "/contact",
   "/licenses",
-  "/math",
-  "/courses",
+  "/subjects",
+] as const;
+
+const MATH_COURSE_ROUTES = ["/courses"] as const;
+
+const MATH_PROBLEM_ROUTES = [
   "/units",
   "/tags",
-  "/common-test",
+  "/math/calculation",
+  "/challenge-problems",
+] as const;
+
+const MATH_EXAM_ROUTES = [
+  "/dojo",
   "/common-test/simulator",
   "/common-test/practice",
   "/common-test/problem-lectures",
-  "/common-test/math-1a",
-  "/common-test/math-2bc",
-  "/common-test/english-reading",
-  "/english",
+] as const;
+
+const ENGLISH_COURSE_ROUTES = [
+  "/english/grammar",
+  "/english/vocab",
+] as const;
+
+const ENGLISH_PROBLEM_ROUTES = [
   "/english/speed-reading",
   "/english/comprehension",
   "/english/multi-source",
-  "/english/grammar",
-  "/english/vocab",
-  "/english/dojo",
 ] as const;
+
+const ENGLISH_EXAM_ROUTES = ["/english/dojo"] as const;
 
 function sitemapEntry(
   baseUrl: string,
@@ -63,33 +77,70 @@ function sitemapEntry(
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getSiteUrl();
-  const routes = new Set<string>(STATIC_ROUTES);
+  const routes = new Set<string>(GLOBAL_STATIC_ROUTES);
+  const mathSubject = PUBLIC_SUBJECTS.find((subject) => subject.id === "math");
+  const englishSubject = PUBLIC_SUBJECTS.find((subject) => subject.id === "english");
 
-  for (const slug of getUnitSlugs()) routes.add(`/units/${slug}`);
-  for (const slug of getAllLessonSlugs()) routes.add(`/lessons/${slug}`);
-  for (const problem of getAllProblems()) routes.add(`/problems/${problem.slug}`);
-  for (const tag of getAllTags()) {
-    if (getTagIndexingDecision(tag.tag, tag.total).includeInSitemap) {
-      routes.add(`/tags/${encodeURIComponent(tag.tag)}`);
+  for (const item of PRIMARY_NAVIGATION) {
+    if (["learn", "problems", "exams", "review"].includes(item.id)) {
+      routes.add(item.href);
     }
   }
 
-  for (const subject of COMMON_TEST_SUBJECTS) {
+  if (mathSubject?.capabilities.courses) {
+    for (const route of MATH_COURSE_ROUTES) routes.add(route);
+  }
+  if (mathSubject?.capabilities.problems) {
+    for (const route of MATH_PROBLEM_ROUTES) routes.add(route);
+  }
+  if (mathSubject?.capabilities.exams) {
+    for (const route of MATH_EXAM_ROUTES) routes.add(route);
+  }
+  if (englishSubject?.capabilities.courses) {
+    for (const route of ENGLISH_COURSE_ROUTES) routes.add(route);
+  }
+  if (englishSubject?.capabilities.problems) {
+    for (const route of ENGLISH_PROBLEM_ROUTES) routes.add(route);
+  }
+  if (englishSubject?.capabilities.exams) {
+    for (const route of ENGLISH_EXAM_ROUTES) routes.add(route);
+  }
+  if (PUBLIC_COMMON_TEST_SUBJECTS.length > 0) routes.add("/common-test");
+
+  for (const subject of PUBLIC_SUBJECTS) routes.add(subject.href);
+
+  if (mathSubject?.capabilities.problems) {
+    for (const slug of getUnitSlugs()) routes.add(`/units/${slug}`);
+    for (const problem of getAllProblems()) routes.add(`/problems/${problem.slug}`);
+    for (const tag of getAllTags()) {
+      if (getTagIndexingDecision(tag.tag, tag.total).includeInSitemap) {
+        routes.add(`/tags/${encodeURIComponent(tag.tag)}`);
+      }
+    }
+  }
+  if (mathSubject?.capabilities.courses) {
+    for (const slug of getAllLessonSlugs()) routes.add(`/lessons/${slug}`);
+  }
+
+  for (const subject of PUBLIC_COMMON_TEST_SUBJECTS) {
+    routes.add(subject.route);
     for (const section of subject.sections) {
       routes.add(`${subject.route}/section-${section.number}`);
     }
   }
-  for (const exam of getPublicCommonTestMockExams()) {
-    routes.add(`/common-test/simulator/${exam.id}`);
-  }
-  for (const exam of SECTION_PRACTICE_EXAMS) {
-    routes.add(`/common-test/practice/${exam.id}`);
-  }
-  for (const lecture of COMMON_TEST_PROBLEM_LECTURES) {
-    routes.add(`/common-test/problem-lectures/${lecture.id}`);
-  }
-  for (const lecture of PUBLIC_SPECIAL_LECTURES) {
-    if (!lecture.noindex) routes.add(`/common-test/lectures/${lecture.slug}`);
+  if (mathSubject?.capabilities.exams) {
+    for (const exam of getPublicCommonTestMockExams()) {
+      routes.add(`/common-test/simulator/${exam.id}`);
+    }
+    for (const exam of SECTION_PRACTICE_EXAMS) {
+      routes.add(`/common-test/practice/${exam.id}`);
+    }
+    for (const lecture of COMMON_TEST_PROBLEM_LECTURES) {
+      routes.add(`/common-test/problem-lectures/${lecture.id}`);
+    }
+    for (const lecture of PUBLIC_SPECIAL_LECTURES) {
+      if (!lecture.noindex) routes.add(`/common-test/lectures/${lecture.slug}`);
+    }
   }
 
   for (const subject of PUBLIC_COURSE_SUBJECTS) {
@@ -102,18 +153,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  const speedReadingLevels = new Set(SPEED_READING_PROBLEMS.map((problem) => problem.level));
-  for (const level of speedReadingLevels) {
-    routes.add(`/english/speed-reading/level/${ENGLISH_LEVEL_SLUG[level]}`);
-  }
-  for (const problem of SPEED_READING_PROBLEMS) {
-    routes.add(`/english/speed-reading/${problem.id}`);
-  }
-  for (const problem of COMPREHENSION_PROBLEMS) {
-    routes.add(`/english/comprehension/${problem.id}`);
-  }
-  for (const problem of MULTI_SOURCE_PROBLEMS) {
-    routes.add(`/english/multi-source/${problem.id}`);
+  if (englishSubject?.capabilities.problems) {
+    const speedReadingLevels = new Set(SPEED_READING_PROBLEMS.map((problem) => problem.level));
+    for (const level of speedReadingLevels) {
+      routes.add(`/english/speed-reading/level/${ENGLISH_LEVEL_SLUG[level]}`);
+    }
+    for (const problem of SPEED_READING_PROBLEMS) {
+      routes.add(`/english/speed-reading/${problem.id}`);
+    }
+    for (const problem of COMPREHENSION_PROBLEMS) {
+      routes.add(`/english/comprehension/${problem.id}`);
+    }
+    for (const problem of MULTI_SOURCE_PROBLEMS) {
+      routes.add(`/english/multi-source/${problem.id}`);
+    }
   }
 
   return Array.from(routes)

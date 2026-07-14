@@ -5,7 +5,7 @@ import { CommonTestDailyPlaylistPanel } from "@/components/common-test/CommonTes
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "今日の学習メニュー — 共通テスト対策室",
+  title: "今日の学習メニュー — 共通テスト対策",
   description:
     "共通テスト対策の今日の学習プレイリスト。履歴・目標点・復習キューをもとにルールベースで今日やるべきタスクを表示します。",
 };
@@ -68,7 +68,7 @@ export default function CommonTestDailyPage() {
               {[
                 { step: 1, label: "本番演習を受ける", href: "/common-test/simulator", color: "#2563eb" },
                 { step: 2, label: "本番分析で結果を確認する", href: "/common-test/history", color: "#0891b2" },
-                { step: 3, label: "弱点攻略で優先課題を確認する", href: "/common-test/weakness", color: "#e11d48" },
+                { step: 3, label: "弱点分析で優先課題を確認する", href: "/common-test/weakness", color: "#e11d48" },
                 { step: 4, label: "今日の学習メニューを進める", href: "/common-test/daily", color: "#2563eb" },
                 { step: 5, label: "復習キューで定着させる", href: "/common-test/review", color: "#ea580c" },
               ].map(({ step, label, href, color }) => (
@@ -123,7 +123,7 @@ export default function CommonTestDailyPage() {
 
         {/* Footer */}
         <p className="mt-16 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">
-          {SITE_NAME} · 共通テスト対策室
+          {SITE_NAME} · 共通テスト対策
         </p>
       </div>
     </div>

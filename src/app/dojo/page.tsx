@@ -8,9 +8,9 @@ import { DEVIATION_VALUES, DEVIATION_META, UNIVERSITY_GROUP_META } from "@/lib/t
 import type { UniversityGroup } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "過去問道場",
+  title: "入試良問演習",
   description:
-    "偏差値55〜70帯の良問20選。偏差値スライダー×単元絞り込みで良問をランダム出題。「なぜ？」ポップアップと複数解法で定石を深掘りする。",
+    "大学入試の典型テーマをもとにしたオリジナル類題20選。レベルと単元で絞り込み、複数解法で定石を深掘りします。",
 };
 
 export default async function DojoPage({
@@ -37,16 +37,16 @@ export default async function DojoPage({
       <header className="mt-6">
         <div className="inline-flex items-center gap-2 rounded-full border border-neon-amber/30 bg-neon-amber/5 px-3 py-1 text-xs font-mono uppercase tracking-[0.2em] text-neon-amber">
           <Swords className="h-3.5 w-3.5" />
-          Dojo — Past Problems
+          大学入試レベル・オリジナル類題
         </div>
 
         <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-foreground"
           style={{ textShadow: "0 0 30px oklch(0.6 0.13 70 / 0.18)" }}>
-          過去問<span className="text-neon-amber">道場</span>
+          入試良問演習
         </h1>
         <p className="mt-2 text-muted-foreground">
           偏差値帯と単元を絞り込み、良問をランダム出題。定石（背景）を把握し、
-          複数の解法で「なぜ解けるのか」を体得せよ。
+          複数の解法を比べながら、「なぜ解けるのか」を理解します。
         </p>
       </header>
 
@@ -102,7 +102,7 @@ export default async function DojoPage({
         ))}
       </div>
 
-      {/* ---- 私立文系 HACK MODE（数学） ---- */}
+      {/* ---- 私立文系の志望校群別演習 ---- */}
       <section
         className="mt-10 rounded-2xl overflow-hidden"
         style={{
@@ -119,10 +119,9 @@ export default async function DojoPage({
         >
           <div className="flex items-center gap-2">
             <span
-              className="font-mono text-xs font-bold uppercase tracking-[0.2em]"
-              style={{ color: "#e879f9" }}
+              className="text-xs font-bold tracking-wide text-blue-800"
             >
-              ▸ 私立文系 HACK MODE
+              私立文系・志望校群別演習
             </span>
             <span className="font-mono text-[10px] text-muted-foreground ml-1">
               志望校群別・数学対策問題
@@ -130,8 +129,7 @@ export default async function DojoPage({
           </div>
           <Link
             href="/english/dojo"
-            className="font-mono text-[10px] transition-colors hover:opacity-80"
-            style={{ color: "#e879f9" }}
+            className="text-xs font-semibold text-blue-800 underline underline-offset-2"
           >
             英語版 →
           </Link>
@@ -148,16 +146,13 @@ export default async function DojoPage({
                   border: `1px solid color-mix(in srgb, ${m.accent} 28%, transparent)`,
                 }}
               >
-                <div
-                  className="font-display text-base font-extrabold"
-                  style={{ color: m.accent }}
-                >
+                <div className="text-base font-extrabold text-slate-900">
                   {m.label}
                 </div>
-                <div className="mt-0.5 font-mono text-[9px] text-muted-foreground">
+                <div className="mt-0.5 text-xs font-medium text-slate-600">
                   {m.deviationRange}
                 </div>
-                <div className="mt-1 font-mono text-[10px] text-muted-foreground leading-snug">
+                <div className="mt-1 text-xs leading-snug text-slate-600">
                   {m.description}
                 </div>
               </div>
@@ -165,9 +160,9 @@ export default async function DojoPage({
           })}
         </div>
         <div className="px-5 pb-4">
-          <p className="font-mono text-[11px] text-muted-foreground leading-relaxed">
+          <p className="text-sm leading-relaxed text-slate-600">
             下の探索エリアで{" "}
-            <span style={{ color: "#e879f9" }}>tags: 私立文系</span>{" "}
+            <span className="font-semibold text-blue-800">tags: 私立文系</span>{" "}
             を検索すると，各大学群の対策問題を絞り込める。
           </p>
         </div>

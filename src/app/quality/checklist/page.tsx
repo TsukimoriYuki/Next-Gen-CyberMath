@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Cyber Mathが公開前・公開後に実行しているQAスクリプトの一覧と、現在の公開問題数を示すページです。",
   alternates: { canonical: "/quality/checklist" },
   openGraph: {
-    title: "公開QAチェックリスト | Cyber Math Next-Gen",
+    title: "公開QAチェックリスト",
     description: "実行しているQAスクリプトの一覧と、現在の公開問題数。",
     url: "/quality/checklist",
   },
@@ -26,14 +26,14 @@ export default function QualityChecklistPage() {
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
       <Link
         href="/quality"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-neon-cyan"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-blue-700"
       >
         <ArrowLeft className="h-4 w-4" />
         教材・品質方針へ戻る
       </Link>
 
       <header className="mt-8">
-        <div className="inline-flex rounded-full border border-neon-cyan/30 bg-neon-cyan/5 px-3 py-1 font-mono text-xs uppercase tracking-[0.2em] text-neon-cyan">
+        <div className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold tracking-wide text-blue-800">
           Quality Checklist
         </div>
         <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -130,11 +130,11 @@ export default function QualityChecklistPage() {
         <h2 className="font-display text-lg font-bold text-foreground">更新履歴・誤り報告</h2>
         <p className="mt-2 text-sm leading-7 text-muted-foreground">
           直近の修正内容は
-          <Link href="/quality/changelog" className="mx-1 text-neon-cyan hover:underline">
+          <Link href="/quality/changelog" className="mx-1 font-semibold text-blue-800 underline underline-offset-2">
             更新履歴
           </Link>
           にまとめています。教材や表示の誤りに気づいた場合は
-          <Link href="/contact" className="mx-1 text-neon-cyan hover:underline">
+          <Link href="/contact" className="mx-1 font-semibold text-blue-800 underline underline-offset-2">
             お問い合わせ
           </Link>
           から報告してください。

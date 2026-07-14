@@ -8,6 +8,7 @@ import {
   assertUniqueRegistryKeys,
   indexByUniqueRegistryKey,
 } from "@/lib/registry";
+import { isVisibleSubject, SUBJECTS_BY_ID } from "@/data/subjects";
 
 export const COURSE_SUBJECTS: CourseSubject[] = [
   MATH_1A_COURSE_SUBJECT,
@@ -26,7 +27,13 @@ export const PREMIUM_COURSE_SUBJECTS: CourseSubject[] = COURSE_SUBJECTS.filter(
 );
 
 export function isPublicCourseSubject(subject: CourseSubject): boolean {
+  const parentSubject = SUBJECTS_BY_ID[subject.parentSubjectId];
   return (
+    Boolean(
+      parentSubject &&
+        isVisibleSubject(parentSubject) &&
+        parentSubject.capabilities.courses,
+    ) &&
     (subject.status ?? "available") === "available" &&
     subject.units.length > 0 &&
     subject.units.every((unit) => unit.lessons.length > 0)

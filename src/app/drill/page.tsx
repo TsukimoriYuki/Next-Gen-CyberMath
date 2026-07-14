@@ -196,10 +196,10 @@ export default function DrillPage() {
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6 sm:py-14">
       <div className="inline-flex items-center gap-2 rounded-full border border-neon-amber/30 bg-neon-amber/5 px-3 py-1 text-xs font-mono uppercase tracking-[0.2em] text-neon-amber">
         <Zap className="h-3.5 w-3.5" />
-        Cyber Drill · Shuttle Run
+        計算トレーニング・連続スピード
       </div>
       <h1 className="mt-5 font-display text-3xl font-extrabold tracking-tight">
-        サイバー計算特訓
+        連続スピードモード
       </h1>
 
       {/* ============ IDLE ============ */}
@@ -211,8 +211,8 @@ export default function DrillPage() {
           </p>
           <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
             平方完成・因数分解・微分係数などを 4 択で連続出題します。5 問正解ごとに
-            ステージが上がり、制限時間が短くなります。ライフは 3 つ。3 回ミス、または
-            時間切れでゲームオーバーです。
+            レベルが上がり、制限時間が短くなります。3回誤答するか、時間切れになると
+            その回の練習は終了です。
           </p>
           <button
             type="button"
@@ -220,7 +220,7 @@ export default function DrillPage() {
             className="glow-cyan mt-8 inline-flex items-center gap-2 rounded-xl bg-neon-cyan/15 px-6 py-3 font-display text-lg font-bold text-neon-cyan transition-colors hover:bg-neon-cyan/25"
           >
             <Play className="h-5 w-5" />
-            SYSTEM START
+            練習を始める
           </button>
         </div>
       )}
@@ -256,7 +256,7 @@ export default function DrillPage() {
           {/* HUD */}
           <div className="mt-3 flex items-center justify-between text-sm">
             <span className="font-mono text-muted-foreground">
-              STAGE <span className="font-bold text-neon-cyan">{s.stage}</span>
+              レベル <span className="font-bold text-neon-cyan">{s.stage}</span>
               <span className="ml-3">
                 {s.streak}/{CORRECT_PER_STAGE}
               </span>
@@ -274,7 +274,7 @@ export default function DrillPage() {
               ))}
             </span>
             <span className="font-mono text-muted-foreground">
-              SCORE <span className="font-bold text-neon-lime">{s.score}</span>
+              正解 <span className="font-bold text-neon-lime">{s.score}</span>
             </span>
           </div>
 
@@ -283,7 +283,7 @@ export default function DrillPage() {
             {s.flash && (
               <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-neon-lime/10 backdrop-blur-sm">
                 <span className="font-display text-3xl font-extrabold text-neon-lime">
-                  STAGE {s.stage} ↑
+                  レベル {s.stage} に進みました
                 </span>
               </div>
             )}
@@ -315,7 +315,7 @@ export default function DrillPage() {
       {s.phase === "over" && (
         <div className="glass glow-magenta mt-8 rounded-3xl p-8 text-center sm:p-12">
           <p className="font-display text-3xl font-extrabold tracking-wide text-neon-magenta">
-            GAME OVER
+            練習終了
           </p>
           <div className="mt-6 flex items-center justify-center gap-8">
             <div>
@@ -331,7 +331,7 @@ export default function DrillPage() {
                 {s.stage}
               </div>
               <div className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
-                到達ステージ
+                到達レベル
               </div>
             </div>
           </div>
@@ -345,11 +345,11 @@ export default function DrillPage() {
               もう一度
             </button>
             <Link
-              href="/"
+              href="/math"
               className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 font-semibold text-muted-foreground transition-colors hover:text-neon-cyan"
             >
               <Home className="h-5 w-5" />
-              トップへ
+              数学トップへ
             </Link>
           </div>
         </div>

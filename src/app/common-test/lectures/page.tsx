@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     canonical: "/common-test/lectures",
   },
   openGraph: {
-    title: "特別講義 | Cyber Math Next-Gen",
+    title: "特別講義",
     description:
       "共通テスト数学の満点講義、判別ドリル、本番判断、時間短縮講義への入口。",
     url: "/common-test/lectures",

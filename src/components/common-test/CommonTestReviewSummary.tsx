@@ -97,7 +97,7 @@ export function CommonTestReviewSummary() {
               ログインで保存
             </span>
           </div>
-          <p className="mt-0.5 text-xs text-slate-400">
+          <p className="mt-0.5 text-xs text-slate-600">
             ログインすると、間違えた問題と次の復習日を保存できます。
           </p>
         </div>

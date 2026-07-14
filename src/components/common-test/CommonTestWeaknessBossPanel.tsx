@@ -333,7 +333,7 @@ function SummaryHeader({
       <div className="flex items-center gap-2">
         <ShieldAlert className="h-4 w-4" style={{ color: headerColor }} />
         <span className="text-sm font-bold" style={{ color: headerColor }}>
-          弱点攻略
+          弱点分析
         </span>
         <span className="font-mono text-[9px] uppercase tracking-[0.22em]" style={{ color: headerColor, opacity: 0.5 }}>
           Weakness

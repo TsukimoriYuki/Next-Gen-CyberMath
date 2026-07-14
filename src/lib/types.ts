@@ -255,13 +255,13 @@ export const DIFFICULTY_META: Record<
   },
   EX: {
     label: "EX",
-    name: "競技数学・特異点",
+    name: "競技数学・発展探究",
     className: "border-purple-500/60 text-purple-400",
     accent: "#a855f7",
   },
   OLYMPIAD: {
     label: "∞",
-    name: "数学オリンピック・深淵",
+    name: "数学オリンピック・最難関",
     className: "border-yellow-500/60 text-yellow-400",
     accent: "#eab308",
   },

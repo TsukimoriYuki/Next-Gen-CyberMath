@@ -101,7 +101,7 @@ export function MessageEditor({ students }: { students: Student[] }) {
           placeholder={
             receiverId
               ? `${students.find((s) => s.id === receiverId)?.name ?? "生徒"} へのメッセージ…`
-              : "全門下生へのメッセージ…"
+              : "全生徒へのメッセージ…"
           }
           rows={4}
           className="w-full resize-none rounded-xl border border-border/60 bg-secondary/20 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-neon-violet/40"

@@ -113,7 +113,7 @@ export function MissionViewer({ problem, mission }: Props) {
               </div>
               <div>
                 <div className="font-display text-sm font-bold" style={{ color: "oklch(0.8 0.15 350)" }}>
-                  師範からのコメント
+                  指導者からのコメント
                 </div>
                 <div className="font-mono text-xs" style={{ color: "oklch(0.65 0.08 290)" }}>
                   Mentor&apos;s Message

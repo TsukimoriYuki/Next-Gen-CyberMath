@@ -5,7 +5,7 @@ import { VocabFlashcardGame } from "@/components/english/VocabFlashcardGame";
 import { createPublicMetadata } from "@/lib/public-metadata";
 
 export const metadata: Metadata = createPublicMetadata({
-  title: "英単語フラッシュカード | CYBER English",
+  title: "英単語フラッシュカード",
   description: "入試頻出英単語を反復して定着させるフラッシュカードです。",
   path: "/english/vocab",
 });
@@ -29,7 +29,7 @@ export default function VocabPage() {
           className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 hover:text-emerald-400 transition-colors"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
-          CYBER English
+          英語
         </Link>
 
         <header className="mt-6 mb-8">

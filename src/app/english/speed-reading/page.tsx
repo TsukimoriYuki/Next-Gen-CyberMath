@@ -64,7 +64,7 @@ export default function SpeedReadingPage() {
           className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 transition-colors hover:text-emerald-500"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
-          CYBER English
+          英語
         </Link>
 
         <header className="mt-8 mb-12">

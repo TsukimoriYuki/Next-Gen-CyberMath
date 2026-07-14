@@ -10,14 +10,14 @@ import type { Lesson } from "@/lib/types";
 import type { CourseSubject } from "@/types/course";
 
 export const metadata: Metadata = {
-  title: "講座集",
+  title: "講座一覧",
   description:
-    "数学IA、数学IIBC、数学IIICの基礎講座と発展講座を、単元ごとに整理した講座一覧です。",
+    "公開中の数学IA、数学II・B・Cの講座を、単元ごとに整理した一覧です。",
   alternates: {
     canonical: "/courses",
   },
   openGraph: {
-    title: "講座集 | Cyber Math Next-Gen",
+    title: "講座一覧",
     description: "高校数学の基礎講座と発展講座を単元ごとに整理した講座一覧。",
     url: "/courses",
   },
@@ -34,14 +34,14 @@ export default function CoursesIndexPage() {
             <GraduationCap className="h-3.5 w-3.5" />
             Courses
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">講座集</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">講座一覧</h1>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
-            単元ページから直接開ける通常講座と、共通テスト向けの発展講座を一覧できます。
+            新課程の単元順に学ぶ体系講座と、特定テーマを深く学ぶ講義を一覧できます。
             公開済みの講座だけを、科目と単元から選べます。
           </p>
         </header>
 
-        <CourseSection title="基礎講座" subjects={PUBLIC_STANDARD_COURSE_SUBJECTS} />
+        <CourseSection title="体系講座" subjects={PUBLIC_STANDARD_COURSE_SUBJECTS} />
         {PUBLIC_PREMIUM_COURSE_SUBJECTS.length > 0 && (
           <CourseSection
             title="発展編"
@@ -140,7 +140,7 @@ function LessonSection({
   return (
     <section className={className}>
       <div className="mb-4 flex items-center gap-3">
-        <h2 className="text-xl font-extrabold text-slate-950">単元別講座</h2>
+        <h2 className="text-xl font-extrabold text-slate-950">テーマ別講義</h2>
         <span className="h-px flex-1 bg-slate-200" />
       </div>
       <div className="space-y-5">

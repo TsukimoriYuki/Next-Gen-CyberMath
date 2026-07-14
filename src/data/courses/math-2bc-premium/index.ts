@@ -12,6 +12,7 @@ function createPremiumUnit(unitId: string, unitTitle: string): CourseUnit {
 
 export const MATH_2BC_PREMIUM_COURSE_SUBJECT: CourseSubject = {
   subjectId: "math-2bc-premium",
+  parentSubjectId: "math",
   subjectName: "数学II・B・C 発展編",
   description:
     "数学II・B・Cの内容を、入試標準〜応用レベルまで体系的に扱う発展編です。関数、図形、数列、ベクトル、統計などを深く掘り下げ、実戦的な解法まで単元ごとに追加していきます。",

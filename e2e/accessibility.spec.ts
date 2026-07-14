@@ -11,6 +11,13 @@ import AxeBuilder from "@axe-core/playwright";
 const PAGES_TO_SCAN = [
   "/",
   "/math",
+  "/english",
+  "/subjects",
+  "/learn",
+  "/practice",
+  "/exams",
+  "/review",
+  "/mypage",
   "/units",
   "/problems/sine-synthesis-amplitude",
   "/common-test",
@@ -19,6 +26,7 @@ const PAGES_TO_SCAN = [
   "/courses",
   "/quality",
   "/quality/checklist",
+  "/challenge-problems",
 ];
 
 for (const route of PAGES_TO_SCAN) {

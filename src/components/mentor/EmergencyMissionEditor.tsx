@@ -62,7 +62,7 @@ type EnglishCategory = "SPEED_READING" | "COMPREHENSION" | "MULTI_SOURCE";
 
 const MATH_CATEGORIES: { key: MathCategory; label: string }[] = [
   { key: "standard", label: "通常問題" },
-  { key: "abyss",    label: "ABYSS（特異点）" },
+  { key: "abyss",    label: "挑戦問題（発展・最難関）" },
 ];
 
 const ENGLISH_CATEGORIES: { key: EnglishCategory; label: string; icon: React.ElementType }[] = [
@@ -451,7 +451,7 @@ export function EmergencyMissionEditor({ students, allProblems, allEnglishProble
         {/* ── コメント ────────────────────────────────────────────── */}
         <div>
           <label className="mb-2 block font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-            師範からのコメント（魂を込めろ）
+            指導者からのコメント
           </label>
           <textarea
             rows={4}
@@ -468,7 +468,7 @@ export function EmergencyMissionEditor({ students, allProblems, allEnglishProble
         {/* ── Status ──────────────────────────────────────────────── */}
         {status === "ok" && (
           <div className="flex items-center gap-2 rounded-xl border border-neon-lime/40 bg-neon-lime/8 px-4 py-3 text-sm text-neon-lime">
-            <CheckCircle2 className="h-4 w-4" /> 緊急ミッションを発令しました
+            <CheckCircle2 className="h-4 w-4" /> 個別課題を割り当てました
           </div>
         )}
         {status === "err" && (
@@ -490,7 +490,7 @@ export function EmergencyMissionEditor({ students, allProblems, allEnglishProble
           }}
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-          {loading ? "発令中..." : "緊急ミッションを発令する"}
+          {loading ? "割り当て中..." : "個別課題を割り当てる"}
         </button>
       </div>
 
@@ -499,7 +499,7 @@ export function EmergencyMissionEditor({ students, allProblems, allEnglishProble
         <div className="mb-3 flex items-center gap-2">
           <Flame className="h-4 w-4 text-neon-magenta" />
           <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-            発令済みミッション（最新30件）
+            割り当て済みの個別課題（最新30件）
           </span>
         </div>
         {missionsLoading ? (
@@ -507,7 +507,7 @@ export function EmergencyMissionEditor({ students, allProblems, allEnglishProble
             <Loader2 className="h-4 w-4 animate-spin" /> 読み込み中...
           </div>
         ) : missions.length === 0 ? (
-          <p className="text-sm text-muted-foreground">まだミッションは発令されていません。</p>
+          <p className="text-sm text-muted-foreground">まだ個別課題は割り当てられていません。</p>
         ) : (
           <div className="space-y-2">
             {missions.map((m) => (
@@ -538,7 +538,7 @@ export function EmergencyMissionEditor({ students, allProblems, allEnglishProble
                     className="font-mono text-xs"
                     style={{ color: m.isCompleted ? "var(--neon-lime)" : "var(--neon-magenta)" }}
                   >
-                    {m.isCompleted ? "完了" : "未クリア"}
+                    {m.isCompleted ? "完了" : "未完了"}
                   </span>
                 </div>
               </div>

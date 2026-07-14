@@ -32,7 +32,7 @@ export default function SectionPracticeIndexPage() {
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-neon-cyan"
       >
         <ArrowLeft className="h-4 w-4" />
-        共通テスト対策室へ戻る
+        共通テスト対策へ戻る
       </Link>
 
       <header className="mt-8">

@@ -4,7 +4,7 @@
 // そのため初学者講座でも、公式暗記ではなく、式とグラフの対応・平方完成の意味・最大最小の見方まで丁寧に扱う。
 // 数式はインライン数式のみ使う（display math delimiter は禁止）。
 
-import type { CourseLesson, CourseSubject, CourseUnit } from "@/types/course";
+import type { CourseLesson, CourseUnit } from "@/types/course";
 
 // ─── 数学IA ─── 二次関数 ────────────────────────────────────────────────────
 
@@ -2908,7 +2908,7 @@ const QUADRATIC_ALL_LESSONS: CourseLesson[] = [
   });
 
 
-const QUADRATIC_UNIT: CourseUnit = {
+export const QUADRATIC_UNIT: CourseUnit = {
   unitId: "quadratic",
   subjectId: "math-1a",
   unitTitle: "二次関数",
@@ -2918,60 +2918,3 @@ const QUADRATIC_UNIT: CourseUnit = {
   */
   lessons: QUADRATIC_ALL_LESSONS,
 };
-
-// ─── 数学IA 科目 ────────────────────────────────────────────────────────────
-
-const MATH_1A: CourseSubject = {
-  subjectId: "math-1a",
-  subjectName: "数学IA",
-  description: "数と式・図形・確率・データ分析。共通テスト数学IAを軸に、基礎から旧帝大レベルの思考力まで体系的に学ぶ。",
-  color: "#2563eb",
-  units: [
-    QUADRATIC_UNIT,
-    // 今後追加予定: 場合の数と確率、図形と計量、集合と命題、整数の性質 …
-  ],
-};
-
-// ─── 数学IIB 科目（準備中） ──────────────────────────────────────────────────
-
-const MATH_2BC: CourseSubject = {
-  subjectId: "math-2bc",
-  subjectName: "数学II・B・C",
-  description: "三角関数・指数対数・微積分・数列・ベクトル。共通テスト数学II・B・Cを体系的に学ぶ。",
-  color: "#7c3aed",
-  units: [
-    // 今後追加予定: 三角関数、指数・対数、微分・積分、数列、ベクトル …
-  ],
-};
-
-// ─── 英語R 科目（準備中） ────────────────────────────────────────────────────
-
-const ENGLISH_READING: CourseSubject = {
-  subjectId: "english-reading",
-  subjectName: "英語リーディング",
-  description: "速読・精読・語彙・文法。共通テスト英語リーディングを速度・精度の両面から強化する。",
-  color: "#059669",
-  units: [
-    // 今後追加予定: 速読トレーニング、長文読解、語彙・熟語 …
-  ],
-};
-
-// ─── エクスポート ────────────────────────────────────────────────────────────
-
-export const COURSE_SUBJECTS: CourseSubject[] = [
-  MATH_1A,
-  MATH_2BC,
-  ENGLISH_READING,
-];
-
-export const COURSE_SUBJECT_MAP: Record<string, CourseSubject> = Object.fromEntries(
-  COURSE_SUBJECTS.map((s) => [s.subjectId, s]),
-);
-
-export function getCourseSubject(subjectId: string): CourseSubject | undefined {
-  return COURSE_SUBJECT_MAP[subjectId];
-}
-
-export function getCourseUnit(subjectId: string, unitId: string): CourseUnit | undefined {
-  return getCourseSubject(subjectId)?.units.find((u) => u.unitId === unitId);
-}

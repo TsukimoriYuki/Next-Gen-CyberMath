@@ -32,14 +32,14 @@ export default function ExamSetsPage() {
             本番レベル模試集
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
-            大学入試の個別試験を想定した固定セットの模試です。サイバー模試とは別に、出題範囲・配点・制限時間を固定して実戦形式で確認できます。
+            大学入試の個別試験を想定した固定セットの模試です。カスタム演習とは別に、出題範囲・配点・制限時間を固定して実戦形式で確認できます。
           </p>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             <div className="rounded-xl border border-violet-200 bg-violet-50 p-4">
               <div className="mb-1 flex items-center gap-2">
                 <FileText className="h-4 w-4 text-violet-700" />
-                <span className="text-sm font-bold text-violet-800">サイバー模試</span>
+                <span className="text-sm font-bold text-violet-800">カスタム演習</span>
                 <Link
                   href="/mock"
                   className="ml-auto inline-flex items-center gap-1 text-xs font-bold text-violet-700 hover:text-violet-900"

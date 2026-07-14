@@ -5,7 +5,7 @@ import { CommonTestHistoryPanel } from "@/components/common-test/CommonTestHisto
 import { CommonTestExamHistoryPanel } from "@/components/common-test/CommonTestExamHistoryPanel";
 
 export const metadata: Metadata = {
-  title: "演習履歴 — 共通テスト数学 攻略OS",
+  title: "共通テスト演習履歴",
   description: "共通テスト対策ドリルの演習履歴と自信度分析",
 };
 

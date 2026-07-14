@@ -13,6 +13,7 @@ function createPremiumUnit(unitId: string, unitTitle: string): CourseUnit {
 
 export const MATH_1A_PREMIUM_COURSE_SUBJECT: CourseSubject = {
   subjectId: "math-1a-premium",
+  parentSubjectId: "math",
   subjectName: "数学I・A 発展編",
   description:
     "数学I・Aの内容を、入試標準〜応用レベルまで深く扱う発展編です。詳しい解説、入試頻出パターン、つまずきやすいポイント、実戦的な例題を単元ごとに追加していきます。",

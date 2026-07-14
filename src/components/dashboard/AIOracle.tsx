@@ -145,7 +145,7 @@ export function AIOracle() {
           </div>
           <div className="min-w-0">
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/30">
-              Cyber Oracle · AI教官
+              学習アドバイス
             </p>
             <p
               className="animate-pulse font-mono text-sm font-semibold"
@@ -188,7 +188,7 @@ export function AIOracle() {
               style={{ color: "#f43f5e" }}
             />
             <p className="font-mono text-xs text-white/50">
-              通信障害 — Oracle との接続に失敗しました
+              学習アドバイスを読み込めませんでした
             </p>
           </div>
           <button
@@ -239,7 +239,7 @@ export function AIOracle() {
             className="font-mono text-[10px] uppercase tracking-[0.25em]"
             style={{ color: "#a78bfa" }}
           >
-            Cyber Oracle · AI教官指令
+            次のおすすめ
           </span>
         </div>
         <button
@@ -299,7 +299,7 @@ export function AIOracle() {
               boxShadow: "0 4px 16px rgba(139,92,246,0.2)",
             }}
           >
-            出撃する
+            おすすめを開く
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>

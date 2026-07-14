@@ -170,11 +170,11 @@ export const COMMON_TEST_MATH_1A_AI_PROTOTYPE_001: CommonTestMockExam = {
       estimatedMinutes: 70,
       theme: "AI生成の低品質な試作版のため、公開導線から外しています。",
       leadText:
-        "この模試は現在、公開用の本番模試として扱っていません。共通テスト型本番模試は、手動作成版 第1回を利用してください。",
+        "この模試は現在、公開用の本番模試として扱っていません。共通テスト型本番模試は、オリジナル模試 第1回を利用してください。",
       questions: [
         {
           id: "m1a-ai-prototype-notice",
-          prompt: "この試作版は採点対象外です。手動作成版 第1回へ移動してください。",
+          prompt: "この旧試作版は採点対象外です。オリジナル模試 第1回へ移動してください。",
           answerFormat: "choice",
           choices: choices([{ text: "確認した", correct: true }]),
           points: 100,
@@ -183,11 +183,11 @@ export const COMMON_TEST_MATH_1A_AI_PROTOTYPE_001: CommonTestMockExam = {
           commonMistakes: ["公開用模試と取り違える"],
           answer: "0",
           explanation:
-            "方針: AI生成の試作版は公開導線に出しません。計算過程: なし。答え: 手動作成版を利用します。よくあるミス: 古いURLを使い続けること。時短ポイント: 一覧の最上部から手動作成版を選びます。復習リンク: /common-test/simulator/common-test-math-1a-manual-001",
-          shortSolution: "手動作成版 第1回を利用してください。",
+            "方針: 旧試作版は公開導線に出しません。計算過程: なし。答え: オリジナル模試を利用します。よくあるミス: 古いURLを使い続けること。時短ポイント: 一覧の最上部からオリジナル模試を選びます。復習リンク: /common-test/simulator/common-test-math-1a-manual-001",
+          shortSolution: "オリジナル模試 第1回を利用してください。",
           reviewLinks: ["/common-test/simulator/common-test-math-1a-manual-001"],
           measuredAbility: "公開版と試作版を区別する",
-          timeSavingTip: "一覧の先頭にある手動作成版を使う。",
+          timeSavingTip: "一覧の先頭にあるオリジナル模試を使う。",
         },
       ],
     },
