@@ -30,7 +30,7 @@ export function StickyProblemViewer({
 
   const frame = (
     <iframe
-      src={`${pdfUrl}#view=FitH`}
+      src={`${pdfUrl}?embed=1#view=FitH`}
       title={title}
       className="h-full w-full border-0"
     />

@@ -203,7 +203,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
           </div>
           <div className="overflow-hidden rounded border border-stone-300 bg-white">
             <iframe
-              src={`${pdfUrl}#view=FitH`}
+              src={`${pdfUrl}?embed=1#view=FitH`}
               title={exam.title}
               className="h-[80vh] w-full"
             />

@@ -184,6 +184,7 @@ test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文
   expect(pageResponse?.headers()["x-frame-options"]).toBe("DENY");
   const iframeCount = await page.locator("iframe").count();
   expect(iframeCount, "manual mock page should embed the PDF via <iframe>").toBeGreaterThan(0);
+  expect(await page.locator("iframe").getAttribute("src")).toContain("?embed=1#view=FitH");
   await expect(page.getByRole("link", { name: "別タブでPDFを開く" })).toBeVisible();
 
   const pdfResponse = await request.get("/mock-exams/math1a/common-test-math-1a-manual-001.pdf");
@@ -197,6 +198,7 @@ test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文
   await page.goto("/common-test/simulator/common-test-math-1a-manual-002");
   const iframeCount002 = await page.locator("iframe").count();
   expect(iframeCount002, "manual 002 page should embed the PDF via <iframe>").toBeGreaterThan(0);
+  expect(await page.locator("iframe").getAttribute("src")).toContain("?embed=1#view=FitH");
 
   const pdfResponse002 = await request.get("/mock-exams/math1a/common-test-math-1a-manual-002.pdf");
   expect(pdfResponse002.status()).toBe(200);
@@ -208,6 +210,7 @@ test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文
 
   await page.goto("/common-test/problem-lectures/ct-ia-q1-front-algebra-logic-abs");
   await expect(page.getByRole("link", { name: "問題PDFを別タブで開く" }).first()).toBeVisible();
+  expect(await page.locator('iframe[src*="?embed=1#view=FitH"]').count()).toBeGreaterThan(0);
   const lecturePdfResponse = await request.get("/problem1a/ct_algebra_logic_abs_problem.pdf");
   expect(lecturePdfResponse.status()).toBe(200);
   expect(lecturePdfResponse.headers()["content-type"]).toContain("application/pdf");
