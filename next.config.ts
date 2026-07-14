@@ -23,6 +23,11 @@ const sameOriginPdfHeaders = [
   // Keep the site-wide DENY policy, but allow these first-party PDF assets to be
   // rendered by the site's own iframe viewers. Later matching header rules win.
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  {
+    key: "Content-Security-Policy-Report-Only",
+    value:
+      "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; font-src 'self' https://fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https:; form-action 'self'",
+  },
 ];
 
 const nextConfig: NextConfig = {

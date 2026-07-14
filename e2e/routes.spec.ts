@@ -190,6 +190,9 @@ test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文
   expect(pdfResponse.status()).toBe(200);
   expect(pdfResponse.headers()["content-type"]).toContain("application/pdf");
   expect(pdfResponse.headers()["x-frame-options"]).toBe("SAMEORIGIN");
+  expect(pdfResponse.headers()["content-security-policy-report-only"]).toContain(
+    "frame-ancestors 'self'",
+  );
 
   await page.goto("/common-test/simulator/common-test-math-1a-manual-002");
   const iframeCount002 = await page.locator("iframe").count();
@@ -199,6 +202,9 @@ test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文
   expect(pdfResponse002.status()).toBe(200);
   expect(pdfResponse002.headers()["content-type"]).toContain("application/pdf");
   expect(pdfResponse002.headers()["x-frame-options"]).toBe("SAMEORIGIN");
+  expect(pdfResponse002.headers()["content-security-policy-report-only"]).toContain(
+    "frame-ancestors 'self'",
+  );
 
   await page.goto("/common-test/problem-lectures/ct-ia-q1-front-algebra-logic-abs");
   await expect(page.getByRole("link", { name: "問題PDFを別タブで開く" }).first()).toBeVisible();
@@ -206,4 +212,7 @@ test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文
   expect(lecturePdfResponse.status()).toBe(200);
   expect(lecturePdfResponse.headers()["content-type"]).toContain("application/pdf");
   expect(lecturePdfResponse.headers()["x-frame-options"]).toBe("SAMEORIGIN");
+  expect(lecturePdfResponse.headers()["content-security-policy-report-only"]).toContain(
+    "frame-ancestors 'self'",
+  );
 });
