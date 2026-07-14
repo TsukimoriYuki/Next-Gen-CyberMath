@@ -5,6 +5,12 @@ const baseUrl = (process.env.LIVE_SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?
 const REQUIRED_ROUTES = [
   "/",
   "/math",
+  "/english",
+  "/subjects",
+  "/learn",
+  "/practice",
+  "/exams",
+  "/review",
   "/courses",
   "/units",
   "/mypage",
@@ -14,6 +20,7 @@ const REQUIRED_ROUTES = [
   "/common-test/simulator/common-test-math-1a-manual-001",
   "/common-test/simulator/common-test-math-1a-manual-002",
   "/mock",
+  "/challenge-problems",
   "/quality",
   "/privacy",
   "/terms",
@@ -55,11 +62,15 @@ async function main() {
 
   const home = pages.get("/") ?? "";
   assertIncludes("/", home, "Cyber Math");
+  assertIncludes("/", home, "講義、問題演習、模試、復習を一つにつなぐ。");
+  for (const route of ["/learn", "/practice", "/exams", "/review", "/subjects"]) {
+    assertIncludes("/", home, route);
+  }
   assertExcludes("/", home, "C Y B E R");
 
   const commonTest = pages.get("/common-test") ?? "";
-  assertIncludes("/common-test", commonTest, "common-test-math-1a-manual-001");
-  assertIncludes("/common-test", commonTest, "common-test-math-1a-manual-002");
+  assertIncludes("/common-test", commonTest, "/common-test/simulator");
+  assertIncludes("/common-test", commonTest, "/common-test/problem-lectures");
   assertIncludes("/common-test", commonTest, "math-1a");
   for (const bad of ["64/80", "57/75", "70/85", "Analyzing Data"]) {
     assertExcludes("/common-test", commonTest, bad);
@@ -69,6 +80,10 @@ async function main() {
   assertIncludes("/common-test/math-1a", math1a, "common-test-math-1a-manual-001");
   assertIncludes("/common-test/math-1a", math1a, "common-test-math-1a-manual-002");
   assertIncludes("/common-test/math-1a", math1a, "math-1a/section-1");
+
+  const simulator = pages.get("/common-test/simulator") ?? "";
+  assertIncludes("/common-test/simulator", simulator, "common-test-math-1a-manual-001");
+  assertIncludes("/common-test/simulator", simulator, "common-test-math-1a-manual-002");
 
   const courses = pages.get("/courses") ?? "";
   assertIncludes("/courses", courses, "Courses");
