@@ -46,6 +46,7 @@ export default async function ExamPage({ params }: Props) {
     if (preset.subjectId === "math-1a") {
       redirect("/common-test/simulator/common-test-math-1a-manual-001");
     }
+    if (process.env.NODE_ENV === "production") notFound();
     // 数学II・B・C・英語リーディングにはまだ手動作成PDF版が無いため、
     // 本番模試のふりをさせず、旧試作版であることを明示した案内だけを表示する。
     return <LegacyPresetNotice title={preset.title} subjectRoute={SUBJECT_ROUTE[preset.subjectId]} />;

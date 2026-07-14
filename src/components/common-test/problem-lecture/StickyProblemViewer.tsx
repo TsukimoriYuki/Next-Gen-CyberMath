@@ -133,9 +133,10 @@ function ViewerToolbar({
           target="_blank"
           rel="noopener noreferrer"
           aria-label="問題PDFを別タブで開く"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+          className="inline-flex h-8 items-center justify-center gap-1 rounded-lg px-2 text-xs font-bold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
         >
           <ExternalLink className="h-4 w-4" />
+          <span>別タブでPDFを開く</span>
         </a>
         <a
           href={pdfUrl}

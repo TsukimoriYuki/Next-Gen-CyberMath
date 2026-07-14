@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { COMMON_TEST_MATH_1A_MANUAL_001 } from "@/data/common-test/manual-mocks/math1a-001";
 import { CommonTestMockExamRunner } from "@/components/common-test/mock-exam/CommonTestMockExamRunner";
 
@@ -11,5 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default function StructuredPrototypePage() {
+  if (process.env.NODE_ENV === "production") notFound();
   return <CommonTestMockExamRunner exam={COMMON_TEST_MATH_1A_MANUAL_001} />;
 }

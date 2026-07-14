@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BookOpen, GraduationCap } from "lucide-react";
 import {
-  PREMIUM_COURSE_SUBJECTS,
-  STANDARD_COURSE_SUBJECTS,
+  PUBLIC_PREMIUM_COURSE_SUBJECTS,
+  PUBLIC_STANDARD_COURSE_SUBJECTS,
 } from "@/data/course-curriculum";
 import { getLessonsForIndex } from "@/lib/content";
 import type { Lesson } from "@/lib/types";
@@ -37,16 +37,18 @@ export default function CoursesIndexPage() {
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">講座集</h1>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
             単元ページから直接開ける通常講座と、共通テスト向けの発展講座を一覧できます。
-            未公開の科目は「準備中」として表示します。
+            公開済みの講座だけを、科目と単元から選べます。
           </p>
         </header>
 
-        <CourseSection title="基礎講座" subjects={STANDARD_COURSE_SUBJECTS} />
-        <CourseSection
-          title="発展編"
-          subjects={PREMIUM_COURSE_SUBJECTS}
-          className="mt-10"
-        />
+        <CourseSection title="基礎講座" subjects={PUBLIC_STANDARD_COURSE_SUBJECTS} />
+        {PUBLIC_PREMIUM_COURSE_SUBJECTS.length > 0 && (
+          <CourseSection
+            title="発展編"
+            subjects={PUBLIC_PREMIUM_COURSE_SUBJECTS}
+            className="mt-10"
+          />
+        )}
         <LessonSection groups={lessonGroups} className="mt-10" />
       </main>
     </div>
@@ -80,7 +82,6 @@ function CourseSection({
 function CourseSubjectCard({ subject }: { subject: CourseSubject }) {
   const lessonCount = subject.units.reduce((sum, unit) => sum + unit.lessons.length, 0);
   const isPremium = subject.courseKind === "premium";
-  const isPreparing = lessonCount === 0;
 
   return (
     <Link
@@ -109,24 +110,20 @@ function CourseSubjectCard({ subject }: { subject: CourseSubject }) {
         ))}
       </div>
       <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">
-        {isPreparing ? "現在は準備中です。公開予定の講座は順次追加します。" : subject.description}
+        {subject.description}
       </p>
       <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-600">
         <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
           {subject.units.length}単元
         </span>
         <span
-          className={`rounded-full border px-2.5 py-1 ${
-            isPreparing
-              ? "border-amber-200 bg-amber-50 font-bold text-amber-700"
-              : "border-slate-200 bg-slate-50"
-          }`}
+          className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1"
         >
-          {isPreparing ? "準備中" : `${lessonCount}講座`}
+          {lessonCount}講座
         </span>
       </div>
       <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-blue-600">
-        {isPreparing ? "公開予定を見る" : isPremium ? "予定を見る" : "単元を見る"}
+        {isPremium ? "発展講座を見る" : "単元を見る"}
         <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
       </span>
     </Link>

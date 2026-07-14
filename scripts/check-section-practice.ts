@@ -134,6 +134,31 @@ function main() {
 
   for (const exam of SECTION_PRACTICE_EXAMS) checkExam(exam);
 
+  const factorizationQuestion = SECTION_PRACTICE_EXAMS
+    .flatMap((exam) => allQuestions(exam))
+    .find((question) => question.id === "prac-ne2-q1");
+  check(!!factorizationQuestion, "prac-ne2-q1 factorization question missing");
+  if (factorizationQuestion) {
+    check(factorizationQuestion.prompt.includes("$16x^2$"), "prac-ne2-q1 prompt must add and subtract 16x^2");
+    check(!factorizationQuestion.prompt.includes("$4x^2$"), "prac-ne2-q1 prompt still contains the incorrect 4x^2 guidance");
+    check(factorizationQuestion.explanation.includes("$16x^2$"), "prac-ne2-q1 plan must use 16x^2");
+    check(
+      factorizationQuestion.explanation.includes("x^4+16x^2+64-16x^2"),
+      "prac-ne2-q1 worked solution must show the valid completing-square identity",
+    );
+    check(factorizationQuestion.answer === "0", "prac-ne2-q1 registered answer must select option 0");
+    check(
+      factorizationQuestion.choices?.[0]?.text === "$(x^2-4x+8)(x^2+4x+8)$" &&
+        factorizationQuestion.choices[0].isCorrect === true,
+      "prac-ne2-q1 registered factorization must match the correct option",
+    );
+    for (const x of [-5, -2, 0, 1, 4]) {
+      const original = x ** 4 + 64;
+      const factored = (x ** 2 - 4 * x + 8) * (x ** 2 + 4 * x + 8);
+      check(original === factored, `prac-ne2-q1 factorization fails independent expansion check at x=${x}`);
+    }
+  }
+
   report();
 }
 

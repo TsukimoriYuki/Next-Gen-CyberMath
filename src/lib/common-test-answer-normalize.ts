@@ -55,6 +55,31 @@ function exactChoiceMatch(
   return String(selected) === String(correct);
 }
 
+const FINITE_DECIMAL_PATTERN = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/;
+
+function toFiniteDecimal(value: string | number | null | undefined): number | null {
+  const normalized = toComparable(value);
+  if (!normalized || !FINITE_DECIMAL_PATTERN.test(normalized)) return null;
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function numericMatch(
+  selected: string | string[] | number | null | undefined,
+  correct: string | string[] | number | null | undefined,
+): boolean {
+  if (Array.isArray(selected)) return false;
+  const selectedNumber = toFiniteDecimal(selected);
+  if (selectedNumber === null) return false;
+
+  const expectedAnswers = Array.isArray(correct) ? correct : [correct];
+  return expectedAnswers.some((answer) => {
+    const correctNumber = toFiniteDecimal(answer);
+    return correctNumber !== null && selectedNumber === correctNumber;
+  });
+}
+
 export function isCommonTestAnswerCorrect(
   selected: string | string[] | number | null | undefined,
   correct: string | string[] | number | null | undefined,
@@ -62,6 +87,10 @@ export function isCommonTestAnswerCorrect(
 ): boolean {
   if (answerFormat === "choice") {
     return exactChoiceMatch(selected, correct);
+  }
+
+  if (answerFormat === "number") {
+    return numericMatch(selected, correct);
   }
 
   const selectedValue = Array.isArray(selected)

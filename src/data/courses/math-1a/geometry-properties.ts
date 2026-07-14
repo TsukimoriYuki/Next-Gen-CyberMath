@@ -210,7 +210,7 @@ const GEOMETRY_PROPERTIES_BEGINNER: CourseLesson[] = [
     relatedPracticeLinks: [
       {
         label: "図形の性質 中核講義",
-        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        href: "/courses/math-1a/geometry-properties",
         description: "円周角・接弦定理・方べきの判別フローと代表例題を復習する",
       },
       {
@@ -431,7 +431,7 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
     relatedPracticeLinks: [
       {
         label: "図形の性質 中核講義",
-        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        href: "/courses/math-1a/geometry-properties",
         description: "チェバ・メネラウス・面積比の使い分けを代表例題で復習する",
       },
       {
@@ -643,7 +643,7 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
     relatedPracticeLinks: [
       {
         label: "図形の性質 中核講義",
-        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        href: "/courses/math-1a/geometry-properties",
         description: "接線・割線・球の断面まで、方べきの3つの形を代表例題で復習する",
       },
       {
@@ -854,7 +854,7 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
     relatedPracticeLinks: [
       {
         label: "図形の性質 中核講義",
-        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        href: "/courses/math-1a/geometry-properties",
         description: "五心と補助線の判別を、判別フローと代表例題で復習する",
       },
       {
@@ -873,9 +873,9 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
         description: "円と線分の長さを扱う定理として、外接円の問題と接続する",
       },
       {
-        label: "本番レベル模試集",
-        href: "/exam-sets",
-        description: "図形の性質を含む数学IAの実戦演習へ進む",
+        label: "共通テスト型本番模試",
+        href: "/common-test/simulator",
+        description: "図形の性質を含む数学IAの公開済み実戦演習へ進む",
       },
     ],
     qualityTags: [
@@ -1074,7 +1074,7 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
     relatedPracticeLinks: [
       {
         label: "図形の性質 中核講義",
-        href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+        href: "/courses/math-1a/geometry-properties",
         description: "内接四角形・接弦定理・円周角を代表例題2で復習する",
       },
       {
@@ -1093,9 +1093,9 @@ const GEOMETRY_PROPERTIES_STANDARD: CourseLesson[] = [
         description: "外心・外接円とあわせて、円に関わる図形性質を整理する",
       },
       {
-        label: "本番レベル模試集",
-        href: "/exam-sets",
-        description: "円の角度・長さの知識を数学IAの実戦問題で確認する",
+        label: "共通テスト型本番模試",
+        href: "/common-test/simulator",
+        description: "円の角度・長さの知識を公開済み数学IA模試で確認する",
       },
     ],
     qualityTags: [

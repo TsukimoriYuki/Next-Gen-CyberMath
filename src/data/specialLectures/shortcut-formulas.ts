@@ -415,6 +415,7 @@ export const SHORTCUT_FORMULAS_LECTURE: Lecture = {
     "通常講義と満点講義を終えた受験生向けに、共通テスト本番で検算・時間短縮・選択肢処理に使う上級ショートカットを整理します。",
   subject: "数学IA",
   unit: "共通テスト総合",
+  publicationStatus: "advanced-reference",
   difficulty: "発展",
   recommendedMinutes: 60,
   tags: ["重点講座", "上級者向け", "時間短縮", "裏技", "即殺公式", "選択肢処理", "検算", "共通テスト"],

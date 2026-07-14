@@ -1,6 +1,6 @@
 import type { CommonTestProblemLecture } from "@/types/common-test-problem-lecture";
 
-const geometryProperties = "/common-test/lectures/geometry-properties-auxiliary-lines";
+const geometryProperties = "/courses/math-1a/geometry-properties";
 
 export const CT_Q3_PLANE_GEOMETRY: CommonTestProblemLecture = {
   id: "ct-ia-q3-plane-geometry",

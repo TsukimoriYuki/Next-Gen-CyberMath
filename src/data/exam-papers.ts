@@ -265,7 +265,7 @@ export const MATH_1A_PAPER_001: ExamPaper = {
         },
         {
           label: "共通テスト数学IA 裏技・即殺公式講義",
-          href: "/common-test/lectures/math-1a-shortcut-formulas",
+          href: "/common-test/lectures/numbers-expressions-core-skills",
           note: "選択肢処理と近似チェックを復習",
         },
       ],
@@ -341,7 +341,7 @@ export const MATH_1A_PAPER_001: ExamPaper = {
         },
         {
           label: "共通テスト数学IA 裏技・即殺公式講義",
-          href: "/common-test/lectures/math-1a-shortcut-formulas",
+          href: "/common-test/lectures/numbers-expressions-core-skills",
           note: "余事象と母集団リセットを復習",
         },
       ],

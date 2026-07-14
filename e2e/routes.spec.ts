@@ -34,6 +34,7 @@ const CORE_ROUTES = [
   "/common-test/problem-lectures/ct-ia-q3-plane-geometry",
   "/common-test/problem-lectures/ct-ia-q3-space-geometry",
   "/common-test/problem-lectures/ct-ia-q4-probability",
+  "/common-test/lectures/numbers-expressions-core-skills",
   "/exam-sets",
   "/courses",
   "/calc-drill",
@@ -78,7 +79,17 @@ const UNIT_ROUTES = [
 const ALL_ROUTES = [...CORE_ROUTES, ...REPRESENTATIVE_PROBLEM_ROUTES, ...UNIT_ROUTES];
 
 // 「準備中」等の代替導線を持つべきページ（本文中に他ページへのリンクが最低1つ必要）。
-const PREPARING_ROUTES_NEED_ALT_NAV = ["/courses/math-3c", "/exam-sets/advanced-private"];
+const NON_PUBLIC_ROUTES = [
+  "/common-test/lectures/math-1a-shortcut-formulas",
+  "/common-test/lectures/geometry-properties-auxiliary-lines",
+  "/courses/math-3c",
+  "/courses/math-1a-premium",
+  "/courses/math-2bc-premium",
+  "/exam-sets/advanced-private",
+  "/exam-sets/standard-private/math-1a/standard-private-math-1a-001",
+  "/common-test/simulator/paper-sample",
+  "/common-test/simulator/common-test-math-1a-manual-001/structured-prototype",
+] as const;
 
 const RAW_TEX_PATTERN = /\$[^$\n]{1,80}\$|\\(frac|sqrt|sin|cos|tan|sum|int|left|right)\{/;
 
@@ -107,12 +118,10 @@ for (const route of ALL_ROUTES) {
   });
 }
 
-for (const route of PREPARING_ROUTES_NEED_ALT_NAV) {
-  test(`${route} — 準備中でも他ページへの代替導線がある`, async ({ page }) => {
-    await page.goto(route);
-    const links = page.locator("a[href^='/']");
-    const count = await links.count();
-    expect(count, `${route} should offer at least one link elsewhere on the site`).toBeGreaterThan(1);
+for (const route of NON_PUBLIC_ROUTES) {
+  test(`${route} — productionでは404`, async ({ page }) => {
+    const response = await page.goto(route, { waitUntil: "domcontentloaded" });
+    expect(response?.status(), `${route} should return 404 in production`).toBe(404);
   });
 }
 
@@ -138,20 +147,49 @@ test("/common-test/simulator/math-1a-70 — 旧プリセットは手動PDF版へ
   expect(new URL(page.url()).pathname).toBe("/common-test/simulator/common-test-math-1a-manual-001");
 });
 
-test("/common-test/simulator/math-2bc-70 — 旧プリセットは非公開notice を表示する", async ({ page }) => {
-  await page.goto("/common-test/simulator/math-2bc-70");
-  const bodyText = await page.locator("body").innerText();
-  expect(bodyText).toContain("旧試作版のため非公開です");
+test("/common-test/simulator/math-2bc-70 — 旧プリセットはproductionで404", async ({ page }) => {
+  const response = await page.goto("/common-test/simulator/math-2bc-70");
+  expect(response?.status()).toBe(404);
+});
+
+test("AI prototype — productionでは監修済みPDF模試へredirect", async ({ page }) => {
+  await page.goto("/common-test/simulator/common-test-math-1a-mock-001", {
+    waitUntil: "domcontentloaded",
+  });
+  expect(new URL(page.url()).pathname).toBe(
+    "/common-test/simulator/common-test-math-1a-manual-001",
+  );
+});
+
+test("公開一覧 — 空講座・範囲外講義・空模試カテゴリへの導線を出さない", async ({ page }) => {
+  await page.goto("/courses");
+  const coursesText = await page.locator("body").innerText();
+  expect(coursesText).not.toContain("数学III・C");
+  expect(coursesText).not.toContain("準備中");
+
+  await page.goto("/common-test/lectures");
+  await expect(
+    page.locator('a[href="/common-test/lectures/math-1a-shortcut-formulas"]'),
+  ).toHaveCount(0);
+  await expect(
+    page.locator('a[href="/common-test/lectures/geometry-properties-auxiliary-lines"]'),
+  ).toHaveCount(0);
+
+  await page.goto("/exam-sets", { waitUntil: "domcontentloaded" });
+  expect(new URL(page.url()).pathname).toBe("/mock");
 });
 
 test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文を再構成していない", async ({ page, request }) => {
-  await page.goto("/common-test/simulator/common-test-math-1a-manual-001");
+  const pageResponse = await page.goto("/common-test/simulator/common-test-math-1a-manual-001");
+  expect(pageResponse?.headers()["x-frame-options"]).toBe("DENY");
   const iframeCount = await page.locator("iframe").count();
   expect(iframeCount, "manual mock page should embed the PDF via <iframe>").toBeGreaterThan(0);
+  await expect(page.getByRole("link", { name: "別タブでPDFを開く" })).toBeVisible();
 
   const pdfResponse = await request.get("/mock-exams/math1a/common-test-math-1a-manual-001.pdf");
   expect(pdfResponse.status()).toBe(200);
   expect(pdfResponse.headers()["content-type"]).toContain("application/pdf");
+  expect(pdfResponse.headers()["x-frame-options"]).toBe("SAMEORIGIN");
 
   await page.goto("/common-test/simulator/common-test-math-1a-manual-002");
   const iframeCount002 = await page.locator("iframe").count();
@@ -160,4 +198,12 @@ test("手動作成版PDF模試 — PDFがそのまま配信され、問題本文
   const pdfResponse002 = await request.get("/mock-exams/math1a/common-test-math-1a-manual-002.pdf");
   expect(pdfResponse002.status()).toBe(200);
   expect(pdfResponse002.headers()["content-type"]).toContain("application/pdf");
+  expect(pdfResponse002.headers()["x-frame-options"]).toBe("SAMEORIGIN");
+
+  await page.goto("/common-test/problem-lectures/ct-ia-q1-front-algebra-logic-abs");
+  await expect(page.getByRole("link", { name: "問題PDFを別タブで開く" }).first()).toBeVisible();
+  const lecturePdfResponse = await request.get("/problem1a/ct_algebra_logic_abs_problem.pdf");
+  expect(lecturePdfResponse.status()).toBe(200);
+  expect(lecturePdfResponse.headers()["content-type"]).toContain("application/pdf");
+  expect(lecturePdfResponse.headers()["x-frame-options"]).toBe("SAMEORIGIN");
 });

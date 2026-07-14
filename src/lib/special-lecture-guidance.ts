@@ -14,6 +14,7 @@ export interface MasteryLectureGuide {
   recoveryLinks: { symptom: string; label: string; href: string }[];
   commonTestAppearance: string;
   targetMinutes: number;
+  isPublished?: boolean;
 }
 
 export const MASTERY_LECTURE_GUIDES: MasteryLectureGuide[] = [
@@ -40,6 +41,7 @@ export const MASTERY_LECTURE_GUIDES: MasteryLectureGuide[] = [
   },
   {
     lectureSlug: "geometry-properties-auxiliary-lines",
+    isPublished: false,
     legacySlugs: ["geometry-properties-intensive"],
     unitNames: ["図形の性質"],
     unitSlugs: ["geometry-properties"],
@@ -197,8 +199,9 @@ export function getMasteryLectureGuideForUnit({
 }): MasteryLectureGuide | undefined {
   return MASTERY_LECTURE_GUIDES.find(
     (guide) =>
-      (unitName ? guide.unitNames.includes(unitName) : false) ||
-      (unitSlug ? guide.unitSlugs.includes(unitSlug) : false),
+      guide.isPublished !== false &&
+      ((unitName ? guide.unitNames.includes(unitName) : false) ||
+        (unitSlug ? guide.unitSlugs.includes(unitSlug) : false)),
   );
 }
 
@@ -469,16 +472,33 @@ export interface ProblemContextGuide {
  */
 export function getProblemContextGuide(problem: Problem): ProblemContextGuide | undefined {
   const contextGuide = UNIT_CONTEXT_BY_NAME.get(problem.unit);
-  const lectureGuide = getMasteryLectureGuideForUnit({ unitName: problem.unit });
+  // Hidden lectures may still supply editorial context, but never their public CTA or links.
+  const sourceLectureGuide = MASTERY_LECTURE_GUIDES.find((guide) =>
+    guide.unitNames.includes(problem.unit),
+  );
+  const lectureGuide =
+    sourceLectureGuide?.isPublished === false ? undefined : sourceLectureGuide;
 
-  if (!contextGuide && !lectureGuide) return undefined;
+  if (!contextGuide && !sourceLectureGuide) return undefined;
 
   return {
-    masteryFocus: contextGuide?.masteryFocus ?? lectureGuide!.masteryFocus,
-    weapons: contextGuide?.weapons ?? lectureGuide!.weapons,
-    recoveryLinks: contextGuide?.recoveryLinks ?? lectureGuide!.recoveryLinks,
+    masteryFocus: contextGuide?.masteryFocus ?? sourceLectureGuide!.masteryFocus,
+    weapons: contextGuide?.weapons ?? sourceLectureGuide!.weapons,
+    recoveryLinks:
+      contextGuide?.recoveryLinks ??
+      (lectureGuide
+        ? lectureGuide.recoveryLinks
+        : [
+            {
+              symptom: "図形の性質を復習したい",
+              label: "通常コースの図形の性質",
+              href: "/courses/math-1a/geometry-properties",
+            },
+          ]),
     commonTestContext:
-      contextGuide?.commonTestContext ?? lectureGuide!.commonTestAppearance ?? DEFAULT_COMMON_TEST_CONTEXT,
+      contextGuide?.commonTestContext ??
+      sourceLectureGuide!.commonTestAppearance ??
+      DEFAULT_COMMON_TEST_CONTEXT,
     advancedContext: contextGuide?.advancedContext ?? DEFAULT_ADVANCED_CONTEXT,
     lecture: lectureGuide
       ? {

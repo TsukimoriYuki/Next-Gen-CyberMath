@@ -1,4 +1,5 @@
 import { STANDARD_PRIVATE_MATH_1A_001 } from "./exam-sets/standard-private-math-1a-001";
+import { assertUniqueRegistryKeys } from "@/lib/registry";
 
 export type ExamSetCategoryId =
   | "standard-private"
@@ -122,6 +123,68 @@ export const EXAM_SET_CATEGORIES: ExamSetCategory[] = [
     examSets: [],
   },
 ];
+
+export function isPublicExamSet(examSet: ExamSet): boolean {
+  return (
+    examSet.status === "available" &&
+    examSet.manualReviewed === true &&
+    examSet.source === "manual-reviewed"
+  );
+}
+
+export const PUBLIC_EXAM_SET_CATEGORIES: ExamSetCategory[] =
+  EXAM_SET_CATEGORIES.map((category) => ({
+    ...category,
+    examSets: category.examSets.filter(isPublicExamSet),
+  })).filter((category) => category.examSets.length > 0);
+
+assertUniqueRegistryKeys(
+  EXAM_SET_CATEGORIES,
+  (category) => category.id,
+  "exam-set category ID registry",
+);
+assertUniqueRegistryKeys(
+  EXAM_SET_CATEGORIES.flatMap((category) => category.examSets),
+  (examSet) => examSet.id,
+  "exam-set ID registry",
+);
+
+export function getPublicExamSetCategory(id: string): ExamSetCategory | undefined {
+  return PUBLIC_EXAM_SET_CATEGORIES.find((category) => category.id === id);
+}
+
+export function getPublicExamSet(id: string): ExamSet | undefined {
+  return PUBLIC_EXAM_SET_CATEGORIES.flatMap((category) => category.examSets).find(
+    (examSet) => examSet.id === id,
+  );
+}
+
+export function getPublicExamSetsBySubject(categoryId: string, subjectId: string): ExamSet[] {
+  return (
+    getPublicExamSetCategory(categoryId)?.examSets.filter(
+      (examSet) => examSet.subjectId === subjectId,
+    ) ?? []
+  );
+}
+
+export function getPublicExamSetSubjects(categoryId: string) {
+  const category = getPublicExamSetCategory(categoryId);
+  const subjectMap = new Map<
+    string,
+    { subjectId: ExamSetSubjectId; subjectTitle: string; count: number }
+  >();
+
+  for (const examSet of category?.examSets ?? []) {
+    const current = subjectMap.get(examSet.subjectId);
+    subjectMap.set(examSet.subjectId, {
+      subjectId: examSet.subjectId,
+      subjectTitle: examSet.subjectTitle,
+      count: (current?.count ?? 0) + 1,
+    });
+  }
+
+  return [...subjectMap.values()];
+}
 
 export function getExamSetCategory(id: string): ExamSetCategory | undefined {
   return EXAM_SET_CATEGORIES.find((category) => category.id === id);

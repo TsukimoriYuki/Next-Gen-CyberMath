@@ -4,7 +4,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { COMMON_TEST_PROBLEM_LECTURES } from "../src/data/common-test/problem-lectures";
-import { SPECIAL_LECTURES } from "../src/data/specialLectures";
+import { PUBLIC_SPECIAL_LECTURES } from "../src/data/specialLectures";
 
 const issues: string[] = [];
 const warnings: string[] = [];
@@ -18,7 +18,7 @@ function check(condition: boolean, message: string) {
 // ここに $...$ が紛れ込むと生TeXがそのまま表示されてしまう（過去に実際に起きた不具合）。
 const PLAIN_TEXT_FIELD_PATTERN = /\$/;
 
-const coreLectureSlugs = new Set(SPECIAL_LECTURES.map((lecture) => lecture.slug));
+const coreLectureSlugs = new Set(PUBLIC_SPECIAL_LECTURES.map((lecture) => lecture.slug));
 
 function routeExists(href: string): boolean {
   const [path] = href.split("#");

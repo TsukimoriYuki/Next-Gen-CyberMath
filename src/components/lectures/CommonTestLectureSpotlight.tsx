@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, GraduationCap } from "lucide-react";
-import { SPECIAL_LECTURES } from "@/data/specialLectures";
+import { PUBLIC_SPECIAL_LECTURES } from "@/data/specialLectures";
 import { useAllLectureProgress } from "@/hooks/useLectureProgress";
 import { getLectureEntry, summarizeLecture } from "@/lib/lecture-progress";
 import { MASTERY_LECTURE_GUIDES } from "@/lib/special-lecture-guidance";
@@ -14,7 +14,7 @@ export function CommonTestLectureSpotlight() {
 
   // 受講中（in-progress）のうち、最後に開いた講義を優先表示する。
   const active = hydrated
-    ? SPECIAL_LECTURES.map((lecture) => ({
+    ? PUBLIC_SPECIAL_LECTURES.map((lecture) => ({
         lecture,
         summary: summarizeLecture(getLectureEntry(state, lecture.slug), lecture),
       }))
@@ -86,9 +86,14 @@ export function CommonTestLectureSpotlight() {
 }
 
 function MasteryLectureMiniGrid() {
+  const publicLectureSlugs = new Set(
+    PUBLIC_SPECIAL_LECTURES.map((lecture) => lecture.slug),
+  );
   return (
     <div className="grid gap-2 sm:grid-cols-4">
-      {MASTERY_LECTURE_GUIDES.map((guide) => (
+      {MASTERY_LECTURE_GUIDES.filter((guide) =>
+        guide.isPublished !== false && publicLectureSlugs.has(guide.lectureSlug),
+      ).map((guide) => (
         <Link
           key={guide.lectureSlug}
           href={`/common-test/lectures/${guide.lectureSlug}`}
@@ -100,15 +105,6 @@ function MasteryLectureMiniGrid() {
           </p>
         </Link>
       ))}
-      <Link
-        href="/common-test/lectures/math-1a-shortcut-formulas"
-        className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 text-xs transition hover:border-amber-300 hover:bg-amber-100"
-      >
-        <div className="font-extrabold text-amber-900">裏技・即殺公式</div>
-        <p className="mt-1 line-clamp-2 leading-5 text-amber-800/75">
-          上級者向け。検算・時間短縮・選択肢処理を整理
-        </p>
-      </Link>
     </div>
   );
 }

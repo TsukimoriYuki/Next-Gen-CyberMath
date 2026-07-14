@@ -4,13 +4,13 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Clock, GraduationCap, RotateCcw } from "lucide-react";
 import {
   SPECIAL_LECTURE_ROADMAP,
-  SPECIAL_LECTURES,
+  PUBLIC_SPECIAL_LECTURES,
   type Lecture,
 } from "@/data/specialLectures";
 import { useAllLectureProgress } from "@/hooks/useLectureProgress";
 import { getLectureEntry, summarizeLecture, type LectureStatus } from "@/lib/lecture-progress";
 
-const lectureBySlug = new Map(SPECIAL_LECTURES.map((lecture) => [lecture.slug, lecture]));
+const lectureBySlug = new Map(PUBLIC_SPECIAL_LECTURES.map((lecture) => [lecture.slug, lecture]));
 
 export function LectureNextRecommendation({ currentSlug }: { currentSlug: string }) {
   const { hydrated, state } = useAllLectureProgress();

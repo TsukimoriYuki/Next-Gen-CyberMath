@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Clock, FileText, Trophy } from "lucide-react";
-import { EXAM_SET_CATEGORIES, type ExamSetCategory } from "@/data/exam-sets";
+import { PUBLIC_EXAM_SET_CATEGORIES, type ExamSetCategory } from "@/data/exam-sets";
 
 export const metadata: Metadata = {
   title: "本番レベル模試集",
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default function ExamSetsPage() {
+  if (PUBLIC_EXAM_SET_CATEGORIES.length === 0) redirect("/mock");
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950">
       <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
@@ -68,7 +70,7 @@ export default function ExamSetsPage() {
           </p>
 
           <div className="mt-6 grid gap-6 sm:grid-cols-2">
-            {EXAM_SET_CATEGORIES.map((category) => (
+            {PUBLIC_EXAM_SET_CATEGORIES.map((category) => (
               <CategoryCard key={category.id} category={category} />
             ))}
           </div>

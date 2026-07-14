@@ -21,6 +21,7 @@ import {
 } from "@/lib/common-test-mock-scoring";
 import { AnswerInput } from "./CommonTestMockExamRunner";
 import { cn } from "@/lib/utils";
+import { getSessionId } from "@/lib/exam";
 
 type Mode = "taking" | "submitted" | "review";
 
@@ -52,6 +53,33 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
       next[blank.id] = value;
       return { ...prev, [questionId]: next };
     });
+  }
+
+  function submitExam() {
+    setMode("submitted");
+    const submittedAnswers = Object.entries(answers)
+      .filter((entry): entry is [string, CommonTestMockAnswerValue] => entry[1] !== undefined)
+      .map(([questionId, value]) =>
+        typeof value === "object" && !Array.isArray(value)
+          ? {
+              questionId,
+              blanks: Object.entries(value).map(([blankId, blankValue]) => ({
+                blankId,
+                value: blankValue,
+              })),
+            }
+          : { questionId, value },
+      );
+    fetch("/api/exam/attempts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        examId: exam.id,
+        sessionId: getSessionId(),
+        durationSec: elapsedSec,
+        answers: submittedAnswers,
+      }),
+    }).catch(() => {});
   }
 
   if (!pdfUrl) {
@@ -109,7 +137,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
             {mode === "taking" ? (
               <button
                 type="button"
-                onClick={() => setMode("submitted")}
+                onClick={submitExam}
                 className="inline-flex items-center gap-2 rounded border border-slate-950 bg-slate-950 px-4 py-3 text-sm font-extrabold text-white hover:bg-slate-800"
               >
                 <Send className="h-4 w-4" />
@@ -153,7 +181,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
               className="inline-flex items-center gap-1.5 rounded border border-stone-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-blue-300"
             >
               <ExternalLink className="h-3.5 w-3.5" />
-              別タブで開く
+              別タブでPDFを開く
             </a>
             <a
               href={pdfUrl}

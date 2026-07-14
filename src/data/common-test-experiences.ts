@@ -13,7 +13,7 @@ import {
   getCommonTestMockExamStats,
 } from "./common-test-mock-exams";
 import { getAllCommonTestExamPresets, resolveExamPresetMeta } from "./common-test-exams";
-import { EXAM_SET_CATEGORIES } from "./exam-sets";
+import { EXAM_SET_CATEGORIES, isPublicExamSet } from "./exam-sets";
 import { SECTION_PRACTICE_EXAMS } from "./common-test/section-practice";
 
 export type CommonTestExperienceMode =
@@ -209,7 +209,7 @@ function buildFixedExamEntries(): CommonTestExperience[] {
         title: exam.title,
         subject: "private-math-1a",
         mode: "fixed-exam",
-        status: exam.status === "available" ? "public" : "draft",
+        status: isPublicExamSet(exam) ? "public" : "draft",
         source: exam.manualReviewed
           ? "manual-reviewed"
           : (exam.source ?? "manual-reviewed") === "auto-generated"

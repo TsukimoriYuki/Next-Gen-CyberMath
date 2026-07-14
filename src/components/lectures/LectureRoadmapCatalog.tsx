@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, BookOpen, CheckCircle2, Clock, Compass, Filter, RotateCcw, Sparkles, Tag } from "lucide-react";
 import {
   SPECIAL_LECTURE_ROADMAP,
-  SPECIAL_LECTURES,
+  PUBLIC_SPECIAL_LECTURES,
   type Lecture,
 } from "@/data/specialLectures";
 import {
@@ -48,7 +48,7 @@ const FILTERS: { id: LectureFilter; label: string }[] = [
   { id: "risk", label: "危険度対策" },
 ];
 
-const lectureBySlug = new Map(SPECIAL_LECTURES.map((lecture) => [lecture.slug, lecture]));
+const lectureBySlug = new Map(PUBLIC_SPECIAL_LECTURES.map((lecture) => [lecture.slug, lecture]));
 
 export function LectureRoadmapCatalog() {
   const { hydrated, state } = useAllLectureProgress();
@@ -88,7 +88,7 @@ export function LectureRoadmapCatalog() {
 
   const lectureSummaries = useMemo(
     () =>
-      SPECIAL_LECTURES.map((lecture) => ({
+      PUBLIC_SPECIAL_LECTURES.map((lecture) => ({
         lecture,
         summary: summarizeLecture(getLectureEntry(state, lecture.slug), lecture),
       })),

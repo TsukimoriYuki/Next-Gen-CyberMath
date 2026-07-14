@@ -4,13 +4,14 @@ import type {
   ExamBlank,
   ExamChoice,
 } from "@/data/common-test-mock-exams";
+import { MANUAL_MOCK_SCORING_GROUPS } from "@/data/common-test/manual-mocks/scoring-groups";
 
 const course = {
   numbers: "/common-test/lectures/numbers-expressions-core-skills",
   measurement: "/common-test/lectures/geometry-measurement-intensive",
   quadratic: "/common-test/lectures/quadratic-case-split-intensive",
   data: "/common-test/lectures/data-analysis-quartiles-outliers",
-  geometry: "/common-test/lectures/geometry-properties-auxiliary-lines",
+  geometry: "/courses/math-1a/geometry-properties",
   // 第3問（図形の性質）は、性質で辺を作ったあとに計量へ渡す融合が多いため、
   // 計算量の多い設問ではこちらも合わせて復習リンクに含める。
   geometryMeasurement: "/common-test/lectures/geometry-measurement-intensive",
@@ -82,6 +83,7 @@ function q(base: Omit<CommonTestQuestion, "measuredAbility" | "timeSavingTip" | 
     ...base,
     blanks,
     answer,
+    scoringGroups: base.scoringGroups ?? MANUAL_MOCK_SCORING_GROUPS[base.id],
   };
 }
 

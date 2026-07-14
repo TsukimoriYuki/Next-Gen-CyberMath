@@ -16,6 +16,7 @@ import {
 } from "@/lib/geometry-diagrams";
 import { enhanceSpecialLectures } from "@/data/specialLectureEnhancements";
 import { SHORTCUT_FORMULAS_LECTURE } from "@/data/specialLectures/shortcut-formulas";
+import { assertUniqueRegistryKeys } from "@/lib/registry";
 
 export type LectureDifficulty = "基礎" | "標準" | "発展";
 
@@ -44,6 +45,8 @@ export interface Lecture {
   blocks: LectureBlock[];
   isPublished?: boolean;
   noindex?: boolean;
+  /** Public catalog state. Hidden entries stay in the registry for later editorial work. */
+  publicationStatus?: "public" | "temporarily-hidden" | "advanced-reference";
 }
 
 export interface SpecialLectureRoadmapStep {
@@ -832,8 +835,8 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
           },
           {
             symptom: "比・方べきに気づかなかった",
-            action: "図形の性質 補助線発見講座へ",
-            href: "/common-test/lectures/geometry-properties-auxiliary-lines",
+            action: "通常コースの図形の性質へ",
+            href: "/courses/math-1a/geometry-properties",
           },
         ],
       },
@@ -1565,6 +1568,7 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
       "円周角・相似・方べき・補助線の見つけ方を、図形レイヤーと本番判断で整理する重点講座です。",
     subject: "数学IA",
     unit: "図形の性質",
+    publicationStatus: "temporarily-hidden",
     difficulty: "標準",
     recommendedMinutes: 45,
     tags: ["数学IA", "共通テスト", "図形の性質", "補助線", "できる人の頭の中", "重点講座"],
@@ -3743,13 +3747,26 @@ const BASE_SPECIAL_LECTURES: Lecture[] = [
   SHORTCUT_FORMULAS_LECTURE,
 ];
 
-export const SPECIAL_LECTURES: Lecture[] = enhanceSpecialLectures(BASE_SPECIAL_LECTURES).map((lecture) => ({
-  ...lecture,
-  isPublished: false,
-  noindex: true,
-}));
+export const SPECIAL_LECTURES: Lecture[] = enhanceSpecialLectures(BASE_SPECIAL_LECTURES).map(
+  (lecture) => {
+    const publicationStatus = lecture.publicationStatus ?? "public";
+    return {
+      ...lecture,
+      publicationStatus,
+      isPublished: publicationStatus === "public",
+      noindex: publicationStatus !== "public" || lecture.noindex === true,
+    };
+  },
+);
+
+export const PUBLIC_SPECIAL_LECTURES: Lecture[] = SPECIAL_LECTURES.filter(
+  (lecture) => lecture.isPublished === true,
+);
+
+assertUniqueRegistryKeys(SPECIAL_LECTURES, (lecture) => lecture.id, "special lecture ID registry");
+assertUniqueRegistryKeys(SPECIAL_LECTURES, (lecture) => lecture.slug, "special lecture slug registry");
 
 export function getSpecialLectureBySlug(slug: string): Lecture | undefined {
   const canonicalSlug = canonicalLectureSlug(slug);
-  return SPECIAL_LECTURES.find((lecture) => lecture.slug === canonicalSlug);
+  return PUBLIC_SPECIAL_LECTURES.find((lecture) => lecture.slug === canonicalSlug);
 }

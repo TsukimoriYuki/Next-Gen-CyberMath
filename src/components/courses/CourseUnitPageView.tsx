@@ -34,14 +34,7 @@ export function CourseUnitPageView({
           description:
             "冊子型模試の第1問で崩れやすい、三角比・正弦定理・余弦定理・面積・高さの判断順をまとめて復習できます。",
         }
-      : subject.subjectId === "math-1a" && unit.unitId === "geometry-properties"
-        ? {
-            href: "/common-test/lectures/geometry-properties-auxiliary-lines",
-            title: "図形の性質 中核講義",
-            description:
-              "冊子型模試の第3問で崩れやすい、円周角・接線・方べき・五心・補助線判断をまとめて復習できます。",
-          }
-        : subject.subjectId === "math-1a" && unit.unitId === "counting-probability"
+      : subject.subjectId === "math-1a" && unit.unitId === "counting-probability"
       ? {
           href: "/common-test/lectures/probability-guided-reading",
           title: "確率 guided reading 中核講義",

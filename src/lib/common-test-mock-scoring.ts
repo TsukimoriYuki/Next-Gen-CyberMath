@@ -1,8 +1,10 @@
 import type {
   CommonTestMockExam,
   CommonTestQuestion,
+  CommonTestScoringGroup,
   ExamBlank,
 } from "@/data/common-test-mock-exams";
+import { isCommonTestAnswerCorrect } from "@/lib/common-test-answer-normalize";
 
 export type CommonTestMockAnswerValue = string | string[] | Record<string, string>;
 export type CommonTestMockAnswers = Record<string, CommonTestMockAnswerValue | undefined>;
@@ -12,6 +14,16 @@ export type CommonTestMockQuestionResult = {
   question: CommonTestQuestion;
   selectedAnswer: CommonTestMockAnswerValue | undefined;
   isCorrect: boolean;
+  earnedPoints: number;
+  maxPoints: number;
+  scoringGroupResults: CommonTestMockScoringGroupResult[];
+};
+
+export type CommonTestMockScoringGroupResult = {
+  group: CommonTestScoringGroup;
+  isAnswered: boolean;
+  isCorrect: boolean;
+  earnedPoints: number;
 };
 
 export type CommonTestMockSectionScore = {
@@ -78,19 +90,69 @@ export function isCommonTestMockQuestionCorrect(
     return expected.length === selected.length && expected.every((v, i) => v === selected[i]);
   }
 
+  if (question.answerFormat === "numeric") {
+    return isCommonTestAnswerCorrect(
+      typeof answer === "string" ? answer : null,
+      typeof question.answer === "string" ? question.answer : null,
+      "number",
+    );
+  }
+
   return normalize(typeof answer === "string" ? answer : "") === normalize(String(question.answer));
+}
+
+function scoreScoringGroup(
+  question: CommonTestQuestion,
+  answer: CommonTestMockAnswerValue | undefined,
+  group: CommonTestScoringGroup,
+): CommonTestMockScoringGroupResult {
+  const blanksByLabel = new Map(question.blanks?.map((blank) => [blank.label, blank]) ?? []);
+  const selectedValues = group.answerLabels.map((label) => {
+    const blank = blanksByLabel.get(label);
+    return blank ? normalize(getBlankAnswer(answer, blank)) : "";
+  });
+  const isAnswered = selectedValues.every((value) => value !== "");
+  const isCorrect =
+    isAnswered &&
+    group.answerLabels.every(
+      (label, index) => selectedValues[index] === normalize(group.correctAnswers[label]),
+    );
+
+  return {
+    group,
+    isAnswered,
+    isCorrect,
+    earnedPoints: isCorrect ? group.points : 0,
+  };
+}
+
+export function scoreCommonTestMockQuestion(
+  question: CommonTestQuestion,
+  selectedAnswer: CommonTestMockAnswerValue | undefined,
+): CommonTestMockQuestionResult {
+  const scoringGroupResults = (question.scoringGroups ?? []).map((group) =>
+    scoreScoringGroup(question, selectedAnswer, group),
+  );
+  const earnedPoints =
+    scoringGroupResults.length > 0
+      ? scoringGroupResults.reduce((sum, result) => sum + result.earnedPoints, 0)
+      : isCommonTestMockQuestionCorrect(question, selectedAnswer)
+        ? question.points
+        : 0;
+
+  return {
+    question,
+    selectedAnswer,
+    isCorrect: earnedPoints === question.points,
+    earnedPoints,
+    maxPoints: question.points,
+    scoringGroupResults,
+  };
 }
 
 export function scoreCommonTestMockExam(exam: CommonTestMockExam, answers: CommonTestMockAnswers) {
   const questionResults: CommonTestMockQuestionResult[] = exam.sections.flatMap((section) =>
-    section.questions.map((question) => {
-      const selectedAnswer = answers[question.id];
-      return {
-        question,
-        selectedAnswer,
-        isCorrect: isCommonTestMockQuestionCorrect(question, selectedAnswer),
-      };
-    }),
+    section.questions.map((question) => scoreCommonTestMockQuestion(question, answers[question.id])),
   );
 
   const sectionScores: CommonTestMockSectionScore[] = exam.sections.map((section) => {
@@ -102,10 +164,7 @@ export function scoreCommonTestMockExam(exam: CommonTestMockExam, answers: Commo
     return {
       sectionId: section.id,
       title: section.title,
-      score: results.reduce(
-        (sum, result) => sum + (result.isCorrect ? result.question.points : 0),
-        0,
-      ),
+      score: results.reduce((sum, result) => sum + result.earnedPoints, 0),
       maxScore: section.points,
       answeredCount: results.filter((result) =>
         isCommonTestMockQuestionAnswered(result.question, result.selectedAnswer),

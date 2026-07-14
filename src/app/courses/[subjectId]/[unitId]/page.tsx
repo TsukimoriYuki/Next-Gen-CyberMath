@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { COURSE_SUBJECTS, getCourseSubject, getCourseUnit } from "@/data/course-curriculum";
+import {
+  PUBLIC_COURSE_SUBJECTS,
+  getCourseSubject,
+  getCourseUnit,
+  isPublicCourseSubject,
+} from "@/data/course-curriculum";
 import { CourseUnitPageView } from "@/components/courses/CourseUnitPageView";
 
 export async function generateMetadata({
@@ -12,11 +17,15 @@ export async function generateMetadata({
   const unit = getCourseUnit(subjectId, unitId);
   return {
     title: unit ? `${unit.unitTitle} 講座一覧` : "講座一覧",
+    robots:
+      unit && !isPublicCourseSubject(getCourseSubject(subjectId)!)
+        ? { index: false, follow: false }
+        : undefined,
   };
 }
 
 export function generateStaticParams() {
-  return COURSE_SUBJECTS.flatMap((subject) =>
+  return PUBLIC_COURSE_SUBJECTS.flatMap((subject) =>
     subject.units.map((unit) => ({
       subjectId: subject.subjectId,
       unitId: unit.unitId,
@@ -33,5 +42,6 @@ export default async function CourseUnitPage({
   const subject = getCourseSubject(subjectId);
   const unit = getCourseUnit(subjectId, unitId);
   if (!subject || !unit) notFound();
+  if (!isPublicCourseSubject(subject) && process.env.NODE_ENV === "production") notFound();
   return <CourseUnitPageView subject={subject} unit={unit} />;
 }

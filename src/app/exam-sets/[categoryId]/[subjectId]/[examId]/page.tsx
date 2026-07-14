@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getExamSet, getExamSetCategory } from "@/data/exam-sets";
+import { getPublicExamSet, getPublicExamSetCategory } from "@/data/exam-sets";
 import { ExamSetRunner } from "@/components/exam-sets/ExamSetRunner";
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { examId } = await params;
-  const examSet = getExamSet(examId);
+  const examSet = getPublicExamSet(examId);
   return {
     title: examSet ? `${examSet.title} | 本番レベル模試集` : "本番レベル模試集",
   };
@@ -17,8 +17,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ExamSetDetailPage({ params }: Props) {
   const { categoryId, subjectId, examId } = await params;
-  const category = getExamSetCategory(categoryId);
-  const examSet = getExamSet(examId);
+  const category = getPublicExamSetCategory(categoryId);
+  const examSet = getPublicExamSet(examId);
 
   if (!category || !examSet) notFound();
   if (examSet.categoryId !== categoryId || examSet.subjectId !== subjectId) notFound();

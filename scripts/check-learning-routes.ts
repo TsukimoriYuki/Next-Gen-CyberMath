@@ -21,7 +21,7 @@ import { UNIT_META, UNIT_META_BY_SLUG } from "../src/data/units-meta";
 import { PROBLEMS_BY_SLUG } from "../src/data/problems";
 import { LESSONS_BY_SLUG } from "../src/data/lessons";
 import { MASTERY_LECTURE_GUIDES } from "../src/lib/special-lecture-guidance";
-import { getSpecialLectureBySlug } from "../src/data/specialLectures";
+import { SPECIAL_LECTURES } from "../src/data/specialLectures";
 
 const issues: string[] = [];
 
@@ -53,7 +53,7 @@ for (const slug of getUnitSlugs()) {
 const seenLectureSlugs = new Set<string>();
 for (const guide of MASTERY_LECTURE_GUIDES) {
   check(
-    Boolean(getSpecialLectureBySlug(guide.lectureSlug)),
+    SPECIAL_LECTURES.some((lecture) => lecture.slug === guide.lectureSlug),
     `MASTERY_LECTURE_GUIDES: lectureSlug "${guide.lectureSlug}" has no matching entry in specialLectures.ts`,
   );
   check(

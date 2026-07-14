@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Clock, Trophy } from "lucide-react";
-import { getExamSetCategory, getExamSetsBySubject } from "@/data/exam-sets";
+import {
+  getPublicExamSetCategory,
+  getPublicExamSetsBySubject,
+} from "@/data/exam-sets";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -10,7 +13,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { categoryId, subjectId } = await params;
-  const exams = getExamSetsBySubject(categoryId, subjectId);
+  const exams = getPublicExamSetsBySubject(categoryId, subjectId);
   return {
     title: exams[0] ? `${exams[0].subjectTitle} | 本番レベル模試集` : "本番レベル模試集",
   };
@@ -18,8 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ExamSetSubjectPage({ params }: Props) {
   const { categoryId, subjectId } = await params;
-  const category = getExamSetCategory(categoryId);
-  const exams = getExamSetsBySubject(categoryId, subjectId);
+  const category = getPublicExamSetCategory(categoryId);
+  const exams = getPublicExamSetsBySubject(categoryId, subjectId);
   if (!category || exams.length === 0) notFound();
 
   return (

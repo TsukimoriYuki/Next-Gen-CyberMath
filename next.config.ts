@@ -19,12 +19,26 @@ const securityHeaders = [
   },
 ];
 
+const sameOriginPdfHeaders = [
+  // Keep the site-wide DENY policy, but allow these first-party PDF assets to be
+  // rendered by the site's own iframe viewers. Later matching header rules win.
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+];
+
 const nextConfig: NextConfig = {
   async headers() {
     return [
       {
         source: "/:path*",
         headers: securityHeaders,
+      },
+      {
+        source: "/mock-exams/:path*.pdf",
+        headers: sameOriginPdfHeaders,
+      },
+      {
+        source: "/problem1a/:path*.pdf",
+        headers: sameOriginPdfHeaders,
       },
     ];
   },

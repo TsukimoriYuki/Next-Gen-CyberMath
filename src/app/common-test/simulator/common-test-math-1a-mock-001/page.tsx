@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowLeft, FileText, FlaskConical } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -13,6 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default function CommonTestMath1APrototypePage() {
+  if (process.env.NODE_ENV === "production") {
+    redirect("/common-test/simulator/common-test-math-1a-manual-001");
+  }
   return (
     <main className="min-h-screen bg-stone-50 px-4 py-10 text-slate-950">
       <div className="mx-auto max-w-2xl border border-stone-300 bg-white p-6 shadow-sm">

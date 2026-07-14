@@ -17,7 +17,6 @@ import {
   DIFFICULTY_COST_MIN,
   computeWeakTags,
   lessonsForWeakTags,
-  getSessionId,
   saveAttemptLocal,
   nowMs,
   type ExamConfig,
@@ -136,12 +135,7 @@ export default function MockExamPage() {
     };
     // localStorage（必ず保存）
     saveAttemptLocal({ config, ...result });
-    // DB（ベストエフォート）
-    fetch("/api/exam/attempts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId: getSessionId(), ...config, ...result }),
-    }).catch(() => {});
+    // 自己採点式の生成模試はサーバーが正誤を再計算できないため、履歴はローカルだけに保存する。
     setFinalized(true);
   };
 

@@ -65,12 +65,22 @@ export type ExamChoice = {
   trap?: string;
 };
 
+export type CommonTestScoringGroup = {
+  id: string;
+  answerLabels: string[];
+  points: number;
+  correctAnswers: Record<string, string | number>;
+  /** Why these answer slots form one indivisible scoring step. */
+  rationale: string;
+};
+
 export type CommonTestQuestion = {
   id: string;
   prompt: string;
   answerFormat: CommonTestAnswerFormat;
   blanks?: ExamBlank[];
   choices?: ExamChoice[];
+  scoringGroups?: CommonTestScoringGroup[];
   points: number;
   difficulty: CommonTestDifficulty;
   skillTags: string[];

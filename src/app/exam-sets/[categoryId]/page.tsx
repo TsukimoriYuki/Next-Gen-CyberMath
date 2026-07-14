@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, BookOpen, Trophy } from "lucide-react";
-import { EXAM_SET_CATEGORIES, getExamSetCategory, getExamSetSubjects } from "@/data/exam-sets";
+import {
+  PUBLIC_EXAM_SET_CATEGORIES,
+  getPublicExamSetCategory,
+  getPublicExamSetSubjects,
+} from "@/data/exam-sets";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -10,7 +14,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { categoryId } = await params;
-  const category = getExamSetCategory(categoryId);
+  const category = getPublicExamSetCategory(categoryId);
   return {
     title: category ? `${category.title} | 本番レベル模試集` : "本番レベル模試集",
   };
@@ -18,10 +22,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ExamSetCategoryPage({ params }: Props) {
   const { categoryId } = await params;
-  const category = getExamSetCategory(categoryId);
+  const category = getPublicExamSetCategory(categoryId);
   if (!category) notFound();
 
-  const subjects = getExamSetSubjects(category.id);
+  const subjects = getPublicExamSetSubjects(category.id);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950">
@@ -52,8 +56,8 @@ export default async function ExamSetCategoryPage({ params }: Props) {
             <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-sm text-slate-500">
               <p>このカテゴリの模試は準備中です。</p>
               {(() => {
-                const otherAvailable = EXAM_SET_CATEGORIES.filter(
-                  (c) => c.id !== category.id && getExamSetSubjects(c.id).length > 0,
+                const otherAvailable = PUBLIC_EXAM_SET_CATEGORIES.filter(
+                  (c) => c.id !== category.id && getPublicExamSetSubjects(c.id).length > 0,
                 );
                 if (otherAvailable.length === 0) return null;
                 return (

@@ -2,6 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import sitemap from "../src/app/sitemap";
 import { PRODUCTION_SITE_URL, PUBLIC_INFO_LINKS, getSiteUrl } from "../src/lib/site";
+import { PUBLIC_COURSE_SUBJECTS } from "../src/data/courses";
+import {
+  PUBLIC_SPECIAL_LECTURES,
+  SPECIAL_LECTURES,
+} from "../src/data/specialLectures";
 
 const ROOT = process.cwd();
 const issues: string[] = [];
@@ -210,11 +215,14 @@ function checkHomeHeadline() {
 
 function checkCoursesPage() {
   const source = read("src/app/courses/page.tsx");
-  if (source.includes("0講座")) {
-    issues.push("src/app/courses/page.tsx: empty course cards must say 準備中, not 0講座");
+  if (
+    !source.includes("PUBLIC_STANDARD_COURSE_SUBJECTS") ||
+    !source.includes("PUBLIC_PREMIUM_COURSE_SUBJECTS")
+  ) {
+    issues.push("src/app/courses/page.tsx: course cards must come from public-only registries");
   }
-  if (!source.includes("準備中")) {
-    issues.push("src/app/courses/page.tsx: should include 準備中 state for empty course cards");
+  if (PUBLIC_COURSE_SUBJECTS.some((subject) => subject.units.some((unit) => unit.lessons.length === 0))) {
+    issues.push("public course registry contains an empty unit");
   }
   if (!source.includes('title: "講座集"')) {
     issues.push("src/app/courses/page.tsx: metadata title should be 講座集");
@@ -281,13 +289,19 @@ function checkCommonTestRouting() {
 }
 
 function checkSpecialLecturesAreNoindex() {
-  const specialLectures = read("src/data/specialLectures.ts");
   const lectureIndexPage = read("src/app/common-test/lectures/page.tsx");
   const lectureDetailPage = read("src/app/common-test/lectures/[slug]/page.tsx");
   const problemLectureIndexPage = read("src/app/common-test/problem-lectures/page.tsx");
 
-  if (!specialLectures.includes("isPublished: false") || !specialLectures.includes("noindex: true")) {
-    issues.push("src/data/specialLectures.ts: unpublished special lectures should be flagged isPublished:false and noindex:true");
+  if (
+    SPECIAL_LECTURES.filter((lecture) => lecture.publicationStatus !== "public").some(
+      (lecture) => lecture.isPublished !== false || lecture.noindex !== true,
+    )
+  ) {
+    issues.push("src/data/specialLectures.ts: non-public special lectures must derive isPublished:false and noindex:true");
+  }
+  if (PUBLIC_SPECIAL_LECTURES.some((lecture) => lecture.isPublished !== true)) {
+    issues.push("src/data/specialLectures.ts: public lecture registry contains an unpublished lecture");
   }
   if (!lectureIndexPage.includes("robots") || !lectureIndexPage.includes("index: false")) {
     issues.push("src/app/common-test/lectures/page.tsx: special lecture index should export noindex metadata");

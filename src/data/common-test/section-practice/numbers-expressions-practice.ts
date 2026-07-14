@@ -159,7 +159,7 @@ export const NUMBERS_EXPRESSIONS_PRACTICE_2: CommonTestMockExam = {
         q({
           id: "prac-ne2-q1",
           prompt:
-            "(1) $x^4+64$ を因数分解せよ。$4x^2$ を足して引き、$(x^2+8)^2-(4x)^2$ の形を作れ。",
+            "(1) $x^4+64$ を因数分解せよ。$16x^2$ を足して引き、$(x^2+8)^2-(4x)^2$ の形を作れ。",
           answerFormat: "choice",
           choices: choices([
             { text: "$(x^2-4x+8)(x^2+4x+8)$", correct: true },
@@ -173,7 +173,7 @@ export const NUMBERS_EXPRESSIONS_PRACTICE_2: CommonTestMockExam = {
           answer: "0",
           shortSolution: "$x^4+64=(x^2+8)^2-(4x)^2=(x^2-4x+8)(x^2+4x+8)$。",
           explanation: explanation({
-            plan: "$x^2$ の項がない4次式は、$4x^2$ を足し引きして平方の差 $A^2-B^2$ を作る。",
+            plan: "$x^2$ の項がない4次式は、$16x^2$ を足し引きして平方の差 $A^2-B^2$ を作る。",
             work: "$x^4+64=x^4+16x^2+64-16x^2=(x^2+8)^2-(4x)^2=(x^2+8-4x)(x^2+8+4x)=(x^2-4x+8)(x^2+4x+8)$。",
             answer: "$(x^2-4x+8)(x^2+4x+8)$",
             mistake: "$x^2$ の項がないので因数分解できないと諦めてしまう。",

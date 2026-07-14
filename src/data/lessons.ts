@@ -1,6 +1,7 @@
 import type { Lesson } from "@/lib/types";
 import { AM_GM_INEQUALITY_LESSON } from "./lessons/am-gm-inequality";
 import { RECURRENCE_LESSON } from "./lessons/recurrence-characteristic-equation";
+import { indexByUniqueRegistryKey } from "@/lib/registry";
 
 // Concept Lessons —「めっちゃわかりやすい授業」。
 // content は KaTeX 対応 Markdown。JSXGraph ラボは、行トークン
@@ -527,35 +528,6 @@ $\dfrac{\pi}{2}-\theta$ は直角三角形の「もう一方の鋭角」。だ�
   },
 
   {
-    slug: "recurrence-characteristic-equation",
-    title: "漸化式と特性方程式の正体",
-    unit: "難問対策・解法戦略",
-    summary:
-      "特性方程式の解＝不動点。なぜ aₙ−α が等比になるのかを、クモの巣図で見る。",
-    relatedProblemSlugs: ["recurrence-linear-fixed-point", "recurrence-to-geometric"],
-    tags: ["漸化式", "特性方程式", "等比数列", "解法戦略"],
-    content: r`## 「特性方程式」って結局なに？
-
-$a_{n+1}=p\,a_n+q$（$p\neq1$）を解くとき、$x=px+q$ を解いて $x=\alpha$ を求め、$a_{n+1}-\alpha=p(a_n-\alpha)$ と変形しますね。この $x=px+q$ が**特性方程式**。その解 $\alpha=\dfrac{q}{1-p}$ は、数列がそこへ吸い寄せられる**不動点**です。
-
-@@lab:spider-web-plot@@
-
-## なぜ不動点でずらすと等比になるのか
-
-$\alpha$ は $\alpha=p\alpha+q$ をみたす。これを元の式から辺々引くと
-$$a_{n+1}-\alpha=p(a_n-\alpha).$$
-つまり $b_n=a_n-\alpha$ は公比 $p$ の等比数列。$\alpha$ を中心に測り直した瞬間、$q$ が消えてまっすぐな等比になる——これが特性方程式の正体です。$|p|<1$ なら $b_n\to0$、すなわち $a_n\to\alpha$（ラボで「収束」）。$|p|>1$ なら発散します。
-
-## 3 項間漸化式へ
-
-$a_{n+2}=p\,a_{n+1}+q\,a_n$ では、特性方程式は **2 次**になります：
-$$x^2=px+q.$$
-その 2 解 $\alpha,\beta$ を使うと、$\{a_{n+1}-\alpha a_n\}$ と $\{a_{n+1}-\beta a_n\}$ がそれぞれ等比数列。一般項は $a_n=A\alpha^n+B\beta^n$（$\alpha\neq\beta$）の形になります。
-
-> **核心:** 線形漸化式の特性方程式は「変化しない値（不動点／固有比）」を探す式。そこを基準に取り直すと、複雑な漸化式が等比のまっすぐさに化ける。`,
-  },
-
-  {
     slug: "vector-linear-independence",
     title: "ベクトルの 1 次独立と斜交座標",
     unit: "難問対策・解法戦略",
@@ -623,6 +595,8 @@ $\log_c x$ は、$x$ が「$c$ を基準に何乗ぶんか」を測るものさ�
   },
 ];
 
-export const LESSONS_BY_SLUG: Record<string, Lesson> = Object.fromEntries(
-  LESSONS.map((l) => [l.slug, l]),
+export const LESSONS_BY_SLUG: Record<string, Lesson> = indexByUniqueRegistryKey(
+  LESSONS,
+  (lesson) => lesson.slug,
+  "LESSONS slug registry",
 );

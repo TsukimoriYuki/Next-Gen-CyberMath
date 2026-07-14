@@ -7,6 +7,7 @@ import { EXPANSION_PACK_3 } from "./expansion-pack-3";
 import { ABYSS_PACK_1 } from "./abyss-pack-1";
 import { ABYSS_PACK_2 } from "./abyss-pack-2";
 import { PRIVATE_MATH_PACK_1 } from "./private-math-pack-1";
+import { indexByUniqueRegistryKey } from "@/lib/registry";
 import { numbersAndExpressions } from "./units/numbers-and-expressions";
 import { setsAndLogic } from "./units/sets-and-logic";
 import { quadraticFunctions } from "./units/quadratic-functions";
@@ -545,6 +546,8 @@ export const PROBLEMS: Problem[] = RAW_PROBLEMS.map((p) => {
   return merged.length ? { ...p, tags: merged } : p;
 });
 
-export const PROBLEMS_BY_SLUG: Record<string, Problem> = Object.fromEntries(
-  PROBLEMS.map((p) => [p.slug, p]),
+export const PROBLEMS_BY_SLUG: Record<string, Problem> = indexByUniqueRegistryKey(
+  PROBLEMS,
+  (problem) => problem.slug,
+  "problem slug registry",
 );

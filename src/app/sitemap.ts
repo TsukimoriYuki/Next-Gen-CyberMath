@@ -29,7 +29,6 @@ const STATIC_ROUTES = [
   "/common-test/simulator",
   "/common-test/simulator/common-test-math-1a-manual-001",
   "/common-test/simulator/common-test-math-1a-manual-002",
-  "/common-test/simulator/paper-sample",
   "/common-test/practice",
   "/common-test/problem-lectures",
   "/common-test/math-1a",

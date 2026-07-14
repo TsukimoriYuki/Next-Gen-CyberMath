@@ -13,8 +13,10 @@ import { COMMON_TEST_MATH_1A_MANUAL_002 } from "../src/data/common-test/manual-m
 import {
   isCommonTestMockQuestionCorrect,
   scoreCommonTestMockExam,
+  scoreCommonTestMockQuestion,
   type CommonTestMockAnswers,
 } from "../src/lib/common-test-mock-scoring";
+import { isCommonTestAnswerCorrect } from "../src/lib/common-test-answer-normalize";
 
 const issues: string[] = [];
 const root = process.cwd();
@@ -82,6 +84,32 @@ function checkQuestion(question: CommonTestQuestion, blankIds: Set<string>) {
       if (blank.label.length > 1) {
         check(blank.id in answerRecord, `${question.id} multi-character blank [${blank.label}] is not one answer slot`);
       }
+    }
+
+    const groups = question.scoringGroups ?? [];
+    check(groups.length > 0, `${question.id} has blanks but no scoring groups`);
+    check(
+      groups.reduce((sum, group) => sum + group.points, 0) === question.points,
+      `${question.id} scoring group points do not total ${question.points}`,
+    );
+    const groupedLabels = groups.flatMap((group) => group.answerLabels);
+    check(
+      new Set(groupedLabels).size === groupedLabels.length,
+      `${question.id} assigns an answer label to more than one scoring group`,
+    );
+    check(
+      [...groupedLabels].sort().join("|") === question.blanks.map((blank) => blank.label).sort().join("|"),
+      `${question.id} scoring groups do not cover every answer label exactly once`,
+    );
+    for (const group of groups) {
+      check(group.rationale.trim().length > 0, `${question.id}/${group.id} scoring rationale missing`);
+      check(
+        group.answerLabels.every((label) => {
+          const blank = question.blanks?.find((candidate) => candidate.label === label);
+          return blank && String(group.correctAnswers[label]) === blank.correctAnswer;
+        }),
+        `${question.id}/${group.id} scoring answer key does not match the question data`,
+      );
     }
   }
 
@@ -154,6 +182,56 @@ function checkExam(exam: CommonTestMockExam) {
   const empty = scoreCommonTestMockExam(exam, {});
   check(empty.totalScore === 0, `${exam.id} empty score should be 0, got ${empty.totalScore}`);
   check(empty.unansweredCount === questions.length, `${exam.id} empty unanswered should be ${questions.length}, got ${empty.unansweredCount}`);
+
+  const allWrong = Object.fromEntries(
+    questions.map((question) => [
+      question.id,
+      question.blanks
+        ? Object.fromEntries(question.blanks.map((blank) => [blank.id, "__wrong__"]))
+        : question.answerFormat === "multi-choice"
+          ? []
+          : "__wrong__",
+    ]),
+  );
+  check(scoreCommonTestMockExam(exam, allWrong).totalScore === 0, `${exam.id} all-wrong score should be 0`);
+
+  const groupedQuestion = questions.find((question) => (question.scoringGroups?.length ?? 0) > 1);
+  if (groupedQuestion && groupedQuestion.blanks && groupedQuestion.scoringGroups) {
+    const firstGroup = groupedQuestion.scoringGroups[0];
+    const perfectAnswer = structuredClone(groupedQuestion.answer) as Record<string, string>;
+    const firstBlank = groupedQuestion.blanks.find((blank) => blank.label === firstGroup.answerLabels[0])!;
+
+    const oneWrong = { ...perfectAnswer, [firstBlank.id]: "__wrong__" };
+    const oneWrongResult = scoreCommonTestMockQuestion(groupedQuestion, oneWrong);
+    check(
+      oneWrongResult.earnedPoints === groupedQuestion.points - firstGroup.points,
+      `${groupedQuestion.id} one wrong slot should lose only its scoring group`,
+    );
+
+    const oneBlank = { ...perfectAnswer, [firstBlank.id]: "" };
+    const oneBlankResult = scoreCommonTestMockQuestion(groupedQuestion, oneBlank);
+    check(
+      oneBlankResult.earnedPoints === groupedQuestion.points - firstGroup.points,
+      `${groupedQuestion.id} one blank slot should lose only its scoring group`,
+    );
+
+    const firstGroupOnly = Object.fromEntries(
+      groupedQuestion.blanks.map((blank) => [
+        blank.id,
+        firstGroup.answerLabels.includes(blank.label) ? blank.correctAnswer : "__wrong__",
+      ]),
+    );
+    const firstGroupOnlyResult = scoreCommonTestMockQuestion(groupedQuestion, firstGroupOnly);
+    check(
+      firstGroupOnlyResult.earnedPoints === firstGroup.points,
+      `${groupedQuestion.id} one correct scoring group should earn exactly ${firstGroup.points}`,
+    );
+  }
+
+  check(
+    perfect.sectionScores.map((section) => section.score).join(",") === "30,30,20,20",
+    `${exam.id} perfect section scores should be 30,30,20,20`,
+  );
 }
 
 function main() {
@@ -201,6 +279,35 @@ function main() {
       "manual 002 wrong fraction denominator should score wrong",
     );
   }
+
+  const markAnswerQuestion = allQuestions(COMMON_TEST_MATH_1A_MANUAL_002).find(
+    (question) => question.id === "m1a-manual-002-s1-1-sets",
+  );
+  if (markAnswerQuestion && markAnswerQuestion.blanks) {
+    const markAnswers = structuredClone(markAnswerQuestion.answer) as Record<string, string>;
+    const firstBlank = markAnswerQuestion.blanks[0];
+    markAnswers[firstBlank.id] = "-03.0";
+    check(
+      !isCommonTestMockQuestionCorrect(markAnswerQuestion, markAnswers),
+      "mark-sheet answers must preserve significant leading zeros and exact box notation",
+    );
+  }
+
+  for (const equivalent of ["8", "8.0", "08.000", "+8.000", "８．０"]) {
+    check(
+      isCommonTestAnswerCorrect(equivalent, "8", "number"),
+      `number answer ${equivalent} should be equivalent to 8`,
+    );
+  }
+  for (const invalid of ["", "NaN", "Infinity", "8/1", "√64", "sqrt(64)", "x+8", "8e0", "."]) {
+    check(
+      !isCommonTestAnswerCorrect(invalid, "8", "number"),
+      `non-decimal answer ${invalid || "(empty)"} must not be coerced to number 8`,
+    );
+  }
+  check(isCommonTestAnswerCorrect("-0", "0.0", "number"), "finite decimal -0 should equal 0.0");
+  check(!isCommonTestAnswerCorrect("08", "8", "choice"), "choice numbers must remain exact");
+  check(!isCommonTestAnswerCorrect("08", "8", "digits"), "digit/mark answers must preserve leading zeros");
 
   report();
 }
