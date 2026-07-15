@@ -130,7 +130,7 @@ export function SubjectCard({ subject }: { subject: SubjectConfig }) {
           <span className="text-xl font-bold text-slate-950">{subject.name}</span>
           {subject.status === "beta" && (
             <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-800">
-              ベータ公開
+              β
             </span>
           )}
         </span>

@@ -17,7 +17,7 @@ import { PUBLIC_SUBJECTS, SUBJECTS } from "../src/data/subjects";
 import { evaluateSubjectPublication } from "../src/lib/subject-publication";
 import { isCommonTestAnswerCorrect } from "../src/lib/common-test-answer-normalize";
 
-// 情報Ⅰ 第1〜第3スプリントの整合性QA。
+// 情報Ⅰ 第1〜第4スプリントとβ公開の整合性QA。
 // 実行例: npx tsx scripts/check-informatics.ts / npm run qa:informatics
 
 const ROOT = process.cwd();
@@ -38,7 +38,7 @@ check(
   "informatics unit IDs must be unique",
 );
 check(lessonIds.size === lessons.length, "informatics lesson IDs must be unique");
-check(lessons.length === 12, `informatics must have 12 lessons (found ${lessons.length})`);
+check(lessons.length === 16, `informatics must have 16 lessons (found ${lessons.length})`);
 check(
   COURSE_SUBJECTS.some((subject) => subject.subjectId === "informatics-1"),
   "informatics-1 must be registered in COURSE_SUBJECTS",
@@ -71,8 +71,8 @@ for (const lesson of lessons) {
 // ── 演習問題 registry ───────────────────────────────────────────────────────
 
 check(
-  INFORMATICS_PROBLEMS.length === 60,
-  `informatics must ship exactly 60 problems (found ${INFORMATICS_PROBLEMS.length})`,
+  INFORMATICS_PROBLEMS.length === 80,
+  `informatics must ship exactly 80 problems (found ${INFORMATICS_PROBLEMS.length})`,
 );
 check(
   new Set(INFORMATICS_PROBLEMS.map((problem) => problem.id)).size ===
@@ -160,9 +160,9 @@ for (const lesson of lessons) {
 }
 
 const expectedDifficulty: Record<InformaticsDifficulty, number> = {
-  basic: 24,
-  standard: 24,
-  "ct-prep": 12,
+  basic: 32,
+  standard: 32,
+  "ct-prep": 16,
 };
 for (const [difficulty, expected] of Object.entries(expectedDifficulty)) {
   const actual = byDifficulty.get(difficulty as InformaticsDifficulty) ?? 0;
@@ -535,21 +535,182 @@ for (const invalid of ["", "NaN", "Infinity", "20/1", "√400"]) {
   );
 }
 
+// ── 第4スプリント固有の教材・問題品質と独立検算 ─────────────────────────────
+
+const sprint4LessonIds = new Set([
+  "network-communication",
+  "internet-web-dns",
+  "databases-data-organization",
+  "data-analysis-visualization-modeling",
+]);
+const sprint4Lessons = lessons.filter((lesson) => sprint4LessonIds.has(lesson.lessonId));
+const sprint4Problems = INFORMATICS_PROBLEMS.filter((problem) =>
+  sprint4LessonIds.has(problem.lessonId),
+);
+
+check(sprint4Lessons.length === 4, `sprint 4 must have 4 lessons (found ${sprint4Lessons.length})`);
+check(sprint4Problems.length === 20, `sprint 4 must have 20 problems (found ${sprint4Problems.length})`);
+
+for (const lesson of sprint4Lessons) {
+  const label = `sprint 4 lesson "${lesson.lessonId}"`;
+  check(lesson.qualityTags.includes("sprint-4"), `${label} must be tagged sprint-4`);
+  check(
+    lesson.lessonBlocks.some((block) => block.kind === "comparisonTable"),
+    `${label} must include an accurate table`,
+  );
+  check(
+    lesson.lessonBlocks.some((block) => block.kind === "workedExample"),
+    `${label} must include a worked example`,
+  );
+}
+
+const sprint4Difficulty = new Map<InformaticsDifficulty, number>();
+for (const networkProblem of sprint4Problems) {
+  sprint4Difficulty.set(
+    networkProblem.difficulty,
+    (sprint4Difficulty.get(networkProblem.difficulty) ?? 0) + 1,
+  );
+  check(
+    networkProblem.slug === networkProblem.id,
+    `sprint 4 problem "${networkProblem.id}" must declare its slug`,
+  );
+  check(
+    Boolean(networkProblem.solutionProcess?.trim()),
+    `sprint 4 problem "${networkProblem.id}" must record a calculation or trace`,
+  );
+  const correctIds = new Set(networkProblem.correctChoiceIds);
+  for (const answerChoice of networkProblem.choices) {
+    const expectedPrefix = correctIds.has(answerChoice.id) ? "正答：" : "誤り：";
+    check(
+      answerChoice.reason.startsWith(expectedPrefix),
+      `sprint 4 problem "${networkProblem.id}" choice "${answerChoice.id}" must agree with registered answer`,
+    );
+  }
+}
+
+for (const [difficulty, expected] of Object.entries({ basic: 8, standard: 8, "ct-prep": 4 })) {
+  check(
+    (sprint4Difficulty.get(difficulty as InformaticsDifficulty) ?? 0) === expected,
+    `sprint 4 difficulty "${difficulty}" must have ${expected} problems`,
+  );
+}
+check(
+  sprint4Problems
+    .filter((problem) => problem.difficulty === "ct-prep")
+    .every((problem) => /表|会話|資料|計算/.test(problem.prompt) && problem.estimatedMinutes >= 6),
+  "every sprint 4 ct-prep problem must combine a table, conversation, source, or calculation",
+);
+
+const transferSecondsIndependent = ((20 * 1_000_000 * 8) / (10 * 1_000_000));
+const productRows = [
+  { id: "A", category: "文具", price: 800 },
+  { id: "B", category: "書籍", price: 1800 },
+  { id: "C", category: "文具", price: 1200 },
+  { id: "D", category: "書籍", price: 900 },
+];
+const filteredProductIds = productRows
+  .filter((row) => row.category === "文具" && row.price >= 1000)
+  .map((row) => row.id);
+const sortedOrderIds = [
+  { id: "P", amount: 2400 },
+  { id: "Q", amount: 3600 },
+  { id: "R", amount: 1800 },
+  { id: "S", amount: 3000 },
+]
+  .sort((a, b) => b.amount - a.amount)
+  .map((row) => row.id);
+const customers = new Map([
+  ["C1", "青木"],
+  ["C2", "伊藤"],
+  ["C3", "上田"],
+]);
+const joinedOrders = [
+  ["O1", "C2", "本"],
+  ["O2", "C1", "ペン"],
+  ["O3", "C2", "ノート"],
+].map(([orderId, customerId, item]) => `${orderId}${customers.get(customerId)}-${item}`);
+const surveyRows = [
+  ["1年", "利用"],
+  ["1年", "未利用"],
+  ["2年", "利用"],
+  ["2年", "利用"],
+  ["1年", "利用"],
+  ["2年", "未利用"],
+] as const;
+const crossTabCount = surveyRows.filter(
+  ([grade, usage]) => grade === "2年" && usage === "利用",
+).length;
+const trainingMean = [60, 70, 80].reduce((sum, value) => sum + value, 0) / 3;
+
+check(
+  INFORMATICS_PROBLEMS.find((problem) => problem.id === "joho-net-transfer-time")
+    ?.correctNumber === transferSecondsIndependent,
+  `transfer-time answer must equal independent bit/byte calculation ${transferSecondsIndependent}`,
+);
+check(
+  correctChoiceText("joho-db-filter").includes(filteredProductIds.join("")),
+  "filter answer must match independent row filtering",
+);
+check(
+  correctChoiceText("joho-db-sort").includes(sortedOrderIds.join(", ")),
+  "sort answer must match independent descending sort",
+);
+check(
+  joinedOrders.every((joined) => correctChoiceText("joho-db-join-ct").includes(joined)),
+  "join answer must match independent foreign-key lookup",
+);
+check(
+  INFORMATICS_PROBLEMS.find((problem) => problem.id === "joho-data-cross-tab")
+    ?.correctNumber === crossTabCount,
+  "cross-tab answer must match independent two-condition count",
+);
+check(
+  correctChoiceText("joho-data-bias-model-ct").includes(`平均${trainingMean}`),
+  "training mean must match independent arithmetic mean",
+);
+
+const expectedLessonOrder = [
+  "info-society-problem-solving",
+  "info-morals-ip-privacy",
+  "info-security-basics",
+  "info-design-communication",
+  "computer-components-operation",
+  "number-systems-bits",
+  "digital-text-image-audio",
+  "data-size-compression-error",
+  "variables-expressions-io",
+  "branching-loops",
+  "arrays-functions-decomposition",
+  "algorithms-search-simulation",
+  "network-communication",
+  "internet-web-dns",
+  "databases-data-organization",
+  "data-analysis-visualization-modeling",
+];
+check(
+  lessons.map((lesson) => lesson.lessonId).join("|") === expectedLessonOrder.join("|"),
+  "informatics recommended lesson order must remain continuous from 1 through 16",
+);
+check(
+  units.every((unit) => unit.lessons.length > 0) && lessons.every((lesson) => byLesson.get(lesson.lessonId) === 5),
+  "beta curriculum must not expose an empty unit or lesson without five problems",
+);
+
 // ── 公開制御 ─────────────────────────────────────────────────────────────────
 
 const informaticsSubject = SUBJECTS.find((subject) => subject.id === "informatics");
 check(Boolean(informaticsSubject), "informatics subject must exist in subjects.ts");
 check(
-  informaticsSubject?.status === "hidden",
-  "informatics must stay hidden until the publication decision",
+  informaticsSubject?.status === "beta",
+  "informatics must be beta after every publication condition passes",
 );
 check(
-  !PUBLIC_SUBJECTS.some((subject) => subject.id === "informatics"),
-  "informatics must not appear in PUBLIC_SUBJECTS (navigation/subject listing)",
+  PUBLIC_SUBJECTS.some((subject) => subject.id === "informatics"),
+  "informatics beta must appear in PUBLIC_SUBJECTS",
 );
 check(
-  !PUBLIC_COURSE_SUBJECTS.some((subject) => subject.subjectId === "informatics-1"),
-  "informatics-1 must not appear in PUBLIC_COURSE_SUBJECTS (course listing/sitemap)",
+  PUBLIC_COURSE_SUBJECTS.some((subject) => subject.subjectId === "informatics-1"),
+  "informatics-1 beta must appear in PUBLIC_COURSE_SUBJECTS",
 );
 check(
   !PRIMARY_NAVIGATION.some((item) => item.href.startsWith("/informatics")),
@@ -561,26 +722,42 @@ const sitemapSource = fs.readFileSync(
   "utf8",
 );
 check(
-  !sitemapSource.includes("informatics"),
-  "sitemap.ts must not hardcode informatics routes",
+  sitemapSource.includes("INFORMATICS_PROBLEMS"),
+  "sitemap.ts must derive informatics problem routes from its registry",
 );
 const sitemapPaths = sitemap().map((entry) => new URL(entry.url).pathname);
 check(
-  !sitemapPaths.some((route) => route.includes("informatics")),
-  "generated sitemap must not contain informatics routes",
+  sitemapPaths.includes("/informatics"),
+  "generated sitemap must contain the canonical informatics subject route",
 );
-
-if (informaticsSubject) {
-  for (const runtime of ["production", "preview", "test"] as const) {
+for (const problem of INFORMATICS_PROBLEMS) {
+  check(
+    sitemapPaths.includes(`/informatics/problems/${problem.slug ?? problem.id}`),
+    `sitemap must contain informatics problem ${problem.id}`,
+  );
+}
+for (const unit of units) {
+  check(
+    sitemapPaths.includes(`/courses/informatics-1/${unit.unitId}`),
+    `sitemap must contain informatics unit ${unit.unitId}`,
+  );
+  for (const lesson of unit.lessons) {
     check(
-      !evaluateSubjectPublication(informaticsSubject, "courses", runtime).allowed,
-      `informatics must be rejected (404) in ${runtime}`,
+      sitemapPaths.includes(
+        `/courses/informatics-1/${unit.unitId}/${lesson.lessonId}`,
+      ),
+      `sitemap must contain informatics lesson ${lesson.lessonId}`,
     );
   }
-  check(
-    evaluateSubjectPublication(informaticsSubject, "courses", "development").allowed,
-    "informatics must stay inspectable in local development",
-  );
+}
+
+if (informaticsSubject) {
+  for (const runtime of ["production", "preview", "test", "development"] as const) {
+    check(
+      evaluateSubjectPublication(informaticsSubject, "courses", runtime).allowed,
+      `informatics beta must be available in ${runtime}`,
+    );
+  }
 }
 
 // ── 結果 ─────────────────────────────────────────────────────────────────────
@@ -592,5 +769,5 @@ if (issues.length > 0) {
 }
 
 console.log(
-  `informatics QA passed: ${lessons.length} lessons, ${INFORMATICS_PROBLEMS.length} problems (overall basic 24 / standard 24 / ct-prep 12; sprint 3 basic 8 / standard 8 / ct-prep 4), sprint 2 calculations and sprint 3 traces independently verified, subject hidden with dev-only preview.`,
+  `informatics QA passed: ${lessons.length} lessons, ${INFORMATICS_PROBLEMS.length} problems (overall basic 32 / standard 32 / ct-prep 16; sprint 3 and 4 each 8 / 8 / 4), independent calculations verified, subject beta with canonical sitemap routes.`,
 );

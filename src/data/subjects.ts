@@ -61,9 +61,8 @@ export const SUBJECTS = [
     shortName: "情報",
     href: "/informatics",
     description:
-      "情報社会の問題解決、情報デザイン、セキュリティ、コンピュータとデジタルデータの基礎を学ぶ共通テスト情報Ⅰ。",
-    // 教材準備中。公開判断が済むまで hidden を維持する（productionでは404）。
-    status: "hidden",
+      "情報社会、情報デザイン、セキュリティ、デジタル表現、プログラミング、ネットワーク、データ活用を学ぶ情報Ⅰ。",
+    status: "beta",
     capabilities: {
       courses: true,
       problems: true,

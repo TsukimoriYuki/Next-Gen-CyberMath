@@ -19,6 +19,7 @@ import { getTagIndexingDecision } from "@/lib/tag-indexing";
 import { getSiteUrl } from "@/lib/site";
 import { PUBLIC_SUBJECTS } from "@/data/subjects";
 import { PRIMARY_NAVIGATION } from "@/data/navigation";
+import { INFORMATICS_PROBLEMS } from "@/data/informatics/problems";
 
 const GLOBAL_STATIC_ROUTES = [
   "/",
@@ -80,6 +81,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = new Set<string>(GLOBAL_STATIC_ROUTES);
   const mathSubject = PUBLIC_SUBJECTS.find((subject) => subject.id === "math");
   const englishSubject = PUBLIC_SUBJECTS.find((subject) => subject.id === "english");
+  const informaticsSubject = PUBLIC_SUBJECTS.find(
+    (subject) => subject.id === "informatics",
+  );
 
   for (const item of PRIMARY_NAVIGATION) {
     if (["learn", "problems", "exams", "review"].includes(item.id)) {
@@ -150,6 +154,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       for (const lesson of unit.lessons) {
         routes.add(`/courses/${subject.subjectId}/${unit.unitId}/${lesson.lessonId}`);
       }
+    }
+  }
+
+  if (informaticsSubject?.capabilities.problems) {
+    for (const problem of INFORMATICS_PROBLEMS) {
+      routes.add(`/informatics/problems/${problem.slug ?? problem.id}`);
     }
   }
 

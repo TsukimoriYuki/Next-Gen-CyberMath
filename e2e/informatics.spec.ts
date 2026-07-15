@@ -1,40 +1,51 @@
 import { expect, test } from "@playwright/test";
 
-// 情報Ⅰ（hidden教科）の公開制御を production build で確認する。
-// 実行例: npx playwright test e2e/informatics.spec.ts
-
-const HIDDEN_ROUTES = [
+const PUBLIC_ROUTES = [
   "/informatics",
-  "/informatics/problems/joho-ps-steps-order",
-  "/informatics/problems/joho-sec-mfa-combination",
   "/courses/informatics-1",
-  "/courses/informatics-1/information-society-problem-solving",
   "/courses/informatics-1/information-society-problem-solving/info-society-problem-solving",
-];
+  "/informatics/problems/joho-ps-steps-order",
+] as const;
 
-for (const route of HIDDEN_ROUTES) {
-  test(`hidden informatics route returns 404 in production: ${route}`, async ({
-    page,
-  }) => {
+for (const route of PUBLIC_ROUTES) {
+  test(`beta informatics route is public: ${route}`, async ({ page }) => {
     const response = await page.goto(route);
-    expect(response?.status()).toBe(404);
+    expect(response?.status()).toBe(200);
+    await expect(page.getByText("ベータ公開").first()).toBeVisible();
   });
 }
 
-test("informatics does not appear in the sitemap", async ({ request }) => {
+test("informatics beta appears in subjects with no empty exam or review card", async ({ page }) => {
+  await page.goto("/subjects");
+  const card = page.locator('[data-subject-card="informatics"]');
+  await expect(card).toContainText("情報Ⅰ");
+  await expect(card).toContainText("β");
+
+  await page.goto("/informatics");
+  await expect(page.getByRole("heading", { name: "基礎講座" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "演習問題" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "復習する" })).toBeVisible();
+  await expect(page.getByText("16講座")).toBeVisible();
+  await expect(page.getByText("80問")).toBeVisible();
+  await expect(page.getByText("模試", { exact: true })).toHaveCount(0);
+});
+
+test("informatics canonical routes are in sitemap", async ({ request }) => {
   const response = await request.get("/sitemap.xml");
   expect(response.status()).toBe(200);
   const body = await response.text();
-  expect(body).not.toContain("informatics");
+  expect(body).toContain("/informatics</loc>");
+  expect(body).toContain("/courses/informatics-1/programming-algorithms");
+  expect(body).toContain("/informatics/problems/joho-data-bias-model-ct");
 });
 
-test("informatics does not appear in global navigation or subject listing", async ({
-  page,
-}) => {
-  await page.goto("/subjects");
-  const content = await page.content();
-  expect(content).not.toContain("/informatics");
-  expect(content).not.toContain("情報Ⅰ");
+test("informatics pages expose canonical metadata", async ({ page }) => {
+  await page.goto("/informatics/problems/joho-net-transfer-time");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    /\/informatics\/problems\/joho-net-transfer-time$/,
+  );
+  await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
 });
 
 test("public math and english subjects stay available", async ({ page }) => {

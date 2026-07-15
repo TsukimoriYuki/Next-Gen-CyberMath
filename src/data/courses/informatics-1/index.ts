@@ -3,23 +3,23 @@ import { COMPUTER_DIGITAL_DATA_UNIT } from "./computer-digital-data";
 import { INFORMATION_DESIGN_UNIT } from "./information-design";
 import { INFORMATION_SOCIETY_UNIT } from "./information-society";
 import { PROGRAMMING_ALGORITHMS_UNIT } from "./programming-algorithms";
+import { NETWORK_DATA_USE_UNIT } from "./network-data-use";
 
-// 情報Ⅰの講座registry。親教科 "informatics" は subjects.ts で hidden のため、
-// この course subject は production では公開されない（/courses/[subjectId] の
-// layout guard が親教科の公開状態で判定する）。閲覧確認は local development で行う。
+// 情報Ⅰの講座registry。公開可否は親教科の状態と共通course publication guardで判定する。
 
 export const INFORMATICS_1_COURSE_SUBJECT: CourseSubject = {
   subjectId: "informatics-1",
   parentSubjectId: "informatics",
   subjectName: "情報Ⅰ",
   description:
-    "情報社会の問題解決、情報モラル・セキュリティ、情報デザイン、コンピュータとデジタルデータの表現を、具体的な場面と計算で学びます。",
+    "情報社会の問題解決、情報デザイン、セキュリティ、デジタル表現、プログラミング、ネットワーク、データ活用を、具体例と演習で学びます。",
   color: "#0d9488",
   units: [
     INFORMATION_SOCIETY_UNIT,
     INFORMATION_DESIGN_UNIT,
     COMPUTER_DIGITAL_DATA_UNIT,
     PROGRAMMING_ALGORITHMS_UNIT,
+    NETWORK_DATA_USE_UNIT,
   ],
 };
 
@@ -27,3 +27,4 @@ export * from "./computer-digital-data";
 export * from "./information-design";
 export * from "./information-society";
 export * from "./programming-algorithms";
+export * from "./network-data-use";

@@ -12,10 +12,12 @@ import { getCourseSubject } from "@/data/courses";
 import {
   INFORMATICS_DIFFICULTY_META,
   INFORMATICS_KIND_META,
+  INFORMATICS_PROBLEMS,
   getInformaticsProblem,
 } from "@/data/informatics/problems";
+import { getSubject } from "@/data/subjects";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
-// hidden 教科配下のため index させない（production では layout guard により404）。
 export async function generateMetadata({
   params,
 }: {
@@ -23,10 +25,24 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { problemId } = await params;
   const problem = getInformaticsProblem(problemId);
-  return {
-    title: problem ? `${problem.title} | 情報Ⅰ` : "情報Ⅰ",
-    robots: { index: false, follow: false },
-  };
+  if (!problem || getSubject("informatics")?.status === "hidden") {
+    return {
+      title: problem ? `${problem.title} | 情報Ⅰ` : "情報Ⅰ",
+      robots: { index: false, follow: false },
+    };
+  }
+  return createPublicMetadata({
+    title: `${problem.title} | 情報Ⅰ`,
+    description: problem.prompt,
+    path: `/informatics/problems/${problem.slug ?? problem.id}`,
+    openGraphType: "article",
+  });
+}
+
+export function generateStaticParams() {
+  return INFORMATICS_PROBLEMS.map((problem) => ({
+    problemId: problem.slug ?? problem.id,
+  }));
 }
 
 export default async function InformaticsProblemPage({

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const SPRINT3_HIDDEN_ROUTES = [
+const SPRINT3_ROUTES = [
   "/courses/informatics-1/programming-algorithms",
   "/courses/informatics-1/programming-algorithms/variables-expressions-io",
   "/courses/informatics-1/programming-algorithms/branching-loops",
@@ -12,18 +12,15 @@ const SPRINT3_HIDDEN_ROUTES = [
   "/informatics/problems/joho-algo-simulation-ct",
 ] as const;
 
-for (const route of SPRINT3_HIDDEN_ROUTES) {
-  test(`sprint 3 hidden informatics route returns 404: ${route}`, async ({ page }) => {
-    const response = await page.goto(route);
-    expect(response?.status()).toBe(404);
+for (const route of SPRINT3_ROUTES) {
+  test(`sprint 3 route is available in beta: ${route}`, async ({ page }) => {
+    expect((await page.goto(route))?.status()).toBe(200);
   });
 }
 
-test("sprint 3 remains absent from public listings and sitemap", async ({ page, request }) => {
-  const sitemap = await request.get("/sitemap.xml");
-  expect(sitemap.status()).toBe(200);
-  expect(await sitemap.text()).not.toContain("informatics");
-
-  await page.goto("/subjects");
-  expect(await page.content()).not.toContain("情報Ⅰ");
+test("number answer reuses finite-decimal normalization", async ({ page }) => {
+  await page.goto("/informatics/problems/joho-prog-assignment-value");
+  await page.getByLabel("数値を入力").fill("020.000");
+  await page.getByRole("button", { name: "答え合わせ" }).click();
+  await expect(page.getByText("正解です")).toBeVisible();
 });

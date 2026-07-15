@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BookOpen, ListChecks } from "lucide-react";
+import { ArrowRight, BookOpen, ListChecks, RotateCcw } from "lucide-react";
 import {
   ContentMeta,
-  LearningPageHeader,
-  LearningPageShell,
-  LearningSectionHeader,
+  LearningBreadcrumbs,
 } from "@/components/learning/LearningPageFrame";
+import {
+  LearningPage,
+  LearningPageContainer,
+  LearningPageHero,
+  LearningSection,
+} from "@/components/learning/LearningPage";
 import { INFORMATICS_1_COURSE_SUBJECT } from "@/data/courses";
 import {
   INFORMATICS_DIFFICULTY_META,
@@ -14,39 +18,64 @@ import {
   INFORMATICS_PROBLEMS,
   getInformaticsProblemsByLesson,
 } from "@/data/informatics/problems";
-import { getSubject } from "@/data/subjects";
+import { requireSubject } from "@/data/subjects";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
-// hidden 教科のため index させない（production では layout guard により404）。
-export const metadata: Metadata = {
-  title: "情報Ⅰ",
-  robots: { index: false, follow: false },
-};
+const INFORMATICS_SUBJECT = requireSubject("informatics");
+
+export const metadata: Metadata = createPublicMetadata({
+  title: `${INFORMATICS_SUBJECT.name} β`,
+  description: INFORMATICS_SUBJECT.description,
+  path: INFORMATICS_SUBJECT.href,
+});
 
 export default function InformaticsPage() {
-  const subject = getSubject("informatics");
+  const subject = INFORMATICS_SUBJECT;
   const units = INFORMATICS_1_COURSE_SUBJECT.units;
   const lessonCount = units.reduce((sum, unit) => sum + unit.lessons.length, 0);
+  const reviewStarts = units.flatMap((unit) => {
+    const firstLesson = unit.lessons[0];
+    const firstProblem = firstLesson
+      ? getInformaticsProblemsByLesson(firstLesson.lessonId)[0]
+      : undefined;
+    return firstLesson && firstProblem
+      ? [{ unit, lesson: firstLesson, problem: firstProblem }]
+      : [];
+  });
 
   return (
-    <LearningPageShell>
-      <LearningPageHeader
+    <LearningPage>
+      <LearningPageContainer>
+        <LearningBreadcrumbs
+          items={[{ label: "教科一覧", href: "/subjects" }, { label: "情報Ⅰ" }]}
+        />
+      <LearningPageHero
         eyebrow="情報Ⅰ"
         title="情報Ⅰ"
-        description={
-          subject?.description ??
-          "情報社会の問題解決、情報デザイン、セキュリティの基礎を学びます。"
-        }
-        meta={[
-          { label: "基礎講座", value: `${lessonCount}講座` },
-          { label: "演習問題", value: `${INFORMATICS_PROBLEMS.length}問` },
+        description={subject.description}
+        actions={[
+          { label: "講座から学ぶ", href: "#learn", primary: true },
+          { label: "問題を解く", href: "#practice" },
         ]}
+        supporting={
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <p className="text-sm font-bold text-slate-950">βカリキュラム</p>
+            <ContentMeta
+              className="mt-3"
+              items={[
+                { label: "基礎講座", value: `${lessonCount}講座` },
+                { label: "演習問題", value: `${INFORMATICS_PROBLEMS.length}問` },
+              ]}
+            />
+          </div>
+        }
       />
 
-      <section aria-labelledby="informatics-lessons" className="mt-10">
-        <LearningSectionHeader
+      <LearningSection
+          id="learn"
           title="基礎講座"
           description="実際の場面でどう判断するかを軸に、情報Ⅰの土台を学びます。上から順に進めるのがおすすめです。"
-        />
+        >
         <div className="space-y-8">
           {units.map((unit) => (
             <div key={unit.unitId}>
@@ -85,13 +114,13 @@ export default function InformaticsPage() {
             </div>
           ))}
         </div>
-      </section>
+      </LearningSection>
 
-      <section aria-labelledby="informatics-problems" className="mt-12">
-        <LearningSectionHeader
+      <LearningSection
+          id="practice"
           title="演習問題"
           description="講座で学んだ判断基準を、単一選択・複数選択・正誤判定・状況判断の形式で確認します。"
-        />
+        >
         <div className="space-y-8">
           {units.flatMap((unit) =>
             unit.lessons.map((lesson) => {
@@ -136,7 +165,35 @@ export default function InformaticsPage() {
             }),
           )}
         </div>
-      </section>
-    </LearningPageShell>
+      </LearningSection>
+
+      <LearningSection
+          title="復習する"
+          description="各領域の最初の問題から解き直し、問題ページの復習タグで弱点を確認して、対応講座へ戻れます。"
+        >
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {reviewStarts.map(({ unit, lesson, problem }) => (
+            <li key={unit.unitId}>
+              <Link
+                href={`/informatics/problems/${problem.slug ?? problem.id}`}
+                className="group flex h-full items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-colors hover:border-teal-300 hover:bg-teal-50/40"
+              >
+                <RotateCcw className="mt-0.5 h-4 w-4 shrink-0 text-teal-700" aria-hidden="true" />
+                <span>
+                  <span className="block font-bold text-slate-900">{unit.unitTitle}</span>
+                  <span className="mt-1 block text-sm leading-6 text-slate-600">
+                    {lesson.lessonTitle}から復習を始める
+                  </span>
+                  <span className="mt-2 block text-xs font-semibold text-teal-800">
+                    復習タグ: {problem.reviewTags.join(" / ")}
+                  </span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </LearningSection>
+      </LearningPageContainer>
+    </LearningPage>
   );
 }

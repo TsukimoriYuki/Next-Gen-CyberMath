@@ -17,8 +17,7 @@ export const COURSE_SUBJECTS: CourseSubject[] = [
   MATH_3C_COURSE_SUBJECT,
   MATH_1A_PREMIUM_COURSE_SUBJECT,
   MATH_2BC_PREMIUM_COURSE_SUBJECT,
-  // 親教科 informatics が hidden のため isPublicCourseSubject は false になり、
-  // 公開一覧・sitemap には露出しない（development でのみ直接URLで閲覧可能）。
+  // 親教科 informatics の公開状態を isPublicCourseSubject が一元的に反映する。
   INFORMATICS_1_COURSE_SUBJECT,
 ];
 
