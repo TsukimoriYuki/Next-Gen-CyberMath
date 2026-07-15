@@ -86,7 +86,7 @@ async function main() {
   assertIncludes("/common-test/simulator", simulator, "common-test-math-1a-manual-002");
 
   const courses = pages.get("/courses") ?? "";
-  assertIncludes("/courses", courses, "Courses");
+  assertIncludes("/courses", courses, "講座");
   assertExcludes("/courses", courses, ">0\u8b1b\u5ea7<");
   assertExcludes("/courses", courses, "CYBER OS | CYBER OS");
 
