@@ -48,6 +48,15 @@ const ACTIONS_BY_SUBJECT = {
       icon: PenLine,
     },
   ],
+  informatics: [
+    {
+      title: "情報Ⅰの体系講座",
+      description: "情報社会からデータ活用まで、16講座を順に学びます。",
+      href: "/courses/informatics-1",
+      label: "情報Ⅰの講座を学ぶ",
+      icon: BookOpen,
+    },
+  ],
 } satisfies Partial<Record<SubjectId, readonly LearningAction[]>>;
 
 export default function LearnPage() {

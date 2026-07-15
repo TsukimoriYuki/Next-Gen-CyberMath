@@ -94,17 +94,17 @@ export function CommonTestMockExamRunner({ exam }: Props) {
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="min-w-0">
             <Link
-              href="/common-test/simulator"
+              href={exam.backHref ?? "/common-test/simulator"}
               className="inline-flex min-h-11 items-center gap-1.5 px-2 text-xs font-bold text-slate-600 hover:text-blue-700"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
-              模試一覧へ戻る
+              一覧へ戻る
             </Link>
             <h1 className="mt-1 text-base font-extrabold text-slate-950 sm:text-lg">
               {exam.title}
             </h1>
             <div className="mt-1 flex flex-wrap gap-2 text-xs text-slate-600">
-              <span>数学I，数学A</span>
+              <span>{exam.subjectLabel ?? "数学I，数学A"}</span>
               <span>/</span>
               <span>全問必答</span>
               <span>/</span>
@@ -243,8 +243,8 @@ function ExamPaperSection({
           <div>
             {sectionIndex === 0 && (
               <div className="mb-6 text-center">
-                <div className="text-xs font-bold text-slate-500">数学I，数学A</div>
-                <div className="mt-2 text-3xl font-black tracking-normal">数学I，数学A</div>
+                <div className="text-xs font-bold text-slate-500">{exam.subjectLabel ?? "数学I，数学A"}</div>
+                <div className="mt-2 text-3xl font-black tracking-normal">{exam.subjectLabel ?? "数学I，数学A"}</div>
                 <div className="mt-2 text-lg font-bold">（全問必答）</div>
               </div>
             )}
@@ -522,7 +522,7 @@ function AssetBlock({ asset }: { asset: ExamAsset }) {
     return (
       <figure className="border border-stone-300 bg-white p-3">
         <figcaption className="mb-2 text-xs font-extrabold text-slate-700">{asset.title}</figcaption>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} aria-label={`${asset.title}の表`}>
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr>

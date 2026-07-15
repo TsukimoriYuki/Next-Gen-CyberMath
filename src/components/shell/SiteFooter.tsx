@@ -13,7 +13,7 @@ export function SiteFooter() {
           <div>
             <p className="text-sm font-bold text-slate-950">{SITE_NAME}</p>
             <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500">
-              高校数学と英語の講義、問題演習、試験対策、復習をつなぐ学習サービスです。
+              教科ごとの講義、問題演習、試験対策、復習をつなぐ学習サービスです。
             </p>
             <p className="mt-2 text-xs text-slate-600">
               © {new Date().getFullYear()} {SITE_NAME}

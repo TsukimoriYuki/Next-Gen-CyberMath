@@ -33,6 +33,22 @@ const ACTIONS_BY_SUBJECT = {
     { title: "精読・構文理解", description: "文法、段落構成、根拠箇所を確認しながら読みます。", href: "/english/comprehension", label: "精読問題を選ぶ", icon: BookOpenCheck },
     { title: "複数資料読解", description: "複数の文章や資料を横断し、条件と根拠を照合します。", href: "/english/multi-source", label: "複数資料問題を選ぶ", icon: Files },
   ],
+  informatics: [
+    {
+      title: "情報Ⅰ 単元問題",
+      description: "16講座に対応した80問で、基礎事項を確かめます。",
+      href: "/informatics#practice",
+      label: "情報Ⅰの単元問題を解く",
+      icon: BookOpenCheck,
+    },
+    {
+      title: "情報Ⅰ 大問別演習",
+      description: "会話や表を読み取る共通テスト型の6セットです。",
+      href: "/informatics/practice",
+      label: "大問別演習を選ぶ",
+      icon: Files,
+    },
+  ],
 } satisfies Partial<Record<SubjectId, readonly LearningAction[]>>;
 
 export default function PracticePage() {

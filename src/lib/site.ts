@@ -2,7 +2,7 @@
 export const SITE_NAME = "Cyber Math";
 
 export const SITE_DESCRIPTION =
-  "高校数学と英語の講義・問題演習・模試・復習を、一つの学習ルートにつなぐ受験学習サービス。";
+  "教科ごとの講義・問題演習・模試・復習を、一つの学習ルートにつなぐ受験学習サービス。";
 
 export const PRODUCTION_SITE_URL = "https://next-gen-cyber-math.vercel.app";
 

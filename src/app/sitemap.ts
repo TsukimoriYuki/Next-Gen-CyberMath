@@ -20,6 +20,7 @@ import { getSiteUrl } from "@/lib/site";
 import { PUBLIC_SUBJECTS } from "@/data/subjects";
 import { PRIMARY_NAVIGATION } from "@/data/navigation";
 import { INFORMATICS_PROBLEMS } from "@/data/informatics/problems";
+import { INFORMATICS_SECTION_PRACTICES } from "@/data/informatics/exam-practice";
 
 const GLOBAL_STATIC_ROUTES = [
   "/",
@@ -158,6 +159,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
 
   if (informaticsSubject?.capabilities.problems) {
+    routes.add("/informatics/practice");
+    for (const exam of INFORMATICS_SECTION_PRACTICES) {
+      routes.add(`/informatics/practice/${exam.slug ?? exam.id}`);
+    }
     for (const problem of INFORMATICS_PROBLEMS) {
       routes.add(`/informatics/problems/${problem.slug ?? problem.id}`);
     }

@@ -2,7 +2,7 @@ import { COMMON_TEST_MATH_1A_MANUAL_001 } from "@/data/common-test/manual-mocks/
 import { COMMON_TEST_MATH_1A_MANUAL_002 } from "@/data/common-test/manual-mocks/math1a-002";
 import { isSubjectResourceDiscoverable } from "@/lib/subject-publication";
 
-export type CommonTestMockSubject = "math-1a";
+export type CommonTestMockSubject = "math-1a" | "informatics";
 
 export type CommonTestDifficulty =
   | "basic"
@@ -93,6 +93,10 @@ export type CommonTestQuestion = {
   measuredAbility: string;
   timeSavingTip: string;
   dependsOnPrevious?: boolean;
+  /** 教科横断の結果画面で使う診断領域。未指定の既存数学問題は skillTags を使う。 */
+  diagnosticDomains?: string[];
+  /** 誤答原因の正規化ID。既存問題の commonMistakes とは独立して追加できる。 */
+  mistakeCauseIds?: string[];
 };
 
 export type CommonTestSection = {
@@ -109,8 +113,12 @@ export type CommonTestSection = {
 
 export type CommonTestMockExam = {
   id: string;
+  /** URLに使う安定した識別子。未指定の既存模試は id を利用する。 */
+  slug?: string;
   title: string;
   subject: CommonTestMockSubject;
+  subjectLabel?: string;
+  backHref?: string;
   /**
    * 手動作成PDF正本の本番模試（4大問・70分・100点）は必ず 70/100。
    * 大問1問分の単独演習（source: "manual-section-practice"）は、その大問の
@@ -135,7 +143,11 @@ export type CommonTestMockExam = {
    * （これは PDF が正本の模試を Reactで再構成しているのではなく、そもそも PDF を
    * 持たない単独演習を最初から HTML/React で作っているため、正本を隠していない）。
    */
-  source: "manual-pdf" | "ai-prototype" | "manual-section-practice";
+  source:
+    | "manual-pdf"
+    | "ai-prototype"
+    | "manual-section-practice"
+    | "original-web";
   status: "published" | "draft";
   devOnly?: boolean;
   /** 解いた後に戻るべき中核講義（主に manual-section-practice 用）。 */

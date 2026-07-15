@@ -146,7 +146,7 @@ export default async function HomePage() {
         <LearningPageHero
           eyebrow="高校生・大学受験生のための学習サービス"
           title="講義、問題演習、模試、復習を一つにつなぐ。"
-          description="Cyber Mathは、学んだ内容を問題で確かめ、結果を次の復習につなげる受験学習サービスです。現在は数学と英語の公開済み教材を利用できます。"
+          description="Cyber Mathは、教科ごとの講座で学び、問題で確かめ、結果を次の復習につなげる受験学習サービスです。"
           actions={actions}
           supporting={
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">

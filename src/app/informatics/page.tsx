@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BookOpen, ListChecks, RotateCcw } from "lucide-react";
+import { ArrowRight, BookOpen, ClipboardCheck, ListChecks, RotateCcw } from "lucide-react";
 import {
   ContentMeta,
   LearningBreadcrumbs,
@@ -165,6 +165,27 @@ export default function InformaticsPage() {
             }),
           )}
         </div>
+      </LearningSection>
+
+      <LearningSection
+          title="共通テスト型 大問別演習"
+          description="会話や表を読み取り、複数の条件を組み合わせる完全オリジナルの6セットです。"
+        >
+        <Link
+          href="/informatics/practice"
+          className="group flex items-center gap-4 rounded-2xl border border-teal-200 bg-teal-50/60 p-5 transition hover:border-teal-400 hover:bg-teal-50"
+        >
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-teal-800 shadow-sm">
+            <ClipboardCheck className="h-5 w-5" aria-hidden="true" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-black text-slate-950">大問別演習を選ぶ</span>
+            <span className="mt-1 block text-sm leading-6 text-slate-600">
+              6セット・各20分。採点後は対応講座へ戻れます。
+            </span>
+          </span>
+          <ArrowRight className="h-5 w-5 shrink-0 text-teal-800" aria-hidden="true" />
+        </Link>
       </LearningSection>
 
       <LearningSection

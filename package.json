@@ -29,6 +29,7 @@
     "qa:information-architecture": "tsx scripts/check-information-architecture.ts",
     "qa:deep-learning-ui": "tsx scripts/check-deep-learning-ui.ts",
     "qa:informatics": "tsx scripts/check-informatics.ts",
+    "qa:informatics:practice": "tsx scripts/check-informatics-exam-practice.ts",
     "qa:subject-publication": "tsx scripts/check-subject-publication.ts",
     "qa:visible-pagination": "tsx scripts/check-visible-pagination.ts",
     "qa:pdf-mock": "tsx scripts/check-pdf-mock.ts",

@@ -43,7 +43,7 @@ export type CommonTestExperienceSource =
 export interface CommonTestExperience {
   id: string;
   title: string;
-  subject: CommonTestSubjectId | "private-math-1a";
+  subject: CommonTestSubjectId | "private-math-1a" | "informatics";
   mode: CommonTestExperienceMode;
   status: CommonTestExperienceStatus;
   source: CommonTestExperienceSource;
