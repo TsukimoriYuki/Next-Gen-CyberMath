@@ -12,17 +12,18 @@ import { CommonTestAiStrategyPanel } from "@/components/common-test/ai/CommonTes
 import { CommonTestGuidedReviewPanel } from "@/components/common-test/CommonTestGuidedReviewPanel";
 import { buildCommonTestGuidedReviewItemsFromAnswers } from "@/lib/common-test-guided-review";
 import type { CommonTestTheme } from "@/data/common-test";
+import { LearningState } from "@/components/learning/LearningPageFrame";
 
 const EXAM_LABELS: Record<string, { label: string; color: string; glowRgb: string }> = {
-  "math-1a-70": { label: "数IA 70min", color: "#00d2ff", glowRgb: "0,210,255" },
-  "math-1a-70-v2": { label: "数IA 第2回", color: "#00d2ff", glowRgb: "0,210,255" },
-  "math-1a-70-v3": { label: "数IA 第3回", color: "#00d2ff", glowRgb: "0,210,255" },
-  "math-2bc-70": { label: "数IIB 70min", color: "#a855f7", glowRgb: "168,85,247" },
-  "math-2bc-70-v2": { label: "数IIBC 第2回", color: "#a855f7", glowRgb: "168,85,247" },
-  "math-2bc-70-v3": { label: "数IIBC 第3回", color: "#a855f7", glowRgb: "168,85,247" },
-  "english-reading-80": { label: "英語R 80min", color: "#10b981", glowRgb: "16,185,129" },
-  "english-reading-80-v2": { label: "英語R 第2回", color: "#10b981", glowRgb: "16,185,129" },
-  "english-reading-80-v3": { label: "英語R 第3回", color: "#10b981", glowRgb: "16,185,129" },
+  "math-1a-70": { label: "数IA 70分", color: "#2563eb", glowRgb: "37,99,235" },
+  "math-1a-70-v2": { label: "数IA 第2回", color: "#2563eb", glowRgb: "37,99,235" },
+  "math-1a-70-v3": { label: "数IA 第3回", color: "#2563eb", glowRgb: "37,99,235" },
+  "math-2bc-70": { label: "数IIB 70分", color: "#7c3aed", glowRgb: "124,58,237" },
+  "math-2bc-70-v2": { label: "数IIBC 第2回", color: "#7c3aed", glowRgb: "124,58,237" },
+  "math-2bc-70-v3": { label: "数IIBC 第3回", color: "#7c3aed", glowRgb: "124,58,237" },
+  "english-reading-80": { label: "英語R 80分", color: "#059669", glowRgb: "5,150,105" },
+  "english-reading-80-v2": { label: "英語R 第2回", color: "#059669", glowRgb: "5,150,105" },
+  "english-reading-80-v3": { label: "英語R 第3回", color: "#059669", glowRgb: "5,150,105" },
 };
 
 function formatDuration(sec: number): string {
@@ -38,6 +39,7 @@ function formatDate(iso: string): string {
 
 export function CommonTestExamHistoryPanel() {
   const [history, setHistory] = useState<CommonTestExamHistoryItem[]>([]);
+  const [hydrated, setHydrated] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [confirmClear, setConfirmClear] = useState(false);
 
@@ -45,6 +47,7 @@ export function CommonTestExamHistoryPanel() {
     // localStorage はサーバーに存在しないため、hydration mismatch を避けてマウント後に読む
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setHistory(getCommonTestExamHistory());
+    setHydrated(true);
   }, []);
 
   function handleClear() {
@@ -57,34 +60,40 @@ export function CommonTestExamHistoryPanel() {
     }
   }
 
+  if (!hydrated) {
+    return (
+      <LearningState
+        kind="loading"
+        title="本番演習の履歴を読み込んでいます"
+        description="この端末に保存された演習結果を確認しています。"
+        compact
+      />
+    );
+  }
+
   if (history.length === 0) {
     return (
-      <div
-        className="rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-sm"
-      >
-        <p className="mb-2 text-sm font-bold text-slate-700">
-          本番演習の履歴はありません
-        </p>
-        <p className="text-xs leading-relaxed text-slate-500">
-          70分の本番形式を1回受けると、本番分析、弱点分析、今日の学習メニューがより正確になります。
-          <br />
-          まとまった時間がない場合は、大問別ドリルで先に現在地を測れます。
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
+      <LearningState
+        kind="empty"
+        title="本番演習の履歴はありません"
+        description="70分の本番形式を1回受けると、本番分析、弱点分析、今日の学習メニューがより正確になります。まとまった時間がない場合は、大問別ドリルで先に現在地を測れます。"
+        actions={
+          <>
           <Link
             href="/common-test/simulator"
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700"
+            className="button-primary"
           >
-            70分の本番演習を始める →
+            70分の本番演習を始める
           </Link>
           <Link
             href="/common-test/math-1a"
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-600 transition-colors hover:border-slate-300"
+            className="button-secondary"
           >
             ミニ診断から始める
           </Link>
-        </div>
-      </div>
+          </>
+        }
+      />
     );
   }
 
@@ -98,21 +107,21 @@ export function CommonTestExamHistoryPanel() {
         <button
           type="button"
           onClick={handleClear}
-          className="flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[11px] font-medium transition-colors"
+          className="flex min-h-11 items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
           style={{
             background: confirmClear ? "#fff1f2" : "#ffffff",
             borderColor: confirmClear ? "#fecdd3" : "#e2e8f0",
             color: confirmClear ? "#e11d48" : "#64748b",
           }}
         >
-          <Trash2 className="h-3 w-3" />
+          <Trash2 className="h-4 w-4" aria-hidden="true" />
           {confirmClear ? "本当に削除する" : "履歴を削除"}
         </button>
       </div>
 
       {/* History items */}
       {history.map((item) => {
-        const examInfo = EXAM_LABELS[item.examId] ?? { label: item.examId, color: "#ffffff", glowRgb: "255,255,255" };
+        const examInfo = EXAM_LABELS[item.examId] ?? { label: item.examId, color: "#475569", glowRgb: "71,85,105" };
         const isExpanded = expandedId === item.id;
         const overTime = item.actualDurationSec > item.examLimitSec;
         const guidedReviewItems = isExpanded
@@ -128,11 +137,12 @@ export function CommonTestExamHistoryPanel() {
             <button
               type="button"
               onClick={() => setExpandedId(isExpanded ? null : item.id)}
-              className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-slate-50"
+              aria-expanded={isExpanded}
+              className="flex min-h-11 w-full flex-wrap items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 sm:flex-nowrap sm:px-5"
             >
               {/* Label */}
               <div
-                className="shrink-0 rounded-lg px-2.5 py-1 text-[11px] font-bold"
+                className="shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold"
                 style={{ background: `${examInfo.color}14`, color: examInfo.color }}
               >
                 {examInfo.label}
@@ -140,30 +150,30 @@ export function CommonTestExamHistoryPanel() {
 
               {/* Date */}
               <div className="min-w-0 flex-1">
-                <div className="font-mono text-[11px] text-slate-500">{formatDate(item.finishedAt)}</div>
+                <div className="text-xs text-slate-600">{formatDate(item.finishedAt)}</div>
               </div>
 
               {/* Scores */}
               <div className="hidden items-center gap-4 sm:flex">
                 <div className="text-center">
-                  <div className="text-[9px] text-slate-400">時間内</div>
-                  <div className="font-mono text-sm font-extrabold text-blue-600">{item.timeLimitScorePct}%</div>
+                  <div className="text-xs text-slate-600">時間内</div>
+                  <div className="text-sm font-extrabold text-blue-700">{item.timeLimitScorePct}%</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-[9px] text-slate-400">全問</div>
-                  <div className="font-mono text-sm font-extrabold text-cyan-600">{item.unlimitedScorePct}%</div>
+                  <div className="text-xs text-slate-600">全問</div>
+                  <div className="text-sm font-extrabold text-cyan-700">{item.unlimitedScorePct}%</div>
                 </div>
               </div>
 
               {/* Duration */}
-              <div className="flex items-center gap-1 font-mono text-[11px]" style={{ color: overTime ? "#ea580c" : "#94a3b8" }}>
-                <Clock className="h-3 w-3" />
+              <div className="flex items-center gap-1 text-xs" style={{ color: overTime ? "#c2410c" : "#64748b" }}>
+                <Clock className="h-3.5 w-3.5" aria-hidden="true" />
                 {formatDuration(item.actualDurationSec)}
                 {overTime && <span className="text-orange-600">(延長)</span>}
               </div>
 
               {/* Expand icon */}
-              <div className="text-slate-300">
+              <div className="text-slate-500" aria-hidden="true">
                 {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
               </div>
             </button>
@@ -192,10 +202,10 @@ export function CommonTestExamHistoryPanel() {
                     },
                   ].map((s) => (
                     <div key={s.label} className="rounded-xl border border-slate-200 bg-white p-3">
-                      <div className="mb-2 text-[10px] font-bold text-slate-500">
+                      <div className="mb-2 text-xs font-bold text-slate-600">
                         {s.label}
                       </div>
-                      <div className="font-mono text-2xl font-extrabold" style={{ color: s.color }}>
+                      <div className="text-2xl font-extrabold" style={{ color: s.color }}>
                         {s.value} <span className="text-sm text-slate-300">/ {s.total}{s.unit}</span>
                       </div>
                       <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
@@ -207,7 +217,7 @@ export function CommonTestExamHistoryPanel() {
 
                 {/* Section results */}
                 <div className="space-y-1.5">
-                  <div className="mb-2 text-[11px] font-bold text-slate-400">
+                  <div className="mb-2 text-xs font-bold text-slate-600">
                     大問別の結果
                   </div>
                   {item.sectionResults.map((sr) => {
@@ -215,14 +225,14 @@ export function CommonTestExamHistoryPanel() {
                     const accColor = acc >= 80 ? "#059669" : acc >= 60 ? "#d97706" : "#e11d48";
                     return (
                       <div key={sr.sectionId} className="flex items-center gap-3">
-                        <span className="w-10 shrink-0 text-[11px] text-slate-500">第{sr.sectionNumber}問</span>
+                        <span className="w-12 shrink-0 text-xs text-slate-600">第{sr.sectionNumber}問</span>
                         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
                           <div className="h-full rounded-full" style={{ width: `${acc}%`, background: accColor }} />
                         </div>
-                        <span className="w-12 text-right font-mono text-[11px] font-bold" style={{ color: accColor }}>
+                        <span className="w-12 text-right text-xs font-bold" style={{ color: accColor }}>
                           {sr.answeredCount > 0 ? `${acc}%` : "—"}
                         </span>
-                        <span className="w-14 text-right font-mono text-[10px] text-slate-400">
+                        <span className="w-16 text-right text-xs text-slate-600">
                           {sr.correctCount}/{sr.answeredCount}/{sr.totalQuestions}
                         </span>
                       </div>
@@ -233,15 +243,15 @@ export function CommonTestExamHistoryPanel() {
                 {/* Unanswered + weak tags */}
                 <div className="flex flex-wrap gap-3 items-center">
                   {item.unansweredCount > 0 && (
-                    <div className="flex items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-[11px] font-medium text-rose-600">
-                      <AlertTriangle className="h-3 w-3" />
+                    <div className="flex items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-xs font-medium text-rose-700">
+                      <AlertTriangle className="h-3.5 w-3.5" aria-hidden="true" />
                       未回答 {item.unansweredCount}問
                     </div>
                   )}
                   {item.weakSkillTags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-lg bg-slate-100 px-2 py-1 text-[10px] text-slate-500"
+                      className="rounded-lg bg-slate-100 px-2 py-1 text-xs text-slate-600"
                     >
                       {tag}
                     </span>

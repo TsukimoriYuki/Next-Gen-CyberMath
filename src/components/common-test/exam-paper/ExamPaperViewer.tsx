@@ -42,7 +42,7 @@ export function ExamPaperViewer({
           {paper.paperPdfUrl && (
             <a
               href={paper.paperPdfUrl}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:border-blue-200 hover:text-blue-700"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-600 hover:border-blue-200 hover:text-blue-700"
             >
               PDF
               <ExternalLink className="h-3.5 w-3.5" />
@@ -51,18 +51,18 @@ export function ExamPaperViewer({
           <button
             type="button"
             onClick={() => changeZoom(-0.1)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             aria-label="縮小"
           >
             <Minus className="h-4 w-4" />
           </button>
-          <span className="min-w-12 text-center font-mono text-xs font-bold text-slate-600">
+          <span className="min-w-12 text-center text-xs font-bold tabular-nums text-slate-600">
             {Math.round(zoom * 100)}%
           </span>
           <button
             type="button"
             onClick={() => changeZoom(0.1)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             aria-label="拡大"
           >
             <Plus className="h-4 w-4" />
@@ -75,7 +75,7 @@ export function ExamPaperViewer({
           type="button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={!canPrev}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:border-blue-200 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-600 hover:border-blue-200 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ChevronLeft className="h-4 w-4" />
           前へ
@@ -87,7 +87,7 @@ export function ExamPaperViewer({
           type="button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={!canNext}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:border-blue-200 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-600 hover:border-blue-200 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
         >
           次へ
           <ChevronRight className="h-4 w-4" />

@@ -58,12 +58,12 @@ export function ExamMarkSheetPanel({
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <div className="text-xs font-extrabold text-slate-900">{section.title}</div>
-                  <div className="mt-0.5 text-[11px] text-slate-500">
+                  <div className="mt-0.5 text-xs text-slate-500">
                     {section.questionCount}小問 / {sectionSlots.length}マーク
                   </div>
                 </div>
                 {mode !== "taking" && sectionScore && (
-                  <div className="rounded-full bg-slate-100 px-2.5 py-1 font-mono text-xs font-bold text-slate-700">
+                  <div className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold tabular-nums text-slate-700">
                     {formatScore(sectionScore.score)} / {formatScore(sectionScore.maxScore)}
                   </div>
                 )}
@@ -135,7 +135,7 @@ function MarkSlot({
               {slot.groupLabel ?? "解答欄"} / {slot.type}
             </div>
             {mode !== "taking" && (
-              <div className="mt-0.5 text-[11px] text-slate-500">
+              <div className="mt-0.5 text-xs text-slate-500">
                 正答 {slot.correctAnswer || "未設定"}
               </div>
             )}
@@ -147,12 +147,12 @@ function MarkSlot({
           disabled={disabled && mode !== "submitted"}
           aria-pressed={flagged}
           data-flag-slot-id={slot.id}
-          className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+          className={`inline-flex h-11 w-11 items-center justify-center rounded-lg border text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
             flagged
               ? "border-amber-300 bg-amber-100 text-amber-700"
               : "border-slate-200 bg-white text-slate-500 hover:border-amber-200 hover:text-amber-700"
           } disabled:cursor-not-allowed disabled:opacity-50`}
-          aria-label={`${slot.label}を見直しフラグにする`}
+          aria-label={`${slot.label}の見直しフラグを${flagged ? "解除する" : "付ける"}`}
         >
           <Flag className={`h-4 w-4 ${flagged ? "fill-current" : ""}`} />
         </button>
@@ -170,7 +170,7 @@ function MarkSlot({
               aria-pressed={active}
               data-slot-id={slot.id}
               data-choice={choice}
-              className={`min-h-9 rounded-lg border px-2 py-1 font-mono text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`min-h-11 rounded-lg border px-2 py-1 text-sm font-bold tabular-nums transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                 active
                   ? "border-blue-500 bg-blue-600 text-white"
                   : "border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50"

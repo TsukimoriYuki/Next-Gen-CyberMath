@@ -14,7 +14,7 @@ export default function ExamSetsPage() {
   if (PUBLIC_EXAM_SET_CATEGORIES.length === 0) redirect("/mock");
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950">
-      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
+      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
         <Link
           href="/math"
           className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-blue-600"
@@ -75,7 +75,7 @@ export default function ExamSetsPage() {
             ))}
           </div>
         </section>
-      </main>
+      </div>
     </div>
   );
 }

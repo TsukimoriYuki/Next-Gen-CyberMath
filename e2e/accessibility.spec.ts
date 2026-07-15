@@ -24,6 +24,17 @@ const PAGES_TO_SCAN = [
   "/mock",
   "/dojo",
   "/courses",
+  "/courses/math-1a",
+  "/courses/math-1a/numbers-and-expressions",
+  "/courses/math-1a/numbers-and-expressions/numbers-expressions-learning-map",
+  "/common-test/lectures",
+  "/common-test/lectures/numbers-expressions-learning-map",
+  "/common-test/simulator",
+  "/english/comprehension/plastic-ocean-pollution",
+  "/common-test/problem-lectures/ct-ia-q1-front-algebra-logic-abs",
+  "/common-test/review",
+  "/common-test/history",
+  "/mock/history",
   "/quality",
   "/quality/checklist",
   "/challenge-problems",
@@ -31,6 +42,8 @@ const PAGES_TO_SCAN = [
 
 for (const route of PAGES_TO_SCAN) {
   test(`a11y scan: ${route}`, async ({ page }) => {
+    // 完全攻略講義や問題解体講義はDOMが大きく、並列実行時はaxe解析が30秒を超えることがある。
+    test.slow();
     await page.goto(route);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa"])
@@ -78,6 +91,13 @@ test("モバイル幅で数式ブロックが横にはみ出さない（問題�
 
 test("難度バッジは文字ラベルを持ち、色のみに依存していない", async ({ page }) => {
   await page.goto("/problems/sine-synthesis-amplitude");
-  const badgeText = await page.locator("main").locator("text=/^[ABCD]\\+?$/").first().innerText();
-  expect(badgeText.trim().length).toBeGreaterThan(0);
+  const difficultyText = (
+    await page
+      .locator("dt", { hasText: /^難度$/ })
+      .locator("..")
+      .locator("dd")
+      .innerText()
+  ).trim();
+  const labels = ["A", "B", "C", "D", "D+", "EX", "∞"];
+  expect(labels.some((label) => difficultyText === label || difficultyText.startsWith(`${label} `))).toBe(true);
 });

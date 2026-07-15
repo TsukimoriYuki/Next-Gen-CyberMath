@@ -89,38 +89,38 @@ function preprocess(src: string): string {
 
 const mdComponents: Components = {
   h2: ({ children }) => (
-    <h2 className="mt-10 mb-3 font-display text-2xl font-bold tracking-wide text-foreground">
-      <span className="text-neon-cyan">#</span> {children}
+    <h2 className="mb-3 mt-10 text-2xl font-bold tracking-tight text-slate-950">
+      {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="mt-7 mb-2 font-display text-lg font-semibold tracking-wide text-neon-cyan/90">
+    <h3 className="mb-2 mt-7 text-lg font-bold text-slate-900">
       {children}
     </h3>
   ),
   p: ({ children }) => (
-    <p className="my-3 leading-relaxed text-foreground/85">{children}</p>
+    <p className="my-3 leading-7 text-slate-700">{children}</p>
   ),
   ul: ({ children }) => (
-    <ul className="my-3 ml-5 list-disc space-y-1.5 marker:text-neon-cyan">
+    <ul className="my-3 ml-5 list-disc space-y-1.5 marker:text-blue-600">
       {children}
     </ul>
   ),
   ol: ({ children }) => (
-    <ol className="my-3 ml-5 list-decimal space-y-1.5 marker:text-neon-cyan">
+    <ol className="my-3 ml-5 list-decimal space-y-1.5 marker:font-semibold marker:text-blue-700">
       {children}
     </ol>
   ),
   li: ({ children }) => (
-    <li className="pl-1 text-foreground/85">{children}</li>
+    <li className="pl-1 leading-7 text-slate-700">{children}</li>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="glass my-5 rounded-xl border-l-2 border-neon-magenta/60 px-5 py-3 text-foreground/90">
+    <blockquote className="my-5 rounded-xl border border-blue-200 border-l-4 bg-blue-50 px-5 py-3 text-slate-800">
       {children}
     </blockquote>
   ),
   strong: ({ children }) => (
-    <strong className="font-semibold text-neon-cyan">{children}</strong>
+    <strong className="font-bold text-slate-950">{children}</strong>
   ),
   a: ({ children, href }) => {
     if (href?.startsWith("#why-")) {
@@ -131,15 +131,15 @@ const mdComponents: Components = {
     return (
       <a
         href={href}
-        className="text-neon-magenta underline decoration-neon-magenta/40 underline-offset-2 hover:decoration-neon-magenta"
+        className="rounded-sm font-semibold text-blue-700 underline decoration-blue-300 underline-offset-2 hover:text-blue-900 hover:decoration-blue-700 focus-visible:outline-offset-4"
       >
         {children}
       </a>
     );
   },
-  hr: () => <hr className="my-8 border-border/60" />,
+  hr: () => <hr className="my-8 border-slate-200" />,
   code: ({ children }) => (
-    <code className="rounded bg-secondary/60 px-1.5 py-0.5 font-mono text-sm text-neon-lime">
+    <code className="rounded border border-slate-200 bg-slate-100 px-1.5 py-0.5 text-sm font-semibold text-slate-800">
       {children}
     </code>
   ),

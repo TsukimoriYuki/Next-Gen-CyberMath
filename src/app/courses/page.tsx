@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BookOpen, GraduationCap } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+} from "@/components/learning/LearningPageFrame";
 import {
   PUBLIC_PREMIUM_COURSE_SUBJECTS,
   PUBLIC_STANDARD_COURSE_SUBJECTS,
@@ -27,31 +32,33 @@ export default function CoursesIndexPage() {
   const lessonGroups = getLessonsForIndex();
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
-        <header className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-            <GraduationCap className="h-3.5 w-3.5" />
-            Courses
-          </div>
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">講座一覧</h1>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
-            新課程の単元順に学ぶ体系講座と、特定テーマを深く学ぶ講義を一覧できます。
-            公開済みの講座だけを、科目と単元から選べます。
-          </p>
-        </header>
+    <LearningPageShell width="content" className="max-w-5xl">
+      <LearningBreadcrumbs
+        items={[
+          { label: "ホーム", href: "/" },
+          { label: "講座" },
+        ]}
+      />
+      <LearningPageHeader
+        eyebrow="講座"
+        title="講座一覧"
+        description="新課程の単元順に学ぶ体系講座と、特定テーマを深く学ぶ講義を一覧できます。公開済みの講座だけを、科目と単元から選べます。"
+      />
 
-        <CourseSection title="体系講座" subjects={PUBLIC_STANDARD_COURSE_SUBJECTS} />
-        {PUBLIC_PREMIUM_COURSE_SUBJECTS.length > 0 && (
-          <CourseSection
-            title="発展編"
-            subjects={PUBLIC_PREMIUM_COURSE_SUBJECTS}
-            className="mt-10"
-          />
-        )}
-        <LessonSection groups={lessonGroups} className="mt-10" />
-      </main>
-    </div>
+      <CourseSection
+        title="体系講座"
+        subjects={PUBLIC_STANDARD_COURSE_SUBJECTS}
+        className="mt-10"
+      />
+      {PUBLIC_PREMIUM_COURSE_SUBJECTS.length > 0 && (
+        <CourseSection
+          title="発展編"
+          subjects={PUBLIC_PREMIUM_COURSE_SUBJECTS}
+          className="mt-10"
+        />
+      )}
+      <LessonSection groups={lessonGroups} className="mt-10" />
+    </LearningPageShell>
   );
 }
 

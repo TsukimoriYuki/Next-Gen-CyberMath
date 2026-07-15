@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MATH_1A_SECTION_2_PAPER_SAMPLE } from "@/data/exam-papers";
 import { ExamPaperRunner } from "@/components/common-test/exam-paper/ExamPaperRunner";
+import { SubjectPublicationNotice } from "@/components/learning/SubjectPublicationNotice";
+import { resolveTopLevelSubjectId } from "@/lib/subject-publication";
+import { requireSubjectPageAccess } from "@/lib/subject-route-guard";
 
 export const metadata: Metadata = {
   title: "PDF冊子型サンプル演習 — 共通テスト数学",
@@ -20,6 +23,20 @@ export const metadata: Metadata = {
 };
 
 export default function PaperSampleExamPage() {
-  if (process.env.NODE_ENV === "production") notFound();
-  return <ExamPaperRunner paper={MATH_1A_SECTION_2_PAPER_SAMPLE} />;
+  const subjectId = resolveTopLevelSubjectId(
+    MATH_1A_SECTION_2_PAPER_SAMPLE.subject,
+  );
+  if (!subjectId) notFound();
+
+  const resourcePublished = false;
+  const access = requireSubjectPageAccess(subjectId, "exams", {
+    resourcePublished,
+  });
+
+  return (
+    <>
+      <SubjectPublicationNotice access={access} />
+      <ExamPaperRunner paper={MATH_1A_SECTION_2_PAPER_SAMPLE} />
+    </>
+  );
 }

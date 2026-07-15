@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, Clock } from "lucide-react";
+import { ArrowRight, Clock } from "lucide-react";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+} from "@/components/learning/LearningPageFrame";
 import {
   COURSE_LEVEL_META,
   type CourseLevel,
@@ -23,9 +28,9 @@ export function CourseUnitPageView({
   unit: CourseUnit;
 }) {
   const isPremium = subject.courseKind === "premium";
-  const levelsToShow = isPremium && unit.lessons.length > 0
-    ? LEVELS.filter((level) => unit.lessons.some((lesson) => lesson.level === level))
-    : LEVELS;
+  const levelsToShow = LEVELS.filter((level) =>
+    unit.lessons.some((lesson) => lesson.level === level),
+  );
   const coreLecture =
     subject.subjectId === "math-1a" && unit.unitId === "figures-and-measurement"
       ? {
@@ -58,38 +63,29 @@ export function CourseUnitPageView({
         : null;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
-        <div className="mb-6 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-          <Link href="/courses" className="inline-flex items-center gap-1 hover:text-blue-600">
-            <ChevronLeft className="h-3.5 w-3.5" />
-            講座集トップ
-          </Link>
-          <span>/</span>
-          <Link href={`/courses/${subject.subjectId}`} className="hover:text-blue-600">
-            {subject.subjectName}
-          </Link>
-          <span>/</span>
-          <span className="font-bold text-slate-900">{unit.unitTitle}</span>
-        </div>
+    <LearningPageShell width="content" className="max-w-5xl">
+      <LearningBreadcrumbs
+        items={[
+          { label: "講座", href: "/courses" },
+          { label: subject.subjectName, href: `/courses/${subject.subjectId}` },
+          { label: unit.unitTitle },
+        ]}
+      />
+      <LearningPageHeader
+        eyebrow={subject.subjectName}
+        title={unit.unitTitle}
+        description={unit.unitDescription}
+        meta={[
+          { label: "講座数", value: `${unit.lessons.length}講座` },
+          { label: "講座種別", value: isPremium ? "発展編" : "標準課程" },
+        ]}
+      />
 
-        <header className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">
-            Unit
-          </p>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
-            {unit.unitTitle}
-          </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
-            {unit.unitDescription}
-          </p>
-        </header>
-
-        {coreLecture ? (
-          <Link
-            href={coreLecture.href}
-            className="mb-8 flex flex-col gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-5 shadow-sm transition hover:border-blue-300 hover:bg-white sm:flex-row sm:items-center sm:justify-between"
-          >
+      {coreLecture ? (
+        <Link
+          href={coreLecture.href}
+          className="mb-8 mt-8 flex flex-col gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-5 shadow-sm transition hover:border-blue-300 hover:bg-white sm:flex-row sm:items-center sm:justify-between"
+        >
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
                 Core Lecture
@@ -105,10 +101,10 @@ export function CourseUnitPageView({
               講義へ戻る
               <ArrowRight className="h-4 w-4" />
             </span>
-          </Link>
-        ) : null}
+        </Link>
+      ) : null}
 
-        <div className="space-y-8">
+      <div className={`space-y-8 ${coreLecture ? "" : "mt-8"}`}>
           {levelsToShow.map((level) => {
             const meta = COURSE_LEVEL_META[level];
             const lessons = unit.lessons.filter((lesson) => lesson.level === level);
@@ -129,12 +125,7 @@ export function CourseUnitPageView({
                   </span>
                 </div>
 
-                {lessons.length === 0 ? (
-                  <p className="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
-                    現在は無料・基礎講座を優先整備中です。このレベルの講座は、公開内容が固まり次第ここに追加します。
-                  </p>
-                ) : (
-                  <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-2">
                     {lessons.map((lesson) => (
                       <Link
                         key={lesson.lessonId}
@@ -149,7 +140,7 @@ export function CourseUnitPageView({
                             {["発展編", "難関大レベル"].map((badge) => (
                               <span
                                 key={badge}
-                                className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700"
+                                className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-700"
                               >
                                 {badge}
                               </span>
@@ -172,13 +163,11 @@ export function CourseUnitPageView({
                         </div>
                       </Link>
                     ))}
-                  </div>
-                )}
+                </div>
               </section>
             );
           })}
-        </div>
-      </main>
-    </div>
+      </div>
+    </LearningPageShell>
   );
 }

@@ -38,16 +38,9 @@ interface Props {
   theme?: CommonTestTheme;
 }
 
-const DEFAULT_THEME: CommonTestTheme = {
-  primary: "#a855f7",
-  secondary: "#06b6d4",
-  glowRgb: "168,85,247",
-};
-
 export function CommonTestAiStrategyPanel({
   examHistoryItem,
   targetScore,
-  theme = DEFAULT_THEME,
 }: Props) {
   const [analysis, setAnalysis] = useState<CommonTestAiAnalysisResult | null>(null);
   const [fromCache, setFromCache] = useState(false);
@@ -130,11 +123,8 @@ export function CommonTestAiStrategyPanel({
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <div className="mb-4 flex items-start gap-3">
-          <div
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-            style={{ background: `${theme.primary}14`, border: `1px solid ${theme.primary}33` }}
-          >
-            <Sparkles className="h-5 w-5" style={{ color: theme.primary }} />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-200 bg-blue-50">
+            <Sparkles className="h-5 w-5 text-blue-700" />
           </div>
           <div className="min-w-0">
             <div className="text-base font-extrabold text-slate-900">
@@ -152,8 +142,8 @@ export function CommonTestAiStrategyPanel({
           type="button"
           onClick={runAnalysis}
           disabled={loading}
-          className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
-          style={{ background: theme.primary }}
+          aria-busy={loading}
+          className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 active:bg-blue-900 disabled:opacity-50"
         >
           {loading ? (
             <>
@@ -178,22 +168,22 @@ export function CommonTestAiStrategyPanel({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2.5">
-          <Sparkles className="h-4 w-4 shrink-0" style={{ color: theme.primary }} />
+          <Sparkles className="h-4 w-4 shrink-0 text-blue-700" />
           <span className="text-base font-extrabold text-slate-900">
             本番分析・次の一手
           </span>
           {fromCache && (
-            <span className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[9px] text-slate-400">
+            <span className="rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
               {cachedLabel}
             </span>
           )}
           {sourceLabel && (
             <span
-              className="rounded px-1.5 py-0.5 font-mono text-[9px]"
-              style={{
-                background: source === "gemini" ? "#ecfeff" : "#fffbeb",
-                color: source === "gemini" ? "#0891b2" : "#d97706",
-              }}
+              className={`rounded border px-2 py-1 text-xs font-medium ${
+                source === "gemini"
+                  ? "border-blue-200 bg-blue-50 text-blue-700"
+                  : "border-slate-200 bg-white text-slate-700"
+              }`}
             >
               {sourceLabel}
             </span>
@@ -207,7 +197,8 @@ export function CommonTestAiStrategyPanel({
           type="button"
           onClick={runAnalysis}
           disabled={loading}
-          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-[11px] font-bold text-slate-600 transition-colors hover:border-slate-300 disabled:opacity-50 sm:w-auto"
+          aria-busy={loading}
+          className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 transition-colors hover:border-blue-300 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:opacity-50 sm:w-auto"
         >
           {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
           もう一度分析
@@ -217,19 +208,16 @@ export function CommonTestAiStrategyPanel({
       {error && <ErrorNote message={error} />}
 
       {/* 総合講評 */}
-      <div
-        className="rounded-xl border p-4"
-        style={{ background: `${theme.primary}0a`, borderColor: `${theme.primary}33` }}
-      >
+      <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
         <p className="text-sm leading-7 text-slate-800">{analysis.summary}</p>
       </div>
 
       {/* スコア診断・時間診断 */}
       <div className="grid gap-3 sm:grid-cols-2">
-        <AdviceCard icon={<Target className="h-3.5 w-3.5" />} label="今回の得点分析" color="#d97706">
+        <AdviceCard icon={<Target className="h-3.5 w-3.5" />} label="今回の得点分析">
           {analysis.scoreDiagnosis}
         </AdviceCard>
-        <AdviceCard icon={<Clock className="h-3.5 w-3.5" />} label="時間配分の診断" color="#0891b2">
+        <AdviceCard icon={<Clock className="h-3.5 w-3.5" />} label="時間配分の診断">
           {analysis.timeDiagnosis}
         </AdviceCard>
       </div>
@@ -237,14 +225,14 @@ export function CommonTestAiStrategyPanel({
       {/* 大問別アドバイス */}
       {analysis.sectionAdvice.length > 0 && (
         <div>
-          <PanelLabel color={theme.primary}>大問別アドバイス</PanelLabel>
+          <PanelLabel>大問別アドバイス</PanelLabel>
           <div className="space-y-2">
             {analysis.sectionAdvice.map((s) => (
               <div
                 key={s.sectionId || s.title}
                 className="rounded-xl border border-slate-200 bg-slate-50 p-3.5"
               >
-                <div className="mb-1.5 text-xs font-bold" style={{ color: theme.primary }}>
+                <div className="mb-1.5 text-xs font-bold text-blue-700">
                   {s.title}
                 </div>
                 <p className="text-[13px] leading-relaxed text-slate-600">{s.diagnosis}</p>
@@ -262,7 +250,7 @@ export function CommonTestAiStrategyPanel({
 
       {/* 弱点まとめ */}
       {analysis.weakPointSummary && (
-        <AdviceCard icon={<Flag className="h-3.5 w-3.5" />} label="弱点まとめ" color="#ea580c">
+        <AdviceCard icon={<Flag className="h-3.5 w-3.5" />} label="弱点まとめ">
           {analysis.weakPointSummary}
         </AdviceCard>
       )}
@@ -270,21 +258,15 @@ export function CommonTestAiStrategyPanel({
       {/* 次にやるべき3つ */}
       {analysis.nextThreeActions.length > 0 && (
         <div>
-          <PanelLabel color={theme.primary}>
+          <PanelLabel>
             <ListChecks className="mr-1 inline h-3 w-3" />
             次にやるべき3つ
           </PanelLabel>
-          <div
-            className="space-y-2 rounded-xl border p-2"
-            style={{ background: `${theme.primary}0a`, borderColor: `${theme.primary}26` }}
-          >
+          <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-2">
             {analysis.nextThreeActions.map((a, i) => {
               const inner = (
                 <>
-                  <div
-                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg font-mono text-[11px] font-extrabold text-white"
-                    style={{ background: theme.primary }}
-                  >
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-xs font-extrabold text-white">
                     {i + 1}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -292,7 +274,7 @@ export function CommonTestAiStrategyPanel({
                     <p className="mt-0.5 text-xs leading-6 text-slate-500">{a.reason}</p>
                   </div>
                   {a.href && (
-                    <div className="flex shrink-0 items-center gap-1 self-center font-mono text-[10px] text-slate-400">
+                    <div className="flex shrink-0 items-center gap-1 self-center text-xs font-medium text-slate-500">
                       次へ
                       <ChevronRight className="h-4 w-4" />
                     </div>
@@ -303,7 +285,7 @@ export function CommonTestAiStrategyPanel({
                 <Link
                   key={i}
                   href={a.href}
-                  className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 transition-colors hover:border-slate-300"
+                  className="flex min-h-11 items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 transition-colors hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                 >
                   {inner}
                 </Link>
@@ -322,20 +304,17 @@ export function CommonTestAiStrategyPanel({
 
       {/* 復習キュー・目標点 */}
       <div className="grid gap-3 sm:grid-cols-2">
-        <AdviceCard icon={<RefreshCcwDot className="h-3.5 w-3.5" />} label="復習キュー" color="#059669">
+        <AdviceCard icon={<RefreshCcwDot className="h-3.5 w-3.5" />} label="復習キュー">
           {analysis.reviewQueueAdvice}
         </AdviceCard>
-        <AdviceCard icon={<Target className="h-3.5 w-3.5" />} label="目標点までの道筋" color="#2563eb">
+        <AdviceCard icon={<Target className="h-3.5 w-3.5" />} label="目標点までの道筋">
           {analysis.targetScoreAdvice}
         </AdviceCard>
       </div>
 
       {/* 励まし */}
       {analysis.encouragement && (
-        <div
-          className="rounded-xl border p-4 text-center"
-          style={{ background: `${theme.primary}0a`, borderColor: `${theme.primary}26` }}
-        >
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center">
           <p className="text-[13px] leading-relaxed text-slate-700">{analysis.encouragement}</p>
         </div>
       )}
@@ -344,9 +323,9 @@ export function CommonTestAiStrategyPanel({
 }
 
 // ── サブコンポーネント ────────────────────────────────────────────────────
-function PanelLabel({ children, color }: { children: React.ReactNode; color: string }) {
+function PanelLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mb-2 text-xs font-bold" style={{ color }}>
+    <div className="mb-2 text-xs font-bold text-slate-700">
       {children}
     </div>
   );
@@ -355,17 +334,15 @@ function PanelLabel({ children, color }: { children: React.ReactNode; color: str
 function AdviceCard({
   icon,
   label,
-  color,
   children,
 }: {
   icon: React.ReactNode;
   label: string;
-  color: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5">
-      <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold" style={{ color }}>
+      <div className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-blue-700">
         {icon}
         {label}
       </div>

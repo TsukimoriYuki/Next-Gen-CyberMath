@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import {
   BarChart3,
   BookOpen,
@@ -174,7 +173,6 @@ async function getDailyProblems(now: Date): Promise<Problem[]> {
 }
 
 export default async function MathHomePage() {
-  if (!isVisibleSubject(MATH_SUBJECT)) notFound();
   const now = new Date();
   const daily = MATH_SUBJECT.capabilities.problems
     ? await getDailyProblems(now)

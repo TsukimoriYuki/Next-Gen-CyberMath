@@ -46,12 +46,12 @@ export function LearningCalendar({ mathAttempts, englishAttempts }: Props) {
   }, [mathAttempts, englishAttempts]);
 
   function cellColor(count: number): string {
-    if (count === 0) return "rgba(255,255,255,0.05)";
+    if (count === 0) return "#e2e8f0";
     const ratio = count / maxCount;
-    if (ratio < 0.3) return "rgba(0,210,255,0.25)";
-    if (ratio < 0.6) return "rgba(0,210,255,0.5)";
-    if (ratio < 0.9) return "rgba(0,210,255,0.75)";
-    return "rgba(0,210,255,1)";
+    if (ratio < 0.3) return "#bfdbfe";
+    if (ratio < 0.6) return "#93c5fd";
+    if (ratio < 0.9) return "#3b82f6";
+    return "#1d4ed8";
   }
 
   // 15 週 × 7 日 のグリッド（列=週、行=曜日）
@@ -63,45 +63,42 @@ export function LearningCalendar({ mathAttempts, englishAttempts }: Props) {
   const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
 
   return (
-    <div
-      className="rounded-2xl p-5"
-      style={{
-        background: "rgba(255,255,255,0.025)",
-        border: "1px solid rgba(255,255,255,0.08)",
-      }}
-    >
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       {/* Header */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/40">
+        <h3 className="text-sm font-bold text-slate-950">
           学習カレンダー · 直近 15 週
-        </span>
+        </h3>
         <div className="flex items-center gap-4">
           <div className="text-center">
             <div
-              className="font-display text-xl font-extrabold tabular-nums"
-              style={{ color: streak > 0 ? "#f59e0b" : "rgba(255,255,255,0.2)" }}
+              className="text-xl font-extrabold tabular-nums"
+              style={{ color: streak > 0 ? "#b45309" : "#64748b" }}
             >
               {streak}
             </div>
-            <div className="font-mono text-[10px] text-white/30">連続日数</div>
+            <div className="text-xs font-medium text-slate-600">連続日数</div>
           </div>
           <div className="text-center">
-            <div className="font-display text-xl font-extrabold tabular-nums text-white/70">
+            <div className="text-xl font-extrabold tabular-nums text-slate-800">
               {totalDays}
             </div>
-            <div className="font-mono text-[10px] text-white/30">活動日数</div>
+            <div className="text-xs font-medium text-slate-600">活動日数</div>
           </div>
         </div>
       </div>
 
       {/* Grid */}
-      <div className="flex gap-0.5 overflow-x-auto pb-1">
+      <div
+        className="flex gap-0.5 overflow-x-auto pb-1"
+        aria-label="直近15週間の日別学習回数"
+      >
         {/* Day labels */}
         <div className="mr-1 flex flex-col gap-0.5 pt-5">
           {dayLabels.map((d, i) => (
             <div
               key={d}
-              className="flex h-3 items-center font-mono text-[9px] text-white/20"
+              className="flex h-3 items-center text-xs text-slate-500"
               style={{ visibility: i % 2 === 0 ? "visible" : "hidden" }}
             >
               {d}
@@ -112,13 +109,15 @@ export function LearningCalendar({ mathAttempts, englishAttempts }: Props) {
         {weeks.map((week, wi) => (
           <div key={wi} className="flex flex-col gap-0.5">
             {/* Month label above first day of month */}
-            <div className="h-4 font-mono text-[9px] text-white/25">
+            <div className="h-4 text-xs text-slate-500">
               {week[0]?.date.slice(8) === "01" ? week[0].date.slice(5, 7) + "/" : ""}
             </div>
             {week.map((cell) => (
               <div
                 key={cell.date}
                 title={`${cell.date}：${cell.count}回`}
+                role="img"
+                aria-label={`${cell.date}の学習回数は${cell.count}回`}
                 className="h-3 w-3 rounded-sm transition-all duration-200"
                 style={{ background: cellColor(cell.count) }}
               />
@@ -128,17 +127,18 @@ export function LearningCalendar({ mathAttempts, englishAttempts }: Props) {
       </div>
 
       {/* Legend */}
-      <div className="mt-3 flex items-center gap-1.5">
-        <span className="font-mono text-[10px] text-white/25">少</span>
+      <div className="mt-3 flex items-center gap-1.5" aria-label="学習回数の凡例">
+        <span className="text-xs text-slate-600">少ない</span>
         {[0, 0.25, 0.5, 0.75, 1].map((r, i) => (
           <div
             key={i}
             className="h-3 w-3 rounded-sm"
             style={{ background: cellColor(i === 0 ? 0 : Math.ceil(r * maxCount)) }}
+            aria-hidden="true"
           />
         ))}
-        <span className="font-mono text-[10px] text-white/25">多</span>
+        <span className="text-xs text-slate-600">多い</span>
       </div>
-    </div>
+    </section>
   );
 }

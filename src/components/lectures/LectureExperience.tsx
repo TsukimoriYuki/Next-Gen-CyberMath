@@ -256,7 +256,10 @@ export function LectureExperience({ lecture }: { lecture: Lecture }) {
                   )}
                   {isProblem && completed && (
                     <div className="mt-2 flex justify-end">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-700">
+                      <span
+                        role="status"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700"
+                      >
                         <CheckCircle2 className="h-3.5 w-3.5" />
                         解答済み
                       </span>
@@ -320,7 +323,7 @@ function LectureProgressHeader({
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-baseline gap-2">
           <span className="text-sm font-extrabold text-slate-900">進捗</span>
-          <span className={`font-mono text-lg font-extrabold ${completed ? "text-emerald-600" : "text-blue-700"}`}>
+          <span className={`text-lg font-extrabold ${completed ? "text-emerald-600" : "text-blue-700"}`}>
             {percent}%
           </span>
         </div>
@@ -328,7 +331,14 @@ function LectureProgressHeader({
           {summary.totalCount}ブロック中 {completedCount}ブロック完了
         </div>
       </div>
-      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+      <div
+        role="progressbar"
+        aria-label="講義の進捗"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+        className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100"
+      >
         <div
           className={`h-full rounded-full transition-[width] duration-500 ${completed ? "bg-emerald-500" : "bg-blue-500"}`}
           style={{ width: `${percent}%` }}
@@ -353,7 +363,7 @@ function CheckToggle({
       onClick={onToggle}
       aria-pressed={completed}
       aria-label={completed ? `「${label}」を未読に戻す` : `「${label}」を読了にする`}
-      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold transition ${
+      className={`inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
         completed
           ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300"
           : "border-slate-300 bg-white text-slate-600 hover:border-slate-400 hover:text-slate-800"
@@ -388,7 +398,8 @@ function TocList({
             key={item.id}
             type="button"
             onClick={() => onJump(item.id)}
-            className={`group flex w-full items-start gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs transition ${
+            aria-current={active ? "location" : undefined}
+            className={`group flex min-h-11 w-full items-start gap-2 rounded-lg px-2.5 py-2 text-left text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 ${
               item.level === 3 ? "pl-5" : ""
             } ${
               active
@@ -405,7 +416,7 @@ function TocList({
             </span>
             <span className={`line-clamp-2 leading-5 ${active ? "font-bold" : "font-medium"}`}>
               {item.kind === "problem" && (
-                <span className="mr-1 rounded bg-violet-100 px-1 py-0.5 text-[10px] font-bold text-violet-700">
+                <span className="mr-1 rounded bg-blue-50 px-1 py-0.5 text-xs font-bold text-blue-700">
                   問題{item.problemIndex}
                 </span>
               )}
@@ -438,7 +449,7 @@ function MobileToc({
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="flex min-h-12 w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm"
+        className="flex min-h-12 w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         aria-expanded={open}
         aria-controls={mobileTocId}
       >
@@ -483,12 +494,12 @@ function LectureStickyNav({
 }) {
   return (
     <div className="sticky bottom-3 z-20">
-      <div className="mx-auto flex max-w-md items-center justify-between gap-2 rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-white/80">
+      <div className="mx-auto flex max-w-md items-center justify-between gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
         <button
           type="button"
           onClick={onPrev}
           disabled={!prevId}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:border-slate-300 disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:border-blue-300 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ChevronLeft className="h-4 w-4" />
           前へ
@@ -497,7 +508,7 @@ function LectureStickyNav({
           type="button"
           onClick={onNext}
           disabled={!nextId}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+          className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-xl bg-blue-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-300"
         >
           次へ
           <ChevronRight className="h-4 w-4" />
@@ -529,7 +540,7 @@ function LectureCompletionCard({
       <div className="grid gap-3 p-5 sm:grid-cols-3 sm:p-6">
         <Link
           href="/common-test/review"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-emerald-700"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         >
           <RefreshCw className="h-4 w-4" />
           復習キューを見る
@@ -537,14 +548,14 @@ function LectureCompletionCard({
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-slate-300"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-blue-300 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         >
           <BookOpen className="h-4 w-4" />
           もう一度講義を復習する
         </button>
         <Link
           href="/common-test/lectures"
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm font-bold text-violet-700 transition hover:bg-violet-100"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-bold text-blue-700 transition hover:border-blue-300 hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         >
           <Sparkles className="h-4 w-4" />
           関連講義を見る
@@ -554,7 +565,7 @@ function LectureCompletionCard({
         <button
           type="button"
           onClick={onReplay}
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 transition hover:text-slate-600"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 text-xs font-medium text-slate-500 transition hover:bg-slate-50 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         >
           <RotateCcw className="h-3.5 w-3.5" />
           進捗をリセット

@@ -21,7 +21,7 @@ export function DrillSectionPageShell({
   const { theme } = subject;
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
         <nav className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
           <Link href="/common-test" className="hover:text-blue-700">
@@ -95,6 +95,6 @@ export function DrillSectionPageShell({
           />
         </section>
       </div>
-    </main>
+    </div>
   );
 }

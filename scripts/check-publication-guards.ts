@@ -142,10 +142,11 @@ async function main() {
   for (const file of productionGuardFiles) {
     const source = read(file);
     check(
-      source.includes('process.env.NODE_ENV === "production"') &&
-        source.includes("notFound()") &&
+      source.includes("const resourcePublished = false") &&
+        source.includes("resolveTopLevelSubjectId(") &&
+        source.includes("requireSubjectPageAccess(") &&
         source.includes("index: false"),
-      `${file} must be dev-only and noindex`,
+      `${file} must be centrally guarded as a dev-only, noindex resource`,
     );
   }
 

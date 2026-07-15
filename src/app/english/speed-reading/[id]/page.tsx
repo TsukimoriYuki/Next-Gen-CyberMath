@@ -1,12 +1,19 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
 import { SpeedReadingGame } from "@/components/english/SpeedReadingGame";
 import {
+  ContentMeta,
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+} from "@/components/learning/LearningPageFrame";
+import {
   ENGLISH_LEVEL_META,
   ENGLISH_LEVEL_SLUG,
+  formatSpeedReadingTime,
   getSpeedReadingTimeLimitSeconds,
+  getSpeedReadingTargetWpm,
+  getSpeedReadingWordCount,
 } from "@/lib/english-types";
 import { createPublicMetadata } from "@/lib/public-metadata";
 
@@ -44,67 +51,61 @@ export default async function SpeedReadingProblemPage({
 
   const levelMeta = ENGLISH_LEVEL_META[problem.level];
   const timeLimitSeconds = getSpeedReadingTimeLimitSeconds(problem);
+  const targetWpm = getSpeedReadingTargetWpm(problem);
+  const wordCount = getSpeedReadingWordCount(problem);
   const speedSupportMode =
     speedSupport === "1" ||
     speedSupport === "true" ||
     (Array.isArray(speedSupport) && speedSupport.includes("1"));
 
   return (
-    <div className="english-academic min-h-screen bg-slate-50 text-slate-900">
-      {/* Ambient grid */}
-      <div
-        className="pointer-events-none fixed inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(16,185,129,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
+    <LearningPageShell width="reading">
+      <LearningBreadcrumbs
+        items={[
+          { label: "英語", href: "/english" },
+          { label: "速読", href: "/english/speed-reading" },
+          {
+            label: levelMeta.label,
+            href:
+              "/english/speed-reading/level/" +
+              ENGLISH_LEVEL_SLUG[problem.level],
+          },
+          { label: problem.title },
+        ]}
       />
-
-      <div className="relative mx-auto max-w-3xl px-4 py-8 sm:px-6">
-        {/* Back */}
-        <Link
-          href={`/english/speed-reading/level/${ENGLISH_LEVEL_SLUG[problem.level]}`}
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-600 hover:text-emerald-500 transition-colors"
-        >
-          <ChevronLeft className="h-3.5 w-3.5" />
-          長文一覧へ
-        </Link>
-
-        {/* Header */}
-        <div className="mt-6 mb-8">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span
-              className="rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold"
-              style={{
-                background: `color-mix(in srgb, ${levelMeta.accent} 14%, transparent)`,
-                border: `1px solid color-mix(in srgb, ${levelMeta.accent} 38%, transparent)`,
-                color: levelMeta.accent,
-              }}
-            >
-              {levelMeta.label}
-            </span>
-            <span className="text-xs text-slate-500">
-              制限時間 {timeLimitSeconds}秒 / {problem.tags?.join(" / ")}
-            </span>
-            <span
-              className={`rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold ${
-                speedSupportMode
-                  ? "border border-sky-400/35 bg-sky-400/10 text-sky-300"
-                  : "border border-slate-200 bg-slate-100 text-slate-500"
-              }`}
-            >
-              {speedSupportMode ? "スピードサポートON" : "通常モード"}
-            </span>
-          </div>
-          <h1 className="font-display text-2xl font-extrabold text-slate-950 sm:text-3xl">
-            {problem.title}
-          </h1>
-        </div>
-
-        {/* Game */}
+      <LearningPageHeader
+        eyebrow="英語・速読"
+        title={problem.title}
+        description={
+          <>
+            <p>制限時間を意識しながら英文を読み、設問に答えてください。</p>
+            <ContentMeta
+              className="mt-5"
+              items={[
+                { label: "レベル", value: levelMeta.label },
+                { label: "本文", value: wordCount + "語" },
+                { label: "目標速度", value: targetWpm + " WPM" },
+                {
+                  label: "制限時間（分:秒）",
+                  value: formatSpeedReadingTime(timeLimitSeconds),
+                },
+                { label: "設問", value: problem.questions.length + "問" },
+                {
+                  label: "読み方",
+                  value: speedSupportMode ? "スピードサポート" : "通常",
+                },
+                {
+                  label: "テーマ",
+                  value: problem.tags?.join(" / ") || "―",
+                },
+              ]}
+            />
+          </>
+        }
+      />
+      <div className="mt-8">
         <SpeedReadingGame problem={problem} speedSupportMode={speedSupportMode} />
       </div>
-    </div>
+    </LearningPageShell>
   );
 }

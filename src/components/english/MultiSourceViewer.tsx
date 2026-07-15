@@ -13,14 +13,14 @@ import {
 import type { MultiSourceProblem, SourceBlock } from "@/lib/english-types";
 import { saveEnglishAttempt } from "@/lib/english-history";
 
-// ── Source color palette (A=cyan, B=amber, C=violet, D=emerald …) ─────────
+// ── Source color palette ─────────────────────────────────────────────────
 
 const SOURCE_PALETTE = [
-  { label: "A", bg: "rgba(34,211,238,0.14)",  text: "#22d3ee", border: "rgba(34,211,238,0.38)" },
-  { label: "B", bg: "rgba(251,191,36,0.14)",  text: "#fbbf24", border: "rgba(251,191,36,0.38)" },
-  { label: "C", bg: "rgba(167,139,250,0.14)", text: "#a78bfa", border: "rgba(167,139,250,0.38)" },
-  { label: "D", bg: "rgba(52,211,153,0.14)",  text: "#34d399", border: "rgba(52,211,153,0.38)" },
-  { label: "E", bg: "rgba(244,63,94,0.14)",   text: "#f43f5e", border: "rgba(244,63,94,0.38)"  },
+  { label: "A", badge: "border-blue-200 bg-blue-50 text-blue-800", dot: "bg-blue-600" },
+  { label: "B", badge: "border-amber-200 bg-amber-50 text-amber-800", dot: "bg-amber-600" },
+  { label: "C", badge: "border-violet-200 bg-violet-50 text-violet-800", dot: "bg-violet-600" },
+  { label: "D", badge: "border-emerald-200 bg-emerald-50 text-emerald-800", dot: "bg-emerald-600" },
+  { label: "E", badge: "border-rose-200 bg-rose-50 text-rose-800", dot: "bg-rose-600" },
 ];
 
 function getPalette(index: number) {
@@ -33,25 +33,16 @@ function TableRenderer({ content }: { content: string[][] }) {
   if (content.length < 2) return null;
   const [headers, ...rows] = content;
   return (
-    <div
-      className="overflow-x-auto rounded-lg"
-      style={{ border: "1px solid rgba(34,211,238,0.2)" }}
-    >
+    <div className="overflow-x-auto rounded-lg border border-slate-200">
       <table className="w-full min-w-max text-xs">
         <thead>
-          <tr style={{ background: "rgba(34,211,238,0.1)" }}>
+          <tr className="bg-blue-50">
             {headers.map((h, i) => (
               <th
                 key={i}
-                className="px-3 py-2.5 text-left font-mono font-semibold whitespace-nowrap"
-                style={{
-                  color: "#22d3ee",
-                  borderBottom: "1px solid rgba(34,211,238,0.28)",
-                  borderRight:
-                    i < headers.length - 1
-                      ? "1px solid rgba(34,211,238,0.14)"
-                      : undefined,
-                }}
+                className={`whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-left font-semibold text-blue-900 ${
+                  i < headers.length - 1 ? "border-r" : ""
+                }`}
               >
                 {h}
               </th>
@@ -60,34 +51,15 @@ function TableRenderer({ content }: { content: string[][] }) {
         </thead>
         <tbody>
           {rows.map((row, ri) => (
-            <tr
-              key={ri}
-              style={{
-                background:
-                  ri % 2 === 0
-                    ? "rgba(255,255,255,0.028)"
-                    : "rgba(255,255,255,0.01)",
-              }}
-            >
+            <tr key={ri} className={ri % 2 === 0 ? "bg-white" : "bg-slate-50"}>
               {row.map((cell, ci) => (
                 <td
                   key={ci}
-                  className="px-3 py-2.5 whitespace-nowrap"
-                  style={{
-                    color:
-                      ci === 0
-                        ? "rgba(255,255,255,0.88)"
-                        : "rgba(255,255,255,0.66)",
-                    fontWeight: ci === 0 ? "500" : "normal",
-                    borderBottom:
-                      ri < rows.length - 1
-                        ? "1px solid rgba(255,255,255,0.055)"
-                        : undefined,
-                    borderRight:
-                      ci < row.length - 1
-                        ? "1px solid rgba(255,255,255,0.055)"
-                        : undefined,
-                  }}
+                  className={`whitespace-nowrap px-3 py-2.5 text-slate-700 ${
+                    ci === 0 ? "font-medium text-slate-900" : ""
+                  } ${ri < rows.length - 1 ? "border-b border-slate-200" : ""} ${
+                    ci < row.length - 1 ? "border-r border-slate-200" : ""
+                  }`}
                 >
                   {cell}
                 </td>
@@ -111,26 +83,14 @@ function SourceCard({ block, index }: { block: SourceBlock; index: number }) {
   const Icon = TYPE_ICON[block.type];
 
   return (
-    <div
-      className="rounded-xl overflow-hidden"
-      style={{ border: "1px solid rgba(255,255,255,0.1)" }}
-    >
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
       {/* Header bar */}
-      <div
-        className="flex items-center gap-2.5 px-4 py-2.5"
-        style={{
-          background: "rgba(255,255,255,0.04)",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
-        }}
-      >
-        <span
-          className="shrink-0 flex h-5 w-5 items-center justify-center rounded font-mono text-[10px] font-bold"
-          style={{ background: p.bg, color: p.text, border: `1px solid ${p.border}` }}
-        >
+      <div className="flex items-center gap-2.5 border-b border-slate-200 bg-slate-50 px-4 py-2.5">
+        <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded border text-xs font-bold ${p.badge}`}>
           {p.label}
         </span>
-        <Icon className="h-3 w-3 text-white/28" />
-        <span className="font-mono text-[11px] text-white/48 truncate">
+        <Icon className="h-4 w-4 text-slate-500" aria-hidden="true" />
+        <span className="truncate text-xs font-medium text-slate-700">
           {block.title}
         </span>
       </div>
@@ -142,7 +102,7 @@ function SourceCard({ block, index }: { block: SourceBlock; index: number }) {
             {block.content.split("\n\n").map((para, i) => (
               <p
                 key={i}
-                className="text-xs leading-relaxed text-white/70"
+                className="text-sm leading-relaxed text-slate-700"
                 style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
               >
                 {para.trim()}
@@ -157,11 +117,8 @@ function SourceCard({ block, index }: { block: SourceBlock; index: number }) {
           <ul className="space-y-2">
             {block.content.map((item, i) => (
               <li key={i} className="flex items-start gap-2.5">
-                <span
-                  className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
-                  style={{ background: p.text }}
-                />
-                <span className="text-xs leading-relaxed text-white/70">
+                <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${p.dot}`} />
+                <span className="text-sm leading-relaxed text-slate-700">
                   {item}
                 </span>
               </li>
@@ -178,10 +135,7 @@ function CrossRefBadge({ sourceRef }: { sourceRef: string }) {
   const idx = match ? match[1].charCodeAt(0) - 65 : 0;
   const p = getPalette(idx);
   return (
-    <span
-      className="inline-flex items-center rounded px-2 py-0.5 font-mono text-[10px] font-semibold"
-      style={{ background: p.bg, color: p.text, border: `1px solid ${p.border}` }}
-    >
+    <span className={`inline-flex items-center rounded border px-2 py-0.5 text-xs font-semibold ${p.badge}`}>
       {sourceRef}
     </span>
   );
@@ -228,35 +182,46 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
 
   const perfect = score === problem.questions.length;
   const passing = score >= Math.ceil(problem.questions.length / 2);
-  const scoreColor = perfect ? "#34d399" : passing ? "#fbbf24" : "#f43f5e";
-  const scoreBg    = perfect ? "rgba(52,211,153,0.1)"  : passing ? "rgba(251,191,36,0.1)"  : "rgba(244,63,94,0.1)";
-  const scoreBorder= perfect ? "rgba(52,211,153,0.3)"  : passing ? "rgba(251,191,36,0.3)"  : "rgba(244,63,94,0.3)";
+  const scoreTone = perfect
+    ? {
+        panel: "border-emerald-200 bg-emerald-50",
+        score: "text-emerald-800",
+      }
+    : passing
+      ? {
+          panel: "border-amber-200 bg-amber-50",
+          score: "text-amber-800",
+        }
+      : {
+          panel: "border-rose-200 bg-rose-50",
+          score: "text-rose-800",
+        };
 
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       {/* ── Mobile tab switcher (hidden on md+) ─────────────────────────── */}
-      <div
-        className="flex md:hidden"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}
-      >
+      <div className="flex border-b border-slate-200 md:hidden" role="group" aria-label="表示する内容">
         <button
+          type="button"
           onClick={() => setMobileTab("sources")}
-          className="flex-1 py-3 font-mono text-xs font-semibold transition-colors"
-          style={{
-            background: mobileTab === "sources" ? "rgba(34,211,238,0.1)" : "rgba(0,0,0,0.4)",
-            color: mobileTab === "sources" ? "#22d3ee" : "rgba(255,255,255,0.35)",
-            borderRight: "1px solid rgba(255,255,255,0.08)",
-          }}
+          aria-pressed={mobileTab === "sources"}
+          className={`min-h-11 flex-1 border-r border-slate-200 px-4 py-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 ${
+            mobileTab === "sources"
+              ? "bg-blue-50 text-blue-800"
+              : "bg-white text-slate-600 hover:bg-slate-50"
+          }`}
         >
           資料
         </button>
         <button
+          type="button"
           onClick={() => setMobileTab("questions")}
-          className="flex-1 py-3 font-mono text-xs font-semibold transition-colors"
-          style={{
-            background: mobileTab === "questions" ? "rgba(34,211,238,0.1)" : "rgba(0,0,0,0.4)",
-            color: mobileTab === "questions" ? "#22d3ee" : "rgba(255,255,255,0.35)",
-          }}
+          aria-pressed={mobileTab === "questions"}
+          className={`min-h-11 flex-1 px-4 py-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 ${
+            mobileTab === "questions"
+              ? "bg-blue-50 text-blue-800"
+              : "bg-white text-slate-600 hover:bg-slate-50"
+          }`}
         >
           設問
         </button>
@@ -265,15 +230,13 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
       <div className="grid md:grid-cols-2">
       {/* ── Left pane: Sources ──────────────────────────────────────────── */}
       <div
-        className={`${mobileTab === "sources" ? "" : "hidden"} md:block h-[65vh] md:h-[80vh] overflow-y-auto border-b md:border-b-0 md:border-r p-4 md:p-5 space-y-4`}
-        style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.012)",
-        }}
+        className={`${mobileTab === "sources" ? "" : "hidden"} h-[65vh] space-y-4 overflow-y-auto border-b border-slate-200 bg-white p-4 md:block md:h-[80vh] md:border-b-0 md:border-r md:p-5`}
+        role="region"
+        aria-label="資料"
       >
         <div className="flex items-center gap-2 pb-1">
-          <Layers className="h-3.5 w-3.5 text-white/25" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/25">
+          <Layers className="h-4 w-4 text-blue-700" aria-hidden="true" />
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
             Sources · 資料
           </span>
         </div>
@@ -285,31 +248,29 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
 
       {/* ── Right pane: Questions ────────────────────────────────────────── */}
       <div
-        className={`${mobileTab === "questions" ? "" : "hidden"} md:block h-[65vh] md:h-[80vh] overflow-y-auto p-5 md:p-6`}
-        style={{ background: "rgba(0,0,0,0.35)" }}
+        className={`${mobileTab === "questions" ? "" : "hidden"} h-[65vh] overflow-y-auto bg-slate-50 p-5 md:block md:h-[80vh] md:p-6`}
+        role="region"
+        aria-label="設問"
       >
         {/* Score summary */}
         {submitted && (
-          <div
-            className="mb-6 rounded-xl p-4 text-center"
-            style={{ background: scoreBg, border: `1px solid ${scoreBorder}` }}
-          >
-            <p className="font-mono text-[10px] uppercase tracking-widest text-white/35 mb-1">
+          <div className={`mb-6 rounded-xl border p-4 text-center ${scoreTone.panel}`}>
+            <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-slate-600">
               Result
             </p>
-            <p className="font-display text-4xl font-extrabold" style={{ color: scoreColor }}>
+            <p className={`text-4xl font-extrabold ${scoreTone.score}`}>
               {score}
-              <span className="text-xl text-white/30"> / {problem.questions.length}</span>
+              <span className="text-xl text-slate-500"> / {problem.questions.length}</span>
             </p>
-            <p className="mt-1 font-mono text-xs text-white/35">
+            <p className="mt-1 text-xs font-medium text-slate-700">
               {perfect ? "満点！" : passing ? "合格ライン突破" : "再挑戦してみよう"}
             </p>
             <button
+              type="button"
               onClick={handleRetry}
-              className="mt-3 inline-flex items-center gap-1.5 rounded-lg px-4 py-1.5 font-mono text-xs text-white/40 transition-colors hover:text-white/70"
-              style={{ border: "1px solid rgba(255,255,255,0.12)" }}
+              className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
             >
-              <RotateCcw className="h-3 w-3" />
+              <RotateCcw className="h-4 w-4" aria-hidden="true" />
               もう一度
             </button>
           </div>
@@ -327,15 +288,15 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
                 <div className="flex items-start gap-2.5 mb-3">
                   {submitted &&
                     (isCorrect ? (
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" aria-hidden="true" />
                     ) : (
-                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
+                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-700" aria-hidden="true" />
                     ))}
                   <div className="min-w-0">
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-white/30">
+                    <span className="text-xs font-semibold uppercase tracking-widest text-slate-500">
                       Q{qIdx + 1}
                     </span>
-                    <p className="mt-0.5 text-sm leading-relaxed text-white/88">
+                    <p className="mt-0.5 text-sm leading-relaxed text-slate-800">
                       {q.questionText}
                     </p>
                     {/* Cross-reference hints (always visible) */}
@@ -344,7 +305,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
                         {q.crossReferences.map((ref) => (
                           <CrossRefBadge key={ref} sourceRef={ref} />
                         ))}
-                        <span className="font-mono text-[10px] text-white/25">を参照</span>
+                        <span className="text-xs text-slate-600">を参照</span>
                       </div>
                     )}
                   </div>
@@ -356,47 +317,33 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
                     const isSelected = userAnswer === optIdx;
                     const isCorrectOpt = optIdx === q.correctAnswerIndex;
 
-                    let bg = "rgba(255,255,255,0.03)";
-                    let border = "rgba(255,255,255,0.1)";
-                    let textColor = "rgba(255,255,255,0.6)";
+                    let optionTone =
+                      "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50";
 
                     if (!submitted) {
                       if (isSelected) {
-                        bg = "rgba(34,211,238,0.1)";
-                        border = "rgba(34,211,238,0.5)";
-                        textColor = "#22d3ee";
+                        optionTone = "border-blue-500 bg-blue-50 text-blue-900";
                       }
                     } else {
                       if (isCorrectOpt) {
-                        bg = "rgba(52,211,153,0.12)";
-                        border = "rgba(52,211,153,0.5)";
-                        textColor = "#34d399";
+                        optionTone = "border-emerald-500 bg-emerald-50 text-emerald-900";
                       } else if (isSelected) {
-                        bg = "rgba(244,63,94,0.12)";
-                        border = "rgba(244,63,94,0.5)";
-                        textColor = "#f43f5e";
+                        optionTone = "border-rose-500 bg-rose-50 text-rose-900";
                       }
                     }
 
                     return (
                       <button
                         key={optIdx}
+                        type="button"
                         onClick={() => handleSelect(qIdx, optIdx)}
                         disabled={submitted}
-                        className="english-option flex w-full items-start gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200"
-                        style={{
-                          background: bg,
-                          border: `1px solid ${border}`,
-                          cursor: submitted ? "default" : "pointer",
-                        }}
+                        className={`english-option flex min-h-11 w-full items-start gap-3 rounded-xl border px-4 py-3 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-default ${optionTone}`}
                       >
-                        <span
-                          className="shrink-0 mt-0.5 flex h-5 w-5 items-center justify-center rounded font-mono text-[11px] font-bold"
-                          style={{ background: "rgba(255,255,255,0.06)", color: textColor }}
-                        >
+                        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded border border-current bg-white text-xs font-bold">
                           {String.fromCharCode(65 + optIdx)}
                         </span>
-                        <span className="min-w-0 flex-1 whitespace-normal break-words text-sm leading-relaxed" style={{ color: textColor }}>
+                        <span className="min-w-0 flex-1 whitespace-normal break-words text-sm leading-relaxed">
                           {opt}
                         </span>
                       </button>
@@ -407,20 +354,17 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
                 {/* Explanation (after submission) */}
                 {submitted && (
                   <div
-                    className="mt-3 rounded-xl p-4"
-                    style={{
-                      background: isCorrect
-                        ? "rgba(52,211,153,0.06)"
-                        : "rgba(244,63,94,0.06)",
-                      border: `1px solid ${
-                        isCorrect ? "rgba(52,211,153,0.22)" : "rgba(244,63,94,0.22)"
-                      }`,
-                    }}
+                    className={`mt-3 rounded-xl border p-4 ${
+                      isCorrect
+                        ? "border-emerald-200 bg-emerald-50"
+                        : "border-rose-200 bg-rose-50"
+                    }`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                       <p
-                        className="font-mono text-[10px] uppercase tracking-widest"
-                        style={{ color: isCorrect ? "#34d399" : "#f43f5e" }}
+                        className={`text-xs font-semibold uppercase tracking-widest ${
+                          isCorrect ? "text-emerald-800" : "text-rose-800"
+                        }`}
                       >
                         {isCorrect ? "✓ 正解" : "✗ 不正解"} · 解説
                       </p>
@@ -432,7 +376,7 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
                         </div>
                       )}
                     </div>
-                    <p className="text-xs leading-relaxed whitespace-pre-line text-white/62">
+                    <p className="whitespace-pre-line text-sm leading-relaxed text-slate-700">
                       {q.explanation}
                     </p>
                   </div>
@@ -444,27 +388,19 @@ export function MultiSourceViewer({ problem }: { problem: MultiSourceProblem }) 
 
         {/* Submit bar */}
         {!submitted && (
-          <div
-            className="mt-8 pt-5"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <p className="mb-3 text-center font-mono text-[11px] text-white/28">
+          <div className="mt-8 border-t border-slate-200 pt-5">
+            <p className="mb-3 text-center text-xs font-medium text-slate-600">
               {answeredCount} / {problem.questions.length} 問 回答済み
             </p>
             <button
+              type="button"
               onClick={handleSubmit}
               disabled={!allAnswered}
-              className="w-full rounded-xl py-3 font-mono text-sm font-semibold transition-all duration-300"
-              style={{
-                background: allAnswered
-                  ? "rgba(34,211,238,0.15)"
-                  : "rgba(255,255,255,0.04)",
-                border: `1px solid ${
-                  allAnswered ? "rgba(34,211,238,0.5)" : "rgba(255,255,255,0.1)"
-                }`,
-                color: allAnswered ? "#22d3ee" : "rgba(255,255,255,0.22)",
-                cursor: allAnswered ? "pointer" : "not-allowed",
-              }}
+              className={`min-h-11 w-full rounded-xl border px-4 py-3 text-sm font-semibold transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed ${
+                allAnswered
+                  ? "border-blue-700 bg-blue-700 text-white hover:bg-blue-800"
+                  : "border-slate-200 bg-slate-100 text-slate-400"
+              }`}
             >
               答え合わせをする
             </button>

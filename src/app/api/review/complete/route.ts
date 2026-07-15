@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { getNextReviewDate, getNextLevelAfterReview } from "@/lib/review-schedule";
+import { canAccessReviewItem } from "@/lib/review-publication";
 
 // POST /api/review/complete
 // Body: { reviewItemId: string, isCorrect: boolean }
@@ -23,6 +24,9 @@ export async function POST(request: Request) {
     });
 
     if (!existing) {
+      return Response.json({ ok: false, error: "not found" }, { status: 404 });
+    }
+    if (!canAccessReviewItem(existing)) {
       return Response.json({ ok: false, error: "not found" }, { status: 404 });
     }
 

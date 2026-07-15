@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 import { SITE_NAME } from "@/lib/site";
+import { canAccessSubject } from "@/lib/subject-publication";
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
@@ -23,11 +24,28 @@ const ALLOWED_TASK_URLS = new Set([
   "/math",
   "/english",
 ]);
+const ENGLISH_COURSE_TASK_URLS = new Set([
+  "/english",
+  "/english/vocab",
+  "/english/grammar",
+]);
 
 function isAllowedUrl(url: string): boolean {
-  if (ALLOWED_TASK_URLS.has(url)) return true;
+  if (ALLOWED_TASK_URLS.has(url)) {
+    if (url.startsWith("/english")) {
+      return canAccessSubject(
+        "english",
+        ENGLISH_COURSE_TASK_URLS.has(url) ? "courses" : "problems",
+      );
+    }
+    if (url === "/math") return canAccessSubject("math", "courses");
+    if (url === "/mock") return canAccessSubject("math", "exams");
+    return canAccessSubject("math", "problems");
+  }
   // /tags/[tagname] — タグ別演習ページ
-  if (/^\/tags\/[^/\s]{1,50}$/.test(url)) return true;
+  if (/^\/tags\/[^/\s]{1,50}$/.test(url)) {
+    return canAccessSubject("math", "problems");
+  }
   return false;
 }
 
@@ -68,10 +86,45 @@ function buildSystemInstruction(name: string) {
 // ── Fallback ──────────────────────────────────────────────────────────────
 
 function buildFallback(name: string): OraclePayload {
+  if (canAccessSubject("math", "exams")) {
+    return {
+      message: `${name}さん、まずは短い演習で現在の理解を確認しましょう。`,
+      taskName: "数学のカスタム演習",
+      taskUrl: "/mock",
+    };
+  }
+  if (canAccessSubject("math", "problems")) {
+    return {
+      message: `${name}さん、公開中の数学問題から1問を選んで取り組みましょう。`,
+      taskName: "数学の入試良問演習",
+      taskUrl: "/dojo",
+    };
+  }
+  if (canAccessSubject("math", "courses")) {
+    return {
+      message: `${name}さん、数学の講座から現在の理解を整理しましょう。`,
+      taskName: "数学の学習メニュー",
+      taskUrl: "/math",
+    };
+  }
+  if (canAccessSubject("english", "problems")) {
+    return {
+      message: `${name}さん、公開中の英語教材から短い演習に取り組みましょう。`,
+      taskName: "英語の速読トレーニング",
+      taskUrl: "/english/speed-reading",
+    };
+  }
+  if (canAccessSubject("english", "courses")) {
+    return {
+      message: `${name}さん、公開中の英語教材から取り組む内容を選びましょう。`,
+      taskName: "英語の学習メニュー",
+      taskUrl: "/english",
+    };
+  }
   return {
-    message: `${name}さん、まずは短い演習で現在の理解を確認しましょう。`,
-    taskName: "数学のカスタム演習",
-    taskUrl: "/mock",
+    message: `${name}さん、公開中の学習メニューから取り組む内容を選びましょう。`,
+    taskName: "学習メニュー",
+    taskUrl: "/learn",
   };
 }
 

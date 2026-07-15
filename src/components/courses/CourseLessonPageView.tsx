@@ -1,7 +1,11 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, ChevronLeft, Clock, Target } from "lucide-react";
+import { ArrowRight, BookOpen, Target } from "lucide-react";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+} from "@/components/learning/LearningPageFrame";
 import type { CourseLesson, CourseSubject, CourseUnit } from "@/types/course";
-import { COURSE_LEVEL_META } from "@/types/course";
 import { CourseBodyRenderer } from "./CourseBodyRenderer";
 import { CourseLessonBlockRenderer } from "./CourseLessonBlockRenderer";
 
@@ -20,70 +24,45 @@ export function CourseLessonPageView({
   unit: CourseUnit;
   lesson: CourseLesson;
 }) {
-  const levelMeta = COURSE_LEVEL_META[lesson.level];
   const isPremium = subject.courseKind === "premium";
+  const metadata = [
+    { label: "対象レベル", value: LEVEL_LABELS[lesson.level] },
+    { label: "所要時間", value: `約${lesson.estimatedMinutes}分` },
+    { label: "単元", value: unit.unitTitle },
+    ...(lesson.prerequisites.length > 0
+      ? [{ label: "前提知識", value: lesson.prerequisites.join("・") }]
+      : []),
+    ...(isPremium ? [{ label: "講座種別", value: "発展編" }] : []),
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
-        <div className="mb-6 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-          <Link href="/courses" className="inline-flex items-center gap-1 hover:text-blue-600">
-            <ChevronLeft className="h-3.5 w-3.5" />
-            講座集トップ
-          </Link>
-          <span>/</span>
-          <Link href={`/courses/${subject.subjectId}`} className="hover:text-blue-600">
-            {subject.subjectName}
-          </Link>
-          <span>/</span>
-          <Link href={`/courses/${subject.subjectId}/${unit.unitId}`} className="hover:text-blue-600">
-            {unit.unitTitle}
-          </Link>
-        </div>
-
-        <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="h-1.5" style={{ background: subject.color }} />
-          <header className="p-6">
-            <div className="mb-3 flex flex-wrap items-center gap-2">
-              <span
-                className="rounded-full border px-2.5 py-1 text-xs font-bold"
-                style={{
-                  borderColor: levelMeta.border,
-                  background: levelMeta.bg,
-                  color: levelMeta.color,
-                }}
-              >
-                {LEVEL_LABELS[lesson.level]}
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs text-slate-500">
-                <Clock className="h-3 w-3" />
-                約{lesson.estimatedMinutes}分
-              </span>
-              {isPremium
-                ? ["発展編", "難関大レベル"].map((badge) => (
-                    <span
-                      key={badge}
-                      className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700"
-                    >
-                      {badge}
-                    </span>
-                  ))
-                : null}
-            </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
-              {lesson.lessonTitle}
-            </h1>
+    <LearningPageShell width="reading">
+      <LearningBreadcrumbs
+        items={[
+          { label: "講座", href: "/courses" },
+          { label: subject.subjectName, href: `/courses/${subject.subjectId}` },
+          { label: unit.unitTitle, href: `/courses/${subject.subjectId}/${unit.unitId}` },
+          { label: lesson.lessonTitle },
+        ]}
+      />
+      <LearningPageHeader
+        eyebrow={subject.subjectName}
+        title={lesson.lessonTitle}
+        description={
             <CourseBodyRenderer
               body={lesson.lessonDescription}
-              className="mt-3 text-sm leading-relaxed text-slate-600"
+              className="text-base leading-7 text-slate-600"
             />
-          </header>
+        }
+        meta={metadata}
+      />
 
+      <article className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           {lesson.goals.length > 0 && (
-            <section className="border-t border-slate-200 bg-slate-50 p-5">
+            <section className="bg-slate-50 p-5 sm:p-6" aria-labelledby="lesson-goals">
               <div className="mb-3 flex items-center gap-2">
                 <Target className="h-4 w-4 text-blue-600" />
-                <h2 className="text-sm font-extrabold text-slate-900">
+                <h2 id="lesson-goals" className="text-xl font-bold text-slate-950">
                   この講座の目標
                 </h2>
               </div>
@@ -98,15 +77,15 @@ export function CourseLessonPageView({
             </section>
           )}
 
-          <div className="space-y-4 p-5">
+          <div className="space-y-4 border-t border-slate-200 p-5 sm:p-6">
             {lesson.lessonBlocks.map((block, index) => (
               <CourseLessonBlockRenderer key={`${block.kind}-${index}`} block={block} />
             ))}
           </div>
 
           {lesson.checkQuestions.length > 0 && (
-            <section className="border-t border-slate-200 p-5">
-              <h2 className="mb-3 text-sm font-extrabold text-slate-900">
+            <section className="border-t border-slate-200 p-5 sm:p-6" aria-labelledby="check-questions">
+              <h2 id="check-questions" className="mb-4 text-xl font-bold text-slate-950">
                 確認問題
               </h2>
               <div className="space-y-3">
@@ -125,7 +104,7 @@ export function CourseLessonPageView({
                     {question.hint && (
                       <CourseBodyRenderer
                         body={`ヒント: ${question.hint}`}
-                        className="mt-2 text-xs leading-relaxed text-slate-500"
+                        className="mt-2 text-sm leading-relaxed text-slate-600"
                       />
                     )}
                   </details>
@@ -135,10 +114,10 @@ export function CourseLessonPageView({
           )}
 
           {lesson.relatedPracticeLinks.length > 0 && (
-            <section className="border-t border-slate-200 bg-slate-50 p-5">
+            <section className="border-t border-slate-200 bg-slate-50 p-5 sm:p-6" aria-labelledby="related-learning">
               <div className="mb-3 flex items-center gap-2">
                 <BookOpen className="h-4 w-4 text-blue-600" />
-                <h2 className="text-sm font-extrabold text-slate-900">
+                <h2 id="related-learning" className="text-xl font-bold text-slate-950">
                   関連演習・次に読む講座
                 </h2>
               </div>
@@ -156,7 +135,7 @@ export function CourseLessonPageView({
                       {link.description ? (
                         <CourseBodyRenderer
                           body={link.description}
-                          className="mt-1 text-xs leading-relaxed text-slate-600"
+                          className="mt-1 text-sm leading-relaxed text-slate-600"
                         />
                       ) : null}
                     </div>
@@ -166,8 +145,7 @@ export function CourseLessonPageView({
               </div>
             </section>
           )}
-        </article>
-      </main>
-    </div>
+      </article>
+    </LearningPageShell>
   );
 }

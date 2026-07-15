@@ -8,6 +8,7 @@ import {
 } from "@/data/course-curriculum";
 import { CourseUnitPageView } from "@/components/courses/CourseUnitPageView";
 import { createPublicMetadata } from "@/lib/public-metadata";
+import { requireSubjectPageAccess } from "@/lib/subject-route-guard";
 
 export async function generateMetadata({
   params,
@@ -45,6 +46,8 @@ export default async function CourseUnitPage({
   const subject = getCourseSubject(subjectId);
   const unit = getCourseUnit(subjectId, unitId);
   if (!subject || !unit) notFound();
-  if (!isPublicCourseSubject(subject) && process.env.NODE_ENV === "production") notFound();
+  requireSubjectPageAccess(subject.parentSubjectId, "courses", {
+    resourcePublished: isPublicCourseSubject(subject),
+  });
   return <CourseUnitPageView subject={subject} unit={unit} />;
 }

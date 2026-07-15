@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { Lightbulb, ArrowRight } from "lucide-react";
 
-/**
- * Neon CTA shown at the end of a problem's explanation, guiding a stuck
- * learner to the related Concept Lesson.
- */
+/** Guides a learner from a problem explanation back to its related lesson. */
 export function LessonLink({
   slug,
   title,
@@ -15,20 +12,20 @@ export function LessonLink({
   return (
     <Link
       href={`/lessons/${slug}`}
-      className="glass glow-magenta group flex items-center gap-4 rounded-2xl p-5 transition-transform hover:-translate-y-0.5"
+      className="group flex min-h-11 items-center gap-4 rounded-2xl border border-blue-200 bg-blue-50 p-5 shadow-sm transition-colors hover:border-blue-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
     >
-      <span className="glow-magenta flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-neon-magenta/15 text-neon-magenta">
-        <Lightbulb className="h-5 w-5" />
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+        <Lightbulb className="h-5 w-5" aria-hidden="true" />
       </span>
       <div className="min-w-0 flex-1">
-        <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-neon-magenta/80">
+        <div className="text-xs font-semibold text-blue-700">
           関連講座
         </div>
-        <div className="mt-0.5 truncate font-display font-semibold text-foreground">
+        <div className="mt-0.5 truncate font-semibold text-slate-950">
           {title}
         </div>
       </div>
-      <ArrowRight className="h-5 w-5 shrink-0 text-neon-magenta transition-transform group-hover:translate-x-1" />
+      <ArrowRight className="h-5 w-5 shrink-0 text-blue-700 transition-transform group-hover:translate-x-1" aria-hidden="true" />
     </Link>
   );
 }

@@ -11,9 +11,9 @@ import {
   Filter,
   Clock,
   AlertTriangle,
-  LogIn,
   Lightbulb,
 } from "lucide-react";
+import { LearningState } from "@/components/learning/LearningPageFrame";
 import { CommonTestGuidedReviewPanel } from "@/components/common-test/CommonTestGuidedReviewPanel";
 import {
   buildCommonTestGuidedReviewItem,
@@ -116,29 +116,40 @@ export function CommonTestReviewQueue() {
   const [doneIds, setDoneIds] = useState<Set<string>>(new Set());
   const [subjectFilter, setSubjectFilter] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [activeGuidedId, setActiveGuidedId] = useState<string | null>(null);
 
   const fetchAll = useCallback(async () => {
     setLoading(true);
+    setLoadError(false);
     try {
       const [meRes, listRes] = await Promise.all([
         fetch("/api/auth/me"),
         fetch("/api/review/list?limit=100"),
       ]);
 
-      const meData = meRes.ok ? await meRes.json() : { ok: false };
-      setIsLoggedIn(Boolean(meData.ok));
+      if (!meRes.ok) throw new Error("auth request failed");
 
-      if (listRes.ok) {
-        const data = await listRes.json();
-        if (data.ok) {
-          const items = (data.items as ReviewItemData[]).filter(isCommonTestReviewItem);
-          setAllItems(items);
-          setMeta(buildMeta(items));
-        }
+      const meData = await meRes.json();
+      const loggedIn = Boolean(meData.ok);
+      setIsLoggedIn(loggedIn);
+
+      if (!loggedIn) {
+        setAllItems([]);
+        setMeta(null);
+        return;
       }
+
+      if (!listRes.ok) throw new Error("review list request failed");
+
+      const data = await listRes.json();
+      if (!data.ok) throw new Error("review list response was not ok");
+
+      const items = (data.items as ReviewItemData[]).filter(isCommonTestReviewItem);
+      setAllItems(items);
+      setMeta(buildMeta(items));
     } catch {
-      setIsLoggedIn(false);
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -168,33 +179,46 @@ export function CommonTestReviewQueue() {
     }
   };
 
+  if (!loading && loadError) {
+    return (
+      <LearningState
+        kind="error"
+        title="復習キューを読み込めませんでした"
+        description="通信状態を確認して、もう一度お試しください。"
+        compact
+        actions={
+          <button type="button" onClick={fetchAll} className="button-primary">
+            再読み込み
+          </button>
+        }
+      />
+    );
+  }
+
   if (!loading && isLoggedIn === false) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-        <LogIn className="mx-auto mb-3 h-8 w-8 text-slate-300" />
-        <div className="mb-2 text-sm font-bold text-slate-700">
-          ログインが必要です
-        </div>
-        <p className="mb-6 text-xs text-slate-500">
-          ログインすると、間違えた問題を復習キューに保存し、間隔反復で繰り返し確認できます。
-        </p>
-        <Link
-          href="/auth/login"
-          className="inline-flex items-center gap-2 rounded-xl bg-orange-600 px-6 py-3 text-xs font-bold text-white transition-colors hover:bg-orange-700"
-        >
-          ログインして復習キューを使う →
-        </Link>
-      </div>
+      <LearningState
+        kind="login-required"
+        title="ログインが必要です"
+        description="ログインすると、間違えた問題を復習キューに保存し、間隔反復で繰り返し確認できます。"
+        compact
+        actions={
+          <Link href="/auth/login" className="button-primary">
+            ログインして復習キューを使う
+          </Link>
+        }
+      />
     );
   }
 
   if (loading) {
     return (
-      <div className="space-y-3">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="h-20 animate-pulse rounded-xl border border-slate-200 bg-white" />
-        ))}
-      </div>
+      <LearningState
+        kind="loading"
+        title="復習キューを読み込んでいます"
+        description="保存済みの復習予定を確認しています。"
+        compact
+      />
     );
   }
 
@@ -231,15 +255,16 @@ export function CommonTestReviewQueue() {
       <RiskPriorityGuide />
 
       {/* Subject filter + refresh */}
-      <div className="flex flex-wrap items-center gap-2">
-        <Filter className="h-3.5 w-3.5 text-slate-400" />
+      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+        <Filter className="h-4 w-4 text-slate-500" aria-hidden="true" />
         <button
           type="button"
           onClick={() => setSubjectFilter("all")}
-          className={`rounded-lg px-3 py-1.5 text-[11px] font-bold transition-colors ${
+          aria-pressed={subjectFilter === "all"}
+          className={`inline-flex min-h-11 items-center rounded-lg border px-4 py-2 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
             subjectFilter === "all"
-              ? "bg-slate-900 text-white"
-              : "border border-slate-200 bg-white text-slate-500 hover:border-slate-300"
+              ? "border-blue-300 bg-blue-50 text-blue-800"
+              : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
           }`}
         >
           すべて
@@ -252,7 +277,8 @@ export function CommonTestReviewQueue() {
               key={subj}
               type="button"
               onClick={() => setSubjectFilter(subj ?? "all")}
-              className="rounded-lg border px-3 py-1.5 text-[11px] font-bold transition-colors"
+              aria-pressed={isActive}
+              className="inline-flex min-h-11 items-center rounded-lg border px-4 py-2 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
               style={{
                 background: isActive ? `${meta?.color ?? "#475569"}14` : "#ffffff",
                 borderColor: isActive ? `${meta?.color ?? "#475569"}55` : "#e2e8f0",
@@ -266,9 +292,10 @@ export function CommonTestReviewQueue() {
         <button
           type="button"
           onClick={fetchAll}
-          className="ml-auto rounded-lg p-2 transition-colors hover:bg-slate-100"
+          aria-label="復習キューを再読み込み"
+          className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         >
-          <RefreshCw className="h-4 w-4 text-slate-400" />
+          <RefreshCw className="h-4 w-4 text-slate-500" aria-hidden="true" />
         </button>
       </div>
 
@@ -320,10 +347,10 @@ export function CommonTestReviewQueue() {
               >
                 <Trophy className="h-4 w-4 shrink-0 text-emerald-500" />
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-xs font-bold text-slate-700">
+                  <div className="truncate text-sm font-bold text-slate-700">
                     {item.title}
                   </div>
-                  <div className="mt-0.5 text-[10px] text-emerald-600">
+                  <div className="mt-1 text-xs text-emerald-700">
                     克服済み · {item.correctStreak}連続正解
                   </div>
                 </div>
@@ -333,36 +360,58 @@ export function CommonTestReviewQueue() {
         </div>
       )}
 
+      {allItems.length > 0 && filtered.length === 0 && (
+        <LearningState
+          kind="empty"
+          title="該当する復習項目はありません"
+          description="科目フィルターを変更すると、ほかの復習予定を確認できます。"
+          compact
+          actions={
+            <button
+              type="button"
+              onClick={() => setSubjectFilter("all")}
+              className="button-secondary"
+            >
+              すべての科目を表示
+            </button>
+          }
+        />
+      )}
+
       {/* Empty state */}
       {allItems.length === 0 && (
-        <div className="rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-sm">
-          <div className="mb-2 text-sm font-bold text-slate-700">
-          復習キューはまだ空です
-        </div>
-        <p className="text-xs leading-relaxed text-slate-500">
-            まずは大問別ドリルを1つ解くと、間違えた問題や自信があいまいな問題がここに入ります。
-            <br />
-            今日の復習、次回の確認日、危険度を自動で並べ替えます。
-          </p>
-          <div className="mt-4 flex flex-wrap justify-center gap-2 text-[11px] font-bold text-slate-500">
-            <span className="rounded-full bg-slate-100 px-2.5 py-1">所要時間: 大問1つあたり10〜20分</span>
-            <span className="rounded-full bg-slate-100 px-2.5 py-1">初回は3問から</span>
-          </div>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+        <LearningState
+          kind="empty"
+          title="復習キューはまだ空です"
+          description={
+            <div className="space-y-3">
+              <p>
+                まずは大問別ドリルを1つ解くと、間違えた問題や自信があいまいな問題がここに入ります。
+                今日の復習、次回の確認日、危険度を自動で並べ替えます。
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 text-xs font-semibold text-slate-600">
+                <span className="rounded-full bg-slate-100 px-3 py-1.5">所要時間: 大問1つあたり10〜20分</span>
+                <span className="rounded-full bg-slate-100 px-3 py-1.5">初回は3問から</span>
+              </div>
+            </div>
+          }
+          actions={
+            <>
             <Link
               href="/common-test/math-1a"
-              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700"
+              className="button-primary"
             >
-              ミニ診断を始める →
+              ミニ診断を始める
             </Link>
             <Link
               href="/common-test/problem-lectures"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-600 transition-colors hover:border-slate-300"
+              className="button-secondary"
             >
               講義ロードマップを見る
             </Link>
-          </div>
-        </div>
+            </>
+          }
+        />
       )}
     </div>
   );
@@ -400,7 +449,7 @@ function ReviewSection({
           {title}
         </span>
         <div className="h-px flex-1 bg-slate-200" />
-        <span className="text-[11px] text-slate-400">{items.length}件</span>
+        <span className="text-xs text-slate-600">{items.length}件</span>
       </div>
 
       <div className="space-y-2">
@@ -445,12 +494,12 @@ function ReviewSection({
                 {/* Info */}
                 <div className="min-w-0 flex-1 space-y-1.5">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-700">
+                    <span className="rounded bg-amber-50 px-2 py-1 text-xs font-bold text-amber-800">
                       {levelLabel}
                     </span>
                     {subjMeta && (
                       <span
-                        className="rounded px-1.5 py-0.5 text-[10px] font-bold"
+                        className="rounded px-2 py-1 text-xs font-bold"
                         style={{ background: `${subjMeta.color}14`, color: subjMeta.color }}
                       >
                         {subjMeta.label}
@@ -458,24 +507,24 @@ function ReviewSection({
                       </span>
                     )}
                     {item.itemType === "common-test-lecture" && (
-                      <span className="rounded bg-violet-50 px-1.5 py-0.5 text-[10px] font-bold text-violet-700">
+                      <span className="rounded bg-violet-50 px-2 py-1 text-xs font-bold text-violet-800">
                         出典：特別講義
                       </span>
                     )}
-                    <span className="flex items-center gap-1 text-[10px] text-slate-400">
-                      <Clock className="h-3 w-3" />
+                    <span className="flex items-center gap-1 text-xs text-slate-600">
+                      <Clock className="h-3.5 w-3.5" aria-hidden="true" />
                       {fmtDate(item.nextReviewAt)}
                     </span>
                   </div>
 
-                  <div className="truncate text-[13px] font-bold text-slate-800">
+                  <div className="truncate text-sm font-bold text-slate-900">
                     {item.title}
                   </div>
 
                   <div className="flex flex-wrap gap-1">
                     {riskMeta && (
                       <span
-                        className={`rounded border px-1.5 py-0.5 text-[10px] font-bold ${riskMeta.className}`}
+                        className={`rounded border px-2 py-1 text-xs font-bold ${riskMeta.className}`}
                       >
                         {riskMeta.label}
                       </span>
@@ -486,7 +535,7 @@ function ReviewSection({
                       return (
                         <span
                           key={f}
-                          className="rounded px-1.5 py-0.5 text-[10px] font-bold"
+                          className="rounded px-2 py-1 text-xs font-bold"
                           style={{ background: `${r.color}14`, color: r.color }}
                         >
                           {r.label}
@@ -496,24 +545,24 @@ function ReviewSection({
                     {mistakeTagIds.map((tagId) => (
                       <span
                         key={tagId}
-                        className="rounded bg-rose-50 px-1.5 py-0.5 text-[10px] font-bold text-rose-600 ring-1 ring-rose-100"
+                        className="rounded bg-rose-50 px-2 py-1 text-xs font-bold text-rose-700 ring-1 ring-rose-100"
                       >
                         {getCommonTestMistakeTagLabel(tagId)}
                       </span>
                     ))}
                     {item.skillTags.slice(0, 3).map((t) => (
-                      <span key={t} className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">
+                      <span key={t} className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600">
                         {t}
                       </span>
                     ))}
                   </div>
                   {item.wrongCount > 1 && (
-                    <p className="text-[11px] text-rose-500">
+                    <p className="text-xs text-rose-700">
                       ✕ {item.wrongCount}回 間違えた問題
                     </p>
                   )}
                   {riskMeta && (
-                    <p className="text-[11px] leading-5 text-slate-500">
+                    <p className="text-sm leading-6 text-slate-600">
                       {riskMeta.description}
                     </p>
                   )}
@@ -526,18 +575,19 @@ function ReviewSection({
                       <button
                         type="button"
                         onClick={() => onToggleGuided(item.id)}
-                        className="flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-bold text-amber-700 transition-colors hover:bg-amber-100"
+                        aria-expanded={activeGuidedId === item.id}
+                        className="flex min-h-11 items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800 transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2"
                       >
-                        <Lightbulb className="h-3 w-3" />
+                        <Lightbulb className="h-4 w-4" aria-hidden="true" />
                         段階復習
                       </button>
                     )}
                     {reviewHref !== "#" && (
                       <Link
                         href={reviewHref}
-                        className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-[11px] font-bold text-slate-600 transition-colors hover:border-slate-300"
+                        className="flex min-h-11 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 transition-colors hover:border-blue-300 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                       >
-                        <ExternalLink className="h-3 w-3" />
+                        <ExternalLink className="h-4 w-4" aria-hidden="true" />
                         演習
                       </Link>
                     )}
@@ -545,18 +595,18 @@ function ReviewSection({
                       type="button"
                       disabled={isCompleting || isDone}
                       onClick={() => onComplete(item.id, false)}
-                      className="flex items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-[11px] font-bold text-rose-600 transition-colors hover:bg-rose-100 disabled:opacity-40"
+                      className="flex min-h-11 items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700 transition-colors hover:bg-rose-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2 disabled:opacity-40"
                     >
-                      <XCircle className="h-3.5 w-3.5" />
+                      <XCircle className="h-4 w-4" aria-hidden="true" />
                       不正解
                     </button>
                     <button
                       type="button"
                       disabled={isCompleting || isDone}
                       onClick={() => onComplete(item.id, true)}
-                      className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-[11px] font-bold text-white transition-colors hover:bg-emerald-700 disabled:opacity-40"
+                      className="flex min-h-11 items-center gap-1.5 rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:ring-offset-2 disabled:opacity-40"
                     >
-                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                       正解
                     </button>
                   </div>
@@ -624,8 +674,8 @@ function StatCard({
 }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="text-[10px] text-slate-400">{label}</div>
-      <div className="mt-1 font-mono text-2xl font-extrabold" style={{ color }}>
+      <div className="text-xs font-medium text-slate-600">{label}</div>
+      <div className="mt-1 text-2xl font-extrabold" style={{ color }}>
         {value}
       </div>
     </div>

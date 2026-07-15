@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { canAccessMissionProblem } from "@/lib/mission-publication";
 
 // GET /api/mission/[id] — ミッション詳細（本人 or MENTOR のみ）
 export async function GET(
@@ -23,6 +24,9 @@ export async function GET(
   if (session.role !== "MENTOR" && mission.userId !== session.sub) {
     return Response.json({ ok: false, error: "forbidden" }, { status: 403 });
   }
+  if (!canAccessMissionProblem(mission.problemSlug)) {
+    return Response.json({ ok: false, error: "not found" }, { status: 404 });
+  }
 
   return Response.json({ ok: true, mission });
 }
@@ -40,7 +44,7 @@ export async function PATCH(
   const { id } = await params;
   const mission = await prisma.emergencyMission.findUnique({
     where: { id },
-    select: { userId: true },
+    select: { userId: true, problemSlug: true },
   });
 
   if (!mission) {
@@ -48,6 +52,9 @@ export async function PATCH(
   }
   if (session.role !== "MENTOR" && mission.userId !== session.sub) {
     return Response.json({ ok: false, error: "forbidden" }, { status: 403 });
+  }
+  if (!canAccessMissionProblem(mission.problemSlug)) {
+    return Response.json({ ok: false, error: "not found" }, { status: 404 });
   }
 
   await prisma.emergencyMission.update({

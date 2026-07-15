@@ -15,16 +15,21 @@ export function CourseComparisonTable({
   if (!columns || !rows || rows.length === 0) return null;
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-violet-200 bg-white">
-      <table className="w-full min-w-max text-xs">
+    <div
+      tabIndex={0}
+      role="region"
+      aria-label="比較表（横にスクロールできます）"
+      className="overflow-x-auto rounded-xl border border-violet-200 bg-white focus-visible:outline-2 focus-visible:outline-offset-2"
+    >
+      <table className="w-full min-w-max text-sm">
         <thead>
           <tr className="bg-violet-50">
             {columns.map((col, ci) => (
               <th
                 key={ci}
-                className="border-b border-violet-200 px-3 py-2 text-left text-[11px] font-bold text-violet-700"
+                className="border-b border-violet-200 px-3 py-2 text-left text-xs font-bold text-violet-800"
               >
-                <CourseBodyRenderer body={col} className="text-[11px] text-violet-700" />
+                <CourseBodyRenderer body={col} className="text-xs text-violet-800" />
               </th>
             ))}
           </tr>
@@ -48,7 +53,7 @@ export function CourseComparisonTable({
                     ci === 0 ? "font-semibold text-slate-700" : "text-slate-600"
                   } ${row.highlight ? "text-violet-700" : ""}`}
                 >
-                  <CourseBodyRenderer body={cell} className="text-xs leading-relaxed" />
+                  <CourseBodyRenderer body={cell} className="text-sm leading-relaxed" />
                 </td>
               ))}
             </tr>

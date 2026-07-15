@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
-import type React from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, BookOpen, Clock, RotateCcw, Target } from "lucide-react";
+import { ArrowRight, BookOpen, Target } from "lucide-react";
 import { getAllProblems, getAllSlugs, getProblem, getLesson } from "@/lib/content";
 import { DIFFICULTY_META } from "@/lib/types";
 import type { Problem } from "@/lib/types";
-import { DifficultyBadge } from "@/components/shell/DifficultyBadge";
-import { TagList } from "@/components/shell/TagChip";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+  LearningSectionHeader,
+} from "@/components/learning/LearningPageFrame";
 import { MathText } from "@/components/math/Math";
 import { LogicSteps } from "@/components/scaffolding/LogicSteps";
 import { LabRenderer } from "@/components/graph/LabRenderer";
+import { tagSlug } from "@/data/tags";
 import {
   getExamContextLabel,
   getProblemContextGuide,
@@ -50,7 +55,7 @@ export default async function ProblemPage({
   const problem = getProblem(slug);
   if (!problem) notFound();
 
-  const meta = DIFFICULTY_META[problem.difficulty];
+  const difficulty = DIFFICULTY_META[problem.difficulty];
   const lesson = getLesson(problem.relatedLessonSlug);
   const allProblems = getAllProblems();
   const contextGuide = getProblemContextGuide(problem);
@@ -58,72 +63,63 @@ export default async function ProblemPage({
   const reverseProblems = getReversePatternProblems(problem, allProblems, 2);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
-      <Link
-        href="/units"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-neon-cyan"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        単元一覧へ戻る
-      </Link>
-
-      {/* Problem header */}
-      <header className="mt-6">
-        <div className="flex flex-wrap items-center gap-3">
-          <DifficultyBadge difficulty={problem.difficulty} withName />
-          <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
-            {problem.unit}
-          </span>
-        </div>
-
-        <h1
-          className="mt-4 font-display text-3xl font-extrabold leading-tight tracking-tight"
-          style={{ textShadow: `0 0 24px color-mix(in oklch, ${meta.accent} 30%, transparent)` }}
-        >
-          {problem.title}
-        </h1>
-        {problem.tagline && (
-          <p className="mt-2 text-sm italic text-muted-foreground">
-            「{problem.tagline}」
-          </p>
-        )}
-        <TagList tags={problem.tags} className="mt-4 flex flex-wrap gap-1.5" />
-      </header>
-
-      {/* Statement */}
-      <section className="glass mt-8 rounded-2xl p-6">
-        <div className="mb-3 flex items-center gap-2 text-xs font-semibold tracking-wide text-blue-800">
-          <span className="inline-block h-2 w-2 rounded-full bg-neon-cyan" />
-          問題
-        </div>
-        <MathText className="text-[15px] text-foreground/90">
-          {problem.statement}
-        </MathText>
-      </section>
-
-      {/* Logic scaffolding (+ embedded lab in the EXPERIMENT step) */}
-      <section className="mt-10">
-        <LogicSteps
-          slug={problem.slug}
-          steps={problem.steps}
-          labSlot={
-            problem.hasGraph && problem.graphKey ? (
-              <LabRenderer graphKey={problem.graphKey} />
-            ) : undefined
-          }
-          relatedLesson={
-            lesson ? { slug: lesson.slug, title: lesson.title } : undefined
-          }
-        />
-      </section>
-
-      <ProblemAftercare
-        problem={problem}
-        contextGuide={contextGuide}
-        similarProblems={similarProblems}
-        reverseProblems={reverseProblems}
+    <LearningPageShell width="reading">
+      <LearningBreadcrumbs
+        items={[
+          { label: "数学", href: "/math" },
+          { label: "単元一覧", href: "/units" },
+          { label: problem.title },
+        ]}
       />
-    </div>
+
+      <article>
+        <LearningPageHeader
+          eyebrow="問題演習"
+          title={problem.title}
+          description={problem.tagline}
+          meta={[
+            { label: "単元", value: problem.unit },
+            {
+              label: "難度",
+              value: `${difficulty.label} ${difficulty.name}`,
+            },
+          ]}
+        />
+
+        <TagLinks tags={problem.tags} />
+
+        <section className="mt-10">
+          <LearningSectionHeader title="問題" />
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <MathText className="text-base leading-8 text-slate-900">
+              {problem.statement}
+            </MathText>
+          </div>
+        </section>
+
+        <section className="mt-12" aria-label="解説">
+          <LogicSteps
+            slug={problem.slug}
+            steps={problem.steps}
+            labSlot={
+              problem.hasGraph && problem.graphKey ? (
+                <LabRenderer graphKey={problem.graphKey} />
+              ) : undefined
+            }
+            relatedLesson={
+              lesson ? { slug: lesson.slug, title: lesson.title } : undefined
+            }
+          />
+        </section>
+
+        <ProblemAftercare
+          problem={problem}
+          contextGuide={contextGuide}
+          similarProblems={similarProblems}
+          reverseProblems={reverseProblems}
+        />
+      </article>
+    </LearningPageShell>
   );
 }
 
@@ -138,57 +134,51 @@ function ProblemAftercare({
   similarProblems: Problem[];
   reverseProblems: Problem[];
 }) {
-  const fallbackWeapons = problem.tags?.slice(0, 3) ?? [problem.unit, "条件整理", "解法選択"];
+  const fallbackSkills = problem.tags?.slice(0, 3) ?? [problem.unit, "条件整理", "解法選択"];
   const contextLabel = getExamContextLabel(problem.difficulty);
   const contextBody = isCommonTestDifficulty(problem.difficulty)
     ? contextGuide?.commonTestContext
     : contextGuide?.advancedContext;
 
   return (
-    <section className="mt-10 overflow-hidden rounded-2xl border border-neon-violet/25 bg-card/70">
-      <div className="border-b border-neon-violet/10 bg-neon-violet/5 px-5 py-3">
-        <div className="flex items-center gap-2 text-sm font-bold text-neon-violet">
-          <RotateCcw className="h-4 w-4" />
-          この問題を解いた後の復習導線
-        </div>
-      </div>
-      <div className="space-y-6 p-5">
-        <div className="grid gap-3 sm:grid-cols-3">
+    <section className="mt-14">
+      <LearningSectionHeader
+        title="復習と関連学習"
+        description="解答後に確認したいポイントと、次の学習先をまとめています。"
+      />
+
+      <div className="space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
+        <div className="grid gap-3 sm:grid-cols-2">
           <AftercareBox
-            icon={<Target className="h-4 w-4 text-neon-lime" />}
-            label="この問題の核"
+            icon={<Target className="h-4 w-4 text-blue-700" />}
+            label="この問題のポイント"
             body={contextGuide?.masteryFocus ?? `${problem.unit}の条件を整理して、最初の一手を選ぶ`}
           />
           <AftercareBox
-            icon={<BookOpen className="h-4 w-4 text-neon-cyan" />}
-            label="身につく武器"
-            body={(contextGuide?.weapons ?? fallbackWeapons).slice(0, 3).join(" / ")}
-          />
-          <AftercareBox
-            icon={<Clock className="h-4 w-4 text-neon-amber" />}
-            label="目標解答時間"
-            body={`${defaultTargetMinutes(problem)}分`}
+            icon={<BookOpen className="h-4 w-4 text-emerald-700" />}
+            label="確認する考え方"
+            body={(contextGuide?.weapons ?? fallbackSkills).slice(0, 3).join(" / ")}
           />
         </div>
 
         {contextGuide?.lecture && (
-          <div className="rounded-2xl border border-neon-cyan/20 bg-background/40 p-4">
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 sm:p-5">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="text-xs font-bold text-neon-cyan">関連する特別授業</div>
-                <h2 className="mt-1 font-display text-xl font-extrabold text-foreground">
+                <p className="text-sm font-semibold text-blue-800">関連講座</p>
+                <h3 className="mt-1 text-lg font-bold text-slate-950">
                   {contextGuide.lecture.title}
-                </h2>
-                <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                </h3>
+                <p className="mt-1 text-sm leading-6 text-slate-600">
                   {contextGuide.lecture.description}
                 </p>
               </div>
               <Link
                 href={`/common-test/lectures/${contextGuide.lecture.lectureSlug}`}
-                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-neon-cyan px-4 py-3 text-sm font-extrabold text-background transition hover:brightness-110"
+                className="button-secondary shrink-0"
               >
-                補講を見る
-                <ArrowRight className="h-4 w-4" />
+                講座を見る
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -196,20 +186,22 @@ function ProblemAftercare({
 
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
-            <h3 className="mb-2 text-sm font-bold text-foreground">間違えた場合の戻り先</h3>
+            <h3 className="mb-2 text-base font-bold text-slate-950">
+              間違えた場合の確認先
+            </h3>
             <div className="space-y-2">
               {(contextGuide?.recoveryLinks ?? []).slice(0, 3).map((item) => (
                 <Link
                   key={`${item.symptom}-${item.href}`}
                   href={item.href}
-                  className="block rounded-xl border border-white/10 bg-background/40 p-3 transition hover:border-neon-cyan/40"
+                  className="block rounded-xl border border-slate-200 bg-white p-3 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                 >
-                  <div className="text-xs font-bold text-neon-amber">{item.symptom}</div>
-                  <div className="mt-0.5 text-sm font-semibold text-foreground">{item.label}</div>
+                  <div className="text-sm font-semibold text-amber-800">{item.symptom}</div>
+                  <div className="mt-1 text-sm font-semibold text-slate-900">{item.label}</div>
                 </Link>
               ))}
               {!contextGuide && (
-                <div className="rounded-xl border border-white/10 bg-background/40 p-3 text-sm text-muted-foreground">
+                <div className="rounded-xl border border-slate-200 bg-white p-3 text-sm leading-6 text-slate-600">
                   解説ステップの「着眼点」に戻り、条件を1つずつ言語化してください。
                 </div>
               )}
@@ -217,8 +209,8 @@ function ProblemAftercare({
           </div>
 
           <div>
-            <h3 className="mb-2 text-sm font-bold text-foreground">{contextLabel}</h3>
-            <p className="rounded-xl border border-white/10 bg-background/40 p-3 text-sm leading-6 text-muted-foreground">
+            <h3 className="mb-2 text-base font-bold text-slate-950">{contextLabel}</h3>
+            <p className="rounded-xl border border-slate-200 bg-white p-3 text-sm leading-6 text-slate-600">
               {contextBody ??
                 (isCommonTestDifficulty(problem.difficulty)
                   ? "小問の誘導に沿って、条件整理から計算へ進む形で出やすい。"
@@ -239,36 +231,39 @@ function AftercareBox({
   label,
   body,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   body: string;
 }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-background/40 p-3">
-      <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
         {icon}
         {label}
       </div>
-      <div className="mt-1 text-sm font-semibold leading-6 text-foreground">{body}</div>
+      <div className="mt-2 text-sm font-semibold leading-6 text-slate-900">{body}</div>
     </div>
   );
 }
 
 function ProblemLinkGroup({ title, problems }: { title: string; problems: Problem[] }) {
   if (problems.length === 0) return null;
+
   return (
     <div>
-      <h3 className="mb-2 text-sm font-bold text-foreground">{title}</h3>
+      <h3 className="mb-2 text-base font-bold text-slate-950">{title}</h3>
       <div className="grid gap-2 sm:grid-cols-2">
         {problems.map((problem) => (
           <Link
             key={problem.slug}
             href={`/problems/${problem.slug}`}
-            className="rounded-xl border border-white/10 bg-background/40 p-3 transition hover:border-neon-cyan/40"
+            className="group rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
           >
-            <div className="text-sm font-bold text-foreground">{problem.title}</div>
-            <div className="mt-1 text-xs text-muted-foreground">
-              {problem.unit} / 難度{problem.difficulty}
+            <div className="font-semibold text-slate-900 group-hover:text-blue-800">
+              {problem.title}
+            </div>
+            <div className="mt-1 text-sm text-slate-600">
+              {problem.unit} / 難度 {DIFFICULTY_META[problem.difficulty].label}
             </div>
           </Link>
         ))}
@@ -277,23 +272,21 @@ function ProblemLinkGroup({ title, problems }: { title: string; problems: Proble
   );
 }
 
-function defaultTargetMinutes(problem: Problem): number {
-  switch (problem.difficulty) {
-    case "A":
-      return 4;
-    case "B":
-      return 6;
-    case "C":
-      return 8;
-    case "D":
-      return 12;
-    case "D_PLUS":
-      return 18;
-    case "EX":
-      return 25;
-    case "OLYMPIAD":
-      return 40;
-    default:
-      return 10;
-  }
+function TagLinks({ tags }: { tags?: string[] }) {
+  if (!tags || tags.length === 0) return null;
+
+  return (
+    <ul className="mt-5 flex flex-wrap gap-2" aria-label="関連タグ">
+      {tags.map((tag) => (
+        <li key={tag}>
+          <Link
+            href={`/tags/${tagSlug(tag)}`}
+            className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+          >
+            #{tag}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
 }

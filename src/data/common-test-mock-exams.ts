@@ -1,5 +1,6 @@
 import { COMMON_TEST_MATH_1A_MANUAL_001 } from "@/data/common-test/manual-mocks/math1a-001";
 import { COMMON_TEST_MATH_1A_MANUAL_002 } from "@/data/common-test/manual-mocks/math1a-002";
+import { isSubjectResourceDiscoverable } from "@/lib/subject-publication";
 
 export type CommonTestMockSubject = "math-1a";
 
@@ -214,7 +215,12 @@ export function getCommonTestMockExam(id: string): CommonTestMockExam | null {
 }
 
 export function getPublicCommonTestMockExams(): CommonTestMockExam[] {
-  return COMMON_TEST_MOCK_EXAMS.filter((exam) => exam.status === "published" && !exam.devOnly);
+  return COMMON_TEST_MOCK_EXAMS.filter(
+    (exam) =>
+      exam.status === "published" &&
+      !exam.devOnly &&
+      isSubjectResourceDiscoverable(exam.subject, "exams"),
+  );
 }
 
 export function getCommonTestMockExamStats(exam: CommonTestMockExam) {

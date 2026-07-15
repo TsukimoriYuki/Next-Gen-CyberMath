@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import {
   BarChart3,
   BookOpen,
@@ -100,7 +99,6 @@ const REVIEW_ACTIONS: readonly LearningAction[] = [
 ];
 
 export default function EnglishHomePage() {
-  if (!isVisibleSubject(ENGLISH_SUBJECT)) notFound();
   return (
     <LearningPage>
       <LearningPageContainer>

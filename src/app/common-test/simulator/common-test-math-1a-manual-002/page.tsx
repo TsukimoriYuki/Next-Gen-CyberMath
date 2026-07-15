@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { COMMON_TEST_MATH_1A_MANUAL_002 } from "@/data/common-test/manual-mocks/math1a-002";
 import { CommonTestPdfMockViewer } from "@/components/common-test/mock-exam/CommonTestPdfMockViewer";
+import { SubjectPublicationNotice } from "@/components/learning/SubjectPublicationNotice";
 import { createPublicMetadata } from "@/lib/public-metadata";
+import { resolveTopLevelSubjectId } from "@/lib/subject-publication";
+import { requireSubjectPageAccess } from "@/lib/subject-route-guard";
 
 export const metadata: Metadata = createPublicMetadata({
   title: COMMON_TEST_MATH_1A_MANUAL_002.title,
@@ -11,5 +15,22 @@ export const metadata: Metadata = createPublicMetadata({
 });
 
 export default function CommonTestMath1AManual002Page() {
-  return <CommonTestPdfMockViewer exam={COMMON_TEST_MATH_1A_MANUAL_002} />;
+  const subjectId = resolveTopLevelSubjectId(
+    COMMON_TEST_MATH_1A_MANUAL_002.subject,
+  );
+  if (!subjectId) notFound();
+
+  const resourcePublished =
+    COMMON_TEST_MATH_1A_MANUAL_002.status === "published" &&
+    COMMON_TEST_MATH_1A_MANUAL_002.devOnly !== true;
+  const access = requireSubjectPageAccess(subjectId, "exams", {
+    resourcePublished,
+  });
+
+  return (
+    <>
+      <SubjectPublicationNotice access={access} />
+      <CommonTestPdfMockViewer exam={COMMON_TEST_MATH_1A_MANUAL_002} />
+    </>
+  );
 }

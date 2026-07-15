@@ -12,28 +12,28 @@ export function SummaryCards({ summary }: Props) {
       value: `${summary.attempts}`,
       unit: "回",
       icon: Sparkles,
-      accent: "var(--neon-cyan)",
+      accent: "#1d4ed8",
     },
     {
       label: "総解答問題数",
       value: `${summary.totalAnswered}`,
       unit: "問",
       icon: ListChecks,
-      accent: "var(--neon-violet)",
+      accent: "#6d28d9",
     },
     {
       label: "平均スコア",
       value: `${summary.avgScorePct}`,
       unit: "%",
       icon: Target,
-      accent: "var(--neon-magenta)",
+      accent: "#047857",
     },
     {
       label: "累計学習時間",
       value: formatDuration(summary.totalTimeSec),
       unit: "",
       icon: Timer,
-      accent: "var(--neon-amber)",
+      accent: "#b45309",
     },
   ];
 
@@ -44,14 +44,13 @@ export function SummaryCards({ summary }: Props) {
         return (
           <div
             key={c.label}
-            className="glass rounded-2xl p-4"
-            style={{ borderColor: `color-mix(in oklch, ${c.accent} 30%, transparent)` }}
+            className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
           >
-            <div className="mb-2 flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-muted-foreground">
+            <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-slate-600">
               <Icon className="h-3.5 w-3.5" style={{ color: c.accent }} />
               {c.label}
             </div>
-            <div className="font-display text-2xl font-extrabold" style={{ color: c.accent }}>
+            <div className="text-2xl font-bold" style={{ color: c.accent }}>
               {c.value}
               {c.unit && <span className="ml-0.5 text-sm font-bold">{c.unit}</span>}
             </div>

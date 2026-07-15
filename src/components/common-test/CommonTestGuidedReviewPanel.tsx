@@ -26,13 +26,12 @@ interface Props {
   initialQuestionId?: string;
 }
 
-const DEFAULT_THEME = { primary: "#fbbf24", glowRgb: "251,191,36" };
+const DEFAULT_THEME = { primary: "#2563eb", glowRgb: "37,99,235" };
 
 export function CommonTestGuidedReviewPanel({
   items,
   title = "Guided Review Mode",
   description = "ヒントを少しずつ開き、考える余地を残したまま復習できます。",
-  theme = DEFAULT_THEME,
   compact = false,
   initialQuestionId,
 }: Props) {
@@ -68,8 +67,7 @@ export function CommonTestGuidedReviewPanel({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1.5">
           <div
-            className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold"
-            style={{ background: `${theme.primary}14`, color: theme.primary }}
+            className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700"
           >
             <Lightbulb className="h-3.5 w-3.5" />
             段階復習
@@ -80,10 +78,10 @@ export function CommonTestGuidedReviewPanel({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <MiniBadge label="対象" value={`${orderedItems.length}問`} color={theme.primary} />
-          {wrongCount > 0 && <MiniBadge label="不正解" value={`${wrongCount}問`} color="#e11d48" />}
+          <MiniBadge label="対象" value={`${orderedItems.length}問`} tone="primary" />
+          {wrongCount > 0 && <MiniBadge label="不正解" value={`${wrongCount}問`} tone="strong" />}
           {unresolvedCount > wrongCount && (
-            <MiniBadge label="要確認" value={`${unresolvedCount - wrongCount}問`} color="#ea580c" />
+            <MiniBadge label="要確認" value={`${unresolvedCount - wrongCount}問`} tone="neutral" />
           )}
         </div>
       </div>
@@ -97,43 +95,41 @@ export function CommonTestGuidedReviewPanel({
           const canPracticeVariant = canGenerateCommonTestVariant(item);
           const isVariantPracticeOpen = variantPracticeId === item.questionId;
           const status = getStatus(item);
+          const panelId = `guided-review-${index}`;
 
           return (
             <div
               key={`${item.examId ?? "drill"}:${item.questionId}`}
-              className="overflow-hidden rounded-xl border bg-white"
-              style={{ borderColor: isOpen ? `${theme.primary}40` : "#e2e8f0" }}
+              className={`overflow-hidden rounded-xl border bg-white ${
+                isOpen ? "border-blue-300" : "border-slate-200"
+              }`}
             >
               <button
                 type="button"
                 onClick={() => setOpenId(isOpen ? null : item.questionId)}
-                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50"
+                aria-expanded={isOpen}
+                aria-controls={panelId}
+                className="flex min-h-11 w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600"
               >
                 <div
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-mono text-[11px] font-extrabold"
-                  style={{
-                    background: `${status.color}14`,
-                    border: `1px solid ${status.color}33`,
-                    color: status.color,
-                  }}
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-xs font-extrabold text-slate-700"
                 >
                   {index + 1}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span
-                      className="rounded px-1.5 py-0.5 text-[10px] font-bold"
-                      style={{ color: status.color, background: `${status.color}14` }}
+                      className={`rounded border px-1.5 py-0.5 text-xs font-bold ${status.className}`}
                     >
                       {status.label}
                     </span>
                     {item.difficultyStage && (
-                      <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">
+                      <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600">
                         {formatStage(item.difficultyStage)}
                         {item.dependsOnPrevious ? "・前問利用" : ""}
                       </span>
                     )}
-                    <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">
+                    <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600">
                       {formatAnswerFormat(item.answerFormat)}
                     </span>
                   </div>
@@ -149,9 +145,9 @@ export function CommonTestGuidedReviewPanel({
               </button>
 
               {isOpen && (
-                <div className="space-y-4 border-t border-slate-100 px-4 pb-4 pt-3">
+                <div id={panelId} className="space-y-4 border-t border-slate-100 px-4 pb-4 pt-3">
                   <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-                    <div className="text-[11px] font-bold text-slate-400">
+                    <div className="text-xs font-bold text-slate-500">
                       問題の確認
                     </div>
                     <QuestionMaterial item={item} />
@@ -162,24 +158,23 @@ export function CommonTestGuidedReviewPanel({
                   </div>
 
                   <div className="space-y-2">
-                    {stepsToShow.map((step) => (
-                      <div
-                        key={step.kind}
-                        className="rounded-lg p-3"
-                        style={{
-                          background: getStepColor(step.kind).bg,
-                          border: `1px solid ${getStepColor(step.kind).border}`,
-                        }}
-                      >
-                        <div className="mb-1.5 flex items-center gap-2 text-xs font-extrabold" style={{ color: getStepColor(step.kind).text }}>
-                          {getStepIcon(step.kind)}
-                          {step.label}
+                    {stepsToShow.map((step) => {
+                      const stepTone = getStepTone(step.kind);
+                      return (
+                        <div
+                          key={step.kind}
+                          className={`rounded-lg border p-3 ${stepTone.container}`}
+                        >
+                          <div className={`mb-1.5 flex items-center gap-2 text-xs font-extrabold ${stepTone.label}`}>
+                            {getStepIcon(step.kind)}
+                            {step.label}
+                          </div>
+                          <div className="text-xs leading-relaxed text-slate-700">
+                            <RenderMath text={step.body} className="text-xs leading-relaxed text-slate-700" />
+                          </div>
                         </div>
-                        <div className="text-xs leading-relaxed text-slate-700">
-                          <RenderMath text={step.body} className="text-xs leading-relaxed text-slate-700" />
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -187,7 +182,7 @@ export function CommonTestGuidedReviewPanel({
                       {item.skillTags.slice(0, 5).map((tag) => (
                         <span
                           key={tag}
-                          className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500"
+                          className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600"
                         >
                           {tag}
                         </span>
@@ -203,8 +198,7 @@ export function CommonTestGuidedReviewPanel({
                               [item.questionId]: Math.min(item.steps.length, revealed + 1),
                             }))
                           }
-                          className="rounded-lg px-3 py-2 text-xs font-bold text-white transition-opacity hover:opacity-90"
-                          style={{ background: theme.primary }}
+                          className="min-h-11 rounded-lg bg-blue-700 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                         >
                           次のヒントを開く
                         </button>
@@ -217,7 +211,9 @@ export function CommonTestGuidedReviewPanel({
                               current === item.questionId ? null : item.questionId
                             )
                           }
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700 transition-colors hover:bg-emerald-100"
+                          aria-expanded={isVariantPracticeOpen}
+                          aria-controls={`${panelId}-variant`}
+                          className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700 transition-colors hover:border-blue-300 hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                         >
                           <PlusCircle className="h-3.5 w-3.5" />
                           この型の類題を解く
@@ -225,7 +221,7 @@ export function CommonTestGuidedReviewPanel({
                       )}
                       <Link
                         href={item.nextHref}
-                        className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 transition-colors hover:border-slate-300"
+                        className="inline-flex min-h-11 items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 transition-colors hover:border-blue-300 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                       >
                         関連演習へ
                       </Link>
@@ -233,11 +229,13 @@ export function CommonTestGuidedReviewPanel({
                   </div>
 
                   {canPracticeVariant && isVariantPracticeOpen && (
-                    <CommonTestVariantPracticePanel
-                      sourceItem={item}
-                      theme={theme}
-                      onClose={() => setVariantPracticeId(null)}
-                    />
+                    <div id={`${panelId}-variant`}>
+                      <CommonTestVariantPracticePanel
+                        sourceItem={item}
+                        theme={DEFAULT_THEME}
+                        onClose={() => setVariantPracticeId(null)}
+                      />
+                    </div>
                   )}
                 </div>
               )}
@@ -267,17 +265,17 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
       {item.sharedData && (
         <div className="overflow-x-auto rounded border border-slate-200">
           {item.sharedData.title && (
-            <div className="border-b border-slate-200 bg-slate-50 px-2 py-1.5 text-[11px] font-bold text-slate-600">
-              <RenderMath text={item.sharedData.title} className="text-[11px] font-bold text-slate-600" />
+            <div className="border-b border-slate-200 bg-slate-50 px-2 py-1.5 text-xs font-bold text-slate-600">
+              <RenderMath text={item.sharedData.title} className="text-xs font-bold text-slate-600" />
             </div>
           )}
           {item.sharedData.headers?.length ? (
-            <table className="min-w-full text-left text-[11px] text-slate-600">
+            <table className="min-w-full text-left text-xs text-slate-600">
               <thead>
                 <tr>
                   {item.sharedData.headers.map((header) => (
                     <th key={header} className="border-b border-slate-200 bg-slate-50 px-2 py-1.5 font-bold">
-                      <RenderMath text={header} className="text-[11px] font-bold text-slate-600" />
+                      <RenderMath text={header} className="text-xs font-bold text-slate-600" />
                     </th>
                   ))}
                 </tr>
@@ -287,7 +285,7 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
                   <tr key={rowIndex}>
                     {row.map((cell, cellIndex) => (
                       <td key={`${rowIndex}-${cellIndex}`} className="border-b border-slate-100 px-2 py-1.5">
-                        <RenderMath text={cell} className="text-[11px] text-slate-600" />
+                        <RenderMath text={cell} className="text-xs text-slate-600" />
                       </td>
                     ))}
                   </tr>
@@ -296,10 +294,10 @@ function QuestionMaterial({ item }: { item: CommonTestGuidedReviewItem }) {
             </table>
           ) : null}
           {item.sharedData.notes?.length ? (
-            <div className="space-y-1 px-2 py-1.5 text-[11px] text-slate-500">
+            <div className="space-y-1 px-2 py-1.5 text-xs text-slate-500">
               {item.sharedData.notes.map((note) => (
                 <div key={note}>
-                  <RenderMath text={note} className="text-[11px] leading-relaxed text-slate-500" />
+                  <RenderMath text={note} className="text-xs leading-relaxed text-slate-500" />
                 </div>
               ))}
             </div>
@@ -319,7 +317,7 @@ function AnswerLine({ item }: { item: CommonTestGuidedReviewItem }) {
   return (
     <div className="grid gap-2 sm:grid-cols-2">
       <div className="rounded-lg border border-slate-200 bg-white p-3">
-        <div className="text-[10px] font-bold text-slate-400">
+        <div className="text-xs font-bold text-slate-500">
           あなたの解答
         </div>
         <div className="mt-1 text-xs font-bold text-slate-700">
@@ -331,7 +329,7 @@ function AnswerLine({ item }: { item: CommonTestGuidedReviewItem }) {
         </div>
       </div>
       <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
-        <div className="text-[10px] font-bold text-emerald-600">
+        <div className="text-xs font-bold text-emerald-700">
           正答
         </div>
         <div className="mt-1 text-xs font-bold text-emerald-700">
@@ -342,27 +340,53 @@ function AnswerLine({ item }: { item: CommonTestGuidedReviewItem }) {
   );
 }
 
-function MiniBadge({ label, value, color }: { label: string; value: string; color: string }) {
+function MiniBadge({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "primary" | "strong" | "neutral";
+}) {
+  const toneClass = {
+    primary: "border-blue-200 bg-blue-50 text-blue-800",
+    strong: "border-slate-300 bg-slate-100 text-slate-900",
+    neutral: "border-slate-200 bg-white text-slate-700",
+  }[tone];
+
   return (
-    <div className="rounded-lg px-3 py-2 text-right" style={{ background: `${color}12`, border: `1px solid ${color}33` }}>
-      <div className="text-[10px] text-slate-400">{label}</div>
-      <div className="font-mono text-sm font-extrabold" style={{ color }}>{value}</div>
+    <div className={`rounded-lg border px-3 py-2 text-right ${toneClass}`}>
+      <div className="text-xs font-medium">{label}</div>
+      <div className="text-sm font-extrabold">{value}</div>
     </div>
   );
 }
 
-function getStatus(item: CommonTestGuidedReviewItem): { label: string; color: string } {
-  if (item.isCorrect === true) return { label: "正解", color: "#059669" };
-  if (item.userAnswerText) return { label: "不正解", color: "#e11d48" };
-  if (item.isCorrect === false) return { label: "未解答", color: "#ea580c" };
-  return { label: "復習", color: "#d97706" };
+function getStatus(item: CommonTestGuidedReviewItem): { label: string; className: string } {
+  if (item.isCorrect === true) {
+    return { label: "正解", className: "border-blue-200 bg-blue-50 text-blue-700" };
+  }
+  if (item.userAnswerText) {
+    return { label: "不正解", className: "border-slate-300 bg-slate-100 text-slate-900" };
+  }
+  if (item.isCorrect === false) {
+    return { label: "未解答", className: "border-slate-200 bg-white text-slate-700" };
+  }
+  return { label: "復習", className: "border-blue-200 bg-white text-blue-700" };
 }
 
-function getStepColor(kind: string): { bg: string; border: string; text: string } {
-  if (kind === "explanation") return { bg: "#f0fdf4", border: "#bbf7d0", text: "#059669" };
-  if (kind === "trap") return { bg: "#fff1f2", border: "#fecdd3", text: "#e11d48" };
-  if (kind === "strategy") return { bg: "#eff6ff", border: "#bfdbfe", text: "#2563eb" };
-  return { bg: "#fffbeb", border: "#fde68a", text: "#d97706" };
+function getStepTone(kind: string): { container: string; label: string } {
+  if (kind === "strategy") {
+    return { container: "border-blue-200 bg-blue-50", label: "text-blue-700" };
+  }
+  if (kind === "trap") {
+    return { container: "border-slate-300 bg-slate-100", label: "text-slate-900" };
+  }
+  if (kind === "explanation") {
+    return { container: "border-slate-200 bg-slate-50", label: "text-slate-700" };
+  }
+  return { container: "border-slate-200 bg-white", label: "text-slate-700" };
 }
 
 function getStepIcon(kind: string) {

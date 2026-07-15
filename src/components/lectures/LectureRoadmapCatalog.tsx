@@ -20,6 +20,7 @@ import {
 } from "@/lib/common-test-history";
 import { getLectureEntry, summarizeLecture, type LectureStatus } from "@/lib/lecture-progress";
 import { useAllLectureProgress } from "@/hooks/useLectureProgress";
+import { LearningState } from "@/components/learning/LearningPageFrame";
 import { LectureCardFooter } from "./LectureCardFooter";
 
 type LectureFilter =
@@ -116,7 +117,9 @@ export function LectureRoadmapCatalog() {
               進捗や単元で絞り込めます。迷ったらロードマップ順に進めてください。
             </p>
           </div>
-          <span className="text-xs font-bold text-slate-400">{filteredLectures.length}講義</span>
+          <span className="text-xs font-bold text-slate-500" aria-live="polite">
+            {filteredLectures.length}講義
+          </span>
         </div>
 
         <div className="mb-5 flex gap-2 overflow-x-auto pb-1">
@@ -125,7 +128,8 @@ export function LectureRoadmapCatalog() {
               key={item.id}
               type="button"
               onClick={() => setFilter(item.id)}
-              className={`shrink-0 rounded-full border px-3 py-2 text-xs font-bold transition ${
+              aria-pressed={filter === item.id}
+              className={`min-h-11 shrink-0 rounded-full border px-4 py-2 text-xs font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
                 filter === item.id
                   ? "border-blue-600 bg-blue-600 text-white"
                   : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:text-blue-700"
@@ -136,11 +140,30 @@ export function LectureRoadmapCatalog() {
           ))}
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-2">
-          {filteredLectures.map((lecture) => (
-            <LectureCard key={lecture.id} lecture={lecture} />
-          ))}
-        </div>
+        {filteredLectures.length > 0 ? (
+          <div className="grid gap-4 lg:grid-cols-2">
+            {filteredLectures.map((lecture) => (
+              <LectureCard key={lecture.id} lecture={lecture} />
+            ))}
+          </div>
+        ) : (
+          <LearningState
+            kind="empty"
+            headingLevel={3}
+            title="条件に合う講義がありません"
+            description="絞り込みを解除すると、公開中の講義をすべて確認できます。"
+            compact
+            actions={
+              <button
+                type="button"
+                className="button-secondary"
+                onClick={() => setFilter("all")}
+              >
+                すべての講義を表示
+              </button>
+            }
+          />
+        )}
       </section>
     </div>
   );
@@ -194,7 +217,7 @@ function RecommendedLectureCard({
         </div>
         <Link
           href={ctaHref}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-violet-700"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-violet-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
         >
           {ctaLabel}
           <ArrowRight className="h-4 w-4" />
@@ -229,7 +252,7 @@ function LectureRoadmap({ hydrated }: { hydrated: boolean }) {
           const summary = summarizeLecture(getLectureEntry(state, lecture.slug), lecture);
           return (
             <li key={step.slug} className="relative grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:grid-cols-[42px_1fr_auto] sm:items-center">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white font-mono text-sm font-extrabold text-blue-700 ring-1 ring-blue-100">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-extrabold tabular-nums text-blue-700 ring-1 ring-blue-100">
                 {index + 1}
               </div>
               <div className="min-w-0">
@@ -243,7 +266,7 @@ function LectureRoadmap({ hydrated }: { hydrated: boolean }) {
                   <div className="h-1.5 w-full max-w-[260px] overflow-hidden rounded-full bg-white">
                     <div className="h-full rounded-full bg-blue-500" style={{ width: `${hydrated ? summary.percent : 0}%` }} />
                   </div>
-                  <span className="font-mono text-xs font-bold text-slate-600">{hydrated ? summary.percent : 0}%</span>
+                  <span className="text-xs font-bold tabular-nums text-slate-600">{hydrated ? summary.percent : 0}%</span>
                 </div>
               </div>
               <RoadmapCta lecture={lecture} status={hydrated ? summary.status : "not-started"} />
@@ -270,7 +293,7 @@ function RoadmapCta({ lecture, status }: { lecture: Lecture; status: LectureStat
     <Link
       href={href}
       aria-label={`${lecture.title}を${label}`}
-      className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition ${
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
         status === "completed"
           ? "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
           : "bg-blue-600 text-white hover:bg-blue-700"
@@ -287,10 +310,10 @@ function LectureCard({ lecture }: { lecture: Lecture }) {
     <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:border-blue-200 hover:shadow-md">
       <div className="border-b border-slate-100 bg-slate-50 px-5 py-3">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-violet-50 px-2.5 py-1 text-[11px] font-extrabold text-violet-700 ring-1 ring-violet-100">
+          <span className="rounded-full bg-violet-50 px-2.5 py-1 text-xs font-extrabold text-violet-700 ring-1 ring-violet-100">
             イベント講義
           </span>
-          <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-extrabold text-blue-700 ring-1 ring-blue-100">
+          <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-extrabold text-blue-700 ring-1 ring-blue-100">
             重点講座
           </span>
         </div>
@@ -314,7 +337,7 @@ function LectureCard({ lecture }: { lecture: Lecture }) {
           {lecture.tags.slice(0, 6).map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] font-medium text-slate-600"
+              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-600"
             >
               <Tag className="h-3 w-3 text-slate-400" />
               {tag}
@@ -331,7 +354,7 @@ function LectureCard({ lecture }: { lecture: Lecture }) {
 function MetaPill({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-      <div className="text-[10px] font-bold text-slate-500">{label}</div>
+      <div className="text-xs font-bold text-slate-500">{label}</div>
       <div className="mt-0.5 truncate text-sm font-extrabold text-slate-900">{value}</div>
     </div>
   );
@@ -357,7 +380,7 @@ function StatusPill({ status }: { status: LectureStatus }) {
   }[status];
   const Icon = meta.icon;
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold ${meta.className}`}>
+    <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-bold ${meta.className}`}>
       <Icon className="h-3.5 w-3.5" />
       {meta.label}
     </span>

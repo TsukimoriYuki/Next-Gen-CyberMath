@@ -147,6 +147,15 @@ test("/common-test/simulator/math-1a-70 — 旧プリセットは手動PDF版へ
   expect(new URL(page.url()).pathname).toBe("/common-test/simulator/common-test-math-1a-manual-001");
 });
 
+test("/common-test/simulator/math-1a-paper-001 — 旧冊子URLは手動PDF版へリダイレクトされる", async ({ page }) => {
+  await page.goto("/common-test/simulator/math-1a-paper-001", {
+    waitUntil: "domcontentloaded",
+  });
+  expect(new URL(page.url()).pathname).toBe(
+    "/common-test/simulator/common-test-math-1a-manual-001",
+  );
+});
+
 test("/common-test/simulator/math-2bc-70 — 旧プリセットはproductionで404", async ({ page }) => {
   const response = await page.goto("/common-test/simulator/math-2bc-70");
   expect(response?.status()).toBe(404);

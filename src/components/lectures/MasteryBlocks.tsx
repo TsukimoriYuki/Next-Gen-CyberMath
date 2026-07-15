@@ -49,7 +49,7 @@ export function SolutionFlowBlock({ block }: { block: SolutionFlowBlockData }) {
           {block.title ?? "解法判別フロー"}
         </div>
         {block.intro && (
-          <MathText className="mt-1 text-xs leading-5 text-blue-900/75">{block.intro}</MathText>
+          <MathText className="mt-1 text-xs leading-5 text-blue-900">{block.intro}</MathText>
         )}
       </div>
       <ol className="divide-y divide-slate-100">
@@ -59,8 +59,8 @@ export function SolutionFlowBlock({ block }: { block: SolutionFlowBlockData }) {
             className="grid gap-2 p-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-4 sm:px-6"
           >
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-              <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-slate-600">
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-slate-200 text-[9px] font-mono text-slate-600">
+              <div className="flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-slate-600">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-700">
                   {i + 1}
                 </span>
                 見えている条件
@@ -72,7 +72,7 @@ export function SolutionFlowBlock({ block }: { block: SolutionFlowBlockData }) {
               <span className="text-xs font-bold text-blue-700 sm:hidden">↓ 道具を選ぶ</span>
             </div>
             <div className="rounded-xl border border-blue-200 bg-blue-50 p-3">
-              <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-blue-700">
+              <div className="flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-blue-700">
                 <Wrench className="h-3 w-3" />
                 使う道具
               </div>
@@ -118,19 +118,20 @@ export function DiscriminationDrillBlock({
     <section
       data-testid="discrimination-drill"
       data-block-id={block.id}
-      className="overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-sm"
+      className="overflow-hidden rounded-2xl border border-blue-200 bg-white shadow-sm"
     >
-      <div className="border-b border-violet-100 bg-violet-50 px-5 py-4 sm:px-6">
+      <div className="border-b border-blue-100 bg-blue-50 px-5 py-4 sm:px-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2 text-sm font-extrabold text-violet-800">
+          <div className="flex items-center gap-2 text-sm font-extrabold text-blue-800">
             <Target className="h-4 w-4" />
             {block.title ?? "判別ドリル：初手は何を使う？"}
           </div>
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold ${
+            aria-live="polite"
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-bold ${
               allDone
                 ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                : "border-violet-200 bg-white text-violet-600"
+                : "border-blue-200 bg-white text-blue-700"
             }`}
           >
             {allDone ? (
@@ -145,7 +146,7 @@ export function DiscriminationDrillBlock({
             )}
           </span>
         </div>
-        <MathText className="mt-1 text-xs leading-5 text-violet-900/75">
+        <MathText className="mt-1 text-xs leading-5 text-blue-900">
           {block.intro ??
             "計算はしません。条件を見て「最初に使う道具」を選び、理由まで言えるかを確認します。"}
         </MathText>
@@ -163,13 +164,13 @@ export function DiscriminationDrillBlock({
               className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
             >
               <div className="flex items-start gap-2">
-                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-600 font-mono text-xs font-extrabold text-white">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-700 text-xs font-extrabold text-white">
                   {i + 1}
                 </span>
                 <div className="min-w-0">
                   <MathText className="text-sm font-semibold text-slate-800">{item.condition}</MathText>
                   {item.goal && (
-                    <MathText className="mt-1 text-xs font-bold text-violet-700">
+                    <MathText className="mt-1 text-xs font-bold text-blue-700">
                       {`求めたいもの：${item.goal}`}
                     </MathText>
                   )}
@@ -193,14 +194,14 @@ export function DiscriminationDrillBlock({
                       onClick={() => choose(i, choice)}
                       aria-label={`選択肢: ${mathLabel(choice)}`}
                       aria-pressed={isChosen}
-                      className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-sm font-bold transition ${
+                      className={`flex min-h-11 items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
                         showCorrect
                           ? "border-emerald-300 bg-emerald-50 text-emerald-800"
                           : showWrong
                             ? "border-rose-300 bg-rose-50 text-rose-800"
                             : answered
                               ? "border-slate-200 bg-white text-slate-400"
-                              : "border-slate-200 bg-white text-slate-700 hover:border-violet-300 hover:bg-violet-50"
+                              : "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50"
                       }`}
                     >
                       {showCorrect && <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />}
@@ -213,6 +214,7 @@ export function DiscriminationDrillBlock({
 
               {answered && (
                 <div
+                  role="status"
                   className={`mt-3 rounded-xl border p-3 text-xs leading-5 ${
                     chosen === item.answer
                       ? "border-emerald-200 bg-emerald-50 text-emerald-900"
@@ -235,7 +237,7 @@ export function DiscriminationDrillBlock({
             <button
               type="button"
               onClick={reset}
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-500 transition hover:border-slate-300 hover:text-slate-700"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-blue-300 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               もう一度
@@ -253,15 +255,15 @@ export function MistakeRecoveryBlock({ block }: { block: MistakeRecoveryBlockDat
     <section
       data-testid="mistake-recovery"
       data-block-id={block.id}
-      className="overflow-hidden rounded-2xl border border-amber-200 bg-white shadow-sm"
+      className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
     >
-      <div className="border-b border-amber-100 bg-amber-50 px-5 py-4 sm:px-6">
-        <div className="flex items-center gap-2 text-sm font-extrabold text-amber-800">
+      <div className="border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6">
+        <div className="flex items-center gap-2 text-sm font-extrabold text-slate-800">
           <LifeBuoy className="h-4 w-4" />
           {block.title ?? "ミス別補講：間違えた理由から戻る"}
         </div>
         {block.intro && (
-          <MathText className="mt-1 text-xs leading-5 text-amber-900/75">{block.intro}</MathText>
+          <MathText className="mt-1 text-xs leading-5 text-slate-700">{block.intro}</MathText>
         )}
       </div>
       <ul className="divide-y divide-slate-100">
@@ -270,13 +272,13 @@ export function MistakeRecoveryBlock({ block }: { block: MistakeRecoveryBlockDat
             key={i}
             className="grid gap-2 p-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-4 sm:px-6"
           >
-            <div className="rounded-xl border border-rose-100 bg-rose-50/60 p-3">
-              <div className="text-[10px] font-bold uppercase tracking-wide text-rose-500">
+            <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <div className="text-xs font-bold uppercase tracking-wide text-slate-600">
                 間違えた理由
               </div>
               <MathText className="mt-0.5 text-sm font-semibold text-slate-800">{item.symptom}</MathText>
             </div>
-            <ArrowRight className="hidden h-5 w-5 justify-self-center text-amber-400 sm:block" />
+            <ArrowRight className="hidden h-5 w-5 justify-self-center text-blue-500 sm:block" />
             <RecoveryAction action={item.action} href={item.href} />
           </li>
         ))}
@@ -288,15 +290,15 @@ export function MistakeRecoveryBlock({ block }: { block: MistakeRecoveryBlockDat
 function RecoveryAction({ action, href }: { action: string; href?: string }) {
   const inner = (
     <>
-      <div className="text-[10px] font-bold uppercase tracking-wide text-emerald-600">戻る場所</div>
-      <MathText className="mt-0.5 text-sm font-bold text-emerald-800">{action}</MathText>
+      <div className="text-xs font-bold uppercase tracking-wide text-blue-700">戻る場所</div>
+      <MathText className="mt-0.5 text-sm font-bold text-blue-900">{action}</MathText>
     </>
   );
   const baseClass =
-    "block rounded-xl border border-emerald-200 bg-emerald-50 p-3 transition hover:border-emerald-300 hover:bg-emerald-100";
+    "block min-h-11 rounded-xl border border-blue-200 bg-blue-50 p-3 transition hover:border-blue-300 hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2";
 
   if (!href) {
-    return <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">{inner}</div>;
+    return <div className="rounded-xl border border-blue-200 bg-blue-50 p-3">{inner}</div>;
   }
   if (href.startsWith("#")) {
     return (

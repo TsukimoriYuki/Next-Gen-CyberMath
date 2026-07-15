@@ -2,9 +2,12 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight, FileText } from "lucide-react";
+import { SubjectPublicationNotice } from "@/components/learning/SubjectPublicationNotice";
 import { getCommonTestExamPreset, resolveExamPresetMeta } from "@/data/common-test-exams";
 import { getCommonTestExamQuestions } from "@/lib/common-test-exams";
 import { CommonTestExamRunner } from "@/components/common-test/exam/CommonTestExamRunner";
+import { resolveTopLevelSubjectId } from "@/lib/subject-publication";
+import { requireSubjectPageAccess } from "@/lib/subject-route-guard";
 
 interface Props {
   params: Promise<{ examId: string }>;
@@ -40,22 +43,53 @@ export default async function ExamPage({ params }: Props) {
   if (!preset) notFound();
 
   const meta = resolveExamPresetMeta(preset);
+  const subjectId = resolveTopLevelSubjectId(preset.subjectId);
+  if (!subjectId) notFound();
 
-  if (meta.status !== "public") {
+  const resourcePublished = meta.status === "public";
+  // A legacy mathematics IA preset keeps its public redirect contract. The
+  // first guard validates its real subject before the redirect can happen.
+  const subjectAccess = requireSubjectPageAccess(subjectId, "exams", {
+    resourcePublished: true,
+  });
+
+  if (!resourcePublished) {
     // 数学IAの旧プリセットは、手動作成PDF正本の本番模試へ一本化する。
-    if (preset.subjectId === "math-1a") {
+    if (
+      preset.subjectId === "math-1a" &&
+      subjectAccess.runtime !== "development"
+    ) {
       redirect("/common-test/simulator/common-test-math-1a-manual-001");
     }
-    if (process.env.NODE_ENV === "production") notFound();
+
+    const access = requireSubjectPageAccess(subjectId, "exams", {
+      resourcePublished,
+    });
     // 数学II・B・C・英語リーディングにはまだ手動作成PDF版が無いため、
     // 本番模試のふりをさせず、旧試作版であることを明示した案内だけを表示する。
-    return <LegacyPresetNotice title={preset.title} subjectRoute={SUBJECT_ROUTE[preset.subjectId]} />;
+    return (
+      <>
+        <SubjectPublicationNotice access={access} />
+        <LegacyPresetNotice
+          title={preset.title}
+          subjectRoute={SUBJECT_ROUTE[preset.subjectId]}
+        />
+      </>
+    );
   }
 
+  const access = requireSubjectPageAccess(subjectId, "exams", {
+    resourcePublished,
+  });
   const questions = getCommonTestExamQuestions(examId);
   if (questions.length === 0) notFound();
 
-  return <CommonTestExamRunner preset={preset} questions={questions} />;
+  return (
+    <>
+      <SubjectPublicationNotice access={access} />
+      <CommonTestExamRunner preset={preset} questions={questions} />
+    </>
+  );
 }
 
 function LegacyPresetNotice({
@@ -66,7 +100,7 @@ function LegacyPresetNotice({
   subjectRoute?: string;
 }) {
   return (
-    <main className="min-h-screen bg-stone-50 text-slate-950">
+    <div className="min-h-screen bg-stone-50 text-slate-950">
       <div className="mx-auto max-w-xl px-4 py-16 sm:px-6">
         <Link
           href="/common-test/simulator"
@@ -104,6 +138,6 @@ function LegacyPresetNotice({
           数学I・数学Aのオリジナル模試を見る
         </Link>
       </div>
-    </main>
+    </div>
   );
 }

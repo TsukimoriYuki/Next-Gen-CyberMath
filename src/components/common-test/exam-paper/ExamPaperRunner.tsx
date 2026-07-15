@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
 import Link from "next/link";
 import { ArrowLeft, BookOpen, CheckCircle2, Clock, FileText, RotateCcw, Send } from "lucide-react";
 import type { ExamPaper } from "@/data/exam-papers";
@@ -31,6 +38,9 @@ export function ExamPaperRunner({ paper }: Props) {
   const [zoom, setZoom] = useState(1);
   const [mobileTab, setMobileTab] = useState<MobileTab>("paper");
   const [elapsedSec, setElapsedSec] = useState(0);
+  const paperTabRef = useRef<HTMLButtonElement>(null);
+  const markSheetTabRef = useRef<HTMLButtonElement>(null);
+  const mobileTabsId = useId();
   const stats = getExamPaperStats(paper);
   const score = useMemo(() => scoreExamPaper(paper, answers), [paper, answers]);
 
@@ -68,14 +78,36 @@ export function ExamPaperRunner({ paper }: Props) {
     setElapsedSec(0);
   }
 
+  function selectMobileTab(tab: MobileTab, moveFocus = false) {
+    setMobileTab(tab);
+    if (moveFocus) {
+      const target = tab === "paper" ? paperTabRef.current : markSheetTabRef.current;
+      target?.focus();
+    }
+  }
+
+  function handleMobileTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const nextTab =
+      event.key === "Home"
+        ? "paper"
+        : event.key === "End"
+          ? "marksheet"
+          : mobileTab === "paper"
+            ? "marksheet"
+            : "paper";
+    selectMobileTab(nextTab, true);
+  }
+
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="min-w-0">
             <Link
               href="/common-test/simulator"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-700"
+              className="inline-flex min-h-11 items-center gap-1.5 px-2 text-xs font-bold text-slate-600 hover:text-blue-700"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               本番演習一覧へ戻る
@@ -107,7 +139,7 @@ export function ExamPaperRunner({ paper }: Props) {
               <button
                 type="button"
                 onClick={() => setMode("submitted")}
-                className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-extrabold text-white transition hover:bg-slate-800"
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-700 px-4 py-2 text-sm font-extrabold text-white transition hover:bg-blue-800"
               >
                 <Send className="h-4 w-4" />
                 提出する
@@ -116,7 +148,7 @@ export function ExamPaperRunner({ paper }: Props) {
               <button
                 type="button"
                 onClick={reset}
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-extrabold text-slate-700 transition hover:border-blue-200 hover:text-blue-700"
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-extrabold text-slate-700 transition hover:border-blue-200 hover:text-blue-700"
               >
                 <RotateCcw className="h-4 w-4" />
                 もう一度
@@ -144,21 +176,43 @@ export function ExamPaperRunner({ paper }: Props) {
       )}
 
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
-        <div className="mb-3 grid grid-cols-2 rounded-xl border border-slate-200 bg-white p-1 lg:hidden">
+        <div
+          role="tablist"
+          aria-label="模試の表示切り替え"
+          className="mb-3 grid grid-cols-2 rounded-xl border border-slate-200 bg-white p-1 lg:hidden"
+        >
           <button
+            ref={paperTabRef}
             type="button"
-            onClick={() => setMobileTab("paper")}
-            className={`rounded-lg px-3 py-2 text-sm font-bold ${
-              mobileTab === "paper" ? "bg-slate-950 text-white" : "text-slate-600"
+            role="tab"
+            id={`${mobileTabsId}-paper-tab`}
+            aria-selected={mobileTab === "paper"}
+            aria-controls={`${mobileTabsId}-paper-panel`}
+            tabIndex={mobileTab === "paper" ? 0 : -1}
+            onClick={() => selectMobileTab("paper")}
+            onKeyDown={handleMobileTabKeyDown}
+            className={`min-h-11 rounded-lg px-3 py-2 text-sm font-bold ${
+              mobileTab === "paper"
+                ? "bg-blue-50 text-blue-800 ring-1 ring-blue-200"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
             }`}
           >
             冊子
           </button>
           <button
+            ref={markSheetTabRef}
             type="button"
-            onClick={() => setMobileTab("marksheet")}
-            className={`rounded-lg px-3 py-2 text-sm font-bold ${
-              mobileTab === "marksheet" ? "bg-slate-950 text-white" : "text-slate-600"
+            role="tab"
+            id={`${mobileTabsId}-marksheet-tab`}
+            aria-selected={mobileTab === "marksheet"}
+            aria-controls={`${mobileTabsId}-marksheet-panel`}
+            tabIndex={mobileTab === "marksheet" ? 0 : -1}
+            onClick={() => selectMobileTab("marksheet")}
+            onKeyDown={handleMobileTabKeyDown}
+            className={`min-h-11 rounded-lg px-3 py-2 text-sm font-bold ${
+              mobileTab === "marksheet"
+                ? "bg-blue-50 text-blue-800 ring-1 ring-blue-200"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
             }`}
           >
             マーク欄
@@ -166,7 +220,13 @@ export function ExamPaperRunner({ paper }: Props) {
         </div>
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
-          <div className={mobileTab === "paper" ? "block" : "hidden lg:block"}>
+          <div
+            id={`${mobileTabsId}-paper-panel`}
+            role="tabpanel"
+            aria-labelledby={`${mobileTabsId}-paper-tab`}
+            tabIndex={0}
+            className={mobileTab === "paper" ? "block" : "hidden lg:block"}
+          >
             <ExamPaperViewer
               paper={paper}
               currentPage={currentPage}
@@ -175,7 +235,13 @@ export function ExamPaperRunner({ paper }: Props) {
               onZoomChange={setZoom}
             />
           </div>
-          <div className={mobileTab === "marksheet" ? "block" : "hidden lg:block"}>
+          <div
+            id={`${mobileTabsId}-marksheet-panel`}
+            role="tabpanel"
+            aria-labelledby={`${mobileTabsId}-marksheet-tab`}
+            tabIndex={0}
+            className={mobileTab === "marksheet" ? "block" : "hidden lg:block"}
+          >
             <ExamMarkSheetPanel
               paper={paper}
               answers={answers}
@@ -189,7 +255,7 @@ export function ExamPaperRunner({ paper }: Props) {
 
         {mode === "review" && <ReviewPanel paper={paper} />}
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -240,7 +306,7 @@ function ResultSummary({
 
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(220px,0.85fr)]">
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-              <div className="text-[11px] font-bold text-slate-500">大問別得点</div>
+              <div className="text-xs font-bold text-slate-500">大問別得点</div>
               <div className="mt-2 grid gap-2 sm:grid-cols-2">
                 {sectionScores.map((section) => (
                   <div
@@ -251,11 +317,11 @@ function ResultSummary({
                       <div className="truncate text-xs font-bold text-slate-800">
                         {section.title}
                       </div>
-                      <div className="mt-0.5 text-[11px] text-slate-500">
+                      <div className="mt-0.5 text-xs text-slate-500">
                         {section.correctSlots} / {section.totalSlots}マーク
                       </div>
                     </div>
-                    <div className="shrink-0 font-mono text-sm font-extrabold text-slate-950">
+                    <div className="shrink-0 text-sm font-extrabold tabular-nums text-slate-950">
                       {formatScore(section.score)} / {formatScore(section.maxScore)}
                     </div>
                   </div>
@@ -264,7 +330,7 @@ function ResultSummary({
             </div>
 
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-              <div className="text-[11px] font-bold text-slate-500">見直しメモ</div>
+              <div className="text-xs font-bold text-slate-500">見直しメモ</div>
               <div className="mt-2 space-y-2 text-xs leading-6 text-slate-600">
                 <SlotLabelList title="未入力" labels={unansweredLabels} emptyText="未入力なし" />
                 <SlotLabelList title="フラグ" labels={flaggedLabels} emptyText="フラグなし" />
@@ -277,7 +343,7 @@ function ResultSummary({
           <button
             type="button"
             onClick={onReview}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-extrabold text-white transition hover:bg-blue-700"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2 text-sm font-extrabold text-white transition hover:bg-blue-800"
           >
             <CheckCircle2 className="h-4 w-4" />
             復習モードで解説を見る
@@ -301,7 +367,7 @@ function SlotLabelList({
     <div>
       <span className="font-bold text-slate-700">{title}: </span>
       {labels.length > 0 ? (
-        <span className="break-words font-mono">{labels.map((label) => `[${label}]`).join(" ")}</span>
+        <span className="break-words tabular-nums">{labels.map((label) => `[${label}]`).join(" ")}</span>
       ) : (
         <span className="text-emerald-700">{emptyText}</span>
       )}
@@ -349,7 +415,7 @@ function ReviewPanel({ paper }: { paper: ExamPaper }) {
                     <Link
                       key={lecture.href}
                       href={lecture.href}
-                      className="rounded-lg border border-blue-100 bg-white px-3 py-2 text-sm font-bold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
+                      className="flex min-h-11 flex-col justify-center rounded-lg border border-blue-100 bg-white px-3 py-2 text-sm font-bold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
                     >
                       <span className="block">{lecture.label}</span>
                       {lecture.note && (
@@ -388,8 +454,8 @@ function StatusPill({
     >
       {icon}
       <div>
-        <div className="text-[10px] font-bold text-slate-500">{label}</div>
-        <div className="font-mono text-sm font-extrabold">{value}</div>
+        <div className="text-xs font-bold text-slate-500">{label}</div>
+        <div className="text-sm font-extrabold tabular-nums">{value}</div>
       </div>
     </div>
   );
@@ -398,8 +464,8 @@ function StatusPill({
 function Metric({ label, value, muted = false }: { label: string; value: string; muted?: boolean }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-      <div className="text-[11px] font-bold text-slate-500">{label}</div>
-      <div className={`mt-1 font-mono text-lg font-extrabold ${muted ? "text-emerald-600" : "text-slate-950"}`}>
+      <div className="text-xs font-bold text-slate-500">{label}</div>
+      <div className={`mt-1 text-lg font-extrabold tabular-nums ${muted ? "text-emerald-600" : "text-slate-950"}`}>
         {value}
       </div>
     </div>

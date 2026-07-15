@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { getNextReviewDate } from "@/lib/review-schedule";
+import { canAccessReviewItem } from "@/lib/review-publication";
 
 // POST /api/review/create
 // 復習アイテムを作成または更新（upsert）する。
@@ -32,13 +33,24 @@ export async function POST(request: Request) {
       skillTags = [],
     } = body ?? {};
 
-    if (!itemType || !itemId || !source) {
+    if (
+      typeof itemType !== "string" ||
+      typeof itemId !== "string" ||
+      typeof source !== "string" ||
+      !itemType ||
+      !itemId ||
+      !source ||
+      (subjectId != null && typeof subjectId !== "string")
+    ) {
       return Response.json({ ok: false, error: "missing required fields" }, { status: 400 });
     }
 
     const VALID_TYPES = ["common-test-drill", "common-test-lecture", "math-problem", "english-problem"];
     if (!VALID_TYPES.includes(itemType)) {
       return Response.json({ ok: false, error: "invalid itemType" }, { status: 400 });
+    }
+    if (!canAccessReviewItem({ itemType, itemId, subjectId })) {
+      return Response.json({ ok: false, error: "not found" }, { status: 404 });
     }
 
     const tomorrow = getNextReviewDate(0);

@@ -3,11 +3,8 @@
 import React, { useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import {
-  Activity,
   BookMarked,
   BookOpen,
-  ChevronLeft,
-  LineChart,
   Network,
   RotateCcw,
   Sigma,
@@ -46,16 +43,50 @@ import { ENGLISH_LEVEL_META } from "@/lib/english-types";
 import { LearningCalendar } from "@/components/dashboard/LearningCalendar";
 import { ReviewQueuePanel } from "@/components/review/ReviewQueuePanel";
 import { CommonTestReviewSummary } from "@/components/common-test/CommonTestReviewSummary";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+  LearningState,
+  LearningStatusBadge,
+} from "@/components/learning/LearningPageFrame";
 import { SITE_NAME } from "@/lib/site";
 
 type Subject = "MATH" | "ENGLISH";
+
+const SUBJECT_TABS: readonly {
+  value: Subject;
+  label: string;
+  icon: React.ElementType;
+  tabId: string;
+  panelId: string;
+}[] = [
+  {
+    value: "MATH",
+    label: "数学",
+    icon: Sigma,
+    tabId: "mypage-math-tab",
+    panelId: "mypage-math-panel",
+  },
+  {
+    value: "ENGLISH",
+    label: "英語",
+    icon: BookOpen,
+    tabId: "mypage-english-tab",
+    panelId: "mypage-english-panel",
+  },
+];
 
 const noopSubscribe = () => () => {};
 
 export default function MyPage() {
   const [subject, setSubject] = useState<Subject>("MATH");
 
-  const attempts = useSyncExternalStore(subscribeAttempts, getAttemptsSnapshot, getAttemptsServerSnapshot);
+  const attempts = useSyncExternalStore(
+    subscribeAttempts,
+    getAttemptsSnapshot,
+    getAttemptsServerSnapshot,
+  );
   const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
 
   const summary = useMemo(() => summarize(attempts), [attempts]);
@@ -69,7 +100,10 @@ export default function MyPage() {
     getEnglishAttemptsSnapshot,
     getEnglishAttemptsServerSnapshot,
   );
-  const englishStats = useMemo(() => computeEnglishStats(englishAttempts), [englishAttempts]);
+  const englishStats = useMemo(
+    () => computeEnglishStats(englishAttempts),
+    [englishAttempts],
+  );
 
   const clearHistory = () => {
     if (typeof window === "undefined") return;
@@ -83,174 +117,262 @@ export default function MyPage() {
     clearEnglishAttemptsLocal();
   };
 
+  const selectTab = (nextSubject: Subject, moveFocus = false) => {
+    setSubject(nextSubject);
+    if (!moveFocus) return;
+    const nextTab = SUBJECT_TABS.find((tab) => tab.value === nextSubject);
+    if (nextTab) document.getElementById(nextTab.tabId)?.focus();
+  };
+
+  const handleTabKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    currentSubject: Subject,
+  ) => {
+    const currentIndex = SUBJECT_TABS.findIndex(
+      (tab) => tab.value === currentSubject,
+    );
+    let nextIndex: number | null = null;
+
+    if (event.key === "ArrowRight") {
+      nextIndex = (currentIndex + 1) % SUBJECT_TABS.length;
+    } else if (event.key === "ArrowLeft") {
+      nextIndex =
+        (currentIndex - 1 + SUBJECT_TABS.length) % SUBJECT_TABS.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = SUBJECT_TABS.length - 1;
+    }
+
+    if (nextIndex === null) return;
+    event.preventDefault();
+    selectTab(SUBJECT_TABS[nextIndex].value, true);
+  };
+
+  const activeAttemptCount =
+    subject === "MATH" ? attempts.length : englishAttempts.length;
+
   return (
-    <div className="mypage-academic relative min-h-screen bg-slate-50 text-slate-950">
-      <div
-        className="mypage-grid-bg pointer-events-none fixed inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,210,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,210,255,0.025) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
+    <LearningPageShell width="content">
+      <LearningBreadcrumbs
+        items={[
+          { label: SITE_NAME, href: "/" },
+          { label: "マイページ" },
+        ]}
+      />
+      <LearningPageHeader
+        eyebrow="学習管理"
+        title="学習分析"
+        description="数学と英語の学習データ、復習キュー、次に解くべき内容をまとめて確認できます。"
       />
 
-      <div className="relative mx-auto max-w-5xl px-4 py-10 sm:px-6">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 transition-colors hover:text-blue-700"
-        >
-          <ChevronLeft className="h-3.5 w-3.5" />
-          {SITE_NAME}
-        </Link>
-
-        <header className="mb-8 mt-6">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-            <LineChart className="h-3.5 w-3.5" />
-            マイページ
-          </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
-            学習分析
-          </h1>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            数学と英語の学習データ、復習キュー、次に解くべき内容をまとめて確認できます。
+      <section className="mt-10" aria-labelledby="review-overview-heading">
+        <div className="max-w-3xl">
+          <h2
+            id="review-overview-heading"
+            className="text-2xl font-bold tracking-tight text-slate-950"
+          >
+            復習の状況
+          </h2>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            今日取り組む内容と、共通テスト対策で復習が必要な項目を確認できます。
           </p>
-        </header>
-
-        <ReviewQueuePanel />
-
-        <div className="mb-8">
-          <div className="mb-3 flex items-center gap-3">
-            <span className="text-xs font-bold tracking-wide text-slate-600">
-              共通テストの復習
-            </span>
-            <div className="h-px flex-1 bg-white/[0.05]" />
-          </div>
-          <CommonTestReviewSummary />
         </div>
 
-        {mounted && (
-          <div className="mb-8">
-            <LearningCalendar mathAttempts={attempts} englishAttempts={englishAttempts} />
+        <div className="mt-5">
+          <ReviewQueuePanel />
+        </div>
+
+        <div className="mt-6">
+          <h3 className="text-lg font-bold text-slate-950">共通テストの復習</h3>
+          <p className="mt-1 text-sm leading-6 text-slate-600">
+            保存した弱点問題と、次の復習日をまとめています。
+          </p>
+          <div className="mt-4">
+            <CommonTestReviewSummary />
           </div>
-        )}
+        </div>
+      </section>
+
+      <section className="mt-12" aria-labelledby="learning-calendar-heading">
+        <div className="max-w-3xl">
+          <h2
+            id="learning-calendar-heading"
+            className="text-2xl font-bold tracking-tight text-slate-950"
+          >
+            学習カレンダー
+          </h2>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            数学と英語の記録を日ごとにまとめ、学習の継続状況を表示します。
+          </p>
+        </div>
+        <div className="mt-5">
+          {mounted ? (
+            <div>
+              <LearningCalendar
+                mathAttempts={attempts}
+                englishAttempts={englishAttempts}
+              />
+            </div>
+          ) : (
+            <LearningState
+              kind="loading"
+              headingLevel={3}
+              title="学習カレンダーを読み込んでいます"
+              description="この端末に保存された学習記録を集計しています。"
+              compact
+            />
+          )}
+        </div>
+      </section>
+
+      <section className="mt-12" aria-labelledby="subject-analysis-heading">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-3xl">
+            <h2
+              id="subject-analysis-heading"
+              className="text-2xl font-bold tracking-tight text-slate-950"
+            >
+              教科別の学習状況
+            </h2>
+            <p className="mt-2 text-sm leading-7 text-slate-600">
+              教科を切り替えて、得点推移、弱点、最近の演習を確認できます。
+            </p>
+          </div>
+          {mounted && activeAttemptCount > 0 ? (
+            <LearningStatusBadge status="in-progress" />
+          ) : null}
+        </div>
 
         <div
-          className="mb-8 inline-flex gap-1 rounded-xl border border-slate-200 bg-white p-1"
+          className="mt-6 inline-flex gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm"
           role="tablist"
           aria-label="教科別の学習履歴"
+          aria-orientation="horizontal"
         >
-          {(["MATH", "ENGLISH"] as Subject[]).map((tab) => {
-            const active = subject === tab;
-            const accent = tab === "MATH" ? "#1d4ed8" : "#047857";
+          {SUBJECT_TABS.map((tab) => {
+            const active = subject === tab.value;
+            const Icon = tab.icon;
             return (
               <button
-                key={tab}
+                key={tab.value}
+                id={tab.tabId}
                 type="button"
                 role="tab"
                 aria-selected={active}
-                onClick={() => setSubject(tab)}
-                className="flex items-center gap-2 rounded-lg px-5 py-2.5 font-mono text-sm font-semibold transition-all duration-200"
-                style={{
-                  background: active ? `color-mix(in srgb, ${accent} 14%, transparent)` : "transparent",
-                  border: active ? `1px solid color-mix(in srgb, ${accent} 40%, transparent)` : "1px solid transparent",
-                  color: active ? accent : "rgba(255,255,255,0.35)",
-                }}
+                aria-controls={tab.panelId}
+                tabIndex={active ? 0 : -1}
+                onClick={() => selectTab(tab.value)}
+                onKeyDown={(event) => handleTabKeyDown(event, tab.value)}
+                className={
+                  "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border px-5 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 " +
+                  (active
+                    ? "border-blue-200 bg-blue-50 text-blue-800 shadow-sm"
+                    : "border-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-950")
+                }
               >
-                {tab === "MATH" ? <Sigma className="h-4 w-4" /> : <BookOpen className="h-4 w-4" />}
-                {tab === "MATH" ? "数学" : "英語"}
+                <Icon className="h-4 w-4" aria-hidden="true" />
+                {tab.label}
               </button>
             );
           })}
         </div>
 
-        {subject === "MATH" && (
-          <div>
-            {!mounted ? (
-              <div
-                className="h-40 animate-pulse rounded-2xl"
-                style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
-              />
-            ) : attempts.length === 0 ? (
-              <NoMathData />
-            ) : (
-              <div className="space-y-6">
-                <SummaryCards summary={summary} />
-                <div className="grid gap-6 lg:grid-cols-2">
-                  <ScoreTrendChart points={trend} />
-                  <UnitRadarChart stats={units} />
-                </div>
-                <WeakTagPanel weakTags={weak} lessons={lessons} />
-                <AttemptList attempts={attempts} />
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                  <Link
-                    href="/mock"
-                    className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm text-white/40 transition-colors hover:text-white/70"
-                  >
-                    <RotateCcw className="h-4 w-4" />
-                    新しい模試を受ける
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={clearHistory}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-2 text-xs text-white/30 transition-colors hover:text-red-400"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                    履歴を削除
-                  </button>
-                </div>
+        <section
+          id="mypage-math-panel"
+          role="tabpanel"
+          aria-labelledby="mypage-math-tab"
+          hidden={subject !== "MATH"}
+          tabIndex={0}
+          className="mt-6 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
+        >
+          {!mounted ? (
+            <LearningState
+              kind="loading"
+              headingLevel={3}
+              title="数学の学習記録を読み込んでいます"
+              description="得点推移と弱点を集計しています。"
+              compact
+            />
+          ) : attempts.length === 0 ? (
+            <NoMathData />
+          ) : (
+            <div className="space-y-6">
+              <SummaryCards summary={summary} />
+              <div className="grid gap-6 lg:grid-cols-2">
+                <ScoreTrendChart points={trend} headingLevel={3} />
+                <UnitRadarChart stats={units} headingLevel={3} />
               </div>
-            )}
-          </div>
-        )}
+              <WeakTagPanel weakTags={weak} lessons={lessons} headingLevel={3} />
+              <AttemptList attempts={attempts} headingLevel={3} />
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                <Link href="/mock" className="button-secondary">
+                  <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                  新しい模試を受ける
+                </Link>
+                <button
+                  type="button"
+                  onClick={clearHistory}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+                >
+                  <Trash2 className="h-4 w-4" aria-hidden="true" />
+                  履歴を削除
+                </button>
+              </div>
+            </div>
+          )}
+        </section>
 
-        {subject === "ENGLISH" && (
+        <section
+          id="mypage-english-panel"
+          role="tabpanel"
+          aria-labelledby="mypage-english-tab"
+          hidden={subject !== "ENGLISH"}
+          tabIndex={0}
+          className="mt-6 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
+        >
           <EnglishPanel
             mounted={mounted}
             attempts={englishAttempts}
             stats={englishStats}
             onClear={clearEnglishHistory}
           />
-        )}
-      </div>
-    </div>
+        </section>
+      </section>
+    </LearningPageShell>
   );
 }
 
 function NoMathData() {
   return (
-    <div
-      className="rounded-2xl p-10 text-center"
-      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
-    >
-      <Sparkles className="mx-auto mb-3 h-8 w-8" style={{ color: "#e879f9" }} />
-      <p className="mb-1 font-display text-lg font-bold text-white">まだ学習データがありません</p>
-      <p className="mb-6 text-sm leading-6 text-white/50">
-        まずは共通テスト診断または大問別ドリルを1つ解くと、ここに正答率・弱点単元・復習予定が表示されます。
-      </p>
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <Link
-          href="/common-test"
-          className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 font-bold text-blue-800 transition-colors hover:bg-blue-100"
-        >
-          <BookOpen className="h-4 w-4" />
-          共通テスト対策を始める
-        </Link>
-        <Link
-          href="/common-test/math-1a/section-1"
-          className="inline-flex items-center gap-2 rounded-xl border border-cyan-200 bg-cyan-50 px-5 py-3 font-bold text-cyan-900 transition-colors hover:bg-cyan-100"
-        >
-          <Sigma className="h-4 w-4" />
-          大問別ドリルを解く
-        </Link>
-        <Link
-          href="/common-test/simulator/common-test-math-1a-manual-001"
-          className="inline-flex items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-5 py-3 font-bold text-violet-900 transition-colors hover:bg-violet-100"
-        >
-          <Sparkles className="h-4 w-4" />
-          冊子型模試を受ける
-        </Link>
-      </div>
-    </div>
+    <LearningState
+      kind="empty"
+      headingLevel={3}
+      title="まだ学習データがありません"
+      description="数学の共通テスト診断または大問別ドリルを解くと、正答率・弱点単元・復習予定がここに表示されます。"
+      actions={
+        <>
+          <Link href="/common-test" className="button-primary">
+            <BookOpen className="h-4 w-4" aria-hidden="true" />
+            共通テスト対策を始める
+          </Link>
+          <Link
+            href="/common-test/math-1a/section-1"
+            className="button-secondary"
+          >
+            <Sigma className="h-4 w-4" aria-hidden="true" />
+            大問別ドリルを解く
+          </Link>
+          <Link
+            href="/common-test/simulator/common-test-math-1a-manual-001"
+            className="button-secondary"
+          >
+            <Sparkles className="h-4 w-4" aria-hidden="true" />
+            冊子型模試を受ける
+          </Link>
+        </>
+      }
+    />
   );
 }
 
@@ -265,103 +387,126 @@ function EnglishPanel({
   stats: ReturnType<typeof computeEnglishStats>;
   onClear: () => void;
 }) {
+  if (!mounted) {
+    return (
+      <LearningState
+        kind="loading"
+        headingLevel={3}
+        title="英語の学習記録を読み込んでいます"
+        description="正答率と最近の演習を集計しています。"
+        compact
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <EnglishStat label="速読 回数" value={mounted ? stats.speedReading.count : null} unit="回" icon={Zap} accent="#10b981" />
+      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <EnglishStat
+          label="速読 回数"
+          value={stats.speedReading.count}
+          unit="回"
+          icon={Zap}
+        />
         <EnglishStat
           label="速読 正答率"
-          value={mounted && stats.speedReading.count > 0 ? stats.speedReading.avgAccuracy : null}
+          value={
+            stats.speedReading.count > 0
+              ? stats.speedReading.avgAccuracy
+              : null
+          }
           unit="%"
           icon={TrendingUp}
-          accent="#10b981"
         />
         <EnglishStat
           label="精読 正答率"
-          value={mounted && stats.comprehension.count > 0 ? stats.comprehension.avgAccuracy : null}
+          value={
+            stats.comprehension.count > 0
+              ? stats.comprehension.avgAccuracy
+              : null
+          }
           unit="%"
           icon={BookMarked}
-          accent="#22d3ee"
         />
-        <EnglishStat label="資料読解" value={mounted ? stats.multiSource.count : null} unit="問" icon={Network} accent="#a78bfa" />
-      </div>
+        <EnglishStat
+          label="資料読解"
+          value={stats.multiSource.count}
+          unit="問"
+          icon={Network}
+        />
+      </dl>
 
-      {mounted && attempts.length > 0 ? (
-        <div className="overflow-hidden rounded-2xl" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
-          <div
-            className="flex items-center justify-between px-5 py-3"
-            style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/35">
+      {attempts.length > 0 ? (
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3 sm:px-5">
+            <span className="text-sm font-semibold text-slate-700">
               最近の演習 / {attempts.length}件
             </span>
             <button
               type="button"
               onClick={onClear}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/30 transition-colors hover:text-red-400"
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
             >
-              <Trash2 className="h-3 w-3" />
+              <Trash2 className="h-4 w-4" aria-hidden="true" />
               履歴を削除
             </button>
           </div>
-          <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+          <ul className="divide-y divide-slate-200">
             {attempts.slice(0, 10).map((attempt) => {
               const pct = Math.round((attempt.score / attempt.total) * 100);
-              const scoreColor = pct === 100 ? "#34d399" : pct >= 60 ? "#fbbf24" : "#f43f5e";
-              const modeMeta = {
-                "speed-reading": { label: "速読", accent: "#10b981" },
-                comprehension: { label: "精読", accent: "#22d3ee" },
-                "multi-source": { label: "資料", accent: "#a78bfa" },
+              const modeLabel = {
+                "speed-reading": "速読",
+                comprehension: "精読",
+                "multi-source": "資料",
               }[attempt.mode];
               const levelMeta = ENGLISH_LEVEL_META[attempt.level];
               return (
-                <div key={attempt.id} className="flex items-center justify-between px-5 py-3 text-sm" style={{ background: "rgba(0,0,0,0.2)" }}>
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="shrink-0 rounded-md px-2 py-0.5 font-mono text-[10px] font-semibold"
-                      style={{
-                        background: `color-mix(in srgb, ${modeMeta.accent} 14%, transparent)`,
-                        border: `1px solid color-mix(in srgb, ${modeMeta.accent} 35%, transparent)`,
-                        color: modeMeta.accent,
-                      }}
-                    >
-                      {modeMeta.label}
+                <li
+                  key={attempt.id}
+                  className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5"
+                >
+                  <div className="flex min-w-0 flex-wrap items-center gap-2">
+                    <span className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-800">
+                      {modeLabel}
                     </span>
-                    <span className="font-mono text-[11px]" style={{ color: levelMeta.accent }}>
+                    <span className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700">
                       {levelMeta.label}
                     </span>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <span className="font-display text-sm font-bold tabular-nums" style={{ color: scoreColor }}>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <span className="text-sm font-bold tabular-nums text-slate-950">
                       {attempt.score}/{attempt.total}
-                      <span className="ml-1 text-xs font-normal text-white/35">({pct}%)</span>
+                      <span className="ml-1 text-xs font-normal text-slate-500">
+                        ({pct}%)
+                      </span>
                     </span>
-                    <span className="font-mono text-[11px] tabular-nums text-white/25">
-                      {new Date(attempt.completedAt).toLocaleDateString("ja-JP", { month: "short", day: "numeric" })}
-                    </span>
+                    <time
+                      className="text-xs tabular-nums text-slate-500"
+                      dateTime={attempt.completedAt}
+                    >
+                      {new Date(attempt.completedAt).toLocaleDateString("ja-JP", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </time>
                   </div>
-                </div>
+                </li>
               );
             })}
-          </div>
+          </ul>
         </div>
       ) : (
-        mounted && (
-          <div className="rounded-2xl p-8 text-center" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(16,185,129,0.15)" }}>
-            <Activity className="mx-auto mb-3 h-8 w-8" style={{ color: "rgba(16,185,129,0.5)" }} />
-            <p className="mb-1 font-display text-base font-bold text-white/70">まだ英語の記録がありません</p>
-            <p className="text-xs leading-5 text-white/35">
-              速読、精読、資料読解を解くと、正答率と学習時間がここに記録されます。
-            </p>
-            <Link
-              href="/english/speed-reading"
-              className="mt-4 inline-flex items-center justify-center rounded-xl px-4 py-2 text-xs font-bold transition-colors"
-              style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.35)", color: "#10b981" }}
-            >
+        <LearningState
+          kind="empty"
+          headingLevel={3}
+          title="まだ英語の記録がありません"
+          description="速読、精読、資料読解に取り組むと、正答率と学習時間がここに記録されます。"
+          actions={
+            <Link href="/english/speed-reading" className="button-primary">
               速読を始める
             </Link>
-          </div>
-        )
+          }
+        />
       )}
     </div>
   );
@@ -372,32 +517,33 @@ function EnglishStat({
   value,
   unit,
   icon: Icon,
-  accent,
 }: {
   label: string;
   value: number | null;
   unit: string;
   icon: React.ElementType;
-  accent: string;
 }) {
-  const hasValue = value !== null && value > 0;
+  const hasValue = value !== null;
   return (
-    <div
-      className="rounded-2xl p-4"
-      style={{
-        background: "rgba(255,255,255,0.025)",
-        border: `1px solid color-mix(in srgb, ${accent} 25%, transparent)`,
-      }}
-    >
-      <div className="mb-2 flex items-center gap-1.5">
-        <Icon className="h-3.5 w-3.5" style={{ color: accent }} />
-        <span className="font-mono text-[10px] uppercase tracking-wider text-white/30">{label}</span>
-      </div>
-      <div className="font-display text-2xl font-extrabold" style={{ color: hasValue ? accent : "rgba(255,255,255,0.18)" }}>
-        {value !== null ? value : "--"}
-        {hasValue && <span className="ml-0.5 text-sm font-bold text-white/30">{unit}</span>}
-      </div>
-      {!hasValue && <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-white/18">no data yet</p>}
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <dt className="mb-3 flex items-center gap-2">
+        <span
+          className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700"
+          aria-hidden="true"
+        >
+          <Icon className="h-4 w-4" />
+        </span>
+        <span className="text-xs font-semibold text-slate-600">{label}</span>
+      </dt>
+      <dd className="text-2xl font-bold tabular-nums text-slate-950">
+        {value !== null ? value : "—"}
+        {hasValue ? (
+          <span className="ml-1 text-sm font-semibold text-slate-500">{unit}</span>
+        ) : null}
+      </dd>
+      {!hasValue ? (
+        <dd className="mt-1 text-xs text-slate-500">まだデータがありません</dd>
+      ) : null}
     </div>
   );
 }

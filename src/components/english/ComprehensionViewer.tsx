@@ -16,12 +16,12 @@ import { saveEnglishAttempt } from "@/lib/english-history";
 // ── Syntax role color palette ─────────────────────────────────────────────
 
 const SYNTAX_COLORS: Record<SyntaxRole, { bg: string; text: string; border: string }> = {
-  S:    { bg: "rgba(34,211,238,0.15)",  text: "#22d3ee", border: "rgba(34,211,238,0.4)"  },
-  V:    { bg: "rgba(52,211,153,0.15)",  text: "#34d399", border: "rgba(52,211,153,0.4)"  },
-  O:    { bg: "rgba(251,191,36,0.15)",  text: "#fbbf24", border: "rgba(251,191,36,0.4)"  },
-  C:    { bg: "rgba(244,63,94,0.15)",   text: "#f43f5e", border: "rgba(244,63,94,0.4)"   },
-  M:    { bg: "rgba(167,139,250,0.15)", text: "#a78bfa", border: "rgba(167,139,250,0.4)" },
-  NONE: { bg: "transparent",            text: "rgba(255,255,255,0.5)", border: "transparent" },
+  S: { bg: "#eff6ff", text: "#1d4ed8", border: "#bfdbfe" },
+  V: { bg: "#ecfdf5", text: "#047857", border: "#a7f3d0" },
+  O: { bg: "#fffbeb", text: "#b45309", border: "#fde68a" },
+  C: { bg: "#fff1f2", text: "#be123c", border: "#fecdd3" },
+  M: { bg: "#f5f3ff", text: "#6d28d9", border: "#ddd6fe" },
+  NONE: { bg: "transparent", text: "#475569", border: "transparent" },
 };
 
 const SYNTAX_LABELS: Record<SyntaxRole, string> = {
@@ -37,18 +37,15 @@ const SYNTAX_LABELS: Record<SyntaxRole, string> = {
 
 function SyntaxVisualizer({ blocks }: { blocks: SyntaxBlock[] }) {
   return (
-    <div
-      className="rounded-xl p-4 space-y-3"
-      style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.09)" }}
-    >
-      <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/30 mb-4">
+    <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <p className="mb-4 text-xs font-semibold text-slate-600">
         構文解析 / Syntax Breakdown
       </p>
 
       {blocks.map((block, i) => {
         if (block.role === "NONE") {
           return (
-            <p key={i} className="text-xs italic text-white/35">
+            <p key={i} className="text-xs italic text-slate-600">
               {block.text}
             </p>
           );
@@ -58,7 +55,7 @@ function SyntaxVisualizer({ blocks }: { blocks: SyntaxBlock[] }) {
           <div key={i} className="flex items-start gap-3">
             {/* Role badge */}
             <span
-              className="shrink-0 mt-0.5 flex h-5 w-5 items-center justify-center rounded font-mono text-[10px] font-bold"
+              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded text-xs font-bold"
               style={{ background: c.bg, color: c.text, border: `1px solid ${c.border}` }}
             >
               {block.role}
@@ -77,7 +74,7 @@ function SyntaxVisualizer({ blocks }: { blocks: SyntaxBlock[] }) {
                 {block.text}
               </p>
               {block.translation && (
-                <p className="mt-1 pl-1 text-[11px] leading-relaxed text-white/40">
+                <p className="mt-1 pl-1 text-xs leading-relaxed text-slate-600">
                   {block.translation}
                 </p>
               )}
@@ -87,20 +84,17 @@ function SyntaxVisualizer({ blocks }: { blocks: SyntaxBlock[] }) {
       })}
 
       {/* Legend */}
-      <div
-        className="flex flex-wrap gap-x-4 gap-y-1.5 pt-3"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
-      >
+      <div className="flex flex-wrap gap-x-4 gap-y-1.5 border-t border-slate-200 pt-3">
         {(["S", "V", "O", "C", "M"] as SyntaxRole[]).map((role) => {
           const c = SYNTAX_COLORS[role];
           return (
-            <span key={role} className="flex items-center gap-1.5 font-mono text-[10px]">
+            <span key={role} className="flex items-center gap-1.5 text-xs">
               <span
                 className="inline-block h-2.5 w-2.5 rounded-sm"
                 style={{ background: c.bg, border: `1px solid ${c.border}` }}
               />
               <span style={{ color: c.text }}>{role}</span>
-              <span className="text-white/30">= {SYNTAX_LABELS[role]}</span>
+              <span className="text-slate-600">= {SYNTAX_LABELS[role]}</span>
             </span>
           );
         })}
@@ -154,46 +148,43 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
     setShowSyntax((prev) => ({ ...prev, [i]: !prev[i] }));
   };
 
-  // Score color
   const perfect = score === problem.questions.length;
   const passing = score >= Math.ceil(problem.questions.length / 2);
-  const scoreColor = perfect ? "#34d399" : passing ? "#fbbf24" : "#f43f5e";
-  const scoreBg = perfect
-    ? "rgba(52,211,153,0.1)"
+  const scoreTone = perfect
+    ? { container: "border-emerald-200 bg-emerald-50", text: "text-emerald-700" }
     : passing
-    ? "rgba(251,191,36,0.1)"
-    : "rgba(244,63,94,0.1)";
-  const scoreBorder = perfect
-    ? "rgba(52,211,153,0.3)"
-    : passing
-    ? "rgba(251,191,36,0.3)"
-    : "rgba(244,63,94,0.3)";
+      ? { container: "border-amber-200 bg-amber-50", text: "text-amber-700" }
+      : { container: "border-rose-200 bg-rose-50", text: "text-rose-700" };
 
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       {/* ── Mobile tab switcher (hidden on md+) ─────────────────────────── */}
       <div
-        className="flex md:hidden"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+        className="flex gap-1 border-b border-slate-200 bg-slate-50 p-1 md:hidden"
+        role="group"
+        aria-label="表示する内容"
       >
         <button
+          type="button"
           onClick={() => setMobileTab("passage")}
-          className="flex-1 py-3 font-mono text-xs font-semibold transition-colors"
-          style={{
-            background: mobileTab === "passage" ? "rgba(34,211,238,0.1)" : "rgba(0,0,0,0.4)",
-            color: mobileTab === "passage" ? "#22d3ee" : "rgba(255,255,255,0.35)",
-            borderRight: "1px solid rgba(255,255,255,0.08)",
-          }}
+          aria-pressed={mobileTab === "passage"}
+          className={`min-h-11 flex-1 rounded-lg border px-4 py-2 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
+            mobileTab === "passage"
+              ? "border-blue-200 bg-white text-blue-800 shadow-sm"
+              : "border-transparent text-slate-600 hover:bg-white hover:text-slate-950"
+          }`}
         >
           本文
         </button>
         <button
+          type="button"
           onClick={() => setMobileTab("questions")}
-          className="flex-1 py-3 font-mono text-xs font-semibold transition-colors"
-          style={{
-            background: mobileTab === "questions" ? "rgba(34,211,238,0.1)" : "rgba(0,0,0,0.4)",
-            color: mobileTab === "questions" ? "#22d3ee" : "rgba(255,255,255,0.35)",
-          }}
+          aria-pressed={mobileTab === "questions"}
+          className={`min-h-11 flex-1 rounded-lg border px-4 py-2 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
+            mobileTab === "questions"
+              ? "border-blue-200 bg-white text-blue-800 shadow-sm"
+              : "border-transparent text-slate-600 hover:bg-white hover:text-slate-950"
+          }`}
         >
           設問
         </button>
@@ -202,16 +193,14 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
       <div className="grid md:grid-cols-2">
       {/* ── Left pane: Passage ──────────────────────────────────────────── */}
       <div
-        className={`${mobileTab === "passage" ? "" : "hidden"} md:block h-[65vh] md:h-[72vh] overflow-y-auto border-b md:border-b-0 md:border-r p-6 md:p-8`}
-        style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.015)",
-        }}
+        className={`${mobileTab === "passage" ? "" : "hidden"} h-[65vh] overflow-y-auto border-b border-slate-200 bg-white p-6 md:block md:h-[72vh] md:border-b-0 md:border-r md:p-8`}
+        role="region"
+        aria-label="英文本文"
       >
         {/* Pane header */}
         <div className="flex items-center gap-2 mb-5">
-          <BookOpen className="h-3.5 w-3.5 text-white/25" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/25">
+          <BookOpen className="h-4 w-4 text-blue-700" aria-hidden="true" />
+          <span className="text-xs font-semibold text-slate-600">
             Passage · 本文
           </span>
         </div>
@@ -221,7 +210,7 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
           {problem.passage.split("\n\n").map((para, i) => (
             <p
               key={i}
-              className="text-sm leading-[1.95] text-white/72"
+              className="text-sm leading-[1.95] text-slate-800"
               style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
             >
               {para.trim()}
@@ -232,34 +221,29 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
 
       {/* ── Right pane: Questions ────────────────────────────────────────── */}
       <div
-        className={`${mobileTab === "questions" ? "" : "hidden"} md:block h-[65vh] md:h-[72vh] overflow-y-auto p-6 md:p-8`}
-        style={{ background: "rgba(0,0,0,0.35)" }}
+        className={`${mobileTab === "questions" ? "" : "hidden"} h-[65vh] overflow-y-auto bg-slate-50 p-6 md:block md:h-[72vh] md:p-8`}
+        role="region"
+        aria-label="設問"
       >
         {/* Score summary (after submission) */}
         {submitted && (
-          <div
-            className="mb-6 rounded-xl p-4 text-center"
-            style={{ background: scoreBg, border: `1px solid ${scoreBorder}` }}
-          >
-            <p className="font-mono text-[10px] uppercase tracking-widest text-white/35 mb-1">
+          <div className={`mb-6 rounded-xl border p-4 text-center ${scoreTone.container}`}>
+            <p className="mb-1 text-xs font-semibold text-slate-600">
               Result
             </p>
-            <p
-              className="font-display text-4xl font-extrabold"
-              style={{ color: scoreColor }}
-            >
+            <p className={`text-4xl font-extrabold ${scoreTone.text}`}>
               {score}
-              <span className="text-xl text-white/30"> / {problem.questions.length}</span>
+              <span className="text-xl text-slate-500"> / {problem.questions.length}</span>
             </p>
-            <p className="mt-1 font-mono text-xs text-white/35">
+            <p className="mt-1 text-xs text-slate-600">
               {perfect ? "満点！" : passing ? "合格ライン突破" : "再挑戦してみよう"}
             </p>
             <button
+              type="button"
               onClick={handleRetry}
-              className="mt-3 inline-flex items-center gap-1.5 rounded-lg px-4 py-1.5 font-mono text-xs transition-colors text-white/40 hover:text-white/70"
-              style={{ border: "1px solid rgba(255,255,255,0.12)" }}
+              className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-blue-300 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
             >
-              <RotateCcw className="h-3 w-3" />
+              <RotateCcw className="h-4 w-4" aria-hidden="true" />
               もう一度
             </button>
           </div>
@@ -278,15 +262,15 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
                 <div className="flex items-start gap-2.5 mb-3">
                   {submitted &&
                     (isCorrect ? (
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" aria-hidden="true" />
                     ) : (
-                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
+                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-700" aria-hidden="true" />
                     ))}
                   <div>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-white/30">
+                    <span className="text-xs font-semibold uppercase tracking-widest text-slate-500">
                       Q{qIdx + 1}
                     </span>
-                    <p className="mt-0.5 text-sm leading-relaxed text-white/85">
+                    <p className="mt-0.5 text-sm leading-relaxed text-slate-800">
                       {q.questionText}
                     </p>
                   </div>
@@ -298,53 +282,33 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
                     const isSelected = userAnswer === optIdx;
                     const isCorrectOpt = optIdx === q.correctAnswerIndex;
 
-                    let bg = "rgba(255,255,255,0.03)";
-                    let border = "rgba(255,255,255,0.1)";
-                    let textColor = "rgba(255,255,255,0.6)";
+                    let optionTone =
+                      "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50";
 
                     if (!submitted) {
                       if (isSelected) {
-                        bg = "rgba(34,211,238,0.1)";
-                        border = "rgba(34,211,238,0.5)";
-                        textColor = "#22d3ee";
+                        optionTone = "border-blue-500 bg-blue-50 text-blue-900";
                       }
                     } else {
                       if (isCorrectOpt) {
-                        bg = "rgba(52,211,153,0.12)";
-                        border = "rgba(52,211,153,0.5)";
-                        textColor = "#34d399";
+                        optionTone = "border-emerald-500 bg-emerald-50 text-emerald-900";
                       } else if (isSelected) {
-                        bg = "rgba(244,63,94,0.12)";
-                        border = "rgba(244,63,94,0.5)";
-                        textColor = "#f43f5e";
+                        optionTone = "border-rose-500 bg-rose-50 text-rose-900";
                       }
                     }
 
                     return (
                       <button
                         key={optIdx}
+                        type="button"
                         onClick={() => handleSelect(qIdx, optIdx)}
                         disabled={submitted}
-                        className="english-option flex w-full items-start gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200"
-                        style={{
-                          background: bg,
-                          border: `1px solid ${border}`,
-                          cursor: submitted ? "default" : "pointer",
-                        }}
+                        className={`english-option flex min-h-11 w-full items-start gap-3 rounded-xl border px-4 py-3 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-default ${optionTone}`}
                       >
-                        <span
-                          className="shrink-0 mt-0.5 flex h-5 w-5 items-center justify-center rounded font-mono text-[11px] font-bold"
-                          style={{
-                            background: "rgba(255,255,255,0.06)",
-                            color: textColor,
-                          }}
-                        >
+                        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded border border-current bg-white text-xs font-bold">
                           {String.fromCharCode(65 + optIdx)}
                         </span>
-                        <span
-                          className="min-w-0 flex-1 whitespace-normal break-words text-sm leading-relaxed"
-                          style={{ color: textColor }}
-                        >
+                        <span className="min-w-0 flex-1 whitespace-normal break-words text-sm leading-relaxed">
                           {opt}
                         </span>
                       </button>
@@ -355,21 +319,20 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
                 {/* Explanation (after submission) */}
                 {submitted && (
                   <div
-                    className="mt-3 rounded-xl p-4"
-                    style={{
-                      background: isCorrect
-                        ? "rgba(52,211,153,0.06)"
-                        : "rgba(244,63,94,0.06)",
-                      border: `1px solid ${isCorrect ? "rgba(52,211,153,0.2)" : "rgba(244,63,94,0.2)"}`,
-                    }}
+                    className={`mt-3 rounded-xl border p-4 ${
+                      isCorrect
+                        ? "border-emerald-200 bg-emerald-50"
+                        : "border-rose-200 bg-rose-50"
+                    }`}
                   >
                     <p
-                      className="font-mono text-[10px] uppercase tracking-widest mb-2"
-                      style={{ color: isCorrect ? "#34d399" : "#f43f5e" }}
+                      className={`mb-2 text-xs font-semibold uppercase tracking-widest ${
+                        isCorrect ? "text-emerald-800" : "text-rose-800"
+                      }`}
                     >
                       {isCorrect ? "✓ 正解" : "✗ 不正解"} · 解説
                     </p>
-                    <p className="text-xs leading-relaxed whitespace-pre-line text-white/62">
+                    <p className="whitespace-pre-line text-sm leading-relaxed text-slate-700">
                       {q.explanation}
                     </p>
 
@@ -377,19 +340,22 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
                     {q.syntaxAnalysis && (
                       <div className="mt-4">
                         <button
+                          type="button"
                           onClick={() => toggleSyntax(qIdx)}
-                          className="inline-flex items-center gap-1.5 font-mono text-[11px] text-white/38 transition-colors hover:text-white/68"
+                          aria-expanded={Boolean(showSyntax[qIdx])}
+                          aria-controls={`syntax-analysis-${qIdx}`}
+                          className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-xs font-semibold text-blue-800 transition-colors hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                         >
-                          <Brain className="h-3 w-3" />
+                          <Brain className="h-4 w-4" aria-hidden="true" />
                           構文解析を{showSyntax[qIdx] ? "閉じる" : "表示する"}
                           {showSyntax[qIdx] ? (
-                            <ChevronUp className="h-3 w-3" />
+                            <ChevronUp className="h-4 w-4" aria-hidden="true" />
                           ) : (
-                            <ChevronDown className="h-3 w-3" />
+                            <ChevronDown className="h-4 w-4" aria-hidden="true" />
                           )}
                         </button>
                         {showSyntax[qIdx] && (
-                          <div className="mt-3">
+                          <div id={`syntax-analysis-${qIdx}`} className="mt-3">
                             <SyntaxVisualizer blocks={q.syntaxAnalysis} />
                           </div>
                         )}
@@ -404,25 +370,19 @@ export function ComprehensionViewer({ problem }: { problem: ComprehensionProblem
 
         {/* Submit bar */}
         {!submitted && (
-          <div
-            className="mt-8 pt-5"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <p className="mb-3 text-center font-mono text-[11px] text-white/28">
+          <div className="mt-8 border-t border-slate-200 pt-5">
+            <p className="mb-3 text-center text-xs font-medium text-slate-600">
               {answeredCount} / {problem.questions.length} 問 回答済み
             </p>
             <button
+              type="button"
               onClick={handleSubmit}
               disabled={!allAnswered}
-              className="w-full rounded-xl py-3 font-mono text-sm font-semibold transition-all duration-300"
-              style={{
-                background: allAnswered
-                  ? "rgba(34,211,238,0.15)"
-                  : "rgba(255,255,255,0.04)",
-                border: `1px solid ${allAnswered ? "rgba(34,211,238,0.5)" : "rgba(255,255,255,0.1)"}`,
-                color: allAnswered ? "#22d3ee" : "rgba(255,255,255,0.22)",
-                cursor: allAnswered ? "pointer" : "not-allowed",
-              }}
+              className={`min-h-11 w-full rounded-xl border px-4 py-3 text-sm font-semibold transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed ${
+                allAnswered
+                  ? "border-blue-700 bg-blue-700 text-white hover:bg-blue-800"
+                  : "border-slate-200 bg-slate-100 text-slate-400"
+              }`}
             >
               答え合わせをする
             </button>

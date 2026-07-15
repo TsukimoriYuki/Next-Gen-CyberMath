@@ -2,7 +2,13 @@
 
 import { useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { LineChart, ArrowLeft, Sparkles, RotateCcw, Trash2 } from "lucide-react";
+import { RotateCcw, Trash2 } from "lucide-react";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+  LearningState,
+} from "@/components/learning/LearningPageFrame";
 import {
   subscribeAttempts,
   getAttemptsSnapshot,
@@ -51,45 +57,36 @@ export default function MockHistoryPage() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
-      <Link
-        href="/mock"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-neon-cyan"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        カスタム演習に戻る
-      </Link>
+    <LearningPageShell width="reading">
+      <LearningBreadcrumbs
+        items={[
+          { label: "復習", href: "/review" },
+          { label: "カスタム演習", href: "/mock" },
+          { label: "演習履歴・弱点分析" },
+        ]}
+      />
+      <LearningPageHeader
+        eyebrow="数学演習"
+        title="演習履歴・弱点分析"
+        description="過去のカスタム演習から、スコア推移・単元別の正答率・弱点タグを確認します。"
+      />
 
-      <header className="mt-6">
-        <div className="inline-flex items-center gap-2 rounded-full border border-neon-cyan/30 bg-neon-cyan/5 px-3 py-1 text-xs font-mono uppercase tracking-[0.2em] text-neon-cyan">
-          <LineChart className="h-3.5 w-3.5" />
-          Analytics Dashboard
-        </div>
-        <h1 className="mt-5 font-display text-3xl font-extrabold tracking-tight">
-          演習履歴・弱点分析
-        </h1>
-        <p className="mt-2 text-muted-foreground">
-          過去のカスタム演習から、スコア推移・単元別の正答率・弱点タグを集計します。
-        </p>
-      </header>
-
-      {/* マウント前はスケルトン（簡易） */}
       {!mounted ? (
-        <div className="mt-8 h-40 animate-pulse rounded-2xl border border-border/60 bg-muted/30" />
+        <div className="mt-8">
+          <LearningState
+            kind="loading"
+            title="演習履歴を読み込んでいます"
+            description="この端末に保存された結果を集計しています。"
+          />
+        </div>
       ) : attempts.length === 0 ? (
-        <div className="glass mt-8 rounded-2xl p-10 text-center">
-          <Sparkles className="mx-auto mb-3 h-8 w-8 text-neon-magenta" />
-          <p className="mb-1 font-display text-lg font-bold">まだ記録がありません</p>
-          <p className="mb-5 text-sm text-muted-foreground">
-            カスタム演習を採点すると、ここに学習履歴が表示されます。
-          </p>
-          <Link
-            href="/mock"
-            className="glow-magenta inline-flex items-center gap-2 rounded-xl bg-neon-magenta/15 px-5 py-3 font-display font-bold text-neon-magenta transition-colors hover:bg-neon-magenta/25"
-          >
-            <Sparkles className="h-4 w-4" />
-            カスタム演習を始める
-          </Link>
+        <div className="mt-8">
+          <LearningState
+            kind="empty"
+            title="まだ演習記録がありません"
+            description="カスタム演習を採点すると、ここに得点推移と弱点が表示されます。"
+            actions={<Link href="/mock" className="button-primary">カスタム演習を始める</Link>}
+          />
         </div>
       ) : (
         <div className="mt-8 space-y-6">
@@ -107,7 +104,7 @@ export default function MockHistoryPage() {
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
             <Link
               href="/mock"
-              className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-neon-cyan"
+              className="button-secondary"
             >
               <RotateCcw className="h-4 w-4" />
               新しい問題セットを作る
@@ -115,7 +112,7 @@ export default function MockHistoryPage() {
             <button
               type="button"
               onClick={clearHistory}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-destructive"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 transition-colors hover:bg-rose-50 focus-visible:outline-offset-4"
             >
               <Trash2 className="h-3.5 w-3.5" />
               履歴を削除
@@ -123,6 +120,6 @@ export default function MockHistoryPage() {
           </div>
         </div>
       )}
-    </div>
+    </LearningPageShell>
   );
 }

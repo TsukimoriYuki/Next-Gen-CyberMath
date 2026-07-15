@@ -1,15 +1,39 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Lock, Unlock, Check, Lightbulb } from "lucide-react";
+import { ArrowRight, Check, Lightbulb, Lock, Unlock } from "lucide-react";
 import type { ExplanationStep } from "@/lib/types";
-import { STEP_META } from "@/lib/types";
 import { MathText } from "@/components/math/Math";
 import { LessonRenderer } from "@/components/lessons/LessonRenderer";
-import { LessonLink } from "@/components/scaffolding/LessonLink";
 import { useProgress } from "@/hooks/useProgress";
-import { cn } from "@/lib/utils";
+
+const STEP_PRESENTATION: Record<
+  ExplanationStep["type"],
+  { label: string; hint: string }
+> = {
+  INSIGHT: {
+    label: "着眼点",
+    hint: "問題文の条件と方針を確認します",
+  },
+  EXPERIMENT: {
+    label: "試行・観察",
+    hint: "手を動かして性質を確かめます",
+  },
+  HINT: {
+    label: "ヒント",
+    hint: "解答につながる手がかりを確認します",
+  },
+  SOLUTION: {
+    label: "解答",
+    hint: "考え方から結論までを確認します",
+  },
+  GUIDANCE_ANALYSIS: {
+    label: "誘導の意図",
+    hint: "設問の構成と狙いを確認します",
+  },
+};
 
 export function LogicSteps({
   slug,
@@ -37,7 +61,7 @@ export function LogicSteps({
   const { complete } = useProgress();
 
   // Mark the problem complete once the rigorous solution is revealed.
-  const solutionIndex = ordered.findIndex((s) => s.type === "SOLUTION");
+  const solutionIndex = ordered.findIndex((step) => step.type === "SOLUTION");
   useEffect(() => {
     if (solutionIndex >= 0 && revealed > solutionIndex) complete(slug);
   }, [revealed, solutionIndex, complete, slug]);
@@ -50,185 +74,104 @@ export function LogicSteps({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="font-display text-lg font-semibold tracking-wide">
-          段階的論理開示
-        </h2>
-        <span className="font-mono text-xs text-muted-foreground">
-          {Math.min(revealed, ordered.length)} / {ordered.length} 開示
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-950">
+            解説ステップ
+          </h2>
+          <p className="mt-1 text-sm leading-6 text-slate-600">
+            必要なところから一段ずつ確認できます。
+          </p>
+        </div>
+        <span className="text-sm font-medium text-slate-600" aria-live="polite">
+          {Math.min(revealed, ordered.length)} / {ordered.length} ステップ
         </span>
       </div>
 
       <ol className="space-y-3">
-        {ordered.map((step, i) => {
-          const meta = STEP_META[step.type];
-          const isRevealed = i < revealed;
-          const isActive = i === revealed;
-          const isLocked = i > revealed;
+        {ordered.map((step, index) => {
+          const presentation = STEP_PRESENTATION[step.type];
+          const isRevealed = index < revealed;
+          const isActive = index === revealed;
+          const isLocked = index > revealed;
           const isGuidance = step.type === "GUIDANCE_ANALYSIS";
+          const stepId = `logic-step-${slug}-${step.order}`;
 
-          // GUIDANCE_ANALYSIS — 出題者のメタ視点ステップ（独立した特別レンダリング）
-          if (isGuidance) {
-            return (
-              <li key={step.order}>
-                <div
-                  className="rounded-2xl transition-shadow"
-                  style={{
-                    background: "color-mix(in oklch, var(--neon-violet) 5%, transparent)",
-                    border: "2px dashed color-mix(in oklch, var(--neon-violet) 35%, transparent)",
-                  }}
-                >
-                  {/* Header */}
-                  <div className="flex items-center gap-3 p-4">
-                    <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                      style={{
-                        color: meta.accent,
-                        background: `color-mix(in oklch, ${meta.accent} 14%, transparent)`,
-                      }}
-                    >
-                      <Lightbulb className="h-4 w-4" />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="font-display text-sm font-semibold tracking-wide"
-                          style={{ color: meta.accent }}
-                        >
-                          {meta.label}
-                        </div>
-                        <span
-                          className="rounded px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-widest"
-                          style={{
-                            color: meta.accent,
-                            background: `color-mix(in oklch, ${meta.accent} 12%, transparent)`,
-                          }}
-                        >
-                          META
-                        </span>
-                      </div>
-                      <div className="truncate text-xs text-muted-foreground">
-                        {isLocked ? "前のステップを開くと解放されます" : meta.hint}
-                      </div>
-                    </div>
-                    {isActive && (
-                      <button
-                        type="button"
-                        onClick={() => setRevealed((r) => Math.max(r, i + 1))}
-                        className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors"
-                        style={{
-                          color: meta.accent,
-                          borderColor: `color-mix(in oklch, ${meta.accent} 50%, transparent)`,
-                          background: `color-mix(in oklch, ${meta.accent} 10%, transparent)`,
-                        }}
-                      >
-                        <Unlock className="h-3.5 w-3.5" />
-                        開く
-                      </button>
-                    )}
-                    {isLocked && <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" />}
-                  </div>
+          const cardClassName = isGuidance
+            ? "border-blue-200 bg-blue-50/70"
+            : isRevealed
+              ? "border-emerald-200 bg-white"
+              : isActive
+                ? "border-blue-300 bg-white"
+                : "border-slate-200 bg-slate-50";
 
-                  {/* Body */}
-                  <AnimatePresence initial={false}>
-                    {isRevealed && (
-                      <motion.div
-                        key="body"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <div className="space-y-3 px-4 pb-5">
-                          <div
-                            className="rounded-lg px-3 py-2 font-mono text-[11px] uppercase tracking-[0.15em]"
-                            style={{
-                              color: meta.accent,
-                              background: `color-mix(in oklch, ${meta.accent} 8%, transparent)`,
-                            }}
-                          >
-                            ✦ 出題者のメタ視点 — なぜこの誘導が設けられているか
-                          </div>
-                          <MathText className="text-sm font-medium text-foreground/90">
-                            {step.title}
-                          </MathText>
-                          <LessonRenderer content={step.body} />
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </li>
-            );
-          }
+          const markerClassName = isGuidance
+            ? "bg-blue-100 text-blue-700"
+            : isRevealed
+              ? "bg-emerald-100 text-emerald-700"
+              : isActive
+                ? "bg-blue-100 text-blue-700"
+                : "bg-slate-200 text-slate-600";
 
           return (
             <li key={step.order}>
-              <div
-                className={cn(
-                  "glass rounded-2xl transition-shadow",
-                  isRevealed && "glow-cyan/0",
-                )}
-                style={
-                  isRevealed
-                    ? {
-                        borderColor: `color-mix(in oklch, ${meta.accent} 40%, transparent)`,
-                      }
-                    : undefined
-                }
-              >
-                {/* Header */}
-                <div className="flex items-center gap-3 p-4">
+              <div className={`rounded-2xl border shadow-sm ${cardClassName}`}>
+                <div className="flex items-start gap-3 p-4 sm:p-5">
                   <span
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-mono text-sm font-bold"
-                    style={{
-                      color: meta.accent,
-                      background: `color-mix(in oklch, ${meta.accent} 14%, transparent)`,
-                      boxShadow: isRevealed
-                        ? `0 0 18px color-mix(in oklch, ${meta.accent} 30%, transparent)`
-                        : undefined,
-                    }}
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold ${markerClassName}`}
+                    aria-hidden="true"
                   >
-                    {isRevealed ? <Check className="h-4 w-4" /> : i + 1}
+                    {isGuidance ? (
+                      <Lightbulb className="h-5 w-5" />
+                    ) : isRevealed ? (
+                      <Check className="h-5 w-5" />
+                    ) : (
+                      index + 1
+                    )}
                   </span>
 
                   <div className="min-w-0 flex-1">
-                    <div
-                      className="font-display text-sm font-semibold tracking-wide"
-                      style={{ color: meta.accent }}
-                    >
-                      {meta.label}
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="text-sm font-bold text-slate-950">
+                        {presentation.label}
+                      </p>
+                      {isGuidance && (
+                        <span className="rounded-full border border-blue-200 bg-white px-2 py-0.5 text-xs font-semibold text-blue-800">
+                          設問分析
+                        </span>
+                      )}
                     </div>
-                    <div className="truncate text-xs text-muted-foreground">
-                      {isLocked ? "前のステップを開くと解放されます" : meta.hint}
-                    </div>
+                    <p className="mt-1 text-xs leading-5 text-slate-600 sm:text-sm">
+                      {isLocked
+                        ? "前のステップを確認すると、この解説を開けます"
+                        : presentation.hint}
+                    </p>
                   </div>
 
                   {isActive && (
                     <button
                       type="button"
-                      onClick={() => setRevealed((r) => Math.max(r, i + 1))}
-                      className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors"
-                      style={{
-                        color: meta.accent,
-                        borderColor: `color-mix(in oklch, ${meta.accent} 50%, transparent)`,
-                        background: `color-mix(in oklch, ${meta.accent} 10%, transparent)`,
-                      }}
+                      onClick={() => setRevealed((current) => Math.max(current, index + 1))}
+                      aria-controls={stepId}
+                      aria-expanded="false"
+                      className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-blue-700 bg-blue-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 sm:px-4"
                     >
-                      <Unlock className="h-3.5 w-3.5" />
-                      開く
+                      <Unlock className="h-4 w-4" aria-hidden="true" />
+                      解説を見る
                     </button>
                   )}
                   {isLocked && (
-                    <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
+                    <Lock
+                      className="mt-2 h-4 w-4 shrink-0 text-slate-400"
+                      aria-hidden="true"
+                    />
                   )}
                 </div>
 
-                {/* Body */}
                 <AnimatePresence initial={false}>
                   {isRevealed && (
                     <motion.div
+                      id={stepId}
                       key="body"
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -236,8 +179,13 @@ export function LogicSteps({
                       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="space-y-4 px-4 pb-5">
-                        <MathText className="text-sm font-medium text-foreground/90">
+                      <div className="space-y-4 border-t border-slate-200 px-4 pb-5 pt-4 sm:px-5">
+                        {isGuidance && (
+                          <div className="rounded-lg border border-blue-200 bg-white px-3 py-2 text-sm font-semibold leading-6 text-blue-900">
+                            出題意図の確認 — この誘導が設けられている理由
+                          </div>
+                        )}
+                        <MathText className="text-sm font-medium leading-7 text-slate-900 sm:text-base">
                           {step.title}
                         </MathText>
                         <LessonRenderer content={step.body} />
@@ -256,18 +204,37 @@ export function LogicSteps({
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass glow-magenta rounded-2xl p-4 text-center text-sm text-foreground/90"
+          role="status"
+          className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center text-sm font-medium leading-6 text-emerald-950"
         >
-          すべてのステップを開きました。論理は閉じています。{" "}
-          <span className="text-neon-magenta">この問題を完了に記録しました。</span>
+          すべての解説ステップを確認しました。この問題を完了として記録しました。
         </motion.div>
       )}
 
-      {/* 関連講座への誘導（躓いたユーザー向け。常時表示） */}
       {relatedLesson && (
-        <div className="pt-2">
-          <LessonLink slug={relatedLesson.slug} title={relatedLesson.title} />
-        </div>
+        <aside className="pt-2" aria-label="関連講座">
+          <Link
+            href={`/lessons/${relatedLesson.slug}`}
+            className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+          >
+            <span
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-700"
+              aria-hidden="true"
+            >
+              <Lightbulb className="h-5 w-5" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-semibold text-blue-800">関連講座</span>
+              <span className="mt-1 block font-semibold text-slate-950">
+                {relatedLesson.title}
+              </span>
+            </span>
+            <ArrowRight
+              className="h-5 w-5 shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-blue-700"
+              aria-hidden="true"
+            />
+          </Link>
+        </aside>
       )}
     </div>
   );

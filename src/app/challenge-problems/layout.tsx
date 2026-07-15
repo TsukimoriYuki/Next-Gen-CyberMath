@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { SubjectPublicationNotice } from "@/components/learning/SubjectPublicationNotice";
 import { createPublicMetadata } from "@/lib/public-metadata";
+import { requireSubjectPageAccess } from "@/lib/subject-route-guard";
 
 export const metadata: Metadata = createPublicMetadata({
   title: "数学の挑戦問題",
@@ -9,5 +11,11 @@ export const metadata: Metadata = createPublicMetadata({
 });
 
 export default function ChallengeProblemsLayout({ children }: { children: ReactNode }) {
-  return children;
+  const access = requireSubjectPageAccess("math", "problems");
+  return (
+    <>
+      <SubjectPublicationNotice access={access} />
+      {children}
+    </>
+  );
 }

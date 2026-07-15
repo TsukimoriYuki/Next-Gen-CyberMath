@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { getProblem } from "@/lib/content";
+import { collectVisibleRows } from "@/lib/collect-visible-rows";
+import { canAccessReviewItem } from "@/lib/review-publication";
 
 // GET /api/review/today
 // ログイン中ユーザーの今日期限の復習アイテムを最大20件返す。
@@ -11,14 +13,23 @@ export async function GET() {
   }
 
   try {
-    const items = await prisma.reviewItem.findMany({
-      where: {
-        userId: session.sub,
-        status: "ACTIVE",
-        nextReviewAt: { lte: new Date() },
-      },
-      orderBy: { nextReviewAt: "asc" },
-      take: 20,
+    const dueAt = new Date();
+    const items = await collectVisibleRows({
+      limit: 20,
+      batchSize: 100,
+      fetchBatch: ({ afterId, take }) =>
+        prisma.reviewItem.findMany({
+          where: {
+            userId: session.sub,
+            status: "ACTIVE",
+            nextReviewAt: { lte: dueAt },
+          },
+          orderBy: [{ nextReviewAt: "asc" }, { id: "asc" }],
+          take,
+          cursor: afterId ? { id: afterId } : undefined,
+          skip: afterId ? 1 : undefined,
+        }),
+      isVisible: (item) => canAccessReviewItem(item),
     });
 
     const enriched = items.map((item) => {

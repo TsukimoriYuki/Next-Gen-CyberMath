@@ -28,7 +28,7 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
     return (
       <div className="rounded-xl border border-sky-200 bg-sky-50 p-3">
         <div className="mb-2 flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-sky-100 px-2 py-0.5 text-[10px] font-bold text-sky-700">
+          <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-bold text-sky-800">
             {meta.label}
           </span>
           <BlockTitle title={block.title} />
@@ -46,7 +46,7 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
     return (
       <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-800">
             {meta.label}
           </span>
           <BlockTitle title={block.title} />
@@ -64,7 +64,7 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
     return (
       <div className="rounded-xl border border-violet-200 bg-violet-50/40 p-3">
         <div className="mb-2 flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-bold text-violet-700">
+          <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-bold text-violet-800">
             {meta.label}
           </span>
           <BlockTitle title={block.title} />
@@ -87,10 +87,7 @@ export function CourseLessonBlockRenderer({ block }: { block: LessonBlock }) {
       style={{ borderColor: `${meta.color}33`, background: meta.bg }}
     >
       <div className="mb-1.5 flex flex-wrap items-center gap-2">
-        <span
-          className="rounded-full px-2 py-0.5 text-[10px] font-bold"
-          style={{ background: `${meta.color}1a`, color: meta.color }}
-        >
+        <span className="rounded-full bg-white px-2 py-0.5 text-xs font-bold text-slate-700 ring-1 ring-slate-200">
           {meta.label}
         </span>
         <BlockTitle title={block.title} />

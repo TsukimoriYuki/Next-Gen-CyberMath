@@ -39,6 +39,7 @@ export function CommonTestExamHeader({
     <header
       className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur"
     >
+      <h1 className="sr-only">{preset.title} — 受験中</h1>
       {/* Progress bar */}
       <div className="h-1 w-full" style={{ background: "#e5e7eb" }}>
         <div
@@ -68,13 +69,13 @@ export function CommonTestExamHeader({
           )}
           <div className="flex flex-col leading-none">
             <span
-              className="font-mono text-lg font-bold tabular-nums"
+              className="text-lg font-bold tabular-nums"
               style={{ color: timerColor }}
             >
               {isOvertime ? "+" : ""}
               {isOvertime ? formatTime(elapsedSec - preset.examLimitSec) : formatTime(remainingSec)}
             </span>
-            <span className="text-[10px]" style={{ color: "#6b7280" }}>
+            <span className="text-xs" style={{ color: "#6b7280" }}>
               {isOvertime ? "時間超過" : "残り時間"}
             </span>
           </div>
@@ -83,7 +84,7 @@ export function CommonTestExamHeader({
         {/* Overtime badge */}
         {isOvertime && (
           <div
-            className="shrink-0 rounded px-2 py-0.5 text-[10px] font-bold"
+            className="shrink-0 rounded px-2 py-0.5 text-xs font-bold"
             style={{ background: "#fef2f2", border: "1px solid #fca5a5", color: "#dc2626" }}
           >
             時間超過中
@@ -103,7 +104,7 @@ export function CommonTestExamHeader({
         {/* Unanswered count */}
         {unansweredCount > 0 && (
           <div
-            className="hidden sm:flex items-center rounded px-2 py-1 text-[11px]"
+            className="hidden items-center rounded px-2 py-1 text-xs sm:flex"
             style={{ background: "#fffbeb", border: "1px solid #fcd34d", color: "#92400e" }}
           >
             未解答 {unansweredCount}
@@ -114,7 +115,7 @@ export function CommonTestExamHeader({
         <button
           type="button"
           onClick={onFinish}
-          className="flex shrink-0 items-center gap-1.5 rounded px-4 py-2 text-xs font-bold transition-all hover:opacity-85 active:scale-[0.97]"
+          className="flex min-h-11 shrink-0 items-center gap-1.5 rounded px-4 py-2 text-xs font-bold transition-all hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 active:scale-[0.97]"
           style={{
             background: isOvertime ? "#dc2626" : "#111827",
             color: "#ffffff",

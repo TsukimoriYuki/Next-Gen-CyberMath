@@ -1,10 +1,11 @@
 import type { CommonTestMockExam } from "@/data/common-test-mock-exams";
-import { getPublicCommonTestMockExams } from "@/data/common-test-mock-exams";
+import { getCommonTestMockExam } from "@/data/common-test-mock-exams";
 import {
   scoreCommonTestMockExam,
   type CommonTestMockAnswers,
 } from "@/lib/common-test-mock-scoring";
 import { getClientIp, rateLimit, rateLimitJson } from "@/lib/rate-limit";
+import { canAccessSubjectResource } from "@/lib/subject-publication";
 
 const MAX_BODY_BYTES = 64 * 1024;
 const MAX_DURATION_SEC = 8 * 60 * 60;
@@ -68,7 +69,16 @@ function validateOptionalClientScore(body: Record<string, unknown>, key: "score"
 }
 
 function findPublishedExam(examId: string): CommonTestMockExam | undefined {
-  return getPublicCommonTestMockExams().find((exam) => exam.id === examId);
+  const exam = getCommonTestMockExam(examId);
+  if (
+    !exam ||
+    exam.status !== "published" ||
+    exam.devOnly ||
+    !canAccessSubjectResource(exam.subject, "exams")
+  ) {
+    return undefined;
+  }
+  return exam;
 }
 
 export function validateExamAttemptPayload(

@@ -6,18 +6,20 @@ import { tagColor, tagSlug } from "@/data/tags";
 interface Props {
   weakTags: WeakTag[];
   lessons: RecommendedLesson[];
+  headingLevel?: 2 | 3 | 4;
 }
 
-export function WeakTagPanel({ weakTags, lessons }: Props) {
+export function WeakTagPanel({ weakTags, lessons, headingLevel = 2 }: Props) {
   const maxCount = weakTags[0]?.count ?? 1;
+  const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
 
   return (
-    <section className="glass glow-magenta rounded-2xl p-5">
-      <h2 className="mb-1 flex items-center gap-2 font-display text-sm font-bold tracking-wide text-neon-magenta">
-        <Lightbulb className="h-4 w-4" />
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Heading className="mb-1 flex items-center gap-2 text-lg font-bold text-slate-950">
+        <Lightbulb className="h-5 w-5 text-blue-700" />
         弱点タグと、おすすめの復習講座
-      </h2>
-      <p className="mb-4 text-xs text-muted-foreground">
+      </Heading>
+      <p className="mb-4 text-sm leading-6 text-slate-600">
         これまでに間違えた問題のタグを集計しました。よく間違える概念ほど大きく表示されます。
       </p>
 
@@ -36,7 +38,7 @@ export function WeakTagPanel({ weakTags, lessons }: Props) {
                 <Link
                   key={w.tag}
                   href={`/tags/${tagSlug(w.tag)}`}
-                  className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-xs transition-transform hover:-translate-y-0.5"
+                  className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-colors hover:bg-slate-50"
                   style={{
                     color: c,
                     borderColor: `color-mix(in oklch, ${c} 50%, transparent)`,
@@ -45,7 +47,7 @@ export function WeakTagPanel({ weakTags, lessons }: Props) {
                   }}
                 >
                   #{w.tag}
-                  <span className="text-[10px] opacity-70">×{w.count}</span>
+                  <span className="text-xs opacity-70">×{w.count}</span>
                 </Link>
               );
             })}
@@ -58,17 +60,17 @@ export function WeakTagPanel({ weakTags, lessons }: Props) {
                 <Link
                   key={rec.lesson.slug}
                   href={`/lessons/${rec.lesson.slug}`}
-                  className="glass glass-hover group rounded-xl p-4"
+                  className="group rounded-xl border border-slate-200 bg-slate-50 p-4 transition-colors hover:border-blue-300 hover:bg-blue-50"
                 >
                   <div className="mb-1 flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-1.5 font-display text-sm font-bold text-foreground">
-                      <BookOpen className="h-4 w-4 shrink-0 text-neon-cyan" />
+                    <div className="flex items-center gap-1.5 text-sm font-bold text-slate-950">
+                      <BookOpen className="h-4 w-4 shrink-0 text-blue-700" />
                       {rec.lesson.title}
                     </div>
                     <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
                   </div>
                   {rec.lesson.summary && (
-                    <p className="mb-2 line-clamp-2 text-xs text-muted-foreground">
+                    <p className="mb-2 line-clamp-2 text-sm text-slate-600">
                       {rec.lesson.summary}
                     </p>
                   )}
@@ -78,7 +80,7 @@ export function WeakTagPanel({ weakTags, lessons }: Props) {
                       return (
                         <span
                           key={t}
-                          className="rounded-full px-2 py-0.5 font-mono text-[10px]"
+                          className="rounded-full px-2 py-0.5 text-xs font-medium"
                           style={{
                             color: c,
                             background: `color-mix(in oklch, ${c} 12%, transparent)`,
@@ -93,7 +95,7 @@ export function WeakTagPanel({ weakTags, lessons }: Props) {
               ))}
             </div>
           ) : (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-slate-600">
               弱点タグに直接対応する講座が見つかりませんでした。上のタグから関連問題を復習しましょう。
             </p>
           )}

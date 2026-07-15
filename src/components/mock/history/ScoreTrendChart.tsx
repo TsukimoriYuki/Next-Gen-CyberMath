@@ -6,6 +6,7 @@ import type { TrendPoint } from "@/lib/history";
 
 interface Props {
   points: TrendPoint[];
+  headingLevel?: 2 | 3 | 4;
 }
 
 // レイアウト定数（viewBox 座標）
@@ -18,8 +19,9 @@ const PAD_B = 30;
 const PLOT_W = W - PAD_L - PAD_R;
 const PLOT_H = H - PAD_T - PAD_B;
 
-export function ScoreTrendChart({ points }: Props) {
+export function ScoreTrendChart({ points, headingLevel = 2 }: Props) {
   const [hover, setHover] = useState<number | null>(null);
+  const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
 
   const n = points.length;
   const x = (i: number) =>
@@ -30,11 +32,11 @@ export function ScoreTrendChart({ points }: Props) {
   const gridVals = [0, 25, 50, 75, 100];
 
   return (
-    <section className="glass rounded-2xl p-5">
-      <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-bold tracking-wide">
-        <TrendingUp className="h-4 w-4 text-neon-cyan" />
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Heading className="mb-3 flex items-center gap-2 text-lg font-bold text-slate-950">
+        <TrendingUp className="h-5 w-5 text-blue-700" />
         スコアの推移
-      </h2>
+      </Heading>
 
       {n === 0 ? (
         <p className="py-10 text-center text-sm text-muted-foreground">
@@ -62,9 +64,8 @@ export function ScoreTrendChart({ points }: Props) {
                 x={PAD_L - 6}
                 y={y(v) + 3}
                 textAnchor="end"
-                fontSize={10}
+                fontSize={12}
                 fill="var(--muted-foreground)"
-                fontFamily="var(--font-mono, monospace)"
               >
                 {v}
               </text>
@@ -76,7 +77,7 @@ export function ScoreTrendChart({ points }: Props) {
             <polyline
               points={linePts}
               fill="none"
-              stroke="var(--neon-cyan)"
+              stroke="#2563eb"
               strokeWidth={2.5}
               strokeLinejoin="round"
               strokeLinecap="round"
@@ -90,7 +91,7 @@ export function ScoreTrendChart({ points }: Props) {
                 cx={x(i)}
                 cy={y(p.scorePct)}
                 r={hover === i ? 6 : 4}
-                fill="var(--neon-magenta)"
+                fill="#047857"
                 stroke="#ffffff"
                 strokeWidth={1.5}
               />
@@ -102,6 +103,11 @@ export function ScoreTrendChart({ points }: Props) {
                 fill="transparent"
                 onMouseEnter={() => setHover(i)}
                 onMouseLeave={() => setHover(null)}
+                onFocus={() => setHover(i)}
+                onBlur={() => setHover(null)}
+                tabIndex={0}
+                role="img"
+                aria-label={`${i + 1}回目、${p.scorePct}%、${p.score}点／${p.total}点`}
                 style={{ cursor: "pointer" }}
               />
               {hover === i && (
@@ -112,7 +118,6 @@ export function ScoreTrendChart({ points }: Props) {
                   fontSize={12}
                   fontWeight={700}
                   fill="var(--foreground)"
-                  fontFamily="var(--font-mono, monospace)"
                 >
                   {p.scorePct}% ({p.score}/{p.total})
                 </text>
@@ -125,9 +130,8 @@ export function ScoreTrendChart({ points }: Props) {
             x={x(0)}
             y={H - 8}
             textAnchor="middle"
-            fontSize={10}
+            fontSize={12}
             fill="var(--muted-foreground)"
-            fontFamily="var(--font-mono, monospace)"
           >
             1回目
           </text>
@@ -136,18 +140,43 @@ export function ScoreTrendChart({ points }: Props) {
               x={x(n - 1)}
               y={H - 8}
               textAnchor="middle"
-              fontSize={10}
+              fontSize={12}
               fill="var(--muted-foreground)"
-              fontFamily="var(--font-mono, monospace)"
             >
               {n}回目
             </text>
           )}
         </svg>
       )}
-      <p className="mt-2 text-xs text-muted-foreground">
-        点にカーソルを合わせると各回のスコアが表示されます。
-      </p>
+      {n > 0 ? (
+        <details className="mt-3 rounded-xl border border-slate-200 bg-slate-50">
+          <summary className="flex min-h-11 cursor-pointer items-center px-3 py-2 text-sm font-semibold text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-inset">
+            各回の得点を表で確認
+          </summary>
+          <div className="overflow-x-auto border-t border-slate-200 p-3">
+            <table className="w-full min-w-80 text-left text-sm">
+              <thead>
+                <tr className="text-slate-600">
+                  <th scope="col" className="px-2 py-1 font-semibold">回</th>
+                  <th scope="col" className="px-2 py-1 font-semibold">受験日</th>
+                  <th scope="col" className="px-2 py-1 font-semibold">得点</th>
+                  <th scope="col" className="px-2 py-1 font-semibold">正答率</th>
+                </tr>
+              </thead>
+              <tbody>
+                {points.map((point, index) => (
+                  <tr key={`${point.date}-${index}`} className="border-t border-slate-200 text-slate-800">
+                    <th scope="row" className="px-2 py-1.5 font-semibold">{index + 1}回目</th>
+                    <td className="px-2 py-1.5">{point.date}</td>
+                    <td className="px-2 py-1.5">{point.score}/{point.total}点</td>
+                    <td className="px-2 py-1.5">{point.scorePct}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      ) : null}
     </section>
   );
 }

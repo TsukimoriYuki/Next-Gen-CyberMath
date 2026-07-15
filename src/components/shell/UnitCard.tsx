@@ -7,17 +7,17 @@ export function UnitCard({ unit }: { unit: UnitSummary }) {
   return (
     <Link
       href={`/units/${unit.slug}`}
-      className="glass glass-hover group relative flex flex-col gap-3 rounded-2xl p-6"
+      className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-offset-4"
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-display text-lg font-bold leading-snug tracking-wide text-foreground">
+        <h3 className="text-lg font-bold leading-snug text-slate-950">
           {unit.name}
         </h3>
-        <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-neon-cyan" />
+        <ArrowUpRight className="h-4 w-4 shrink-0 text-slate-500 transition-colors group-hover:text-blue-700" aria-hidden="true" />
       </div>
 
       {unit.description && (
-        <p className="text-sm leading-relaxed text-muted-foreground">
+        <p className="text-sm leading-6 text-slate-600">
           {unit.description}
         </p>
       )}
@@ -29,7 +29,7 @@ export function UnitCard({ unit }: { unit: UnitSummary }) {
           return (
             <span
               key={d}
-              className="rounded-full border px-2 py-0.5 font-mono text-[10px] font-bold"
+              className="rounded-full border px-2 py-0.5 text-xs font-semibold"
               style={{
                 color: meta.accent,
                 borderColor: `color-mix(in oklch, ${meta.accent} 40%, transparent)`,
@@ -41,20 +41,19 @@ export function UnitCard({ unit }: { unit: UnitSummary }) {
         })}
       </div>
 
-      <div className="mt-auto flex items-center gap-4 pt-1 text-[11px] text-muted-foreground">
+      <div className="mt-auto flex items-center gap-4 pt-1 text-sm text-slate-600">
         <span className="inline-flex items-center gap-1">
-          <FlaskConical className="h-3 w-3 text-neon-cyan/80" />
+          <FlaskConical className="h-4 w-4 text-blue-700" aria-hidden="true" />
           {unit.problemCount} 問
         </span>
         {unit.lessonCount > 0 && (
-          <span className="inline-flex items-center gap-1 text-neon-magenta/80">
-            <BookOpen className="h-3 w-3" />
-            授業 {unit.lessonCount}
+          <span className="inline-flex items-center gap-1 text-violet-700">
+            <BookOpen className="h-4 w-4" aria-hidden="true" />
+            講座 {unit.lessonCount}
           </span>
         )}
       </div>
 
-      <span className="pointer-events-none absolute inset-x-6 -bottom-px h-px scale-x-0 bg-gradient-to-r from-transparent via-neon-cyan to-transparent transition-transform duration-300 group-hover:scale-x-100" />
     </Link>
   );
 }

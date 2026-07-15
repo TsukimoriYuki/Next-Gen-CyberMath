@@ -26,13 +26,13 @@ export function WhyPopover({ noteKey, label }: { noteKey: string; label: string 
     return () => document.removeEventListener("mousedown", handleClick);
   }, [open]);
 
-  if (!note) return <span className="text-neon-cyan">{label}</span>;
+  if (!note) return <span className="font-semibold text-slate-800">{label}</span>;
 
   return (
     <span ref={ref} className="relative inline-block">
       <button
         type="button"
-        className="cursor-help border-b border-dotted border-neon-cyan/70 text-neon-cyan transition-colors hover:border-neon-cyan"
+        className="cursor-help rounded-sm border-b border-dotted border-blue-500 font-semibold text-blue-700 transition-colors hover:border-blue-800 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
         onFocus={() => setOpen(true)}
@@ -56,22 +56,16 @@ export function WhyPopover({ noteKey, label }: { noteKey: string; label: string 
             onMouseEnter={() => setOpen(true)}
             onMouseLeave={() => setOpen(false)}
           >
-            <div
-              className="rounded-xl border border-neon-cyan/30 bg-white/95 p-3 text-xs shadow-lg backdrop-blur-md"
-              style={{
-                boxShadow:
-                  "0 4px 20px oklch(0.58 0.13 215 / 0.12), 0 0 0 1px oklch(0.58 0.13 215 / 0.15)",
-              }}
-            >
+            <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-lg">
               <div className="mb-1.5 flex items-center gap-1.5">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-neon-cyan" />
-                <span className="font-display text-[11px] font-bold uppercase tracking-wider text-neon-cyan">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-blue-600" />
+                <span className="text-xs font-bold text-blue-800">
                   {note.title}
                 </span>
               </div>
               <WhyBody text={note.body} />
             </div>
-            <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-white/95" />
+            <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-white" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -83,7 +77,7 @@ export function WhyPopover({ noteKey, label }: { noteKey: string; label: string 
 function WhyBody({ text }: { text: string }) {
   const parts = text.split(/(\$[^$]+\$)/g);
   return (
-    <div className="space-y-1.5 leading-relaxed text-foreground/80">
+    <div className="space-y-1.5 leading-6 text-slate-700">
       {parts.map((part, i) => {
         if (part.startsWith("$") && part.endsWith("$") && part.length > 2) {
           return (

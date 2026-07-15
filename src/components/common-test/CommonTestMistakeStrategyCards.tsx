@@ -33,14 +33,14 @@ export function CommonTestMistakeStrategyCards({
               {strategy.lectureHref ? (
                 <Link
                   href={strategy.lectureHref}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-violet-200 bg-white px-2.5 py-1.5 text-[11px] font-bold text-violet-700 transition hover:bg-violet-50"
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-blue-200 bg-white px-3 py-2 text-xs font-bold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                 >
                   <BookOpen className="h-3.5 w-3.5" />
                   {strategy.lectureLabel ?? "関連講義を見る"}
                   <ArrowRight className="h-3 w-3" />
                 </Link>
               ) : (
-                <span className="inline-flex rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-bold text-slate-500">
+                <span className="inline-flex min-h-11 items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-500">
                   関連講義は無料教材を優先整備中
                 </span>
               )}

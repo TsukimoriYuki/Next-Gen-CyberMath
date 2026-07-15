@@ -1,6 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -29,17 +37,22 @@ import {
 } from "@/lib/exam-clock";
 
 type Mode = "taking" | "submitted" | "review";
+type MobilePane = "pdf" | "answers";
 
 // PDF冊子を正本として表示するビューア。問題本文はPDFをそのまま表示し、
 // Reactで再構成しない。採点・解説だけを構造化データ (exam.sections) から出す。
 export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) {
   const pdfUrl = exam.pdfUrl;
   const [mode, setMode] = useState<Mode>("taking");
+  const [mobilePane, setMobilePane] = useState<MobilePane>("pdf");
   const [answers, setAnswers] = useState<CommonTestMockAnswers>({});
   const [elapsedSec, setElapsedSec] = useState(0);
   const startedAtRef = useRef<number | null>(null);
   const answersRef = useRef<CommonTestMockAnswers>({});
   const hasSubmittedRef = useRef(false);
+  const pdfTabRef = useRef<HTMLButtonElement>(null);
+  const answersTabRef = useRef<HTMLButtonElement>(null);
+  const mobileTabsId = useId();
 
   const score = useMemo(() => scoreCommonTestMockExam(exam, answers), [exam, answers]);
   const durationSec = exam.durationMinutes * 60;
@@ -62,6 +75,28 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
       answersRef.current = nextAnswers;
       return nextAnswers;
     });
+  }
+
+  function selectMobilePane(pane: MobilePane, moveFocus = false) {
+    setMobilePane(pane);
+    if (moveFocus) {
+      const tab = pane === "pdf" ? pdfTabRef.current : answersTabRef.current;
+      tab?.focus();
+    }
+  }
+
+  function handleMobileTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const nextPane =
+      event.key === "Home"
+        ? "pdf"
+        : event.key === "End"
+          ? "answers"
+          : mobilePane === "pdf"
+            ? "answers"
+            : "pdf";
+    selectMobilePane(nextPane, true);
   }
 
   const submitExam = useCallback((clockSnapshot?: ExamClockSnapshot) => {
@@ -132,20 +167,23 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
 
   if (!pdfUrl) {
     return (
-      <main className="mx-auto max-w-2xl px-4 py-16 text-center">
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center">
         <p className="text-sm text-slate-600">
           このPDF冊子はまだ準備中です。「{exam.title}」の詳細は品質チェックリストを参照してください。
         </p>
-        <Link href="/common-test/simulator" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-700">
+        <Link
+          href="/common-test/simulator"
+          className="mt-4 inline-flex min-h-11 items-center gap-2 px-3 text-sm font-bold text-blue-700"
+        >
           <ArrowLeft className="h-4 w-4" />
           模試一覧へ戻る
         </Link>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main data-exam-shell className="min-h-screen bg-[#f4f1ea] text-slate-950">
+    <div data-exam-shell className="min-h-screen bg-[#f4f1ea] text-slate-950">
       <header
         data-testid="exam-header"
         className="sticky top-[env(safe-area-inset-top)] z-40 border-b border-stone-300 bg-white"
@@ -154,7 +192,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
           <div className="min-w-0">
             <Link
               href="/common-test/simulator"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900"
+              className="inline-flex min-h-11 items-center gap-1.5 px-2 text-xs font-bold text-slate-600 hover:text-blue-700"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               模試一覧へ戻る
@@ -177,10 +215,10 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
             )}>
               <Clock className={cn("h-4 w-4", isOvertime ? "text-rose-700" : "text-slate-600")} />
               <div>
-                <div className="text-[10px] font-bold text-slate-500">
+                <div className="text-xs font-bold text-slate-500">
                   {isOvertime ? "時間超過" : mode === "taking" ? "残り時間" : "経過時間"}
                 </div>
-                <div className="font-mono text-sm font-extrabold text-slate-950">
+                <div className="text-sm font-extrabold tabular-nums text-slate-950">
                   {formatTime(mode === "taking" ? remainingSec : elapsedSec)}
                 </div>
               </div>
@@ -189,7 +227,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
               <button
                 type="button"
                 onClick={() => submitExam()}
-                className="inline-flex items-center gap-2 rounded border border-slate-950 bg-slate-950 px-4 py-3 text-sm font-extrabold text-white hover:bg-slate-800"
+                className="inline-flex min-h-11 items-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-2 text-sm font-extrabold text-white hover:bg-blue-800"
               >
                 <Send className="h-4 w-4" />
                 提出する
@@ -198,7 +236,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
               <button
                 type="button"
                 onClick={() => setMode("review")}
-                className="inline-flex items-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-3 text-sm font-extrabold text-white hover:bg-blue-800"
+                className="inline-flex min-h-11 items-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-2 text-sm font-extrabold text-white hover:bg-blue-800"
               >
                 <BookOpen className="h-4 w-4" />
                 解説を見る
@@ -221,34 +259,87 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
         </section>
       )}
 
+      <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6 lg:hidden">
+        <div
+          role="tablist"
+          aria-label="模試の表示切り替え"
+          className="grid grid-cols-2 rounded-xl border border-stone-300 bg-white p-1"
+        >
+          <button
+            ref={pdfTabRef}
+            type="button"
+            role="tab"
+            id={`${mobileTabsId}-pdf-tab`}
+            aria-selected={mobilePane === "pdf"}
+            aria-controls={`${mobileTabsId}-pdf-panel`}
+            tabIndex={mobilePane === "pdf" ? 0 : -1}
+            onClick={() => selectMobilePane("pdf")}
+            onKeyDown={handleMobileTabKeyDown}
+            className={cn(
+              "min-h-11 rounded-lg px-3 py-2 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2",
+              mobilePane === "pdf"
+                ? "bg-blue-50 text-blue-800 ring-1 ring-blue-200"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+            )}
+          >
+            PDF問題冊子
+          </button>
+          <button
+            ref={answersTabRef}
+            type="button"
+            role="tab"
+            id={`${mobileTabsId}-answers-tab`}
+            aria-selected={mobilePane === "answers"}
+            aria-controls={`${mobileTabsId}-answers-panel`}
+            tabIndex={mobilePane === "answers" ? 0 : -1}
+            onClick={() => selectMobilePane("answers")}
+            onKeyDown={handleMobileTabKeyDown}
+            className={cn(
+              "min-h-11 rounded-lg px-3 py-2 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2",
+              mobilePane === "answers"
+                ? "bg-blue-50 text-blue-800 ring-1 ring-blue-200"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+            )}
+          >
+            解答用紙
+          </button>
+        </div>
+      </div>
+
       <div className="mx-auto grid max-w-6xl gap-5 px-4 py-5 sm:px-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
         {/* PDF booklet — the source of truth. Not reconstructed as React/HTML. */}
-        <section className="min-w-0">
+        <section
+          id={`${mobileTabsId}-pdf-panel`}
+          role="tabpanel"
+          aria-labelledby={`${mobileTabsId}-pdf-tab`}
+          tabIndex={0}
+          className={cn("min-w-0", mobilePane !== "pdf" && "hidden lg:block")}
+        >
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <a
               href={pdfUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded border border-stone-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-blue-300"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded border border-stone-300 bg-white px-3 py-2 text-sm font-bold text-slate-700 hover:border-blue-300 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
             >
-              <ExternalLink className="h-3.5 w-3.5" />
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
               別タブでPDFを開く
             </a>
             <a
               href={pdfUrl}
               download
-              className="inline-flex items-center gap-1.5 rounded border border-stone-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-blue-300"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded border border-stone-300 bg-white px-3 py-2 text-sm font-bold text-slate-700 hover:border-blue-300 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
             >
-              <Download className="h-3.5 w-3.5" />
+              <Download className="h-3.5 w-3.5" aria-hidden="true" />
               ダウンロード
             </a>
             <a
               href={pdfUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded border border-stone-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-blue-300"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded border border-stone-300 bg-white px-3 py-2 text-sm font-bold text-slate-700 hover:border-blue-300 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
             >
-              <Printer className="h-3.5 w-3.5" />
+              <Printer className="h-3.5 w-3.5" aria-hidden="true" />
               印刷（別タブで開いて印刷）
             </a>
           </div>
@@ -262,7 +353,13 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
         </section>
 
         {/* Answer sheet — collects answers only; problem text lives in the PDF. */}
-        <section className="min-w-0">
+        <section
+          id={`${mobileTabsId}-answers-panel`}
+          role="tabpanel"
+          aria-labelledby={`${mobileTabsId}-answers-tab`}
+          tabIndex={0}
+          className={cn("min-w-0", mobilePane !== "answers" && "hidden lg:block")}
+        >
           <div className="rounded border border-stone-300 bg-white p-4">
             <h2 className="text-sm font-extrabold text-slate-900">解答用紙</h2>
             <p className="mt-1 text-xs leading-5 text-slate-500">
@@ -285,7 +382,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
                       return (
                         <div key={question.id} className="border border-stone-200 p-3">
                           <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
-                            <span className="inline-flex h-6 min-w-6 items-center justify-center border border-slate-400 bg-white px-1.5 font-mono">
+                            <span className="inline-flex h-6 min-w-6 items-center justify-center border border-slate-400 bg-white px-1.5 font-bold tabular-nums">
                               {index + 1}
                             </span>
                             {question.points}点
@@ -317,7 +414,7 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
                                     <Link
                                       key={href}
                                       href={href}
-                                      className="inline-flex items-center gap-1 border border-blue-200 bg-white px-2 py-1 font-bold text-blue-700"
+                                      className="inline-flex min-h-11 items-center gap-1 border border-blue-200 bg-white px-3 py-2 text-xs font-bold text-blue-700"
                                     >
                                       <BookOpen className="h-3 w-3" />
                                       復習リンク
@@ -337,15 +434,15 @@ export function CommonTestPdfMockViewer({ exam }: { exam: CommonTestMockExam }) 
           </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 }
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="border border-stone-200 bg-stone-50 px-4 py-3">
-      <div className="text-[11px] font-bold text-slate-500">{label}</div>
-      <div className="mt-1 font-mono text-lg font-extrabold text-slate-950">{value}</div>
+      <div className="text-xs font-bold text-slate-500">{label}</div>
+      <div className="mt-1 text-lg font-extrabold tabular-nums text-slate-950">{value}</div>
     </div>
   );
 }

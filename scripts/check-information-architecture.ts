@@ -127,7 +127,7 @@ for (const subject of PUBLIC_SUBJECTS) {
   if (fs.existsSync(layoutPath)) {
     const layoutSource = fs.readFileSync(layoutPath, "utf8");
     check(
-      layoutSource.includes("isVisibleSubject") && layoutSource.includes("notFound"),
+      layoutSource.includes("requireSubjectPageAccess"),
       `${subject.id} layout must reject a hidden subject`,
     );
   }

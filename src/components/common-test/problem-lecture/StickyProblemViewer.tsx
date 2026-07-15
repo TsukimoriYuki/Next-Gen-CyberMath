@@ -102,29 +102,38 @@ function ViewerToolbar({
   onToggleFullscreen: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between gap-2 border-b border-slate-100 px-3 py-2 sm:px-4">
+    <div className="flex flex-col gap-2 border-b border-slate-100 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:px-4">
       <div className="flex min-w-0 items-center gap-2">
         <FileText className="h-4 w-4 shrink-0 text-blue-600" />
-        <span className="truncate text-xs font-bold text-slate-700 sm:text-sm">
+        <span className="truncate text-sm font-bold text-slate-700">
           {title}・問題PDF
         </span>
       </div>
-      <div className="flex shrink-0 items-center gap-1">
+      <div className="flex w-full shrink-0 flex-wrap items-center justify-end gap-1 sm:w-auto">
         {!fullscreen && (
           <ToolbarButton
             label={minimized ? "問題PDFを展開する" : "問題PDFを最小化する"}
             onClick={onToggleMinimize}
+            expanded={!minimized}
           >
             {minimized ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
           </ToolbarButton>
         )}
         {!fullscreen && (
-          <ToolbarButton label="問題PDFを全画面表示する" onClick={onToggleFullscreen}>
+          <ToolbarButton
+            label="問題PDFを全画面表示する"
+            onClick={onToggleFullscreen}
+            pressed={false}
+          >
             <Maximize2 className="h-4 w-4" />
           </ToolbarButton>
         )}
         {fullscreen && (
-          <ToolbarButton label="全画面表示を閉じる" onClick={onToggleFullscreen}>
+          <ToolbarButton
+            label="全画面表示を閉じる"
+            onClick={onToggleFullscreen}
+            pressed
+          >
             <Minimize2 className="h-4 w-4" />
           </ToolbarButton>
         )}
@@ -133,7 +142,7 @@ function ViewerToolbar({
           target="_blank"
           rel="noopener noreferrer"
           aria-label="問題PDFを別タブで開く"
-          className="inline-flex h-8 items-center justify-center gap-1 rounded-lg px-2 text-xs font-bold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-lg px-3 text-xs font-bold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         >
           <ExternalLink className="h-4 w-4" />
           <span>別タブでPDFを開く</span>
@@ -142,7 +151,7 @@ function ViewerToolbar({
           href={pdfUrl}
           download
           aria-label="問題PDFをダウンロードする"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         >
           <Download className="h-4 w-4" />
         </a>
@@ -155,17 +164,23 @@ function ToolbarButton({
   label,
   onClick,
   children,
+  expanded,
+  pressed,
 }: {
   label: string;
   onClick: () => void;
   children: ReactNode;
+  expanded?: boolean;
+  pressed?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+      aria-expanded={expanded}
+      aria-pressed={pressed}
+      className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
     >
       {children}
     </button>

@@ -166,7 +166,7 @@ export function ExamSetRunner({ examSet }: { examSet: ExamSet }) {
         </div>
       </div>
 
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
         <header className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <div className="flex flex-wrap gap-2 text-xs font-bold text-slate-600">
             <span className="rounded-full bg-blue-50 px-3 py-1 text-blue-700">
@@ -338,7 +338,7 @@ export function ExamSetRunner({ examSet }: { examSet: ExamSet }) {
             </div>
           )}
         </form>
-      </main>
+      </div>
     </div>
   );
 }

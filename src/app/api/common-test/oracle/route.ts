@@ -17,6 +17,7 @@ import {
   buildCommonTestOracleUserPrompt,
 } from "@/lib/common-test-ai-prompt";
 import { buildRuleBasedAnalysis } from "@/lib/common-test-rule-analysis";
+import { canAccessSubjectResource } from "@/lib/subject-publication";
 
 // ── レート制限（IPごと・1時間20回。超過時はフォールバックを返す） ──────────
 interface RateEntry {
@@ -83,6 +84,12 @@ export async function POST(req: NextRequest) {
     );
   }
   const input = body;
+  if (!canAccessSubjectResource(input.subjectId, "exams")) {
+    return NextResponse.json(
+      { ok: false, error: "対象の教材が見つかりません。" },
+      { status: 404 },
+    );
+  }
 
   // 認証は不要（localStorage履歴だけで分析できるため）。
   const ip =

@@ -15,6 +15,7 @@ import type { StoredAttempt } from "@/lib/exam";
 
 interface Props {
   attempts: StoredAttempt[];
+  headingLevel?: 2 | 3 | 4;
 }
 
 /** 出題問題を難易度別に数える。 */
@@ -28,17 +29,18 @@ function difficultyMix(slugs: string[]): Partial<Record<Difficulty, number>> {
   return m;
 }
 
-export function AttemptList({ attempts }: Props) {
+export function AttemptList({ attempts, headingLevel = 2 }: Props) {
   const [open, setOpen] = useState<string | null>(null);
+  const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
 
   return (
-    <section className="glass rounded-2xl p-5">
-      <h2 className="mb-1 flex items-center gap-2 font-display text-sm font-bold tracking-wide">
-        <History className="h-4 w-4 text-neon-cyan" />
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Heading className="mb-1 flex items-center gap-2 text-lg font-bold text-slate-950">
+        <History className="h-5 w-5 text-blue-700" />
         模試の履歴
-      </h2>
-      <p className="mb-3 text-xs text-muted-foreground">
-        行をクリックすると、その回の「初見問題」や誤答を復習できます。
+      </Heading>
+      <p className="mb-3 text-sm text-slate-600">
+        各行の詳細ボタンから、その回の初見問題や誤答を復習できます。
       </p>
 
       {attempts.length === 0 ? (
@@ -47,12 +49,12 @@ export function AttemptList({ attempts }: Props) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border/60 text-left text-xs text-muted-foreground">
+              <tr className="border-b border-slate-200 text-left text-sm text-slate-600">
                 <th className="py-2 pr-3 font-medium">日付</th>
                 <th className="py-2 pr-3 font-medium">スコア</th>
                 <th className="py-2 pr-3 font-medium">難易度構成</th>
                 <th className="py-2 pr-3 text-right font-medium">所要時間</th>
-                <th className="w-6 py-2" />
+                <th className="w-12 py-2"><span className="sr-only">詳細</span></th>
               </tr>
             </thead>
             <tbody>
@@ -65,6 +67,7 @@ export function AttemptList({ attempts }: Props) {
                 return (
                   <Row
                     key={a.id}
+                    id={a.id}
                     open={isOpen}
                     onToggle={() => setOpen(isOpen ? null : a.id)}
                     date={formatDate(a.createdAt)}
@@ -88,6 +91,7 @@ export function AttemptList({ attempts }: Props) {
 }
 
 function Row({
+  id,
   open,
   onToggle,
   date,
@@ -99,6 +103,7 @@ function Row({
   mockCount,
   children,
 }: {
+  id: string;
   open: boolean;
   onToggle: () => void;
   date: string;
@@ -112,15 +117,12 @@ function Row({
 }) {
   return (
     <>
-      <tr
-        onClick={onToggle}
-        className="cursor-pointer border-b border-border/40 transition-colors hover:bg-secondary/40"
-      >
-        <td className="py-2.5 pr-3 font-mono text-xs text-muted-foreground">{date}</td>
+      <tr className="border-b border-slate-200 transition-colors hover:bg-slate-50">
+        <td className="py-2.5 pr-3 text-sm text-slate-600">{date}</td>
         <td className="py-2.5 pr-3">
-          <span className="font-display font-bold text-neon-lime">{score}</span>
-          <span className="text-muted-foreground">/{total}</span>
-          <span className="ml-1.5 font-mono text-xs text-neon-cyan">({pct}%)</span>
+          <span className="font-bold text-emerald-700">{score}</span>
+          <span className="text-slate-600">/{total}</span>
+          <span className="ml-1.5 text-sm font-semibold text-blue-700">({pct}%)</span>
         </td>
         <td className="py-2.5 pr-3">
           <span className="flex flex-wrap items-center gap-1">
@@ -129,7 +131,7 @@ function Row({
               return (
                 <span
                   key={d}
-                  className="inline-flex items-center gap-0.5 rounded border px-1.5 py-0.5 font-mono text-[10px]"
+                  className="inline-flex items-center gap-0.5 rounded border px-1.5 py-0.5 text-xs font-medium"
                   style={{
                     color: meta.accent,
                     borderColor: `color-mix(in oklch, ${meta.accent} 40%, transparent)`,
@@ -141,25 +143,35 @@ function Row({
               );
             })}
             {mockCount > 0 && (
-              <span className="inline-flex items-center gap-0.5 rounded border border-neon-magenta/40 bg-neon-magenta/5 px-1.5 py-0.5 font-mono text-[10px] text-neon-magenta">
+              <span className="inline-flex items-center gap-0.5 rounded border border-violet-200 bg-violet-50 px-1.5 py-0.5 text-xs font-medium text-violet-700">
                 <Sparkles className="h-2.5 w-2.5" />
                 初見×{mockCount}
               </span>
             )}
           </span>
         </td>
-        <td className="py-2.5 pr-3 text-right font-mono text-xs text-muted-foreground">
+        <td className="py-2.5 pr-3 text-right text-sm text-slate-600">
           {duration}
         </td>
         <td className="py-2.5 text-right">
-          <ChevronDown
-            className="ml-auto h-4 w-4 text-muted-foreground transition-transform"
-            style={{ transform: open ? "rotate(180deg)" : "none" }}
-          />
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-expanded={open}
+            aria-controls={`attempt-details-${id}`}
+            aria-label={`${date}の演習詳細を${open ? "閉じる" : "開く"}`}
+            className="ml-auto flex min-h-11 min-w-11 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-offset-2"
+          >
+            <ChevronDown
+              className="h-4 w-4 transition-transform"
+              style={{ transform: open ? "rotate(180deg)" : "none" }}
+              aria-hidden="true"
+            />
+          </button>
         </td>
       </tr>
       {open && (
-        <tr className="border-b border-border/40">
+        <tr id={`attempt-details-${id}`} className="border-b border-slate-200">
           <td colSpan={5} className="px-1 pb-4 pt-1">
             {children}
           </td>
@@ -177,14 +189,14 @@ function ReviewPanel({
   wrong: { slug: string; title: string; difficulty: Difficulty }[];
 }) {
   return (
-    <div className="space-y-3 rounded-xl border border-border/50 bg-secondary/30 p-3">
+    <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
       <div>
-        <div className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-neon-magenta">
+        <div className="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-violet-700">
           <Sparkles className="h-3.5 w-3.5" />
           初見問題（この履歴からのみ復習できます）
         </div>
         {mockOnly.length === 0 ? (
-          <p className="text-xs text-muted-foreground">この回に初見問題はありませんでした。</p>
+          <p className="text-sm text-slate-600">この回に初見問題はありませんでした。</p>
         ) : (
           <div className="grid gap-1.5 sm:grid-cols-2">
             {mockOnly.map((p) => (
@@ -195,12 +207,12 @@ function ReviewPanel({
       </div>
 
       <div>
-        <div className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+        <div className="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-slate-700">
           <X className="h-3.5 w-3.5" />
           間違えた問題
         </div>
         {wrong.length === 0 ? (
-          <p className="text-xs text-muted-foreground">誤答はありません（全問正解）。</p>
+          <p className="text-sm text-slate-600">誤答はありません（全問正解）。</p>
         ) : (
           <div className="grid gap-1.5 sm:grid-cols-2">
             {wrong.map((p) => (
@@ -226,11 +238,11 @@ function ReviewLink({
   return (
     <Link
       href={`/problems/${slug}`}
-      className="glass glass-hover group flex items-center justify-between gap-2 rounded-lg p-2.5"
+      className="group flex min-h-11 items-center justify-between gap-2 rounded-lg border border-slate-200 bg-white p-2.5 transition-colors hover:border-blue-300 hover:bg-blue-50"
     >
       <span className="flex items-center gap-2 truncate">
         <span
-          className="shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-bold"
+          className="shrink-0 rounded px-1.5 py-0.5 text-xs font-bold"
           style={{
             color: meta.accent,
             background: `color-mix(in oklch, ${meta.accent} 12%, transparent)`,
@@ -238,7 +250,7 @@ function ReviewLink({
         >
           {meta.label}
         </span>
-        <span className="truncate text-xs text-foreground">{title}</span>
+        <span className="truncate text-sm text-slate-800">{title}</span>
       </span>
       <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
     </Link>

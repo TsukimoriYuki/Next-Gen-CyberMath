@@ -19,6 +19,11 @@ import { ReviewQueueRegistrar } from "@/components/common-test/ReviewQueueRegist
 import type { ReviewCandidate } from "@/components/common-test/ReviewQueueRegistrar";
 import { CommonTestAiStrategyPanel } from "@/components/common-test/ai/CommonTestAiStrategyPanel";
 import { CommonTestGuidedReviewPanel } from "@/components/common-test/CommonTestGuidedReviewPanel";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+} from "@/components/learning/LearningPageFrame";
 import type { CommonTestGuidedReviewItem } from "@/lib/common-test-guided-review";
 import {
   analyzeExamResult,
@@ -148,40 +153,30 @@ export function CommonTestExamResultPanel({
   const isMath = historyItem.subjectId !== "english-reading";
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-50 text-slate-900">
-      {/* Subtle grid */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `linear-gradient(rgba(${preset.theme.glowRgb},0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(${preset.theme.glowRgb},0.05) 1px, transparent 1px)`,
-          backgroundSize: "64px 64px",
-          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 360px)",
-          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 360px)",
-        }}
-      />
-
-      <div className="relative mx-auto max-w-4xl space-y-10 px-4 py-10 sm:px-6 sm:py-14">
+    <LearningPageShell width="reading" className="space-y-10">
+        <LearningBreadcrumbs
+          items={[
+            { label: "試験対策", href: "/exams" },
+            { label: "共通テスト", href: "/common-test" },
+            { label: preset.title, href: `/common-test/simulator/${preset.id}` },
+            { label: "演習結果" },
+          ]}
+        />
 
         {/* ── Header ─────────────────────────────────────────────────────── */}
-        <header className="text-center">
-          <div
-            className="mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5"
-            style={{ background: `${preset.theme.primary}10`, borderColor: `${preset.theme.primary}33`, color: preset.theme.primary }}
-          >
-            <Trophy className="h-3.5 w-3.5" />
-            <span className="text-xs font-semibold">演習結果</span>
-            <span className="font-mono text-[9px] uppercase tracking-[0.22em] opacity-60">Result</span>
-          </div>
-          <h2 className="font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-            試験終了
-          </h2>
-          <p className="mt-3 text-sm text-slate-500">
-            {preset.title} — 所要時間: {formatDuration(historyItem.actualDurationSec)}
+        <LearningPageHeader
+          eyebrow="演習結果"
+          title="試験終了"
+          description={
+            <p>
+            {preset.title}
             {!finishedOnTime && (
               <span className="ml-2 text-amber-600">(時間超過 +{formatDuration(historyItem.actualDurationSec - historyItem.examLimitSec)})</span>
             )}
-          </p>
-        </header>
+            </p>
+          }
+          meta={[{ label: "所要時間", value: formatDuration(historyItem.actualDurationSec) }]}
+        />
 
         {/* ── Dual Score ─────────────────────────────────────────────────── */}
         <section>
@@ -213,12 +208,12 @@ export function CommonTestExamResultPanel({
                 タイムロス
               </div>
               <div
-                className="font-display text-5xl font-extrabold"
+                className="text-5xl font-extrabold"
                 style={{ color: gap > 0 ? "#7c3aed" : "#059669" }}
               >
                 {gap > 0 ? `+${gap}` : "0"}
               </div>
-              <div className="text-xs leading-relaxed text-slate-500">
+              <div className="text-sm leading-6 text-slate-600">
                 {gap > 0
                   ? `時間があれば取れていた問題が${gap}${unitLabel}あります。理解はできているので、処理速度と時間配分が次の課題です。`
                   : "時間内に全問解き切れています。理想的なペースです。"}
@@ -231,7 +226,7 @@ export function CommonTestExamResultPanel({
         <section>
           <SectionLabel color={preset.theme.primary} en="By Section">大問別結果</SectionLabel>
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="grid grid-cols-4 gap-2 border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-[10px] font-bold text-slate-400 sm:grid-cols-6">
+            <div className="grid grid-cols-4 gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-bold text-slate-600 sm:grid-cols-6">
               <div className="col-span-2">大問</div>
               <div className="hidden text-center sm:block">解答/出題</div>
               <div className="text-center">正答</div>
@@ -255,17 +250,17 @@ export function CommonTestExamResultPanel({
                       第{sr.sectionNumber}問
                     </div>
                     {sr.sectionTitle && (
-                      <div className="truncate text-[11px] text-slate-400">{sr.sectionTitle}</div>
+                      <div className="truncate text-xs text-slate-600">{sr.sectionTitle}</div>
                     )}
                   </div>
-                  <div className="hidden text-center font-mono text-[11px] text-slate-500 sm:block">
+                  <div className="hidden text-center text-xs text-slate-600 sm:block">
                     {sr.answeredCount}/{sr.totalQuestions}
                   </div>
-                  <div className="text-center font-mono text-[11px] font-bold text-slate-800">{sr.correctCount}</div>
-                  <div className="hidden text-center font-mono text-[11px] font-bold text-slate-800 sm:block">
+                  <div className="text-center text-xs font-bold text-slate-800">{sr.correctCount}</div>
+                  <div className="hidden text-center text-xs font-bold text-slate-800 sm:block">
                     {sr.maxScore != null ? `${sr.earnedScore ?? 0}/${sr.maxScore}` : "—"}
                   </div>
-                  <div className="text-center font-mono text-[11px] font-bold" style={{ color: accuracyColor }}>
+                  <div className="text-center text-xs font-bold" style={{ color: accuracyColor }}>
                     {sr.answeredCount > 0 ? `${accuracy}%` : "—"}
                   </div>
                 </div>
@@ -320,17 +315,17 @@ export function CommonTestExamResultPanel({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span
-                          className="rounded px-2 py-0.5 text-[11px] font-bold"
+                          className="rounded px-2 py-1 text-xs font-bold"
                           style={{ background: accent.bg, border: `1px solid ${accent.border}`, color: accent.text }}
                         >
                           {s.label}
                         </span>
-                        <span className="text-[11px] text-slate-500">
+                        <span className="text-xs text-slate-600">
                           {s.correct}/{s.total}問
                         </span>
                       </div>
                       <span
-                        className="font-mono text-sm font-extrabold"
+                        className="text-sm font-extrabold"
                         style={{ color: pct >= 80 ? "#059669" : pct >= 60 ? "#d97706" : "#e11d48" }}
                       >
                         {s.accuracy >= 0 ? `${pct}%` : "—"}
@@ -347,13 +342,13 @@ export function CommonTestExamResultPanel({
               })}
 
               {analysis.weakestStage && (
-                <p className="border-t border-slate-100 pt-3 text-xs text-slate-600">
+                <p className="border-t border-slate-100 pt-3 text-sm leading-6 text-slate-600">
                   「{STAGE_ACCENT[analysis.weakestStage] && analysis.stageStats.find((s) => s.stage === analysis.weakestStage)?.label}」レベルの問題が最も正答率が低い状態です。基礎からの見直しを優先してください。
                 </p>
               )}
 
               {analysis.cascadeMisses.length > 0 && (
-                <p className="pt-1 text-xs text-amber-700">
+                <p className="pt-1 text-sm leading-6 text-amber-800">
                   前の問題の結果を引き継ぐ設問で、{analysis.cascadeMisses.length}か所の連続ミスが見られます。誘導の流れを意識した読解練習が有効です。
                 </p>
               )}
@@ -388,7 +383,7 @@ export function CommonTestExamResultPanel({
               )}
             </div>
             {analysis.markSheetStats.markSheetAccuracy < analysis.markSheetStats.choiceAccuracy - 15 && (
-              <p className="mt-3 text-xs text-amber-700">
+              <p className="mt-3 text-sm leading-6 text-amber-800">
                 数値入力問題の正答率が選択問題より低い傾向があります。計算ミスや桁の入力ミスに注意してください。
               </p>
             )}
@@ -430,12 +425,6 @@ export function CommonTestExamResultPanel({
           </section>
         )}
 
-        {/* ── 本番分析 ────────────────────────────────────────────────────── */}
-        <section>
-          <SectionLabel color={preset.theme.primary} en="Strategy">本番分析・次の一手</SectionLabel>
-          <CommonTestAiStrategyPanel examHistoryItem={historyItem} theme={preset.theme} />
-        </section>
-
         {/* ── Review queue ────────────────────────────────────────────────── */}
         {reviewCandidates.length > 0 && (
           <section>
@@ -444,83 +433,79 @@ export function CommonTestExamResultPanel({
           </section>
         )}
 
+        {/* ── 本番分析 ────────────────────────────────────────────────────── */}
+        <section>
+          <SectionLabel color={preset.theme.primary} en="Strategy">本番分析・次の一手</SectionLabel>
+          <CommonTestAiStrategyPanel examHistoryItem={historyItem} theme={preset.theme} />
+        </section>
+
         {/* ── Next steps ──────────────────────────────────────────────────── */}
         <section>
           <SectionLabel color={preset.theme.primary} en="Next Steps">次にやること</SectionLabel>
-          <div className="grid gap-3 sm:grid-cols-2">
-
-            {/* Retry */}
-            <Link
-              href={`/common-test/simulator/${preset.id}`}
-              className="group flex items-center gap-4 rounded-xl border bg-white p-4 shadow-sm transition-all hover:shadow-md"
-              style={{ borderColor: `${preset.theme.primary}40` }}
-            >
-              <div
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ background: `${preset.theme.primary}14` }}
-              >
-                <RefreshCw className="h-4 w-4" style={{ color: preset.theme.primary }} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-bold" style={{ color: preset.theme.primary }}>もう一度受験する</div>
-                <div className="text-xs text-slate-500">同じ科目で再挑戦</div>
-              </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-slate-300" />
-            </Link>
-
-            {/* Weakness boss */}
+          <div className="space-y-3">
+            {/* Primary review action */}
             <Link
               href="/common-test/weakness"
-              className="group flex items-center gap-4 rounded-xl border border-rose-200 bg-white p-4 shadow-sm transition-all hover:shadow-md"
+              className="group flex min-h-11 items-center gap-4 rounded-xl border border-blue-700 bg-blue-700 p-5 text-white shadow-sm transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-50">
-                <BarChart3 className="h-4 w-4 text-rose-600" />
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-white/15">
+                <BarChart3 className="h-5 w-5" aria-hidden="true" />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-bold text-rose-600">弱点分析を確認する</div>
-                <div className="text-xs text-slate-500">優先して取り組む課題を確認</div>
+                <div className="font-bold">弱点を復習する</div>
+                <div className="mt-1 text-sm text-blue-100">優先して取り組む問題と単元を確認</div>
               </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-slate-300" />
+              <ChevronRight className="h-5 w-5 shrink-0 text-blue-100" aria-hidden="true" />
             </Link>
 
-            {/* Daily playlist */}
-            <Link
-              href="/common-test/daily"
-              className="group flex items-center gap-4 rounded-xl border border-emerald-200 bg-white p-4 shadow-sm transition-all hover:shadow-md"
-            >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50">
-                <BookOpen className="h-4 w-4 text-emerald-600" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-bold text-emerald-600">今日の学習メニューへ</div>
-                <div className="text-xs text-slate-500">大問別ドリルで定着を図る</div>
-              </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-slate-300" />
-            </Link>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Link
+                href="/common-test/daily"
+                className="group flex min-h-11 items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+              >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                  <BookOpen className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-bold text-slate-950">今日の学習メニューへ</div>
+                  <div className="mt-1 text-sm text-slate-600">大問別ドリルで定着を図る</div>
+                </div>
+                <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" aria-hidden="true" />
+              </Link>
 
-            {/* Other exam / history */}
-            <div className="flex gap-3">
+              <Link
+                href={`/common-test/simulator/${preset.id}`}
+                className="group flex min-h-11 items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+              >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700">
+                  <RefreshCw className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-bold text-slate-950">もう一度受験する</div>
+                  <div className="mt-1 text-sm text-slate-600">同じ科目で再挑戦</div>
+                </div>
+                <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" aria-hidden="true" />
+              </Link>
+
               <Link
                 href="/common-test/simulator"
-                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-xs font-medium text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-900"
+                className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition-colors hover:border-blue-300 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
               >
                 科目を変える
-                <ArrowRight className="h-3.5 w-3.5" />
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
               <Link
                 href="/common-test/history"
-                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-xs font-medium text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-900"
+                className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition-colors hover:border-blue-300 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
               >
                 演習履歴
-                <ArrowRight className="h-3.5 w-3.5" />
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
-
           </div>
         </section>
 
-      </div>
-    </div>
+    </LearningPageShell>
   );
 }
 
@@ -541,9 +526,9 @@ function SectionLabel({
     <div className="mb-4 flex items-center gap-3">
       <div className="flex items-center gap-2">
         {icon && <span style={{ color }}>{icon}</span>}
-        <h3 className="text-sm font-bold text-slate-900">{children}</h3>
+        <h2 className="text-xl font-bold text-slate-950">{children}</h2>
         {en && (
-          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-400">{en}</span>
+          <span className="text-xs text-slate-500">{en}</span>
         )}
       </div>
       <div className="h-px flex-1 bg-slate-200" />
@@ -574,17 +559,17 @@ function ScoreCard({
         {label}
       </div>
       <div className="flex items-end gap-2">
-        <span className="font-display text-5xl font-extrabold" style={{ color }}>
+        <span className="text-5xl font-extrabold" style={{ color }}>
           {value}
         </span>
-        <span className="mb-1 font-mono text-sm text-slate-400">/ {total}{unit}</span>
+        <span className="mb-1 text-sm text-slate-600">/ {total}{unit}</span>
       </div>
       <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
         <div className="h-full rounded-full" style={{ width: `${pct}%`, background: color }} />
       </div>
       <div className="flex items-center justify-between">
-        <span className="font-mono text-xs font-bold" style={{ color }}>{pct}%</span>
-        <span className="text-[11px] text-slate-400">{sublabel}</span>
+        <span className="text-xs font-bold" style={{ color }}>{pct}%</span>
+        <span className="text-sm text-slate-600">{sublabel}</span>
       </div>
     </div>
   );
@@ -605,12 +590,12 @@ function MiniStatCard({
 }) {
   return (
     <div className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+      <div className="flex items-center gap-1.5 text-xs font-medium text-slate-600">
         <span style={{ color }}>{icon}</span>
         {label}
       </div>
       <div
-        className={`font-extrabold leading-tight ${small ? "text-xs" : "font-mono text-lg"}`}
+        className={`font-extrabold leading-tight ${small ? "text-sm" : "text-lg"}`}
         style={{ color }}
       >
         {value}
@@ -639,11 +624,11 @@ function AnswerTypeCard({
     <div className="space-y-3 rounded-xl border bg-white p-4 shadow-sm" style={{ borderColor: `${accentColor}33` }}>
       <div>
         <div className="text-xs font-bold" style={{ color: accentColor }}>{label}</div>
-        <div className="mt-0.5 text-[11px] text-slate-400">{description}</div>
+        <div className="mt-1 text-sm leading-6 text-slate-600">{description}</div>
       </div>
       <div className="flex items-end justify-between">
-        <span className="font-mono text-[11px] text-slate-500">{correct}/{total}問</span>
-        <span className="font-mono text-xl font-extrabold" style={{ color: accColor }}>{accuracy}%</span>
+        <span className="text-xs text-slate-600">{correct}/{total}問</span>
+        <span className="text-xl font-extrabold" style={{ color: accColor }}>{accuracy}%</span>
       </div>
       <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
         <div className="h-full rounded-full" style={{ width: `${accuracy}%`, background: accentColor }} />

@@ -9,6 +9,7 @@ import {
 } from "@/data/course-curriculum";
 import { CourseLessonPageView } from "@/components/courses/CourseLessonPageView";
 import { createPublicMetadata } from "@/lib/public-metadata";
+import { requireSubjectPageAccess } from "@/lib/subject-route-guard";
 
 export async function generateMetadata({
   params,
@@ -51,6 +52,8 @@ export default async function CourseLessonPage({
   const unit = getCourseUnit(subjectId, unitId);
   const lesson = getCourseLesson(subjectId, unitId, lessonId);
   if (!subject || !unit || !lesson) notFound();
-  if (!isPublicCourseSubject(subject) && process.env.NODE_ENV === "production") notFound();
+  requireSubjectPageAccess(subject.parentSubjectId, "courses", {
+    resourcePublished: isPublicCourseSubject(subject),
+  });
   return <CourseLessonPageView subject={subject} unit={unit} lesson={lesson} />;
 }

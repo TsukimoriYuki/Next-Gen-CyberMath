@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { collectVisibleRows } from "@/lib/collect-visible-rows";
+import { canAccessReviewItem } from "@/lib/review-publication";
+import { canAccessSubjectResource } from "@/lib/subject-publication";
 
 // GET /api/review/list
 // ログイン中ユーザーのReviewItem一覧を返す。
@@ -28,43 +31,58 @@ export async function GET(request: Request) {
     const itemType = url.searchParams.get("itemType") ?? undefined;
     const limitParam = parseInt(url.searchParams.get("limit") ?? "50", 10);
     const limit = Math.min(Math.max(1, isNaN(limitParam) ? 50 : limitParam), 100);
+    if (subjectId && !canAccessSubjectResource(subjectId, "review")) {
+      return Response.json({ ok: false, error: "not found" }, { status: 404 });
+    }
 
-    const items = await prisma.reviewItem.findMany({
-      where: {
-        userId: session.sub,
-        ...(status ? { status } : {}),
-        ...(subjectId ? { subjectId } : {}),
-        ...(sectionId ? { sectionId } : {}),
-        ...(itemType ? { itemType } : {}),
-      },
-      orderBy: [{ status: "asc" }, { nextReviewAt: "asc" }],
-      take: limit,
-      select: {
-        id: true,
-        itemType: true,
-        itemId: true,
-        subjectId: true,
-        sectionId: true,
-        title: true,
-        source: true,
-        status: true,
-        level: true,
-        wrongCount: true,
-        correctStreak: true,
-        reasonFlags: true,
-        skillTags: true,
-        nextReviewAt: true,
-        lastReviewedAt: true,
-        createdAt: true,
-      },
+    const visibleItems = await collectVisibleRows({
+      limit,
+      batchSize: 100,
+      fetchBatch: ({ afterId, take }) =>
+        prisma.reviewItem.findMany({
+          where: {
+            userId: session.sub,
+            ...(status ? { status } : {}),
+            ...(subjectId ? { subjectId } : {}),
+            ...(sectionId ? { sectionId } : {}),
+            ...(itemType ? { itemType } : {}),
+          },
+          orderBy: [
+            { status: "asc" },
+            { nextReviewAt: "asc" },
+            { id: "asc" },
+          ],
+          take,
+          cursor: afterId ? { id: afterId } : undefined,
+          skip: afterId ? 1 : undefined,
+          select: {
+            id: true,
+            itemType: true,
+            itemId: true,
+            subjectId: true,
+            sectionId: true,
+            title: true,
+            source: true,
+            status: true,
+            level: true,
+            wrongCount: true,
+            correctStreak: true,
+            reasonFlags: true,
+            skillTags: true,
+            nextReviewAt: true,
+            lastReviewedAt: true,
+            createdAt: true,
+          },
+        }),
+      isVisible: (item) => canAccessReviewItem(item),
     });
 
     const now = new Date();
-    const todayCount = items.filter(
+    const todayCount = visibleItems.filter(
       (i) => i.status === "ACTIVE" && i.nextReviewAt <= now
     ).length;
-    const masteredCount = items.filter((i) => i.status === "MASTERED").length;
-    const overdueCount = items.filter(
+    const masteredCount = visibleItems.filter((i) => i.status === "MASTERED").length;
+    const overdueCount = visibleItems.filter(
       (i) =>
         i.status === "ACTIVE" &&
         i.nextReviewAt < now &&
@@ -74,14 +92,14 @@ export async function GET(request: Request) {
 
     return Response.json({
       ok: true,
-      items: items.map((item) => ({
+      items: visibleItems.map((item) => ({
         ...item,
         nextReviewAt: item.nextReviewAt.toISOString(),
         lastReviewedAt: item.lastReviewedAt?.toISOString() ?? null,
         createdAt: item.createdAt.toISOString(),
       })),
       meta: {
-        total: items.length,
+        total: visibleItems.length,
         todayCount,
         masteredCount,
         overdueCount,

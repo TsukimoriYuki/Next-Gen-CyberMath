@@ -41,10 +41,10 @@ const MATH_PROBLEM_ROUTES = [
   "/tags",
   "/math/calculation",
   "/challenge-problems",
+  "/dojo",
 ] as const;
 
 const MATH_EXAM_ROUTES = [
-  "/dojo",
   "/common-test/simulator",
   "/common-test/practice",
   "/common-test/problem-lectures",

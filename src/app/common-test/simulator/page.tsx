@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Clock, FileText, ShieldCheck } from "lucide-react";
+import { notFound } from "next/navigation";
+import { BookOpen, Clock, FileText } from "lucide-react";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+} from "@/components/learning/LearningPageFrame";
+import { SubjectPublicationNotice } from "@/components/learning/SubjectPublicationNotice";
 import {
   getCommonTestMockExamStats,
   getPublicCommonTestMockExams,
 } from "@/data/common-test-mock-exams";
 import { createPublicMetadata } from "@/lib/public-metadata";
+import { resolveTopLevelSubjectId } from "@/lib/subject-publication";
+import { requireSubjectPageAccess } from "@/lib/subject-route-guard";
 
 export const metadata: Metadata = createPublicMetadata({
   title: "共通テスト型本番模試",
@@ -16,34 +25,43 @@ export const metadata: Metadata = createPublicMetadata({
 
 export default function SimulatorIndexPage() {
   const publicMocks = getPublicCommonTestMockExams();
+  const guardedMocks = publicMocks.map((mock) => {
+    const subjectId = resolveTopLevelSubjectId(mock.subject);
+    if (!subjectId) notFound();
+
+    const resourcePublished =
+      mock.status === "published" && mock.devOnly !== true;
+    const access = requireSubjectPageAccess(subjectId, "exams", {
+      resourcePublished,
+    });
+    return { access, mock };
+  });
+  const subjectNotices = Array.from(
+    new Map(
+      guardedMocks.map(({ access }) => [access.subject.id, access]),
+    ).values(),
+  );
 
   return (
-    <main className="min-h-screen bg-stone-50 text-slate-950">
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
-        <Link
-          href="/common-test"
-          className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-900"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          共通テスト対策へ戻る
-        </Link>
-
-        <header className="mt-8">
-          <div className="inline-flex items-center gap-2 border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700">
-            <ShieldCheck className="h-4 w-4" />
-            共通テスト型本番模試
-          </div>
-          <h1 className="mt-4 text-3xl font-black tracking-normal sm:text-4xl">
-            数学I・数学Aの本番形式を70分で解く
-          </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            公開中の本番模試は、オリジナルPDFを正本としてWeb解答欄を対応させた教材です。問題本文は新規生成せず、
-            大問構成・空欄・選択肢・図をPDFに合わせて実装しています。
-          </p>
-        </header>
+    <>
+      {subjectNotices.map((access) => (
+        <SubjectPublicationNotice key={access.subject.id} access={access} />
+      ))}
+      <LearningPageShell width="reading">
+        <LearningBreadcrumbs
+          items={[
+            { label: "共通テスト対策", href: "/common-test" },
+            { label: "本番模試" },
+          ]}
+        />
+        <LearningPageHeader
+          eyebrow="共通テスト型本番模試"
+          title="数学I・数学Aの本番形式を70分で解く"
+          description="公開中の本番模試は、オリジナルPDFを正本としてWeb解答欄を対応させた教材です。問題本文は新規生成せず、大問構成・空欄・選択肢・図をPDFに合わせて実装しています。"
+        />
 
         <section className="mt-8 grid gap-4">
-          {publicMocks.map((mock) => {
+          {guardedMocks.map(({ mock }) => {
             const stats = getCommonTestMockExamStats(mock);
             return (
               <article
@@ -91,7 +109,7 @@ export default function SimulatorIndexPage() {
             );
           })}
         </section>
-      </div>
-    </main>
+      </LearningPageShell>
+    </>
   );
 }

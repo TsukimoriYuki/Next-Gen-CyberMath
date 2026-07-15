@@ -1695,7 +1695,7 @@ export function CourseDiagramBlock({
       <div className="p-3">{diagram}</div>
       {caption && (
         <div className="border-t border-sky-200 bg-white px-3 py-1.5">
-          <CourseBodyRenderer body={caption} className="text-[10px] leading-relaxed text-slate-500" />
+          <CourseBodyRenderer body={caption} className="text-xs leading-relaxed text-slate-600" />
         </div>
       )}
     </div>

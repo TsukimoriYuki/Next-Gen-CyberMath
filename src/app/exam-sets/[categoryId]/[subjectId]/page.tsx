@@ -27,7 +27,7 @@ export default async function ExamSetSubjectPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950">
-      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
+      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
         <Link
           href={`/exam-sets/${category.id}`}
           className="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-blue-600"
@@ -96,7 +96,7 @@ export default async function ExamSetSubjectPage({ params }: Props) {
             </Link>
           ))}
         </section>
-      </main>
+      </div>
     </div>
   );
 }

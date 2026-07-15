@@ -89,13 +89,13 @@ export function CommonTestMockExamRunner({ exam }: Props) {
   }
 
   return (
-    <main className="min-h-screen bg-[#f4f1ea] text-slate-950">
+    <div className="min-h-screen bg-slate-50 text-slate-950">
       <header className="no-print sticky top-0 z-40 border-b border-stone-300 bg-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="min-w-0">
             <Link
               href="/common-test/simulator"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900"
+              className="inline-flex min-h-11 items-center gap-1.5 px-2 text-xs font-bold text-slate-600 hover:text-blue-700"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               模試一覧へ戻る
@@ -126,7 +126,7 @@ export function CommonTestMockExamRunner({ exam }: Props) {
               <button
                 type="button"
                 onClick={() => setShowSubmitConfirm(true)}
-                className="inline-flex items-center gap-2 rounded border border-slate-950 bg-slate-950 px-4 py-3 text-sm font-extrabold text-white hover:bg-slate-800"
+                className="inline-flex min-h-11 items-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-2 text-sm font-extrabold text-white hover:bg-blue-800"
               >
                 <Send className="h-4 w-4" />
                 提出する
@@ -135,7 +135,7 @@ export function CommonTestMockExamRunner({ exam }: Props) {
               <button
                 type="button"
                 onClick={() => setMode("review")}
-                className="inline-flex items-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-3 text-sm font-extrabold text-white hover:bg-blue-800"
+                className="inline-flex min-h-11 items-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-2 text-sm font-extrabold text-white hover:bg-blue-800"
               >
                 <BookOpen className="h-4 w-4" />
                 解説を見る
@@ -178,7 +178,7 @@ export function CommonTestMockExamRunner({ exam }: Props) {
               type="button"
               onClick={() => go(-1)}
               disabled={currentIndex === 0}
-              className="inline-flex items-center gap-2 rounded border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex min-h-11 items-center gap-2 rounded border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronLeft className="h-4 w-4" />
               前の大問
@@ -190,7 +190,7 @@ export function CommonTestMockExamRunner({ exam }: Props) {
               type="button"
               onClick={() => go(1)}
               disabled={currentIndex + 1 === exam.sections.length}
-              className="inline-flex items-center gap-2 rounded border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex min-h-11 items-center gap-2 rounded border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
             >
               次の大問
               <ChevronRight className="h-4 w-4" />
@@ -211,7 +211,7 @@ export function CommonTestMockExamRunner({ exam }: Props) {
           onSubmit={submit}
         />
       )}
-    </main>
+    </div>
   );
 }
 
@@ -255,8 +255,8 @@ function ExamPaperSection({
             <div className="mt-2 text-sm text-slate-600">{section.unit}</div>
           </div>
           <div className="no-print rounded border border-stone-300 px-3 py-2 text-right">
-            <div className="text-[11px] font-bold text-slate-500">現在の大問</div>
-            <div className="font-mono text-sm font-extrabold text-slate-950">
+            <div className="text-xs font-bold text-slate-500">現在の大問</div>
+            <div className="text-sm font-extrabold tabular-nums text-slate-950">
               {sectionIndex + 1} / {exam.sections.length}
             </div>
           </div>
@@ -317,7 +317,7 @@ function QuestionBlock({
     <section className="break-inside-avoid px-5 py-5">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="inline-flex h-8 min-w-8 items-center justify-center border border-slate-500 bg-white px-2 font-mono text-sm font-bold">
+          <span className="inline-flex h-8 min-w-8 items-center justify-center border border-slate-500 bg-white px-2 text-sm font-bold tabular-nums">
             {index}
           </span>
           <span className="text-xs font-bold text-slate-500">{question.points}点</span>
@@ -330,7 +330,7 @@ function QuestionBlock({
           onClick={onToggleFlag}
           aria-pressed={flagged}
           className={cn(
-            "no-print inline-flex h-8 w-8 items-center justify-center rounded border text-slate-500",
+            "no-print inline-flex h-11 w-11 items-center justify-center rounded border text-slate-500",
             flagged ? "border-amber-400 bg-amber-100 text-amber-700" : "border-slate-300 bg-white",
           )}
           aria-label="見直しフラグ"
@@ -376,7 +376,7 @@ function QuestionBlock({
                 <Link
                   key={href}
                   href={href}
-                  className="inline-flex items-center gap-1 border border-blue-200 bg-white px-2.5 py-1 text-xs font-bold text-blue-700"
+                  className="inline-flex min-h-11 items-center gap-1 border border-blue-200 bg-white px-3 py-2 text-xs font-bold text-blue-700"
                 >
                   <BookOpen className="h-3.5 w-3.5" />
                   復習リンク
@@ -418,7 +418,7 @@ export function AnswerInput({
               onChange={(event) => onBlankAnswer(blank, event.target.value)}
               disabled={submitted}
               inputMode={blank.type.includes("integer") ? "numeric" : "text"}
-              className="h-10 rounded-none border border-slate-500 bg-white px-3 font-mono text-sm font-bold text-slate-950 outline-none focus:border-blue-600 disabled:bg-stone-100"
+              className="h-11 rounded-none border border-slate-500 bg-white px-3 text-sm font-bold tabular-nums text-slate-950 outline-none focus:border-blue-600 disabled:bg-stone-100"
               style={{ width: `${blank.width ?? 5}rem` }}
               aria-label={`${blank.label}の解答`}
             />
@@ -456,14 +456,14 @@ export function AnswerInput({
                 }
               }}
               className={cn(
-                "flex items-start gap-3 border px-3 py-3 text-left text-sm leading-6",
+                "flex min-h-11 items-start gap-3 border px-3 py-3 text-left text-sm leading-6",
                 active ? "border-blue-700 bg-blue-50" : "border-stone-300 bg-white",
                 showCorrect && "border-emerald-600 bg-emerald-50",
                 showWrong && "border-rose-500 bg-rose-50",
                 submitted ? "cursor-default" : "hover:border-blue-500",
               )}
             >
-              <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-full border border-slate-500 bg-white font-mono text-xs font-bold">
+              <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-full border border-slate-500 bg-white text-xs font-bold">
                 {choice.label}
               </span>
               <MathText className="text-sm leading-6 text-slate-900">{choice.text}</MathText>
@@ -479,7 +479,7 @@ export function AnswerInput({
       value={typeof answer === "string" ? answer : ""}
       onChange={(event) => onAnswer(event.target.value)}
       disabled={submitted}
-      className="mt-4 h-10 w-full max-w-sm rounded-none border border-slate-500 bg-white px-3 font-mono text-sm font-bold outline-none focus:border-blue-600 disabled:bg-stone-100"
+      className="mt-4 h-11 w-full max-w-sm rounded-none border border-slate-500 bg-white px-3 text-sm font-bold tabular-nums outline-none focus:border-blue-600 disabled:bg-stone-100"
       aria-label="解答"
     />
   );
@@ -647,18 +647,18 @@ function SectionNavigator({
               type="button"
               onClick={() => onSelect(section.id)}
               className={cn(
-                "border px-3 py-3 text-left",
+                "min-h-11 border px-3 py-3 text-left",
                 currentSectionId === section.id
-                  ? "border-slate-950 bg-slate-950 text-white"
+                  ? "border-blue-300 bg-blue-50 text-blue-900"
                   : "border-stone-300 bg-white text-slate-800 hover:border-slate-600",
               )}
             >
               <div className="text-xs font-extrabold">{section.title}</div>
-              <div className="mt-1 flex items-center justify-between text-[11px] opacity-80">
+              <div className="mt-1 flex items-center justify-between text-xs opacity-80">
                 <span>{answered}/{section.questions.length}問</span>
                 <span>{section.points}点</span>
               </div>
-              {flagged && <div className="mt-1 text-[11px] font-bold text-amber-600">見直しあり</div>}
+              {flagged && <div className="mt-1 text-xs font-bold text-amber-700">見直しあり</div>}
             </button>
           );
         })}
@@ -691,8 +691,8 @@ function AnswerStatusPanel({
         <div className="mt-4 space-y-2">
           {score.sectionScores.map((section) => (
             <div key={section.sectionId} className="border border-stone-200 p-2">
-              <div className="text-[11px] font-bold text-slate-700">{section.title}</div>
-              <div className="mt-1 font-mono text-sm font-extrabold">
+              <div className="text-xs font-bold text-slate-700">{section.title}</div>
+              <div className="mt-1 text-sm font-extrabold tabular-nums">
                 {section.score} / {section.maxScore}
               </div>
             </div>
@@ -727,8 +727,8 @@ function ResultBand({
           <div className="mt-3 grid gap-2 md:grid-cols-4">
             {score.sectionScores.map((section) => (
               <div key={section.sectionId} className="border border-stone-200 bg-stone-50 p-3">
-                <div className="text-[11px] font-bold text-slate-600">{section.title}</div>
-                <div className="mt-1 font-mono text-sm font-extrabold">
+                <div className="text-xs font-bold text-slate-600">{section.title}</div>
+                <div className="mt-1 text-sm font-extrabold tabular-nums">
                   {section.score} / {section.maxScore}
                 </div>
               </div>
@@ -738,7 +738,7 @@ function ResultBand({
         <button
           type="button"
           onClick={onReview}
-          className="inline-flex items-center justify-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-3 text-sm font-extrabold text-white"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-2 text-sm font-extrabold text-white"
         >
           <BookOpen className="h-4 w-4" />
           解説表示
@@ -779,14 +779,14 @@ function SubmitDialog({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded border border-stone-300 bg-white px-4 py-3 text-sm font-bold"
+            className="min-h-11 flex-1 rounded border border-stone-300 bg-white px-4 py-2 text-sm font-bold"
           >
             戻る
           </button>
           <button
             type="button"
             onClick={onSubmit}
-            className="flex-1 rounded border border-slate-950 bg-slate-950 px-4 py-3 text-sm font-bold text-white"
+            className="min-h-11 flex-1 rounded border border-blue-700 bg-blue-700 px-4 py-2 text-sm font-bold text-white hover:bg-blue-800"
           >
             提出する
           </button>
@@ -799,7 +799,7 @@ function SubmitDialog({
 function MiniReview({ label, value }: { label: string; value: string }) {
   return (
     <div className="border border-stone-200 bg-white p-3">
-      <div className="text-[11px] font-bold text-slate-500">{label}</div>
+      <div className="text-xs font-bold text-slate-500">{label}</div>
       <div className="mt-1 text-xs leading-5 text-slate-700">{value}</div>
     </div>
   );
@@ -810,8 +810,8 @@ function StatusBox({ label, value, danger = false }: { label: string; value: str
     <div className={cn("inline-flex items-center gap-2 border px-3 py-2", danger ? "border-rose-300 bg-rose-50" : "border-stone-300 bg-white")}>
       <Clock className={cn("h-4 w-4", danger ? "text-rose-700" : "text-slate-600")} />
       <div>
-        <div className="text-[10px] font-bold text-slate-500">{label}</div>
-        <div className="font-mono text-sm font-extrabold text-slate-950">{value}</div>
+        <div className="text-xs font-bold text-slate-500">{label}</div>
+        <div className="text-sm font-extrabold tabular-nums text-slate-950">{value}</div>
       </div>
     </div>
   );
@@ -820,8 +820,8 @@ function StatusBox({ label, value, danger = false }: { label: string; value: str
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="border border-stone-200 bg-stone-50 px-4 py-3">
-      <div className="text-[11px] font-bold text-slate-500">{label}</div>
-      <div className="mt-1 font-mono text-lg font-extrabold text-slate-950">{value}</div>
+      <div className="text-xs font-bold text-slate-500">{label}</div>
+      <div className="mt-1 text-lg font-extrabold tabular-nums text-slate-950">{value}</div>
     </div>
   );
 }
@@ -829,8 +829,8 @@ function Metric({ label, value }: { label: string; value: string }) {
 function SmallMetric({ label, value, danger = false }: { label: string; value: string; danger?: boolean }) {
   return (
     <div className={cn("border p-3 text-center", danger ? "border-amber-300 bg-amber-50" : "border-stone-200 bg-stone-50")}>
-      <div className="text-[11px] font-bold text-slate-500">{label}</div>
-      <div className="mt-1 font-mono text-lg font-extrabold text-slate-950">{value}</div>
+      <div className="text-xs font-bold text-slate-500">{label}</div>
+      <div className="mt-1 text-lg font-extrabold tabular-nums text-slate-950">{value}</div>
     </div>
   );
 }

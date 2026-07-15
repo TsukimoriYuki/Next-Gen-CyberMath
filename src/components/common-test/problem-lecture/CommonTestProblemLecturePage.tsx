@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { ArrowLeft, BookMarked, Clock, Target } from "lucide-react";
+import { BookMarked, Target } from "lucide-react";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+} from "@/components/learning/LearningPageFrame";
 import { MathText } from "@/components/math/Math";
 import type { CommonTestProblemLecture } from "@/types/common-test-problem-lecture";
 import { StickyProblemViewer } from "./StickyProblemViewer";
@@ -10,60 +15,43 @@ import { RelatedMathCourseLinks } from "./RelatedMathCourseLinks";
 
 export function CommonTestProblemLecturePage({ lecture }: { lecture: CommonTestProblemLecture }) {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <div className="lg:hidden">
-        <StickyProblemViewer pdfUrl={lecture.pdfUrl} title={lecture.title} variant="top" />
-      </div>
+    <LearningPageShell width="split">
+      <div className="lg:grid lg:grid-cols-[minmax(380px,42vw)_minmax(0,1fr)] lg:items-start lg:gap-8">
+        <div className="mx-auto min-w-0 max-w-3xl lg:col-start-2 lg:row-start-1 lg:mx-0">
+          <LearningBreadcrumbs
+            items={[
+              { label: "試験対策", href: "/exams" },
+              { label: "共通テスト", href: "/common-test" },
+              { label: "問題解体型講座", href: "/common-test/problem-lectures" },
+              { label: lecture.title },
+            ]}
+          />
+          <LearningPageHeader
+            eyebrow="問題解体型講座"
+            title={lecture.title}
+            meta={[
+              { label: "科目", value: lecture.subjectLabel },
+              { label: "対象", value: lecture.targetSection },
+              { label: "所要時間", value: lecture.estimatedTime },
+              { label: "難易度", value: lecture.difficulty },
+              { label: "主な内容", value: lecture.concepts.join("・") },
+            ]}
+          />
+        </div>
 
-      <div className="mx-auto max-w-[1500px] px-4 py-8 sm:px-6 sm:py-10 lg:grid lg:grid-cols-[minmax(380px,42vw)_minmax(0,1fr)] lg:items-start lg:gap-8 lg:px-8">
-        <aside className="hidden lg:sticky lg:top-4 lg:block lg:h-[calc(100dvh-2rem)] lg:min-h-0">
+        <aside className="hidden lg:sticky lg:top-4 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:block lg:h-[calc(100dvh-2rem)] lg:min-h-0">
           <StickyProblemViewer pdfUrl={lecture.pdfUrl} title={lecture.title} variant="side" />
         </aside>
 
-        <main className="mx-auto min-w-0 max-w-3xl lg:mx-0 lg:py-0">
-          <Link
-            href="/common-test/problem-lectures"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-900"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            問題解体型講座一覧へ戻る
-          </Link>
-
-          <header className="mt-6">
-            <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold text-slate-500">
-              <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1">
-                {lecture.subjectLabel}
-              </span>
-              <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1">
-                {lecture.targetSection}
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1">
-                <Clock className="h-3 w-3" />
-                {lecture.estimatedTime}
-              </span>
-              <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1">
-                {lecture.difficulty}
-              </span>
-            </div>
-            <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">
-              {lecture.title}
-            </h1>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {lecture.concepts.map((concept) => (
-                <span
-                  key={concept}
-                  className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-700"
-                >
-                  {concept}
-                </span>
-              ))}
-            </div>
-          </header>
+        <div className="mx-auto min-w-0 max-w-3xl lg:col-start-2 lg:row-start-2 lg:mx-0">
+          <div className="mt-6 lg:hidden">
+            <StickyProblemViewer pdfUrl={lecture.pdfUrl} title={lecture.title} variant="top" />
+          </div>
 
           <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
             <div className="mb-3 flex items-center gap-2">
               <Target className="h-4 w-4 text-emerald-600" />
-              <h2 className="text-sm font-extrabold text-slate-950">この講座で鍛えること</h2>
+              <h2 className="text-xl font-bold text-slate-950">この講座で学ぶこと</h2>
             </div>
             <ul className="space-y-1.5">
               {lecture.goals.map((goal) => (
@@ -82,7 +70,7 @@ export function CommonTestProblemLecturePage({ lecture }: { lecture: CommonTestP
             <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
               <div className="mb-3 flex items-center gap-2">
                 <BookMarked className="h-4 w-4 text-blue-600" />
-                <h2 className="text-sm font-extrabold text-slate-950">詳しい解説</h2>
+                <h2 className="text-xl font-bold text-slate-950">詳しい解説</h2>
               </div>
               <div className="space-y-4">
                 {lecture.explanations.map((section) => (
@@ -94,7 +82,7 @@ export function CommonTestProblemLecturePage({ lecture }: { lecture: CommonTestP
                     {section.mathCourseLink && (
                       <Link
                         href={section.mathCourseLink.href}
-                        className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:underline"
+                        className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-blue-700 hover:underline"
                       >
                         基礎が不安なら: {section.mathCourseLink.label}
                       </Link>
@@ -113,8 +101,8 @@ export function CommonTestProblemLecturePage({ lecture }: { lecture: CommonTestP
               nextProblemLectures={lecture.nextProblemLectures}
             />
           </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </LearningPageShell>
   );
 }

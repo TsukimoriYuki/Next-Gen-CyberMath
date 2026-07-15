@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BookOpen, GraduationCap, Target } from "lucide-react";
+import { BookOpen, GraduationCap, Target } from "lucide-react";
+import {
+  LearningBreadcrumbs,
+  LearningPageHeader,
+  LearningPageShell,
+  LearningSectionHeader,
+} from "@/components/learning/LearningPageFrame";
 import {
   getUnitSlugs,
   getProblemsByUnitSlug,
@@ -47,58 +53,52 @@ export default async function UnitDetailPage({
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-      <Link
-        href="/units"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-neon-cyan"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        単元一覧へ戻る
-      </Link>
-
-      <header className="mt-6">
-        <h1 className="font-display text-3xl font-extrabold tracking-tight">
-          {unit.name}
-        </h1>
-        {unit.description && (
-          <p className="mt-2 text-muted-foreground">{unit.description}</p>
-        )}
-        <p className="mt-1 font-mono text-xs text-muted-foreground">
-          {unit.problems.length} 問
-        </p>
-      </header>
+    <LearningPageShell width="content">
+      <LearningBreadcrumbs
+        items={[
+          { label: "数学", href: "/math" },
+          { label: "単元別問題", href: "/units" },
+          { label: unit.name },
+        ]}
+      />
+      <LearningPageHeader
+        eyebrow="数学・単元別問題"
+        title={unit.name}
+        description={unit.description}
+        meta={[{ label: "問題数", value: `${unit.problems.length}問` }]}
+      />
 
       {masteryLecture && (
-        <section className="mt-8 overflow-hidden rounded-2xl border border-neon-cyan/25 bg-card/70 shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
-          <div className="border-b border-neon-cyan/10 bg-neon-cyan/5 px-5 py-3">
-            <div className="flex items-center gap-2 text-sm font-bold text-neon-cyan">
+        <section className="mt-8 overflow-hidden rounded-2xl border border-blue-200 bg-white shadow-sm">
+          <div className="border-b border-blue-100 bg-blue-50 px-5 py-3">
+            <div className="flex items-center gap-2 text-sm font-bold text-blue-800">
               <GraduationCap className="h-4 w-4" />
-              この単元で満点を狙うなら
+              この単元の理解を深める講座
             </div>
           </div>
           <div className="grid gap-5 p-5 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
-              <h2 className="font-display text-2xl font-extrabold tracking-tight text-foreground">
+              <h2 className="text-2xl font-bold tracking-tight text-slate-950">
                 {masteryLecture.title}
               </h2>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              <p className="mt-2 text-sm leading-6 text-slate-600">
                 {masteryLecture.description}
               </p>
               <div className="mt-4 grid gap-2 sm:grid-cols-3">
-                {masteryLecture.weapons.slice(0, 3).map((weapon) => (
+                {masteryLecture.weapons.slice(0, 3).map((point) => (
                   <div
-                    key={weapon}
-                    className="rounded-xl border border-white/10 bg-background/40 px-3 py-2 text-xs leading-5 text-foreground/85"
+                    key={point}
+                    className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm leading-6 text-slate-700"
                   >
-                    <Target className="mb-1 h-3.5 w-3.5 text-neon-lime" />
-                    {weapon}
+                    <Target className="mb-1 h-4 w-4 text-emerald-700" aria-hidden="true" />
+                    {point}
                   </div>
                 ))}
               </div>
             </div>
             <Link
               href={`/common-test/lectures/${masteryLecture.lectureSlug}`}
-              className="inline-flex items-center justify-center rounded-xl bg-neon-cyan px-4 py-3 text-sm font-extrabold text-background transition hover:brightness-110"
+              className="button-primary"
             >
               {masteryLecture.ctaLabel}
             </Link>
@@ -109,22 +109,20 @@ export default async function UnitDetailPage({
       {/* Related lessons for this unit */}
       {lessons.length > 0 && (
         <section className="mt-8">
-          <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-bold uppercase tracking-[0.2em] text-neon-magenta/90">
-            <BookOpen className="h-4 w-4" />
-            この単元の講座
-          </h2>
+          <LearningSectionHeader title="この単元の講座" />
           <div className="grid gap-3 sm:grid-cols-2">
             {lessons.map((l) => (
               <Link
                 key={l.slug}
                 href={`/lessons/${l.slug}`}
-                className="glass glass-hover rounded-xl p-4"
+                className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-offset-4"
               >
-                <div className="font-display font-semibold text-foreground">
+                <div className="flex items-center gap-2 font-semibold text-slate-950">
+                  <BookOpen className="h-4 w-4 text-blue-700" aria-hidden="true" />
                   {l.title}
                 </div>
                 {l.summary && (
-                  <p className="mt-1 text-xs text-muted-foreground">
+                  <p className="mt-1 text-sm leading-6 text-slate-600">
                     {l.summary}
                   </p>
                 )}
@@ -136,12 +134,13 @@ export default async function UnitDetailPage({
 
       {/* Problems */}
       <section className="mt-10">
+        <LearningSectionHeader title="問題" description="難度とテーマを確認して、取り組む問題を選んでください。" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {unit.problems.map((p) => (
             <ProblemCard key={p.slug} problem={p} />
           ))}
         </div>
       </section>
-    </div>
+    </LearningPageShell>
   );
 }

@@ -1,10 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { NextRequest } from "next/server";
+import { canAccessSubject } from "@/lib/subject-publication";
+
+function subjectUnavailableResponse() {
+  return Response.json({ ok: false, error: "not found" }, { status: 404 });
+}
 
 // ── POST /api/english-attempts — 生徒が問題を解いたときに呼ばれる ────────
 
 export async function POST(req: NextRequest) {
+  if (!canAccessSubject("english", "problems")) {
+    return subjectUnavailableResponse();
+  }
   const session = await getSession();
   if (!session) {
     return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
@@ -49,6 +57,9 @@ export async function POST(req: NextRequest) {
 // ── GET /api/english-attempts — 生徒: 自分の履歴 / MENTOR: 全生徒の集計 ──
 
 export async function GET() {
+  if (!canAccessSubject("english", "problems")) {
+    return subjectUnavailableResponse();
+  }
   const session = await getSession();
   if (!session) {
     return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
