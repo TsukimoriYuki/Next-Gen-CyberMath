@@ -15,8 +15,9 @@ import {
 } from "../src/data/informatics/problems";
 import { PUBLIC_SUBJECTS, SUBJECTS } from "../src/data/subjects";
 import { evaluateSubjectPublication } from "../src/lib/subject-publication";
+import { isCommonTestAnswerCorrect } from "../src/lib/common-test-answer-normalize";
 
-// 情報Ⅰ 第1・第2スプリントの整合性QA。
+// 情報Ⅰ 第1〜第3スプリントの整合性QA。
 // 実行例: npx tsx scripts/check-informatics.ts / npm run qa:informatics
 
 const ROOT = process.cwd();
@@ -37,7 +38,7 @@ check(
   "informatics unit IDs must be unique",
 );
 check(lessonIds.size === lessons.length, "informatics lesson IDs must be unique");
-check(lessons.length === 8, `informatics must have 8 lessons (found ${lessons.length})`);
+check(lessons.length === 12, `informatics must have 12 lessons (found ${lessons.length})`);
 check(
   COURSE_SUBJECTS.some((subject) => subject.subjectId === "informatics-1"),
   "informatics-1 must be registered in COURSE_SUBJECTS",
@@ -70,13 +71,18 @@ for (const lesson of lessons) {
 // ── 演習問題 registry ───────────────────────────────────────────────────────
 
 check(
-  INFORMATICS_PROBLEMS.length === 40,
-  `informatics must ship exactly 40 problems (found ${INFORMATICS_PROBLEMS.length})`,
+  INFORMATICS_PROBLEMS.length === 60,
+  `informatics must ship exactly 60 problems (found ${INFORMATICS_PROBLEMS.length})`,
 );
 check(
   new Set(INFORMATICS_PROBLEMS.map((problem) => problem.id)).size ===
     INFORMATICS_PROBLEMS.length,
   "informatics problem IDs must be unique",
+);
+check(
+  new Set(INFORMATICS_PROBLEMS.map((problem) => problem.slug ?? problem.id)).size ===
+    INFORMATICS_PROBLEMS.length,
+  "informatics problem slugs must be unique",
 );
 
 const byLesson = new Map<string, number>();
@@ -137,6 +143,12 @@ for (const problem of INFORMATICS_PROBLEMS) {
       `${label} true-false must have exactly 2 choices`,
     );
   }
+  if (problem.kind === "number") {
+    check(
+      typeof problem.correctNumber === "number" && Number.isFinite(problem.correctNumber),
+      `${label} numeric answer must be finite`,
+    );
+  }
 }
 
 for (const lesson of lessons) {
@@ -148,9 +160,9 @@ for (const lesson of lessons) {
 }
 
 const expectedDifficulty: Record<InformaticsDifficulty, number> = {
-  basic: 16,
-  standard: 16,
-  "ct-prep": 8,
+  basic: 24,
+  standard: 24,
+  "ct-prep": 12,
 };
 for (const [difficulty, expected] of Object.entries(expectedDifficulty)) {
   const actual = byDifficulty.get(difficulty as InformaticsDifficulty) ?? 0;
@@ -357,6 +369,172 @@ check(
   "hexadecimal problem must explain that upper- and lower-case digits are equivalent",
 );
 
+// ── 第3スプリント固有の教材・問題品質と独立検算 ─────────────────────────────
+
+const sprint3LessonIds = new Set([
+  "variables-expressions-io",
+  "branching-loops",
+  "arrays-functions-decomposition",
+  "algorithms-search-simulation",
+]);
+const sprint3Lessons = lessons.filter((lesson) => sprint3LessonIds.has(lesson.lessonId));
+const sprint3Problems = INFORMATICS_PROBLEMS.filter((problem) =>
+  sprint3LessonIds.has(problem.lessonId),
+);
+
+check(sprint3Lessons.length === 4, `sprint 3 must have 4 lessons (found ${sprint3Lessons.length})`);
+check(sprint3Problems.length === 20, `sprint 3 must have 20 problems (found ${sprint3Problems.length})`);
+
+for (const lesson of sprint3Lessons) {
+  const label = `sprint 3 lesson "${lesson.lessonId}"`;
+  check(lesson.qualityTags.includes("sprint-3"), `${label} must be tagged sprint-3`);
+  check(
+    lesson.lessonBlocks.some((block) => block.kind === "comparisonTable"),
+    `${label} must include a trace table`,
+  );
+  check(
+    lesson.lessonBlocks.some((block) => /←|random\(|div/.test(block.body)),
+    `${label} must include explicit pseudocode`,
+  );
+}
+
+const sprint3Difficulty = new Map<InformaticsDifficulty, number>();
+for (const problem of sprint3Problems) {
+  sprint3Difficulty.set(
+    problem.difficulty,
+    (sprint3Difficulty.get(problem.difficulty) ?? 0) + 1,
+  );
+  check(problem.slug === problem.id, `sprint 3 problem "${problem.id}" must declare its slug`);
+  check(Boolean(problem.solutionProcess?.trim()), `sprint 3 problem "${problem.id}" must record a calculation or trace`);
+  const correctIds = new Set(problem.correctChoiceIds);
+  for (const answerChoice of problem.choices) {
+    const expectedPrefix = correctIds.has(answerChoice.id) ? "正答：" : "誤り：";
+    check(
+      answerChoice.reason.startsWith(expectedPrefix),
+      `sprint 3 problem "${problem.id}" choice "${answerChoice.id}" must agree with registered answer`,
+    );
+  }
+  if (problem.pseudocodeRules) {
+    check(/←は代入/.test(problem.pseudocodeRules), `${problem.id} must define assignment`);
+    check(/=は等価比較/.test(problem.pseudocodeRules), `${problem.id} must define equality`);
+    check(/添字は1/.test(problem.pseudocodeRules), `${problem.id} must define array origin`);
+    check(/両端を含む/.test(problem.pseudocodeRules), `${problem.id} must define loop endpoints`);
+    check(/div/.test(problem.pseudocodeRules), `${problem.id} must define integer division`);
+    check(/random\(a, b\)/.test(problem.pseudocodeRules), `${problem.id} must define random range`);
+  }
+}
+
+for (const [difficulty, expected] of Object.entries({ basic: 8, standard: 8, "ct-prep": 4 })) {
+  check(
+    (sprint3Difficulty.get(difficulty as InformaticsDifficulty) ?? 0) === expected,
+    `sprint 3 difficulty "${difficulty}" must have ${expected} problems`,
+  );
+}
+
+check(
+  new Set(sprint3Problems.map((problem) => problem.kind)).size >= 7,
+  "sprint 3 must include the requested mix of answer formats",
+);
+check(
+  sprint3Problems
+    .filter((problem) => problem.difficulty === "ct-prep")
+    .every((problem) => /生徒|会話|表|トレース/.test(problem.prompt) && problem.estimatedMinutes >= 5),
+  "every sprint 3 ct-prep problem must include a conversation, table, or trace",
+);
+
+function assignmentValue(): number {
+  let x = 6;
+  const y = x + 4;
+  x = y * 2;
+  return x;
+}
+
+function loopSum(from: number, to: number): number {
+  let sum = 0;
+  for (let value = from; value <= to; value += 1) sum += value;
+  return sum;
+}
+
+function doublingCount(initial: number, limit: number): number {
+  let value = initial;
+  let count = 0;
+  while (value < limit) {
+    value *= 2;
+    count += 1;
+  }
+  return count;
+}
+
+function linearSearchOneBased(values: readonly number[], target: number): number {
+  return values.findIndex((value) => value === target) + 1;
+}
+
+function binarySearchComparisons(values: readonly number[], target: number): number {
+  let left = 0;
+  let right = values.length - 1;
+  let comparisons = 0;
+  while (left <= right) {
+    const middle = Math.floor((left + right) / 2);
+    comparisons += 1;
+    if (values[middle] === target) return comparisons;
+    if (values[middle] < target) left = middle + 1;
+    else right = middle - 1;
+  }
+  return comparisons;
+}
+
+function oneAdjacentSwapPass(values: readonly number[]): number[] {
+  const result = [...values];
+  for (let index = 0; index < result.length - 1; index += 1) {
+    if (result[index] > result[index + 1]) {
+      [result[index], result[index + 1]] = [result[index + 1], result[index]];
+    }
+  }
+  return result;
+}
+
+const sprint3IndependentAnswers = new Map<string, number>([
+  ["joho-prog-assignment-value", assignmentValue()],
+  ["joho-prog-expression-order", Math.floor((3 + 4 * 2 - 1) / 3)],
+  ["joho-prog-loop-sum", loopSum(1, 5)],
+  ["joho-prog-while-count", doublingCount(3, 50)],
+  ["joho-prog-array-sum", [4, 7, 2, 9].reduce((sum, value) => sum + value, 0)],
+  ["joho-prog-function-return", Math.floor((5 * 2 + 8) / 3)],
+  ["joho-algo-linear-search", linearSearchOneBased([14, 6, 23, 9, 18], 9)],
+  ["joho-algo-binary-search-count", binarySearchComparisons([3, 8, 12, 19, 27, 31, 44], 27)],
+]);
+
+for (const [problemId, expected] of sprint3IndependentAnswers) {
+  const numericProblem = INFORMATICS_PROBLEMS.find((problem) => problem.id === problemId);
+  check(numericProblem?.correctNumber === expected, `${problemId} must match independent result ${expected}`);
+  check(
+    numericProblem ? numericProblem.explanation.includes(String(expected)) : false,
+    `${problemId} explanation must include independently calculated result ${expected}`,
+  );
+}
+
+check(
+  oneAdjacentSwapPass([5, 2, 4, 1]).join(",") === "2,4,1,5" &&
+    correctChoiceText("joho-algo-sort-trace").includes("[2,4,1,5]"),
+  "sorting trace must match an independent adjacent-swap pass",
+);
+check(
+  correctChoiceText("joho-algo-simulation-ct").includes(String(2 * 1000)),
+  "simulation question must independently confirm two random draws per trial",
+);
+for (const equivalent of ["20", "20.0", "020.000", "２０．０"]) {
+  check(
+    isCommonTestAnswerCorrect(equivalent, assignmentValue(), "number"),
+    `numeric normalization must accept ${equivalent} as 20`,
+  );
+}
+for (const invalid of ["", "NaN", "Infinity", "20/1", "√400"]) {
+  check(
+    !isCommonTestAnswerCorrect(invalid, assignmentValue(), "number"),
+    `numeric normalization must reject ${invalid || "empty"}`,
+  );
+}
+
 // ── 公開制御 ─────────────────────────────────────────────────────────────────
 
 const informaticsSubject = SUBJECTS.find((subject) => subject.id === "informatics");
@@ -414,5 +592,5 @@ if (issues.length > 0) {
 }
 
 console.log(
-  `informatics QA passed: ${lessons.length} lessons, ${INFORMATICS_PROBLEMS.length} problems (overall basic 16 / standard 16 / ct-prep 8; sprint 2 basic 8 / standard 8 / ct-prep 4), numerical answers independently verified, subject hidden with dev-only preview.`,
+  `informatics QA passed: ${lessons.length} lessons, ${INFORMATICS_PROBLEMS.length} problems (overall basic 24 / standard 24 / ct-prep 12; sprint 3 basic 8 / standard 8 / ct-prep 4), sprint 2 calculations and sprint 3 traces independently verified, subject hidden with dev-only preview.`,
 );

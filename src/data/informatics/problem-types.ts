@@ -6,7 +6,12 @@ export type InformaticsProblemKind =
   | "single-choice" // 単一選択
   | "multi-select" // 複数選択（正答集合を明示する）
   | "true-false" // 正誤判定
-  | "scenario"; // 短い状況判断（単一選択形式）
+  | "scenario" // 短い状況判断（単一選択形式）
+  | "number" // 数値入力（共通の number 正規化を利用）
+  | "pseudocode-output" // 擬似コードの出力を選ぶ
+  | "trace" // トレース表を読んで選ぶ
+  | "fill-blank" // プログラムの空欄補充
+  | "algorithm-choice"; // 条件に合うアルゴリズムを選ぶ
 
 export const INFORMATICS_KIND_META: Record<
   InformaticsProblemKind,
@@ -27,6 +32,26 @@ export const INFORMATICS_KIND_META: Record<
   scenario: {
     label: "状況判断",
     instruction: "場面を読み、最も適切な判断を1つ選んでください。",
+  },
+  number: {
+    label: "数値回答",
+    instruction: "答えを半角または全角の有限小数で入力してください。",
+  },
+  "pseudocode-output": {
+    label: "擬似コードの出力",
+    instruction: "規則と処理を追い、出力として正しいものを1つ選んでください。",
+  },
+  trace: {
+    label: "トレース表",
+    instruction: "変数や配列の変化を追い、正しいものを1つ選んでください。",
+  },
+  "fill-blank": {
+    label: "空欄補充",
+    instruction: "空欄に入る最も適切なものを1つ選んでください。",
+  },
+  "algorithm-choice": {
+    label: "アルゴリズム選択",
+    instruction: "条件に合う方法を1つ選んでください。",
   },
 };
 
@@ -57,6 +82,8 @@ export type InformaticsChoice = Readonly<{
 export type InformaticsProblem = Readonly<{
   /** URL slug を兼ねる一意ID。 */
   id: string;
+  /** 明示的なURL slug。既存問題は未指定時に id をslugとして扱う。 */
+  slug?: string;
   title: string;
   /** 対応する講座の lessonId（informatics-1 に実在すること）。 */
   lessonId: string;
@@ -67,7 +94,13 @@ export type InformaticsProblem = Readonly<{
   choices: readonly InformaticsChoice[];
   /** 正答の選択肢ID。single-choice / true-false / scenario は必ず1つ。 */
   correctChoiceIds: readonly string[];
+  /** kind === "number" の有限な数値正答。 */
+  correctNumber?: number;
   /** 正答の考え方をまとめた解説。 */
   explanation: string;
+  /** 独立検算できる計算過程またはトレース過程。 */
+  solutionProcess?: string;
+  /** 擬似コードを含む問題で採用する記号・添字・端点などの規則。 */
+  pseudocodeRules?: string;
   reviewTags: readonly string[];
 }>;

@@ -6,6 +6,7 @@ import type { InformaticsProblem } from "./problem-types";
 import { INFORMATICS_DIGITAL_DATA_PROBLEMS } from "./problems-digital-data";
 import { INFORMATICS_SECURITY_DESIGN_PROBLEMS } from "./problems-security-design";
 import { INFORMATICS_SOCIETY_PROBLEMS } from "./problems-society";
+import { PROGRAMMING_PROBLEMS } from "./problems-programming";
 
 // 情報Ⅰ 演習問題 registry。
 // 詳細な整合性（各講座5問・難易度内訳・正答の存在など）は
@@ -15,6 +16,7 @@ export const INFORMATICS_PROBLEMS: readonly InformaticsProblem[] = [
   ...INFORMATICS_SOCIETY_PROBLEMS,
   ...INFORMATICS_SECURITY_DESIGN_PROBLEMS,
   ...INFORMATICS_DIGITAL_DATA_PROBLEMS,
+  ...PROGRAMMING_PROBLEMS,
 ];
 
 assertUniqueRegistryKeys(
@@ -42,3 +44,4 @@ export function getInformaticsProblemsByLesson(
 }
 
 export * from "./problem-types";
+export * from "./problems-programming";

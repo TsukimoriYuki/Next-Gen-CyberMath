@@ -2,6 +2,7 @@ import type { CourseSubject } from "@/types/course";
 import { COMPUTER_DIGITAL_DATA_UNIT } from "./computer-digital-data";
 import { INFORMATION_DESIGN_UNIT } from "./information-design";
 import { INFORMATION_SOCIETY_UNIT } from "./information-society";
+import { PROGRAMMING_ALGORITHMS_UNIT } from "./programming-algorithms";
 
 // 情報Ⅰの講座registry。親教科 "informatics" は subjects.ts で hidden のため、
 // この course subject は production では公開されない（/courses/[subjectId] の
@@ -18,9 +19,11 @@ export const INFORMATICS_1_COURSE_SUBJECT: CourseSubject = {
     INFORMATION_SOCIETY_UNIT,
     INFORMATION_DESIGN_UNIT,
     COMPUTER_DIGITAL_DATA_UNIT,
+    PROGRAMMING_ALGORITHMS_UNIT,
   ],
 };
 
 export * from "./computer-digital-data";
 export * from "./information-design";
 export * from "./information-society";
+export * from "./programming-algorithms";

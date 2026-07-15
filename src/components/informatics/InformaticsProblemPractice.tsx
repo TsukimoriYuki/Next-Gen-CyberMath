@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import { CheckCircle2, RotateCcw, XCircle } from "lucide-react";
 import type { InformaticsProblem } from "@/data/informatics/problem-types";
 import { INFORMATICS_KIND_META } from "@/data/informatics/problem-types";
+import { isCommonTestAnswerCorrect } from "@/lib/common-test-answer-normalize";
 
 // 情報Ⅰ 演習問題の解答UI。
 // 選択 → 答え合わせ → 全選択肢の理由と解説を表示、の流れを1画面で完結させる。
@@ -15,14 +16,18 @@ export function InformaticsProblemPractice({
 }) {
   const groupId = useId();
   const [selected, setSelected] = useState<readonly string[]>([]);
+  const [numberAnswer, setNumberAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const isMultiSelect = problem.kind === "multi-select";
+  const isNumber = problem.kind === "number";
   const correctSet = new Set(problem.correctChoiceIds);
   const isCorrect =
     submitted &&
-    selected.length === correctSet.size &&
-    selected.every((id) => correctSet.has(id));
+    (isNumber
+      ? isCommonTestAnswerCorrect(numberAnswer, problem.correctNumber, "number")
+      : selected.length === correctSet.size &&
+        selected.every((id) => correctSet.has(id)));
 
   function toggleChoice(choiceId: string) {
     if (submitted) return;
@@ -39,6 +44,7 @@ export function InformaticsProblemPractice({
 
   function reset() {
     setSelected([]);
+    setNumberAnswer("");
     setSubmitted(false);
   }
 
@@ -48,6 +54,19 @@ export function InformaticsProblemPractice({
         <legend className="text-sm font-medium text-slate-600">
           {INFORMATICS_KIND_META[problem.kind].instruction}
         </legend>
+        {isNumber ? (
+          <label className="mt-3 block max-w-sm text-sm font-semibold text-slate-800">
+            数値を入力
+            <input
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
+              value={numberAnswer}
+              onChange={(event) => setNumberAnswer(event.target.value)}
+              className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-950 shadow-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
+            />
+          </label>
+        ) : (
         <div className="mt-3 space-y-2.5">
           {problem.choices.map((choice) => {
             const checked = selected.includes(choice.id);
@@ -96,6 +115,7 @@ export function InformaticsProblemPractice({
             );
           })}
         </div>
+        )}
       </fieldset>
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -103,7 +123,7 @@ export function InformaticsProblemPractice({
           <button
             type="button"
             className="button-primary"
-            disabled={selected.length === 0}
+            disabled={isNumber ? numberAnswer.trim().length === 0 : selected.length === 0}
             onClick={() => setSubmitted(true)}
           >
             答え合わせ
@@ -134,6 +154,9 @@ export function InformaticsProblemPractice({
               <p className="font-bold">
                 {isCorrect ? "正解です" : "不正解です"}
               </p>
+              {isNumber && (
+                <p className="mt-1">正答：{problem.correctNumber}</p>
+              )}
               {isMultiSelect && (
                 <p className="mt-1">
                   正答：
@@ -157,6 +180,21 @@ export function InformaticsProblemPractice({
           <p className="mt-2 text-sm leading-7 text-slate-700 sm:text-base">
             {problem.explanation}
           </p>
+          {problem.solutionProcess && (
+            <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-700 sm:text-base">
+              {problem.solutionProcess}
+            </p>
+          )}
+          {isNumber && (
+            <div className="mt-4 space-y-2 border-t border-slate-200 pt-4">
+              <h3 className="font-bold text-slate-900">代表的な考え方</h3>
+              {problem.choices.map((choice) => (
+                <p key={choice.id} className="text-sm leading-6 text-slate-700">
+                  <span className="font-semibold">{choice.text}：</span>{choice.reason}
+                </p>
+              ))}
+            </div>
+          )}
         </section>
       )}
     </div>
