@@ -33,7 +33,7 @@ const ACTIONS_BY_SUBJECT = {
     { title: "精読・構文理解", description: "文法、段落構成、根拠箇所を確認しながら読みます。", href: "/english/comprehension", label: "精読問題を選ぶ", icon: BookOpenCheck },
     { title: "複数資料読解", description: "複数の文章や資料を横断し、条件と根拠を照合します。", href: "/english/multi-source", label: "複数資料問題を選ぶ", icon: Files },
   ],
-} satisfies Record<SubjectId, readonly LearningAction[]>;
+} satisfies Partial<Record<SubjectId, readonly LearningAction[]>>;
 
 export default function PracticePage() {
   const subjects = filterVisibleSubjectsByCapability(SUBJECTS, "problems");
@@ -43,11 +43,16 @@ export default function PracticePage() {
     <LearningPage>
       <LearningPageContainer>
         <LearningPageHero eyebrow="問題を解く" title="目的に合う練習方法を選ぶ。" description="単元、読む速さ、制限時間など、伸ばしたい力に合わせて公開中の問題を選べます。" actions={[{ label: "教科から選ぶ", href: "/subjects" }]} />
-        {subjects.map((subject) => (
-          <LearningSection key={subject.id} title={subject.name}>
-            <LearningActionGrid actions={ACTIONS_BY_SUBJECT[subject.id]} />
-          </LearningSection>
-        ))}
+        {subjects.map((subject) => {
+          const actions =
+            ACTIONS_BY_SUBJECT[subject.id as keyof typeof ACTIONS_BY_SUBJECT];
+          if (!actions) return null;
+          return (
+            <LearningSection key={subject.id} title={subject.name}>
+              <LearningActionGrid actions={actions} />
+            </LearningSection>
+          );
+        })}
       </LearningPageContainer>
     </LearningPage>
   );

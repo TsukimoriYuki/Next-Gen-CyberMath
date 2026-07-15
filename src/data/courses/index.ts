@@ -1,4 +1,5 @@
 import type { CourseLesson, CourseSubject, CourseUnit } from "@/types/course";
+import { INFORMATICS_1_COURSE_SUBJECT } from "./informatics-1";
 import { MATH_1A_COURSE_SUBJECT } from "./math-1a";
 import { MATH_1A_PREMIUM_COURSE_SUBJECT } from "./math-1a-premium";
 import { MATH_2BC_COURSE_SUBJECT } from "./math-2bc";
@@ -16,6 +17,9 @@ export const COURSE_SUBJECTS: CourseSubject[] = [
   MATH_3C_COURSE_SUBJECT,
   MATH_1A_PREMIUM_COURSE_SUBJECT,
   MATH_2BC_PREMIUM_COURSE_SUBJECT,
+  // 親教科 informatics が hidden のため isPublicCourseSubject は false になり、
+  // 公開一覧・sitemap には露出しない（development でのみ直接URLで閲覧可能）。
+  INFORMATICS_1_COURSE_SUBJECT,
 ];
 
 export const STANDARD_COURSE_SUBJECTS: CourseSubject[] = COURSE_SUBJECTS.filter(
@@ -96,6 +100,7 @@ export function getCourseLesson(
   );
 }
 
+export * from "./informatics-1";
 export * from "./math-1a";
 export * from "./math-1a-premium";
 export * from "./math-2bc";

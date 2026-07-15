@@ -55,6 +55,21 @@ export const SUBJECTS = [
       review: true,
     },
   },
+  {
+    id: "informatics",
+    name: "情報Ⅰ",
+    shortName: "情報",
+    href: "/informatics",
+    description: "情報社会の問題解決、情報デザイン、セキュリティの基礎を学ぶ共通テスト情報Ⅰ。",
+    // 教材準備中。公開判断が済むまで hidden を維持する（productionでは404）。
+    status: "hidden",
+    capabilities: {
+      courses: true,
+      problems: true,
+      exams: false,
+      review: false,
+    },
+  },
 ] as const satisfies readonly SubjectConfig[];
 
 export type SubjectId = (typeof SUBJECTS)[number]["id"];

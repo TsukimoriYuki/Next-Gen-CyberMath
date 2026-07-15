@@ -48,7 +48,7 @@ const ACTIONS_BY_SUBJECT = {
       icon: PenLine,
     },
   ],
-} satisfies Record<SubjectId, readonly LearningAction[]>;
+} satisfies Partial<Record<SubjectId, readonly LearningAction[]>>;
 
 export default function LearnPage() {
   const subjects = filterVisibleSubjectsByCapability(SUBJECTS, "courses");
@@ -63,11 +63,16 @@ export default function LearnPage() {
           description="現在公開している教科の教材だけを案内します。学んだ後は、問題演習で理解を確かめられます。"
           actions={[{ label: "教科から選ぶ", href: "/subjects" }]}
         />
-        {subjects.map((subject) => (
-          <LearningSection key={subject.id} title={subject.name}>
-            <LearningActionGrid actions={ACTIONS_BY_SUBJECT[subject.id]} />
-          </LearningSection>
-        ))}
+        {subjects.map((subject) => {
+          const actions =
+            ACTIONS_BY_SUBJECT[subject.id as keyof typeof ACTIONS_BY_SUBJECT];
+          if (!actions) return null;
+          return (
+            <LearningSection key={subject.id} title={subject.name}>
+              <LearningActionGrid actions={actions} />
+            </LearningSection>
+          );
+        })}
       </LearningPageContainer>
     </LearningPage>
   );

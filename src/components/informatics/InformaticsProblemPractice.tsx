@@ -1,0 +1,164 @@
+"use client";
+
+import { useId, useState } from "react";
+import { CheckCircle2, RotateCcw, XCircle } from "lucide-react";
+import type { InformaticsProblem } from "@/data/informatics/problem-types";
+import { INFORMATICS_KIND_META } from "@/data/informatics/problem-types";
+
+// 情報Ⅰ 演習問題の解答UI。
+// 選択 → 答え合わせ → 全選択肢の理由と解説を表示、の流れを1画面で完結させる。
+
+export function InformaticsProblemPractice({
+  problem,
+}: {
+  problem: InformaticsProblem;
+}) {
+  const groupId = useId();
+  const [selected, setSelected] = useState<readonly string[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+
+  const isMultiSelect = problem.kind === "multi-select";
+  const correctSet = new Set(problem.correctChoiceIds);
+  const isCorrect =
+    submitted &&
+    selected.length === correctSet.size &&
+    selected.every((id) => correctSet.has(id));
+
+  function toggleChoice(choiceId: string) {
+    if (submitted) return;
+    if (isMultiSelect) {
+      setSelected((prev) =>
+        prev.includes(choiceId)
+          ? prev.filter((id) => id !== choiceId)
+          : [...prev, choiceId],
+      );
+    } else {
+      setSelected([choiceId]);
+    }
+  }
+
+  function reset() {
+    setSelected([]);
+    setSubmitted(false);
+  }
+
+  return (
+    <div>
+      <fieldset disabled={submitted}>
+        <legend className="text-sm font-medium text-slate-600">
+          {INFORMATICS_KIND_META[problem.kind].instruction}
+        </legend>
+        <div className="mt-3 space-y-2.5">
+          {problem.choices.map((choice) => {
+            const checked = selected.includes(choice.id);
+            const showAsCorrect = submitted && correctSet.has(choice.id);
+            const showAsWrongPick =
+              submitted && checked && !correctSet.has(choice.id);
+            return (
+              <label
+                key={choice.id}
+                className={`flex cursor-pointer items-start gap-3 rounded-xl border bg-white p-4 text-sm leading-6 shadow-sm transition-colors ${
+                  showAsCorrect
+                    ? "border-emerald-300 bg-emerald-50/60"
+                    : showAsWrongPick
+                      ? "border-rose-300 bg-rose-50/60"
+                      : checked
+                        ? "border-teal-400 bg-teal-50/40"
+                        : "border-slate-200 hover:border-slate-300"
+                }`}
+              >
+                <input
+                  type={isMultiSelect ? "checkbox" : "radio"}
+                  name={groupId}
+                  value={choice.id}
+                  checked={checked}
+                  onChange={() => toggleChoice(choice.id)}
+                  className="mt-1 h-4 w-4 shrink-0 accent-teal-700"
+                />
+                <span className="min-w-0">
+                  <span className="font-medium text-slate-900">{choice.text}</span>
+                  {submitted && (
+                    <span className="mt-1.5 block text-slate-700">
+                      <span
+                        className={`mr-1.5 font-semibold ${
+                          correctSet.has(choice.id)
+                            ? "text-emerald-800"
+                            : "text-rose-800"
+                        }`}
+                      >
+                        {correctSet.has(choice.id) ? "正答" : "誤答"}：
+                      </span>
+                      {choice.reason}
+                    </span>
+                  )}
+                </span>
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
+
+      <div className="mt-5 flex flex-wrap items-center gap-3">
+        {!submitted ? (
+          <button
+            type="button"
+            className="button-primary"
+            disabled={selected.length === 0}
+            onClick={() => setSubmitted(true)}
+          >
+            答え合わせ
+          </button>
+        ) : (
+          <button type="button" className="button-secondary" onClick={reset}>
+            <RotateCcw className="mr-1.5 inline h-4 w-4" aria-hidden="true" />
+            もう一度解く
+          </button>
+        )}
+      </div>
+
+      <div aria-live="polite">
+        {submitted && (
+          <div
+            className={`mt-5 flex items-start gap-3 rounded-xl border p-4 text-sm leading-6 ${
+              isCorrect
+                ? "border-emerald-200 bg-emerald-50 text-emerald-950"
+                : "border-rose-200 bg-rose-50 text-rose-950"
+            }`}
+          >
+            {isCorrect ? (
+              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+            ) : (
+              <XCircle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+            )}
+            <div>
+              <p className="font-bold">
+                {isCorrect ? "正解です" : "不正解です"}
+              </p>
+              {isMultiSelect && (
+                <p className="mt-1">
+                  正答：
+                  {problem.choices
+                    .filter((choice) => correctSet.has(choice.id))
+                    .map((choice) => choice.text)
+                    .join(" ／ ")}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {submitted && (
+        <section
+          aria-label="解説"
+          className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <h2 className="text-lg font-bold text-slate-950">解説</h2>
+          <p className="mt-2 text-sm leading-7 text-slate-700 sm:text-base">
+            {problem.explanation}
+          </p>
+        </section>
+      )}
+    </div>
+  );
+}

@@ -1,4 +1,5 @@
 import {
+  isVisibleSubject,
   SUBJECTS,
   type SubjectCapabilities,
   type SubjectConfig,
@@ -132,8 +133,6 @@ export function isSubjectResourceDiscoverable(
   if (!subjectId) return false;
   const subject = SUBJECTS.find((entry) => entry.id === subjectId);
   return Boolean(
-    subject &&
-      (subject.status === "public" || subject.status === "beta") &&
-      subject.capabilities[capability],
+    subject && isVisibleSubject(subject) && subject.capabilities[capability],
   );
 }

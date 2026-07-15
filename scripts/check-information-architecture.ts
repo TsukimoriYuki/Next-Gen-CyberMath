@@ -10,6 +10,7 @@ import {
 import {
   filterVisibleSubjectsByCapability,
   filterVisibleSubjects,
+  isVisibleSubject,
   PUBLIC_SUBJECTS,
   SUBJECTS,
   type SubjectConfig,
@@ -46,8 +47,7 @@ check(SUBJECTS.length > 0, "subject registry must not be empty");
 check(unique(SUBJECTS.map((subject) => subject.id)), "subject IDs must be unique");
 check(unique(SUBJECTS.map((subject) => subject.href)), "subject hrefs must be unique");
 check(
-  PUBLIC_SUBJECTS.length ===
-    SUBJECTS.filter((subject) => subject.status === "public" || subject.status === "beta").length,
+  PUBLIC_SUBJECTS.length === SUBJECTS.filter(isVisibleSubject).length,
   "PUBLIC_SUBJECTS must contain exactly public and beta subjects",
 );
 

@@ -33,7 +33,7 @@ const ACTIONS_BY_SUBJECT = {
     { title: "共通テスト英語リーディング", description: "情報検索、資料照合、要約、推論を大問別に練習します。", href: "/common-test/english-reading", label: "英語リーディング対策を開く", icon: BookOpen },
     { title: "英語 入試良問演習", description: "大学群の傾向を参考にしたオリジナル問題に取り組みます。", href: "/english/dojo", label: "英語の入試形式演習を始める", icon: Trophy },
   ],
-} satisfies Record<SubjectId, readonly LearningAction[]>;
+} satisfies Partial<Record<SubjectId, readonly LearningAction[]>>;
 
 export default function ExamsPage() {
   const subjects = filterVisibleSubjectsByCapability(SUBJECTS, "exams");
@@ -43,11 +43,16 @@ export default function ExamsPage() {
     <LearningPage>
       <LearningPageContainer>
         <LearningPageHero eyebrow="模試・入試対策" title="試験形式で、判断と時間配分を確かめる。" description="教科ごとに、公開中の共通テスト対策、模試、大学入試を想定したオリジナル問題を案内します。" actions={[{ label: "教科から選ぶ", href: "/subjects" }]} />
-        {subjects.map((subject) => (
-          <LearningSection key={subject.id} title={subject.name}>
-            <LearningActionGrid actions={ACTIONS_BY_SUBJECT[subject.id]} />
-          </LearningSection>
-        ))}
+        {subjects.map((subject) => {
+          const actions =
+            ACTIONS_BY_SUBJECT[subject.id as keyof typeof ACTIONS_BY_SUBJECT];
+          if (!actions) return null;
+          return (
+            <LearningSection key={subject.id} title={subject.name}>
+              <LearningActionGrid actions={actions} />
+            </LearningSection>
+          );
+        })}
       </LearningPageContainer>
     </LearningPage>
   );
