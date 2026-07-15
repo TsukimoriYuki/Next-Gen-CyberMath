@@ -3,6 +3,7 @@ import {
   indexByUniqueRegistryKey,
 } from "@/lib/registry";
 import type { InformaticsProblem } from "./problem-types";
+import { INFORMATICS_DIGITAL_DATA_PROBLEMS } from "./problems-digital-data";
 import { INFORMATICS_SECURITY_DESIGN_PROBLEMS } from "./problems-security-design";
 import { INFORMATICS_SOCIETY_PROBLEMS } from "./problems-society";
 
@@ -13,6 +14,7 @@ import { INFORMATICS_SOCIETY_PROBLEMS } from "./problems-society";
 export const INFORMATICS_PROBLEMS: readonly InformaticsProblem[] = [
   ...INFORMATICS_SOCIETY_PROBLEMS,
   ...INFORMATICS_SECURITY_DESIGN_PROBLEMS,
+  ...INFORMATICS_DIGITAL_DATA_PROBLEMS,
 ];
 
 assertUniqueRegistryKeys(

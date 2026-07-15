@@ -60,7 +60,8 @@ export const SUBJECTS = [
     name: "情報Ⅰ",
     shortName: "情報",
     href: "/informatics",
-    description: "情報社会の問題解決、情報デザイン、セキュリティの基礎を学ぶ共通テスト情報Ⅰ。",
+    description:
+      "情報社会の問題解決、情報デザイン、セキュリティ、コンピュータとデジタルデータの基礎を学ぶ共通テスト情報Ⅰ。",
     // 教材準備中。公開判断が済むまで hidden を維持する（productionでは404）。
     status: "hidden",
     capabilities: {

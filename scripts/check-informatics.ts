@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import sitemap from "../src/app/sitemap";
 import { PRIMARY_NAVIGATION } from "../src/data/navigation";
 import {
   INFORMATICS_1_COURSE_SUBJECT,
@@ -15,7 +16,7 @@ import {
 import { PUBLIC_SUBJECTS, SUBJECTS } from "../src/data/subjects";
 import { evaluateSubjectPublication } from "../src/lib/subject-publication";
 
-// 情報Ⅰ 第1スプリントの整合性QA。
+// 情報Ⅰ 第1・第2スプリントの整合性QA。
 // 実行例: npx tsx scripts/check-informatics.ts / npm run qa:informatics
 
 const ROOT = process.cwd();
@@ -36,7 +37,7 @@ check(
   "informatics unit IDs must be unique",
 );
 check(lessonIds.size === lessons.length, "informatics lesson IDs must be unique");
-check(lessons.length === 4, `informatics must have 4 lessons (found ${lessons.length})`);
+check(lessons.length === 8, `informatics must have 8 lessons (found ${lessons.length})`);
 check(
   COURSE_SUBJECTS.some((subject) => subject.subjectId === "informatics-1"),
   "informatics-1 must be registered in COURSE_SUBJECTS",
@@ -69,8 +70,8 @@ for (const lesson of lessons) {
 // ── 演習問題 registry ───────────────────────────────────────────────────────
 
 check(
-  INFORMATICS_PROBLEMS.length === 20,
-  `informatics must ship exactly 20 problems (found ${INFORMATICS_PROBLEMS.length})`,
+  INFORMATICS_PROBLEMS.length === 40,
+  `informatics must ship exactly 40 problems (found ${INFORMATICS_PROBLEMS.length})`,
 );
 check(
   new Set(INFORMATICS_PROBLEMS.map((problem) => problem.id)).size ===
@@ -147,9 +148,9 @@ for (const lesson of lessons) {
 }
 
 const expectedDifficulty: Record<InformaticsDifficulty, number> = {
-  basic: 8,
-  standard: 8,
-  "ct-prep": 4,
+  basic: 16,
+  standard: 16,
+  "ct-prep": 8,
 };
 for (const [difficulty, expected] of Object.entries(expectedDifficulty)) {
   const actual = byDifficulty.get(difficulty as InformaticsDifficulty) ?? 0;
@@ -158,6 +159,203 @@ for (const [difficulty, expected] of Object.entries(expectedDifficulty)) {
     `difficulty "${difficulty}" must have ${expected} problems (found ${actual})`,
   );
 }
+
+// ── 第2スプリント固有の教材・問題品質 ─────────────────────────────────────
+
+const sprint2LessonIds = new Set([
+  "computer-components-operation",
+  "number-systems-bits",
+  "digital-text-image-audio",
+  "data-size-compression-error",
+]);
+const sprint2Lessons = lessons.filter((lesson) =>
+  sprint2LessonIds.has(lesson.lessonId),
+);
+const sprint2Problems = INFORMATICS_PROBLEMS.filter((problem) =>
+  sprint2LessonIds.has(problem.lessonId),
+);
+
+check(
+  sprint2Lessons.length === 4,
+  `sprint 2 must have 4 lessons (found ${sprint2Lessons.length})`,
+);
+check(
+  sprint2Problems.length === 20,
+  `sprint 2 must have 20 problems (found ${sprint2Problems.length})`,
+);
+
+for (const lesson of sprint2Lessons) {
+  const label = `sprint 2 lesson "${lesson.lessonId}"`;
+  check(
+    lesson.lessonBlocks.some((block) => block.kind === "concept"),
+    `${label} must explain basic concepts`,
+  );
+  check(
+    lesson.lessonBlocks.some((block) => block.kind === "comparisonTable"),
+    `${label} must include an accurate table where a visual comparison is useful`,
+  );
+  check(
+    lesson.lessonBlocks.some((block) => block.kind === "workedExample"),
+    `${label} must include a worked example or calculation`,
+  );
+  check(
+    lesson.qualityTags.includes("sprint-2"),
+    `${label} must be tagged as sprint-2`,
+  );
+}
+
+const sprint2Difficulty = new Map<InformaticsDifficulty, number>();
+for (const problem of sprint2Problems) {
+  sprint2Difficulty.set(
+    problem.difficulty,
+    (sprint2Difficulty.get(problem.difficulty) ?? 0) + 1,
+  );
+
+  const correctIds = new Set(problem.correctChoiceIds);
+  for (const choice of problem.choices) {
+    const isCorrect = correctIds.has(choice.id);
+    check(
+      isCorrect ? choice.reason.startsWith("正答。") : choice.reason.startsWith("誤り。"),
+      `sprint 2 problem "${problem.id}" choice "${choice.id}" reason must agree with the registered answer`,
+    );
+  }
+}
+
+const expectedSprint2Difficulty: Record<InformaticsDifficulty, number> = {
+  basic: 8,
+  standard: 8,
+  "ct-prep": 4,
+};
+for (const [difficulty, expected] of Object.entries(expectedSprint2Difficulty)) {
+  const actual = sprint2Difficulty.get(difficulty as InformaticsDifficulty) ?? 0;
+  check(
+    actual === expected,
+    `sprint 2 difficulty "${difficulty}" must have ${expected} problems (found ${actual})`,
+  );
+}
+
+check(
+  new Set(sprint2Problems.map((problem) => problem.kind)).size >= 4,
+  "sprint 2 must include single-choice, multi-select, true-false, and scenario formats",
+);
+check(
+  sprint2Problems.filter((problem) => problem.difficulty === "ct-prep").every(
+    (problem) =>
+      /生徒|会話|表|条件/.test(problem.prompt) &&
+      problem.estimatedMinutes >= 3,
+  ),
+  "every sprint 2 ct-prep problem must combine a conversation, table, or multiple conditions",
+);
+
+function correctChoiceText(problemId: string): string {
+  const problem = INFORMATICS_PROBLEMS.find((entry) => entry.id === problemId);
+  if (!problem) return "";
+  const correct = new Set(problem.correctChoiceIds);
+  return problem.choices
+    .filter((choice) => correct.has(choice.id))
+    .map((choice) => choice.text)
+    .join(" / ");
+}
+
+const decimalFromBinary = Number.parseInt("101101", 2);
+const binaryFromDecimal = (58).toString(2);
+const hexFromBinary = Number.parseInt("10101111", 2).toString(16).toUpperCase();
+const sixBitStates = 2 ** 6;
+const bitsFor50States = Math.ceil(Math.log2(50));
+const bitsFor260States = Math.ceil(Math.log2(120 + 140));
+const imageBytes = (800 * 600 * 24) / 8;
+const audioBytes = (44_100 * 16 * 2 * 10) / 8;
+const recordingPlanABytes = (32_000 * 16 * 1 * 30) / 8;
+const recordingPlanBBytes = (48_000 * 16 * 2 * 20) / 8;
+const transferSeconds = (24 * 8) / 12;
+const compressionPercent = (5 / 20) * 100;
+const combinedTransferSeconds = (10 * 8) / 8;
+
+const numericalAnswerChecks = [
+  ["joho-bin-to-decimal", String(decimalFromBinary)],
+  ["joho-dec-to-binary", binaryFromDecimal],
+  ["joho-bin-to-hex", hexFromBinary],
+  ["joho-bit-states-required", `${sixBitStates}通り`],
+  ["joho-bit-states-required", `最低${bitsFor50States} bit`],
+  ["joho-bit-device-id-overflow", `最低${bitsFor260States} bit`],
+  ["joho-media-image-size", `${imageBytes.toLocaleString("en-US")} B`],
+  ["joho-media-audio-size", `${audioBytes.toLocaleString("en-US")} B`],
+  ["joho-media-recording-plan", `${recordingPlanABytes.toLocaleString("en-US")} B`],
+  ["joho-media-recording-plan", `${recordingPlanBBytes.toLocaleString("en-US")} B`],
+  ["joho-size-transfer-time", `${transferSeconds}秒`],
+  ["joho-compression-ratio", `圧縮率${compressionPercent}%`],
+  ["joho-rounding-compression-plan", `理論転送時間は${combinedTransferSeconds}秒`],
+] as const;
+
+for (const [problemId, expectedText] of numericalAnswerChecks) {
+  check(
+    correctChoiceText(problemId).includes(expectedText),
+    `numerical answer for "${problemId}" must contain independently calculated result "${expectedText}"`,
+  );
+}
+
+const calculationProblemIds = [
+  "joho-bin-to-decimal",
+  "joho-dec-to-binary",
+  "joho-bin-to-hex",
+  "joho-bit-states-required",
+  "joho-bit-device-id-overflow",
+  "joho-media-image-size",
+  "joho-media-audio-size",
+  "joho-media-recording-plan",
+  "joho-size-bit-byte-units",
+  "joho-size-transfer-time",
+  "joho-compression-ratio",
+  "joho-rounding-compression-plan",
+] as const;
+
+for (const problemId of calculationProblemIds) {
+  const problem = INFORMATICS_PROBLEMS.find((entry) => entry.id === problemId);
+  check(Boolean(problem), `calculation problem "${problemId}" must exist`);
+  check(
+    Boolean(problem && /[=×÷+−<>≥]/.test(problem.explanation)),
+    `calculation problem "${problemId}" must record reproducible intermediate calculations`,
+  );
+}
+
+for (const problemId of [
+  "joho-media-image-size",
+  "joho-media-audio-size",
+  "joho-size-bit-byte-units",
+  "joho-size-transfer-time",
+  "joho-rounding-compression-plan",
+]) {
+  const prompt =
+    INFORMATICS_PROBLEMS.find((problem) => problem.id === problemId)?.prompt ?? "";
+  check(
+    prompt.includes("1 B = 8 bit") || prompt.includes("1 B=8 bit"),
+    `data-size problem "${problemId}" must state the bit/byte definition`,
+  );
+}
+
+for (const problemId of [
+  "joho-media-image-size",
+  "joho-media-audio-size",
+  "joho-media-recording-plan",
+]) {
+  const problem = INFORMATICS_PROBLEMS.find((entry) => entry.id === problemId);
+  check(
+    Boolean(
+      problem &&
+        /ヘッダー/.test(problem.prompt) &&
+        /理論/.test(problem.prompt + problem.explanation),
+    ),
+    `media problem "${problemId}" must distinguish the theoretical value from a real file size`,
+  );
+}
+
+const hexProblem = INFORMATICS_PROBLEMS.find(
+  (problem) => problem.id === "joho-bin-to-hex",
+);
+check(
+  Boolean(hexProblem && /大文字・小文字|AFとaf/.test(hexProblem.explanation)),
+  "hexadecimal problem must explain that upper- and lower-case digits are equivalent",
+);
 
 // ── 公開制御 ─────────────────────────────────────────────────────────────────
 
@@ -188,6 +386,11 @@ check(
   !sitemapSource.includes("informatics"),
   "sitemap.ts must not hardcode informatics routes",
 );
+const sitemapPaths = sitemap().map((entry) => new URL(entry.url).pathname);
+check(
+  !sitemapPaths.some((route) => route.includes("informatics")),
+  "generated sitemap must not contain informatics routes",
+);
 
 if (informaticsSubject) {
   for (const runtime of ["production", "preview", "test"] as const) {
@@ -211,5 +414,5 @@ if (issues.length > 0) {
 }
 
 console.log(
-  `informatics QA passed: ${lessons.length} lessons, ${INFORMATICS_PROBLEMS.length} problems (basic 8 / standard 8 / ct-prep 4), subject hidden with dev-only preview.`,
+  `informatics QA passed: ${lessons.length} lessons, ${INFORMATICS_PROBLEMS.length} problems (overall basic 16 / standard 16 / ct-prep 8; sprint 2 basic 8 / standard 8 / ct-prep 4), numerical answers independently verified, subject hidden with dev-only preview.`,
 );
