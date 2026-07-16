@@ -48,6 +48,7 @@ for (const problem of JAPANESE_PROBLEMS) {
   ids.add(problem.id);
   slugs.add(problem.slug);
   assert(problem.choices.some((choice) => choice.id === problem.correctAnswer), `${problem.id}: correct answer is absent`);
+  assert.equal(new Set(problem.choices.map((choice) => choice.id)).size, problem.choices.length, `${problem.id}: duplicate choice IDs`);
   assert(problem.explanation.length >= 30, `${problem.id}: explanation is too short`);
   assert(problem.evidence.length >= 15, `${problem.id}: evidence is too short`);
   for (const choice of problem.choices) {
@@ -60,7 +61,7 @@ for (const problem of JAPANESE_PROBLEMS) {
   assert(["original", "public-domain-original"].includes(problem.copyrightStatus), `${problem.id}: unsupported copyright status`);
 }
 
-for (const area of ["kanbun", "classical-japanese"] as const) {
+for (const area of ["kanbun", "classical-japanese", "modern-vocabulary"] as const) {
   const problems = JAPANESE_PROBLEMS.filter((problem) => problem.area === area);
   if (problems.length === 0) continue;
   assert.equal(problems.length, 20, `${area}: expected 20 problems`);
@@ -81,5 +82,13 @@ for (const problem of JAPANESE_PROBLEMS.filter((entry) => entry.area === "kanbun
 for (const problem of JAPANESE_PROBLEMS.filter((entry) => entry.area === "classical-japanese")) {
   assert(problem.modernTranslation, `${problem.id}: original modern translation is missing`);
 }
+for (const problem of JAPANESE_PROBLEMS.filter((entry) => entry.area === "modern-vocabulary")) {
+  assert.equal(problem.copyrightStatus, "original", `${problem.id}: modern passage must be original`);
+  assert.notEqual(problem.questionType, "written-reading", `${problem.id}: kanji reading drill is forbidden`);
+  assert.notEqual(problem.questionType, "reading-order", `${problem.id}: kanji writing/reading drill is forbidden`);
+}
+assert.equal(JAPANESE_PROBLEMS.length, 60, "Japanese curriculum must contain exactly 60 problems");
+const japaneseCourse = COURSE_SUBJECTS.find((subject) => subject.subjectId === "japanese");
+assert.equal(japaneseCourse?.units.reduce((count, unit) => count + unit.lessons.length, 0), 12, "Japanese curriculum must contain 12 lessons");
 
 console.log(`Japanese foundation QA passed: hidden publication guard, discovery exclusions, guarded pages, and ${JAPANESE_PROBLEMS.length} registered problem keys verified.`);

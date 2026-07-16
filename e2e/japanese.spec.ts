@@ -11,6 +11,7 @@ test("hidden Japanese catalog is available in development", async ({ page }) => 
 for (const testCase of [
   ["漢文", "/courses/japanese/kanbun/kanbun-return-marks", "返り点と書き下し文"],
   ["古文", "/courses/japanese/classical-japanese/classical-auxiliary-verbs", "助動詞と意味の見分け方"],
+  ["現代文語彙", "/courses/japanese/modern-vocabulary/modern-connectors-logic", "接続語と論理関係"],
 ] as const) {
   test(`${testCase[0]} representative lesson renders`, async ({ page }) => {
     await page.goto(testCase[1]);
