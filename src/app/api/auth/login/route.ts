@@ -2,6 +2,7 @@ import { compare } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signJWT, setSessionCookie } from "@/lib/auth";
 import { getClientIp, rateLimit, rateLimitJson } from "@/lib/rate-limit";
+import { validateLoginInput } from "@/lib/auth-input";
 
 export async function POST(req: Request) {
   try {
@@ -11,25 +12,34 @@ export async function POST(req: Request) {
     });
     if (!limited.ok) return rateLimitJson(limited.retryAfter);
 
-    const { name, passcode } = (await req.json()) ?? {};
-
-    if (typeof name !== "string" || typeof passcode !== "string") {
-      return Response.json({ ok: false, error: "名前とパスコードを入力してください" }, { status: 400 });
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return Response.json(
+        { ok: false, code: "MISSING_INPUT", error: "名前とパスコードを入力してください" },
+        { status: 400 },
+      );
     }
+    const input = validateLoginInput(body);
+    if (!input.ok) return Response.json(input, { status: input.status });
+    const { name: normalizedName, passcode } = input.value;
+    const invalidCredentials = () =>
+      Response.json(
+        { ok: false, code: "INVALID_CREDENTIALS", error: "名前またはパスコードが正しくありません" },
+        { status: 401 },
+      );
 
-    const normalizedName = name.trim();
-    if (!normalizedName || !passcode || normalizedName.length > 40 || passcode.length > 128) {
-      return Response.json({ ok: false, error: "名前またはパスコードが正しくありません" }, { status: 401 });
-    }
+    if (normalizedName.length > 40 || passcode.length > 128) return invalidCredentials();
 
     const user = await prisma.user.findUnique({ where: { name: normalizedName } });
     if (!user) {
-      return Response.json({ ok: false, error: "名前またはパスコードが正しくありません" }, { status: 401 });
+      return invalidCredentials();
     }
 
     const ok = await compare(String(passcode), user.passcode);
     if (!ok) {
-      return Response.json({ ok: false, error: "名前またはパスコードが正しくありません" }, { status: 401 });
+      return invalidCredentials();
     }
 
     // 最終ログイン時刻を更新
@@ -39,8 +49,11 @@ export async function POST(req: Request) {
     await setSessionCookie(token);
 
     return Response.json({ ok: true, name: user.name, role: user.role });
-  } catch (e) {
-    console.error("login error:", e);
-    return Response.json({ ok: false, error: "ログインに失敗しました" }, { status: 500 });
+  } catch {
+    console.error("Authentication login failed");
+    return Response.json(
+      { ok: false, code: "SERVICE_UNAVAILABLE", error: "現在、ログイン処理を利用できません。時間をおいて再試行してください" },
+      { status: 503 },
+    );
   }
 }

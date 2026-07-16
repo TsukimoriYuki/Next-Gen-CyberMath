@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, KeyRound, Loader2, LogIn, ShieldCheck, UserPlus } from "lucide-react";
@@ -23,12 +23,19 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [showMentorCode, setShowMentorCode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
 
   const nameInputId = `${mode}-name`;
   const passcodeInputId = `${mode}-passcode`;
   const mentorCodeInputId = `${mode}-mentor-code`;
   const mentorCodeHintId = `${mode}-mentor-code-hint`;
+  const nameHintId = `${mode}-name-hint`;
+  const passcodeHintId = `${mode}-passcode-hint`;
   const isLogin = mode === "login";
+
+  useEffect(() => {
+    if (error) errorRef.current?.focus();
+  }, [error]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -79,9 +86,14 @@ export function AuthForm({ mode }: AuthFormProps) {
           onChange={(event) => setName(event.target.value)}
           required
           autoComplete="username"
+          aria-describedby={nameHintId}
+          aria-invalid={Boolean(error)}
           placeholder="例: 鈴木一郎"
           className="w-full rounded-xl border border-border bg-white/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-neon-cyan/60 focus:ring-1 focus:ring-neon-cyan/30"
         />
+        <p id={nameHintId} className="text-[11px] text-muted-foreground">
+          2〜40文字で入力してください。
+        </p>
       </div>
 
       <div className="space-y-1.5">
@@ -96,8 +108,12 @@ export function AuthForm({ mode }: AuthFormProps) {
             value={passcode}
             onChange={(event) => setPasscode(event.target.value)}
             required
+            minLength={isLogin ? 1 : 8}
+            maxLength={128}
             autoComplete={isLogin ? "current-password" : "new-password"}
-            placeholder="4文字以上"
+            aria-describedby={passcodeHintId}
+            aria-invalid={Boolean(error)}
+            placeholder={isLogin ? "登録したパスコード" : "8〜128文字"}
             className="w-full rounded-xl border border-border bg-white/60 px-4 py-3 pr-11 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-neon-cyan/60 focus:ring-1 focus:ring-neon-cyan/30"
           />
           <button
@@ -109,6 +125,11 @@ export function AuthForm({ mode }: AuthFormProps) {
             {showPasscode ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
+        <p id={passcodeHintId} className="text-[11px] text-muted-foreground">
+          {isLogin
+            ? "登録時に設定したパスコードを入力してください。"
+            : "新規登録では8〜128文字が必要です。大切に保管してください。"}
+        </p>
       </div>
 
       {!isLogin && (
@@ -129,6 +150,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               onChange={(event) => setMentorCode(event.target.value)}
               autoComplete="off"
               aria-describedby={mentorCodeHintId}
+              aria-invalid={Boolean(error)}
               placeholder="学校・塾などで案内された場合のみ"
               className="w-full rounded-xl border border-neon-amber/30 bg-neon-amber/5 px-4 py-3 pr-11 text-sm text-foreground placeholder:text-muted-foreground/40 outline-none transition-colors focus:border-neon-amber/60 focus:ring-1 focus:ring-neon-amber/25"
             />
@@ -141,14 +163,20 @@ export function AuthForm({ mode }: AuthFormProps) {
               {showMentorCode ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          <p id={mentorCodeHintId} className="text-[11px] text-muted-foreground/70">
+          <p id={mentorCodeHintId} className="text-[11px] text-muted-foreground">
             学校・塾などで案内された場合のみ入力してください。通常の学習者アカウントでは空欄のまま登録できます。
           </p>
         </div>
       )}
 
       {error && (
-        <div className="rounded-xl border border-destructive/40 bg-destructive/8 px-4 py-3 text-sm text-destructive">
+        <div
+          ref={errorRef}
+          role="alert"
+          aria-live="assertive"
+          tabIndex={-1}
+          className="rounded-xl border border-destructive/40 bg-destructive/8 px-4 py-3 text-sm text-destructive outline-none focus:ring-2 focus:ring-destructive/30"
+        >
           {error}
         </div>
       )}

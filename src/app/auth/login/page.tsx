@@ -35,7 +35,7 @@ export default async function LoginPage() {
               CYBER<span className="text-neon-cyan">MATH</span>
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              ログインして道場の門を開く
+              学習履歴と復習を続きから利用できます
             </p>
           </div>
         </div>

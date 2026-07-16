@@ -1,16 +1,12 @@
-import { timingSafeEqual } from "node:crypto";
 import { hash } from "bcryptjs";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { signJWT, setSessionCookie } from "@/lib/auth";
 import { getClientIp, rateLimit, rateLimitJson } from "@/lib/rate-limit";
-
-function constantTimeEquals(left: string, right: string): boolean {
-  const encoder = new TextEncoder();
-  const leftBytes = encoder.encode(left);
-  const rightBytes = encoder.encode(right);
-  if (leftBytes.byteLength !== rightBytes.byteLength) return false;
-  return timingSafeEqual(leftBytes, rightBytes);
-}
+import {
+  resolveRegistrationRole,
+  validateRegistrationInput,
+} from "@/lib/auth-input";
 
 export async function POST(req: Request) {
   try {
@@ -20,29 +16,30 @@ export async function POST(req: Request) {
     });
     if (!limited.ok) return rateLimitJson(limited.retryAfter);
 
-    const { name, passcode, mentorCode } = (await req.json()) ?? {};
-
-    if (typeof name !== "string" || name.trim().length < 2 || name.trim().length > 40) {
-      return Response.json({ ok: false, error: "名前は 2 文字以上で入力してください" }, { status: 400 });
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return Response.json(
+        { ok: false, code: "MISSING_INPUT", error: "名前とパスコードを入力してください" },
+        { status: 400 },
+      );
     }
-    if (typeof passcode !== "string" || passcode.length < 4 || passcode.length > 128) {
-      return Response.json({ ok: false, error: "パスコードは 4 文字以上で入力してください" }, { status: 400 });
-    }
+    const input = validateRegistrationInput(body);
+    if (!input.ok) return Response.json(input, { status: input.status });
+    const { name: normalizedName, passcode, mentorCode } = input.value;
 
-    const normalizedName = name.trim();
+    const roleResult = resolveRegistrationRole(mentorCode, process.env.MENTOR_PASSCODE);
+    if (!roleResult.ok) return Response.json(roleResult, { status: roleResult.status });
+    const role = roleResult.value;
+
     const existing = await prisma.user.findUnique({ where: { name: normalizedName } });
     if (existing) {
-      return Response.json({ ok: false, error: "その名前はすでに使われています" }, { status: 409 });
+      return Response.json(
+        { ok: false, code: "NAME_TAKEN", error: "その名前はすでに使われています" },
+        { status: 409 },
+      );
     }
-
-    // 師範コードは許可された指導者向け。値はログに出さず、定数時間比較に寄せる。
-    const mentorSecret = process.env.MENTOR_PASSCODE;
-    const normalizedMentorCode =
-      typeof mentorCode === "string" ? mentorCode.trim() : "";
-    const role =
-      mentorSecret && normalizedMentorCode && constantTimeEquals(normalizedMentorCode, mentorSecret)
-        ? "MENTOR"
-        : "STUDENT";
 
     const hashed = await hash(passcode, 12);
     const user = await prisma.user.create({
@@ -54,8 +51,17 @@ export async function POST(req: Request) {
     await setSessionCookie(token);
 
     return Response.json({ ok: true, name: user.name, role: user.role });
-  } catch (e) {
-    console.error("register error:", e);
-    return Response.json({ ok: false, error: "登録に失敗しました" }, { status: 500 });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return Response.json(
+        { ok: false, code: "NAME_TAKEN", error: "その名前はすでに使われています" },
+        { status: 409 },
+      );
+    }
+    console.error("Authentication registration failed");
+    return Response.json(
+      { ok: false, code: "SERVICE_UNAVAILABLE", error: "現在、登録処理を利用できません。時間をおいて再試行してください" },
+      { status: 503 },
+    );
   }
 }

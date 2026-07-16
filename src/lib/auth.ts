@@ -23,8 +23,18 @@ export interface SessionPayload extends JWTPayload {
 
 function getSecret(): Uint8Array {
   const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error("JWT_SECRET is not set");
+  validateJWTSecret(secret, process.env.NODE_ENV);
   return new TextEncoder().encode(secret);
+}
+
+export function validateJWTSecret(
+  secret: string | undefined,
+  nodeEnv: string | undefined,
+): asserts secret is string {
+  if (!secret) throw new Error("JWT secret is not configured");
+  if (nodeEnv === "production" && secret.length < 32) {
+    throw new Error("JWT secret does not meet the production length requirement");
+  }
 }
 
 /** JWT を署名して返す。API ルートで使用。 */
@@ -39,7 +49,16 @@ export async function signJWT(payload: Omit<SessionPayload, "iat" | "exp">): Pro
 /** JWT を検証してペイロードを返す。無効なら null。 */
 export async function verifyJWT(token: string): Promise<SessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, getSecret());
+    const { payload } = await jwtVerify(token, getSecret(), {
+      algorithms: ["HS256"],
+    });
+    if (
+      typeof payload.sub !== "string" ||
+      typeof payload.name !== "string" ||
+      (payload.role !== "MENTOR" && payload.role !== "STUDENT")
+    ) {
+      return null;
+    }
     return payload as SessionPayload;
   } catch {
     return null;
@@ -54,6 +73,7 @@ export async function setSessionCookie(token: string): Promise<void> {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: EXPIRES_IN,
+    expires: new Date(Date.now() + EXPIRES_IN * 1000),
     path: "/",
   });
 }
@@ -61,7 +81,14 @@ export async function setSessionCookie(token: string): Promise<void> {
 /** セッション Cookie を削除する。 */
 export async function clearSessionCookie(): Promise<void> {
   const store = await cookies();
-  store.delete(SESSION_COOKIE);
+  store.set(SESSION_COOKIE, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+    expires: new Date(0),
+    path: "/",
+  });
 }
 
 /** Server Component / Server Action からセッションを取得する。認証されていなければ null。 */
