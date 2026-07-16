@@ -7,10 +7,17 @@ import type {
 export type JapaneseReadingGenre = "criticism" | "fiction" | "essay" | "practical";
 export type JapaneseReadingLength = "short" | "medium" | "long" | "multi-source";
 export type JapaneseAnswerMode = "single" | "multiple" | "sequence";
+export type JapaneseReadingExamFormat =
+  | "single-choice"
+  | "multiple-select"
+  | "fill-matching"
+  | "ordering"
+  | "material-condition";
 
 export type JapaneseReadingParagraph = Readonly<{
   id: string;
   text: string;
+  sectionTitle?: string;
 }>;
 
 export type JapaneseReadingMaterial = Readonly<{
@@ -26,16 +33,25 @@ export type JapaneseReadingMaterial = Readonly<{
 
 export type JapaneseReadingQuestion = Readonly<{
   id: string;
+  slug: string;
+  passageSetId: string;
+  questionNumber: number;
   prompt: string;
   questionType: JapaneseQuestionType;
+  examFormat?: JapaneseReadingExamFormat;
   answerMode: JapaneseAnswerMode;
   choices: readonly JapaneseChoice[];
+  correctAnswer: string | readonly string[];
   correctAnswers: readonly string[];
   evidenceParagraphIds: readonly string[];
   evidenceText: string;
   explanation: string;
+  detailedExplanation: string;
   firstLook: string;
+  firstCheck: string;
   comparisonMethod: string;
+  readingStrategy: string;
+  verification: string;
   questionSkill: string;
   distractorReasons: Readonly<Record<string, string>>;
   difficulty: JapaneseDifficulty;
@@ -43,6 +59,9 @@ export type JapaneseReadingQuestion = Readonly<{
   reviewTags: readonly string[];
   mistakeTags: readonly string[];
   relatedCourseIds: readonly string[];
+  copyrightStatus: "original";
+  sourceType: "original";
+  publicationStatus: "beta";
 }>;
 
 export type JapaneseReadingPassage = Readonly<{
@@ -59,6 +78,8 @@ export type JapaneseReadingPassage = Readonly<{
   sourceType: "original";
   copyrightStatus: "original";
   people?: readonly string[];
+  practiceKind?: "passage" | "exam-set";
+  displayNumber?: number;
 }>;
 
 export const READING_GENRE_LABEL: Readonly<Record<JapaneseReadingGenre, string>> = {

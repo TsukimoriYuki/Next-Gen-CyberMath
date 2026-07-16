@@ -89,6 +89,11 @@ export function makeJapaneseLesson(draft: JapaneseLessonDraft): CourseLesson {
           ? "この講座に対応する文章を、本文根拠と誤答理由まで確認します。"
           : "この講座に対応する5問を、本文根拠と誤答理由まで確認します。",
       },
+      ...(isReadingLesson ? [{
+        label: "共通テスト型の大問を解く",
+        href: `/japanese/reading/exams?course=${draft.id}`,
+        description: "この講座の読み方を、5問構成の大問と複数資料で実践します。",
+      }] : []),
     ],
     qualityTags: ["japanese", "beginner", "evidence-first", "original-explanation"],
   };

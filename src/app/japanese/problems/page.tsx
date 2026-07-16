@@ -43,10 +43,10 @@ export default async function JapaneseProblemsPage({
         description="正解だけでなく、各誤答がなぜ違うかまで確認できます。"
         meta={[
           { label: "表示中", value: `${problems.length}問` },
-          { label: "国語全体", value: "160問" },
+          { label: "国語全体", value: "190問" },
         ]}
       />
-      <Link href="/japanese/reading" className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-violet-700 px-5 py-2.5 font-bold text-white">現代文読解 20文章へ</Link>
+      <div className="mt-6 flex flex-wrap gap-3"><Link href="/japanese/reading" className="inline-flex min-h-11 items-center rounded-xl bg-violet-700 px-5 py-2.5 font-bold text-white">現代文読解 20文章へ</Link><Link href="/japanese/reading/exams" className="inline-flex min-h-11 items-center rounded-xl border border-violet-300 bg-white px-5 py-2.5 font-bold text-violet-800">現代文大問 6セットへ</Link></div>
       <div className="mt-8 grid gap-4 md:grid-cols-2">
         {problems.map((problem) => (
           <Link

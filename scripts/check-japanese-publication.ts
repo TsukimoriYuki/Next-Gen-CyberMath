@@ -24,9 +24,9 @@ assert.equal(japanese.capabilities.exams, false);
 const lessons = JAPANESE_COURSE_SUBJECT.units.flatMap((unit) => unit.lessons);
 assert.equal(JAPANESE_COURSE_SUBJECT.units.length, 4);
 assert.equal(lessons.length, 16);
-assert.equal(JAPANESE_PROBLEMS.length, 160);
-assert.equal(JAPANESE_READING_PASSAGES.length, 20);
-assert.equal(JAPANESE_PROBLEMS.filter((problem) => problem.area === "modern-reading").length, 100);
+assert.equal(JAPANESE_PROBLEMS.length, 190);
+assert.equal(JAPANESE_READING_PASSAGES.length, 26);
+assert.equal(JAPANESE_PROBLEMS.filter((problem) => problem.area === "modern-reading").length, 130);
 
 const lessonIds = new Set(lessons.map((lesson) => lesson.lessonId));
 for (const problem of JAPANESE_PROBLEMS) {
@@ -39,7 +39,7 @@ const sitemapEntries = sitemap();
 const urls = sitemapEntries.map((entry) => entry.url);
 const paths = new Set(urls.map((url) => new URL(url).pathname));
 assert.equal(new Set(urls).size, urls.length, "duplicate sitemap URL");
-for (const route of ["/japanese", "/courses/japanese", "/japanese/problems", "/japanese/reading"]) assert(paths.has(route), `sitemap missing ${route}`);
+for (const route of ["/japanese", "/courses/japanese", "/japanese/problems", "/japanese/reading", "/japanese/reading/exams"]) assert(paths.has(route), `sitemap missing ${route}`);
 for (const unit of JAPANESE_COURSE_SUBJECT.units) {
   assert(paths.has(`/courses/japanese/${unit.unitId}`));
   for (const lesson of unit.lessons) assert(paths.has(`/courses/japanese/${unit.unitId}/${lesson.lessonId}`));
@@ -58,9 +58,9 @@ assert(home.includes("PUBLIC_SUBJECTS.map"));
 assert(subjects.includes("PUBLIC_SUBJECTS.map"));
 assert(learn.includes('href: "/courses/japanese"'));
 assert(practice.includes('href: "/japanese/problems"') && practice.includes('href: "/japanese/reading"'));
-for (const label of ["現代文語彙", "現代文読解", "古文", "漢文", "16", "160"]) assert(japanesePage.includes(label), `Japanese top missing ${label}`);
-for (const forbidden of ["国語模試", "大問別演習", "過去問", "漢字大量演習", "記述式採点", "ランキング", "ガチャ", "近日公開", "準備中", "開発確認用"]) assert(!japanesePage.includes(forbidden), `forbidden public copy: ${forbidden}`);
-for (const file of ["src/app/japanese/page.tsx", "src/app/japanese/problems/page.tsx", "src/app/japanese/reading/page.tsx"]) {
+for (const label of ["現代文語彙", "現代文読解", "古文", "漢文", "16", "190", "6セット", "30問"]) assert(japanesePage.includes(label), `Japanese top missing ${label}`);
+for (const forbidden of ["国語模試", "過去問", "漢字大量演習", "記述式採点", "ランキング", "ガチャ", "近日公開", "準備中", "開発確認用"]) assert(!japanesePage.includes(forbidden), `forbidden public copy: ${forbidden}`);
+for (const file of ["src/app/japanese/page.tsx", "src/app/japanese/problems/page.tsx", "src/app/japanese/reading/page.tsx", "src/app/japanese/reading/exams/page.tsx"]) {
   const source = read(file);
   assert(source.includes("createPublicMetadata"), `${file}: public metadata missing`);
   assert(!source.includes("index: false"), `${file}: public page remains noindex`);
@@ -71,4 +71,4 @@ assert.equal(getActiveNavigationId("/japanese/reading/jp-reading-01"), "problems
 assert(!fs.existsSync(path.join(root, "src/app/search/page.tsx")), "unexpected site search route; add Japanese to its registry");
 assert(!read("src/data/navigation.ts").includes('{ id: "japanese"'), "Japanese must not become global navigation");
 
-console.log(`Japanese publication QA passed: beta, 4 areas, 16 lessons, 160 problems, ${paths.size} sitemap paths, Railway canonical, discovery and related links verified.`);
+console.log(`Japanese publication QA passed: beta, 4 areas, 16 lessons, 190 problems, ${paths.size} sitemap paths, Railway canonical, discovery and related links verified.`);

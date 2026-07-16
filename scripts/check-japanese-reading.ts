@@ -4,18 +4,19 @@ import path from "node:path";
 import sitemap from "../src/app/sitemap";
 import { COURSE_SUBJECTS } from "../src/data/courses";
 import { JAPANESE_PROBLEMS } from "../src/data/japanese";
-import { JAPANESE_READING_PASSAGES } from "../src/data/japanese/reading";
+import { JAPANESE_READING_CORE_PASSAGES, JAPANESE_READING_EXAM_SETS } from "../src/data/japanese/reading";
 
 const root = process.cwd();
 const read = (file: string) => fs.readFileSync(path.join(root, file), "utf8");
-const passages = JAPANESE_READING_PASSAGES;
+const passages = JAPANESE_READING_CORE_PASSAGES;
 const questions = passages.flatMap((passage) => passage.questions);
 const lengths = (genre: string) => passages.filter((passage) => passage.genre === genre);
 const courseIds = new Set(COURSE_SUBJECTS.flatMap((subject) => subject.units.flatMap((unit) => unit.lessons.map((lesson) => lesson.lessonId))));
 
 assert.equal(passages.length, 20, "expected 20 reading passages");
 assert.equal(questions.length, 100, "expected 100 reading questions");
-assert.equal(JAPANESE_PROBLEMS.length, 160, "expected 160 Japanese problems total");
+assert.equal(JAPANESE_READING_EXAM_SETS.length, 6, "expected 6 reading exam sets");
+assert.equal(JAPANESE_PROBLEMS.length, 190, "expected 190 Japanese problems total");
 assert.equal(COURSE_SUBJECTS.find((subject) => subject.subjectId === "japanese")?.units.reduce((sum, unit) => sum + unit.lessons.length, 0), 16, "expected 16 Japanese lessons");
 assert.equal(lengths("criticism").length, 8);
 assert.equal(lengths("fiction").length, 4);
@@ -76,4 +77,4 @@ for (const term of banned) assert(!corpus.includes(term), `copyright/source term
 assert.equal(read("src/data/subjects.ts").includes('id: "japanese"') && read("src/data/subjects.ts").includes('status: "beta"'), true, "Japanese must be beta");
 assert(new Set(sitemap().map((entry) => new URL(entry.url).pathname)).has("/japanese"), "Japanese is missing from sitemap");
 assert(!read("src/data/navigation.ts").includes('href: "/japanese"'), "Japanese leaked into global navigation");
-console.log("Japanese reading QA passed: 4 courses, 20 original passages, 100 questions, 40/40/20 difficulty, evidence, duplication, and publication guards verified.");
+console.log("Japanese reading QA passed: 4 courses, existing 20 original passages and 100 questions remain valid; 6 exam sets are registered separately.");

@@ -10,6 +10,7 @@ import {
 } from "@/components/learning/LearningPageFrame";
 import {
   READING_GENRE_LABEL,
+  getJapaneseReadingCharacterCount,
   type JapaneseReadingMaterial,
   type JapaneseReadingPassage,
 } from "@/data/japanese/reading";
@@ -18,6 +19,14 @@ const DIFFICULTY = {
   basic: "基礎",
   standard: "標準",
   "common-test-ready": "共通テスト準備",
+} as const;
+
+const EXAM_FORMAT_LABEL = {
+  "single-choice": "単一選択",
+  "multiple-select": "複数選択",
+  "fill-matching": "空欄・対応選択",
+  ordering: "並べ替え",
+  "material-condition": "資料条件選択",
 } as const;
 
 function Material({ material }: { material: JapaneseReadingMaterial }) {
@@ -43,7 +52,16 @@ export function JapaneseReadingRunner({ passage, nextPassage, relatedCourses }: 
   const [selected, setSelected] = useState<Record<string, string[]>>({});
   const [answered, setAnswered] = useState<Record<string, boolean>>({});
   const [reviewState, setReviewState] = useState<Record<string, "idle" | "saving" | "saved" | "login">>({});
-  const characterCount = passage.paragraphs.reduce((sum, paragraph) => sum + paragraph.text.length, 0);
+  const [mobileView, setMobileView] = useState<"passage" | "questions">("passage");
+  const characterCount = getJapaneseReadingCharacterCount(passage);
+  const isExamSet = passage.practiceKind === "exam-set";
+  const answeredCount = passage.questions.filter((question) => answered[question.id]).length;
+  const score = passage.questions.filter((question) => {
+    if (!answered[question.id]) return false;
+    const answers = selected[question.id] ?? [];
+    return answers.length === question.correctAnswers.length
+      && answers.every((answer) => question.correctAnswers.includes(answer));
+  }).length;
 
   function toggle(questionId: string, choiceId: string, multiple: boolean) {
     if (answered[questionId]) return;
@@ -69,8 +87,15 @@ export function JapaneseReadingRunner({ passage, nextPassage, relatedCourses }: 
 
   return (
     <LearningPageShell width="split">
-      <LearningBreadcrumbs items={[{ label: "国語", href: "/japanese" }, { label: "現代文読解", href: "/japanese/reading" }, { label: passage.title }]} />
-      <LearningPageHeader eyebrow={READING_GENRE_LABEL[passage.genre]} title={passage.title} description={passage.theme} meta={[{ label: "想定時間", value: `約${passage.estimatedReadingTime}分` }, { label: "文字数", value: `${characterCount}字` }, { label: "出典", value: "Cyber Math 完全オリジナル" }]} />
+      <LearningBreadcrumbs items={[{ label: "国語", href: "/japanese" }, { label: "現代文読解", href: "/japanese/reading" }, ...(isExamSet ? [{ label: "大問演習", href: "/japanese/reading/exams" }] : []), { label: passage.title }]} />
+      <LearningPageHeader eyebrow={isExamSet ? `大問${passage.displayNumber}・${READING_GENRE_LABEL[passage.genre]}` : READING_GENRE_LABEL[passage.genre]} title={passage.title} description={passage.theme} meta={[{ label: "想定時間", value: `約${passage.estimatedReadingTime}分` }, { label: "文章量", value: `${characterCount}字` }, { label: "出典", value: "Cyber Math 完全オリジナル" }]} />
+
+      {isExamSet ? (
+        <div className="mt-6 grid grid-cols-2 gap-3" aria-label="設問進捗と得点">
+          <div className="rounded-xl border border-slate-200 bg-white p-4"><span className="block text-xs font-bold text-slate-500">設問進捗</span><strong className="mt-1 block text-lg text-slate-950">{answeredCount} / 5問</strong></div>
+          <div className="rounded-xl border border-slate-200 bg-white p-4"><span className="block text-xs font-bold text-slate-500">現在の得点</span><strong className="mt-1 block text-lg text-slate-950">{score} / 5点</strong></div>
+        </div>
+      ) : null}
 
       {relatedCourses.length > 0 ? (
         <aside className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-4" aria-label="対応講座">
@@ -81,14 +106,21 @@ export function JapaneseReadingRunner({ passage, nextPassage, relatedCourses }: 
         </aside>
       ) : null}
 
+      {isExamSet ? (
+        <div className="mt-6 grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1 lg:hidden" aria-label="本文と設問の切替">
+          <button type="button" aria-pressed={mobileView === "passage"} onClick={() => setMobileView("passage")} className={`min-h-11 rounded-lg px-3 py-2 font-bold ${mobileView === "passage" ? "bg-white text-blue-800 shadow-sm" : "text-slate-600"}`}>本文・資料</button>
+          <button type="button" aria-pressed={mobileView === "questions"} onClick={() => setMobileView("questions")} className={`min-h-11 rounded-lg px-3 py-2 font-bold ${mobileView === "questions" ? "bg-white text-blue-800 shadow-sm" : "text-slate-600"}`}>設問</button>
+        </div>
+      ) : null}
+
       <div className="mt-8 grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:items-start">
-        <article className="min-w-0 space-y-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7" aria-labelledby="passage-heading">
+        <article className={`min-w-0 space-y-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7 ${isExamSet && mobileView !== "passage" ? "hidden lg:block" : "block"}`} aria-labelledby="passage-heading">
           <h2 id="passage-heading" className="text-xl font-bold text-slate-950">本文</h2>
-          {passage.paragraphs.map((paragraph) => <p key={paragraph.id} id={`paragraph-${paragraph.id}`} className="text-base leading-8 text-slate-900"><span className="mr-2 inline-flex min-w-8 justify-center rounded bg-slate-100 px-1.5 py-0.5 text-xs font-bold text-slate-600" aria-label={`段落 ${paragraph.id}`}>[{paragraph.id}]</span>{paragraph.text}</p>)}
+          {passage.paragraphs.map((paragraph) => <div key={paragraph.id}>{paragraph.sectionTitle ? <h3 className="mb-3 mt-7 border-b border-slate-200 pb-2 text-lg font-bold text-slate-950">{paragraph.sectionTitle}</h3> : null}<p id={`paragraph-${paragraph.id}`} className="text-base leading-8 text-slate-900"><span className="mr-2 inline-flex min-w-8 justify-center rounded bg-slate-100 px-1.5 py-0.5 text-xs font-bold text-slate-600" aria-label={`段落 ${paragraph.id}`}>[{paragraph.id}]</span>{paragraph.text}</p></div>)}
           {passage.materials?.map((material) => <Material key={material.id} material={material} />)}
         </article>
 
-        <div className="min-w-0 space-y-6 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:pr-1">
+        <div className={`min-w-0 space-y-6 lg:sticky lg:top-4 lg:block lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:pr-1 ${isExamSet && mobileView !== "questions" ? "hidden" : "block"}`}>
           {passage.questions.map((question, index) => {
             const answers = selected[question.id] ?? [];
             const isAnswered = Boolean(answered[question.id]);
@@ -96,7 +128,7 @@ export function JapaneseReadingRunner({ passage, nextPassage, relatedCourses }: 
             const multiple = question.answerMode === "multiple";
             return (
               <section key={question.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" aria-labelledby={`${question.id}-heading`}>
-                <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600"><span>問{index + 1}</span><span>・</span><span>{DIFFICULTY[question.difficulty]}</span><span>・</span><span>約{question.estimatedTime}秒</span></div>
+                <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600"><span>問{index + 1}</span><span>・</span>{question.examFormat ? <><span>{EXAM_FORMAT_LABEL[question.examFormat]}</span><span>・</span></> : null}<span>{DIFFICULTY[question.difficulty]}</span><span>・</span><span>約{question.estimatedTime}秒</span></div>
                 <h2 id={`${question.id}-heading`} className="mt-2 font-bold leading-7 text-slate-950">{question.prompt}</h2>
                 {multiple ? <p className="mt-2 text-xs text-slate-600">当てはまるものをすべて選んでください。</p> : null}
                 <fieldset className="mt-4 space-y-3"><legend className="sr-only">問{index + 1}の選択肢</legend>{question.choices.map((choice) => <label key={choice.id} className="flex min-h-12 cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3 hover:bg-slate-50"><input type={multiple ? "checkbox" : "radio"} name={question.id} value={choice.id} checked={answers.includes(choice.id)} onChange={() => toggle(question.id, choice.id, multiple)} disabled={isAnswered} className="mt-1" /><span className="leading-6"><strong>{choice.id}.</strong> {choice.text}</span></label>)}</fieldset>
@@ -113,7 +145,7 @@ export function JapaneseReadingRunner({ passage, nextPassage, relatedCourses }: 
               </section>
             );
           })}
-          {nextPassage ? <Link href={`/japanese/reading/${nextPassage.slug}`} className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-slate-900 px-5 py-3 font-bold text-white">次の文章：{nextPassage.title}</Link> : null}
+          {nextPassage ? <Link href={`/japanese/reading/${nextPassage.slug}`} className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-slate-900 px-5 py-3 font-bold text-white">{isExamSet ? "次の大問" : "次の文章"}：{nextPassage.title}</Link> : null}
         </div>
       </div>
     </LearningPageShell>

@@ -81,16 +81,24 @@ export function makePassage(seed: PassageSeed): JapaneseReadingPassage {
     ]));
     return {
       id: `${seed.id}-q${index + 1}`,
+      slug: `${seed.id}-q${index + 1}`,
+      passageSetId: seed.id,
+      questionNumber: index + 1,
       prompt: promptFor(seed, insight, index),
       questionType: insight.questionType,
       answerMode: insight.answerMode ?? (insight.secondAnswer ? "multiple" : "single"),
       choices,
+      correctAnswer: correctAnswers.length === 1 ? correctAnswers[0] : correctAnswers,
       correctAnswers,
       evidenceParagraphIds: insight.evidenceParagraphIds,
       evidenceText: insight.evidenceText,
       explanation: `まず${insight.evidenceParagraphIds.map((id) => `段落${id}`).join("と")}を確認する。そこでは「${insight.evidenceText}」と述べられ、答えの「${insight.answer}」へ言い換えられる。選択肢は主語・対象・条件・因果・評価の強さに分け、本文にない追加や一部だけの一致を除く。`,
+      detailedExplanation: `まず${insight.evidenceParagraphIds.map((id) => `段落${id}`).join("と")}を確認する。そこでは「${insight.evidenceText}」と述べられ、答えの「${insight.answer}」へ言い換えられる。選択肢は主語・対象・条件・因果・評価の強さに分け、本文にない追加や一部だけの一致を除く。`,
       firstLook: `段落${insight.evidenceParagraphIds[0]}の主語と述語、および前後の接続を先に見る。`,
+      firstCheck: `段落${insight.evidenceParagraphIds[0]}の主語と述語、および前後の接続を先に見る。`,
       comparisonMethod: `各選択肢を主語・範囲・条件・因果に分解し、段落${insight.evidenceParagraphIds.join("・")}へ一項目ずつ戻す。`,
+      readingStrategy: `段落${insight.evidenceParagraphIds[0]}から読み、主語・範囲・条件・因果を欄外に短く整理する。`,
+      verification: `選んだ答えを段落${insight.evidenceParagraphIds.join("・")}へ戻し、本文より強い断定や条件の欠落がないか確認する。`,
       questionSkill: insight.skill,
       distractorReasons,
       difficulty: DIFFICULTIES[index],
@@ -98,6 +106,9 @@ export function makePassage(seed: PassageSeed): JapaneseReadingPassage {
       reviewTags: [seed.genre, insight.skill, seed.theme],
       mistakeTags: ["本文にない", "一部だけ一致", index % 2 === 0 ? "範囲が広い" : "因果の逆転"],
       relatedCourseIds: seed.genre === "fiction" ? [COURSE_IDS[2]] : seed.genre === "practical" ? [COURSE_IDS[3]] : [COURSE_IDS[index % 2]],
+      copyrightStatus: "original",
+      sourceType: "original",
+      publicationStatus: "beta",
     } as const;
   });
   const { expansion: _expansion, ...passage } = seed;

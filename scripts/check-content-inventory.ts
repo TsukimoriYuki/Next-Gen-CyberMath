@@ -17,7 +17,7 @@ const rendered = renderContentInventoryMarkdown(generated);
 check(generated.subjects.length === 4, "all four subjects must exist");
 check(SUBJECT_IDS.every((id) => generated.subjects.some((subject) => subject.subjectId === id)), "subject IDs are incomplete");
 check(generated.totals.scorableQuestionCount === generated.subjects.reduce((sum, subject) => sum + subject.scorableQuestionCount, 0), "subject totals do not add up");
-check(generated.subjects.find((subject) => subject.subjectId === "japanese")?.scorableQuestionCount === 160, "Japanese scorable count must remain 160");
+check(generated.subjects.find((subject) => subject.subjectId === "japanese")?.scorableQuestionCount === 190, "Japanese scorable count must be 190");
 check(generated.totals.unresolvedReferenceCount === generated.unresolvedReferences.length, "unresolved reference count is inconsistent");
 check(generated.totals.unresolvedReferenceCount === 0, "registry references must resolve");
 check(generated.items.every((item) => !item.isCounted || item.isScorable), "a non-scorable item was counted");

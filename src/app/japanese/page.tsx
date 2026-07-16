@@ -22,7 +22,7 @@ const subject = requireSubject("japanese");
 
 export const metadata: Metadata = createPublicMetadata({
   title: "国語",
-  description: "現代文語彙・現代文読解・古文・漢文を、16講座・160問で学ぶ国語ベータ版です。",
+  description: "現代文語彙・現代文読解・古文・漢文を、16講座・190問で学ぶ国語ベータ版です。",
   path: "/japanese",
 });
 
@@ -51,7 +51,7 @@ export default function JapanesePage() {
             <dl className="grid grid-cols-3 gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-center">
               <div><dt className="text-xs font-semibold text-amber-800">領域</dt><dd className="mt-1 text-xl font-bold text-slate-950">4</dd></div>
               <div><dt className="text-xs font-semibold text-amber-800">講座</dt><dd className="mt-1 text-xl font-bold text-slate-950">16</dd></div>
-              <div><dt className="text-xs font-semibold text-amber-800">問題</dt><dd className="mt-1 text-xl font-bold text-slate-950">160</dd></div>
+              <div><dt className="text-xs font-semibold text-amber-800">問題</dt><dd className="mt-1 text-xl font-bold text-slate-950">190</dd></div>
             </dl>
           }
         />
@@ -97,6 +97,10 @@ export default function JapanesePage() {
             <Link href="/japanese/reading" className="action-card group">
               <BookOpenCheck className="h-5 w-5 text-violet-700" aria-hidden="true" />
               <span><strong className="block text-lg text-slate-950">現代文読解</strong><span className="mt-2 block text-sm leading-6 text-slate-600">完全オリジナル20文章・100問に取り組みます。</span></span>
+            </Link>
+            <Link href="/japanese/reading/exams" className="action-card group">
+              <BookOpenCheck className="h-5 w-5 text-rose-700" aria-hidden="true" />
+              <span><strong className="block text-lg text-slate-950">共通テスト型・現代文大問</strong><span className="mt-2 block text-sm leading-6 text-slate-600">完全オリジナル6セット・30問を時間目安つきで解きます。</span></span>
             </Link>
           </div>
         </LearningSection>

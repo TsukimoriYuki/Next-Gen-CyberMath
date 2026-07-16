@@ -117,6 +117,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   if (japaneseSubject?.capabilities.problems) {
     routes.add("/japanese/problems");
     routes.add("/japanese/reading");
+    routes.add("/japanese/reading/exams");
     for (const problem of JAPANESE_PROBLEMS) {
       if (problem.area !== "modern-reading") {
         routes.add(`/japanese/problems/${problem.slug}`);
