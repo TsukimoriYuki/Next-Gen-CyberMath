@@ -1,8 +1,17 @@
 import { indexByUniqueRegistryKey } from "@/lib/registry";
 import type { JapaneseProblem } from "../types";
 import type { JapaneseReadingPassage } from "./types";
+import { CRITICISM_PASSAGES } from "./criticism";
+import { ESSAY_PASSAGES } from "./essay";
+import { FICTION_PASSAGES } from "./fiction";
+import { PRACTICAL_PASSAGES } from "./practical";
 
-export const JAPANESE_READING_PASSAGES: readonly JapaneseReadingPassage[] = [];
+export const JAPANESE_READING_PASSAGES: readonly JapaneseReadingPassage[] = [
+  ...CRITICISM_PASSAGES,
+  ...FICTION_PASSAGES,
+  ...ESSAY_PASSAGES,
+  ...PRACTICAL_PASSAGES,
+];
 
 export const JAPANESE_READING_PASSAGES_BY_ID = indexByUniqueRegistryKey(
   JAPANESE_READING_PASSAGES,
