@@ -31,6 +31,8 @@ for (const file of [
   "src/app/japanese/page.tsx",
   "src/app/japanese/problems/page.tsx",
   "src/app/japanese/problems/[problemId]/page.tsx",
+  "src/app/japanese/reading/page.tsx",
+  "src/app/japanese/reading/[passageId]/page.tsx",
 ]) {
   assert(read(file).includes("requireSubjectPageAccess"), `${file} lacks the publication guard`);
 }
@@ -87,8 +89,8 @@ for (const problem of JAPANESE_PROBLEMS.filter((entry) => entry.area === "modern
   assert.notEqual(problem.questionType, "written-reading", `${problem.id}: kanji reading drill is forbidden`);
   assert.notEqual(problem.questionType, "reading-order", `${problem.id}: kanji writing/reading drill is forbidden`);
 }
-assert.equal(JAPANESE_PROBLEMS.length, 60, "Japanese curriculum must contain exactly 60 problems");
+assert.equal(JAPANESE_PROBLEMS.length, 160, "Japanese curriculum must contain exactly 160 problems");
 const japaneseCourse = COURSE_SUBJECTS.find((subject) => subject.subjectId === "japanese");
-assert.equal(japaneseCourse?.units.reduce((count, unit) => count + unit.lessons.length, 0), 12, "Japanese curriculum must contain 12 lessons");
+assert.equal(japaneseCourse?.units.reduce((count, unit) => count + unit.lessons.length, 0), 16, "Japanese curriculum must contain 16 lessons");
 
 console.log(`Japanese foundation QA passed: hidden publication guard, discovery exclusions, guarded pages, and ${JAPANESE_PROBLEMS.length} registered problem keys verified.`);
