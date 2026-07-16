@@ -24,7 +24,9 @@ export const metadata: Metadata = createPublicMetadata({
 });
 
 export default function SimulatorIndexPage() {
-  const publicMocks = getPublicCommonTestMockExams();
+  const publicMocks = getPublicCommonTestMockExams().filter(
+    (exam) => exam.subject === "math-1a",
+  );
   const guardedMocks = publicMocks.map((mock) => {
     const subjectId = resolveTopLevelSubjectId(mock.subject);
     if (!subjectId) notFound();

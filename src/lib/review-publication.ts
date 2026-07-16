@@ -4,6 +4,7 @@ import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
 import { getCommonTestDrillById } from "@/lib/common-test-drills";
 import { getProblem } from "@/lib/content";
+import { getCommonTestMockExam } from "@/data/common-test-mock-exams";
 import {
   canAccessSubject,
   resolveTopLevelSubjectId,
@@ -37,6 +38,7 @@ const SUPPORTED_REVIEW_ITEM_TYPES = new Set([
   "english-problem",
   "common-test-lecture",
   "common-test-drill",
+  "informatics-exam",
 ]);
 
 export function resolveLectureTopLevelSubjectId(
@@ -80,6 +82,12 @@ function inferReviewSubjectId(
   if (itemType === "common-test-drill") {
     return resolveTopLevelSubjectId(getCommonTestDrillById(itemId)?.subjectId);
   }
+  if (itemType === "informatics-exam") {
+    const exists = getCommonTestMockExam("informatics-original-mock-001")?.sections.some(
+      (section) => section.questions.some((question) => question.id === itemId),
+    );
+    return exists ? "informatics" : undefined;
+  }
   return undefined;
 }
 
@@ -98,7 +106,8 @@ export function resolveReviewTopLevelSubjectId({
     (itemType === "math-problem" ||
       itemType === "english-problem" ||
       itemType === "common-test-lecture" ||
-      itemType === "common-test-drill") &&
+      itemType === "common-test-drill" ||
+      itemType === "informatics-exam") &&
     !inferred
   ) {
     return undefined;

@@ -26,6 +26,7 @@ export interface ReviewCandidate {
   riskLevel?: CommonTestRiskLevel;
   quadrantLabel: string;
   quadrantColor: string;
+  itemType?: string;
 }
 
 interface Props {
@@ -63,7 +64,7 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          itemType: "common-test-drill",
+          itemType: candidate.itemType ?? "common-test-drill",
           itemId: candidate.questionId,
           subjectId: candidate.subjectId,
           sectionId: candidate.sectionId,

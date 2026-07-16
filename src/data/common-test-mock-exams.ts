@@ -1,5 +1,6 @@
 import { COMMON_TEST_MATH_1A_MANUAL_001 } from "@/data/common-test/manual-mocks/math1a-001";
 import { COMMON_TEST_MATH_1A_MANUAL_002 } from "@/data/common-test/manual-mocks/math1a-002";
+import { INFORMATICS_MOCK_EXAM_001 } from "@/data/informatics/mock-exam";
 import { isSubjectResourceDiscoverable } from "@/lib/subject-publication";
 
 export type CommonTestMockSubject = "math-1a" | "informatics";
@@ -212,6 +213,7 @@ export const COMMON_TEST_MATH_1A_MOCK_001 = COMMON_TEST_MATH_1A_MANUAL_001;
 export const COMMON_TEST_MOCK_EXAMS: CommonTestMockExam[] = [
   COMMON_TEST_MATH_1A_MANUAL_001,
   COMMON_TEST_MATH_1A_MANUAL_002,
+  INFORMATICS_MOCK_EXAM_001,
 ];
 
 export const COMMON_TEST_MOCK_EXAM_DRAFTS: CommonTestMockExam[] = [

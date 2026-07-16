@@ -21,6 +21,7 @@ import { PUBLIC_SUBJECTS } from "@/data/subjects";
 import { PRIMARY_NAVIGATION } from "@/data/navigation";
 import { INFORMATICS_PROBLEMS } from "@/data/informatics/problems";
 import { INFORMATICS_SECTION_PRACTICES } from "@/data/informatics/exam-practice";
+import { INFORMATICS_MOCK_EXAM_001 } from "@/data/informatics/mock-exam";
 
 const GLOBAL_STATIC_ROUTES = [
   "/",
@@ -135,6 +136,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
   if (mathSubject?.capabilities.exams) {
     for (const exam of getPublicCommonTestMockExams()) {
+      if (exam.subject !== "math-1a") continue;
       routes.add(`/common-test/simulator/${exam.id}`);
     }
     for (const exam of SECTION_PRACTICE_EXAMS) {
@@ -166,6 +168,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     for (const problem of INFORMATICS_PROBLEMS) {
       routes.add(`/informatics/problems/${problem.slug ?? problem.id}`);
     }
+  }
+  if (informaticsSubject?.capabilities.exams) {
+    routes.add("/informatics/mock-exam");
+    routes.add(`/informatics/mock-exam/${INFORMATICS_MOCK_EXAM_001.slug ?? INFORMATICS_MOCK_EXAM_001.id}`);
+    routes.add("/informatics/history");
   }
 
   if (englishSubject?.capabilities.problems) {

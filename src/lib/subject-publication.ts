@@ -104,6 +104,7 @@ const TOP_LEVEL_SUBJECT_BY_RESOURCE_ID: Readonly<Record<string, string>> = {
   math2bc: "math",
   english: "english",
   "english-reading": "english",
+  informatics: "informatics",
 };
 
 export function resolveTopLevelSubjectId(

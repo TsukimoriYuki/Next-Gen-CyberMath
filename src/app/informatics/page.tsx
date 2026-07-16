@@ -189,6 +189,26 @@ export default function InformaticsPage() {
       </LearningSection>
 
       <LearningSection
+          id="exam"
+          title="オリジナル模試"
+          description="60分・100点のWeb模試です。中断・再開、自動採点、分野別診断に対応します。"
+        >
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link href="/informatics/mock-exam" className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-teal-300">
+            <ClipboardCheck className="h-5 w-5 text-teal-800" aria-hidden="true" />
+            <span className="font-black text-slate-950">情報Ⅰ オリジナル模試</span>
+            <ArrowRight className="ml-auto h-5 w-5 text-teal-800" aria-hidden="true" />
+          </Link>
+          <Link href="/informatics/history" className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-teal-300">
+            <RotateCcw className="h-5 w-5 text-teal-800" aria-hidden="true" />
+            <span className="font-black text-slate-950">受験履歴</span>
+            <ArrowRight className="ml-auto h-5 w-5 text-teal-800" aria-hidden="true" />
+          </Link>
+        </div>
+      </LearningSection>
+
+      <LearningSection
+          id="review"
           title="復習する"
           description="各領域の最初の問題から解き直し、問題ページの復習タグで弱点を確認して、対応講座へ戻れます。"
         >

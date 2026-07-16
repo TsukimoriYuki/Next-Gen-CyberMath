@@ -33,6 +33,9 @@ const ACTIONS_BY_SUBJECT = {
     { title: "共通テスト英語リーディング", description: "情報検索、資料照合、要約、推論を大問別に練習します。", href: "/common-test/english-reading", label: "英語リーディング対策を開く", icon: BookOpen },
     { title: "英語 入試良問演習", description: "大学群の傾向を参考にしたオリジナル問題に取り組みます。", href: "/english/dojo", label: "英語の入試形式演習を始める", icon: Trophy },
   ],
+  informatics: [
+    { title: "情報Ⅰ オリジナル模試", description: "60分・100点の完全オリジナルWeb模試で、分野別の弱点まで確認します。", href: "/informatics/mock-exam", label: "情報Ⅰの模試を開く", icon: ClipboardCheck },
+  ],
 } satisfies Partial<Record<SubjectId, readonly LearningAction[]>>;
 
 export default function ExamsPage() {

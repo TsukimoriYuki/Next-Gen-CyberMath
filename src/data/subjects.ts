@@ -66,8 +66,8 @@ export const SUBJECTS = [
     capabilities: {
       courses: true,
       problems: true,
-      exams: false,
-      review: false,
+      exams: true,
+      review: true,
     },
   },
 ] as const satisfies readonly SubjectConfig[];

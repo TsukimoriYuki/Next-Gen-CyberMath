@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -12,6 +12,7 @@ import {
   Flag,
   Send,
   TriangleAlert,
+  PauseCircle,
 } from "lucide-react";
 import type {
   CommonTestMockExam,
@@ -31,6 +32,11 @@ import {
   type CommonTestMockFlags,
 } from "@/lib/common-test-mock-scoring";
 import { cn } from "@/lib/utils";
+import { getSessionId, nowMs } from "@/lib/exam";
+import { startExamClockController } from "@/lib/exam-clock";
+import { saveCommonTestExamHistory } from "@/lib/common-test-exam-history";
+import { buildInformaticsExamDiagnostics } from "@/lib/informatics-exam-diagnostics";
+import { ReviewQueueRegistrar } from "@/components/common-test/ReviewQueueRegistrar";
 
 type ExamMode = "taking" | "submitted" | "review";
 
@@ -45,6 +51,13 @@ export function CommonTestMockExamRunner({ exam }: Props) {
   const [flags, setFlags] = useState<CommonTestMockFlags>({});
   const [elapsedSec, setElapsedSec] = useState(0);
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const persistent = exam.subject === "informatics" && exam.source === "original-web";
+  const draftKey = `cyber-os:informatics-exam-draft:${exam.id}`;
+  const [initialized, setInitialized] = useState(!persistent);
+  const startedAtRef = useRef(nowMs());
+  const answersRef = useRef<CommonTestMockAnswers>({});
+  const flagsRef = useRef<CommonTestMockFlags>({});
+  const elapsedRef = useRef(0);
 
   const score = useMemo(() => scoreCommonTestMockExam(exam, answers), [exam, answers]);
   const currentSection =
@@ -54,10 +67,173 @@ export function CommonTestMockExamRunner({ exam }: Props) {
   const isOvertime = remainingSec === 0 && mode === "taking";
 
   useEffect(() => {
-    if (mode !== "taking") return;
-    const timer = window.setInterval(() => setElapsedSec((value) => value + 1), 1000);
-    return () => window.clearInterval(timer);
-  }, [mode]);
+    if (!persistent) return;
+    const timer = window.setTimeout(() => {
+      try {
+        const raw = localStorage.getItem(draftKey);
+        if (raw) {
+          const saved = JSON.parse(raw) as {
+            startedAt?: number;
+            answers?: CommonTestMockAnswers;
+            flags?: CommonTestMockFlags;
+            currentSectionId?: string;
+          };
+          if (typeof saved.startedAt === "number" && saved.startedAt <= nowMs()) {
+            startedAtRef.current = saved.startedAt;
+          }
+          if (saved.answers && typeof saved.answers === "object") {
+            setAnswers(saved.answers);
+            answersRef.current = saved.answers;
+          }
+          if (saved.flags && typeof saved.flags === "object") setFlags(saved.flags);
+          if (saved.currentSectionId && exam.sections.some((section) => section.id === saved.currentSectionId)) {
+            setCurrentSectionId(saved.currentSectionId);
+          }
+        }
+      } catch {
+        localStorage.removeItem(draftKey);
+      }
+      setInitialized(true);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [draftKey, exam.sections, persistent]);
+
+  const submit = useCallback(() => {
+    setShowSubmitConfirm(false);
+    setMode("submitted");
+    if (!persistent) return;
+    localStorage.removeItem(draftKey);
+    const finalAnswers = answersRef.current;
+    const finalScore = scoreCommonTestMockExam(exam, finalAnswers);
+    const finishedAt = new Date().toISOString();
+    const startedAt = new Date(startedAtRef.current).toISOString();
+    saveCommonTestExamHistory({
+      id: `${exam.id}-${Date.now()}`,
+      examId: exam.id,
+      subjectId: "informatics",
+      startedAt,
+      finishedAt,
+      examLimitSec: exam.durationMinutes * 60,
+      actualDurationSec: elapsedRef.current,
+      totalQuestions: finalScore.totalQuestions,
+      timeLimitCorrect: finalScore.correctCount,
+      unlimitedCorrect: finalScore.correctCount,
+      timeLimitScorePct: Math.round((finalScore.totalScore / exam.totalPoints) * 100),
+      unlimitedScorePct: Math.round((finalScore.totalScore / exam.totalPoints) * 100),
+      unansweredCount: finalScore.unansweredCount,
+      sectionResults: finalScore.sectionScores.map((section, index) => ({
+        sectionId: section.sectionId,
+        sectionNumber: index + 1,
+        sectionTitle: section.title,
+        totalQuestions: section.questionCount,
+        answeredCount: section.answeredCount,
+        correctCount: finalScore.questionResults.filter(
+          (result) =>
+            exam.sections[index]?.questions.some((question) => question.id === result.question.id) &&
+            result.isCorrect,
+        ).length,
+        maxScore: section.maxScore,
+        earnedScore: section.score,
+        timeLimitEarnedScore: section.score,
+        timeLimitCorrectCount: finalScore.questionResults.filter(
+          (result) =>
+            exam.sections[index]?.questions.some((question) => question.id === result.question.id) &&
+            result.isCorrect,
+        ).length,
+      })),
+      answers: finalScore.questionResults.map((result) => ({
+        questionId: result.question.id,
+        sectionId:
+          exam.sections.find((section) =>
+            section.questions.some((question) => question.id === result.question.id),
+          )?.id ?? "",
+        selectedAnswer:
+          result.selectedAnswer === undefined ? null : JSON.stringify(result.selectedAnswer),
+        correctAnswer:
+          typeof result.question.answer === "object"
+            ? JSON.stringify(result.question.answer)
+            : String(result.question.answer),
+        isCorrect: result.isCorrect,
+        estimatedSec: Math.round((exam.durationMinutes * 60) / finalScore.totalQuestions),
+        answeredAtSec: result.selectedAnswer === undefined ? null : elapsedRef.current,
+        markedForReview: Boolean(flagsRef.current[result.question.id]),
+        confidence: null,
+        skillTags: result.question.skillTags,
+      })),
+      weakSkillTags: finalScore.weakTags,
+      maxScore: exam.totalPoints,
+      timeLimitScore: finalScore.totalScore,
+      unlimitedScore: finalScore.totalScore,
+      selectedSectionIds: exam.sections.map((section) => section.id),
+    });
+
+    const submittedAnswers = Object.entries(finalAnswers).map(([questionId, value]) =>
+      typeof value === "object" && !Array.isArray(value)
+        ? {
+            questionId,
+            blanks: Object.entries(value).map(([blankId, blankValue]) => ({
+              blankId,
+              value: blankValue,
+            })),
+          }
+        : { questionId, value },
+    );
+    fetch("/api/exam/attempts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        examId: exam.id,
+        sessionId: getSessionId(),
+        durationSec: elapsedRef.current,
+        answers: submittedAnswers,
+      }),
+    }).catch(() => {});
+  }, [draftKey, exam, persistent]);
+
+  useEffect(() => {
+    if (mode !== "taking" || !initialized) return;
+    if (!persistent) {
+      const timer = window.setInterval(() => setElapsedSec((value) => value + 1), 1000);
+      return () => window.clearInterval(timer);
+    }
+    return startExamClockController({
+      startedAtMs: startedAtRef.current,
+      durationSec: exam.durationMinutes * 60,
+      now: nowMs,
+      schedule: (callback, intervalMs) => window.setInterval(callback, intervalMs),
+      cancel: (timer) => window.clearInterval(timer as number),
+      onTick: (snapshot) => {
+        elapsedRef.current = snapshot.elapsedSec;
+        setElapsedSec(snapshot.elapsedSec);
+      },
+      onExpire: submit,
+      subscribeVisibility: (sync) => {
+        const listener = () => document.visibilityState === "visible" && sync();
+        document.addEventListener("visibilitychange", listener);
+        return () => document.removeEventListener("visibilitychange", listener);
+      },
+      subscribeFocus: (sync) => {
+        window.addEventListener("focus", sync);
+        return () => window.removeEventListener("focus", sync);
+      },
+    });
+  }, [exam.durationMinutes, initialized, mode, persistent, submit]);
+
+  useEffect(() => {
+    answersRef.current = answers;
+    flagsRef.current = flags;
+    if (!persistent || !initialized || mode !== "taking") return;
+    localStorage.setItem(
+      draftKey,
+      JSON.stringify({
+        version: 1,
+        startedAt: startedAtRef.current,
+        answers,
+        flags,
+        currentSectionId,
+      }),
+    );
+  }, [answers, currentSectionId, draftKey, flags, initialized, mode, persistent]);
 
   function setQuestionAnswer(questionId: string, value: CommonTestMockAnswerValue) {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
@@ -81,11 +257,6 @@ export function CommonTestMockExamRunner({ exam }: Props) {
     const next = Math.min(exam.sections.length - 1, Math.max(0, currentIndex + delta));
     setCurrentSectionId(exam.sections[next].id);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function submit() {
-    setShowSubmitConfirm(false);
-    setMode("submitted");
   }
 
   return (
@@ -123,14 +294,25 @@ export function CommonTestMockExamRunner({ exam }: Props) {
               danger={isOvertime}
             />
             {mode === "taking" ? (
-              <button
-                type="button"
-                onClick={() => setShowSubmitConfirm(true)}
-                className="inline-flex min-h-11 items-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-2 text-sm font-extrabold text-white hover:bg-blue-800"
-              >
-                <Send className="h-4 w-4" />
-                提出する
-              </button>
+              <>
+                {persistent && (
+                  <Link
+                    href={exam.backHref ?? "/informatics"}
+                    className="inline-flex min-h-11 items-center gap-2 rounded border border-slate-300 bg-white px-3 py-2 text-sm font-bold text-slate-700"
+                  >
+                    <PauseCircle className="h-4 w-4" />
+                    中断して保存
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setShowSubmitConfirm(true)}
+                  className="inline-flex min-h-11 items-center gap-2 rounded border border-blue-700 bg-blue-700 px-4 py-2 text-sm font-extrabold text-white hover:bg-blue-800"
+                >
+                  <Send className="h-4 w-4" />
+                  提出する
+                </button>
+              </>
             ) : (
               <button
                 type="button"
@@ -714,6 +896,26 @@ function ResultBand({
   flags: CommonTestMockFlags;
   onReview: () => void;
 }) {
+  const diagnostics =
+    exam.subject === "informatics"
+      ? buildInformaticsExamDiagnostics(exam, score.questionResults)
+      : null;
+  const reviewCandidates = score.questionResults
+    .filter((result) => !result.isCorrect)
+    .map((result) => ({
+      questionId: result.question.id,
+      title: `${exam.title} ${result.question.id}`,
+      subjectId: exam.subject,
+      sectionId:
+        exam.sections.find((section) =>
+          section.questions.some((question) => question.id === result.question.id),
+        )?.id ?? "",
+      reasonFlags: result.question.mistakeCauseIds ?? result.question.commonMistakes,
+      skillTags: result.question.skillTags,
+      quadrantLabel: "模試・演習の誤答",
+      quadrantColor: "#0f766e",
+      itemType: exam.subject === "informatics" ? "informatics-exam" : undefined,
+    }));
   return (
     <section className="no-print border-b border-stone-300 bg-white">
       <div className="mx-auto grid max-w-7xl gap-4 px-4 py-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_auto]">
@@ -744,6 +946,60 @@ function ResultBand({
           解説表示
         </button>
       </div>
+      {diagnostics && (
+        <div className="mx-auto grid max-w-7xl gap-4 border-t border-stone-200 px-4 py-5 sm:px-6 lg:grid-cols-2">
+          <div>
+            <h2 className="text-sm font-black text-slate-950">分野別得点</h2>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {diagnostics.domainScores.map((domain) => (
+                <div key={domain.domain} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="text-xs font-bold text-slate-600">{domain.domain}</div>
+                  <div className="mt-1 font-black tabular-nums text-slate-950">
+                    {domain.earned} / {domain.max}点
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h2 className="text-sm font-black text-slate-950">主な誤答原因</h2>
+            {diagnostics.mistakeCauses.length > 0 ? (
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {diagnostics.mistakeCauses.slice(0, 5).map((item) => (
+                  <li key={item.cause} className="rounded-full bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-800">
+                    {item.cause} {item.count}問
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm text-emerald-700">誤答はありません。</p>
+            )}
+            <h2 className="mt-5 text-sm font-black text-slate-950">優先して復習する講座</h2>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {diagnostics.priorityLessons.map((href, index) => (
+                <Link key={href} href={href} className="inline-flex min-h-11 items-center rounded-xl border border-teal-200 px-3 py-2 text-xs font-bold text-teal-800">
+                  復習講座 {index + 1}
+                </Link>
+              ))}
+              <Link href="/informatics#practice" className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700">
+                関連する既存問題
+              </Link>
+              <Link href={`/informatics/mock-exam/${exam.slug ?? exam.id}`} className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700">
+                再挑戦する
+              </Link>
+              <Link href="/informatics/history" className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700">
+                受験履歴を見る
+              </Link>
+            </div>
+          </div>
+          <div className="lg:col-span-2">
+            <ReviewQueueRegistrar
+              candidates={reviewCandidates}
+              theme={{ primary: "#0f766e", glowRgb: "15,118,110" }}
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }

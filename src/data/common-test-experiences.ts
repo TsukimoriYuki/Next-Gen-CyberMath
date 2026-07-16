@@ -133,7 +133,9 @@ function buildSectionPracticeEntries(): CommonTestExperience[] {
 
 // ── 手動作成PDF正本の本番模試 / AI試作版 ────────────────────────────────
 function buildFullMockEntries(): CommonTestExperience[] {
-  const published = COMMON_TEST_MOCK_EXAMS.map((exam): CommonTestExperience => {
+  const published = COMMON_TEST_MOCK_EXAMS.filter(
+    (exam) => exam.subject === "math-1a",
+  ).map((exam): CommonTestExperience => {
     const stats = getCommonTestMockExamStats(exam);
     return {
       id: exam.id,
