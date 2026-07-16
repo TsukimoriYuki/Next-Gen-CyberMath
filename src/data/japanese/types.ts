@@ -30,7 +30,12 @@ export type JapaneseQuestionType =
   | "written-reading"
   | "construction"
   | "interpretation"
-  | "person-relation";
+  | "person-relation"
+  | "main-idea"
+  | "structure"
+  | "expression-effect"
+  | "material-comparison"
+  | "sequence";
 
 export type JapaneseChoice = Readonly<{
   id: string;
@@ -67,6 +72,16 @@ export type JapaneseProblem = Readonly<{
   relatedCourseIds: readonly string[];
   annotations?: readonly string[];
   people?: readonly string[];
+  passageId?: string;
+  paragraphIds?: readonly string[];
+  passageGenre?: "criticism" | "fiction" | "essay" | "practical";
+  readingLength?: number;
+  evidenceParagraphIds?: readonly string[];
+  evidenceText?: string;
+  questionSkill?: string;
+  readingStrategy?: string;
+  mistakeTags?: readonly string[];
+  estimatedReadingTime?: number;
 }>;
 
 export const JAPANESE_AREA_META: Readonly<
@@ -79,7 +94,7 @@ export const JAPANESE_AREA_META: Readonly<
   },
   "modern-reading": {
     label: "現代文読解",
-    description: "長文読解の教材は次フェーズで追加します。",
+    description: "評論・小説・随筆・複数資料を、段落と本文根拠から読みます。",
     unitId: "modern-reading",
   },
   "classical-japanese": {

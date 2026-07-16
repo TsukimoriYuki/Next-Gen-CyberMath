@@ -2,6 +2,7 @@ import { indexByUniqueRegistryKey } from "@/lib/registry";
 import { CLASSICAL_JAPANESE_PROBLEMS } from "./classical-problems";
 import { KANBUN_PROBLEMS } from "./kanbun-problems";
 import { MODERN_VOCABULARY_PROBLEMS } from "./modern-vocabulary-problems";
+import { JAPANESE_READING_PROBLEMS } from "./reading";
 import type { JapaneseProblem } from "./types";
 
 // Curriculum modules are added by area. Keeping a single registry prevents
@@ -10,6 +11,7 @@ export const JAPANESE_PROBLEMS: readonly JapaneseProblem[] = [
   ...KANBUN_PROBLEMS,
   ...CLASSICAL_JAPANESE_PROBLEMS,
   ...MODERN_VOCABULARY_PROBLEMS,
+  ...JAPANESE_READING_PROBLEMS,
 ];
 
 export const JAPANESE_PROBLEMS_BY_ID = indexByUniqueRegistryKey(
@@ -32,3 +34,4 @@ export * from "./types";
 export * from "./classical-problems";
 export * from "./kanbun-problems";
 export * from "./modern-vocabulary-problems";
+export * from "./reading";

@@ -66,6 +66,9 @@ const SUBJECT_COLOR: Record<string, string> = {
 
 function getProblemHref(item: ReviewItemData): string {
   if (item.itemType === "math-problem") return `/problems/${item.itemId}`;
+  if (item.itemType === "japanese-problem" && /^jp-reading-\d{2}-q\d+$/.test(item.itemId)) {
+    return `/japanese/reading/${item.itemId.replace(/-q\d+$/, "")}`;
+  }
   if (item.itemType === "japanese-problem") return `/japanese/problems/${item.itemId}`;
   if (item.itemType === "common-test-drill" && item.subjectId && item.sectionId) {
     return `/common-test/${item.subjectId}/${item.sectionId}`;

@@ -21,6 +21,7 @@ const DIFFICULTY = {
 
 export default function JapaneseProblemsPage() {
   requireSubjectPageAccess("japanese", "problems");
+  const problems = JAPANESE_PROBLEMS.filter((problem) => problem.area !== "modern-reading");
   return (
     <LearningPageShell>
       <LearningBreadcrumbs items={[{ label: "国語", href: "/japanese" }, { label: "問題一覧" }]} />
@@ -28,10 +29,11 @@ export default function JapaneseProblemsPage() {
         eyebrow="国語演習"
         title="本文根拠を確かめる問題"
         description="正解だけでなく、各誤答がなぜ違うかまで確認できます。"
-        meta={[{ label: "問題数", value: `${JAPANESE_PROBLEMS.length}問` }]}
+        meta={[{ label: "問題数", value: `${problems.length}問` }]}
       />
+      <Link href="/japanese/reading" className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-violet-700 px-5 py-2.5 font-bold text-white">現代文読解 20文章へ</Link>
       <div className="mt-8 grid gap-4 md:grid-cols-2">
-        {JAPANESE_PROBLEMS.map((problem) => (
+        {problems.map((problem) => (
           <Link
             key={problem.id}
             href={`/japanese/problems/${problem.slug}`}

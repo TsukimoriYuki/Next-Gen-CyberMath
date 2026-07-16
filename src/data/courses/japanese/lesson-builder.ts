@@ -14,6 +14,11 @@ type JapaneseLessonDraft = Readonly<{
   example: string;
   mistake: string;
   elimination?: string;
+  marking?: string;
+  previewQuestions?: string;
+  paragraphRoles?: string;
+  evidenceSearch?: string;
+  finalCheck?: string;
   checkpoint: string;
   next: string;
 }>;
@@ -29,10 +34,25 @@ export function makeJapaneseLesson(draft: JapaneseLessonDraft): CourseLesson {
       steps: draft.order.map((body, index) => ({ step: index + 1, label: `手順${index + 1}`, body })),
     },
     { kind: "concept", title: "頭の中で考えること", body: draft.thinking },
+    ...(draft.marking
+      ? [{ kind: "strategy" as const, title: "本文への線の引き方", body: draft.marking }]
+      : []),
+    ...(draft.previewQuestions
+      ? [{ kind: "strategy" as const, title: "設問を先に見るべき場合", body: draft.previewQuestions }]
+      : []),
+    ...(draft.paragraphRoles
+      ? [{ kind: "concept" as const, title: "段落の役割", body: draft.paragraphRoles }]
+      : []),
+    ...(draft.evidenceSearch
+      ? [{ kind: "strategy" as const, title: "根拠の探し方", body: draft.evidenceSearch }]
+      : []),
     { kind: "workedExample", title: "具体例", body: draft.example },
     { kind: "commonMistake", title: "よくある誤答", body: draft.mistake },
     ...(draft.elimination
       ? [{ kind: "strategy" as const, title: "選択肢の削り方", body: draft.elimination }]
+      : []),
+    ...(draft.finalCheck
+      ? [{ kind: "summary" as const, title: "最後に検算すること", body: draft.finalCheck }]
       : []),
     { kind: "practice", title: "確認問題", body: draft.checkpoint },
     {

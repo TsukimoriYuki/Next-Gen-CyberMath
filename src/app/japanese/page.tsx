@@ -6,7 +6,7 @@ import {
   LearningPageShell,
   LearningSectionHeader,
 } from "@/components/learning/LearningPageFrame";
-import { JAPANESE_AREA_META, JAPANESE_PROBLEMS } from "@/data/japanese";
+import { JAPANESE_AREA_META, JAPANESE_PROBLEMS, JAPANESE_READING_PASSAGES } from "@/data/japanese";
 import { requireSubjectPageAccess } from "@/lib/subject-route-guard";
 
 export const metadata: Metadata = {
@@ -16,9 +16,7 @@ export const metadata: Metadata = {
 
 export default function JapanesePage() {
   requireSubjectPageAccess("japanese");
-  const areas = Object.entries(JAPANESE_AREA_META).filter(
-    ([area]) => area !== "modern-reading",
-  );
+  const areas = Object.entries(JAPANESE_AREA_META);
 
   return (
     <LearningPageShell>
@@ -38,7 +36,7 @@ export default function JapanesePage() {
           title="領域から学ぶ"
           description="講座で読み方を確認してから、対応する問題で根拠の取り方を練習します。"
         />
-        <div id="japanese-areas" className="grid gap-4 md:grid-cols-3">
+        <div id="japanese-areas" className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {areas.map(([area, meta]) => {
             const count = JAPANESE_PROBLEMS.filter((problem) => problem.area === area).length;
             return (
@@ -46,13 +44,14 @@ export default function JapanesePage() {
                 <BookOpen className="h-5 w-5 text-blue-600" aria-hidden="true" />
                 <h2 className="mt-3 text-xl font-bold text-slate-950">{meta.label}</h2>
                 <p className="mt-2 text-sm leading-6 text-slate-600">{meta.description}</p>
-                <p className="mt-3 text-sm font-semibold text-slate-700">{count}問</p>
+                <p className="mt-3 text-sm font-semibold text-slate-700">{area === "modern-reading" ? `4講座・${JAPANESE_READING_PASSAGES.length}文章・${count}問` : `${count}問`}</p>
                 <Link
                   href={`/courses/japanese/${meta.unitId}`}
                   className="mt-4 inline-flex min-h-11 items-center gap-2 font-semibold text-blue-700 hover:underline"
                 >
                   講座を見る <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
+                {area === "modern-reading" ? <Link href="/japanese/reading" className="ml-4 inline-flex min-h-11 items-center font-semibold text-violet-800 hover:underline">演習へ</Link> : null}
               </article>
             );
           })}
