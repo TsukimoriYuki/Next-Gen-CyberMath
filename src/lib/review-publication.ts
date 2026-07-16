@@ -1,6 +1,7 @@
 import { getSpecialLectureBySlug } from "@/data/specialLectures";
 import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
 import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
+import { ENGLISH_USAGE_PROBLEMS } from "@/data/english-usage";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
 import { JAPANESE_PROBLEMS } from "@/data/japanese";
 import { getInformaticsProblem } from "@/data/informatics/problems";
@@ -21,6 +22,7 @@ export type ReviewPublicationInput = Readonly<{
 }>;
 
 const PUBLIC_ENGLISH_REVIEW_ITEM_IDS = new Set<string>([
+  ...ENGLISH_USAGE_PROBLEMS.map((problem) => problem.id),
   ...SPEED_READING_PROBLEMS.flatMap((problem) => [
     problem.id,
     `english/speed-reading/${problem.id}`,

@@ -14,6 +14,7 @@ import { PUBLIC_COURSE_SUBJECTS } from "@/data/course-curriculum";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
 import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
 import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
+import { ENGLISH_USAGE_PROBLEMS } from "@/data/english-usage";
 import { ENGLISH_LEVEL_SLUG } from "@/lib/english-types";
 import { getTagIndexingDecision } from "@/lib/tag-indexing";
 import { getSiteUrl } from "@/lib/site";
@@ -207,6 +208,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
     for (const problem of MULTI_SOURCE_PROBLEMS) {
       routes.add(`/english/multi-source/${problem.id}`);
+    }
+    for (const problem of ENGLISH_USAGE_PROBLEMS) {
+      routes.add(`/english/vocab/${problem.slug}`);
     }
   }
 

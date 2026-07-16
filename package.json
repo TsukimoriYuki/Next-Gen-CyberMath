@@ -42,6 +42,7 @@
     "qa:deep-learning-ui": "tsx scripts/check-deep-learning-ui.ts",
     "qa:informatics": "tsx scripts/check-informatics.ts",
     "qa:informatics:unit-practice": "tsx scripts/check-informatics-unit-practice.ts",
+    "qa:english:usage-practice": "tsx scripts/check-english-usage-practice.ts",
     "qa:informatics:practice": "tsx scripts/check-informatics-exam-practice.ts",
     "qa:informatics:mock": "tsx scripts/check-informatics-mock.ts",
     "qa:informatics:readiness": "tsx scripts/check-informatics-readiness.ts",

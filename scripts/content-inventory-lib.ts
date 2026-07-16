@@ -24,6 +24,7 @@ import { LESSONS } from "../src/data/lessons";
 import { PROBLEMS } from "../src/data/problems";
 import { SUBJECTS } from "../src/data/subjects";
 import { VOCAB_CARDS } from "../src/data/vocab-flashcards";
+import { ENGLISH_USAGE_PROBLEMS } from "../src/data/english-usage";
 
 export const SUBJECT_IDS = ["math", "english", "informatics", "japanese"] as const;
 export type InventorySubjectId = (typeof SUBJECT_IDS)[number];
@@ -463,6 +464,24 @@ function buildDraftItems(): { items: DraftItem[]; unresolvedReferences: string[]
       publicationStatus: "public",
       relatedCourseId: null,
       isScorable: false,
+    });
+  }
+
+  for (const problem of ENGLISH_USAGE_PROBLEMS) {
+    items.push({
+      id: problem.id,
+      subject: "english",
+      unit: `英単語・語彙/${problem.area}`,
+      sourceFile: "src/data/english-usage.ts",
+      sourceType: "single-question",
+      rawDifficulty: problem.difficulty,
+      difficulty: normalizeDifficulty(problem.difficulty),
+      rawQuestionType: problem.questionType,
+      questionType: normalizeQuestionType(problem.questionType),
+      publicationStatus: problem.publicationStatus,
+      relatedCourseId: null,
+      isScorable: true,
+      promptForHash: problem.statement,
     });
   }
 

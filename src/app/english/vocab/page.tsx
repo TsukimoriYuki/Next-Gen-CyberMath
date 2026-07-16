@@ -3,6 +3,11 @@ import Link from "next/link";
 import { ChevronLeft, BookOpen } from "lucide-react";
 import { VocabFlashcardGame } from "@/components/english/VocabFlashcardGame";
 import { createPublicMetadata } from "@/lib/public-metadata";
+import {
+  ENGLISH_USAGE_AREA_META,
+  ENGLISH_USAGE_DIFFICULTY_LABEL,
+  ENGLISH_USAGE_PROBLEMS,
+} from "@/data/english-usage";
 
 export const metadata: Metadata = createPublicMetadata({
   title: "英単語フラッシュカード",
@@ -55,6 +60,18 @@ export default function VocabPage() {
         </header>
 
         <VocabFlashcardGame />
+
+        <section id="usage-practice" className="mt-12" aria-labelledby="usage-practice-title">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-700">Vocabulary &amp; Usage Practice</p>
+          <h2 id="usage-practice-title" className="mt-2 text-3xl font-extrabold text-slate-950">語彙・語法演習 40問</h2>
+          <p className="mt-3 text-sm leading-7 text-slate-600">文脈、言い換え、語形、コロケーション、動詞語法、会話表現を採点付きで練習します。</p>
+          <div className="mt-8 space-y-8">
+            {Object.entries(ENGLISH_USAGE_AREA_META).map(([area, meta]) => {
+              const problems = ENGLISH_USAGE_PROBLEMS.filter((problem) => problem.area === area);
+              return <div key={area}><h3 className="text-lg font-bold text-slate-900">{meta.label}</h3><ul className="mt-3 divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">{problems.map((problem) => <li key={problem.id}><Link href={`/english/vocab/${problem.slug}`} className="flex min-h-14 items-center justify-between gap-3 p-4 hover:bg-blue-50"><span className="min-w-0 break-words font-semibold text-slate-900">{problem.title}</span><span className="shrink-0 text-xs text-slate-500">{ENGLISH_USAGE_DIFFICULTY_LABEL[problem.difficulty]}・約{problem.estimatedTime}秒</span></Link></li>)}</ul></div>;
+            })}
+          </div>
+        </section>
       </div>
     </div>
   );
