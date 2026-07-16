@@ -1,9 +1,14 @@
 import { indexByUniqueRegistryKey } from "@/lib/registry";
+import { CLASSICAL_JAPANESE_PROBLEMS } from "./classical-problems";
+import { KANBUN_PROBLEMS } from "./kanbun-problems";
 import type { JapaneseProblem } from "./types";
 
 // Curriculum modules are added by area. Keeping a single registry prevents
 // duplicate IDs/slugs and gives pages/review guards one lookup source.
-export const JAPANESE_PROBLEMS: readonly JapaneseProblem[] = [];
+export const JAPANESE_PROBLEMS: readonly JapaneseProblem[] = [
+  ...KANBUN_PROBLEMS,
+  ...CLASSICAL_JAPANESE_PROBLEMS,
+];
 
 export const JAPANESE_PROBLEMS_BY_ID = indexByUniqueRegistryKey(
   JAPANESE_PROBLEMS,
@@ -22,3 +27,5 @@ export function getJapaneseProblem(idOrSlug: string): JapaneseProblem | undefine
 }
 
 export * from "./types";
+export * from "./classical-problems";
+export * from "./kanbun-problems";
