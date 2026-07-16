@@ -15,15 +15,15 @@ const read = (file: string) => fs.readFileSync(path.join(root, file), "utf8");
 const japanese = SUBJECTS.find((subject) => subject.id === "japanese");
 
 assert(japanese, "Japanese subject is missing");
-assert.equal(japanese.status, "hidden");
-assert.equal(canAccessSubject("japanese", undefined, "production"), false);
-assert.equal(canAccessSubject("japanese", undefined, "preview"), false);
+assert.equal(japanese.status, "beta");
+assert.equal(canAccessSubject("japanese", undefined, "production"), true);
+assert.equal(canAccessSubject("japanese", undefined, "preview"), true);
 assert.equal(canAccessSubject("japanese", undefined, "development"), true);
-assert.equal(isSubjectResourceDiscoverable("japanese", "courses"), false);
-assert.equal(isSubjectResourceDiscoverable("japanese", "problems"), false);
+assert.equal(isSubjectResourceDiscoverable("japanese", "courses"), true);
+assert.equal(isSubjectResourceDiscoverable("japanese", "problems"), true);
 
 const sitemapPaths = new Set(sitemap().map((entry) => new URL(entry.url).pathname));
-assert(!sitemapPaths.has("/japanese"), "hidden Japanese subject leaked into sitemap");
+assert(sitemapPaths.has("/japanese"), "public Japanese subject is missing from sitemap");
 assert(!read("src/data/navigation.ts").includes('href: "/japanese"'), "Japanese leaked into navigation");
 
 for (const file of [
@@ -93,4 +93,4 @@ assert.equal(JAPANESE_PROBLEMS.length, 160, "Japanese curriculum must contain ex
 const japaneseCourse = COURSE_SUBJECTS.find((subject) => subject.subjectId === "japanese");
 assert.equal(japaneseCourse?.units.reduce((count, unit) => count + unit.lessons.length, 0), 16, "Japanese curriculum must contain 16 lessons");
 
-console.log(`Japanese foundation QA passed: hidden publication guard, discovery exclusions, guarded pages, and ${JAPANESE_PROBLEMS.length} registered problem keys verified.`);
+console.log(`Japanese foundation QA passed: beta publication guard, discovery routes, guarded pages, and ${JAPANESE_PROBLEMS.length} registered problem keys verified.`);

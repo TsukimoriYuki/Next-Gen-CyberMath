@@ -1,10 +1,10 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-test("hidden Japanese catalog is available in development", async ({ page }) => {
+test("Japanese beta catalog is available", async ({ page }) => {
   await page.goto("/japanese");
   await expect(page.getByRole("heading", { level: 1, name: "根拠と文脈から読む国語" })).toBeVisible();
-  await expect(page.getByText("未公開・開発確認用")).toBeVisible();
+  await expect(page.getByText("ベータ公開", { exact: true })).toBeVisible();
   await expect(page.locator("body")).toContainText(/\d+問/);
 });
 

@@ -73,7 +73,7 @@ for (let left = 0; left < normalized.length; left += 1) for (let right = left + 
 const banned = ["朝日新聞", "読売新聞", "毎日新聞", "日本経済新聞", "共通テスト本試験", "大学入試センター"];
 const corpus = passages.map((passage) => passage.paragraphs.map((paragraph) => paragraph.text).join("\n")).join("\n");
 for (const term of banned) assert(!corpus.includes(term), `copyright/source term found: ${term}`);
-assert.equal(read("src/data/subjects.ts").includes('id: "japanese"') && read("src/data/subjects.ts").includes('status: "hidden"'), true, "Japanese must remain hidden");
-assert(!new Set(sitemap().map((entry) => new URL(entry.url).pathname)).has("/japanese"), "Japanese leaked into sitemap");
+assert.equal(read("src/data/subjects.ts").includes('id: "japanese"') && read("src/data/subjects.ts").includes('status: "beta"'), true, "Japanese must be beta");
+assert(new Set(sitemap().map((entry) => new URL(entry.url).pathname)).has("/japanese"), "Japanese is missing from sitemap");
 assert(!read("src/data/navigation.ts").includes('href: "/japanese"'), "Japanese leaked into global navigation");
 console.log("Japanese reading QA passed: 4 courses, 20 original passages, 100 questions, 40/40/20 difficulty, evidence, duplication, and publication guards verified.");

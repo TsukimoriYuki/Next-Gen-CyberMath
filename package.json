@@ -20,6 +20,8 @@
     "qa:japanese:reading": "tsx scripts/check-japanese-reading.ts",
     "qa:japanese:reading:e2e": "playwright test e2e/japanese-reading.spec.ts --config playwright.japanese.config.ts",
     "qa:japanese:reading:production": "playwright test e2e/japanese-reading-production.spec.ts",
+    "qa:japanese:public": "tsx scripts/check-japanese-publication.ts",
+    "qa:japanese:public:e2e": "playwright test e2e/japanese-public.spec.ts --config playwright.japanese-public.config.ts",
     "qa:public:live": "tsx scripts/check-live-public-quality.ts",
     "qa:math1a-paper": "tsx scripts/check-exam-paper.ts",
     "qa:manual-mock": "tsx scripts/check-common-test-mock.ts",
