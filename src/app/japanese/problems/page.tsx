@@ -7,11 +7,13 @@ import {
 } from "@/components/learning/LearningPageFrame";
 import { JAPANESE_AREA_META, JAPANESE_PROBLEMS } from "@/data/japanese";
 import { requireSubjectPageAccess } from "@/lib/subject-route-guard";
+import { createPublicMetadata } from "@/lib/public-metadata";
 
-export const metadata: Metadata = {
-  title: "国語 問題一覧（開発確認用）",
-  robots: { index: false, follow: false },
-};
+export const metadata: Metadata = createPublicMetadata({
+  title: "国語 問題一覧",
+  description: "現代文語彙・古文・漢文の60問を、本文根拠と全選択肢の誤答理由つきで学びます。",
+  path: "/japanese/problems",
+});
 
 const DIFFICULTY = {
   basic: "基礎",
@@ -19,9 +21,19 @@ const DIFFICULTY = {
   "common-test-ready": "共通テスト準備",
 } as const;
 
-export default function JapaneseProblemsPage() {
+export default async function JapaneseProblemsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ area?: string; course?: string }>;
+}) {
   requireSubjectPageAccess("japanese", "problems");
-  const problems = JAPANESE_PROBLEMS.filter((problem) => problem.area !== "modern-reading");
+  const { area, course } = await searchParams;
+  const problems = JAPANESE_PROBLEMS.filter(
+    (problem) =>
+      problem.area !== "modern-reading" &&
+      (!area || problem.area === area) &&
+      (!course || problem.relatedCourseIds.includes(course)),
+  );
   return (
     <LearningPageShell>
       <LearningBreadcrumbs items={[{ label: "国語", href: "/japanese" }, { label: "問題一覧" }]} />
@@ -29,7 +41,10 @@ export default function JapaneseProblemsPage() {
         eyebrow="国語演習"
         title="本文根拠を確かめる問題"
         description="正解だけでなく、各誤答がなぜ違うかまで確認できます。"
-        meta={[{ label: "問題数", value: `${problems.length}問` }]}
+        meta={[
+          { label: "表示中", value: `${problems.length}問` },
+          { label: "国語全体", value: "160問" },
+        ]}
       />
       <Link href="/japanese/reading" className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-violet-700 px-5 py-2.5 font-bold text-white">現代文読解 20文章へ</Link>
       <div className="mt-8 grid gap-4 md:grid-cols-2">

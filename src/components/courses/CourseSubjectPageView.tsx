@@ -36,6 +36,7 @@ export function CourseSubjectPageView({ subject }: { subject: CourseSubject }) {
         ]}
       />
       <LearningPageHeader
+        status={subject.subjectId === "japanese" ? "beta" : undefined}
         eyebrow={isPremium ? "発展講座" : "体系講座"}
         title={subject.subjectName}
         description={pageDescription}

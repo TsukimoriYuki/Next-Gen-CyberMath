@@ -97,14 +97,17 @@ export function getActiveNavigationId(
     pathname.startsWith("/math/calculation") ||
     pathname.startsWith("/english/speed-reading") ||
     pathname.startsWith("/english/comprehension") ||
-    pathname.startsWith("/english/multi-source")
+    pathname.startsWith("/english/multi-source") ||
+    pathname.startsWith("/japanese/problems") ||
+    pathname.startsWith("/japanese/reading")
   ) {
     return "problems";
   }
   if (
     pathname === "/subjects" ||
     pathname.startsWith("/math") ||
-    pathname.startsWith("/english")
+    pathname.startsWith("/english") ||
+    pathname === "/japanese"
   ) {
     return "subjects";
   }

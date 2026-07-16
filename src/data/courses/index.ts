@@ -20,7 +20,7 @@ export const COURSE_SUBJECTS: CourseSubject[] = [
   MATH_2BC_PREMIUM_COURSE_SUBJECT,
   // 親教科 informatics の公開状態を isPublicCourseSubject が一元的に反映する。
   INFORMATICS_1_COURSE_SUBJECT,
-  // 国語は親教科が hidden のためdevelopmentでのみ閲覧できる。
+  // 国語は親教科のbeta公開状態をisPublicCourseSubjectが一元的に反映する。
   JAPANESE_COURSE_SUBJECT,
 ];
 

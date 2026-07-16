@@ -75,8 +75,8 @@ export const SUBJECTS = [
     name: "国語",
     shortName: "国語",
     href: "/japanese",
-    description: "現代文語彙・現代文読解・古文・漢文を、根拠と文脈から学ぶ高校国語。",
-    status: "hidden",
+    description: "現代文語彙・現代文読解・古文・漢文を、16講座・160問で学ぶ高校国語。",
+    status: "beta",
     capabilities: {
       courses: true,
       problems: true,

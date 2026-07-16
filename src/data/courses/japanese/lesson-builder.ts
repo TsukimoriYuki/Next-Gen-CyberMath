@@ -24,6 +24,7 @@ type JapaneseLessonDraft = Readonly<{
 }>;
 
 export function makeJapaneseLesson(draft: JapaneseLessonDraft): CourseLesson {
+  const isReadingLesson = draft.id.startsWith("reading-");
   const blocks: LessonBlock[] = [
     { kind: "intro", title: "最低限の知識", body: draft.minimumKnowledge },
     { kind: "strategy", title: "最初に見る場所", body: draft.firstLook },
@@ -81,8 +82,12 @@ export function makeJapaneseLesson(draft: JapaneseLessonDraft): CourseLesson {
     relatedPracticeLinks: [
       {
         label: "対応問題を解く",
-        href: "/japanese/problems",
-        description: "この講座に対応する5問を、本文根拠と誤答理由まで確認します。",
+        href: isReadingLesson
+          ? `/japanese/reading?course=${draft.id}`
+          : `/japanese/problems?course=${draft.id}`,
+        description: isReadingLesson
+          ? "この講座に対応する文章を、本文根拠と誤答理由まで確認します。"
+          : "この講座に対応する5問を、本文根拠と誤答理由まで確認します。",
       },
     ],
     qualityTags: ["japanese", "beginner", "evidence-first", "original-explanation"],

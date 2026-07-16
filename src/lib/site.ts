@@ -4,7 +4,7 @@ export const SITE_NAME = "Cyber Math";
 export const SITE_DESCRIPTION =
   "教科ごとの講義・問題演習・模試・復習を、一つの学習ルートにつなぐ受験学習サービス。";
 
-export const PRODUCTION_SITE_URL = "https://next-gen-cyber-math.vercel.app";
+export const PRODUCTION_SITE_URL = "https://cyber-math-production.up.railway.app";
 
 export function getSiteUrl(): string {
   const url = process.env.NEXT_PUBLIC_SITE_URL?.trim();

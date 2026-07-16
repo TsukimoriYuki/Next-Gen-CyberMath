@@ -39,7 +39,7 @@ function Material({ material }: { material: JapaneseReadingMaterial }) {
   );
 }
 
-export function JapaneseReadingRunner({ passage, nextPassage }: { passage: JapaneseReadingPassage; nextPassage?: Pick<JapaneseReadingPassage, "slug" | "title"> }) {
+export function JapaneseReadingRunner({ passage, nextPassage, relatedCourses }: { passage: JapaneseReadingPassage; nextPassage?: Pick<JapaneseReadingPassage, "slug" | "title">; relatedCourses: readonly Readonly<{ id: string; title: string; href: string }>[] }) {
   const [selected, setSelected] = useState<Record<string, string[]>>({});
   const [answered, setAnswered] = useState<Record<string, boolean>>({});
   const [reviewState, setReviewState] = useState<Record<string, "idle" | "saving" | "saved" | "login">>({});
@@ -71,6 +71,15 @@ export function JapaneseReadingRunner({ passage, nextPassage }: { passage: Japan
     <LearningPageShell width="split">
       <LearningBreadcrumbs items={[{ label: "国語", href: "/japanese" }, { label: "現代文読解", href: "/japanese/reading" }, { label: passage.title }]} />
       <LearningPageHeader eyebrow={READING_GENRE_LABEL[passage.genre]} title={passage.title} description={passage.theme} meta={[{ label: "想定時間", value: `約${passage.estimatedReadingTime}分` }, { label: "文字数", value: `${characterCount}字` }, { label: "出典", value: "Cyber Math 完全オリジナル" }]} />
+
+      {relatedCourses.length > 0 ? (
+        <aside className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-4" aria-label="対応講座">
+          <h2 className="font-bold text-blue-950">対応講座</h2>
+          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2">
+            {relatedCourses.map((course) => <Link key={course.id} href={course.href} className="inline-flex min-h-11 items-center font-bold text-blue-700 underline">{course.title}</Link>)}
+          </div>
+        </aside>
+      ) : null}
 
       <div className="mt-8 grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:items-start">
         <article className="min-w-0 space-y-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7" aria-labelledby="passage-heading">

@@ -19,9 +19,11 @@ const DIFFICULTY = {
 export function JapaneseProblemRunner({
   problem,
   areaLabel,
+  relatedCourses,
 }: {
   problem: JapaneseProblem;
   areaLabel: string;
+  relatedCourses: readonly Readonly<{ id: string; title: string; href: string }>[];
 }) {
   const [selected, setSelected] = useState("");
   const [answered, setAnswered] = useState(false);
@@ -153,6 +155,14 @@ export function JapaneseProblemRunner({
                   </li>
                 ))}
               </ul>
+              {relatedCourses.length > 0 ? (
+                <div className="mt-5 rounded-xl border border-blue-200 bg-blue-50 p-4">
+                  <h3 className="font-bold text-blue-950">対応講座へ戻る</h3>
+                  <div className="mt-2 flex flex-wrap gap-3">
+                    {relatedCourses.map((course) => <Link key={course.id} href={course.href} className="inline-flex min-h-11 items-center font-bold text-blue-700 underline">{course.title}</Link>)}
+                  </div>
+                </div>
+              ) : null}
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
                   type="button"

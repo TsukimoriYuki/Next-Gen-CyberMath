@@ -22,6 +22,8 @@ import { PRIMARY_NAVIGATION } from "@/data/navigation";
 import { INFORMATICS_PROBLEMS } from "@/data/informatics/problems";
 import { INFORMATICS_SECTION_PRACTICES } from "@/data/informatics/exam-practice";
 import { INFORMATICS_MOCK_EXAM_001 } from "@/data/informatics/mock-exam";
+import { JAPANESE_PROBLEMS } from "@/data/japanese";
+import { JAPANESE_READING_PASSAGES } from "@/data/japanese/reading";
 
 const GLOBAL_STATIC_ROUTES = [
   "/",
@@ -86,6 +88,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const informaticsSubject = PUBLIC_SUBJECTS.find(
     (subject) => subject.id === "informatics",
   );
+  const japaneseSubject = PUBLIC_SUBJECTS.find(
+    (subject) => subject.id === "japanese",
+  );
 
   for (const item of PRIMARY_NAVIGATION) {
     if (["learn", "problems", "exams", "review"].includes(item.id)) {
@@ -107,6 +112,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
   if (englishSubject?.capabilities.problems) {
     for (const route of ENGLISH_PROBLEM_ROUTES) routes.add(route);
+  }
+
+  if (japaneseSubject?.capabilities.problems) {
+    routes.add("/japanese/problems");
+    routes.add("/japanese/reading");
+    for (const problem of JAPANESE_PROBLEMS) {
+      if (problem.area !== "modern-reading") {
+        routes.add(`/japanese/problems/${problem.slug}`);
+      }
+    }
+    for (const passage of JAPANESE_READING_PASSAGES) {
+      routes.add(`/japanese/reading/${passage.slug}`);
+    }
   }
   if (englishSubject?.capabilities.exams) {
     for (const route of ENGLISH_EXAM_ROUTES) routes.add(route);

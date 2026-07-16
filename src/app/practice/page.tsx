@@ -49,6 +49,22 @@ const ACTIONS_BY_SUBJECT = {
       icon: Files,
     },
   ],
+  japanese: [
+    {
+      title: "国語 基礎・古典演習",
+      description: "現代文語彙・古文・漢文の60問を、本文根拠と誤答理由まで確認します。",
+      href: "/japanese/problems",
+      label: "国語問題を解く",
+      icon: BookOpenCheck,
+    },
+    {
+      title: "現代文読解",
+      description: "完全オリジナル20文章・100問で、評論・小説・随筆・複数資料を読みます。",
+      href: "/japanese/reading",
+      label: "現代文読解を始める",
+      icon: Files,
+    },
+  ],
 } satisfies Partial<Record<SubjectId, readonly LearningAction[]>>;
 
 export default function PracticePage() {

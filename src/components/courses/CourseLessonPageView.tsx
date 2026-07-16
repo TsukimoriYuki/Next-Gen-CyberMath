@@ -46,6 +46,7 @@ export function CourseLessonPageView({
         ]}
       />
       <LearningPageHeader
+        status={subject.subjectId === "japanese" ? "beta" : undefined}
         eyebrow={subject.subjectName}
         title={lesson.lessonTitle}
         description={

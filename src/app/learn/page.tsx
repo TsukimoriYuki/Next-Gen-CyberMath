@@ -57,6 +57,15 @@ const ACTIONS_BY_SUBJECT = {
       icon: BookOpen,
     },
   ],
+  japanese: [
+    {
+      title: "国語の体系講座",
+      description: "現代文語彙・現代文読解・古文・漢文を、16講座で順に学びます。",
+      href: "/courses/japanese",
+      label: "国語の講座を学ぶ",
+      icon: BookOpen,
+    },
+  ],
 } satisfies Partial<Record<SubjectId, readonly LearningAction[]>>;
 
 export default function LearnPage() {
