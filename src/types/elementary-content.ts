@@ -4,6 +4,7 @@ import type {
   ElementaryPublicationStatus,
   ElementarySubjectId,
 } from "@/types/elementary";
+import type { ElementaryAssetUsagePurpose } from "@/types/elementary-assets";
 
 export const ELEMENTARY_CHARACTER_EMOTIONS = [
   "neutral",
@@ -161,6 +162,9 @@ export type ElementaryVisualBlock = ElementaryLessonBlockBase &
     title: ElementaryInlineContent;
     assetId?: string;
     fallbackText: ElementaryInlineContent;
+    captionOverride?: ElementaryInlineContent;
+    creditDisplay: "inline" | "credits-page";
+    visualPurpose: ElementaryAssetUsagePurpose;
   }>;
 
 export type ElementaryRetryBlock = ElementaryLessonBlockBase &

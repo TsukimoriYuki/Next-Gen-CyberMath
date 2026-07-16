@@ -36,6 +36,7 @@ test("開発用見本が構造化ブロック順で表示される", async ({ pa
     "opening-question",
     "learning-goals",
     "dialogue",
+    "visual",
     "explanation",
     "key-point",
     "guided-example",
@@ -100,7 +101,7 @@ test("会話の読み順・見出し・フォーカス・a11yが有効", async (
   await page.goto(SHOWCASE_ROUTE);
   const sections = page.locator("[data-lesson-block] > section");
   const sectionCount = await sections.count();
-  expect(sectionCount).toBe(10);
+  expect(sectionCount).toBe(11);
   for (let index = 0; index < sectionCount; index += 1) {
     await expect(sections.nth(index)).toHaveAttribute("aria-labelledby", /.+/);
   }

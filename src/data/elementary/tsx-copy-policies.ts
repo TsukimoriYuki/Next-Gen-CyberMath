@@ -23,4 +23,11 @@ export const ELEMENTARY_TSX_COPY_EXCLUSIONS: readonly ElementaryTsxCopyExclusion
     audience: "learner",
     reason: "構造化教材のterm.definitionを漢字QAで別途検査する。",
   },
+  {
+    sourcePath: "src/components/elementary/ElementaryVisualAsset.tsx",
+    attributeName: "alt",
+    expression: "getElementaryAssetAltText(asset)",
+    audience: "learner",
+    reason: "asset registryのaltを学年別漢字QAとasset QAで別途検査する。",
+  },
 ] as const;

@@ -6,6 +6,7 @@ import type {
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import { ElementaryDialogue, ElementaryDialogueLineView } from "./ElementaryDialogue";
 import { ElementaryText } from "./ElementaryText";
+import { ElementaryVisualAsset } from "./ElementaryVisualAsset";
 import styles from "./ElementaryLesson.module.css";
 
 function blockHeadingId(lessonId: string, blockId: string) {
@@ -101,12 +102,14 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
       );
     case "visual":
       return (
-        <section className={styles.block} aria-labelledby={headingId}>
+        <section className={styles.block} aria-labelledby={headingId} data-visual-purpose={block.visualPurpose}>
           <SectionHeading id={headingId} content={block.title} />
-          <p className={styles.visualFallback} data-visual-asset={block.assetId}>
-            <span className={styles.fallbackLabel}>{elementaryUiCopy("lesson-visual-fallback-label")}</span>
-            <ElementaryText content={block.fallbackText} />
-          </p>
+          <ElementaryVisualAsset
+            assetId={block.assetId}
+            fallbackText={block.fallbackText}
+            captionOverride={block.captionOverride}
+            creditDisplay={block.creditDisplay}
+          />
         </section>
       );
     case "retry":

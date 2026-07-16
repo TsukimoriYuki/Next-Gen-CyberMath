@@ -20,6 +20,7 @@ import {
 import { ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE } from "../src/data/elementary/showcases/division-dialogue";
 import { ELEMENTARY_TSX_COPY_EXCLUSIONS } from "../src/data/elementary/tsx-copy-policies";
 import { ELEMENTARY_UI_COPY } from "../src/data/elementary/ui-copy";
+import { getElementaryAssetTextFields } from "../src/lib/elementary-assets";
 import {
   getAssignedGradeForKanji,
   getCumulativeKanjiThroughGrade,
@@ -195,6 +196,20 @@ function validateLearnerContent() {
         fieldPath,
       });
     }
+  }
+
+  for (const field of getElementaryAssetTextFields()) {
+    const grades = field.gradeIds.map((gradeId) => Number(gradeId.slice(-1)));
+    const grade = Math.min(...grades);
+    addInspection(field.content, {
+      grade,
+      audience: "learner",
+      policyId: `grade-${grade}` as "grade-1" | "grade-2" | "grade-3" | "grade-4" | "grade-5" | "grade-6",
+      context: field.path === "alt" ? "accessibility" : "visual-fallback",
+      sourceLocation: "src/data/elementary/assets/visual-assets.ts",
+      contentId: field.assetId,
+      fieldPath: field.path,
+    });
   }
 
   for (const copy of ELEMENTARY_UI_COPY) {

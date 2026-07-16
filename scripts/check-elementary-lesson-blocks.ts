@@ -6,6 +6,7 @@ import {
   ELEMENTARY_CHARACTERS_BY_ID,
 } from "../src/data/elementary/characters";
 import { ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE } from "../src/data/elementary/showcases/division-dialogue";
+import { getApprovedElementaryVisualAsset } from "../src/lib/elementary-assets";
 import {
   ELEMENTARY_GRADE_SPEECH_POLICIES,
   ELEMENTARY_PROHIBITED_PHRASES,
@@ -254,6 +255,15 @@ function validateLesson() {
   const normalizedLines = new Set<string>();
   const misconceptionLines = new Map<string, Readonly<{ lineId: string; blockIndex: number }>>();
   const allLines: Array<Readonly<{ line: ElementaryDialogueLine; blockIndex: number }>> = [];
+  const visualAssetIds = lesson.blocks.flatMap((block) =>
+    block.type === "visual" && block.assetId ? [block.assetId] : [],
+  );
+  requireRule(
+    JSON.stringify(visualAssetIds) === JSON.stringify(lesson.visualAssetIds),
+    "LESSON_VISUAL_IDS_MATCH",
+    "visualAssetIds",
+    { declared: lesson.visualAssetIds, referenced: visualAssetIds },
+  );
 
   lesson.blocks.forEach((block, blockIndex) => {
     if (block.type === "dialogue") {
@@ -265,6 +275,10 @@ function validateLesson() {
     }
     if (block.type === "visual") {
       requireRule(extractElementaryInlineText(block.fallbackText).trim().length > 0, "VISUAL_FALLBACK_REQUIRED", `blocks[${blockIndex}].fallbackText`, block.fallbackText, { blockId: block.id });
+      requireRule(Boolean(block.assetId), "VISUAL_ASSET_ID_REQUIRED", `blocks[${blockIndex}].assetId`, block.assetId, { blockId: block.id });
+      requireRule(Boolean(block.assetId && getApprovedElementaryVisualAsset(block.assetId)), "VISUAL_ASSET_APPROVED", `blocks[${blockIndex}].assetId`, block.assetId, { blockId: block.id });
+      requireRule(block.creditDisplay === "inline" || block.creditDisplay === "credits-page", "VISUAL_CREDIT_DISPLAY", `blocks[${blockIndex}].creditDisplay`, block.creditDisplay, { blockId: block.id });
+      requireRule(block.visualPurpose === "concept-explanation", "VISUAL_PURPOSE", `blocks[${blockIndex}].visualPurpose`, block.visualPurpose, { blockId: block.id });
     }
     if (block.type === "retry") {
       requireRule(block.response.speakerId === "hinano", "RETRY_HINANO_REQUIRED", `blocks[${blockIndex}].response.speakerId`, block.response.speakerId, { blockId: block.id, lineId: block.response.id });

@@ -81,6 +81,9 @@ export function getElementaryBlockTextFields(
       return [
         { path: `${path}.title`, content: block.title },
         { path: `${path}.fallbackText`, content: block.fallbackText },
+        ...(block.captionOverride
+          ? [{ path: `${path}.captionOverride`, content: block.captionOverride }]
+          : []),
       ];
     case "retry":
       return [

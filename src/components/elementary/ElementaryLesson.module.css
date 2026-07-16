@@ -266,15 +266,6 @@
   margin-bottom: 0.5rem;
 }
 
-.visualFallback {
-  display: grid;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  border: 1px dashed #879c8e;
-  border-radius: 1rem;
-  padding: 1rem;
-}
-
 .lesson ruby {
   ruby-align: center;
 }
