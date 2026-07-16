@@ -27,6 +27,7 @@ export interface ReviewCandidate {
   quadrantLabel: string;
   quadrantColor: string;
   itemType?: string;
+  source?: string;
 }
 
 interface Props {
@@ -69,7 +70,7 @@ export function ReviewQueueRegistrar({ candidates, theme }: Props) {
           subjectId: candidate.subjectId,
           sectionId: candidate.sectionId,
           title: candidate.title,
-          source: "common-test-drill",
+          source: candidate.source ?? "common-test-drill",
           reasonFlags: candidate.reasonFlags,
           skillTags: candidate.skillTags,
         }),

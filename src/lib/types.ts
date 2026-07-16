@@ -158,6 +158,67 @@ export interface Problem {
   approaches?: Approach[];
   /** 私立文系大学群タグ。道場・検索の絞り込みに使う。 */
   universityGroup?: UniversityGroup;
+  /** 数学IAの単元別・即時採点演習。既存の解説型問題には付与しない。 */
+  unitPractice?: MathUnitPracticeMetadata;
+}
+
+export type MathUnitPracticeDifficulty = "basic" | "standard" | "common-test-prep";
+
+export type MathUnitPracticeQuestionType =
+  | "single-choice"
+  | "numeric"
+  | "multiple-select"
+  | "matching"
+  | "ordering"
+  | "table-reading";
+
+export type MathUnitPracticeChoice = Readonly<{
+  id: string;
+  text: string;
+  reason: string;
+}>;
+
+export type MathUnitPracticeVisual = Readonly<{
+  type: "table";
+  caption: string;
+  headers: readonly string[];
+  rows: readonly (readonly string[])[];
+}>;
+
+export interface MathUnitPracticeMetadata {
+  id: string;
+  slug: string;
+  subjectId: "math-1a";
+  unitId: string;
+  practiceArea:
+    | "数と式"
+    | "集合と命題"
+    | "二次関数"
+    | "図形と計量"
+    | "データの分析"
+    | "場合の数"
+    | "確率"
+    | "図形の性質";
+  questionType: MathUnitPracticeQuestionType;
+  choices?: readonly MathUnitPracticeChoice[];
+  correctAnswer: string;
+  acceptedAnswers?: readonly string[];
+  detailedExplanation: string;
+  distractorReasons: Readonly<Record<string, string>>;
+  strategy: string;
+  firstCheck: string;
+  verification: string;
+  commonMistake: string;
+  relatedCourseIds: readonly string[];
+  reviewTags: readonly string[];
+  mistakeTags: readonly string[];
+  difficulty: MathUnitPracticeDifficulty;
+  internalKpd: number;
+  estimatedTime: number;
+  copyrightStatus: "original";
+  sourceType: "original";
+  publicationStatus: "public";
+  visual?: MathUnitPracticeVisual;
 }
 
 /**

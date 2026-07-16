@@ -14,7 +14,10 @@ import {
 } from "@/components/learning/LearningPageFrame";
 import { MathText } from "@/components/math/Math";
 import { LogicSteps } from "@/components/scaffolding/LogicSteps";
+import { MathUnitPracticeRunner } from "@/components/math/MathUnitPracticeRunner";
 import { LabRenderer } from "@/components/graph/LabRenderer";
+import { MATH_1A_COURSE_SUBJECT } from "@/data/courses/math-1a";
+import { getNextMathUnitPracticeProblem } from "@/data/math-1a-unit-practice";
 import { tagSlug } from "@/data/tags";
 import {
   getExamContextLabel,
@@ -61,6 +64,25 @@ export default async function ProblemPage({
   const contextGuide = getProblemContextGuide(problem);
   const similarProblems = getSimilarProblems(problem, allProblems, 3);
   const reverseProblems = getReversePatternProblems(problem, allProblems, 2);
+  const practice = problem.unitPractice;
+  const nextPracticeProblem = practice
+    ? getNextMathUnitPracticeProblem(problem.slug)
+    : undefined;
+  const courseLinks = practice
+    ? practice.relatedCourseIds.flatMap((courseId) => {
+        for (const unit of MATH_1A_COURSE_SUBJECT.units) {
+          const courseLesson = unit.lessons.find((candidate) => candidate.lessonId === courseId);
+          if (courseLesson) {
+            return [{
+              id: courseId,
+              label: courseLesson.lessonTitle,
+              href: `/courses/math-1a/${unit.unitId}/${courseId}`,
+            }];
+          }
+        }
+        return [];
+      })
+    : [];
 
   return (
     <LearningPageShell width="reading">
@@ -88,39 +110,73 @@ export default async function ProblemPage({
 
         <TagLinks tags={problem.tags} />
 
-        <section className="mt-10">
-          <LearningSectionHeader title="問題" />
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-            <MathText className="text-base leading-8 text-slate-900">
-              {problem.statement}
-            </MathText>
+        {practice ? (
+          <div className="mt-10">
+            <MathUnitPracticeRunner
+              practice={toPublicPractice(practice)}
+              statement={problem.statement}
+              unitHref={`/units/${getUnitRouteSlug(practice.unitId)}`}
+              nextProblem={
+                nextPracticeProblem
+                  ? {
+                      title: nextPracticeProblem.title,
+                      href: `/problems/${nextPracticeProblem.slug}`,
+                    }
+                  : undefined
+              }
+              courseLinks={courseLinks}
+            />
           </div>
-        </section>
+        ) : (
+          <>
+            <section className="mt-10">
+              <LearningSectionHeader title="問題" />
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                <MathText className="text-base leading-8 text-slate-900">
+                  {problem.statement}
+                </MathText>
+              </div>
+            </section>
 
-        <section className="mt-12" aria-label="解説">
-          <LogicSteps
-            slug={problem.slug}
-            steps={problem.steps}
-            labSlot={
-              problem.hasGraph && problem.graphKey ? (
-                <LabRenderer graphKey={problem.graphKey} />
-              ) : undefined
-            }
-            relatedLesson={
-              lesson ? { slug: lesson.slug, title: lesson.title } : undefined
-            }
-          />
-        </section>
+            <section className="mt-12" aria-label="解説">
+              <LogicSteps
+                slug={problem.slug}
+                steps={problem.steps}
+                labSlot={
+                  problem.hasGraph && problem.graphKey ? (
+                    <LabRenderer graphKey={problem.graphKey} />
+                  ) : undefined
+                }
+                relatedLesson={
+                  lesson ? { slug: lesson.slug, title: lesson.title } : undefined
+                }
+              />
+            </section>
 
-        <ProblemAftercare
-          problem={problem}
-          contextGuide={contextGuide}
-          similarProblems={similarProblems}
-          reverseProblems={reverseProblems}
-        />
+            <ProblemAftercare
+              problem={problem}
+              contextGuide={contextGuide}
+              similarProblems={similarProblems}
+              reverseProblems={reverseProblems}
+            />
+          </>
+        )}
       </article>
     </LearningPageShell>
   );
+}
+
+function toPublicPractice(practice: NonNullable<Problem["unitPractice"]>) {
+  const { internalKpd, ...publicPractice } = practice;
+  void internalKpd;
+  return publicPractice;
+}
+
+function getUnitRouteSlug(unitId: string) {
+  return ({
+    quadratic: "quadratic-functions",
+    "figures-and-measurement": "measurement-trigonometry",
+  } as Record<string, string>)[unitId] ?? unitId;
 }
 
 function ProblemAftercare({

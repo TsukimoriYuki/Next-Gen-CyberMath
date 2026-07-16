@@ -15,6 +15,7 @@ import { measurementTrigonometry } from "./units/measurement-trigonometry";
 import { dataAnalysis } from "./units/data-analysis";
 import { countingProbability } from "./units/counting-probability";
 import { geometryProperties } from "./units/geometry-properties";
+import { MATH_1A_UNIT_PRACTICE_PROBLEMS } from "./math-1a-unit-practice";
 import { integerProperties } from "./units/integer-properties";
 // ---- 数学 II・B ----
 import { expressionsAndProofs } from "./units/expressions-and-proofs";
@@ -502,6 +503,8 @@ $$L\,H_n=\sum_{k=1}^{n}\frac{L}{k}=\underbrace{\frac{L}{2^m}}_{\text{奇数}}+\u
 
 // 数学IA 単元を先頭に、その後ろに発展ショーケースを並べる。
 const RAW_PROBLEMS: Problem[] = [
+  // 数学IAの即時採点つき単元別演習。各単元の既存一覧・詳細ルートを共有する。
+  ...MATH_1A_UNIT_PRACTICE_PROBLEMS,
   ...numbersAndExpressions,
   ...setsAndLogic,
   ...quadraticFunctions,
