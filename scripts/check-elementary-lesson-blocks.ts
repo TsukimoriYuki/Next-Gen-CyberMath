@@ -235,6 +235,39 @@ function validateLesson() {
   requireRule(lesson.copyrightStatus === "original", "LESSON_COPYRIGHT_ORIGINAL", "copyrightStatus", lesson.copyrightStatus);
   requireRule(lesson.reviewStatus === "prototype", "LESSON_REVIEW_PROTOTYPE", "reviewStatus", lesson.reviewStatus);
   requireRule(lesson.problemIds.length === 0, "LESSON_NO_PROBLEMS", "problemIds", lesson.problemIds);
+  requireRule(
+    JSON.stringify(lesson.curriculumReferenceIds) === JSON.stringify(["g3-math-division"]),
+    "LESSON_CURRICULUM_REFERENCE",
+    "curriculumReferenceIds",
+    lesson.curriculumReferenceIds,
+  );
+  requireRule(
+    lesson.curriculumObjectiveIds.length === 5 && !hasDuplicates(lesson.curriculumObjectiveIds),
+    "LESSON_CURRICULUM_OBJECTIVES",
+    "curriculumObjectiveIds",
+    lesson.curriculumObjectiveIds,
+  );
+  requireRule(
+    lesson.requirementCoverage.length === 1 &&
+      lesson.requirementCoverage[0]?.entryId === "g3-math-division" &&
+      lesson.requirementCoverage[0]?.lessonCoverage === "partial" &&
+      lesson.requirementCoverage[0]?.assessmentCoverage === "not-started",
+    "LESSON_CURRICULUM_PARTIAL_COVERAGE",
+    "requirementCoverage",
+    lesson.requirementCoverage,
+  );
+  requireRule(
+    JSON.stringify(lesson.enrichmentReferenceIds) === JSON.stringify(["g3-math-division-reasoning-enrichment"]),
+    "LESSON_ENRICHMENT_REFERENCE",
+    "enrichmentReferenceIds",
+    lesson.enrichmentReferenceIds,
+  );
+  requireRule(
+    !/(?:学習指導要領|https?:\/\/|mext\.go\.jp)/iu.test(JSON.stringify(lesson.blocks)),
+    "LESSON_CHILD_CONTENT_NO_CURRICULUM_CHROME",
+    "blocks",
+    "developer curriculum wording found",
+  );
 
   const blockIds = lesson.blocks.map((block) => block.id);
   requireRule(!hasDuplicates(blockIds), "LESSON_BLOCK_ID_UNIQUE", "blocks.ids", blockIds);

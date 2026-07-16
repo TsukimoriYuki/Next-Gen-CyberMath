@@ -5,6 +5,7 @@ import type {
   ElementarySubjectId,
 } from "@/types/elementary";
 import type { ElementaryAssetUsagePurpose } from "@/types/elementary-assets";
+import type { ElementaryCurriculumCoverage } from "@/types/elementary-curriculum";
 
 export const ELEMENTARY_CHARACTER_EMOTIONS = [
   "neutral",
@@ -220,6 +221,9 @@ export type ElementaryLesson = Readonly<{
   estimatedMinutes: number;
   prerequisiteLessonIds: readonly string[];
   curriculumReferenceIds: readonly string[];
+  curriculumObjectiveIds: readonly string[];
+  requirementCoverage: readonly ElementaryCurriculumCoverage[];
+  enrichmentReferenceIds: readonly string[];
   visualAssetIds: readonly string[];
   problemIds: readonly string[];
   blocks: readonly ElementaryLessonBlock[];

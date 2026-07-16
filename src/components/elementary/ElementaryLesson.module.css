@@ -34,6 +34,42 @@
   color: var(--elementary-muted);
 }
 
+.curriculumPanel {
+  min-width: 0;
+  margin-top: 1rem;
+  border: 1px solid #b8c9dc;
+  border-radius: 1rem;
+  background: #f8fbff;
+  padding: 1rem;
+  color: #243b53;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.curriculumPanel h2 {
+  font-size: 1.15rem;
+  font-weight: 850;
+}
+
+.curriculumPanel > p {
+  margin-top: 0.25rem;
+  color: var(--elementary-muted);
+}
+
+.curriculumPanel dl {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.curriculumPanel dt {
+  font-weight: 750;
+}
+
+.curriculumPanel dd {
+  margin-top: 0.1rem;
+}
+
 .lessonMeta {
   display: grid;
   gap: 0.75rem;

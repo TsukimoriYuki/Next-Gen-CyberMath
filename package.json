@@ -53,6 +53,8 @@
     "qa:elementary:curriculum": "tsx scripts/check-elementary-curriculum.ts",
     "qa:elementary:curriculum-coverage": "tsx scripts/check-elementary-curriculum-coverage.ts",
     "qa:elementary:curriculum:test": "tsx scripts/check-elementary-curriculum.test.ts",
+    "qa:elementary:curriculum:e2e": "playwright test --config playwright.elementary-curriculum.config.ts",
+    "qa:elementary:curriculum:hidden:e2e": "playwright test --config playwright.elementary-curriculum-hidden.config.ts",
     "qa:elementary:assets:e2e": "playwright test --config playwright.elementary-visual-assets.config.ts",
     "qa:elementary:assets:hidden:e2e": "playwright test --config playwright.elementary-visual-assets-hidden.config.ts",
     "qa:elementary:kanji:e2e": "playwright test --config playwright.elementary-kanji.config.ts",

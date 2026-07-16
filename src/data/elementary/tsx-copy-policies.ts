@@ -30,4 +30,11 @@ export const ELEMENTARY_TSX_COPY_EXCLUSIONS: readonly ElementaryTsxCopyExclusion
     audience: "learner",
     reason: "asset registryのaltを学年別漢字QAとasset QAで別途検査する。",
   },
+  {
+    sourcePath: "src/app/elementary/showcase/curriculum/page.tsx",
+    attributeName: "aria-label",
+    expression: "`${source.title}（文部科学省公式PDF・新しいタブ）`",
+    audience: "developer",
+    reason: "developer/guardian向け確認ページのsource registry由来タイトルであり、学習者向けcopyではない。",
+  },
 ] as const;

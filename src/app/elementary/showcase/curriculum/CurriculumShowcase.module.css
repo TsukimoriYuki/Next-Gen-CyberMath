@@ -1,0 +1,216 @@
+.page {
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  color: var(--elementary-ink);
+  overflow-wrap: anywhere;
+}
+
+.header {
+  border-bottom: 2px solid var(--elementary-border);
+  padding-bottom: 1.75rem;
+}
+
+.eyebrow,
+.audience {
+  color: #6b4b00;
+  font-weight: 800;
+}
+
+.title {
+  margin-top: 0.55rem;
+  font-size: clamp(2rem, 7vw, 3.25rem);
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.lead {
+  max-width: 52rem;
+  margin-top: 0.8rem;
+  color: var(--elementary-muted);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.audience {
+  margin-top: 1rem;
+  border-left: 4px solid #d59a16;
+  background: #fff8df;
+  padding: 0.75rem 1rem;
+}
+
+.summaryGrid,
+.sourceGrid,
+.entryGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.summaryGrid,
+.sourceGrid {
+  margin-top: 1.25rem;
+}
+
+.summaryCard,
+.sourceCard,
+.entryCard,
+.coverageCard {
+  min-width: 0;
+  border: 1px solid var(--elementary-border);
+  border-radius: 1rem;
+  background: var(--elementary-surface);
+  padding: 1rem;
+}
+
+.summaryCard strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 1.75rem;
+}
+
+.section {
+  margin-top: 2.5rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 850;
+}
+
+.sectionLead {
+  margin-top: 0.45rem;
+  color: var(--elementary-muted);
+}
+
+.sourceCard h3,
+.entryCard h5 {
+  font-size: 1.1rem;
+  font-weight: 850;
+}
+
+.sourceCard p,
+.entrySummary,
+.entryMeta,
+.relations,
+.coverageCard p {
+  margin-top: 0.45rem;
+  line-height: 1.65;
+}
+
+.sourceLink {
+  display: inline-flex;
+  margin-top: 0.75rem;
+  color: #125b9a;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.sourceLink:focus-visible {
+  outline: 3px solid #125b9a;
+  outline-offset: 3px;
+}
+
+.subject {
+  margin-top: 2rem;
+  border-top: 1px solid var(--elementary-border);
+  padding-top: 1.5rem;
+}
+
+.subjectTitle {
+  font-size: 1.55rem;
+  font-weight: 850;
+}
+
+.domain {
+  margin-top: 1.5rem;
+}
+
+.domainTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.entryGrid {
+  margin-top: 0.85rem;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.65rem;
+}
+
+.badge {
+  border: 1px solid #b8c9dc;
+  border-radius: 999px;
+  background: #f8fbff;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 750;
+}
+
+.badge[data-requirement="enrichment"] {
+  border-style: dashed;
+  border-color: #8b5ca7;
+  background: #fcf8ff;
+}
+
+.objectiveList {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.objectiveList li::marker {
+  color: var(--elementary-accent);
+}
+
+.objectiveList small {
+  display: block;
+  color: var(--elementary-muted);
+}
+
+.details {
+  margin-top: 0.75rem;
+}
+
+.details summary {
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.details summary:focus-visible {
+  outline: 3px solid #125b9a;
+  outline-offset: 3px;
+}
+
+.details code {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  white-space: normal;
+}
+
+.coverageCard {
+  margin-top: 1rem;
+  border-left: 5px solid #3569a8;
+}
+
+@media (min-width: 640px) {
+  .summaryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .entryGrid,
+  .sourceGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .summaryGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

@@ -4,6 +4,10 @@ import type {
   ElementaryLessonBlock,
 } from "@/types/elementary-content";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
+import {
+  getCurriculumCoverageForLesson,
+  getElementaryCurriculumEntry,
+} from "@/lib/elementary-curriculum";
 import { ElementaryDialogue, ElementaryDialogueLineView } from "./ElementaryDialogue";
 import { ElementaryText } from "./ElementaryText";
 import { ElementaryVisualAsset } from "./ElementaryVisualAsset";
@@ -145,6 +149,10 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
 }
 
 export function ElementaryLessonRenderer({ lesson }: { lesson: ElementaryLesson }) {
+  const curriculumCoverage = getCurriculumCoverageForLesson(lesson);
+  const curriculumEntries = lesson.curriculumReferenceIds
+    .map(getElementaryCurriculumEntry)
+    .filter((entry) => entry !== undefined);
   return (
     <article className={styles.lesson} data-testid="elementary-lesson-renderer">
       <header className={styles.lessonHeader}>
@@ -161,6 +169,16 @@ export function ElementaryLessonRenderer({ lesson }: { lesson: ElementaryLesson 
         <p className={styles.prototypeNotice} data-text-audience="developer">
           {elementaryUiCopy("lesson-prototype-notice")}
         </p>
+        <aside className={styles.curriculumPanel} data-testid="elementary-curriculum-developer" data-text-audience="developer" aria-label="Curriculum接続">
+          <h2>Curriculum接続</h2>
+          <p>開発確認用です。子ども向け講座本文には表示しません。</p>
+          <dl>
+            <div><dt>必修entry</dt><dd>{curriculumEntries.map((entry) => entry.title).join("、")}</dd></div>
+            <div><dt>objective</dt><dd>{lesson.curriculumObjectiveIds.length}件</dd></div>
+            <div><dt>lesson coverage</dt><dd>{curriculumCoverage.map((coverage) => coverage.lessonCoverage).join("、")}</dd></div>
+            <div><dt>assessment coverage</dt><dd>{curriculumCoverage.map((coverage) => coverage.assessmentCoverage).join("、")}</dd></div>
+          </dl>
+        </aside>
       </header>
       <div className={styles.blocks}>
         {lesson.blocks.map((block, index) => (
