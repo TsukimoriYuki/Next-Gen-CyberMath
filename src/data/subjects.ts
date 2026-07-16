@@ -70,6 +70,20 @@ export const SUBJECTS = [
       review: true,
     },
   },
+  {
+    id: "japanese",
+    name: "国語",
+    shortName: "国語",
+    href: "/japanese",
+    description: "現代文語彙・現代文読解・古文・漢文を、根拠と文脈から学ぶ高校国語。",
+    status: "hidden",
+    capabilities: {
+      courses: true,
+      problems: true,
+      exams: false,
+      review: true,
+    },
+  },
 ] as const satisfies readonly SubjectConfig[];
 
 export type SubjectId = (typeof SUBJECTS)[number]["id"];

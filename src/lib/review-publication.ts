@@ -2,6 +2,7 @@ import { getSpecialLectureBySlug } from "@/data/specialLectures";
 import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
 import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
+import { JAPANESE_PROBLEMS } from "@/data/japanese";
 import { getCommonTestDrillById } from "@/lib/common-test-drills";
 import { getProblem } from "@/lib/content";
 import { getCommonTestMockExam } from "@/data/common-test-mock-exams";
@@ -39,7 +40,12 @@ const SUPPORTED_REVIEW_ITEM_TYPES = new Set([
   "common-test-lecture",
   "common-test-drill",
   "informatics-exam",
+  "japanese-problem",
 ]);
+
+const JAPANESE_REVIEW_ITEM_IDS = new Set(
+  JAPANESE_PROBLEMS.flatMap((problem) => [problem.id, problem.slug]),
+);
 
 export function resolveLectureTopLevelSubjectId(
   lectureSubject: string,
@@ -88,6 +94,9 @@ function inferReviewSubjectId(
     );
     return exists ? "informatics" : undefined;
   }
+  if (itemType === "japanese-problem") {
+    return JAPANESE_REVIEW_ITEM_IDS.has(itemId) ? "japanese" : undefined;
+  }
   return undefined;
 }
 
@@ -107,7 +116,8 @@ export function resolveReviewTopLevelSubjectId({
       itemType === "english-problem" ||
       itemType === "common-test-lecture" ||
       itemType === "common-test-drill" ||
-      itemType === "informatics-exam") &&
+      itemType === "informatics-exam" ||
+      itemType === "japanese-problem") &&
     !inferred
   ) {
     return undefined;

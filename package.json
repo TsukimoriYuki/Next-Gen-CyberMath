@@ -15,6 +15,7 @@
     "qa:auth": "tsx scripts/check-auth.ts",
     "qa:auth:e2e": "playwright test e2e/auth.spec.ts",
     "qa:migration": "tsx scripts/check-prisma-migration.ts",
+    "qa:japanese": "tsx scripts/check-japanese.ts",
     "qa:public:live": "tsx scripts/check-live-public-quality.ts",
     "qa:math1a-paper": "tsx scripts/check-exam-paper.ts",
     "qa:manual-mock": "tsx scripts/check-common-test-mock.ts",
