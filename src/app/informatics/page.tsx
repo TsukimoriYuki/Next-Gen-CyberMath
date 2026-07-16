@@ -15,6 +15,7 @@ import { INFORMATICS_1_COURSE_SUBJECT } from "@/data/courses";
 import {
   INFORMATICS_DIFFICULTY_META,
   INFORMATICS_KIND_META,
+  INFORMATICS_PRACTICE_QUESTION_TYPE_LABEL,
   INFORMATICS_PROBLEMS,
   getInformaticsProblemsByLesson,
 } from "@/data/informatics/problems";
@@ -119,7 +120,7 @@ export default function InformaticsPage() {
       <LearningSection
           id="practice"
           title="演習問題"
-          description="講座で学んだ判断基準を、単一選択・複数選択・正誤判定・状況判断の形式で確認します。"
+          description="講座で学んだ判断基準を、選択・数値入力・資料読解・プログラムトレースなどの採点可能な形式で確認します。"
         >
         <div className="space-y-8">
           {units.flatMap((unit) =>
@@ -147,7 +148,9 @@ export default function InformaticsPage() {
                               {problem.title}
                             </span>
                             <span className="mt-0.5 block text-xs text-slate-600">
-                              {INFORMATICS_KIND_META[problem.kind].label} ・{" "}
+                              {problem.questionType
+                                ? INFORMATICS_PRACTICE_QUESTION_TYPE_LABEL[problem.questionType]
+                                : INFORMATICS_KIND_META[problem.kind].label} ・{" "}
                               {INFORMATICS_DIFFICULTY_META[problem.difficulty].label} ・
                               約{problem.estimatedMinutes}分
                             </span>

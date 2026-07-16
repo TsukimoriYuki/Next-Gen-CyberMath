@@ -26,7 +26,7 @@ test("informatics beta appears in subjects with no empty exam or review card", a
   await expect(page.getByRole("heading", { name: "演習問題" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "復習する" })).toBeVisible();
   await expect(page.getByText("16講座")).toBeVisible();
-  await expect(page.getByText("80問")).toBeVisible();
+  await expect(page.getByText("120問")).toBeVisible();
   await expect(page.getByText("模試", { exact: true })).toHaveCount(0);
 });
 

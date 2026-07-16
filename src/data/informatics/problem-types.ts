@@ -79,6 +79,63 @@ export type InformaticsChoice = Readonly<{
   reason: string;
 }>;
 
+export type InformaticsPracticeArea =
+  | "data-use"
+  | "programming"
+  | "network"
+  | "security"
+  | "digital-representation"
+  | "computer-systems"
+  | "information-design"
+  | "information-society";
+
+export type InformaticsPracticeQuestionType =
+  | "single-choice"
+  | "multiple-select"
+  | "numeric-input"
+  | "matching-ordering"
+  | "table-graph"
+  | "program-trace";
+
+export const INFORMATICS_PRACTICE_QUESTION_TYPE_LABEL: Record<
+  InformaticsPracticeQuestionType,
+  string
+> = {
+  "single-choice": "単一選択",
+  "multiple-select": "複数選択",
+  "numeric-input": "数値入力",
+  "matching-ordering": "対応・並べ替え",
+  "table-graph": "表・グラフ・資料読解",
+  "program-trace": "プログラム読解・トレース",
+};
+
+export type InformaticsTableData = Readonly<{
+  caption: string;
+  headers: readonly string[];
+  rows: readonly (readonly string[])[];
+}>;
+
+export type InformaticsChartData =
+  | Readonly<{
+      kind: "bar";
+      title: string;
+      unit: string;
+      baseline?: number;
+      values: readonly Readonly<{ label: string; value: number }>[];
+    }>
+  | Readonly<{
+      kind: "scatter";
+      title: string;
+      xLabel: string;
+      yLabel: string;
+      points: readonly Readonly<{ label: string; x: number; y: number }>[];
+    }>;
+
+export type InformaticsTraceRow = Readonly<{
+  step: string;
+  values: readonly string[];
+}>;
+
 export type InformaticsProblem = Readonly<{
   /** URL slug を兼ねる一意ID。 */
   id: string;
@@ -103,4 +160,38 @@ export type InformaticsProblem = Readonly<{
   /** 擬似コードを含む問題で採用する記号・添字・端点などの規則。 */
   pseudocodeRules?: string;
   reviewTags: readonly string[];
+  /** 以下は2026年追加の単元別演習に必要な、既存問題と互換な拡張metadata。 */
+  subjectId?: "informatics";
+  unitId?: InformaticsPracticeArea;
+  statement?: string;
+  questionType?: InformaticsPracticeQuestionType;
+  correctAnswer?: string | number | readonly string[];
+  acceptedNumericAnswers?: readonly number[];
+  numericTolerance?: number;
+  answerUnit?: string;
+  roundingRule?: string;
+  detailedExplanation?: string;
+  distractorReasons?: Readonly<Record<string, string>>;
+  strategy?: string;
+  firstCheck?: string;
+  verification?: string;
+  commonMistake?: string;
+  relatedCourseIds?: readonly string[];
+  mistakeTags?: readonly string[];
+  estimatedTime?: number;
+  copyrightStatus?: "original";
+  sourceType?: "original";
+  publicationStatus?: "beta";
+  programCode?: string;
+  traceTable?: Readonly<{
+    headers: readonly string[];
+    rows: readonly InformaticsTraceRow[];
+  }>;
+  expectedOutput?: string;
+  variableStates?: readonly string[];
+  indexRule?: string;
+  tableData?: InformaticsTableData;
+  chartData?: InformaticsChartData;
+  calculationRule?: string;
+  sourceNote?: string;
 }>;

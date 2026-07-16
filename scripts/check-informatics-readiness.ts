@@ -18,7 +18,7 @@ const allExamQuestions = [
 const urls = new Set(sitemap().map((entry) => new URL(entry.url).pathname));
 
 check(lessons.length === 16, "基礎講座16本");
-check(INFORMATICS_PROBLEMS.length === 80, "単元問題80問");
+check(INFORMATICS_PROBLEMS.length === 120, "単元問題120問");
 check(INFORMATICS_SECTION_PRACTICES.length === 6, "大問別演習6セット");
 check(INFORMATICS_MOCK_EXAM_001.totalPoints === 100, "模試1回・100点");
 check(allExamQuestions.every((question) => Boolean(question.answer) && Boolean(question.explanation)), "全設問の正答・解説");

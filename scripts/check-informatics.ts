@@ -70,10 +70,14 @@ for (const lesson of lessons) {
 
 // ── 演習問題 registry ───────────────────────────────────────────────────────
 
-check(
-  INFORMATICS_PROBLEMS.length === 80,
-  `informatics must ship exactly 80 problems (found ${INFORMATICS_PROBLEMS.length})`,
+const legacyProblems = INFORMATICS_PROBLEMS.filter(
+  (problem) => problem.subjectId !== "informatics",
 );
+check(
+  INFORMATICS_PROBLEMS.length === 120,
+  `informatics must ship exactly 120 unit problems (found ${INFORMATICS_PROBLEMS.length})`,
+);
+check(legacyProblems.length === 80, `legacy informatics set must remain 80 problems (found ${legacyProblems.length})`);
 check(
   new Set(INFORMATICS_PROBLEMS.map((problem) => problem.id)).size ===
     INFORMATICS_PROBLEMS.length,
@@ -90,7 +94,9 @@ const byDifficulty = new Map<InformaticsDifficulty, number>();
 
 for (const problem of INFORMATICS_PROBLEMS) {
   const label = `problem "${problem.id}"`;
-  byLesson.set(problem.lessonId, (byLesson.get(problem.lessonId) ?? 0) + 1);
+  if (problem.subjectId !== "informatics") {
+    byLesson.set(problem.lessonId, (byLesson.get(problem.lessonId) ?? 0) + 1);
+  }
   byDifficulty.set(
     problem.difficulty,
     (byDifficulty.get(problem.difficulty) ?? 0) + 1,
@@ -160,9 +166,9 @@ for (const lesson of lessons) {
 }
 
 const expectedDifficulty: Record<InformaticsDifficulty, number> = {
-  basic: 32,
-  standard: 32,
-  "ct-prep": 16,
+  basic: 44,
+  standard: 50,
+  "ct-prep": 26,
 };
 for (const [difficulty, expected] of Object.entries(expectedDifficulty)) {
   const actual = byDifficulty.get(difficulty as InformaticsDifficulty) ?? 0;
@@ -183,7 +189,7 @@ const sprint2LessonIds = new Set([
 const sprint2Lessons = lessons.filter((lesson) =>
   sprint2LessonIds.has(lesson.lessonId),
 );
-const sprint2Problems = INFORMATICS_PROBLEMS.filter((problem) =>
+const sprint2Problems = legacyProblems.filter((problem) =>
   sprint2LessonIds.has(problem.lessonId),
 );
 
@@ -378,7 +384,7 @@ const sprint3LessonIds = new Set([
   "algorithms-search-simulation",
 ]);
 const sprint3Lessons = lessons.filter((lesson) => sprint3LessonIds.has(lesson.lessonId));
-const sprint3Problems = INFORMATICS_PROBLEMS.filter((problem) =>
+const sprint3Problems = legacyProblems.filter((problem) =>
   sprint3LessonIds.has(problem.lessonId),
 );
 
@@ -544,7 +550,7 @@ const sprint4LessonIds = new Set([
   "data-analysis-visualization-modeling",
 ]);
 const sprint4Lessons = lessons.filter((lesson) => sprint4LessonIds.has(lesson.lessonId));
-const sprint4Problems = INFORMATICS_PROBLEMS.filter((problem) =>
+const sprint4Problems = legacyProblems.filter((problem) =>
   sprint4LessonIds.has(problem.lessonId),
 );
 
@@ -769,5 +775,5 @@ if (issues.length > 0) {
 }
 
 console.log(
-  `informatics QA passed: ${lessons.length} lessons, ${INFORMATICS_PROBLEMS.length} problems (overall basic 32 / standard 32 / ct-prep 16; sprint 3 and 4 each 8 / 8 / 4), independent calculations verified, subject beta with canonical sitemap routes.`,
+  `informatics QA passed: ${lessons.length} lessons, ${INFORMATICS_PROBLEMS.length} unit problems (overall basic 44 / standard 50 / ct-prep 26; legacy set retained), independent calculations verified, subject beta with canonical sitemap routes.`,
 );

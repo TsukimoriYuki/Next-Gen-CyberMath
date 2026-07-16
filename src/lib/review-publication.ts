@@ -3,6 +3,7 @@ import { COMPREHENSION_PROBLEMS } from "@/data/english-comprehension";
 import { MULTI_SOURCE_PROBLEMS } from "@/data/english-multisource";
 import { SPEED_READING_PROBLEMS } from "@/data/english-speed-reading";
 import { JAPANESE_PROBLEMS } from "@/data/japanese";
+import { getInformaticsProblem } from "@/data/informatics/problems";
 import { getCommonTestDrillById } from "@/lib/common-test-drills";
 import { getProblem } from "@/lib/content";
 import { getCommonTestMockExam } from "@/data/common-test-mock-exams";
@@ -40,6 +41,7 @@ const SUPPORTED_REVIEW_ITEM_TYPES = new Set([
   "common-test-lecture",
   "common-test-drill",
   "informatics-exam",
+  "informatics-problem",
   "japanese-problem",
 ]);
 
@@ -94,6 +96,9 @@ function inferReviewSubjectId(
     );
     return exists ? "informatics" : undefined;
   }
+  if (itemType === "informatics-problem") {
+    return getInformaticsProblem(itemId) ? "informatics" : undefined;
+  }
   if (itemType === "japanese-problem") {
     return JAPANESE_REVIEW_ITEM_IDS.has(itemId) ? "japanese" : undefined;
   }
@@ -117,6 +122,7 @@ export function resolveReviewTopLevelSubjectId({
       itemType === "common-test-lecture" ||
       itemType === "common-test-drill" ||
       itemType === "informatics-exam" ||
+      itemType === "informatics-problem" ||
       itemType === "japanese-problem") &&
     !inferred
   ) {

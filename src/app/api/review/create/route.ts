@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       return Response.json({ ok: false, error: "missing required fields" }, { status: 400 });
     }
 
-    const VALID_TYPES = ["common-test-drill", "common-test-lecture", "math-problem", "english-problem", "japanese-problem"];
+    const VALID_TYPES = ["common-test-drill", "common-test-lecture", "math-problem", "english-problem", "japanese-problem", "informatics-problem"];
     if (!VALID_TYPES.includes(itemType)) {
       return Response.json({ ok: false, error: "invalid itemType" }, { status: 400 });
     }

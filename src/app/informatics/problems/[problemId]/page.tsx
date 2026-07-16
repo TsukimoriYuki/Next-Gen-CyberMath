@@ -12,8 +12,10 @@ import { getCourseSubject } from "@/data/courses";
 import {
   INFORMATICS_DIFFICULTY_META,
   INFORMATICS_KIND_META,
+  INFORMATICS_PRACTICE_QUESTION_TYPE_LABEL,
   INFORMATICS_PROBLEMS,
   getInformaticsProblem,
+  getNextInformaticsProblem,
 } from "@/data/informatics/problems";
 import { getSubject } from "@/data/subjects";
 import { createPublicMetadata } from "@/lib/public-metadata";
@@ -61,6 +63,10 @@ export default async function InformaticsProblemPage({
   const lesson = unit?.lessons.find(
     (entry) => entry.lessonId === problem.lessonId,
   );
+  const nextProblem = getNextInformaticsProblem(problem.id);
+  const formatLabel = problem.questionType
+    ? INFORMATICS_PRACTICE_QUESTION_TYPE_LABEL[problem.questionType]
+    : INFORMATICS_KIND_META[problem.kind].label;
 
   return (
     <LearningPageShell width="reading">
@@ -77,7 +83,7 @@ export default async function InformaticsProblemPage({
           eyebrow="演習問題"
           title={problem.title}
           meta={[
-            { label: "形式", value: INFORMATICS_KIND_META[problem.kind].label },
+            { label: "形式", value: formatLabel },
             {
               label: "難度",
               value: INFORMATICS_DIFFICULTY_META[problem.difficulty].label,
@@ -115,6 +121,18 @@ export default async function InformaticsProblemPage({
             items={[{ label: "復習タグ", value: problem.reviewTags.join(" / ") }]}
           />
         </section>
+
+        {nextProblem && nextProblem.id !== problem.id && (
+          <nav aria-label="次の問題" className="mt-8">
+            <Link
+              href={`/informatics/problems/${nextProblem.slug ?? nextProblem.id}`}
+              className="flex min-h-12 items-center justify-between rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 font-bold text-teal-950 transition-colors hover:bg-teal-100"
+            >
+              <span>次の問題</span>
+              <span className="ml-4 text-right text-sm">{nextProblem.title} →</span>
+            </Link>
+          </nav>
+        )}
       </article>
     </LearningPageShell>
   );

@@ -53,6 +53,7 @@ const SUBJECT_LABEL: Record<string, string> = {
   math: "数学",
   english: "英語",
   japanese: "国語",
+  informatics: "情報Ⅰ",
 };
 
 const SUBJECT_COLOR: Record<string, string> = {
@@ -62,6 +63,7 @@ const SUBJECT_COLOR: Record<string, string> = {
   math: "#2563eb",
   english: "#059669",
   japanese: "#9333ea",
+  informatics: "#0f766e",
 };
 
 function getProblemHref(item: ReviewItemData): string {
@@ -70,6 +72,7 @@ function getProblemHref(item: ReviewItemData): string {
     return `/japanese/reading/${item.itemId.replace(/-q\d+$/, "")}`;
   }
   if (item.itemType === "japanese-problem") return `/japanese/problems/${item.itemId}`;
+  if (item.itemType === "informatics-problem") return `/informatics/problems/${item.itemId}`;
   if (item.itemType === "common-test-drill" && item.subjectId && item.sectionId) {
     return `/common-test/${item.subjectId}/${item.sectionId}`;
   }
