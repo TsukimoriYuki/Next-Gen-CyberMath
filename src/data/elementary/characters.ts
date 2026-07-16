@@ -6,12 +6,14 @@ import type {
   ElementaryCharacterId,
   ElementaryCharacterProfile,
 } from "@/types/elementary-content";
+import { TOMIYAMA_RUBY_EXCEPTION_ID } from "./kanji/ruby-exceptions";
 
 export const ELEMENTARY_CHARACTERS: readonly ElementaryCharacterProfile[] = [
   {
     id: "hinano",
     role: "student",
     displayName: "ひなのちゃん",
+    displayNameContent: [{ type: "text", text: "ひなのちゃん" }],
     characterLabel: "考えを言葉にする学習者",
     accessibilityLabel: "学習者のひなのちゃん",
     defaultEmotion: "curious",
@@ -24,7 +26,7 @@ export const ELEMENTARY_CHARACTERS: readonly ElementaryCharacterProfile[] = [
       "acknowledgement",
       "summary",
     ],
-    fallback: { symbol: "ひ", label: "ひなのちゃんの代替表示" },
+    fallback: { symbol: "ひ", label: "ひなのちゃんの代わり" },
     speechPolicy: {
       principles: [
         "子どもが持ちやすい疑問を言葉にする",
@@ -42,8 +44,17 @@ export const ELEMENTARY_CHARACTERS: readonly ElementaryCharacterProfile[] = [
     id: "tomiyama",
     role: "teacher",
     displayName: "冨山先生",
+    displayNameContent: [
+      {
+        type: "ruby",
+        base: "冨山",
+        reading: "とみやま",
+        exceptionId: TOMIYAMA_RUBY_EXCEPTION_ID,
+      },
+      { type: "text", text: "先生" },
+    ],
     characterLabel: "問い返しで考えを支える先生",
-    accessibilityLabel: "先生の冨山先生",
+    accessibilityLabel: "先生の とみやま せんせい",
     defaultEmotion: "encouraging",
     permittedIntents: [
       "acknowledgement",
@@ -53,7 +64,7 @@ export const ELEMENTARY_CHARACTERS: readonly ElementaryCharacterProfile[] = [
       "deepening",
       "summary",
     ],
-    fallback: { symbol: "冨", label: "冨山先生の代替表示" },
+    fallback: { symbol: "と", label: "とみやま せんせいの代わり" },
     speechPolicy: {
       principles: [
         "子どもの考えの正しい部分を先に認める",

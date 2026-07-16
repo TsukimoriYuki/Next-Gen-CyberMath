@@ -21,7 +21,7 @@ test("developmentで小学生版トップから小学3年生シェルへ移動�
   await expect(page.getByTestId("elementary-shell")).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   await expect(
-    page.getByRole("heading", { level: 1, name: "小学生版の学び場を準備しています" }),
+    page.getByRole("heading", { level: 1, name: "いっしょに学ぼう" }),
   ).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
   await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
@@ -89,7 +89,7 @@ test("本文と見出しの文字サイズが小学生向けtokenを満たす", 
 test("キーボードフォーカスとreduced motionが有効", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/elementary");
-  const target = page.getByRole("link", { name: "小学生版トップ" });
+  const target = page.getByRole("link", { name: "小学生トップ" });
   await target.focus();
   await expect(target).toBeFocused();
   const focusStyle = await target.evaluate((element) => {

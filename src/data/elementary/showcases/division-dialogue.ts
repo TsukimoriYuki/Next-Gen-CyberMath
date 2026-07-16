@@ -24,10 +24,10 @@ export const ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE = {
   unitId: "division-prototype",
   order: 1,
   title: content(text("わり"), ruby("算", "ざん"), text("は、どんなときにつかうの？")),
-  description: plain("会話と講座ブロックの動きを確かめるための、開発用の短い見本です。"),
+  description: plain("わり算を、会話で学ぶ短い見本です。"),
   goals: [
     plain("同じ数ずつ分ける場面を見つける"),
-    content(text("わり"), ruby("算", "ざん"), text("の式が表すことを言葉で説明する")),
+    content(text("わり"), ruby("算", "ざん"), text("の式が表すことを言葉でせつめいする")),
   ],
   estimatedMinutes: 8,
   prerequisiteLessonIds: [],
@@ -49,7 +49,7 @@ export const ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE = {
       type: "learning-goals",
       items: [
         plain("同じ数ずつ分ける場面に気づく"),
-        content(text("わり"), ruby("算", "ざん"), text("の答えが一人分の数だと説明する")),
+        content(text("わり"), ruby("算", "ざん"), text("の答えが一人分の数だとせつめいする")),
       ],
     },
     {
@@ -118,7 +118,7 @@ export const ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE = {
     {
       id: "division-guided-example",
       type: "guided-example",
-      title: plain("いっしょに考える例"),
+      title: plain("いっしょに考えるもんだい"),
       prompt: plain("15このあめを5つのふくろへ同じ数ずつ入れます。一ふくろ分は何こ？"),
       steps: [
         { id: "division-example-step-total", content: plain("ぜんぶの数は15こ。") },
@@ -126,7 +126,7 @@ export const ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE = {
         { id: "division-example-step-expression", content: plain("一ふくろ分なので、15÷5と表す。") },
       ],
       answer: content(emphasis("15÷5＝3　一ふくろ分は3こ")),
-      check: plain("3こずつ5ふくろで、3×5＝15になるから確かめられる。"),
+      check: plain("3こずつ5ふくろで、3×5＝15になるからたしかめられる。"),
     },
     {
       id: "division-retry",
@@ -154,7 +154,7 @@ export const ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE = {
           speakerId: "tomiyama",
           intent: "prompt",
           emotion: "encouraging",
-          content: plain("はじめの考えとくらべて、わり算を使うときを説明できる？"),
+          content: plain("はじめの考えとくらべて、わり算を使うときをせつめいできる？"),
         },
         {
           id: "division-self-explanation-line",
@@ -169,7 +169,7 @@ export const ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE = {
           speakerId: "tomiyama",
           intent: "summary",
           emotion: "happy",
-          content: plain("うん。何人へ同じ数ずつ分けるのかを見ると、式を選べるね。"),
+          content: plain("うん。何人へ同じ数ずつ分けるのかを見ると、式をえらべるね。"),
         },
       ],
     },
@@ -178,14 +178,14 @@ export const ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE = {
       type: "summary",
       items: [
         plain("同じ数ずつ分けて、一人分をもとめるときはわり算を使う。"),
-        plain("わり算の答えが何を表すか、場面にもどって確かめる。"),
+        plain("わり算の答えが何を表すか、場面にもどってたしかめる。"),
       ],
     },
     {
       id: "division-enrichment",
       type: "enrichment",
       title: plain("もう少し先へ"),
-      content: [plain("12から3を何回も引く考えでも、4回で0になります。この見方は今はできなくても大丈夫です。")],
+      content: [plain("12から3を何回も引く考えでも、4回で0になります。この見方は今はできなくてもだいじょうぶです。")],
       requiredForCompletion: false,
     },
   ],

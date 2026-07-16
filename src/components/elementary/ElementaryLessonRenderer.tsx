@@ -3,12 +3,17 @@ import type {
   ElementaryLesson,
   ElementaryLessonBlock,
 } from "@/types/elementary-content";
+import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import { ElementaryDialogue, ElementaryDialogueLineView } from "./ElementaryDialogue";
 import { ElementaryText } from "./ElementaryText";
 import styles from "./ElementaryLesson.module.css";
 
 function blockHeadingId(lessonId: string, blockId: string) {
   return `${lessonId}-${blockId}-heading`;
+}
+
+function copyContent(id: string): ElementaryInlineContent {
+  return [{ type: "text", text: elementaryUiCopy(id) }];
 }
 
 function SectionHeading({
@@ -38,14 +43,14 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
     case "opening-question":
       return (
         <section className={`${styles.block} ${styles.opening}`} aria-labelledby={headingId}>
-          <SectionHeading id={headingId} content={[{ type: "text", text: "今日の問い" }]} />
+          <SectionHeading id={headingId} content={copyContent("lesson-opening-heading")} />
           <p className={styles.openingQuestion}><ElementaryText content={block.question} /></p>
         </section>
       );
     case "learning-goals":
       return (
         <section className={styles.block} aria-labelledby={headingId}>
-          <SectionHeading id={headingId} content={[{ type: "text", text: "できるようになること" }]} />
+          <SectionHeading id={headingId} content={copyContent("lesson-goals-heading")} />
           <ul className={styles.itemList}>
             {block.items.map((item, index) => <li key={`${block.id}-${index}`}><ElementaryText content={item} /></li>)}
           </ul>
@@ -54,7 +59,7 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
     case "dialogue":
       return (
         <section className={styles.block} aria-labelledby={headingId} data-testid="elementary-dialogue-block">
-          <SectionHeading id={headingId} content={block.title ?? [{ type: "text", text: "会話で考えよう" }]} />
+          <SectionHeading id={headingId} content={block.title ?? copyContent("lesson-dialogue-heading")} />
           <ElementaryDialogue block={block} />
         </section>
       );
@@ -85,11 +90,11 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
             {block.steps.map((step) => <li key={step.id}><ElementaryText content={step.content} /></li>)}
           </ol>
           <div className={styles.answerBox}>
-            <h3>答え</h3>
+            <h3>{elementaryUiCopy("lesson-answer-heading")}</h3>
             <p><ElementaryText content={block.answer} /></p>
           </div>
           <div className={styles.checkBox}>
-            <h3>たしかめ</h3>
+            <h3>{elementaryUiCopy("lesson-check-heading")}</h3>
             <p><ElementaryText content={block.check} /></p>
           </div>
         </section>
@@ -99,7 +104,7 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
         <section className={styles.block} aria-labelledby={headingId}>
           <SectionHeading id={headingId} content={block.title} />
           <p className={styles.visualFallback} data-visual-asset={block.assetId}>
-            <span className={styles.fallbackLabel}>図の代わりの説明</span>
+            <span className={styles.fallbackLabel}>{elementaryUiCopy("lesson-visual-fallback-label")}</span>
             <ElementaryText content={block.fallbackText} />
           </p>
         </section>
@@ -115,7 +120,7 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
     case "summary":
       return (
         <section className={`${styles.block} ${styles.summary}`} aria-labelledby={headingId} data-testid="elementary-summary-block">
-          <SectionHeading id={headingId} content={[{ type: "text", text: "今日のまとめ" }]} />
+          <SectionHeading id={headingId} content={copyContent("lesson-summary-heading")} />
           <ul className={styles.itemList}>
             {block.items.map((item, index) => <li key={`${block.id}-${index}`}><ElementaryText content={item} /></li>)}
           </ul>
@@ -124,7 +129,7 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
     case "enrichment":
       return (
         <section className={`${styles.block} ${styles.enrichment}`} aria-labelledby={headingId}>
-          <p className={styles.optionalLabel}>発展・できなくても大丈夫</p>
+          <p className={styles.optionalLabel}>{elementaryUiCopy("lesson-enrichment-label")}</p>
           <SectionHeading id={headingId} content={block.title} />
           <div className={styles.prose}>
             {block.content.map((paragraph, index) => <p key={`${block.id}-${index}`}><ElementaryText content={paragraph} /></p>)}
@@ -140,15 +145,19 @@ export function ElementaryLessonRenderer({ lesson }: { lesson: ElementaryLesson 
   return (
     <article className={styles.lesson} data-testid="elementary-lesson-renderer">
       <header className={styles.lessonHeader}>
-        <p className={styles.prototypeLabel}>開発用の講座見本</p>
+        <p className={styles.prototypeLabel} data-text-audience="developer">
+          {elementaryUiCopy("lesson-prototype-label")}
+        </p>
         <h1 className={styles.lessonTitle}><ElementaryText content={lesson.title} /></h1>
         <p className={styles.lessonDescription}><ElementaryText content={lesson.description} /></p>
-        <dl className={styles.lessonMeta}>
-          <div><dt>対象</dt><dd>小学3年生・算数</dd></div>
-          <div><dt>所要時間</dt><dd>約{lesson.estimatedMinutes}分</dd></div>
-          <div><dt>状態</dt><dd>非公開プロトタイプ</dd></div>
+        <dl className={styles.lessonMeta} data-text-audience="developer">
+          <div><dt>{elementaryUiCopy("lesson-meta-target-label")}</dt><dd>{elementaryUiCopy("lesson-meta-target-value")}</dd></div>
+          <div><dt>{elementaryUiCopy("lesson-meta-duration-label")}</dt><dd>{elementaryUiCopy("lesson-meta-duration-prefix")}{lesson.estimatedMinutes}{elementaryUiCopy("lesson-meta-duration-suffix")}</dd></div>
+          <div><dt>{elementaryUiCopy("lesson-meta-status-label")}</dt><dd>{elementaryUiCopy("lesson-meta-status-value")}</dd></div>
         </dl>
-        <p className={styles.prototypeNotice}>これは表示と構造を確認する見本で、正式教材ではありません。</p>
+        <p className={styles.prototypeNotice} data-text-audience="developer">
+          {elementaryUiCopy("lesson-prototype-notice")}
+        </p>
       </header>
       <div className={styles.blocks}>
         {lesson.blocks.map((block, index) => (

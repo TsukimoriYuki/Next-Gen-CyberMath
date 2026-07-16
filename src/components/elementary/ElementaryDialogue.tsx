@@ -1,4 +1,5 @@
 import { getElementaryCharacter } from "@/data/elementary/characters";
+import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import type {
   ElementaryCharacterEmotion,
   ElementaryDialogueBlock,
@@ -7,15 +8,15 @@ import type {
 import { ElementaryText } from "./ElementaryText";
 import styles from "./ElementaryLesson.module.css";
 
-const EMOTION_LABELS: Readonly<Record<ElementaryCharacterEmotion, string>> = {
-  neutral: "おだやか",
-  curious: "知りたい",
-  thinking: "考え中",
-  confused: "とまどい",
-  surprised: "気づき",
-  encouraging: "応援",
-  happy: "うれしい",
-  confident: "自信あり",
+const EMOTION_COPY_IDS: Readonly<Record<ElementaryCharacterEmotion, string>> = {
+  neutral: "emotion-neutral",
+  curious: "emotion-curious",
+  thinking: "emotion-thinking",
+  confused: "emotion-confused",
+  surprised: "emotion-surprised",
+  encouraging: "emotion-encouraging",
+  happy: "emotion-happy",
+  confident: "emotion-confident",
 };
 
 export function ElementaryCharacterBadge({
@@ -36,7 +37,9 @@ export function ElementaryCharacterBadge({
       >
         {character.fallback.symbol}
       </span>
-      <span className={styles.characterName}>{character.displayName}</span>
+      <span className={styles.characterName}>
+        <ElementaryText content={character.displayNameContent} />
+      </span>
     </span>
   );
 }
@@ -59,7 +62,7 @@ export function ElementaryDialogueLineView({
     >
       <div className={styles.dialogueMeta}>
         <ElementaryCharacterBadge speakerId={line.speakerId} />
-        <span className={styles.emotionLabel}>{EMOTION_LABELS[line.emotion]}</span>
+        <span className={styles.emotionLabel}>{elementaryUiCopy(EMOTION_COPY_IDS[line.emotion])}</span>
       </div>
       <p className={styles.dialogueText}>
         <ElementaryText content={line.content} />
@@ -70,7 +73,7 @@ export function ElementaryDialogueLineView({
 
 export function ElementaryDialogue({ block }: { block: ElementaryDialogueBlock }) {
   return (
-    <ol className={styles.dialogueList} aria-label="会話の順番">
+    <ol className={styles.dialogueList} aria-label={elementaryUiCopy("dialogue-order-label")}>
       {block.lines.map((line) => (
         <li key={line.id} className={styles.dialogueItem}>
           <ElementaryDialogueLineView line={line} />

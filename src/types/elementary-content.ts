@@ -39,7 +39,7 @@ export type ElementaryDialogueIntent =
 
 export type ElementaryInlineSegment =
   | Readonly<{ type: "text"; text: string }>
-  | Readonly<{ type: "ruby"; base: string; reading: string }>
+  | Readonly<{ type: "ruby"; base: string; reading: string; exceptionId?: string }>
   | Readonly<{ type: "emphasis"; text: string }>
   | Readonly<{ type: "term"; text: string; definition?: string }>;
 
@@ -59,6 +59,7 @@ export type ElementaryCharacterProfile = Readonly<{
   id: ElementaryCharacterId;
   role: ElementaryCharacterRole;
   displayName: string;
+  displayNameContent: ElementaryInlineContent;
   characterLabel: string;
   accessibilityLabel: string;
   defaultEmotion: ElementaryCharacterEmotion;

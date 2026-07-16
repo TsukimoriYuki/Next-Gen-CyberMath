@@ -22,9 +22,10 @@ test("開発用見本が構造化ブロック順で表示される", async ({ pa
   await expect(page.getByText("開発用の講座見本", { exact: true })).toBeVisible();
   await expect(page.getByText("これは表示と構造を確認する見本で、正式教材ではありません。", { exact: true })).toBeVisible();
   await expect(page.getByText("ひなのちゃん", { exact: true }).first()).toBeVisible();
-  await expect(page.getByText("冨山先生", { exact: true }).first()).toBeVisible();
+  await expect(page.locator("ruby").filter({ hasText: "冨山" }).first()).toBeVisible();
+  await expect(page.locator("ruby").filter({ hasText: "冨山" }).first().locator("rt")).toHaveText("とみやま");
   await expect(page.getByTestId("elementary-character-fallback-hinano").first()).toHaveText("ひ");
-  await expect(page.getByTestId("elementary-character-fallback-tomiyama").first()).toHaveText("冨");
+  await expect(page.getByTestId("elementary-character-fallback-tomiyama").first()).toHaveText("と");
   await expect(page.locator("ruby")).not.toHaveCount(0);
   await expect(page.locator("ruby rt").first()).toHaveText("ざん");
 
@@ -103,7 +104,7 @@ test("会話の読み順・見出し・フォーカス・a11yが有効", async (
   for (let index = 0; index < sectionCount; index += 1) {
     await expect(sections.nth(index)).toHaveAttribute("aria-labelledby", /.+/);
   }
-  const dialogueOrder = await page.locator("ol[aria-label='会話の順番'] [data-dialogue-line]").evaluateAll((nodes) =>
+  const dialogueOrder = await page.locator("ol[aria-label='会話のならび'] [data-dialogue-line]").evaluateAll((nodes) =>
     nodes.map((node) => node.getAttribute("data-dialogue-line")),
   );
   expect(dialogueOrder).toEqual([
@@ -116,8 +117,9 @@ test("会話の読み順・見出し・フォーカス・a11yが有効", async (
     "division-closing-line",
   ]);
   await expect(page.locator("[data-dialogue-line][data-speaker='hinano']").first()).toContainText("ひなのちゃん");
-  await expect(page.locator("[data-dialogue-line][data-speaker='tomiyama']").first()).toContainText("冨山先生");
-  const navLink = page.getByRole("link", { name: "小学生版トップ" });
+  await expect(page.locator("[data-dialogue-line][data-speaker='tomiyama']").first()).toContainText("冨山");
+  await expect(page.locator("[data-dialogue-line][data-speaker='tomiyama']").first()).toContainText("先生");
+  const navLink = page.getByRole("link", { name: "小学生トップ" });
   await navLink.focus();
   await expect(navLink).toBeFocused();
   const focusStyle = await navLink.evaluate((element) => getComputedStyle(element).outlineStyle);

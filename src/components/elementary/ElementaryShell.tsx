@@ -1,23 +1,23 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ELEMENTARY_SITE } from "@/data/elementary";
+import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import styles from "./ElementaryShell.module.css";
 
 export function ElementaryShell({ children }: { children: ReactNode }) {
   return (
     <div className={styles.shell} data-school-level="elementary" data-testid="elementary-shell">
-      <p className={styles.internalBanner} data-testid="elementary-internal-banner">
-        内部準備中 — 現在は公開されていません
+      <p className={styles.internalBanner} data-testid="elementary-internal-banner" data-text-audience="developer">
+        {elementaryUiCopy("internal-banner")}
       </p>
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <p className={styles.brand}>{ELEMENTARY_SITE.name}</p>
-          <nav aria-label="小学生版ナビゲーション" className={styles.nav}>
+          <p className={styles.brand}>{elementaryUiCopy("shell-brand")}</p>
+          <nav aria-label={elementaryUiCopy("shell-nav-label")} className={styles.nav}>
             <Link href="/elementary" className={styles.navLink}>
-              小学生版トップ
+              {elementaryUiCopy("shell-nav-top")}
             </Link>
             <Link href="/elementary/grade-3" className={styles.navLink}>
-              3年生
+              {elementaryUiCopy("shell-nav-grade-3")}
             </Link>
           </nav>
         </div>
@@ -67,7 +67,7 @@ export function ElementaryCardGrid({ children }: { children: ReactNode }) {
 export function ElementaryStatusCard({
   title,
   description,
-  status = "準備中",
+  status,
   testId,
 }: {
   title: string;
@@ -79,7 +79,7 @@ export function ElementaryStatusCard({
     <article className={styles.card} data-testid={testId}>
       <h3 className={styles.cardTitle}>{title}</h3>
       <p className={styles.cardText}>{description}</p>
-      <span className={styles.status}>{status}</span>
+      <span className={styles.status}>{status ?? elementaryUiCopy("status-default")}</span>
     </article>
   );
 }
@@ -97,7 +97,7 @@ export function ElementaryGradeLink({
     <Link href={href} className={styles.cardLink} data-testid="elementary-grade-link">
       <span className={styles.cardTitle}>{title}</span>
       <span className={styles.cardText}>{description}</span>
-      <span className={styles.status}>内部シェルを開く</span>
+      <span className={styles.status}>{elementaryUiCopy("home-grade-3-status")}</span>
     </Link>
   );
 }

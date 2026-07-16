@@ -149,11 +149,25 @@ function validateCharacters() {
     });
     requireRule(character.fallback.symbol.trim().length > 0, "CHARACTER_FALLBACK_SYMBOL", `characters.${character.id}.fallback.symbol`, character.fallback.symbol);
     requireRule(character.fallback.label.trim().length > 0, "CHARACTER_FALLBACK_LABEL", `characters.${character.id}.fallback.label`, character.fallback.label);
+    validateInlineContent(character.displayNameContent, `characters.${character.id}.displayNameContent`);
     requireRule(character.characterLabel.trim().length > 0, "CHARACTER_LABEL_REQUIRED", `characters.${character.id}.characterLabel`, character.characterLabel);
     requireRule(character.accessibilityLabel.trim().length > 0, "CHARACTER_A11Y_LABEL", `characters.${character.id}.accessibilityLabel`, character.accessibilityLabel);
     requireRule(character.speechPolicy.principles.length > 0, "CHARACTER_SPEECH_POLICY", `characters.${character.id}.speechPolicy`, character.speechPolicy);
   }
   requireRule(ELEMENTARY_CHARACTERS_BY_ID.tomiyama?.displayName === "冨山先生", "TOMIYAMA_NAME", "characters.tomiyama.displayName", ELEMENTARY_CHARACTERS_BY_ID.tomiyama?.displayName);
+  const tomiyamaName = ELEMENTARY_CHARACTERS_BY_ID.tomiyama?.displayNameContent;
+  requireRule(
+    tomiyamaName?.some(
+      (segment) =>
+        segment.type === "ruby" &&
+        segment.base === "冨山" &&
+        segment.reading === "とみやま" &&
+        segment.exceptionId === "proper-name-tomiyama",
+    ) === true,
+    "TOMIYAMA_RUBY_NAME",
+    "characters.tomiyama.displayNameContent",
+    tomiyamaName,
+  );
 }
 
 function validateSpeechPolicies() {

@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { ElementaryShell } from "@/components/elementary/ElementaryShell";
+import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import { requireElementaryPageAccess } from "@/lib/elementary-route-guard";
 
 export const metadata: Metadata = {
   title: {
-    default: "小学生版",
-    template: "%s | Cyber Math 小学生版",
+    default: elementaryUiCopy("layout-metadata-title"),
+    template: `%s | Cyber Math ${elementaryUiCopy("layout-metadata-title")}`,
   },
-  description: "Cyber Mathの小学生版を準備するための内部ページです。",
+  description: elementaryUiCopy("layout-metadata-description"),
   robots: {
     index: false,
     follow: false,

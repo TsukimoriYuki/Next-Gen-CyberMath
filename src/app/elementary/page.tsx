@@ -5,6 +5,7 @@ import {
   ElementarySection,
 } from "@/components/elementary/ElementaryShell";
 import { ELEMENTARY_SITE, getElementaryGrade } from "@/data/elementary";
+import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 
 export default function ElementaryPage() {
   const grade3 = getElementaryGrade(ELEMENTARY_SITE.defaultGradeId);
@@ -12,17 +13,17 @@ export default function ElementaryPage() {
   return (
     <>
       <ElementaryPageHeader
-        eyebrow="FOUNDATION PREVIEW"
-        title="小学生版の学び場を準備しています"
-        description="このページは、学年別の通常コースを安全に作り始めるための内部シェルです。教材や問題はまだありません。"
+        eyebrow={elementaryUiCopy("home-eyebrow")}
+        title={elementaryUiCopy("home-title")}
+        description={elementaryUiCopy("home-description")}
       />
-      <ElementarySection title="最初に準備する学年">
+      <ElementarySection title={elementaryUiCopy("home-section-title")}>
         <ElementaryCardGrid>
           {grade3?.href === "/elementary/grade-3" ? (
             <ElementaryGradeLink
               href={grade3.href}
-              title={grade3.name}
-              description="算数・国語・社会の通常コースを、これから順番に準備します。"
+              title={elementaryUiCopy("home-grade-3-title")}
+              description={elementaryUiCopy("home-grade-3-description")}
             />
           ) : null}
         </ElementaryCardGrid>
