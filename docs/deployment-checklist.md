@@ -35,7 +35,7 @@ npm run build
 
 `qa:public` が `NEXT_PUBLIC_SITE_URL is not set` を warning として出す場合、ローカルQAとしては続行できる。本番公開前には Vercel 側で必ず設定する。
 
-Railway の `npx prisma db push` は正式な migration 導入までの暫定措置とする。
+Railway の `npx prisma db push` はbaseline完了までの暫定措置とし、手順は [Prisma migration運用](./deployment/prisma-migration.md) に従う。
 
 ## URL / SEO
 
