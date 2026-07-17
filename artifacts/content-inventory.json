@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-16T15:08:12.143Z",
-  "gitCommit": "edbaf23924a8261b2d45988673dc78a039b3a104",
+  "generatedAt": "2026-07-17T10:08:41.608Z",
+  "gitCommit": "35b4d0c1d028f93801758ca5f8cfb10e1cfaa798",
   "countingRules": [
     "ユーザーが解答でき、正答または採点基準があり、独立得点になる項目だけを採点問題とする。",
     "模試は独立した scoringGroup または実際の採点欄を1問とする。",
@@ -42945,5 +42945,293 @@
     }
   ],
   "recommendedPlan": "A",
-  "unresolvedReferences": []
+  "unresolvedReferences": [],
+  "highSchool": {
+    "schoolLevel": "highSchool",
+    "problemCount": 1348,
+    "subjects": [
+      {
+        "subjectId": "math",
+        "subjectName": "数学",
+        "problemCount": 465
+      },
+      {
+        "subjectId": "english",
+        "subjectName": "英語",
+        "problemCount": 523
+      },
+      {
+        "subjectId": "informatics",
+        "subjectName": "情報Ⅰ",
+        "problemCount": 170
+      },
+      {
+        "subjectId": "japanese",
+        "subjectName": "国語",
+        "problemCount": 190
+      }
+    ]
+  },
+  "elementary": {
+    "schoolLevel": "elementary",
+    "grades": [
+      {
+        "schoolLevel": "elementary",
+        "grade": "grade-3",
+        "courseType": "regular",
+        "unitCount": 3,
+        "lessonCount": 3,
+        "problemCount": 24,
+        "singleChoiceCount": 17,
+        "multipleChoiceCount": 3,
+        "numericInputCount": 4,
+        "basicCount": 18,
+        "standardCount": 6,
+        "visualAssetCount": 2,
+        "curriculumEntryReferenceCount": 3,
+        "curriculumObjectiveReferenceCount": 9,
+        "lessonCoverage": {
+          "not-started": 0,
+          "partial": 3,
+          "covered": 0,
+          "reviewed": 0
+        },
+        "assessmentCoverage": {
+          "not-started": 0,
+          "partial": 3,
+          "covered": 0,
+          "reviewed": 0
+        },
+        "publicationStatus": "hidden",
+        "reviewStatus": "pilot",
+        "publicationStatusBreakdown": {
+          "hidden": 30,
+          "internal": 0,
+          "beta": 0,
+          "public": 0
+        },
+        "reviewStatusBreakdown": {
+          "prototype": 0,
+          "pilot": 30,
+          "reviewed": 0,
+          "approved": 0
+        }
+      }
+    ],
+    "subjects": [
+      {
+        "schoolLevel": "elementary",
+        "grade": "grade-3",
+        "subject": "math",
+        "courseType": "regular",
+        "unitCount": 1,
+        "lessonCount": 1,
+        "problemCount": 8,
+        "singleChoiceCount": 4,
+        "multipleChoiceCount": 0,
+        "numericInputCount": 4,
+        "basicCount": 6,
+        "standardCount": 2,
+        "visualAssetCount": 1,
+        "curriculumEntryReferenceCount": 1,
+        "curriculumObjectiveReferenceCount": 5,
+        "lessonCoverage": {
+          "not-started": 0,
+          "partial": 1,
+          "covered": 0,
+          "reviewed": 0
+        },
+        "assessmentCoverage": {
+          "not-started": 0,
+          "partial": 1,
+          "covered": 0,
+          "reviewed": 0
+        },
+        "publicationStatus": "hidden",
+        "reviewStatus": "pilot",
+        "publicationStatusBreakdown": {
+          "hidden": 10,
+          "internal": 0,
+          "beta": 0,
+          "public": 0
+        },
+        "reviewStatusBreakdown": {
+          "prototype": 0,
+          "pilot": 10,
+          "reviewed": 0,
+          "approved": 0
+        }
+      },
+      {
+        "schoolLevel": "elementary",
+        "grade": "grade-3",
+        "subject": "japanese",
+        "courseType": "regular",
+        "unitCount": 1,
+        "lessonCount": 1,
+        "problemCount": 8,
+        "singleChoiceCount": 7,
+        "multipleChoiceCount": 1,
+        "numericInputCount": 0,
+        "basicCount": 6,
+        "standardCount": 2,
+        "visualAssetCount": 0,
+        "curriculumEntryReferenceCount": 1,
+        "curriculumObjectiveReferenceCount": 2,
+        "lessonCoverage": {
+          "not-started": 0,
+          "partial": 1,
+          "covered": 0,
+          "reviewed": 0
+        },
+        "assessmentCoverage": {
+          "not-started": 0,
+          "partial": 1,
+          "covered": 0,
+          "reviewed": 0
+        },
+        "publicationStatus": "hidden",
+        "reviewStatus": "pilot",
+        "publicationStatusBreakdown": {
+          "hidden": 10,
+          "internal": 0,
+          "beta": 0,
+          "public": 0
+        },
+        "reviewStatusBreakdown": {
+          "prototype": 0,
+          "pilot": 10,
+          "reviewed": 0,
+          "approved": 0
+        }
+      },
+      {
+        "schoolLevel": "elementary",
+        "grade": "grade-3",
+        "subject": "social-studies",
+        "courseType": "regular",
+        "unitCount": 1,
+        "lessonCount": 1,
+        "problemCount": 8,
+        "singleChoiceCount": 6,
+        "multipleChoiceCount": 2,
+        "numericInputCount": 0,
+        "basicCount": 6,
+        "standardCount": 2,
+        "visualAssetCount": 1,
+        "curriculumEntryReferenceCount": 1,
+        "curriculumObjectiveReferenceCount": 2,
+        "lessonCoverage": {
+          "not-started": 0,
+          "partial": 1,
+          "covered": 0,
+          "reviewed": 0
+        },
+        "assessmentCoverage": {
+          "not-started": 0,
+          "partial": 1,
+          "covered": 0,
+          "reviewed": 0
+        },
+        "publicationStatus": "hidden",
+        "reviewStatus": "pilot",
+        "publicationStatusBreakdown": {
+          "hidden": 10,
+          "internal": 0,
+          "beta": 0,
+          "public": 0
+        },
+        "reviewStatusBreakdown": {
+          "prototype": 0,
+          "pilot": 10,
+          "reviewed": 0,
+          "approved": 0
+        }
+      }
+    ],
+    "totals": {
+      "unitCount": 3,
+      "lessonCount": 3,
+      "problemCount": 24,
+      "singleChoiceCount": 17,
+      "multipleChoiceCount": 3,
+      "numericInputCount": 4,
+      "basicCount": 18,
+      "standardCount": 6,
+      "visualAssetCount": 2,
+      "curriculumEntryReferenceCount": 3,
+      "curriculumObjectiveReferenceCount": 9,
+      "lessonCoverage": {
+        "not-started": 0,
+        "partial": 3,
+        "covered": 0,
+        "reviewed": 0
+      },
+      "assessmentCoverage": {
+        "not-started": 0,
+        "partial": 3,
+        "covered": 0,
+        "reviewed": 0
+      },
+      "publicationStatus": "hidden",
+      "reviewStatus": "pilot",
+      "publicationStatusBreakdown": {
+        "hidden": 30,
+        "internal": 0,
+        "beta": 0,
+        "public": 0
+      },
+      "reviewStatusBreakdown": {
+        "prototype": 0,
+        "pilot": 30,
+        "reviewed": 0,
+        "approved": 0
+      }
+    },
+    "unitIds": [
+      "g3-japanese-story-reading-unit",
+      "g3-math-division-unit",
+      "g3-social-local-community-unit"
+    ],
+    "lessonIds": [
+      "elementary-grade-3-japanese-feelings-change",
+      "elementary-grade-3-math-division-meaning",
+      "elementary-grade-3-social-read-neighborhood-map"
+    ],
+    "problemIds": [
+      "eg3-jp-story-change-trigger",
+      "eg3-jp-story-characters",
+      "eg3-jp-story-feeling-change",
+      "eg3-jp-story-line-meaning",
+      "eg3-jp-story-reason-cold",
+      "eg3-jp-story-reason-stick",
+      "eg3-jp-story-scene",
+      "eg3-jp-story-whole-text",
+      "eg3-math-division-check-answer",
+      "eg3-math-division-choose-op-divide",
+      "eg3-math-division-choose-op-multiply",
+      "eg3-math-division-equal-share-op",
+      "eg3-math-division-equal-share-value",
+      "eg3-math-division-grouping-op",
+      "eg3-math-division-grouping-value",
+      "eg3-math-division-word-problem",
+      "eg3-social-direction-up",
+      "eg3-social-inference-cannot-say",
+      "eg3-social-inference-say",
+      "eg3-social-land-use-houses",
+      "eg3-social-legend-role",
+      "eg3-social-park-direction",
+      "eg3-social-read-map-facts",
+      "eg3-social-store-cluster"
+    ],
+    "visualAssetIds": [
+      "division-cookies-12-into-3",
+      "hikari-city-aoba-neighborhood-map"
+    ]
+  },
+  "combined": {
+    "highSchoolProblemCount": 1348,
+    "elementaryProblemCount": 24,
+    "problemCount": 1372
+  }
 }

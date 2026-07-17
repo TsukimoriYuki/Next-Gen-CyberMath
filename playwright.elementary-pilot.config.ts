@@ -6,7 +6,7 @@ const READY_URL = `${BASE_URL}/elementary/grade-3/math/units/division/lessons/di
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: /elementary-(pilot-lessons|practice)\.spec\.ts/,
+  testMatch: /elementary-(pilot-lessons|practice|content-inventory)\.spec\.ts/,
   timeout: 45_000,
   expect: { timeout: 7_000 },
   fullyParallel: false,
@@ -21,7 +21,7 @@ export default defineConfig({
     command: `npm run dev -- -p ${PORT}`,
     url: READY_URL,
     env: { NODE_ENV: "development" },
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
 });

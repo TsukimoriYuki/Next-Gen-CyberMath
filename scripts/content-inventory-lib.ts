@@ -25,6 +25,8 @@ import { PROBLEMS } from "../src/data/problems";
 import { SUBJECTS } from "../src/data/subjects";
 import { VOCAB_CARDS } from "../src/data/vocab-flashcards";
 import { ENGLISH_USAGE_PROBLEMS } from "../src/data/english-usage";
+import { buildElementaryContentInventory } from "../src/lib/elementary-inventory";
+import type { ElementaryContentInventory } from "../src/types/elementary-inventory";
 
 export const SUBJECT_IDS = ["math", "english", "informatics", "japanese"] as const;
 export type InventorySubjectId = (typeof SUBJECT_IDS)[number];
@@ -127,6 +129,33 @@ export type ContentInventory = {
   recommendedPlan: "A";
   unresolvedReferences: string[];
 };
+
+export type CombinedContentInventory = Readonly<{
+  generatedAt: string;
+  gitCommit: string;
+  highSchool: ContentInventory;
+  elementary: ElementaryContentInventory;
+  combined: Readonly<{
+    highSchoolProblemCount: number;
+    elementaryProblemCount: number;
+    problemCount: number;
+  }>;
+}>;
+
+export type PersistedContentInventory = ContentInventory &
+  Readonly<{
+    highSchool: Readonly<{
+      schoolLevel: "highSchool";
+      problemCount: number;
+      subjects: readonly Readonly<{
+        subjectId: InventorySubjectId;
+        subjectName: string;
+        problemCount: number;
+      }>[];
+    }>;
+    elementary: ElementaryContentInventory;
+    combined: CombinedContentInventory["combined"];
+  }>;
 
 type DraftItem = Omit<InventoryItem, "isCounted" | "duplicateStatus" | "duplicateGroup"> & {
   promptForHash?: string;
@@ -730,6 +759,46 @@ export function buildContentInventory(gitCommit: string, generatedAt = new Date(
   };
 }
 
+export function buildCombinedContentInventory(
+  gitCommit: string,
+  generatedAt = new Date().toISOString(),
+): CombinedContentInventory {
+  const highSchool = buildContentInventory(gitCommit, generatedAt);
+  const elementary = buildElementaryContentInventory();
+  const highSchoolProblemCount = highSchool.totals.scorableQuestionCount;
+  const elementaryProblemCount = elementary.totals.problemCount;
+  return Object.freeze({
+    generatedAt,
+    gitCommit,
+    highSchool,
+    elementary,
+    combined: Object.freeze({
+      highSchoolProblemCount,
+      elementaryProblemCount,
+      problemCount: highSchoolProblemCount + elementaryProblemCount,
+    }),
+  });
+}
+
+export function buildPersistedContentInventory(
+  inventory: CombinedContentInventory,
+): PersistedContentInventory {
+  return {
+    ...inventory.highSchool,
+    highSchool: {
+      schoolLevel: "highSchool",
+      problemCount: inventory.highSchool.totals.scorableQuestionCount,
+      subjects: inventory.highSchool.subjects.map((subject) => ({
+        subjectId: subject.subjectId,
+        subjectName: subject.subjectName,
+        problemCount: subject.scorableQuestionCount,
+      })),
+    },
+    elementary: inventory.elementary,
+    combined: inventory.combined,
+  };
+}
+
 function markdownTable(headers: string[], rows: Array<Array<string | number>>) {
   return [
     `| ${headers.join(" | ")} |`,
@@ -904,5 +973,41 @@ ${markdownTable(["Tier", "教科・単元", "現在", "目標", "追加", "形�
 3. 集計コマンドと専用検査を実行する。
 4. JSON差分で件数、重複、参照切れ、metadata不足を確認する。
 5. 問題本文ではなくadapter・目標定数を変更してこの文書を再生成する。
+`;
+}
+
+export function renderCombinedContentInventoryMarkdown(
+  inventory: CombinedContentInventory,
+): string {
+  const elementary = inventory.elementary;
+  const subjectRows = elementary.subjects.map((subject) => [
+    subject.subject ?? "-",
+    subject.lessonCount,
+    subject.problemCount,
+    subject.visualAssetCount,
+    subject.lessonCoverage.partial,
+    subject.assessmentCoverage.partial,
+    subject.publicationStatus,
+    subject.reviewStatus,
+  ]);
+  return `${renderContentInventoryMarkdown(inventory.highSchool).trimEnd()}
+
+## 19. 小学生版と全体集計
+
+高校版と hidden の小学生版を別の school level として集計し、高校版の従来値を維持します。小学生版の正式 lesson registry だけを対象にし、prototype showcase は含めません。
+
+${markdownTable(["区分", "採点可能問題"], [
+  ["高校版", inventory.combined.highSchoolProblemCount],
+  ["小学生版", inventory.combined.elementaryProblemCount],
+  ["全体", inventory.combined.problemCount],
+])}
+
+${markdownTable(["小学生版教科ID", "lesson", "problem", "approved asset", "lesson partial", "assessment partial", "公開状態", "review"], subjectRows)}
+
+- 小学生版 unit: ${elementary.totals.unitCount}
+- 小学生版 lesson: ${elementary.totals.lessonCount}
+- 問題形式: single-choice ${elementary.totals.singleChoiceCount} / multiple-choice ${elementary.totals.multipleChoiceCount} / numeric-input ${elementary.totals.numericInputCount}
+- 難易度: basic ${elementary.totals.basicCount} / standard ${elementary.totals.standardCount}
+- curriculum参照: entry ${elementary.totals.curriculumEntryReferenceCount} / objective ${elementary.totals.curriculumObjectiveReferenceCount}
 `;
 }
