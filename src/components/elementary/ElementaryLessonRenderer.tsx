@@ -3,6 +3,7 @@ import type {
   ElementaryLesson,
   ElementaryLessonBlock,
 } from "@/types/elementary-content";
+import { getElementaryGrade, getElementarySubject } from "@/data/elementary";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import {
   getCurriculumCoverageForLesson,
@@ -167,6 +168,12 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
 }
 
 export function ElementaryLessonRenderer({ lesson }: { lesson: ElementaryLesson }) {
+  const grade = getElementaryGrade(lesson.grade);
+  const subject = getElementarySubject(lesson.subject);
+  if (!grade || !subject) {
+    throw new Error(`Unknown elementary lesson target: ${lesson.grade}/${lesson.subject}`);
+  }
+  const isPrototype = lesson.reviewStatus === "prototype";
   const curriculumCoverage = getCurriculumCoverageForLesson(lesson);
   const curriculumEntries = lesson.curriculumReferenceIds
     .map(getElementaryCurriculumEntry)
@@ -175,17 +182,17 @@ export function ElementaryLessonRenderer({ lesson }: { lesson: ElementaryLesson 
     <article className={styles.lesson} data-testid="elementary-lesson-renderer">
       <header className={styles.lessonHeader}>
         <p className={styles.prototypeLabel} data-text-audience="developer">
-          {elementaryUiCopy("lesson-prototype-label")}
+          {elementaryUiCopy(isPrototype ? "lesson-prototype-label" : "lesson-pilot-label")}
         </p>
         <h1 className={styles.lessonTitle}><ElementaryText content={lesson.title} /></h1>
         <p className={styles.lessonDescription}><ElementaryText content={lesson.description} /></p>
         <dl className={styles.lessonMeta} data-text-audience="developer">
-          <div><dt>{elementaryUiCopy("lesson-meta-target-label")}</dt><dd>{elementaryUiCopy("lesson-meta-target-value")}</dd></div>
+          <div><dt>{elementaryUiCopy("lesson-meta-target-label")}</dt><dd>{grade.name}・{subject.name}</dd></div>
           <div><dt>{elementaryUiCopy("lesson-meta-duration-label")}</dt><dd>{elementaryUiCopy("lesson-meta-duration-prefix")}{lesson.estimatedMinutes}{elementaryUiCopy("lesson-meta-duration-suffix")}</dd></div>
-          <div><dt>{elementaryUiCopy("lesson-meta-status-label")}</dt><dd>{elementaryUiCopy("lesson-meta-status-value")}</dd></div>
+          <div><dt>{elementaryUiCopy("lesson-meta-status-label")}</dt><dd>{elementaryUiCopy(isPrototype ? "lesson-meta-status-value" : "lesson-meta-pilot-status-value")}</dd></div>
         </dl>
         <p className={styles.prototypeNotice} data-text-audience="developer">
-          {elementaryUiCopy("lesson-prototype-notice")}
+          {elementaryUiCopy(isPrototype ? "lesson-prototype-notice" : "lesson-pilot-notice")}
         </p>
         <aside className={styles.curriculumPanel} data-testid="elementary-curriculum-developer" data-text-audience="developer" aria-label="Curriculum接続">
           <h2>Curriculum接続</h2>

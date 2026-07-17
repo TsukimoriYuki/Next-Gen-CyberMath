@@ -212,7 +212,9 @@ export const ELEMENTARY_SOCIAL_MAP_LESSON = {
           speakerId: "tomiyama",
           intent: "deepening",
           emotion: "encouraging",
-          content: plain("駅は人が多く集まるから、お店にとってべんりなんだよ。"),
+          content: plain(
+            "この地図では、駅の近くにお店が集まっているね。人が集まりやすいことが、わけの一つかもしれないよ。",
+          ),
         },
       ],
     },
@@ -222,7 +224,7 @@ export const ELEMENTARY_SOCIAL_MAP_LESSON = {
       title: plain("もう少し先へ"),
       content: [
         plain(
-          "交番のような安全を守るしせつは、道路の近くにあることが多いです。すぐに人が集まる場所へ向かえるからだと考えられます。この見方は、今はできなくてもだいじょうぶです。",
+          "この地図では、交番が道路の近くにあります。すぐに動きやすいことが理由かもしれません。本当の理由は、行って調べないと分かりません。この見方は、今はできなくてもだいじょうぶです。",
         ),
       ],
       requiredForCompletion: false,

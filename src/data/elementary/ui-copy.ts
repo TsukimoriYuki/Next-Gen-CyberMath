@@ -127,6 +127,7 @@ export const ELEMENTARY_UI_COPY: readonly ElementaryUiCopyEntry[] = [
   developer("credits-metadata-title", "画像・図のクレジット", "metadata"),
   developer("credits-metadata-description", "小学生版で使う画像や図の出典と権利情報を確認する非公開ページです。", "metadata"),
   developer("lesson-prototype-label", "開発用の講座見本"),
+  developer("lesson-pilot-label", "小学3年生のpilot講座"),
   developer("lesson-meta-target-label", "対象"),
   developer("lesson-meta-target-value", "小学3年生・算数"),
   developer("lesson-meta-duration-label", "所要時間"),
@@ -134,7 +135,9 @@ export const ELEMENTARY_UI_COPY: readonly ElementaryUiCopyEntry[] = [
   developer("lesson-meta-duration-suffix", "分"),
   developer("lesson-meta-status-label", "状態"),
   developer("lesson-meta-status-value", "非公開プロトタイプ"),
+  developer("lesson-meta-pilot-status-value", "非公開・pilot確認中"),
   developer("lesson-prototype-notice", "これは表示と構造を確認する見本で、正式教材ではありません。"),
+  developer("lesson-pilot-notice", "公開前のpilot教材です。内容と表示を確認しています。"),
   developer("grade-3-developer-title", "技術基盤メモ"),
   developer("grade-3-developer-description", "型、registry、公開ガード、layoutを確認する内部情報です。"),
 ] as const;
