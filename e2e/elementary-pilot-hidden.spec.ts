@@ -12,6 +12,8 @@ const HIDDEN_ROUTES = [
   "/elementary/grade-3/japanese/units/story-reading/lessons/feelings-change",
   "/elementary/grade-3/social-studies/units/local-community/lessons/read-neighborhood-map",
   "/elementary/showcase/content-inventory",
+  "/elementary/for-guardians",
+  "/elementary/showcase/publication-readiness",
 ];
 
 for (const route of HIDDEN_ROUTES) {

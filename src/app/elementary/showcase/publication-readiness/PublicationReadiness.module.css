@@ -1,0 +1,200 @@
+.page {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  color: #17352b;
+}
+
+.header {
+  max-width: 52rem;
+}
+
+.header h1 {
+  margin: 0.4rem 0 0.9rem;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.header p,
+.checkCard p,
+.section > p {
+  line-height: 1.75;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #486e60;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.section {
+  margin-top: 2.75rem;
+}
+
+.section h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+}
+
+.summaryGrid,
+.metricGrid,
+.areaGrid,
+.checkGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+}
+
+.summaryGrid article,
+.metricGrid > div,
+.areaGrid article,
+.checkCard {
+  min-width: 0;
+  border: 1px solid #c8ded4;
+  border-radius: 1rem;
+  background: #f8fcfa;
+  padding: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.summaryGrid span,
+.summaryGrid strong {
+  display: block;
+}
+
+.summaryGrid span,
+.metricGrid dt,
+.checkCard dt {
+  color: #48655a;
+}
+
+.summaryGrid strong,
+.metricGrid dd {
+  margin-top: 0.35rem;
+  font-size: 1.2rem;
+  font-weight: 850;
+}
+
+.holdNotice {
+  margin-top: 1rem;
+  border-left: 4px solid #d59a16;
+  background: #fff8df;
+  padding: 0.9rem 1rem;
+  font-weight: 700;
+}
+
+.metricGrid {
+  margin: 0;
+}
+
+.metricGrid dd,
+.checkCard dd {
+  margin-left: 0;
+  overflow-wrap: anywhere;
+}
+
+.areaGrid h3,
+.checkCard h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  overflow-wrap: anywhere;
+}
+
+.statusText {
+  font-weight: 850;
+}
+
+[data-status="pass"] .statusText {
+  color: #17613c;
+}
+
+[data-status="warning"] .statusText,
+[data-status="not-reviewed"] .statusText {
+  color: #795300;
+}
+
+[data-status="fail"] .statusText {
+  color: #a4262c;
+}
+
+.checkHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.checkHeading .statusText {
+  flex: 0 0 auto;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.85rem;
+}
+
+.checkCard dl {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.8rem 0 0;
+}
+
+.checkCard dt {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.checkCard code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.nextAction {
+  margin-top: 0.8rem;
+  border-top: 1px solid #dbeae3;
+  padding-top: 0.7rem;
+}
+
+.unresolvedList {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.unresolvedList li {
+  display: grid;
+  min-width: 0;
+  gap: 0.3rem;
+  border-left: 4px solid #d59a16;
+  background: #fff8df;
+  padding: 0.8rem 1rem;
+  overflow-wrap: anywhere;
+}
+
+.link {
+  display: inline-block;
+  margin-top: 0.8rem;
+  color: #075f45;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.link:focus-visible {
+  border-radius: 0.2rem;
+  outline: 3px solid #efb72d;
+  outline-offset: 3px;
+}
+
+@media (max-width: 540px) {
+  .page {
+    padding-inline: 0.8rem;
+  }
+
+  .checkHeading {
+    flex-direction: column;
+  }
+}

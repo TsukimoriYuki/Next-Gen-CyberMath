@@ -44,10 +44,6 @@ export default function ElementaryGrade3Page() {
           ))}
         </ElementaryCardGrid>
       </ElementarySection>
-      <aside data-text-audience="developer">
-        <h2>{elementaryUiCopy("grade-3-developer-title")}</h2>
-        <p>{elementaryUiCopy("grade-3-developer-description")}</p>
-      </aside>
     </>
   );
 }

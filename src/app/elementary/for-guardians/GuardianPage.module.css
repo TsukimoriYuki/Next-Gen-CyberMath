@@ -1,0 +1,121 @@
+.page {
+  width: min(100%, 68rem);
+  margin-inline: auto;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  color: #17352b;
+}
+
+.header {
+  max-width: 50rem;
+}
+
+.header h1 {
+  margin: 0.4rem 0 1rem;
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  line-height: 1.15;
+}
+
+.header p,
+.card p,
+.reviewPanel p,
+.note {
+  line-height: 1.8;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #486e60;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.section {
+  margin-top: 2.75rem;
+}
+
+.section h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+}
+
+.metrics,
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.metrics > div,
+.card,
+.reviewPanel {
+  min-width: 0;
+  border: 1px solid #c8ded4;
+  border-radius: 1rem;
+  background: #f8fcfa;
+  padding: 1.15rem;
+}
+
+.metrics dt {
+  color: #48655a;
+  font-weight: 700;
+}
+
+.metrics dd {
+  margin: 0.4rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.note {
+  margin-top: 1rem;
+  border-left: 4px solid #d59a16;
+  background: #fff8df;
+  padding: 0.9rem 1rem;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.card p {
+  margin: 0.7rem 0 0;
+}
+
+.card a,
+.reviewPanel a {
+  display: inline-block;
+  margin-top: 0.8rem;
+  color: #075f45;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.card a:focus-visible,
+.reviewPanel a:focus-visible {
+  border-radius: 0.2rem;
+  outline: 3px solid #efb72d;
+  outline-offset: 3px;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+  padding-left: 1.5rem;
+  line-height: 1.75;
+}
+
+.reviewPanel {
+  background: #fffaf0;
+  border-color: #e1bc58;
+}
+
+@media (max-width: 420px) {
+  .page {
+    padding-inline: 0.8rem;
+  }
+}

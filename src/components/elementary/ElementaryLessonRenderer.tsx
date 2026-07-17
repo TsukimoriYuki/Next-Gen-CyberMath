@@ -181,29 +181,35 @@ export function ElementaryLessonRenderer({ lesson }: { lesson: ElementaryLesson 
   return (
     <article className={styles.lesson} data-testid="elementary-lesson-renderer">
       <header className={styles.lessonHeader}>
-        <p className={styles.prototypeLabel} data-text-audience="developer">
-          {elementaryUiCopy(isPrototype ? "lesson-prototype-label" : "lesson-pilot-label")}
-        </p>
+        {isPrototype ? (
+          <p className={styles.prototypeLabel} data-text-audience="developer">
+            {elementaryUiCopy("lesson-prototype-label")}
+          </p>
+        ) : null}
         <h1 className={styles.lessonTitle}><ElementaryText content={lesson.title} /></h1>
         <p className={styles.lessonDescription}><ElementaryText content={lesson.description} /></p>
-        <dl className={styles.lessonMeta} data-text-audience="developer">
-          <div><dt>{elementaryUiCopy("lesson-meta-target-label")}</dt><dd>{grade.name}・{subject.name}</dd></div>
-          <div><dt>{elementaryUiCopy("lesson-meta-duration-label")}</dt><dd>{elementaryUiCopy("lesson-meta-duration-prefix")}{lesson.estimatedMinutes}{elementaryUiCopy("lesson-meta-duration-suffix")}</dd></div>
-          <div><dt>{elementaryUiCopy("lesson-meta-status-label")}</dt><dd>{elementaryUiCopy(isPrototype ? "lesson-meta-status-value" : "lesson-meta-pilot-status-value")}</dd></div>
-        </dl>
-        <p className={styles.prototypeNotice} data-text-audience="developer">
-          {elementaryUiCopy(isPrototype ? "lesson-prototype-notice" : "lesson-pilot-notice")}
-        </p>
-        <aside className={styles.curriculumPanel} data-testid="elementary-curriculum-developer" data-text-audience="developer" aria-label="Curriculum接続">
-          <h2>Curriculum接続</h2>
-          <p>開発確認用です。子ども向け講座本文には表示しません。</p>
-          <dl>
-            <div><dt>必修entry</dt><dd>{curriculumEntries.map((entry) => entry.title).join("、")}</dd></div>
-            <div><dt>objective</dt><dd>{lesson.curriculumObjectiveIds.length}件</dd></div>
-            <div><dt>lesson coverage</dt><dd>{curriculumCoverage.map((coverage) => coverage.lessonCoverage).join("、")}</dd></div>
-            <div><dt>assessment coverage</dt><dd>{curriculumCoverage.map((coverage) => coverage.assessmentCoverage).join("、")}</dd></div>
-          </dl>
-        </aside>
+        {isPrototype ? (
+          <>
+            <dl className={styles.lessonMeta} data-text-audience="developer">
+              <div><dt>{elementaryUiCopy("lesson-meta-target-label")}</dt><dd>{grade.name}・{subject.name}</dd></div>
+              <div><dt>{elementaryUiCopy("lesson-meta-duration-label")}</dt><dd>{elementaryUiCopy("lesson-meta-duration-prefix")}{lesson.estimatedMinutes}{elementaryUiCopy("lesson-meta-duration-suffix")}</dd></div>
+              <div><dt>{elementaryUiCopy("lesson-meta-status-label")}</dt><dd>{elementaryUiCopy("lesson-meta-status-value")}</dd></div>
+            </dl>
+            <p className={styles.prototypeNotice} data-text-audience="developer">
+              {elementaryUiCopy("lesson-prototype-notice")}
+            </p>
+            <aside className={styles.curriculumPanel} data-testid="elementary-curriculum-developer" data-text-audience="developer" aria-label="Curriculum接続">
+              <h2>Curriculum接続</h2>
+              <p>開発確認用です。子ども向け講座本文には表示しません。</p>
+              <dl>
+                <div><dt>必修entry</dt><dd>{curriculumEntries.map((entry) => entry.title).join("、")}</dd></div>
+                <div><dt>objective</dt><dd>{lesson.curriculumObjectiveIds.length}件</dd></div>
+                <div><dt>lesson coverage</dt><dd>{curriculumCoverage.map((coverage) => coverage.lessonCoverage).join("、")}</dd></div>
+                <div><dt>assessment coverage</dt><dd>{curriculumCoverage.map((coverage) => coverage.assessmentCoverage).join("、")}</dd></div>
+              </dl>
+            </aside>
+          </>
+        ) : null}
       </header>
       <div className={styles.blocks}>
         {lesson.blocks.map((block, index) => (
