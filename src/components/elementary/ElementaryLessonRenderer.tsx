@@ -8,7 +8,9 @@ import {
   getCurriculumCoverageForLesson,
   getElementaryCurriculumEntry,
 } from "@/lib/elementary-curriculum";
+import { resolvePracticeSetProblems } from "@/lib/elementary-problems";
 import { ElementaryDialogue, ElementaryDialogueLineView } from "./ElementaryDialogue";
+import { ElementaryPracticeRunner } from "./ElementaryPracticeRunner";
 import { ElementaryText } from "./ElementaryText";
 import { ElementaryVisualAsset } from "./ElementaryVisualAsset";
 import styles from "./ElementaryLesson.module.css";
@@ -143,6 +145,22 @@ function renderBlock(lessonId: string, block: ElementaryLessonBlock) {
           </div>
         </section>
       );
+    case "practice-set": {
+      const problems = resolvePracticeSetProblems(block.problemIds);
+      return (
+        <section className={styles.block} aria-labelledby={headingId} data-testid="elementary-practice-set">
+          <SectionHeading id={headingId} content={block.title} />
+          <div className={styles.prose}>
+            <p><ElementaryText content={block.introduction} /></p>
+          </div>
+          <ElementaryPracticeRunner
+            problems={problems}
+            completionMessage={block.completionMessage}
+            minimumScoreMessage={block.minimumScoreMessage}
+          />
+        </section>
+      );
+    }
     default:
       return assertNeverBlock(block);
   }

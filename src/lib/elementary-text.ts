@@ -98,5 +98,12 @@ export function getElementaryBlockTextFields(
         { path: `${path}.title`, content: block.title },
         ...block.content.map((content, index) => ({ path: `${path}.content[${index}]`, content })),
       ];
+    case "practice-set":
+      return [
+        { path: `${path}.title`, content: block.title },
+        { path: `${path}.introduction`, content: block.introduction },
+        { path: `${path}.minimumScoreMessage`, content: block.minimumScoreMessage },
+        { path: `${path}.completionMessage`, content: block.completionMessage },
+      ];
   }
 }

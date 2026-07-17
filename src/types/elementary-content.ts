@@ -195,6 +195,17 @@ export type ElementaryEnrichmentBlock = ElementaryLessonBlockBase &
     requiredForCompletion: false;
   }>;
 
+export type ElementaryPracticeSetBlock = ElementaryLessonBlockBase &
+  Readonly<{
+    type: "practice-set";
+    title: ElementaryInlineContent;
+    introduction: ElementaryInlineContent;
+    /** この講座の演習問題ID。教材データへ問題本文を複製せず、IDで参照する。 */
+    problemIds: readonly string[];
+    minimumScoreMessage: ElementaryInlineContent;
+    completionMessage: ElementaryInlineContent;
+  }>;
+
 export type ElementaryLessonBlock =
   | ElementaryOpeningQuestionBlock
   | ElementaryLearningGoalsBlock
@@ -205,7 +216,14 @@ export type ElementaryLessonBlock =
   | ElementaryVisualBlock
   | ElementaryRetryBlock
   | ElementarySummaryBlock
-  | ElementaryEnrichmentBlock;
+  | ElementaryEnrichmentBlock
+  | ElementaryPracticeSetBlock;
+
+export type ElementaryLessonReviewStatus =
+  | "prototype"
+  | "pilot"
+  | "reviewed"
+  | "approved";
 
 export type ElementaryLesson = Readonly<{
   id: string;
@@ -220,6 +238,8 @@ export type ElementaryLesson = Readonly<{
   goals: readonly ElementaryInlineContent[];
   estimatedMinutes: number;
   prerequisiteLessonIds: readonly string[];
+  /** 同じ単元内の次の講座（あれば）。学習導線に使う。 */
+  nextLessonId?: string;
   curriculumReferenceIds: readonly string[];
   curriculumObjectiveIds: readonly string[];
   requirementCoverage: readonly ElementaryCurriculumCoverage[];
@@ -228,7 +248,22 @@ export type ElementaryLesson = Readonly<{
   problemIds: readonly string[];
   blocks: readonly ElementaryLessonBlock[];
   publicationStatus: ElementaryPublicationStatus;
-  reviewStatus: "prototype" | "reviewed";
+  reviewStatus: ElementaryLessonReviewStatus;
   sourceType: "original";
   copyrightStatus: "original";
+}>;
+
+export type ElementaryUnit = Readonly<{
+  id: string;
+  slug: string;
+  grade: ElementaryGradeId;
+  subject: ElementarySubjectId;
+  courseType: ElementaryCourseType;
+  title: ElementaryInlineContent;
+  description: ElementaryInlineContent;
+  order: number;
+  lessonIds: readonly string[];
+  curriculumEntryIds: readonly string[];
+  publicationStatus: ElementaryPublicationStatus;
+  reviewStatus: ElementaryLessonReviewStatus;
 }>;

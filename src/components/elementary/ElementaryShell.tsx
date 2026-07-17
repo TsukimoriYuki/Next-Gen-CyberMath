@@ -45,6 +45,24 @@ export function ElementaryPageHeader({
   );
 }
 
+export function ElementaryRichPageHeader({
+  eyebrow,
+  heading,
+  lead,
+}: {
+  eyebrow: string;
+  heading: ReactNode;
+  lead?: ReactNode;
+}) {
+  return (
+    <header className={styles.pageHeader}>
+      <p className={styles.eyebrow}>{eyebrow}</p>
+      <h1 className={styles.title}>{heading}</h1>
+      {lead ? <p className={styles.lead}>{lead}</p> : null}
+    </header>
+  );
+}
+
 export function ElementarySection({
   title,
   children,
@@ -98,6 +116,31 @@ export function ElementaryGradeLink({
       <span className={styles.cardTitle}>{title}</span>
       <span className={styles.cardText}>{description}</span>
       <span className={styles.status}>{elementaryUiCopy("home-grade-3-status")}</span>
+    </Link>
+  );
+}
+
+export function ElementaryLinkCard({
+  href,
+  heading,
+  description,
+  meta,
+  action,
+  testId,
+}: {
+  href: string;
+  heading: ReactNode;
+  description?: ReactNode;
+  meta?: ReactNode;
+  action: string;
+  testId?: string;
+}) {
+  return (
+    <Link href={href} className={styles.cardLink} data-testid={testId}>
+      <span className={styles.cardTitle}>{heading}</span>
+      {description ? <span className={styles.cardText}>{description}</span> : null}
+      {meta ? <span className={styles.cardText}>{meta}</span> : null}
+      <span className={styles.status}>{action}</span>
     </Link>
   );
 }

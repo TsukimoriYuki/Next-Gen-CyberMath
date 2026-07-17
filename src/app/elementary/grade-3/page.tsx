@@ -1,8 +1,8 @@
 import {
   ElementaryCardGrid,
+  ElementaryLinkCard,
   ElementaryPageHeader,
   ElementarySection,
-  ElementaryStatusCard,
 } from "@/components/elementary/ElementaryShell";
 import {
   getElementaryGradeSubjects,
@@ -33,21 +33,16 @@ export default function ElementaryGrade3Page() {
       <ElementarySection title={elementaryUiCopy("grade-3-subject-section")}>
         <ElementaryCardGrid>
           {subjects.map((subject) => (
-            <ElementaryStatusCard
+            <ElementaryLinkCard
               key={subject.id}
-              title={elementaryUiCopy(subject.copyIds[0])}
+              href={`/elementary/grade-3/${subject.id}`}
+              heading={elementaryUiCopy(subject.copyIds[0])}
               description={elementaryUiCopy(subject.copyIds[1])}
+              action={elementaryUiCopy("subject-open")}
               testId="elementary-subject-card"
             />
           ))}
         </ElementaryCardGrid>
-      </ElementarySection>
-      <ElementarySection title={elementaryUiCopy("grade-3-status-section")}>
-        <ElementaryStatusCard
-          title={elementaryUiCopy("grade-3-status-title")}
-          description={elementaryUiCopy("grade-3-status-description")}
-          status={elementaryUiCopy("grade-3-status-badge")}
-        />
       </ElementarySection>
       <aside data-text-audience="developer">
         <h2>{elementaryUiCopy("grade-3-developer-title")}</h2>

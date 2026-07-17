@@ -4,15 +4,19 @@ import {
   ELEMENTARY_VISUAL_ASSETS,
 } from "../src/data/elementary/assets";
 import { ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE } from "../src/data/elementary/showcases/division-dialogue";
+import { ELEMENTARY_LESSONS } from "../src/data/elementary/lessons";
 import { ELEMENTARY_GRADES } from "../src/data/elementary/grades";
 import { ELEMENTARY_SUBJECTS } from "../src/data/elementary/subjects";
 import { inspectElementaryAssets } from "./elementary-assets-validation";
 
-const lesson = ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE;
-const assetReferences = lesson.blocks.flatMap((block, blockIndex) =>
-  block.type === "visual" && block.assetId
-    ? [{ assetId: block.assetId, lessonId: lesson.id, field: `blocks[${blockIndex}].assetId` }]
-    : [],
+// 開発用見本 + pilot 講座を、視覚素材の参照元として扱う。
+const assetLessons = [ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE, ...ELEMENTARY_LESSONS];
+const assetReferences = assetLessons.flatMap((lesson) =>
+  lesson.blocks.flatMap((block, blockIndex) =>
+    block.type === "visual" && block.assetId
+      ? [{ assetId: block.assetId, lessonId: lesson.id, field: `blocks[${blockIndex}].assetId` }]
+      : [],
+  ),
 );
 
 const result = inspectElementaryAssets({
@@ -21,7 +25,7 @@ const result = inspectElementaryAssets({
   publicRoot: path.join(process.cwd(), "public"),
   knownGradeIds: new Set(ELEMENTARY_GRADES.map((grade) => grade.id)),
   knownSubjectIds: new Set(ELEMENTARY_SUBJECTS.map((subject) => subject.id)),
-  knownLessonIds: new Set([lesson.id]),
+  knownLessonIds: new Set(assetLessons.map((lesson) => lesson.id)),
   assetReferences,
 });
 
