@@ -1,0 +1,285 @@
+.practice {
+  margin-top: 1.5rem;
+  max-width: 44rem;
+}
+
+.progress {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.progressBar {
+  margin-top: 0.5rem;
+  height: 0.5rem;
+  width: 100%;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #0d9488;
+  transition: width 0.2s ease;
+}
+
+.card {
+  margin-top: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 1rem;
+  background: #ffffff;
+  padding: 1.25rem;
+}
+
+.problemTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.prompt {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  line-height: 1.9;
+  color: #1f2937;
+}
+
+.instruction {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  color: #475569;
+}
+
+.choiceList {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 52px;
+  padding: 0.85rem 1rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 0.85rem;
+  background: #ffffff;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  cursor: pointer;
+}
+
+.choice:hover {
+  border-color: #94a3b8;
+}
+
+.choiceInput {
+  margin-top: 0.35rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  accent-color: #0d9488;
+  flex-shrink: 0;
+}
+
+.choiceCorrect {
+  border-color: #047857;
+  background: #ecfdf5;
+}
+
+.choiceWrongPick {
+  border-color: #b91c1c;
+  background: #fef2f2;
+}
+
+.choiceReason {
+  margin-top: 0.35rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #334155;
+}
+
+.numericRow {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.numericLabel {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.numericInput {
+  min-height: 52px;
+  width: 8rem;
+  padding: 0.5rem 0.85rem;
+  border: 2px solid #94a3b8;
+  border-radius: 0.75rem;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.numericUnit {
+  font-size: 1.2rem;
+  color: #334155;
+}
+
+.actions {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.buttonPrimary,
+.buttonSecondary {
+  min-height: 52px;
+  padding: 0.6rem 1.4rem;
+  border-radius: 0.85rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.buttonPrimary {
+  background: #0f766e;
+  color: #ffffff;
+}
+
+.buttonPrimary:disabled {
+  background: #e2e8f0;
+  color: #475569;
+  cursor: not-allowed;
+}
+
+.buttonSecondary {
+  background: #ffffff;
+  color: #0f766e;
+  border-color: #5eead4;
+}
+
+.buttonPrimary:focus-visible,
+.buttonSecondary:focus-visible,
+.choice:focus-within,
+.numericInput:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
+}
+
+.result {
+  margin-top: 1.25rem;
+  border-radius: 0.85rem;
+  padding: 1rem 1.15rem;
+  border: 2px solid #cbd5e1;
+}
+
+.resultCorrect {
+  border-color: #047857;
+  background: #ecfdf5;
+}
+
+.resultIncorrect {
+  border-color: #b45309;
+  background: #fffbeb;
+}
+
+.resultHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.resultMark {
+  font-size: 1.4rem;
+}
+
+.answerLabel {
+  margin-top: 0.75rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.explainBlock {
+  margin-top: 0.85rem;
+}
+
+.explainLabel {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.explainText {
+  margin-top: 0.2rem;
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: #1f2937;
+}
+
+.hint {
+  margin-top: 1rem;
+}
+
+.hintText {
+  margin-top: 0.4rem;
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: #334155;
+}
+
+.summary {
+  border: 1px solid #cbd5e1;
+  border-radius: 1rem;
+  background: #ffffff;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.summaryScore {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f766e;
+}
+
+.summaryMessage {
+  margin-top: 0.75rem;
+  font-size: 1.15rem;
+  line-height: 1.85;
+  color: #1f2937;
+}
+
+.summaryList {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.summaryItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+  color: #334155;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressFill {
+    transition: none;
+  }
+}
