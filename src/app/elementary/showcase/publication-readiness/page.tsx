@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { buildElementaryPublicationReadiness } from "@/lib/elementary-readiness";
 import type {
+  ElementaryHumanReviewStatus,
   ElementaryReadinessCheck,
   ElementaryReadinessStatus,
 } from "@/types/elementary-readiness";
@@ -23,6 +24,13 @@ const STATUS_LABELS: Readonly<Record<ElementaryReadinessStatus, string>> = {
   fail: "× fail",
   "not-applicable": "— not-applicable",
   "not-reviewed": "○ not-reviewed",
+};
+
+const HUMAN_REVIEW_LABELS: Readonly<Record<ElementaryHumanReviewStatus, string>> = {
+  "not-reviewed": "not-reviewed",
+  reviewed: "reviewed",
+  approved: "approved",
+  "changes-requested": "changes-requested",
 };
 
 const AREA_LABELS = {
@@ -59,7 +67,14 @@ function CheckCard({ check }: { check: ElementaryReadinessCheck }) {
         <div><dt>確認方法</dt><dd>{check.reviewKind === "automatic" ? "自動確認" : "人間確認"}</dd></div>
         <div><dt>evidence</dt><dd>{check.evidence}</dd></div>
         <div><dt>source</dt><dd><code>{check.sourceQa ?? check.source}</code></dd></div>
+        {check.reviewKind === "manual" ? (
+          <div>
+            <dt>人間レビュー状態</dt>
+            <dd>{HUMAN_REVIEW_LABELS[check.humanReview?.status ?? "not-reviewed"]}</dd>
+          </div>
+        ) : null}
       </dl>
+      {check.humanReview ? <p className={styles.reviewNote}>{check.humanReview.note}</p> : null}
       {check.nextAction ? <p className={styles.nextAction}><strong>次の作業：</strong>{check.nextAction}</p> : null}
     </article>
   );
@@ -72,6 +87,11 @@ export default function ElementaryPublicationReadinessPage() {
   const unresolved = readiness.checks.filter(
     (check) => check.status === "warning" || check.status === "fail" || check.status === "not-reviewed",
   );
+  const betaLabel = readiness.recommendation.beta === "recommend"
+    ? "推奨可能"
+    : readiness.recommendation.beta === "limited-beta-allowed"
+      ? "限定beta可"
+      : "まだ推奨しない";
 
   return (
     <div
@@ -93,12 +113,13 @@ export default function ElementaryPublicationReadinessPage() {
         <h2 id="readiness-summary">総合判定</h2>
         <div className={styles.summaryGrid}>
           <article><span>現在の状態</span><strong>{STATUS_LABELS[readiness.overallStatus]}</strong></article>
-          <article><span>β公開</span><strong>{readiness.recommendation.beta === "recommend" ? "推奨可能" : "まだ推奨しない"}</strong></article>
+          <article><span>β公開</span><strong>{betaLabel}</strong></article>
           <article><span>正式公開</span><strong>{readiness.recommendation.formal === "recommend" ? "推奨可能" : "まだ推奨しない"}</strong></article>
           <article><span>publicationStatus</span><strong>{readiness.publicationStatus}</strong></article>
         </div>
         <p className={styles.holdNotice}>
-          β公開可能と正式公開可能は別のgateです。現在は人間確認が残っているためhiddenを維持します。
+          ユーザー本人の判断は限定beta可です。ただし小学3年生全体対応ではなく、
+          正式公開はまだ推奨しません。publicationStatusはhiddenを維持します。
         </p>
       </section>
 
@@ -135,7 +156,7 @@ export default function ElementaryPublicationReadinessPage() {
 
       <section className={styles.section} aria-labelledby="readiness-manual">
         <h2 id="readiness-manual">人間確認</h2>
-        <p>AIによる今回のレビューは人間の承認として扱わず、ユーザー本人や教材責任者の確認はnot-reviewedのままです。</p>
+        <p>ユーザー本人が明示した項目だけをreviewedまたはapprovedとして記録し、3教科の教材内容はnot-reviewedのままです。</p>
         <div className={styles.checkGrid}>{manualChecks.map((check) => <CheckCard key={check.id} check={check} />)}</div>
       </section>
 

@@ -101,12 +101,12 @@ export default function ElementaryGuardianPage() {
         </ul>
       </section>
 
-      <section className={`${styles.section} ${styles.reviewPanel}`} aria-labelledby="guardian-before-beta">
-        <h2 id="guardian-before-beta">β公開前に必要な確認</h2>
+      <section className={`${styles.section} ${styles.reviewPanel}`} aria-labelledby="guardian-review-status">
+        <h2 id="guardian-review-status">人間レビューと公開判断</h2>
         <p>
-          算数・国語・社会の教材内容、子どもが安心して読める文言、画像の権利表示、
-          この保護者向け説明を、人間の教材責任者・保護者・公開責任者が確認する必要があります。
-          AIによる今回の確認を人間の承認として登録していません。
+          ユーザー本人が、子ども向け文言、保護者向け説明、画像・図の権利管理を確認し、
+          限定beta可と判断しました。ただし公開状態はhiddenのままで、正式公開はまだ推奨しません。
+          算数・国語・社会の教材内容は、それぞれの教材責任者による確認が残っています。
         </p>
         <Link href="/elementary/showcase/publication-readiness">publication readinessの内部判定を確認する</Link>
       </section>

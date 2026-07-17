@@ -24,6 +24,18 @@ export type ElementaryReadinessArea =
 
 export type ElementaryReadinessReviewKind = "automatic" | "manual";
 export type ElementaryReleaseStage = "beta" | "formal";
+export type ElementaryHumanReviewStatus =
+  | "not-reviewed"
+  | "reviewed"
+  | "approved"
+  | "changes-requested";
+
+export type ElementaryHumanReviewRecord = Readonly<{
+  status: ElementaryHumanReviewStatus;
+  reviewedAt: string;
+  reviewedBy: "user";
+  note: string;
+}>;
 
 export type ElementaryReleaseGate = Readonly<{
   id: string;
@@ -37,6 +49,7 @@ export type ElementaryReleaseGate = Readonly<{
   sourceQa?: string;
   source: string;
   nextAction?: string;
+  humanReview?: ElementaryHumanReviewRecord;
 }>;
 
 export type ElementaryReadinessCheck = ElementaryReleaseGate &
@@ -53,7 +66,7 @@ export type ElementaryReadinessAreaResult = Readonly<{
 }>;
 
 export type ElementaryReleaseRecommendation = Readonly<{
-  beta: "recommend" | "hold";
+  beta: "recommend" | "limited-beta-allowed" | "hold";
   formal: "recommend" | "hold";
   publicationStatus: ElementaryPublicationStatus;
   betaBlockingCheckIds: readonly string[];

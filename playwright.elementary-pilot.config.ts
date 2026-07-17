@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 3131;
+const PORT = Number(process.env.ELEMENTARY_PILOT_PORT ?? 3131);
 const BASE_URL = `http://localhost:${PORT}`;
 const READY_URL = `${BASE_URL}/elementary/grade-3/math/units/division/lessons/division-meaning`;
 

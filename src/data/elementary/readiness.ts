@@ -1,4 +1,5 @@
 import type {
+  ElementaryHumanReviewStatus,
   ElementaryReadinessArea,
   ElementaryReleaseGate,
 } from "@/types/elementary-readiness";
@@ -30,11 +31,17 @@ const automatic = (
 
 const manual = (
   gate: Omit<ElementaryReleaseGate, "reviewKind" | "defaultStatus" | "sourceQa">,
-): ElementaryReleaseGate => Object.freeze({
-  ...gate,
-  reviewKind: "manual",
-  defaultStatus: "not-reviewed",
-});
+): ElementaryReleaseGate => {
+  const reviewStatus: ElementaryHumanReviewStatus = gate.humanReview?.status ?? "not-reviewed";
+  const defaultStatus = reviewStatus === "changes-requested"
+    ? "fail"
+    : reviewStatus === "not-reviewed"
+      ? "not-reviewed"
+      : "pass";
+  return Object.freeze({ ...gate, reviewKind: "manual", defaultStatus });
+};
+
+const USER_REVIEW_DATE = "2026-07-17";
 
 export const ELEMENTARY_RELEASE_GATES: readonly ElementaryReleaseGate[] = Object.freeze([
   automatic({ id: "qa-registry", area: "publication", title: "registry QA", description: "学年・教科・course registryのIDと参照を検査します。", requiredForBeta: true, requiredForFormal: true, sourceQa: "qa:elementary:registry", source: "scripts/check-elementary-registry.ts" }),
@@ -68,8 +75,8 @@ export const ELEMENTARY_RELEASE_GATES: readonly ElementaryReleaseGate[] = Object
   manual({ id: "review-math-content", area: "lesson-quality", title: "算数教材の内容妥当性", description: "等分除・包含除、式、単位、正答の妥当性を人間が確認します。", requiredForBeta: true, requiredForFormal: true, source: "src/data/elementary/lessons/math-division.ts", nextAction: "算数の教材責任者が確認する。" }),
   manual({ id: "review-japanese-content", area: "lesson-quality", title: "国語本文・正答の妥当性", description: "本文根拠、人物、気持ち、選択肢を人間が確認します。", requiredForBeta: true, requiredForFormal: true, source: "src/data/elementary/lessons/japanese-feelings.ts", nextAction: "国語の教材責任者が確認する。" }),
   manual({ id: "review-social-content", area: "lesson-quality", title: "社会教材の推測表現", description: "地図から分かることと推測を人間が確認します。", requiredForBeta: true, requiredForFormal: true, source: "src/data/elementary/lessons/social-map.ts", nextAction: "社会の教材責任者が確認する。" }),
-  manual({ id: "review-child-safety", area: "child-safety", title: "子ども向け文言", description: "責める表現、不安、競争、固定的役割がないことを人間が確認します。", requiredForBeta: true, requiredForFormal: true, source: "src/data/elementary", nextAction: "保護者または教育者が実画面で確認する。" }),
-  manual({ id: "review-guardian-information", area: "guardian-information", title: "保護者向け説明", description: "pilotの範囲、採点、保存、権利、未実装事項を人間が確認します。", requiredForBeta: true, requiredForFormal: true, source: "src/app/elementary/for-guardians/page.tsx", nextAction: "保護者視点の人間レビューを実施する。" }),
-  manual({ id: "review-asset-rights", area: "visual-assets", title: "画像・図の権利確認", description: "自動QAに加えて公開責任者が権利表示を確認します。", requiredForBeta: true, requiredForFormal: true, source: "src/data/elementary/assets/visual-assets.ts", nextAction: "公開責任者がcreditsとregistryを確認する。" }),
-  manual({ id: "review-release-decision", area: "publication", title: "β公開の最終判断", description: "自動判定だけでpublicationStatusを変更しません。", requiredForBeta: true, requiredForFormal: true, source: "src/data/elementary/index.ts", nextAction: "ユーザー本人がreadiness結果を確認して判断する。" }),
+  manual({ id: "review-child-safety", area: "child-safety", title: "子ども向け文言", description: "責める表現、不安、競争、固定的役割がないことを人間が確認します。", requiredForBeta: true, requiredForFormal: true, source: "src/data/elementary", humanReview: { status: "approved", reviewedAt: USER_REVIEW_DATE, reviewedBy: "user", note: "ユーザー本人が子ども向け文言に問題なしと確認しました。" } }),
+  manual({ id: "review-guardian-information", area: "guardian-information", title: "保護者向け説明", description: "pilotの範囲、採点、保存、権利、未実装事項を人間が確認します。", requiredForBeta: true, requiredForFormal: true, source: "src/app/elementary/for-guardians/page.tsx", humanReview: { status: "approved", reviewedAt: USER_REVIEW_DATE, reviewedBy: "user", note: "ユーザー本人が保護者向け説明に問題なしと確認しました。" } }),
+  manual({ id: "review-asset-rights", area: "visual-assets", title: "画像・図の権利確認", description: "自動QAに加えて公開責任者が権利表示を確認します。", requiredForBeta: true, requiredForFormal: true, source: "src/data/elementary/assets/visual-assets.ts", humanReview: { status: "approved", reviewedAt: USER_REVIEW_DATE, reviewedBy: "user", note: "ユーザー本人が画像・図の権利管理に問題なしと確認しました。" } }),
+  manual({ id: "review-release-decision", area: "publication", title: "β公開の最終判断", description: "自動判定だけでpublicationStatusを変更しません。", requiredForBeta: true, requiredForFormal: true, source: "src/data/elementary/index.ts", nextAction: "限定betaの公開範囲と運用条件を別工程で確定する。", humanReview: { status: "reviewed", reviewedAt: USER_REVIEW_DATE, reviewedBy: "user", note: "ユーザー本人が限定beta可と判断しました。publicationStatusはhiddenを維持します。" } }),
 ]);

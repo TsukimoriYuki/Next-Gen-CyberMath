@@ -157,6 +157,13 @@
   padding-top: 0.7rem;
 }
 
+.reviewNote {
+  margin-top: 0.8rem;
+  border-left: 3px solid #287a4d;
+  background: #f2faf5;
+  padding: 0.65rem 0.75rem;
+}
+
 .unresolvedList {
   display: grid;
   gap: 0.75rem;

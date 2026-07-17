@@ -128,6 +128,19 @@ export function buildElementaryPublicationReadiness(
     ...checks.filter((check) => check.status === "warning").map((check) => `${check.title}: warning`),
   ];
   const overallStatus = areaStatus(checks);
+  const releaseDecision = checks.find((check) => check.id === "review-release-decision");
+  const hasFailure = checks.some((check) => check.status === "fail");
+  const limitedBetaAllowed =
+    !hasFailure &&
+    releaseDecision?.humanReview?.status === "reviewed" &&
+    betaBlocking.every((check) =>
+      ["review-math-content", "review-japanese-content", "review-social-content"].includes(check.id),
+    );
+  const betaRecommendation = betaBlocking.length === 0
+    ? "recommend" as const
+    : limitedBetaAllowed
+      ? "limited-beta-allowed" as const
+      : "hold" as const;
 
   return deepFreeze({
     overallStatus,
@@ -135,7 +148,7 @@ export function buildElementaryPublicationReadiness(
     checks,
     areas,
     recommendation: {
-      beta: betaBlocking.length === 0 ? "recommend" : "hold",
+      beta: betaRecommendation,
       formal: formalBlocking.length === 0 ? "recommend" : "hold",
       publicationStatus: ELEMENTARY_SITE.publicationStatus,
       betaBlockingCheckIds: betaBlocking.map((check) => check.id),

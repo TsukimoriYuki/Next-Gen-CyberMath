@@ -45,7 +45,7 @@ async function main() {
     scripts?: Record<string, string>;
   };
   const readiness = buildElementaryPublicationReadiness();
-  const combined = buildCombinedContentInventory("phase-i-readiness", "2026-07-17T00:00:00.000Z");
+  const combined = buildCombinedContentInventory("phase-j-readiness", "2026-07-17T00:00:00.000Z");
   const guardianSource = read("src/app/elementary/for-guardians/page.tsx");
   const readinessPageSource = read("src/app/elementary/showcase/publication-readiness/page.tsx");
   const hiddenSpecSource = read("e2e/elementary-pilot-hidden.spec.ts");
@@ -56,8 +56,14 @@ async function main() {
     "絶対に理解できる",
     "全国の小学3年生に対応済み",
     "個別最適化済み",
+    "小学3年生完成",
+    "正式公開可能",
+    "全国対応済み",
+    "保証",
+    "必ず伸びる",
   ];
   const statusValues = new Set(["pass", "warning", "fail", "not-applicable", "not-reviewed"]);
+  const humanReviewValues = new Set(["not-reviewed", "reviewed", "approved", "changes-requested"]);
 
   const gateDuplicates = duplicateIds(ELEMENTARY_RELEASE_GATES.map((gate) => gate.id));
   check(gateDuplicates.length === 0, {
@@ -87,6 +93,16 @@ async function main() {
       actual: gate.defaultStatus,
       source: gate.source,
     });
+    if (gate.humanReview) {
+      check(humanReviewValues.has(gate.humanReview.status), {
+        checkId: gate.id,
+        area: gate.area,
+        ruleId: "human-review-status-valid",
+        expected: [...humanReviewValues],
+        actual: gate.humanReview.status,
+        source: gate.source,
+      });
+    }
     if (gate.sourceQa) {
       check(Boolean(packageJson.scripts?.[gate.sourceQa]), {
         checkId: gate.id,
@@ -118,16 +134,61 @@ async function main() {
     source: "src/lib/elementary-readiness.ts",
   });
   check(
-    readiness.counts["not-reviewed"] > 0 && readiness.recommendation.beta === "hold",
+    readiness.counts["not-reviewed"] === 3 &&
+      readiness.recommendation.beta === "limited-beta-allowed",
     {
       checkId: "manual-reviews",
       area: "publication",
       ruleId: "not-reviewed-is-not-pass",
-      expected: "not-reviewed > 0 and beta hold",
+      expected: "3 subject reviews remain and limited beta is allowed",
       actual: `${readiness.counts["not-reviewed"]} / ${readiness.recommendation.beta}`,
       source: "src/lib/elementary-readiness.ts",
     },
   );
+  const expectedHumanReviews = [
+    ["review-child-safety", "approved"],
+    ["review-guardian-information", "approved"],
+    ["review-asset-rights", "approved"],
+    ["review-release-decision", "reviewed"],
+  ] as const;
+  for (const [id, expected] of expectedHumanReviews) {
+    const gate = ELEMENTARY_RELEASE_GATES.find((candidate) => candidate.id === id);
+    check(gate?.humanReview?.status === expected, {
+      checkId: id,
+      area: gate?.area ?? "unresolved",
+      ruleId: "user-review-reflected",
+      expected,
+      actual: gate?.humanReview?.status ?? "not-reviewed",
+      source: "src/data/elementary/readiness.ts",
+    });
+  }
+  for (const id of ["review-math-content", "review-japanese-content", "review-social-content"]) {
+    const gate = ELEMENTARY_RELEASE_GATES.find((candidate) => candidate.id === id);
+    check(!gate?.humanReview && gate?.defaultStatus === "not-reviewed", {
+      checkId: id,
+      area: gate?.area ?? "unresolved",
+      ruleId: "subject-review-not-promoted",
+      expected: "not-reviewed",
+      actual: gate?.humanReview?.status ?? gate?.defaultStatus,
+      source: gate?.source ?? "src/data/elementary/readiness.ts",
+    });
+  }
+  const readinessCountExpectations = [
+    ["pass", readiness.counts.pass, 30],
+    ["warning", readiness.counts.warning, 2],
+    ["fail", readiness.counts.fail, 0],
+    ["not-reviewed", readiness.counts["not-reviewed"], 3],
+  ] as const;
+  for (const [id, actual, expected] of readinessCountExpectations) {
+    check(actual === expected, {
+      checkId: `readiness-count-${id}`,
+      area: "publication",
+      ruleId: "readiness-count",
+      expected,
+      actual,
+      source: "src/lib/elementary-readiness.ts",
+    });
+  }
 
   check(fs.existsSync(path.join(root, "src/app/elementary/for-guardians/page.tsx")), {
     checkId: "guardian-page",
@@ -240,10 +301,11 @@ async function main() {
     source: "src/lib/elementary-readiness.ts",
   });
   check(
-    readinessPageSource.includes("β公開可能と正式公開可能は別のgate") &&
+    readinessPageSource.includes("限定beta可") &&
+      readinessPageSource.includes("小学3年生全体対応ではなく") &&
       readinessPageSource.includes("β公開") &&
       readinessPageSource.includes("正式公開") &&
-      readiness.recommendation.beta === "hold" &&
+      readiness.recommendation.beta === "limited-beta-allowed" &&
       readiness.recommendation.formal === "hold",
     {
       checkId: "release-stage-separation",

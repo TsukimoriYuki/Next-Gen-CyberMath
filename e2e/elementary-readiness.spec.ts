@@ -16,6 +16,11 @@ const PROHIBITED_CLAIMS = [
   "絶対に理解できる",
   "全国の小学3年生に対応済み",
   "個別最適化済み",
+  "小学3年生完成",
+  "正式公開可能",
+  "全国対応済み",
+  "保証",
+  "必ず伸びる",
 ] as const;
 
 async function hasHorizontalOverflow(page: Page) {
@@ -35,26 +40,33 @@ test("guardian page explains scope, privacy, grading, and incomplete features", 
   await expect(page.getByText("学習進捗をサーバーやデータベースへ保存していません", { exact: false })).toBeVisible();
   await expect(page.getByText("AIによる自由記述の自動採点は使っていません", { exact: false })).toBeVisible();
   await expect(page.getByRole("heading", { name: "まだ実装していないこと" })).toBeVisible();
-  await expect(page.getByText("AIによる今回の確認を人間の承認として登録していません", { exact: false })).toBeVisible();
+  await expect(page.getByText("限定beta可と判断しました", { exact: false })).toBeVisible();
+  await expect(page.getByText("算数・国語・社会の教材内容は", { exact: false })).toBeVisible();
   const body = await page.locator("body").innerText();
   for (const claim of PROHIBITED_CLAIMS) expect(body).not.toContain(claim);
 });
 
-test("readiness page separates beta and formal gates and keeps human reviews open", async ({ page }) => {
+test("readiness page records limited beta while keeping subject reviews open", async ({ page }) => {
   const response = await page.goto(READINESS_ROUTE);
   expect(response?.status()).toBe(200);
   await expect(page.locator("h1")).toHaveCount(1);
-  await expect(page.getByText("β公開可能と正式公開可能は別のgate", { exact: false })).toBeVisible();
-  await expect(page.getByText("まだ推奨しない", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("限定beta可", { exact: true })).toBeVisible();
+  await expect(page.getByText("正式公開はまだ推奨しません", { exact: false })).toBeVisible();
+  await expect(page.getByText("まだ推奨しない", { exact: true })).toHaveCount(1);
   await expect(page.getByText("hidden", { exact: true })).toBeVisible();
   await expect(page.getByText("3講座", { exact: true })).toBeVisible();
   await expect(page.getByText("24問", { exact: true })).toBeVisible();
-  await expect(page.locator('[data-status="warning"]')).toHaveCount(4);
+  await expect(page.locator('[data-status="warning"]')).toHaveCount(6);
   await expect(page.locator('[data-status="fail"]')).toHaveCount(0);
-  await expect(page.locator('[data-check-id][data-status="not-reviewed"]')).toHaveCount(7);
-  await expect(page.getByText("ユーザー本人や教材責任者の確認はnot-reviewedのまま", { exact: false })).toBeVisible();
-  await expect(page.locator('[data-check-id="review-release-decision"]')).toContainText("人間確認");
-  await expect(page.locator('[data-check-id="review-release-decision"]')).toContainText("○ not-reviewed");
+  await expect(page.locator('[data-check-id][data-status="not-reviewed"]')).toHaveCount(3);
+  await expect(page.getByText("3教科の教材内容はnot-reviewedのまま", { exact: false })).toBeVisible();
+  await expect(page.locator('[data-check-id="review-child-safety"]')).toContainText("approved");
+  await expect(page.locator('[data-check-id="review-guardian-information"]')).toContainText("approved");
+  await expect(page.locator('[data-check-id="review-asset-rights"]')).toContainText("approved");
+  await expect(page.locator('[data-check-id="review-release-decision"]')).toContainText("reviewed");
+  for (const id of ["review-math-content", "review-japanese-content", "review-social-content"]) {
+    await expect(page.locator(`[data-check-id="${id}"]`)).toContainText("not-reviewed");
+  }
 });
 
 test("formal child-facing pages do not expose developer-only status text", async ({ page }) => {
