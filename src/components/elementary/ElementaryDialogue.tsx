@@ -1,35 +1,25 @@
 import { getElementaryCharacter } from "@/data/elementary/characters";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import type {
-  ElementaryCharacterEmotion,
   ElementaryDialogueBlock,
   ElementaryDialogueLine,
 } from "@/types/elementary-content";
 import { ElementaryText } from "./ElementaryText";
 import styles from "./ElementaryLesson.module.css";
 
-const EMOTION_COPY_IDS: Readonly<Record<ElementaryCharacterEmotion, string>> = {
-  neutral: "emotion-neutral",
-  curious: "emotion-curious",
-  thinking: "emotion-thinking",
-  confused: "emotion-confused",
-  surprised: "emotion-surprised",
-  encouraging: "emotion-encouraging",
-  happy: "emotion-happy",
-  confident: "emotion-confident",
-};
-
 export function ElementaryCharacterBadge({
   speakerId,
+  labelId,
 }: {
   speakerId: ElementaryDialogueLine["speakerId"];
+  labelId?: string;
 }) {
   const character = getElementaryCharacter(speakerId);
   if (!character) {
     throw new Error(`Unknown elementary character: ${speakerId}`);
   }
   return (
-    <span className={styles.character} aria-label={character.accessibilityLabel}>
+    <span id={labelId} className={styles.character} aria-label={character.accessibilityLabel}>
       <span
         className={styles.avatarFallback}
         aria-hidden="true"
@@ -53,16 +43,19 @@ export function ElementaryDialogueLineView({
   if (!character) {
     throw new Error(`Unknown elementary character: ${line.speakerId}`);
   }
+  const speakerLabelId = `${line.id}-speaker`;
   return (
     <div
       className={styles.dialogueLine}
       data-dialogue-line={line.id}
       data-speaker={line.speakerId}
       data-speaker-role={character.role}
+      data-testid="elementary-dialogue-bubble"
+      role="group"
+      aria-labelledby={speakerLabelId}
     >
       <div className={styles.dialogueMeta}>
-        <ElementaryCharacterBadge speakerId={line.speakerId} />
-        <span className={styles.emotionLabel}>{elementaryUiCopy(EMOTION_COPY_IDS[line.emotion])}</span>
+        <ElementaryCharacterBadge speakerId={line.speakerId} labelId={speakerLabelId} />
       </div>
       <p className={styles.dialogueText}>
         <ElementaryText content={line.content} />

@@ -68,6 +68,34 @@ test("math lesson renders dialogue, characters, visual, and an 8-problem practic
   await expect(practice.getByText("/ 8")).toBeVisible();
 });
 
+for (const width of [375, 390, 768, 1280]) {
+  test(`dialogue uses left/right bubbles without emotion labels at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(MATH_LESSON);
+    const teacher = page.locator('[data-testid="elementary-dialogue-bubble"][data-speaker="tomiyama"]').first();
+    const student = page.locator('[data-testid="elementary-dialogue-bubble"][data-speaker="hinano"]').first();
+    await expect(teacher).toBeVisible();
+    await expect(student).toBeVisible();
+    await expect(teacher).toContainText("冨山");
+    await expect(teacher).toContainText("先生");
+    await expect(student).toContainText("ひなのちゃん");
+    await expect(page.locator('[class*="emotionLabel"]')).toHaveCount(0);
+    const teacherBox = await teacher.boundingBox();
+    const studentBox = await student.boundingBox();
+    expect(teacherBox).not.toBeNull();
+    expect(studentBox).not.toBeNull();
+    expect(teacherBox!.x).toBeLessThan(studentBox!.x);
+    const order = await page.locator('[data-dialogue-line]').evaluateAll((elements) =>
+      elements.map((element) => element.getAttribute("data-speaker")),
+    );
+    expect(order.slice(0, 2)).toEqual(["hinano", "tomiyama"]);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+    );
+    expect(overflow).toBe(false);
+  });
+}
+
 test("Japanese lesson shows the original story and practice set", async ({ page }) => {
   await page.goto(JP_LESSON);
   await expect(page.locator("h1")).toHaveCount(1);
