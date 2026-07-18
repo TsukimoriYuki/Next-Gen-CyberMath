@@ -11,6 +11,7 @@ export const ELEMENTARY_EXPANSION_WAVE_1 = Object.freeze({
   releaseApprovalSource: "user-explicit-approval",
   reviewerType: "human-owner",
   reviewSource: "user-explicit-review",
+  createdAt: "2026-07-18",
   reviewedAt: "2026-07-18",
   approvedAt: "2026-07-18",
   reviewNote: "ユーザー本人が実画面を確認し問題なしと判断しました。",

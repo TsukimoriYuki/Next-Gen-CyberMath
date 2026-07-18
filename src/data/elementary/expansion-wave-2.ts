@@ -53,6 +53,7 @@ export const ELEMENTARY_EXPANSION_WAVE_2 = Object.freeze({
   releaseApprovalSource: "none",
   reviewerType: "none",
   reviewSource: "none",
+  createdAt: "2026-07-18",
   reviewedAt: null,
   approvedAt: null,
   reviewNote: "教材内容はユーザー本人の実画面確認前です。人間レビューと明示承認を待っています。",

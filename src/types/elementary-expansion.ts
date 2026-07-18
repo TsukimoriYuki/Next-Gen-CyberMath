@@ -14,6 +14,7 @@ export type ElementaryExpansionWave = Readonly<{
   releaseApprovalSource: "none" | "user-explicit-approval";
   reviewerType: "human-owner" | "none";
   reviewSource: "user-explicit-review" | "none";
+  createdAt: string;
   reviewedAt: string | null;
   approvedAt: string | null;
   reviewNote: string;
