@@ -3,6 +3,8 @@ export type ElementaryExpansionFixture = Readonly<{
   appearsInPublishedBeta: boolean;
   explicitApproval: string;
   approvalSource: string;
+  humanReviewStatus?: string;
+  formalReleaseStatus?: string;
   automaticRelease: boolean;
   remainder?: Readonly<{ divisor: number; remainder: number }>;
   japaneseEvidence?: string;
@@ -27,6 +29,15 @@ export function inspectElementaryExpansionFixture(
   if (fixture.automaticRelease !== false) add("automatic-release-disabled", false, fixture.automaticRelease);
   if (fixture.explicitApproval === "approved" && fixture.approvalSource !== "user-explicit-approval") {
     add("no-ai-approval", "user-explicit-approval", fixture.approvalSource);
+  }
+  if (fixture.publicationStatus === "beta" && fixture.explicitApproval !== "approved") {
+    add("public-requires-approval", "approved", fixture.explicitApproval);
+  }
+  if (fixture.publicationStatus === "beta" && fixture.humanReviewStatus !== "approved") {
+    add("public-requires-human-review", "approved", fixture.humanReviewStatus);
+  }
+  if (fixture.formalReleaseStatus === "ready") {
+    add("formal-release-hold", "hold", fixture.formalReleaseStatus);
   }
   if (fixture.remainder && (
     fixture.remainder.divisor <= 0 ||

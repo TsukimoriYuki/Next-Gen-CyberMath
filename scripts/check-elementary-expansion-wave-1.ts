@@ -84,9 +84,12 @@ for (const [key, expected, actual] of [
 ] as const) check(actual === expected, issue("inventory", key, expected, actual, "src/lib/elementary-inventory.ts"));
 check(inventory.combinedProblemCounts.published === 1372, issue("inventory", "published-combined", 1372, inventory.combinedProblemCounts.published, "src/lib/elementary-inventory.ts"));
 check(inventory.combinedProblemCounts.registered === 1420, issue("inventory", "registered-combined", 1420, inventory.combinedProblemCounts.registered, "src/lib/elementary-inventory.ts"));
-check(ELEMENTARY_EXPANSION_WAVE_1.explicitReleaseApproval === "pending", issue("wave-1", "approval-pending", "pending", ELEMENTARY_EXPANSION_WAVE_1.explicitReleaseApproval, "src/data/elementary/expansion-wave-1.ts"));
+check(ELEMENTARY_EXPANSION_WAVE_1.explicitReleaseApproval === "approved", issue("wave-1", "approval", "approved", ELEMENTARY_EXPANSION_WAVE_1.explicitReleaseApproval, "src/data/elementary/expansion-wave-1.ts"));
+check(ELEMENTARY_EXPANSION_WAVE_1.approvalSource === "user-explicit-approval", issue("wave-1", "approval-source", "user-explicit-approval", ELEMENTARY_EXPANSION_WAVE_1.approvalSource, "src/data/elementary/expansion-wave-1.ts"));
+check(ELEMENTARY_EXPANSION_WAVE_1.releaseApprovalSource === "user-explicit-approval", issue("wave-1", "release-approval-source", "user-explicit-approval", ELEMENTARY_EXPANSION_WAVE_1.releaseApprovalSource, "src/data/elementary/expansion-wave-1.ts"));
+check(ELEMENTARY_EXPANSION_WAVE_1.reviewerType === "human-owner" && ELEMENTARY_EXPANSION_WAVE_1.reviewSource === "user-explicit-review", issue("wave-1", "human-review-source", "human-owner / user-explicit-review", `${ELEMENTARY_EXPANSION_WAVE_1.reviewerType} / ${ELEMENTARY_EXPANSION_WAVE_1.reviewSource}`, "src/data/elementary/expansion-wave-1.ts"));
 check(ELEMENTARY_EXPANSION_WAVE_1.automaticRelease === false, issue("wave-1", "automatic-release", false, ELEMENTARY_EXPANSION_WAVE_1.automaticRelease, "src/data/elementary/expansion-wave-1.ts"));
-check(Object.values(ELEMENTARY_EXPANSION_WAVE_1.humanReviews).every((status) => status === "not-reviewed"), issue("wave-1", "human-review", "all not-reviewed", ELEMENTARY_EXPANSION_WAVE_1.humanReviews, "src/data/elementary/expansion-wave-1.ts"));
+check(Object.values(ELEMENTARY_EXPANSION_WAVE_1.humanReviews).every((status) => status === "approved"), issue("wave-1", "human-review", "all approved", ELEMENTARY_EXPANSION_WAVE_1.humanReviews, "src/data/elementary/expansion-wave-1.ts"));
 
 if (issues.length) {
   console.error(`elementary expansion wave 1 QA FAILED: ${issues.length} issue(s).`);
