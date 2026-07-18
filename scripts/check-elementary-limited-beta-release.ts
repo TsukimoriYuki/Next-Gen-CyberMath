@@ -38,7 +38,7 @@ async function main() {
   const combined = buildCombinedContentInventory("phase-k-limited-beta", "2026-07-18T00:00:00.000Z");
   const packageJson = JSON.parse(read("package.json")) as { scripts?: Record<string, string> };
   const releasePageSource = read("src/app/elementary/showcase/limited-beta-release/page.tsx");
-  const hiddenSpecSource = read("e2e/elementary-pilot-hidden.spec.ts");
+  const productionSpecSource = read("e2e/elementary-limited-beta-production.spec.ts");
   const dataSource = read("src/data/elementary/release.ts");
 
   const expectedReviews = [
@@ -131,12 +131,15 @@ async function main() {
   );
 
   const releaseChecks = [
-    ["current-status", ELEMENTARY_SITE.publicationStatus, "hidden"],
-    ["current-channel", release.currentChannel, "hidden"],
+    ["current-status", ELEMENTARY_SITE.publicationStatus, "beta"],
+    ["current-channel", release.currentChannel, "limited-beta"],
     ["target-channel", release.targetChannel, "limited-beta"],
     ["release-readiness", release.readiness, "ready"],
     ["release-recommendation", release.recommendation, "limited-beta-ready"],
-    ["explicit-approval", release.explicitReleaseApproval, "pending"],
+    ["explicit-approval", release.explicitReleaseApproval, "approved"],
+    ["approval-source", release.approvalSource, "user-explicit-approval"],
+    ["approved-at", release.approvedAt, "2026-07-18"],
+    ["release-state", release.releaseState, "active"],
     ["formal-release", release.formalReleaseRecommendation, "hold"],
   ] as const;
   for (const [id, actual, expected] of releaseChecks) {
@@ -159,9 +162,9 @@ async function main() {
       actual: values.map((value) => value.id), source: "src/data/elementary/release.ts", blocking: true,
     });
   }
-  check(hiddenSpecSource.includes('"/elementary/showcase/limited-beta-release"'), {
+  check(productionSpecSource.includes('"/elementary/showcase/limited-beta-release"'), {
     checkId: "production-hidden-route", area: "release", expected: "production 404 Playwright coverage",
-    actual: "missing", source: "e2e/elementary-pilot-hidden.spec.ts", blocking: true,
+    actual: "missing", source: "e2e/elementary-limited-beta-production.spec.ts", blocking: true,
   });
   const sitemapUrls = (await sitemap()).map((entry) => entry.url);
   check(!sitemapUrls.some((url) => url.includes("/elementary")), {
@@ -223,8 +226,8 @@ async function main() {
     return;
   }
 
-  console.log("limited beta preflight: ready");
-  console.log("release action: pending explicit approval");
+  console.log("limited beta release: active");
+  console.log("formal release: hold");
 }
 
 void main();

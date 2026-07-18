@@ -48,7 +48,7 @@ if (inventory) {
   check("basicCount", 18, totals.basicCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
   check("standardCount", 6, totals.standardCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
   check("approved visualAssetCount", 2, totals.visualAssetCount, "ELEMENTARY_VISUAL_ASSETS", "src/data/elementary/assets/visual-assets.ts");
-  check("publicationStatus", "hidden", totals.publicationStatus);
+  check("publicationStatus", "beta", totals.publicationStatus);
   check("reviewStatus", "pilot", totals.reviewStatus);
   check("lessonCoverage", { "not-started": 0, partial: 3, covered: 0, reviewed: 0 }, totals.lessonCoverage);
   check("assessmentCoverage", { "not-started": 0, partial: 3, covered: 0, reviewed: 0 }, totals.assessmentCoverage);

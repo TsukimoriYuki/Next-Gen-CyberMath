@@ -123,7 +123,7 @@ function selfGrade(problem: ElementaryProblem) {
 
 function validateProblem(problem: ElementaryProblem) {
   const label = `problem "${problem.id}"`;
-  check(problem.publicationStatus === "hidden", `${label} must stay hidden`);
+  check(problem.publicationStatus === "beta", `${label} must be limited-beta content`);
   check(problem.reviewStatus === "pilot", `${label} must be pilot`);
   check(problem.sourceType === "original", `${label} sourceType must be original`);
   check(problem.copyrightStatus === "original", `${label} copyrightStatus must be original`);

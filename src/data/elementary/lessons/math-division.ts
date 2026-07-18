@@ -59,7 +59,7 @@ export const ELEMENTARY_MATH_DIVISION_LESSON = {
     "eg3-math-division-word-problem",
     "eg3-math-division-check-answer",
   ],
-  publicationStatus: "hidden",
+  publicationStatus: "beta",
   reviewStatus: "pilot",
   sourceType: "original",
   copyrightStatus: "original",

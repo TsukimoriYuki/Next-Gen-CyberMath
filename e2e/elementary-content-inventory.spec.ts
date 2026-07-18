@@ -29,7 +29,7 @@ test("content inventory shows all subject and curriculum breakdowns", async ({ p
   await expect(page.getByText("objective参照").locator("..")).toContainText("9件");
   await expect(page.getByText("lesson coverage").last().locator("..")).toContainText("partial 3件");
   await expect(page.getByText("assessment coverage").last().locator("..")).toContainText("partial 3件");
-  await expect(page.getByText("hidden", { exact: true })).toBeVisible();
+  await expect(page.getByText("beta", { exact: true })).toBeVisible();
   await expect(page.getByText("pilot", { exact: true })).toBeVisible();
 });
 

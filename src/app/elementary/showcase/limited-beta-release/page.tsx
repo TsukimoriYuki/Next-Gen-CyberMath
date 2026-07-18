@@ -28,7 +28,7 @@ export default function ElementaryLimitedBetaReleasePage() {
         <h1>小学生版 limited beta release</h1>
         <p>
           限定betaの公開対象と事前条件を確認するページです。
-          準備完了は公開中を意味せず、この画面から公開状態を変更することもできません。
+          現在の公開範囲とrollback条件を確認します。この画面から公開状態を変更することはできません。
         </p>
       </header>
 
@@ -37,6 +37,7 @@ export default function ElementaryLimitedBetaReleasePage() {
         <dl className={styles.metrics}>
           <div><dt>現在</dt><dd>{release.currentChannel}</dd></div>
           <div><dt>目標</dt><dd>{release.targetChannel}</dd></div>
+          <div><dt>release state</dt><dd>{release.releaseState}</dd></div>
           <div><dt>preflight</dt><dd>{release.readiness === "ready" ? "✓ ready" : "× blocked"}</dd></div>
           <div><dt>人間レビュー</dt><dd>{release.humanReviewComplete ? "✓ 完了" : "× 未完了"}</dd></div>
           <div><dt>not-reviewed</dt><dd>{release.humanReviewComplete ? "0件" : "あり"}</dd></div>
@@ -45,8 +46,8 @@ export default function ElementaryLimitedBetaReleasePage() {
           <div><dt>自動公開</dt><dd>{release.automaticRelease ? "有効" : "無効"}</dd></div>
         </dl>
         <p className={styles.notice}>
-          publicationStatusは{release.currentPublicationStatus}です。次の操作は公開責任者による明示承認であり、
-          release設定だけでrouteは公開されません。
+          publicationStatusは{release.currentPublicationStatus}です。限定betaは明示承認済みで、
+          自動公開は無効のままです。
         </p>
       </section>
 

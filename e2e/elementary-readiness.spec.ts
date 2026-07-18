@@ -33,14 +33,14 @@ test("guardian page explains scope, privacy, grading, and incomplete features", 
   const response = await page.goto(GUARDIAN_ROUTE);
   expect(response?.status()).toBe(200);
   await expect(page.locator("h1")).toHaveCount(1);
-  await expect(page.getByText("公開前のpilot教材", { exact: false })).toBeVisible();
+  await expect(page.getByTestId("elementary-guardian-page")).toContainText("限定beta");
   await expect(page.getByText("3講座", { exact: true })).toBeVisible();
   await expect(page.getByText("24問", { exact: true })).toBeVisible();
   await expect(page.getByText("個人情報入力を求めません", { exact: false })).toBeVisible();
   await expect(page.getByText("学習進捗をサーバーやデータベースへ保存していません", { exact: false })).toBeVisible();
   await expect(page.getByText("AIによる自由記述の自動採点は使っていません", { exact: false })).toBeVisible();
   await expect(page.getByRole("heading", { name: "まだ実装していないこと" })).toBeVisible();
-  await expect(page.getByText("限定betaの準備は完了", { exact: false })).toBeVisible();
+  await expect(page.getByTestId("elementary-guardian-page")).toContainText("正式公開ではありません");
   await expect(page.getByText("算数・国語・社会の教材内容も実画面で確認", { exact: false })).toBeVisible();
   const body = await page.locator("body").innerText();
   for (const claim of PROHIBITED_CLAIMS) expect(body).not.toContain(claim);
@@ -53,7 +53,7 @@ test("readiness page records completed reviews and limited beta readiness", asyn
   await expect(page.getByText("限定beta準備完了", { exact: true })).toBeVisible();
   await expect(page.getByText("正式公開はまだ推奨しません", { exact: false })).toBeVisible();
   await expect(page.getByText("まだ推奨しない", { exact: true })).toHaveCount(1);
-  await expect(page.getByText("hidden", { exact: true })).toBeVisible();
+  await expect(page.getByText("beta", { exact: true })).toBeVisible();
   await expect(page.getByText("3講座", { exact: true })).toBeVisible();
   await expect(page.getByText("24問", { exact: true })).toBeVisible();
   await expect(page.locator('[data-status="warning"]')).toHaveCount(6);

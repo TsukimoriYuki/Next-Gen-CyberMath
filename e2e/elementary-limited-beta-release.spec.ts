@@ -20,13 +20,13 @@ test("limited beta release page shows ready preflight without publishing control
   const response = await page.goto(RELEASE_ROUTE);
   expect(response?.status()).toBe(200);
   await expect(page.locator("h1")).toHaveCount(1);
-  await expect(page.getByText("hidden", { exact: true })).toBeVisible();
-  await expect(page.getByText("limited-beta", { exact: true })).toBeVisible();
+  await expect(page.getByText("limited-beta", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("active", { exact: true })).toBeVisible();
   await expect(page.getByText("✓ ready", { exact: true })).toBeVisible();
   await expect(page.getByText("✓ 完了", { exact: true })).toBeVisible();
   await expect(page.getByText("0件", { exact: true })).toBeVisible();
   await expect(page.getByText("△ hold", { exact: true })).toBeVisible();
-  await expect(page.getByText("○ pending", { exact: true })).toBeVisible();
+  await expect(page.getByText("○ approved", { exact: true })).toBeVisible();
   await expect(page.getByText("無効", { exact: true })).toBeVisible();
   await expect(page.getByText("合計24問", { exact: true })).toBeVisible();
   await expect(page.getByText("算数pilot 1講座・8問", { exact: true })).toBeVisible();

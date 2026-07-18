@@ -63,7 +63,7 @@ function evaluateLiveGate(
     case "formal-release-completeness":
       return { status: "warning" as const, actual: inventory.totals.lessonCoverage, evidence: "全3entryのcoverageはpartialです。" };
     case "qa-publication":
-      return { status: ELEMENTARY_SITE.publicationStatus === "hidden" ? "pass" as const : "fail" as const, actual: ELEMENTARY_SITE.publicationStatus, evidence: `publicationStatusは${ELEMENTARY_SITE.publicationStatus}です。` };
+      return { status: ["hidden", "beta"].includes(ELEMENTARY_SITE.publicationStatus) ? "pass" as const : "fail" as const, actual: ELEMENTARY_SITE.publicationStatus, evidence: `publicationStatusは${ELEMENTARY_SITE.publicationStatus}です。` };
     default:
       return { status: gate.defaultStatus, evidence: gate.sourceQa ? `${gate.sourceQa}へ接続済みです。` : `${gate.source}で確認します。` };
   }
@@ -132,7 +132,7 @@ export function buildElementaryPublicationReadiness(
   const limitedBetaReady =
     betaBlocking.length === 0 &&
     releaseDecision?.humanReview?.status === "reviewed" &&
-    ELEMENTARY_SITE.publicationStatus === "hidden";
+    ["hidden", "beta"].includes(ELEMENTARY_SITE.publicationStatus);
   const betaRecommendation = limitedBetaReady
     ? "limited-beta-ready" as const
     : "hold" as const;

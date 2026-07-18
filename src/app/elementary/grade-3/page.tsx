@@ -4,10 +4,10 @@ import {
   ElementaryPageHeader,
   ElementarySection,
 } from "@/components/elementary/ElementaryShell";
-import {
-  getElementaryGradeSubjects,
-} from "@/data/elementary";
+import { ElementaryBetaNotice } from "@/components/elementary/ElementaryBetaNotice";
+import { getElementaryGradeSubjects } from "@/data/elementary";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
+import { requireElementaryGrade3RegularCourseAccess } from "@/lib/elementary-route-guard";
 
 const SUBJECT_COPY_IDS = {
   math: ["grade-3-math-title", "grade-3-math-description"],
@@ -16,8 +16,9 @@ const SUBJECT_COPY_IDS = {
 } as const;
 
 export default function ElementaryGrade3Page() {
+  requireElementaryGrade3RegularCourseAccess();
   const subjects = getElementaryGradeSubjects("grade-3", "regular")
-    .filter((entry) => entry.availability === "planned")
+    .filter((entry) => entry.availability === "planned" && entry.publicationStatus === "beta")
     .flatMap((entry) => {
       const copyIds = SUBJECT_COPY_IDS[entry.subjectId as keyof typeof SUBJECT_COPY_IDS];
       return copyIds ? [{ id: entry.subjectId, copyIds }] : [];
@@ -30,6 +31,7 @@ export default function ElementaryGrade3Page() {
         title={elementaryUiCopy("grade-3-title")}
         description={elementaryUiCopy("grade-3-description")}
       />
+      <ElementaryBetaNotice />
       <ElementarySection title={elementaryUiCopy("grade-3-subject-section")}>
         <ElementaryCardGrid>
           {subjects.map((subject) => (

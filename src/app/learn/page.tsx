@@ -14,6 +14,9 @@ import {
   SUBJECTS,
   type SubjectId,
 } from "@/data/subjects";
+import { ELEMENTARY_SITE } from "@/data/elementary";
+import { ELEMENTARY_LIMITED_BETA_RELEASE } from "@/data/elementary/release";
+import { isElementaryLimitedBetaActive } from "@/lib/elementary-release";
 import { createPublicMetadata } from "@/lib/public-metadata";
 
 export const metadata: Metadata = createPublicMetadata({
@@ -70,6 +73,7 @@ const ACTIONS_BY_SUBJECT = {
 
 export default function LearnPage() {
   const subjects = filterVisibleSubjectsByCapability(SUBJECTS, "courses");
+  const elementaryActive = isElementaryLimitedBetaActive(ELEMENTARY_SITE.publicationStatus);
   if (subjects.length === 0) notFound();
 
   return (
@@ -81,6 +85,19 @@ export default function LearnPage() {
           description="現在公開している教科の教材だけを案内します。学んだ後は、問題演習で理解を確かめられます。"
           actions={[{ label: "教科から選ぶ", href: "/subjects" }]}
         />
+        {elementaryActive ? (
+          <LearningSection
+            title="小学生向け"
+            description="限定βとして公開中の、小学3年生向けpilot教材です。高校生向け教材とは分けて案内しています。"
+          >
+            <LearningActionGrid
+              actions={[{
+                ...ELEMENTARY_LIMITED_BETA_RELEASE.learnCard,
+                icon: BookOpen,
+              }]}
+            />
+          </LearningSection>
+        ) : null}
         {subjects.map((subject) => {
           const actions =
             ACTIONS_BY_SUBJECT[subject.id as keyof typeof ACTIONS_BY_SUBJECT];

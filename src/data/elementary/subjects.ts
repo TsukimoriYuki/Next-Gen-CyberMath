@@ -16,7 +16,7 @@ export const ELEMENTARY_SUBJECTS: readonly ElementarySubjectConfig[] = [
     description: "数や図を使って、考え方を一つずつ確かめる教科です。",
     order: 1,
     availability: "planned",
-    publicationStatus: "hidden",
+    publicationStatus: "beta",
   },
   {
     id: "japanese",
@@ -26,7 +26,7 @@ export const ELEMENTARY_SUBJECTS: readonly ElementarySubjectConfig[] = [
     description: "ことばや文章を、根拠を見つけながら読む教科です。",
     order: 2,
     availability: "planned",
-    publicationStatus: "hidden",
+    publicationStatus: "beta",
   },
   {
     id: "social-studies",
@@ -36,7 +36,7 @@ export const ELEMENTARY_SUBJECTS: readonly ElementarySubjectConfig[] = [
     description: "地図や資料から、くらしと地域のつながりを考える教科です。",
     order: 3,
     availability: "planned",
-    publicationStatus: "hidden",
+    publicationStatus: "beta",
   },
   {
     id: "science",

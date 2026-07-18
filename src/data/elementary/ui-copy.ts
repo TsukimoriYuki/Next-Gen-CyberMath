@@ -125,7 +125,7 @@ export const ELEMENTARY_UI_COPY: readonly ElementaryUiCopyEntry[] = [
   developer("visual-showcase-metadata-title", "開発用の視覚素材見本", "metadata"),
   developer("visual-showcase-metadata-description", "小学生版の視覚素材、クレジット、fallbackを確認する非公開ページです。", "metadata"),
   developer("credits-metadata-title", "画像・図のクレジット", "metadata"),
-  developer("credits-metadata-description", "小学生版で使う画像や図の出典と権利情報を確認する非公開ページです。", "metadata"),
+  developer("credits-metadata-description", "小学生版・限定betaで使う画像や図の出典とクレジットをご案内します。", "metadata"),
   developer("lesson-prototype-label", "開発用の講座見本"),
   developer("lesson-meta-target-label", "対象"),
   developer("lesson-meta-target-value", "小学3年生・算数"),

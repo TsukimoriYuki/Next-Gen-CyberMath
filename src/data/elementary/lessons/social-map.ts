@@ -55,7 +55,7 @@ export const ELEMENTARY_SOCIAL_MAP_LESSON = {
     "eg3-social-inference-say",
     "eg3-social-inference-cannot-say",
   ],
-  publicationStatus: "hidden",
+  publicationStatus: "beta",
   reviewStatus: "pilot",
   sourceType: "original",
   copyrightStatus: "original",

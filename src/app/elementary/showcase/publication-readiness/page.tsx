@@ -116,8 +116,8 @@ export default function ElementaryPublicationReadinessPage() {
           <article><span>publicationStatus</span><strong>{readiness.publicationStatus}</strong></article>
         </div>
         <p className={styles.holdNotice}>
-          人間レビューは完了し、限定betaの準備は整いました。ただし小学3年生全体対応ではなく、
-          正式公開はまだ推奨しません。明示的な公開承認を待つためpublicationStatusはhiddenを維持します。
+          人間レビューと明示承認を完了し、限定betaを公開中です。ただし小学3年生全体対応ではなく、
+          正式公開はまだ推奨しません。publicationStatusはbetaです。
         </p>
       </section>
 

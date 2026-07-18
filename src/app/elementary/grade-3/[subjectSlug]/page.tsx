@@ -5,10 +5,12 @@ import {
   ElementaryPageHeader,
   ElementarySection,
 } from "@/components/elementary/ElementaryShell";
+import { ElementaryBetaNotice } from "@/components/elementary/ElementaryBetaNotice";
 import { ElementaryText } from "@/components/elementary/ElementaryText";
-import { getElementaryGradeSubjects, getElementarySubject } from "@/data/elementary";
+import { getElementaryGradeSubjects } from "@/data/elementary";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import { getElementaryUnitsForSubject } from "@/lib/elementary-lessons";
+import { requireElementaryGrade3RegularSubjectAccess } from "@/lib/elementary-route-guard";
 
 const SUBJECT_COPY_IDS: Readonly<Record<string, readonly [string, string]>> = {
   math: ["grade-3-math-title", "grade-3-math-description"],
@@ -28,11 +30,12 @@ export default async function ElementarySubjectPage({
   params: Promise<{ subjectSlug: string }>;
 }) {
   const { subjectSlug } = await params;
-  const subject = getElementarySubject(subjectSlug);
+  requireElementaryGrade3RegularSubjectAccess(subjectSlug);
   const copyIds = SUBJECT_COPY_IDS[subjectSlug];
-  if (!subject || !copyIds || !isPlannedGrade3Subject(subjectSlug)) notFound();
+  if (!copyIds || !isPlannedGrade3Subject(subjectSlug)) notFound();
 
-  const units = getElementaryUnitsForSubject("grade-3", subjectSlug);
+  const units = getElementaryUnitsForSubject("grade-3", subjectSlug)
+    .filter((unit) => unit.publicationStatus === "beta");
 
   return (
     <>
@@ -41,6 +44,7 @@ export default async function ElementarySubjectPage({
         title={elementaryUiCopy(copyIds[0])}
         description={elementaryUiCopy(copyIds[1])}
       />
+      <ElementaryBetaNotice />
       <ElementarySection title={elementaryUiCopy("subject-units-heading")}>
         <ElementaryCardGrid>
           {units.map((unit) => (

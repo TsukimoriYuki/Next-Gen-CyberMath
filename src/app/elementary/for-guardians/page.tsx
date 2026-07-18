@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ElementaryBetaNotice } from "@/components/elementary/ElementaryBetaNotice";
 import { buildElementaryContentInventory } from "@/lib/elementary-inventory";
 import styles from "./GuardianPage.module.css";
 
 export const metadata: Metadata = {
   title: "保護者・教育者の方へ",
-  description: "Cyber Math小学生版pilotの範囲、採点、保存、教材品質を説明する非公開ページです。",
+  description: "Cyber Math小学生版・限定betaの範囲、採点、保存、教材品質をご案内します。",
   robots: {
     index: false,
-    follow: false,
-    googleBot: { index: false, follow: false },
+    follow: true,
+    googleBot: { index: false, follow: true },
   },
 };
 
@@ -22,16 +23,17 @@ export default function ElementaryGuardianPage() {
       className={styles.page}
       data-testid="elementary-guardian-page"
       data-text-audience="developer"
-      data-page-audience="guardian developer"
+      data-page-audience="guardian"
     >
       <header className={styles.header}>
         <p className={styles.eyebrow}>FOR GUARDIANS AND EDUCATORS</p>
         <h1>保護者・教育者の方へ</h1>
         <p>
-          Cyber Math小学生版は、小学3年生の算数・国語・社会から始めた公開前のpilot教材です。
+          Cyber Math小学生版は、小学3年生の算数・国語・社会から始めた限定betaのpilot教材です。
           現在の3講座だけで小学3年生全体に対応しているものではありません。
         </p>
       </header>
+      <ElementaryBetaNotice />
 
       <section className={styles.section} aria-labelledby="guardian-current-scope">
         <h2 id="guardian-current-scope">現在確認できる範囲</h2>
@@ -51,8 +53,7 @@ export default function ElementaryGuardianPage() {
         <div className={styles.cardGrid}>
           <article className={styles.card}>
             <h3>学習指導要領との対応</h3>
-            <p>文部科学省の資料を参照したcurriculum registryへ講座と問題を接続し、coverageをpartialとして管理しています。</p>
-            <Link href="/elementary/showcase/curriculum">学習指導要領との接続内容を確認する</Link>
+            <p>文部科学省の資料を参照し、該当する学習内容と講座・問題の対応を管理しています。現在の対応範囲は一部です。</p>
           </article>
           <article className={styles.card}>
             <h3>学年別漢字とふりがな</h3>
@@ -60,7 +61,7 @@ export default function ElementaryGuardianPage() {
           </article>
           <article className={styles.card}>
             <h3>画像・図の権利管理</h3>
-            <p>現在使う2件の図はCyber Mathのオリジナルです。権利状態、checksum、用途、クレジットをregistryで管理しています。</p>
+            <p>現在使う2件の図はCyber Mathのオリジナルです。権利状態、用途、クレジットを管理しています。外部素材は使用していません。</p>
             <Link href="/elementary/credits">画像・図のクレジットを確認する</Link>
           </article>
         </div>
@@ -106,10 +107,9 @@ export default function ElementaryGuardianPage() {
         <p>
           ユーザー本人が、子ども向け文言、保護者向け説明、画像・図の権利管理を確認し、
           算数・国語・社会の教材内容も実画面で確認して、問題なしと承認しました。
-          限定betaの準備は完了していますが、公開状態はhiddenのままで、明示的な公開承認を待っています。
-          小学3年生全範囲への対応ではなく、正式公開はまだ推奨しません。
+          ユーザー本人の明示承認に基づき、現在は限定betaとして公開しています。
+          小学3年生全範囲への対応ではなく、内容や画面を改善中のため正式公開ではありません。
         </p>
-        <Link href="/elementary/showcase/publication-readiness">publication readinessの内部判定を確認する</Link>
       </section>
     </div>
   );

@@ -1,14 +1,20 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { ElementaryBetaNotice } from "@/components/elementary/ElementaryBetaNotice";
+import { ELEMENTARY_SITE } from "@/data/elementary";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import styles from "./ElementaryShell.module.css";
 
 export function ElementaryShell({ children }: { children: ReactNode }) {
   return (
     <div className={styles.shell} data-school-level="elementary" data-testid="elementary-shell">
-      <p className={styles.internalBanner} data-testid="elementary-internal-banner" data-text-audience="developer">
-        {elementaryUiCopy("internal-banner")}
-      </p>
+      {ELEMENTARY_SITE.publicationStatus === "beta" ? (
+        <ElementaryBetaNotice variant="compact" />
+      ) : (
+        <p className={styles.internalBanner} data-testid="elementary-internal-banner" data-text-audience="developer">
+          {elementaryUiCopy("internal-banner")}
+        </p>
+      )}
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <p className={styles.brand}>{elementaryUiCopy("shell-brand")}</p>

@@ -53,7 +53,17 @@ function main() {
     ELEMENTARY_SUBJECTS.map((subject) => subject.id).join(",") === "math,japanese,social-studies,science",
     "subject registry must contain math, Japanese, social studies, and future science",
   );
-  check(ELEMENTARY_SITE.publicationStatus === "hidden", "elementary site must start hidden");
+  check(
+    ELEMENTARY_SUBJECTS.filter((subject) => subject.id !== "science").every((subject) => subject.publicationStatus === "beta") &&
+      ELEMENTARY_SUBJECTS.find((subject) => subject.id === "science")?.publicationStatus === "hidden",
+    "only math, Japanese, and social studies may be limited beta",
+  );
+  check(ELEMENTARY_SITE.publicationStatus === "beta", "elementary site must be limited beta");
+  check(
+    ELEMENTARY_GRADES_BY_ID["grade-3"]?.publicationStatus === "beta" &&
+      ELEMENTARY_GRADES.filter((grade) => grade.id !== "grade-3").every((grade) => grade.publicationStatus === "hidden"),
+    "only grade-3 may be published as beta",
+  );
   check(ELEMENTARY_GRADES_BY_ID["grade-3"]?.href === "/elementary/grade-3", "grade-3 route is missing");
   check(
     ELEMENTARY_GRADES.filter((grade) => grade.href).map((grade) => grade.id).join(",") === "grade-3",
@@ -62,6 +72,10 @@ function main() {
   check(
     ELEMENTARY_COURSE_TYPES.find((course) => course.id === "regular")?.availability === "planned",
     "regular course must be planned",
+  );
+  check(
+    ELEMENTARY_COURSE_TYPES.find((course) => course.id === "regular")?.publicationStatus === "beta",
+    "regular course must be limited beta",
   );
   check(
     ELEMENTARY_COURSE_TYPES.find((course) => course.id === "exam-prep")?.availability === "unavailable",
@@ -80,6 +94,13 @@ function main() {
   check(
     grade3Regular.find((entry) => entry.subjectId === "science")?.availability === "unavailable",
     "grade-3 science must remain unavailable",
+  );
+  check(
+    grade3Regular
+      .filter((entry) => entry.subjectId !== "science")
+      .every((entry) => entry.publicationStatus === "beta") &&
+      grade3Regular.find((entry) => entry.subjectId === "science")?.publicationStatus === "hidden",
+    "only the three approved grade-3 subjects may be limited beta",
   );
   check(
     ELEMENTARY_GRADE_SUBJECTS.every(

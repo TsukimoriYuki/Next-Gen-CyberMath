@@ -1,0 +1,67 @@
+.notice,
+.compact {
+  min-width: 0;
+  border: 1px solid #d6b653;
+  background: #fff9df;
+  color: #49370b;
+  overflow-wrap: anywhere;
+}
+
+.notice {
+  margin-top: 1.5rem;
+  border-radius: 1.1rem;
+  padding: clamp(1rem, 4vw, 1.4rem);
+}
+
+.compact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem 0.85rem;
+  padding: 0.65rem 1rem;
+  text-align: center;
+}
+
+.badge {
+  display: inline-flex;
+  margin: 0;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-weight: 850;
+}
+
+.compactText {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.messages {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.8rem;
+}
+
+.messages p {
+  margin: 0;
+  line-height: 1.75;
+}
+
+.link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  margin-top: 0.9rem;
+  border-radius: 0.75rem;
+  color: #075f45;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.link:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}

@@ -4,6 +4,7 @@ import {
   ElementaryPageHeader,
   ElementarySection,
 } from "@/components/elementary/ElementaryShell";
+import { ElementaryBetaNotice } from "@/components/elementary/ElementaryBetaNotice";
 import { ELEMENTARY_SITE, getElementaryGrade } from "@/data/elementary";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 
@@ -17,6 +18,7 @@ export default function ElementaryPage() {
         title={elementaryUiCopy("home-title")}
         description={elementaryUiCopy("home-description")}
       />
+      <ElementaryBetaNotice />
       <ElementarySection title={elementaryUiCopy("home-section-title")}>
         <ElementaryCardGrid>
           {grade3?.href === "/elementary/grade-3" ? (

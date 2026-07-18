@@ -17,7 +17,7 @@ const base = {
   lessonIds: [LESSON_ID],
   curriculumEntryIds: ["g3-social-local-area-municipality"],
   visualAssetId: MAP_ASSET_ID,
-  publicationStatus: "hidden",
+  publicationStatus: "beta",
   reviewStatus: "pilot",
   sourceType: "original",
   copyrightStatus: "original",

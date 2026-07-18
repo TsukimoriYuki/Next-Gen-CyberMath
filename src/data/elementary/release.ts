@@ -1,10 +1,11 @@
-import { content, text } from "@/data/elementary/inline";
+import { content, ruby, text } from "@/data/elementary/inline";
+import { LIMITED_BETA_LABEL_RUBY_EXCEPTION_ID } from "@/data/elementary/kanji/ruby-exceptions";
 import type { ElementaryLimitedBetaReleaseConfig } from "@/types/elementary-release";
 
 export const ELEMENTARY_LIMITED_BETA_RELEASE = Object.freeze({
-  currentChannel: "hidden",
+  currentChannel: "limited-beta",
   targetChannel: "limited-beta",
-  currentPublicationStatus: "hidden",
+  currentPublicationStatus: "beta",
   declaredReadiness: "ready",
   recommendation: "limited-beta-ready",
   approvedScope: [
@@ -30,7 +31,7 @@ export const ELEMENTARY_LIMITED_BETA_RELEASE = Object.freeze({
   prerequisites: [
     { id: "readiness-qa", label: "publication readiness QA", source: "qa:elementary:readiness" },
     { id: "release-preflight", label: "limited beta preflight QA", source: "qa:elementary:limited-beta-release" },
-    { id: "production-hidden", label: "公開変更前はproduction 404", source: "qa:elementary:pilot:hidden:e2e" },
+    { id: "production-scope", label: "productionの公開・非公開範囲", source: "qa:elementary:limited-beta:production:e2e" },
     { id: "explicit-owner-approval", label: "公開責任者による明示的な公開承認", source: "release owner decision" },
   ],
   rollbackConditions: [
@@ -43,13 +44,15 @@ export const ELEMENTARY_LIMITED_BETA_RELEASE = Object.freeze({
     { id: "high-school-regression", label: "小学生routeを原因とする高校版障害" },
     { id: "publication-guard", label: "publication guardの誤動作" },
   ],
-  explicitReleaseApproval: "pending",
+  explicitReleaseApproval: "approved",
+  approvalSource: "user-explicit-approval",
+  approvedAt: "2026-07-18",
   automaticRelease: false,
   preparedAt: "2026-07-18",
   lastReviewedAt: "2026-07-18",
   learnerDisplay: {
     guardianBadge: "限定β版",
-    badge: content(text("げんていβばん")),
+    badge: content(ruby("限定β版", "げんていべーたばん", LIMITED_BETA_LABEL_RUBY_EXCEPTION_ID)),
     messages: [
       content(text("小学3年生のみなさんが使えます。")),
       content(text("いま学べる教科は、算数・国語・社会です。")),
@@ -60,5 +63,12 @@ export const ELEMENTARY_LIMITED_BETA_RELEASE = Object.freeze({
       content(text("なかみや使いやすさは、これからもよくしていきます。")),
       content(text("これは、せいしきなばんではありません。")),
     ],
+  },
+  learnCard: {
+    title: "小学生版",
+    description: "小学3年生の算数・国語・社会を、いまは各教科1講座ずつ学べます。",
+    href: "/elementary",
+    label: "小学生版を開く",
+    meta: "小学3年生・限定β・3講座",
   },
 } as const satisfies ElementaryLimitedBetaReleaseConfig);

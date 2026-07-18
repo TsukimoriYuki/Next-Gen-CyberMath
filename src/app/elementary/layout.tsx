@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   description: elementaryUiCopy("layout-metadata-description"),
   robots: {
     index: false,
-    follow: false,
-    googleBot: { index: false, follow: false },
+    follow: true,
+    googleBot: { index: false, follow: true },
   },
 };
 

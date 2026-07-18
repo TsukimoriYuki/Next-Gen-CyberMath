@@ -35,7 +35,7 @@ function validateFixture(problem: ElementaryProblem): string[] {
   if (!unitIds.has(problem.unitId)) issues.push("unknown-unit");
   if (!problem.curriculumEntryIds.every((id) => Boolean(ELEMENTARY_CURRICULUM_ENTRIES_BY_ID[id]))) issues.push("unknown-curriculum-entry");
   if (!problem.curriculumObjectiveIds.every((id) => Boolean(ELEMENTARY_CURRICULUM_OBJECTIVES_BY_ID[id]))) issues.push("unknown-curriculum-objective");
-  if (problem.publicationStatus !== "hidden") issues.push("not-hidden");
+  if (problem.publicationStatus !== "beta") issues.push("not-beta");
   if (extractElementaryInlineText(problem.explanation.detailed).trim().length === 0) issues.push("missing-explanation");
 
   if (problem.answer.kind === "numeric-input") {

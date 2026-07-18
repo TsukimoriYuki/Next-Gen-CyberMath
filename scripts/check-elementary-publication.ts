@@ -52,7 +52,7 @@ async function main() {
   check(!isElementaryResourceDiscoverable("hidden"), "hidden elementary content must not be discoverable");
   check(!isElementaryResourceDiscoverable("internal"), "internal elementary content must not be discoverable");
   check(isElementaryResourceDiscoverable("beta"), "beta elementary content should be discoverable when enabled");
-  check(ELEMENTARY_SITE.publicationStatus === "hidden", "elementary site publication status changed from hidden");
+  check(ELEMENTARY_SITE.publicationStatus === "beta", "elementary site must be limited beta");
   check(
     SUBJECTS.every(
       (subject) => evaluateSubjectPublication(subject, undefined, "production").allowed,
@@ -61,13 +61,24 @@ async function main() {
   );
 
   const sitemapUrls = (await sitemap()).map((entry) => entry.url);
-  check(!sitemapUrls.some((url) => url.includes("/elementary")), "hidden elementary route leaked into sitemap");
-  check(!PRIMARY_NAVIGATION.some((item) => item.href.startsWith("/elementary")), "hidden elementary route leaked into global navigation");
+  check(!sitemapUrls.some((url) => url.includes("/elementary")), "elementary beta route leaked into sitemap");
+  check(!PRIMARY_NAVIGATION.some((item) => item.href.startsWith("/elementary")), "elementary beta route leaked into global navigation");
 
   const root = process.cwd();
   const layoutSource = fs.readFileSync(path.join(root, "src/app/elementary/layout.tsx"), "utf8");
+  const learnSource = fs.readFileSync(path.join(root, "src/app/learn/page.tsx"), "utf8");
   check(layoutSource.includes("requireElementaryPageAccess()"), "elementary layout is missing its route guard");
-  check(layoutSource.includes("index: false") && layoutSource.includes("follow: false"), "elementary metadata must be noindex and nofollow");
+  check(layoutSource.includes("index: false") && layoutSource.includes("follow: true"), "elementary beta metadata must be noindex and follow");
+  const showcaseLayoutSource = fs.readFileSync(path.join(root, "src/app/elementary/showcase/layout.tsx"), "utf8");
+  check(
+    showcaseLayoutSource.includes('status: "hidden"'),
+    "elementary showcase routes must retain a production-hidden guard",
+  );
+  check(
+    learnSource.includes("isElementaryLimitedBetaActive") &&
+      learnSource.includes("ELEMENTARY_LIMITED_BETA_RELEASE.learnCard"),
+    "/learn must derive the elementary card from the central active-release metadata",
+  );
 
   if (issues.length) {
     console.error(`elementary publication QA FAILED: ${issues.length} issue(s).`);
@@ -75,7 +86,7 @@ async function main() {
     process.exitCode = 1;
     return;
   }
-  console.log("elementary publication QA passed: hidden routes are authoring-only, fail closed, and absent from discovery.");
+  console.log("elementary publication QA passed: approved beta routes are accessible, showcase routes fail closed, and elementary remains absent from discovery.");
 }
 
 void main();

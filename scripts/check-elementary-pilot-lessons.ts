@@ -99,7 +99,7 @@ function validateLesson(lesson: ElementaryLesson, expectedSubject: string) {
   check(lesson.subject === expectedSubject, `${label} subject must be ${expectedSubject}`);
   check(lesson.grade === "grade-3", `${label} must be grade-3`);
   check(lesson.courseType === "regular", `${label} must be regular course`);
-  check(lesson.publicationStatus === "hidden", `${label} must stay hidden`);
+  check(lesson.publicationStatus === "beta", `${label} must be limited-beta content`);
   check(lesson.reviewStatus === "pilot", `${label} must be pilot`);
   check(lesson.sourceType === "original", `${label} sourceType must be original`);
   check(lesson.copyrightStatus === "original", `${label} copyrightStatus must be original`);

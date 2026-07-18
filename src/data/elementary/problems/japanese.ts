@@ -16,7 +16,7 @@ const base = {
   lessonIds: [LESSON_ID],
   curriculumEntryIds: ["g3-japanese-reading-literary"],
   curriculumObjectiveIds: ["g3-japanese-reading-literary-evidence"],
-  publicationStatus: "hidden",
+  publicationStatus: "beta",
   reviewStatus: "pilot",
   sourceType: "original",
   copyrightStatus: "original",

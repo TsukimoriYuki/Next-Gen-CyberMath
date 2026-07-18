@@ -50,7 +50,7 @@ async function main() {
   const combined = buildCombinedContentInventory("phase-k-readiness", "2026-07-18T00:00:00.000Z");
   const guardianSource = read("src/app/elementary/for-guardians/page.tsx");
   const readinessPageSource = read("src/app/elementary/showcase/publication-readiness/page.tsx");
-  const hiddenSpecSource = read("e2e/elementary-pilot-hidden.spec.ts");
+  const productionSpecSource = read("e2e/elementary-limited-beta-production.spec.ts");
   const prohibitedClaims = [
     "完全対応",
     "教科書完全準拠",
@@ -201,47 +201,48 @@ async function main() {
     actual: false,
     source: "src/app/elementary/for-guardians/page.tsx",
   });
-  check(ELEMENTARY_SITE.publicationStatus === "hidden", {
+  check(ELEMENTARY_SITE.publicationStatus === "beta", {
     checkId: "publication-status",
     area: "publication",
-    ruleId: "hidden-maintained",
-    expected: "hidden",
+    ruleId: "limited-beta-active",
+    expected: "beta",
     actual: ELEMENTARY_SITE.publicationStatus,
     source: "src/data/elementary/index.ts",
   });
   check(
-    readiness.recommendation.publicationStatus === "hidden" && !readinessPageSource.includes("publicationStatus: \"beta\""),
+    readiness.recommendation.publicationStatus === "beta" && release.automaticRelease === false,
     {
       checkId: "no-auto-publish",
       area: "publication",
-      ruleId: "beta-not-automatic",
-      expected: "hidden and no beta assignment",
+      ruleId: "beta-explicit-not-automatic",
+      expected: "beta from explicit approval with automatic release disabled",
       actual: readiness.recommendation.publicationStatus,
       source: "src/lib/elementary-readiness.ts",
     },
   );
   check(
     release.readiness === "ready" &&
-      release.explicitReleaseApproval === "pending" &&
+      release.explicitReleaseApproval === "approved" &&
       release.automaticRelease === false &&
-      release.currentChannel === "hidden" &&
-      release.targetChannel === "limited-beta",
+      release.currentChannel === "limited-beta" &&
+      release.targetChannel === "limited-beta" &&
+      release.releaseState === "active",
     {
       checkId: "limited-beta-release-state",
       area: "publication",
-      ruleId: "explicit-release-required",
-      expected: "ready / pending / automatic false / hidden -> limited-beta",
+      ruleId: "explicit-release-active",
+      expected: "ready / approved / automatic false / limited-beta active",
       actual: release,
       source: "src/lib/elementary-release.ts",
     },
   );
   check(
-    !(release.currentPublicationStatus === "beta" && release.explicitReleaseApproval === "pending"),
+    release.currentPublicationStatus === "beta" && release.explicitReleaseApproval === "approved",
     {
-      checkId: "pending-approval-cannot-be-live",
+      checkId: "approved-beta-is-live",
       area: "publication",
-      ruleId: "pending-approval-blocks-live-beta",
-      expected: "publication is not beta while approval is pending",
+      ruleId: "approved-beta-required",
+      expected: "beta publication has explicit approval",
       actual: `${release.currentPublicationStatus} / ${release.explicitReleaseApproval}`,
       source: "src/data/elementary/index.ts",
     },
@@ -265,17 +266,16 @@ async function main() {
     source: "src/data/navigation.ts",
   });
   for (const route of [
-    "/elementary/for-guardians",
     "/elementary/showcase/publication-readiness",
     "/elementary/showcase/limited-beta-release",
   ]) {
-    check(hiddenSpecSource.includes(`\"${route}\"`), {
+    check(productionSpecSource.includes(`\"${route}\"`), {
       checkId: route,
       area: "publication",
       ruleId: "production-404-covered",
-      expected: "route in hidden Playwright spec",
+      expected: "route in production scope Playwright spec",
       actual: "missing",
-      source: "e2e/elementary-pilot-hidden.spec.ts",
+      source: "e2e/elementary-limited-beta-production.spec.ts",
     });
   }
 

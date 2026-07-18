@@ -19,7 +19,7 @@ export const ELEMENTARY_UNITS: readonly ElementaryUnit[] = [
     order: 1,
     lessonIds: ["elementary-grade-3-math-division-meaning"],
     curriculumEntryIds: ["g3-math-division"],
-    publicationStatus: "hidden",
+    publicationStatus: "beta",
     reviewStatus: "pilot",
   },
   {
@@ -35,7 +35,7 @@ export const ELEMENTARY_UNITS: readonly ElementaryUnit[] = [
     order: 1,
     lessonIds: ["elementary-grade-3-japanese-feelings-change"],
     curriculumEntryIds: ["g3-japanese-reading-literary"],
-    publicationStatus: "hidden",
+    publicationStatus: "beta",
     reviewStatus: "pilot",
   },
   {
@@ -51,7 +51,7 @@ export const ELEMENTARY_UNITS: readonly ElementaryUnit[] = [
     order: 1,
     lessonIds: ["elementary-grade-3-social-read-neighborhood-map"],
     curriculumEntryIds: ["g3-social-local-area-municipality"],
-    publicationStatus: "hidden",
+    publicationStatus: "beta",
     reviewStatus: "pilot",
   },
 ] as const;

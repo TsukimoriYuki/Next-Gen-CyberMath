@@ -5,8 +5,8 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: "elementary-pilot-hidden.spec.ts",
-  timeout: 30_000,
+  testMatch: "elementary-limited-beta-production.spec.ts",
+  timeout: 45_000,
   expect: { timeout: 7_000 },
   fullyParallel: false,
   workers: 1,
@@ -17,9 +17,9 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: `npm run build && npm run start -- -p ${PORT}`,
-    url: BASE_URL,
+    command: `npm run start -- -p ${PORT}`,
+    url: `${BASE_URL}/elementary`,
     reuseExistingServer: false,
-    timeout: 300_000,
+    timeout: 120_000,
   },
 });

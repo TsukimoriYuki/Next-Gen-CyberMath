@@ -14,7 +14,7 @@ const base = {
   unitId: UNIT_ID,
   lessonIds: [LESSON_ID],
   curriculumEntryIds: ["g3-math-division"],
-  publicationStatus: "hidden",
+  publicationStatus: "beta",
   reviewStatus: "pilot",
   sourceType: "original",
   copyrightStatus: "original",

@@ -6,12 +6,13 @@ import {
   ElementarySection,
 } from "@/components/elementary/ElementaryShell";
 import { ElementaryText } from "@/components/elementary/ElementaryText";
-import { getElementaryGradeSubjects, getElementarySubject } from "@/data/elementary";
+import { getElementaryGradeSubjects } from "@/data/elementary";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import {
   getElementaryLessonsForUnit,
   getElementaryUnitBySlug,
 } from "@/lib/elementary-lessons";
+import { requireElementaryGrade3RegularSubjectAccess, requireElementaryPageAccess } from "@/lib/elementary-route-guard";
 
 function isPlannedGrade3Subject(subjectSlug: string): boolean {
   return getElementaryGradeSubjects("grade-3", "regular").some(
@@ -25,13 +26,15 @@ export default async function ElementaryUnitPage({
   params: Promise<{ subjectSlug: string; unitSlug: string }>;
 }) {
   const { subjectSlug, unitSlug } = await params;
-  const subject = getElementarySubject(subjectSlug);
-  if (!subject || !isPlannedGrade3Subject(subjectSlug)) notFound();
+  const { subject } = requireElementaryGrade3RegularSubjectAccess(subjectSlug);
+  if (!isPlannedGrade3Subject(subjectSlug)) notFound();
 
   const unit = getElementaryUnitBySlug("grade-3", subjectSlug, unitSlug);
   if (!unit) notFound();
+  requireElementaryPageAccess({ status: unit.publicationStatus });
 
-  const lessons = getElementaryLessonsForUnit(unit.id);
+  const lessons = getElementaryLessonsForUnit(unit.id)
+    .filter((lesson) => lesson.publicationStatus === "beta");
 
   return (
     <>

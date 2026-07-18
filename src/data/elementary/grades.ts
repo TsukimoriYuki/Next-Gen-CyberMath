@@ -16,7 +16,7 @@ export const ELEMENTARY_GRADES: readonly ElementaryGradeConfig[] = [
     shortName: "3年生",
     order: 3,
     availability: "planned",
-    publicationStatus: "hidden",
+    publicationStatus: "beta",
     href: "/elementary/grade-3",
   },
   {

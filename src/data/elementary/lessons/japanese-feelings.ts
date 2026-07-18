@@ -54,7 +54,7 @@ export const ELEMENTARY_JAPANESE_FEELINGS_LESSON = {
     "eg3-jp-story-change-trigger",
     "eg3-jp-story-whole-text",
   ],
-  publicationStatus: "hidden",
+  publicationStatus: "beta",
   reviewStatus: "pilot",
   sourceType: "original",
   copyrightStatus: "original",

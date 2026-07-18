@@ -3,6 +3,7 @@ import { ELEMENTARY_LIMITED_BETA_RELEASE } from "@/data/elementary/release";
 import { buildElementaryContentInventory } from "@/lib/elementary-inventory";
 import { buildElementaryPublicationReadiness } from "@/lib/elementary-readiness";
 import type { ElementaryLimitedBetaReleaseResult } from "@/types/elementary-release";
+import type { ElementaryPublicationStatus } from "@/types/elementary";
 
 function deepFreeze<T>(value: T): T {
   if (value && typeof value === "object" && !Object.isFrozen(value)) {
@@ -10,6 +11,19 @@ function deepFreeze<T>(value: T): T {
     for (const child of Object.values(value as Record<string, unknown>)) deepFreeze(child);
   }
   return value;
+}
+
+export function isElementaryLimitedBetaActive(
+  publicationStatus: ElementaryPublicationStatus | string = ELEMENTARY_SITE.publicationStatus,
+): boolean {
+  const config = ELEMENTARY_LIMITED_BETA_RELEASE;
+  return publicationStatus === "beta" &&
+    config.currentPublicationStatus === "beta" &&
+    config.currentChannel === "limited-beta" &&
+    config.targetChannel === "limited-beta" &&
+    config.explicitReleaseApproval === "approved" &&
+    config.approvalSource === "user-explicit-approval" &&
+    config.automaticRelease === false;
 }
 
 export function buildElementaryLimitedBetaRelease(): ElementaryLimitedBetaReleaseResult {
@@ -22,16 +36,18 @@ export function buildElementaryLimitedBetaRelease(): ElementaryLimitedBetaReleas
   if (readiness.counts.fail !== 0) blockingReasons.push("readiness contains fail checks");
   if (readiness.counts["not-reviewed"] !== 0) blockingReasons.push("human review is incomplete");
   if (readiness.recommendation.formal !== "hold") blockingReasons.push("formal release must remain on hold");
-  if (ELEMENTARY_SITE.publicationStatus !== "hidden") blockingReasons.push("current publicationStatus is not hidden");
   if (config.currentPublicationStatus !== ELEMENTARY_SITE.publicationStatus) blockingReasons.push("release config does not match publicationStatus");
-  if (config.currentChannel !== "hidden" || config.targetChannel !== "limited-beta") blockingReasons.push("release channel transition is invalid");
-  if (config.explicitReleaseApproval !== "pending") blockingReasons.push("explicit release approval must remain pending in this phase");
+  if (config.currentChannel !== "limited-beta" || config.targetChannel !== "limited-beta") blockingReasons.push("release channel is not limited-beta");
+  if (config.explicitReleaseApproval !== "approved") blockingReasons.push("explicit release approval is missing");
+  if (config.approvalSource !== "user-explicit-approval") blockingReasons.push("release approval source is invalid");
   if (config.automaticRelease !== false) blockingReasons.push("automatic release must be disabled");
   if (inventory.totals.lessonCount !== 3 || inventory.totals.problemCount !== 24) blockingReasons.push("approved content inventory changed");
 
+  const active = blockingReasons.length === 0 && isElementaryLimitedBetaActive();
   return deepFreeze({
     ...config,
     readiness: blockingReasons.length === 0 ? "ready" : "blocked",
+    releaseState: blockingReasons.length > 0 ? "blocked" : active ? "active" : "ready",
     blockingReasons,
     humanReviewComplete: readiness.counts["not-reviewed"] === 0,
     formalReleaseRecommendation: "hold",

@@ -19,7 +19,7 @@ export const ELEMENTARY_COURSE_TYPES: readonly ElementaryCourseTypeConfig[] = [
     description: "学校の授業に沿って、基礎から順番に学ぶコースです。",
     order: 1,
     availability: "planned",
-    publicationStatus: "hidden",
+    publicationStatus: "beta",
   },
   {
     id: "exam-prep",
@@ -44,7 +44,10 @@ export const ELEMENTARY_GRADE_SUBJECTS = ELEMENTARY_GRADES.flatMap((grade) =>
         grade.id === "grade-3" && subject.id !== "science"
           ? "planned"
           : "unavailable",
-      publicationStatus: "hidden",
+      publicationStatus:
+        grade.id === "grade-3" && subject.id !== "science"
+          ? "beta"
+          : "hidden",
     }),
   ),
 );
