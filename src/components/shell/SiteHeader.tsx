@@ -3,12 +3,14 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { SITE_NAME } from "@/lib/site";
 import { PrimaryNavigation } from "./PrimaryNavigation";
+import { RouteAwareSiteHeader } from "./RouteAwareSiteHeader";
 
 export async function SiteHeader() {
   const session = await getSession();
 
   return (
-    <header data-testid="site-header" className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-sm">
+    <RouteAwareSiteHeader>
+      <header data-testid="site-header" className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-sm">
       <div className="page-container relative flex h-16 items-center justify-between gap-4">
         <Link
           href="/"
@@ -27,6 +29,7 @@ export async function SiteHeader() {
           session={session ? { name: session.name, role: session.role } : null}
         />
       </div>
-    </header>
+      </header>
+    </RouteAwareSiteHeader>
   );
 }

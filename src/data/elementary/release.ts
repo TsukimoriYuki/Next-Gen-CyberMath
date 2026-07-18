@@ -56,7 +56,7 @@ export const ELEMENTARY_LIMITED_BETA_RELEASE = Object.freeze({
     messages: [
       content(text("小学3年生のみなさんが使えます。")),
       content(text("いま学べる教科は、算数・国語・社会です。")),
-      content(text("どの教科も、いまは1つのおはなしです。")),
+      content(text("どの教科も、いまは1つのこうざです。")),
       content(text("小学3年生で学ぶことの、すべてではありません。")),
       content(text("もんだいは24問です。")),
       content(text("学んだきろくは、ほぞんしません。")),

@@ -268,7 +268,7 @@ export const ELEMENTARY_MATH_DIVISION_LESSON = {
           speakerId: "tomiyama",
           intent: "summary",
           emotion: "happy",
-          content: plain("そうだね。何人へ分けるかを見ると、式をえらべるね。"),
+          content: plain("そうだね。ぜんぶの数と、分ける人数や一人分の数を見ると、式をえらべるね。"),
         },
       ],
     },

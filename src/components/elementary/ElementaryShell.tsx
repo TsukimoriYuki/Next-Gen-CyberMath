@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ElementaryBetaNotice } from "@/components/elementary/ElementaryBetaNotice";
+import { ElementaryNavigation } from "@/components/elementary/ElementaryNavigation";
 import { ELEMENTARY_SITE } from "@/data/elementary";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
 import styles from "./ElementaryShell.module.css";
@@ -17,15 +18,10 @@ export function ElementaryShell({ children }: { children: ReactNode }) {
       )}
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <p className={styles.brand}>{elementaryUiCopy("shell-brand")}</p>
-          <nav aria-label={elementaryUiCopy("shell-nav-label")} className={styles.nav}>
-            <Link href="/elementary" className={styles.navLink}>
-              {elementaryUiCopy("shell-nav-top")}
-            </Link>
-            <Link href="/elementary/grade-3" className={styles.navLink}>
-              {elementaryUiCopy("shell-nav-grade-3")}
-            </Link>
-          </nav>
+          <Link href="/learn" className={styles.brand} aria-label="Cyber Math 学習トップ">
+            {elementaryUiCopy("shell-brand")}
+          </Link>
+          <ElementaryNavigation />
         </div>
       </header>
       <div className={styles.content}>{children}</div>

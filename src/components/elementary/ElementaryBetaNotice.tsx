@@ -16,7 +16,7 @@ export function ElementaryBetaNotice({ variant = "full" }: { variant?: "full" | 
     >
       <p className={styles.badge}><ElementaryText content={copy.badge} /></p>
       {variant === "compact" ? (
-        <p className={styles.compactText}>小学3年生・算数、国語、社会の3つのおはなしを学べます。</p>
+        <p className={styles.compactText}>小学3年生・算数、国語、社会の3つのこうざを学べます。</p>
       ) : (
         <>
           <div className={styles.messages}>
