@@ -105,8 +105,9 @@ export default function ElementaryGuardianPage() {
         <h2 id="guardian-review-status">人間レビューと公開判断</h2>
         <p>
           ユーザー本人が、子ども向け文言、保護者向け説明、画像・図の権利管理を確認し、
-          限定beta可と判断しました。ただし公開状態はhiddenのままで、正式公開はまだ推奨しません。
-          算数・国語・社会の教材内容は、それぞれの教材責任者による確認が残っています。
+          算数・国語・社会の教材内容も実画面で確認して、問題なしと承認しました。
+          限定betaの準備は完了していますが、公開状態はhiddenのままで、明示的な公開承認を待っています。
+          小学3年生全範囲への対応ではなく、正式公開はまだ推奨しません。
         </p>
         <Link href="/elementary/showcase/publication-readiness">publication readinessの内部判定を確認する</Link>
       </section>

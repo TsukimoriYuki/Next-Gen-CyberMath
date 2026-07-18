@@ -40,17 +40,17 @@ test("guardian page explains scope, privacy, grading, and incomplete features", 
   await expect(page.getByText("学習進捗をサーバーやデータベースへ保存していません", { exact: false })).toBeVisible();
   await expect(page.getByText("AIによる自由記述の自動採点は使っていません", { exact: false })).toBeVisible();
   await expect(page.getByRole("heading", { name: "まだ実装していないこと" })).toBeVisible();
-  await expect(page.getByText("限定beta可と判断しました", { exact: false })).toBeVisible();
-  await expect(page.getByText("算数・国語・社会の教材内容は", { exact: false })).toBeVisible();
+  await expect(page.getByText("限定betaの準備は完了", { exact: false })).toBeVisible();
+  await expect(page.getByText("算数・国語・社会の教材内容も実画面で確認", { exact: false })).toBeVisible();
   const body = await page.locator("body").innerText();
   for (const claim of PROHIBITED_CLAIMS) expect(body).not.toContain(claim);
 });
 
-test("readiness page records limited beta while keeping subject reviews open", async ({ page }) => {
+test("readiness page records completed reviews and limited beta readiness", async ({ page }) => {
   const response = await page.goto(READINESS_ROUTE);
   expect(response?.status()).toBe(200);
   await expect(page.locator("h1")).toHaveCount(1);
-  await expect(page.getByText("限定beta可", { exact: true })).toBeVisible();
+  await expect(page.getByText("限定beta準備完了", { exact: true })).toBeVisible();
   await expect(page.getByText("正式公開はまだ推奨しません", { exact: false })).toBeVisible();
   await expect(page.getByText("まだ推奨しない", { exact: true })).toHaveCount(1);
   await expect(page.getByText("hidden", { exact: true })).toBeVisible();
@@ -58,14 +58,14 @@ test("readiness page records limited beta while keeping subject reviews open", a
   await expect(page.getByText("24問", { exact: true })).toBeVisible();
   await expect(page.locator('[data-status="warning"]')).toHaveCount(6);
   await expect(page.locator('[data-status="fail"]')).toHaveCount(0);
-  await expect(page.locator('[data-check-id][data-status="not-reviewed"]')).toHaveCount(3);
-  await expect(page.getByText("3教科の教材内容はnot-reviewedのまま", { exact: false })).toBeVisible();
+  await expect(page.locator('[data-check-id][data-status="not-reviewed"]')).toHaveCount(0);
+  await expect(page.getByText("算数・国語・社会を含む人間確認は完了", { exact: false })).toBeVisible();
   await expect(page.locator('[data-check-id="review-child-safety"]')).toContainText("approved");
   await expect(page.locator('[data-check-id="review-guardian-information"]')).toContainText("approved");
   await expect(page.locator('[data-check-id="review-asset-rights"]')).toContainText("approved");
   await expect(page.locator('[data-check-id="review-release-decision"]')).toContainText("reviewed");
   for (const id of ["review-math-content", "review-japanese-content", "review-social-content"]) {
-    await expect(page.locator(`[data-check-id="${id}"]`)).toContainText("not-reviewed");
+    await expect(page.locator(`[data-check-id="${id}"]`)).toContainText("approved");
   }
 });
 
@@ -126,7 +126,7 @@ test("guardian and readiness pages have no serious or critical accessibility vio
 
 test("readiness status is textual and internal routes are absent from discovery", async ({ page, request }) => {
   await page.goto(READINESS_ROUTE);
-  for (const status of ["warning", "not-reviewed"] as const) {
+  for (const status of ["warning"] as const) {
     const item = page.locator(`[data-check-id][data-status="${status}"]`).first();
     await expect(item).toContainText(status);
   }

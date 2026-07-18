@@ -34,6 +34,8 @@ export type ElementaryHumanReviewRecord = Readonly<{
   status: ElementaryHumanReviewStatus;
   reviewedAt: string;
   reviewedBy: "user";
+  reviewerType: "human-owner";
+  reviewSource: "user-explicit-review";
   note: string;
 }>;
 
@@ -66,7 +68,7 @@ export type ElementaryReadinessAreaResult = Readonly<{
 }>;
 
 export type ElementaryReleaseRecommendation = Readonly<{
-  beta: "recommend" | "limited-beta-allowed" | "hold";
+  beta: "limited-beta-ready" | "hold";
   formal: "recommend" | "hold";
   publicationStatus: ElementaryPublicationStatus;
   betaBlockingCheckIds: readonly string[];

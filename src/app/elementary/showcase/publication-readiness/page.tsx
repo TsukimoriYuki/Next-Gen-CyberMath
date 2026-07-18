@@ -87,11 +87,9 @@ export default function ElementaryPublicationReadinessPage() {
   const unresolved = readiness.checks.filter(
     (check) => check.status === "warning" || check.status === "fail" || check.status === "not-reviewed",
   );
-  const betaLabel = readiness.recommendation.beta === "recommend"
-    ? "推奨可能"
-    : readiness.recommendation.beta === "limited-beta-allowed"
-      ? "限定beta可"
-      : "まだ推奨しない";
+  const betaLabel = readiness.recommendation.beta === "limited-beta-ready"
+    ? "限定beta準備完了"
+    : "まだ推奨しない";
 
   return (
     <div
@@ -118,8 +116,8 @@ export default function ElementaryPublicationReadinessPage() {
           <article><span>publicationStatus</span><strong>{readiness.publicationStatus}</strong></article>
         </div>
         <p className={styles.holdNotice}>
-          ユーザー本人の判断は限定beta可です。ただし小学3年生全体対応ではなく、
-          正式公開はまだ推奨しません。publicationStatusはhiddenを維持します。
+          人間レビューは完了し、限定betaの準備は整いました。ただし小学3年生全体対応ではなく、
+          正式公開はまだ推奨しません。明示的な公開承認を待つためpublicationStatusはhiddenを維持します。
         </p>
       </section>
 
@@ -156,7 +154,7 @@ export default function ElementaryPublicationReadinessPage() {
 
       <section className={styles.section} aria-labelledby="readiness-manual">
         <h2 id="readiness-manual">人間確認</h2>
-        <p>ユーザー本人が明示した項目だけをreviewedまたはapprovedとして記録し、3教科の教材内容はnot-reviewedのままです。</p>
+        <p>ユーザー本人が明示した項目だけをreviewedまたはapprovedとして記録しています。算数・国語・社会を含む人間確認は完了しています。</p>
         <div className={styles.checkGrid}>{manualChecks.map((check) => <CheckCard key={check.id} check={check} />)}</div>
       </section>
 

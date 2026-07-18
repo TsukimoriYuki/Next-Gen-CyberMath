@@ -129,18 +129,13 @@ export function buildElementaryPublicationReadiness(
   ];
   const overallStatus = areaStatus(checks);
   const releaseDecision = checks.find((check) => check.id === "review-release-decision");
-  const hasFailure = checks.some((check) => check.status === "fail");
-  const limitedBetaAllowed =
-    !hasFailure &&
+  const limitedBetaReady =
+    betaBlocking.length === 0 &&
     releaseDecision?.humanReview?.status === "reviewed" &&
-    betaBlocking.every((check) =>
-      ["review-math-content", "review-japanese-content", "review-social-content"].includes(check.id),
-    );
-  const betaRecommendation = betaBlocking.length === 0
-    ? "recommend" as const
-    : limitedBetaAllowed
-      ? "limited-beta-allowed" as const
-      : "hold" as const;
+    ELEMENTARY_SITE.publicationStatus === "hidden";
+  const betaRecommendation = limitedBetaReady
+    ? "limited-beta-ready" as const
+    : "hold" as const;
 
   return deepFreeze({
     overallStatus,
