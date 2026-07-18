@@ -34,9 +34,9 @@ for (const group of new Set(highSchool.items.filter((item) => item.duplicateStat
 check(parsed.gitCommit !== "test-commit", "persisted JSON must contain a real git commit");
 check(parsed.totals.scorableQuestionCount === highSchool.totals.scorableQuestionCount, "persisted legacy high-school JSON is stale");
 check(parsed.highSchool.problemCount === highSchool.totals.scorableQuestionCount, "persisted high-school summary is stale");
-check(generated.elementary.totals.problemCount === 24, "elementary problem count must be 24");
-check(generated.combined.problemCount === 1372, "combined problem count must be 1372");
-check(parsed.elementary.totals.problemCount === 24 && parsed.combined.problemCount === 1372, "persisted elementary/combined JSON is stale");
+check(generated.elementary.totals.problemCount === 72, "elementary problem count must be 72");
+check(generated.combined.problemCount === 1420, "combined problem count must be 1420");
+check(parsed.elementary.totals.problemCount === 72 && parsed.combined.problemCount === 1420, "persisted elementary/combined JSON is stale");
 for (let section = 1; section <= 19; section += 1) {
   check(markdown.includes(`## ${section}.`), `Markdown section ${section} is missing`);
   check(rendered.includes(`## ${section}.`), `renderer section ${section} is missing`);

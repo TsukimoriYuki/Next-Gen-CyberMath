@@ -93,7 +93,7 @@ export default function ElementaryLimitedBetaReleasePage() {
       <section className={styles.section} aria-labelledby="release-warnings">
         <h2 id="release-warnings">warningと正式公開</h2>
         <ul>
-          <li>小学3年生の全単元ではなく、3講座・24問に限ったpilotです。</li>
+          <li>小学3年生の全単元ではなく、9講座・72問に限ったpilotです。</li>
           <li>小学4〜6年生、理科、長期運用実績を含む正式公開条件は満たしていません。</li>
         </ul>
       </section>

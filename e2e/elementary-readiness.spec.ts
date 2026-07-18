@@ -34,8 +34,8 @@ test("guardian page explains scope, privacy, grading, and incomplete features", 
   expect(response?.status()).toBe(200);
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.getByTestId("elementary-guardian-page")).toContainText("限定beta");
-  await expect(page.getByText("3講座", { exact: true })).toBeVisible();
-  await expect(page.getByText("24問", { exact: true })).toBeVisible();
+  await expect(page.getByText("9講座", { exact: true })).toBeVisible();
+  await expect(page.getByText("72問", { exact: true })).toBeVisible();
   await expect(page.getByText("個人情報入力を求めません", { exact: false })).toBeVisible();
   await expect(page.getByText("学習進捗をサーバーやデータベースへ保存していません", { exact: false })).toBeVisible();
   await expect(page.getByText("AIによる自由記述の自動採点は使っていません", { exact: false })).toBeVisible();
@@ -54,8 +54,8 @@ test("readiness page records completed reviews and limited beta readiness", asyn
   await expect(page.getByText("正式公開はまだ推奨しません", { exact: false })).toBeVisible();
   await expect(page.getByText("まだ推奨しない", { exact: true })).toHaveCount(1);
   await expect(page.getByText("beta", { exact: true })).toBeVisible();
-  await expect(page.getByText("3講座", { exact: true })).toBeVisible();
-  await expect(page.getByText("24問", { exact: true })).toBeVisible();
+  await expect(page.getByText("9講座", { exact: true })).toBeVisible();
+  await expect(page.getByText("72問", { exact: true })).toBeVisible();
   await expect(page.locator('[data-status="warning"]')).toHaveCount(6);
   await expect(page.locator('[data-status="fail"]')).toHaveCount(0);
   await expect(page.locator('[data-check-id][data-status="not-reviewed"]')).toHaveCount(0);

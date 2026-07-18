@@ -28,10 +28,11 @@ test("limited beta release page shows ready preflight without publishing control
   await expect(page.getByText("△ hold", { exact: true })).toBeVisible();
   await expect(page.getByText("○ approved", { exact: true })).toBeVisible();
   await expect(page.getByText("無効", { exact: true })).toBeVisible();
-  await expect(page.getByText("合計24問", { exact: true })).toBeVisible();
-  await expect(page.getByText("算数pilot 1講座・8問", { exact: true })).toBeVisible();
-  await expect(page.getByText("国語pilot 1講座・8問", { exact: true })).toBeVisible();
-  await expect(page.getByText("社会pilot 1講座・8問", { exact: true })).toBeVisible();
+  await expect(page.getByText("合計9講座", { exact: true })).toBeVisible();
+  await expect(page.getByText("合計72問", { exact: true })).toBeVisible();
+  await expect(page.getByText("算数pilot 4講座・32問", { exact: true })).toBeVisible();
+  await expect(page.getByText("国語pilot 3講座・24問", { exact: true })).toBeVisible();
+  await expect(page.getByText("社会pilot 2講座・16問", { exact: true })).toBeVisible();
   await expect(page.getByText("小学3年生の全範囲", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "緊急非公開・rollback条件" })).toBeVisible();
   await expect(

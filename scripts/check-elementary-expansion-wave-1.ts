@@ -31,8 +31,8 @@ check(new Set(ELEMENTARY_EXPANSION_WAVE_1_LESSONS.map((value) => value.id)).size
 check(new Set(ELEMENTARY_EXPANSION_WAVE_1_PROBLEMS.map((value) => value.id)).size === 48, issue("wave-1", "unique-problem-id", 48, new Set(ELEMENTARY_EXPANSION_WAVE_1_PROBLEMS.map((value) => value.id)).size, "src/data/elementary/problems/expansion-wave-1.ts"));
 
 for (const lesson of ELEMENTARY_EXPANSION_WAVE_1_LESSONS) {
-  check(lesson.publicationStatus === "hidden", issue(lesson.id, "publication-hidden", "hidden", lesson.publicationStatus, "src/data/elementary/lessons/expansion-wave-1.ts"));
-  check(lesson.reviewStatus === "pilot", issue(lesson.id, "review-pilot", "pilot", lesson.reviewStatus, "src/data/elementary/lessons/expansion-wave-1.ts"));
+  check(lesson.publicationStatus === "beta", issue(lesson.id, "publication-beta", "beta", lesson.publicationStatus, "src/data/elementary/lessons/expansion-wave-1.ts"));
+  check(lesson.reviewStatus === "approved", issue(lesson.id, "review-approved", "approved", lesson.reviewStatus, "src/data/elementary/lessons/expansion-wave-1.ts"));
   check(lesson.problemIds.length === 8, issue(lesson.id, "lesson-problem-count", 8, lesson.problemIds.length, "src/data/elementary/lessons/expansion-wave-1.ts"));
   check(lesson.estimatedMinutes >= 30 && lesson.estimatedMinutes <= 45, issue(lesson.id, "duration", "30-45", lesson.estimatedMinutes, "src/data/elementary/lessons/expansion-wave-1.ts"));
   const types = new Set(lesson.blocks.map((block) => block.type));
@@ -46,7 +46,8 @@ for (const lesson of ELEMENTARY_EXPANSION_WAVE_1_LESSONS) {
 }
 
 for (const problem of ELEMENTARY_EXPANSION_WAVE_1_PROBLEMS) {
-  check(problem.publicationStatus === "hidden", issue(problem.id, "publication-hidden", "hidden", problem.publicationStatus, "src/data/elementary/problems/expansion-wave-1.ts"));
+  check(problem.publicationStatus === "beta", issue(problem.id, "publication-beta", "beta", problem.publicationStatus, "src/data/elementary/problems/expansion-wave-1.ts"));
+  check(problem.reviewStatus === "approved", issue(problem.id, "review-approved", "approved", problem.reviewStatus, "src/data/elementary/problems/expansion-wave-1.ts"));
   check(problem.choices.every((choice) => extractElementaryInlineText(choice.reason).trim().length > 0), issue(problem.id, "choice-reasons", "all non-empty", "missing", "src/data/elementary/problems/expansion-wave-1.ts"));
   check(problem.lessonIds.length === 1, issue(problem.id, "one-lesson", 1, problem.lessonIds.length, "src/data/elementary/problems/expansion-wave-1.ts"));
   inspectContent(problem.title, problem.id, "title", "src/data/elementary/problems/expansion-wave-1.ts");
@@ -78,16 +79,18 @@ check(expansionAssetIds.size === 4, issue("wave-1", "asset-count", 4, expansionA
 check([...expansionAssetIds].every((id) => ELEMENTARY_VISUAL_ASSETS.some((asset) => asset.id === id && asset.reviewStatus === "approved" && asset.source.sourceType === "original")), issue("wave-1", "approved-original-assets", true, false, "src/data/elementary/assets/visual-assets.ts"));
 
 for (const [key, expected, actual] of [
-  ["published-lessons", 3, published.lessonCount], ["published-problems", 24, published.problemCount],
-  ["hidden-units", 4, hidden.unitCount], ["hidden-lessons", 6, hidden.lessonCount], ["hidden-problems", 48, hidden.problemCount],
+  ["published-units", 7, published.unitCount], ["published-lessons", 9, published.lessonCount], ["published-problems", 72, published.problemCount],
+  ["published-assets", 6, published.visualAssetCount],
+  ["hidden-units", 0, hidden.unitCount], ["hidden-lessons", 0, hidden.lessonCount], ["hidden-problems", 0, hidden.problemCount],
   ["registered-units", 7, registered.unitCount], ["registered-lessons", 9, registered.lessonCount], ["registered-problems", 72, registered.problemCount],
 ] as const) check(actual === expected, issue("inventory", key, expected, actual, "src/lib/elementary-inventory.ts"));
-check(inventory.combinedProblemCounts.published === 1372, issue("inventory", "published-combined", 1372, inventory.combinedProblemCounts.published, "src/lib/elementary-inventory.ts"));
+check(inventory.combinedProblemCounts.published === 1420, issue("inventory", "published-combined", 1420, inventory.combinedProblemCounts.published, "src/lib/elementary-inventory.ts"));
 check(inventory.combinedProblemCounts.registered === 1420, issue("inventory", "registered-combined", 1420, inventory.combinedProblemCounts.registered, "src/lib/elementary-inventory.ts"));
 check(ELEMENTARY_EXPANSION_WAVE_1.explicitReleaseApproval === "approved", issue("wave-1", "approval", "approved", ELEMENTARY_EXPANSION_WAVE_1.explicitReleaseApproval, "src/data/elementary/expansion-wave-1.ts"));
 check(ELEMENTARY_EXPANSION_WAVE_1.approvalSource === "user-explicit-approval", issue("wave-1", "approval-source", "user-explicit-approval", ELEMENTARY_EXPANSION_WAVE_1.approvalSource, "src/data/elementary/expansion-wave-1.ts"));
 check(ELEMENTARY_EXPANSION_WAVE_1.releaseApprovalSource === "user-explicit-approval", issue("wave-1", "release-approval-source", "user-explicit-approval", ELEMENTARY_EXPANSION_WAVE_1.releaseApprovalSource, "src/data/elementary/expansion-wave-1.ts"));
 check(ELEMENTARY_EXPANSION_WAVE_1.reviewerType === "human-owner" && ELEMENTARY_EXPANSION_WAVE_1.reviewSource === "user-explicit-review", issue("wave-1", "human-review-source", "human-owner / user-explicit-review", `${ELEMENTARY_EXPANSION_WAVE_1.reviewerType} / ${ELEMENTARY_EXPANSION_WAVE_1.reviewSource}`, "src/data/elementary/expansion-wave-1.ts"));
+check(ELEMENTARY_EXPANSION_WAVE_1.publicationStatus === "beta" && ELEMENTARY_EXPANSION_WAVE_1.releaseStatus === "active", issue("wave-1", "release-active", "beta / active", `${ELEMENTARY_EXPANSION_WAVE_1.publicationStatus} / ${ELEMENTARY_EXPANSION_WAVE_1.releaseStatus}`, "src/data/elementary/expansion-wave-1.ts"));
 check(ELEMENTARY_EXPANSION_WAVE_1.automaticRelease === false, issue("wave-1", "automatic-release", false, ELEMENTARY_EXPANSION_WAVE_1.automaticRelease, "src/data/elementary/expansion-wave-1.ts"));
 check(Object.values(ELEMENTARY_EXPANSION_WAVE_1.humanReviews).every((status) => status === "approved"), issue("wave-1", "human-review", "all approved", ELEMENTARY_EXPANSION_WAVE_1.humanReviews, "src/data/elementary/expansion-wave-1.ts"));
 
@@ -96,5 +99,5 @@ if (issues.length) {
   issues.forEach((value) => console.error(JSON.stringify(value)));
   process.exitCode = 1;
 } else {
-  console.log(`elementary expansion wave 1 QA passed: 4 units, 6 hidden lessons, 48 problems, 4 assets; published 3/24, registered 9/72; original Japanese texts ${textLength(libraryText)}/${textLength(hallwayText)} chars.`);
+  console.log(`elementary expansion wave 1 QA passed: human-approved active beta wave with 4 units, 6 lessons, 48 problems and 4 assets; published/registered 7 units / 9 lessons / 72 problems; original Japanese texts ${textLength(libraryText)}/${textLength(hallwayText)} chars.`);
 }

@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { ElementaryText } from "@/components/elementary/ElementaryText";
 import { ELEMENTARY_LIMITED_BETA_RELEASE } from "@/data/elementary/release";
+import { buildElementaryContentInventory } from "@/lib/elementary-inventory";
 import styles from "./ElementaryBetaNotice.module.css";
 
 export function ElementaryBetaNotice({ variant = "full" }: { variant?: "full" | "compact" }) {
   const copy = ELEMENTARY_LIMITED_BETA_RELEASE.learnerDisplay;
+  const totals = buildElementaryContentInventory().totals;
 
   return (
     <aside
@@ -16,7 +18,7 @@ export function ElementaryBetaNotice({ variant = "full" }: { variant?: "full" | 
     >
       <p className={styles.badge}><ElementaryText content={copy.badge} /></p>
       {variant === "compact" ? (
-        <p className={styles.compactText}>小学3年生・算数、国語、社会の3つのこうざを学べます。</p>
+        <p className={styles.compactText}>小学3年生・算数、国語、社会の{totals.lessonCount}こうざ・{totals.problemCount}問を学べます。</p>
       ) : (
         <>
           <div className={styles.messages}>

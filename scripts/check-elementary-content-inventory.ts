@@ -40,24 +40,27 @@ try {
 if (inventory) {
   const segmented = buildElementarySegmentedContentInventory();
   const totals = inventory.totals;
-  check("unitCount", 3, totals.unitCount, "ELEMENTARY_UNITS", "src/data/elementary/units/index.ts");
-  check("lessonCount", 3, totals.lessonCount, "ELEMENTARY_LESSONS", "src/data/elementary/lessons/index.ts");
-  check("problemCount", 24, totals.problemCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
+  check("unitCount", 7, totals.unitCount, "ELEMENTARY_UNITS", "src/data/elementary/units/index.ts");
+  check("lessonCount", 9, totals.lessonCount, "ELEMENTARY_LESSONS", "src/data/elementary/lessons/index.ts");
+  check("problemCount", 72, totals.problemCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
   check("subjectCount", 3, inventory.subjects.length);
-  check("singleChoiceCount", 17, totals.singleChoiceCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
-  check("multipleChoiceCount", 3, totals.multipleChoiceCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
-  check("numericInputCount", 4, totals.numericInputCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
-  check("basicCount", 18, totals.basicCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
-  check("standardCount", 6, totals.standardCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
-  check("approved visualAssetCount", 2, totals.visualAssetCount, "ELEMENTARY_VISUAL_ASSETS", "src/data/elementary/assets/visual-assets.ts");
+  check("singleChoiceCount", 49, totals.singleChoiceCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
+  check("multipleChoiceCount", 7, totals.multipleChoiceCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
+  check("numericInputCount", 16, totals.numericInputCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
+  check("basicCount", 54, totals.basicCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
+  check("standardCount", 18, totals.standardCount, "ELEMENTARY_PROBLEMS", "src/data/elementary/problems/index.ts");
+  check("approved visualAssetCount", 6, totals.visualAssetCount, "ELEMENTARY_VISUAL_ASSETS", "src/data/elementary/assets/visual-assets.ts");
   check("publicationStatus", "beta", totals.publicationStatus);
-  check("reviewStatus", "pilot", totals.reviewStatus);
-  check("lessonCoverage", { "not-started": 0, partial: 3, covered: 0, reviewed: 0 }, totals.lessonCoverage);
-  check("assessmentCoverage", { "not-started": 0, partial: 3, covered: 0, reviewed: 0 }, totals.assessmentCoverage);
+  check("reviewStatus", "mixed", totals.reviewStatus);
+  check("lessonCoverage", { "not-started": 0, partial: 9, covered: 0, reviewed: 0 }, totals.lessonCoverage);
+  check("assessmentCoverage", { "not-started": 0, partial: 9, covered: 0, reviewed: 0 }, totals.assessmentCoverage);
 
-  for (const subject of inventory.subjects) {
-    check("subject.lessonCount", 1, subject.lessonCount, subject.subject, "src/data/elementary/lessons/index.ts");
-    check("subject.problemCount", 8, subject.problemCount, subject.subject, "src/data/elementary/problems/index.ts");
+  for (const [subjectId, lessonCount, problemCount] of [
+    ["math", 4, 32], ["japanese", 3, 24], ["social-studies", 2, 16],
+  ] as const) {
+    const subject = inventory.subjects.find((scope) => scope.subject === subjectId);
+    check("subject.lessonCount", lessonCount, subject?.lessonCount, subjectId, "src/data/elementary/lessons/index.ts");
+    check("subject.problemCount", problemCount, subject?.problemCount, subjectId, "src/data/elementary/problems/index.ts");
   }
   const summedSubjectProblems = inventory.subjects.reduce((sum, subject) => sum + subject.problemCount, 0);
   const summedSubjectLessons = inventory.subjects.reduce((sum, subject) => sum + subject.lessonCount, 0);
@@ -106,14 +109,14 @@ if (inventory) {
 
   const highSchool = buildContentInventory("inventory-qa", "2026-01-01T00:00:00.000Z");
   check("highSchool problemCount", 1348, highSchool.totals.scorableQuestionCount, "highSchool", "scripts/content-inventory-lib.ts");
-  check("combined problemCount", 1372, highSchool.totals.scorableQuestionCount + totals.problemCount, "combined", "scripts/content-inventory-lib.ts");
-  check("hidden unitCount", 4, segmented.hiddenPilot.totals.unitCount, "hiddenPilot", "src/lib/elementary-inventory.ts");
-  check("hidden lessonCount", 6, segmented.hiddenPilot.totals.lessonCount, "hiddenPilot", "src/lib/elementary-inventory.ts");
-  check("hidden problemCount", 48, segmented.hiddenPilot.totals.problemCount, "hiddenPilot", "src/lib/elementary-inventory.ts");
+  check("combined problemCount", 1420, highSchool.totals.scorableQuestionCount + totals.problemCount, "combined", "scripts/content-inventory-lib.ts");
+  check("hidden unitCount", 0, segmented.hiddenPilot.totals.unitCount, "hiddenPilot", "src/lib/elementary-inventory.ts");
+  check("hidden lessonCount", 0, segmented.hiddenPilot.totals.lessonCount, "hiddenPilot", "src/lib/elementary-inventory.ts");
+  check("hidden problemCount", 0, segmented.hiddenPilot.totals.problemCount, "hiddenPilot", "src/lib/elementary-inventory.ts");
   check("registered unitCount", 7, segmented.registeredTotal.totals.unitCount, "registeredTotal", "src/lib/elementary-inventory.ts");
   check("registered lessonCount", 9, segmented.registeredTotal.totals.lessonCount, "registeredTotal", "src/lib/elementary-inventory.ts");
   check("registered problemCount", 72, segmented.registeredTotal.totals.problemCount, "registeredTotal", "src/lib/elementary-inventory.ts");
-  check("published combined problemCount", 1372, segmented.combinedProblemCounts.published, "combined", "src/lib/elementary-inventory.ts");
+  check("published combined problemCount", 1420, segmented.combinedProblemCounts.published, "combined", "src/lib/elementary-inventory.ts");
   check("registered combined problemCount", 1420, segmented.combinedProblemCounts.registered, "combined", "src/lib/elementary-inventory.ts");
 
   let failClosed = false;
@@ -143,6 +146,6 @@ if (issues.length) {
   process.exitCode = 1;
 } else if (inventory) {
   console.log(
-    `elementary content inventory QA passed: published 3 units / 3 lessons / 24 problems / 2 assets; hidden 4 units / 6 lessons / 48 problems; registered 7 / 9 / 72; high school 1348 / published combined 1372 / registered combined 1420`,
+    `elementary content inventory QA passed: published and registered 7 units / 9 lessons / 72 problems / 6 assets; hidden pilot 0 / 0 / 0; high school 1348 / published and registered combined 1420`,
   );
 }

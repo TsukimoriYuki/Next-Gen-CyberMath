@@ -124,7 +124,7 @@ function selfGrade(problem: ElementaryProblem) {
 function validateProblem(problem: ElementaryProblem) {
   const label = `problem "${problem.id}"`;
   check(problem.publicationStatus === "beta", `${label} must be limited-beta content`);
-  check(problem.reviewStatus === "pilot", `${label} must be pilot`);
+  check(problem.reviewStatus === "pilot" || problem.reviewStatus === "approved", `${label} must be pilot or human-approved`);
   check(problem.sourceType === "original", `${label} sourceType must be original`);
   check(problem.copyrightStatus === "original", `${label} copyrightStatus must be original`);
   check(problem.estimatedSeconds > 0, `${label} estimatedSeconds must be positive`);
@@ -162,7 +162,10 @@ function validateProblem(problem: ElementaryProblem) {
       const numeric = problem.answer.numeric;
       check(Number.isFinite(numeric.value), `${label} numeric value must be finite`);
       check(Number.isFinite(numeric.tolerance) && numeric.tolerance >= 0, `${label} numeric tolerance must be valid`);
-      check(extractElementaryInlineText(numeric.unit).trim().length > 0, `${label} numeric answer must state a unit`);
+      check(
+        extractElementaryInlineText(numeric.unit).trim().length > 0 || problem.reviewTags.includes("unitless-answer"),
+        `${label} numeric answer must state a unit or explicitly declare a unitless answer`,
+      );
     }
   } else {
     check(problem.choices.length >= 2, `${label} must have at least 2 choices`);
@@ -223,7 +226,7 @@ function main() {
   const publishedProblems = ELEMENTARY_PROBLEMS.filter((problem) => problem.publicationStatus === "beta");
   const publishedLessons = ELEMENTARY_LESSONS.filter((lesson) => lesson.publicationStatus === "beta");
   check(Boolean(grade3Policy), "grade-3 kanji policy must resolve");
-  check(publishedProblems.length === 24, `limited beta must publish 24 problems (found ${publishedProblems.length})`);
+  check(publishedProblems.length === 72, `limited beta must publish 72 problems (found ${publishedProblems.length})`);
   check(ELEMENTARY_MATH_PROBLEMS.length === 8, "math must have 8 problems");
   check(ELEMENTARY_JAPANESE_PROBLEMS.length === 8, "Japanese must have 8 problems");
   check(ELEMENTARY_SOCIAL_STUDIES_PROBLEMS.length === 8, "social studies must have 8 problems");
@@ -239,9 +242,9 @@ function main() {
   }
 
   // 形式内訳。
-  check(countType(publishedProblems, "single-choice") === 17, "there must be 17 published single-choice problems");
-  check(countType(publishedProblems, "multiple-choice") === 3, "there must be 3 published multiple-choice problems");
-  check(countType(publishedProblems, "numeric-input") === 4, "there must be 4 published numeric-input problems");
+  check(countType(publishedProblems, "single-choice") === 49, "there must be 49 published single-choice problems");
+  check(countType(publishedProblems, "multiple-choice") === 7, "there must be 7 published multiple-choice problems");
+  check(countType(publishedProblems, "numeric-input") === 16, "there must be 16 published numeric-input problems");
   check(countType(ELEMENTARY_MATH_PROBLEMS, "single-choice") === 4, "math must have 4 single-choice");
   check(countType(ELEMENTARY_MATH_PROBLEMS, "numeric-input") === 4, "math must have 4 numeric-input");
   check(countType(ELEMENTARY_JAPANESE_PROBLEMS, "single-choice") === 7, "Japanese must have 7 single-choice");
@@ -250,8 +253,8 @@ function main() {
   check(countType(ELEMENTARY_SOCIAL_STUDIES_PROBLEMS, "multiple-choice") === 2, "social must have 2 multiple-choice");
 
   // 難易度内訳。
-  check(publishedProblems.filter((p) => p.difficulty === "basic").length === 18, "there must be 18 published basic problems");
-  check(publishedProblems.filter((p) => p.difficulty === "standard").length === 6, "there must be 6 published standard problems");
+  check(publishedProblems.filter((p) => p.difficulty === "basic").length === 54, "there must be 54 published basic problems");
+  check(publishedProblems.filter((p) => p.difficulty === "standard").length === 18, "there must be 18 published standard problems");
 
   for (const problem of publishedProblems) validateProblem(problem);
 
@@ -262,7 +265,7 @@ function main() {
     return;
   }
   console.log(
-    `elementary pilot-problem QA passed: 24 problems (math 8 / Japanese 8 / social 8), 17 single / 3 multi / 4 numeric, 18 basic / 6 standard, answers re-checked, kanji grade-3 clean.`,
+    `elementary pilot-problem QA passed: 72 problems (math 32 / Japanese 24 / social 16), 49 single / 7 multi / 16 numeric, 54 basic / 18 standard, answers re-checked, kanji grade-3 clean.`,
   );
 }
 

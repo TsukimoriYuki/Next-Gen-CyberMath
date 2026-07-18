@@ -92,8 +92,8 @@ function createLesson(seed: LessonSeed): ElementaryLesson {
     enrichmentReferenceIds: [],
     visualAssetIds: seed.assetId ? [seed.assetId] : [],
     problemIds: seed.problemIds,
-    publicationStatus: "hidden",
-    reviewStatus: "pilot",
+    publicationStatus: "beta",
+    reviewStatus: "approved",
     sourceType: "original",
     copyrightStatus: "original",
     blocks: [

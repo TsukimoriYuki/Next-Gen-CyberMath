@@ -27,7 +27,7 @@ const LETTERS = ["a", "b", "c", "d"] as const;
 
 function choiceProblems(
   seeds: readonly ChoiceSeed[],
-  context: Readonly<{ subject: "math" | "japanese" | "social-studies"; unitId: string; lessonId: string; entryId: string }>,
+  context: Readonly<{ subject: "math" | "japanese" | "social-studies"; unitId: string; lessonId: string; entryId: string; visualAssetId?: string }>,
 ): readonly ElementaryProblem[] {
   return seeds.map((seed, index) => {
     const correctChoiceIds = seed.correct.map((choiceIndex) => LETTERS[choiceIndex]);
@@ -60,14 +60,15 @@ function choiceProblems(
         commonMistake: plain("一つのことばや数字だけで決めず、問い全体を読むことが大切です。"),
       },
       hint: plain("問いの中の大切なことばに目をつけましょう。"),
+      ...(context.visualAssetId ? { visualAssetId: context.visualAssetId } : {}),
       curriculumEntryIds: [context.entryId],
       curriculumObjectiveIds: [seed.objectiveId],
       difficulty: seed.difficulty ?? (index >= 6 ? "standard" : "basic"),
       estimatedSeconds: seed.difficulty === "standard" || index >= 6 ? 90 : 60,
       reviewTags: [context.entryId, "expansion-wave-1"],
       mistakeTags: ["問いの読みちがい"],
-      publicationStatus: "hidden",
-      reviewStatus: "pilot",
+      publicationStatus: "beta",
+      reviewStatus: "approved",
       sourceType: "original",
       copyrightStatus: "original",
     } satisfies ElementaryProblem;
@@ -102,10 +103,10 @@ function numericProblems(
     curriculumObjectiveIds: [seed.objectiveId],
     difficulty: seed.difficulty ?? (index >= 2 ? "standard" : "basic"),
     estimatedSeconds: seed.difficulty === "standard" || index >= 2 ? 90 : 60,
-    reviewTags: [context.entryId, "expansion-wave-1"],
+    reviewTags: [context.entryId, "expansion-wave-1", ...(seed.unit === "" ? ["unitless-answer"] : [])],
     mistakeTags: ["数と意味の取りちがい"],
-    publicationStatus: "hidden",
-    reviewStatus: "pilot",
+    publicationStatus: "beta",
+    reviewStatus: "approved",
     sourceType: "original",
     copyrightStatus: "original",
   } satisfies ElementaryProblem));
@@ -183,7 +184,7 @@ export const ELEMENTARY_PARAGRAPH_PROBLEMS = choiceProblems([
   { id: "eg3-japanese-paragraph-08", title: "だんらくのならび", prompt: "このせつめい文の組み立てとして正しいものはどれですか。", labels: ["問い→くふうと理由→くらべ→まとめ", "まとめ→物語→問い", "会話→人物→気持ち", "れいだけをならべる"], correct: [0], detailed: "問いから始まり、くふう・理由・くらべを通ってまとめへ進みます。", objectiveId: "g3-japanese-reading-expository-structure", difficulty: "standard" },
 ], paragraphContext);
 
-const socialContext = { subject: "social-studies", unitId: "g3-social-work-and-sales-unit", lessonId: "elementary-grade-3-social-goods-to-store", entryId: "g3-social-production-sales" } as const;
+const socialContext = { subject: "social-studies", unitId: "g3-social-work-and-sales-unit", lessonId: "elementary-grade-3-social-goods-to-store", entryId: "g3-social-production-sales", visualAssetId: "goods-to-store-flow" } as const;
 export const ELEMENTARY_GOODS_TO_STORE_PROBLEMS = choiceProblems([
   { id: "eg3-social-goods-01", title: "品物の道すじ", prompt: "図で、そうこのつぎに品物が向かう場所はどこですか。", labels: ["はいたつトラック", "作る場所", "家", "学校"], correct: [0], detailed: "図の矢じるしは、そうこからはいたつトラックへ進みます。", objectiveId: "g3-social-production-sales-knowledge" },
   { id: "eg3-social-goods-02", title: "そうこのはたらき", prompt: "この図から分かる、そうこのはたらきはどれですか。", labels: ["品物をいったん集める", "品物を家で食べる", "学校で教える", "道を作る"], correct: [0], detailed: "作る場所から来た品物が、はいたつの前に集まっています。", objectiveId: "g3-social-production-sales-knowledge" },

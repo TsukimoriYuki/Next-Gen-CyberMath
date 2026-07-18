@@ -2,8 +2,8 @@ import type { ElementaryExpansionWave } from "@/types/elementary-expansion";
 
 export const ELEMENTARY_EXPANSION_WAVE_1 = Object.freeze({
   id: "grade-3-expansion-wave-1",
-  publicationStatus: "hidden",
-  releaseStatus: "candidate",
+  publicationStatus: "beta",
+  releaseStatus: "active",
   implementationStatus: "complete",
   technicalQaStatus: "complete",
   explicitReleaseApproval: "approved",

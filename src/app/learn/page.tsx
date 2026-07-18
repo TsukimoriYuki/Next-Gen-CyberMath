@@ -17,6 +17,7 @@ import {
 import { ELEMENTARY_SITE } from "@/data/elementary";
 import { ELEMENTARY_LIMITED_BETA_RELEASE } from "@/data/elementary/release";
 import { isElementaryLimitedBetaActive } from "@/lib/elementary-release";
+import { buildElementaryContentInventory } from "@/lib/elementary-inventory";
 import { createPublicMetadata } from "@/lib/public-metadata";
 
 export const metadata: Metadata = createPublicMetadata({
@@ -74,6 +75,7 @@ const ACTIONS_BY_SUBJECT = {
 export default function LearnPage() {
   const subjects = filterVisibleSubjectsByCapability(SUBJECTS, "courses");
   const elementaryActive = isElementaryLimitedBetaActive(ELEMENTARY_SITE.publicationStatus);
+  const elementaryInventory = buildElementaryContentInventory();
   if (subjects.length === 0) notFound();
 
   return (
@@ -93,6 +95,8 @@ export default function LearnPage() {
             <LearningActionGrid
               actions={[{
                 ...ELEMENTARY_LIMITED_BETA_RELEASE.learnCard,
+                description: `小学3年生の算数・国語・社会を、限定βの${elementaryInventory.totals.lessonCount}講座・${elementaryInventory.totals.problemCount}問で学べます。全範囲ではありません。`,
+                meta: `小学3年生・限定β・${elementaryInventory.totals.lessonCount}講座・${elementaryInventory.totals.problemCount}問`,
                 icon: BookOpen,
               }]}
             />

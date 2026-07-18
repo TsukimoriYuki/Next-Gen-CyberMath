@@ -57,7 +57,7 @@ function evaluateLiveGate(
       return { status: duplicateCount === 0 ? "pass" as const : "fail" as const, actual: duplicateCount, evidence: `重複ID ${duplicateCount}件` };
     }
     case "elementary-count":
-      return { status: inventory.totals.problemCount === 24 ? "pass" as const : "fail" as const, actual: inventory.totals.problemCount, evidence: `正式pilot problem ${inventory.totals.problemCount}問` };
+      return { status: inventory.totals.problemCount === 72 ? "pass" as const : "fail" as const, actual: inventory.totals.problemCount, evidence: `正式pilot problem ${inventory.totals.problemCount}問` };
     case "limited-pilot-scope":
       return { status: "warning" as const, actual: inventory.totals.lessonCount, evidence: `現在は${inventory.totals.lessonCount}講座のみです。` };
     case "formal-release-completeness":

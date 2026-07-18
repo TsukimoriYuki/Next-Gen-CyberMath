@@ -55,7 +55,7 @@ export const ELEMENTARY_UI_COPY: readonly ElementaryUiCopyEntry[] = [
   learner("home-description", "学年をえらんで、算数・国語・社会を少しずつ学べます。"),
   learner("home-section-title", "学年をえらぼう"),
   learner("home-grade-3-title", "小学3年生"),
-  learner("home-grade-3-description", "算数・国語・社会を、一つずつ学びます。"),
+  learner("home-grade-3-description", "算数・国語・社会の、いま公開しているこうざを学びます。"),
   learner("home-grade-3-status", "3年生をひらく"),
   learner("grade-3-eyebrow", "いつもの学び"),
   learner("grade-3-title", "小学3年生"),

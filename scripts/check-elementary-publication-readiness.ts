@@ -280,10 +280,10 @@ async function main() {
   }
 
   const inventoryExpectations = [
-    ["lesson-count", readiness.lessonCount, 3],
-    ["elementary-problem-count", combined.combined.elementaryProblemCount, 24],
+    ["lesson-count", readiness.lessonCount, 9],
+    ["elementary-problem-count", combined.combined.elementaryProblemCount, 72],
     ["high-school-problem-count", combined.combined.highSchoolProblemCount, 1_348],
-    ["combined-problem-count", combined.combined.problemCount, 1_372],
+    ["combined-problem-count", combined.combined.problemCount, 1_420],
   ] as const;
   for (const [id, actual, expected] of inventoryExpectations) {
     check(actual === expected, {

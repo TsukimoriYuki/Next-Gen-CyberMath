@@ -222,7 +222,7 @@ function validateLesson(lesson: ElementaryLesson, expectedSubject: string) {
 function main() {
   const publishedLessons = ELEMENTARY_LESSONS.filter((lesson) => lesson.publicationStatus === "beta");
   check(Boolean(grade3Policy), "grade-3 kanji policy must resolve");
-  check(publishedLessons.length === 3, `limited beta must publish 3 lessons (found ${publishedLessons.length})`);
+  check(publishedLessons.length === 9, `limited beta must publish 9 lessons (found ${publishedLessons.length})`);
   check(new Set(publishedLessons.map((l) => l.subject)).size === 3, "published pilot lessons must cover 3 distinct subjects");
 
   validateLesson(ELEMENTARY_MATH_DIVISION_LESSON, "math");
@@ -264,7 +264,7 @@ function main() {
     return;
   }
   console.log(
-    `elementary pilot-lesson QA passed: 3 lessons (math / Japanese / social), block structure, dialogue rules, story length, asset and problem references, kanji grade-3 clean.`,
+    `elementary pilot-lesson QA passed: 9 published lessons across math / Japanese / social; original pilot structure, dialogue rules, story length, asset and problem references, kanji grade-3 clean.`,
   );
 }
 

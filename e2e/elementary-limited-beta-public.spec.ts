@@ -29,7 +29,7 @@ test("learn card opens the approved elementary limited beta", async ({ page }) =
   await page.goto("/learn");
   const card = page.getByRole("link", { name: "小学生版を開く" });
   await expect(card).toBeVisible();
-  await expect(card).toContainText("小学3年生・限定β・3講座");
+  await expect(card).toContainText("小学3年生・限定β・9講座・72問");
   await card.click();
   await expect(page).toHaveURL(/\/elementary$/);
   await expectLimitedBetaBadge(page);
@@ -50,7 +50,7 @@ test("approved pages explain limited scope and data handling", async ({ page }) 
   }
 
   await page.goto("/elementary");
-  await expect(page.getByText("もんだいは24問です。", { exact: true })).toBeVisible();
+  await expect(page.getByText("もんだいはぜんぶで72問です。", { exact: true })).toBeVisible();
   await expect(page.getByText("小学3年生で学ぶことの、すべてではありません。", { exact: true })).toBeVisible();
   await expect(page.getByText("学んだきろくは、ほぞんしません。", { exact: true })).toBeVisible();
 

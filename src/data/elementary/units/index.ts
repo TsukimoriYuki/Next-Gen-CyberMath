@@ -36,8 +36,8 @@ export const ELEMENTARY_UNITS: readonly ElementaryUnit[] = [
     order: 2,
     lessonIds: ["elementary-grade-3-math-tenths-and-decimals"],
     curriculumEntryIds: ["g3-math-decimals"],
-    publicationStatus: "hidden",
-    reviewStatus: "pilot",
+    publicationStatus: "beta",
+    reviewStatus: "approved",
   },
   {
     id: "g3-math-fractions-unit",
@@ -50,8 +50,8 @@ export const ELEMENTARY_UNITS: readonly ElementaryUnit[] = [
     order: 3,
     lessonIds: ["elementary-grade-3-math-parts-of-a-whole"],
     curriculumEntryIds: ["g3-math-fractions"],
-    publicationStatus: "hidden",
-    reviewStatus: "pilot",
+    publicationStatus: "beta",
+    reviewStatus: "approved",
   },
   {
     id: "g3-japanese-story-reading-unit",
@@ -83,8 +83,8 @@ export const ELEMENTARY_UNITS: readonly ElementaryUnit[] = [
       "elementary-grade-3-japanese-connect-paragraphs",
     ],
     curriculumEntryIds: ["g3-japanese-reading-expository"],
-    publicationStatus: "hidden",
-    reviewStatus: "pilot",
+    publicationStatus: "beta",
+    reviewStatus: "approved",
   },
   {
     id: "g3-social-local-community-unit",
@@ -113,8 +113,8 @@ export const ELEMENTARY_UNITS: readonly ElementaryUnit[] = [
     order: 2,
     lessonIds: ["elementary-grade-3-social-goods-to-store"],
     curriculumEntryIds: ["g3-social-production-sales"],
-    publicationStatus: "hidden",
-    reviewStatus: "pilot",
+    publicationStatus: "beta",
+    reviewStatus: "approved",
   },
 ] as const;
 

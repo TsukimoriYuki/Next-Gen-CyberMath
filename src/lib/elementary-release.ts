@@ -41,7 +41,7 @@ export function buildElementaryLimitedBetaRelease(): ElementaryLimitedBetaReleas
   if (config.explicitReleaseApproval !== "approved") blockingReasons.push("explicit release approval is missing");
   if (config.approvalSource !== "user-explicit-approval") blockingReasons.push("release approval source is invalid");
   if (config.automaticRelease !== false) blockingReasons.push("automatic release must be disabled");
-  if (inventory.totals.lessonCount !== 3 || inventory.totals.problemCount !== 24) blockingReasons.push("approved content inventory changed");
+  if (inventory.totals.lessonCount !== 9 || inventory.totals.problemCount !== 72) blockingReasons.push("approved content inventory changed");
 
   const active = blockingReasons.length === 0 && isElementaryLimitedBetaActive();
   return deepFreeze({

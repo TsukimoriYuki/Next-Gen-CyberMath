@@ -17,6 +17,7 @@ export const metadata: Metadata = {
 export default function ElementaryGuardianPage() {
   const inventory = buildElementaryContentInventory();
   const totals = inventory.totals;
+  const subjects = Object.fromEntries(inventory.subjects.map((subject) => [subject.subject, subject]));
 
   return (
     <div
@@ -30,7 +31,7 @@ export default function ElementaryGuardianPage() {
         <h1>保護者・教育者の方へ</h1>
         <p>
           Cyber Math小学生版は、小学3年生の算数・国語・社会から始めた限定betaのpilot教材です。
-          現在の3講座だけで小学3年生全体に対応しているものではありません。
+          現在の{totals.lessonCount}講座だけで小学3年生全体に対応しているものではありません。
         </p>
       </header>
       <ElementaryBetaNotice />
@@ -42,6 +43,9 @@ export default function ElementaryGuardianPage() {
           <div><dt>教科</dt><dd>算数・国語・社会</dd></div>
           <div><dt>講座</dt><dd>{totals.lessonCount}講座</dd></div>
           <div><dt>採点できる問題</dt><dd>{totals.problemCount}問</dd></div>
+          <div><dt>算数</dt><dd>{subjects.math?.lessonCount ?? 0}講座・{subjects.math?.problemCount ?? 0}問</dd></div>
+          <div><dt>国語</dt><dd>{subjects.japanese?.lessonCount ?? 0}講座・{subjects.japanese?.problemCount ?? 0}問</dd></div>
+          <div><dt>社会</dt><dd>{subjects["social-studies"]?.lessonCount ?? 0}講座・{subjects["social-studies"]?.problemCount ?? 0}問</dd></div>
         </dl>
         <p className={styles.note}>
           問題数は教材の範囲を示す一つの情報です。問題数だけで品質や学年全体への対応を示すものではありません。

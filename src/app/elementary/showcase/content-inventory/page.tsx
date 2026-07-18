@@ -51,7 +51,7 @@ export default function ElementaryContentInventoryPage() {
         <h2 id="inventory-segments-heading">公開範囲と登録範囲</h2>
         <div className={styles.cardGrid}>
           <article className={styles.metricCard}><span>publishedBeta</span><strong>{segmented.publishedBeta.totals.lessonCount}講座・{segmented.publishedBeta.totals.problemCount}問</strong><p>本番の限定βへ表示する範囲</p></article>
-          <article className={styles.metricCard}><span>hiddenPilot</span><strong>{segmented.hiddenPilot.totals.lessonCount}講座・{segmented.hiddenPilot.totals.problemCount}問</strong><p>人間レビュー前の非公開候補</p></article>
+          <article className={styles.metricCard}><span>hiddenPilot</span><strong>{segmented.hiddenPilot.totals.lessonCount}講座・{segmented.hiddenPilot.totals.problemCount}問</strong><p>現在の非公開pilot教材</p></article>
           <article className={styles.metricCard}><span>registeredTotal</span><strong>{segmented.registeredTotal.totals.lessonCount}講座・{segmented.registeredTotal.totals.problemCount}問</strong><p>registryに登録された全体</p></article>
         </div>
         <p>登録ベースの高校版との合計は{segmented.combinedProblemCounts.registered.toLocaleString("ja-JP")}問です。公開中の合計とは分けて表示します。</p>

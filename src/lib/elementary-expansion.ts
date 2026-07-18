@@ -5,6 +5,13 @@ export type ElementaryExpansionFixture = Readonly<{
   approvalSource: string;
   humanReviewStatus?: string;
   formalReleaseStatus?: string;
+  releaseStatus?: string;
+  publishedProblemCount?: number;
+  registeredProblemCount?: number;
+  publishedCombinedProblemCount?: number;
+  publishedAssetCount?: number;
+  externalAssetCount?: number;
+  publishedShowcaseCount?: number;
   automaticRelease: boolean;
   remainder?: Readonly<{ divisor: number; remainder: number }>;
   japaneseEvidence?: string;
@@ -36,8 +43,22 @@ export function inspectElementaryExpansionFixture(
   if (fixture.publicationStatus === "beta" && fixture.humanReviewStatus !== "approved") {
     add("public-requires-human-review", "approved", fixture.humanReviewStatus);
   }
+  if (
+    fixture.publicationStatus === "hidden" &&
+    fixture.releaseStatus === "active" &&
+    fixture.explicitApproval === "approved" &&
+    fixture.humanReviewStatus === "approved"
+  ) add("approved-active-wave-must-be-public", "beta", fixture.publicationStatus);
   if (fixture.formalReleaseStatus === "ready") {
     add("formal-release-hold", "hold", fixture.formalReleaseStatus);
+  }
+  if (fixture.publicationStatus === "beta") {
+    if (fixture.publishedProblemCount !== 72) add("published-problem-count", 72, fixture.publishedProblemCount);
+    if (fixture.registeredProblemCount !== 72) add("registered-problem-count", 72, fixture.registeredProblemCount);
+    if (fixture.publishedCombinedProblemCount !== 1420) add("published-combined-count", 1420, fixture.publishedCombinedProblemCount);
+    if (fixture.publishedAssetCount !== 6) add("published-asset-count", 6, fixture.publishedAssetCount);
+    if (fixture.externalAssetCount !== 0) add("external-asset-count", 0, fixture.externalAssetCount);
+    if (fixture.publishedShowcaseCount !== 0) add("showcase-excluded", 0, fixture.publishedShowcaseCount);
   }
   if (fixture.remainder && (
     fixture.remainder.divisor <= 0 ||

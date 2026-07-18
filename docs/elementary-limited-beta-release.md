@@ -2,9 +2,9 @@
 
 ## 現在の公開範囲
 
-小学3年生の通常コースにある算数・国語・社会のpilot各1講座（合計3講座・24問）、保護者向け説明、creditsだけを対象とする。小学3年生の全範囲、小学4〜6年生、理科、中学受験、進捗保存、保護者アカウント、AI自由記述採点、正式公開は対象外とする。
+小学3年生の通常コースにある算数4講座・国語3講座・社会2講座（合計9講座・72問）、保護者向け説明、creditsだけを対象とする。小学3年生の全範囲、小学4〜6年生、理科、中学受験、進捗保存、保護者アカウント、AI自由記述採点、正式公開は対象外とする。
 
-ユーザー本人の明示承認に基づき、現在は`beta` / `limited-beta`として公開中です。対象は小学3年生の算数・国語・社会のpilot各1講座（合計3講座・24問）、保護者向け説明、creditsだけです。小学3年生全範囲、小学4〜6年、理科、中学受験、showcaseは対象外です。
+ユーザー本人の明示承認に基づき、現在は`beta` / `limited-beta`として公開中です。対象は小学3年生の算数4講座・国語3講座・社会2講座（合計9講座・72問）、保護者向け説明、creditsだけです。小学3年生全範囲、小学4〜6年、理科、中学受験、showcaseは対象外です。
 
 ## 公開確認
 
@@ -12,7 +12,7 @@
 
 ## 公開後確認
 
-小学3年生トップ、3教科トップ、3講座、保護者向け説明、creditsを確認する。sitemapとglobal navigationへは掲載せず、高校版の公開ルートも確認する。
+小学3年生トップ、3教科トップ、7単元、9講座、保護者向け説明、creditsを確認する。sitemapとglobal navigationへは掲載せず、高校版の公開ルートも確認する。
 
 ## 緊急非公開条件
 
@@ -22,4 +22,4 @@
 
 緊急非公開は`ELEMENTARY_SITE.publicationStatus`を`beta`から`hidden`へ戻す1つのrelease-only変更で行う。対象QAとproduction buildを実行してcommit・pushし、その後、小学生版routeと保護者・creditsがproductionで404、`/learn`の小学生カードが非表示、高校版routeが正常であることを確認する。現在は学習履歴や個人情報を保存しないためDB rollbackは不要であり、高校版全体を停止しない。実行にgit reset、force push、DB操作は使わない。
 
-次期教材候補は`hidden`の別scopeとして管理し、現在の限定βを緊急非公開にする変更や、現在の公開件数・creditsへ混ぜない。
+Expansion Wave 1だけを緊急非公開にする場合は、wave metadataと対象4単元・6講座・48問を`beta`から`hidden`へ戻すrelease-only変更を行う。元の3講座・24問と既存asset 2件は公開を継続し、`/learn`とcreditsは公開inventoryから自動的に元の範囲へ戻る。サイト全体のrollbackは上記`ELEMENTARY_SITE.publicationStatus`の切替を使う。

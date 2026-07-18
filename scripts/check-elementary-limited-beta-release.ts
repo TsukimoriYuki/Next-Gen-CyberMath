@@ -99,10 +99,10 @@ async function main() {
   }
 
   const contentExpectations = [
-    ["unit-count", inventory.totals.unitCount, 3],
-    ["lesson-count", inventory.totals.lessonCount, 3],
-    ["problem-count", inventory.totals.problemCount, 24],
-    ["visual-asset-count", inventory.totals.visualAssetCount, 2],
+    ["unit-count", inventory.totals.unitCount, 7],
+    ["lesson-count", inventory.totals.lessonCount, 9],
+    ["problem-count", inventory.totals.problemCount, 72],
+    ["visual-asset-count", inventory.totals.visualAssetCount, 6],
   ] as const;
   for (const [id, actual, expected] of contentExpectations) {
     check(actual === expected, {
@@ -110,21 +110,23 @@ async function main() {
       source: "src/lib/elementary-inventory.ts", blocking: true,
     });
   }
-  for (const subject of ["math", "japanese", "social-studies"] as const) {
+  for (const [subject, lessonCount, problemCount] of [
+    ["math", 4, 32], ["japanese", 3, 24], ["social-studies", 2, 16],
+  ] as const) {
     const scope = inventory.subjects.find((item) => item.subject === subject);
-    check(scope?.lessonCount === 1 && scope.problemCount === 8, {
-      checkId: `subject-${subject}`, area: "content", expected: "1 lesson / 8 problems",
+    check(scope?.lessonCount === lessonCount && scope.problemCount === problemCount, {
+      checkId: `subject-${subject}`, area: "content", expected: `${lessonCount} lessons / ${problemCount} problems`,
       actual: scope ? `${scope.lessonCount} / ${scope.problemCount}` : "missing",
       source: "src/lib/elementary-inventory.ts", blocking: true,
     });
   }
   check(
-    inventory.totals.lessonCoverage.partial === 3 &&
+    inventory.totals.lessonCoverage.partial === 9 &&
       inventory.totals.lessonCoverage.covered === 0 &&
-      inventory.totals.assessmentCoverage.partial === 3 &&
+      inventory.totals.assessmentCoverage.partial === 9 &&
       inventory.totals.assessmentCoverage.covered === 0,
     {
-      checkId: "curriculum-coverage", area: "content", expected: "lesson/assessment partial 3; covered 0",
+      checkId: "curriculum-coverage", area: "content", expected: "lesson/assessment partial 9; covered 0",
       actual: { lesson: inventory.totals.lessonCoverage, assessment: inventory.totals.assessmentCoverage },
       source: "src/lib/elementary-inventory.ts", blocking: true,
     },
@@ -206,8 +208,8 @@ async function main() {
 
   for (const [id, actual, expected] of [
     ["high-school-problems", combined.combined.highSchoolProblemCount, 1_348],
-    ["elementary-problems", combined.combined.elementaryProblemCount, 24],
-    ["combined-problems", combined.combined.problemCount, 1_372],
+    ["elementary-problems", combined.combined.elementaryProblemCount, 72],
+    ["combined-problems", combined.combined.problemCount, 1_420],
   ] as const) {
     check(actual === expected, {
       checkId: id, area: "high-school", expected, actual,

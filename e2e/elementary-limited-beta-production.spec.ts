@@ -7,12 +7,22 @@ const PUBLIC_ROUTES = [
   "/elementary/grade-3/math",
   "/elementary/grade-3/math/units/division",
   "/elementary/grade-3/math/units/division/lessons/division-meaning",
+  "/elementary/grade-3/math/units/division/lessons/division-with-remainders",
+  "/elementary/grade-3/math/units/decimals",
+  "/elementary/grade-3/math/units/decimals/lessons/tenths-and-decimals",
+  "/elementary/grade-3/math/units/fractions",
+  "/elementary/grade-3/math/units/fractions/lessons/parts-of-a-whole",
   "/elementary/grade-3/japanese",
   "/elementary/grade-3/japanese/units/story-reading",
   "/elementary/grade-3/japanese/units/story-reading/lessons/feelings-change",
+  "/elementary/grade-3/japanese/units/explanatory-text",
+  "/elementary/grade-3/japanese/units/explanatory-text/lessons/find-key-sentences",
+  "/elementary/grade-3/japanese/units/explanatory-text/lessons/connect-paragraphs",
   "/elementary/grade-3/social-studies",
   "/elementary/grade-3/social-studies/units/local-community",
   "/elementary/grade-3/social-studies/units/local-community/lessons/read-neighborhood-map",
+  "/elementary/grade-3/social-studies/units/work-and-sales",
+  "/elementary/grade-3/social-studies/units/work-and-sales/lessons/goods-to-store",
   "/elementary/for-guardians",
   "/elementary/credits",
   "/learn",
@@ -27,16 +37,6 @@ const HIDDEN_ROUTES = [
   "/elementary/showcase/visual-assets",
   "/elementary/showcase/division-dialogue",
   "/elementary/showcase/expansion-wave-1",
-  "/elementary/grade-3/math/units/decimals",
-  "/elementary/grade-3/math/units/fractions",
-  "/elementary/grade-3/japanese/units/explanatory-text",
-  "/elementary/grade-3/social-studies/units/work-and-sales",
-  "/elementary/grade-3/math/units/division/lessons/division-with-remainders",
-  "/elementary/grade-3/math/units/decimals/lessons/tenths-and-decimals",
-  "/elementary/grade-3/math/units/fractions/lessons/parts-of-a-whole",
-  "/elementary/grade-3/japanese/units/explanatory-text/lessons/find-key-sentences",
-  "/elementary/grade-3/japanese/units/explanatory-text/lessons/connect-paragraphs",
-  "/elementary/grade-3/social-studies/units/work-and-sales/lessons/goods-to-store",
   "/elementary/grade-4",
   "/elementary/grade-5",
   "/elementary/grade-6",
@@ -70,6 +70,10 @@ test("approved limited beta routes are public in production", async ({ page }) =
     const response = await page.goto(route);
     expect(response?.status(), route).toBe(200);
     await expect(page.locator("h1"), route).toHaveCount(1);
+    if (route.startsWith("/elementary")) {
+      await expect(page.locator('meta[name="robots"]'), route).toHaveAttribute("content", /noindex/);
+      await expect(page.locator('meta[name="robots"]'), route).toHaveAttribute("content", /follow/);
+    }
   }
 });
 
@@ -84,11 +88,11 @@ test("limited beta is visible, linked from learn, and remains noindex", async ({
   await page.goto("/learn");
   const card = page.getByRole("link", { name: "小学生版を開く" });
   await expect(card).toBeVisible();
-  await expect(card).toContainText("小学3年生・限定β・3講座");
+  await expect(card).toContainText("小学3年生・限定β・9講座・72問");
   await card.click();
   await expect(page).toHaveURL(/\/elementary$/);
   await expectLimitedBetaBadge(page);
-  await expect(page.getByText("もんだいは24問です。", { exact: true })).toBeVisible();
+  await expect(page.getByText("もんだいはぜんぶで72問です。", { exact: true })).toBeVisible();
   await expect(page.getByText("小学3年生で学ぶことの、すべてではありません。", { exact: true })).toBeVisible();
   await expect(page.getByText("学んだきろくは、ほぞんしません。", { exact: true })).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
@@ -105,12 +109,12 @@ test("elementary stays out of sitemap and global navigation", async ({ page, req
   await expect(page.getByRole("navigation", { name: "小学生のページ" })).toBeVisible();
 });
 
-test("production credits and public counts exclude hidden expansion", async ({ page }) => {
+test("production credits and public counts include the approved expansion", async ({ page }) => {
   await page.goto("/elementary/credits");
-  await expect(page.getByTestId("elementary-credit-list").locator("article")).toHaveCount(2);
-  await expect(page.getByText("現在使用中は2件", { exact: false })).toBeVisible();
+  await expect(page.getByTestId("elementary-credit-list").locator("article")).toHaveCount(6);
+  await expect(page.getByText("現在使用中は6件", { exact: false })).toBeVisible();
   await page.goto("/elementary/grade-3/math");
-  await expect(page.getByTestId("elementary-subject-problem-count")).toHaveText("算数では、いま8問。3教科合計24問です。");
+  await expect(page.getByTestId("elementary-subject-problem-count")).toHaveText("算数では、いま32問。3教科合計72問です。");
 });
 
 for (const width of [375, 390, 768, 1280]) {
