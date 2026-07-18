@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">三角形のなかま分け</title><desc id="desc">二等辺三角形、正三角形、三角形ではない曲線の形</desc>
+  <rect width="960" height="480" rx="28" fill="#fffdf5"/>
+  <text x="480" y="55" text-anchor="middle" font-size="30" font-weight="700" fill="#24324a">へんの長さに目をつけよう</text>
+  <g fill="#dff3ff" stroke="#174f75" stroke-width="6"><path d="M90 350L240 110l150 240z"/><path d="M420 350L560 120l140 230z"/></g>
+  <path d="M750 350Q825 80 900 350Z" fill="#ffe7e7" stroke="#a33b3b" stroke-width="6"/>
+  <g text-anchor="middle" font-size="22" fill="#24324a"><text x="240" y="395">二等辺三角形</text><text x="560" y="395">正三角形</text><text x="825" y="395">三角形ではない</text></g>
+  <g stroke="#24324a" stroke-width="4"><path d="M142 265l20 12M318 265l-20 12"/><path d="M470 268l20 12M630 268l-20 12M535 350v-24"/></g>
+  <text x="825" y="95" text-anchor="middle" font-size="20" fill="#a33b3b">まがった線がある</text>
+</svg>

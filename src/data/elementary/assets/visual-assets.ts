@@ -162,8 +162,106 @@ const expansionAssets = [
   }),
 ] as const;
 
+function waveTwoAsset(options: Readonly<{
+  id: string;
+  filename: string;
+  title: string;
+  checksum: string;
+  fileSizeBytes: number;
+  alt: string;
+  caption: string;
+  lessonIds: readonly string[];
+  kind?: "diagram" | "chart";
+}>): ElementaryVisualAsset {
+  return Object.freeze({
+    id: options.id,
+    kind: options.kind ?? "diagram",
+    title: options.title,
+    creator: "Cyber Math",
+    source: Object.freeze({ sourceType: "original", downloadedFilename: options.filename }),
+    localPath: `/elementary/assets/${options.filename}`,
+    rightsStatus: "cyber-math-original",
+    licenseId: null,
+    licenseUrl: null,
+    attributionText: "Cyber Math独自作成",
+    shortCredit: plain("Cyber Mathが作った図"),
+    modification: Object.freeze({ modified: false }),
+    retrievedAt: "2026-07-18",
+    reviewedAt: "2026-07-18",
+    reviewStatus: "approved",
+    sourceVerified: true,
+    humanReviewNotes: "独自作成SVG。外部素材、外部参照、個人情報、安全でない要素を含まないことを確認済み。教材内容の人間レビューは別に行う。",
+    checksumSha256: options.checksum,
+    mimeType: "image/svg+xml",
+    width: 960,
+    height: 480,
+    fileSizeBytes: options.fileSizeBytes,
+    alt: plain(options.alt),
+    caption: plain(options.caption),
+    decorative: false,
+    usage: Object.freeze({
+      purpose: "concept-explanation",
+      gradeIds: Object.freeze(["grade-3"] as const),
+      subjectIds: Object.freeze(["math"] as const),
+      lessonIds: Object.freeze([...options.lessonIds]),
+    }),
+  });
+}
+
+const expansionWaveTwoAssets = [
+  waveTwoAsset({
+    id: "large-number-place-value-chart", filename: "large-number-place-value-chart.svg", title: "大きな数のくらい表",
+    checksum: "caf41f6e0ff5c1f4ec6f8a19ee6aa5bd95a437e19d6b27d08a2765b8b9a0179f", fileSizeBytes: 1408,
+    alt: "30005を万、千、百、十、一のくらいに分け、3、0、0、0、5をおいた表", caption: "0も、ほかの数字のくらいをたもつ大切な数字です。",
+    lessonIds: ["elementary-grade-3-math-read-large-numbers"],
+  }),
+  waveTwoAsset({
+    id: "addition-subtraction-columns", filename: "addition-subtraction-columns.svg", title: "たし算とひき算のくらいをそろえる図",
+    checksum: "3d3defca8d6b153959a3bb144d65d46618418cbe13054b291618291980acea51", fileSizeBytes: 1307,
+    alt: "2345と408を、一、十、百、千の同じくらいがたてにそろうようにならべた図", caption: "ひっ算は、同じくらいをたてにそろえます。",
+    lessonIds: ["elementary-grade-3-math-large-number-addition-subtraction"],
+  }),
+  waveTwoAsset({
+    id: "multiplication-decomposition-array", filename: "multiplication-decomposition-array.svg", title: "かけ算を分けて考えるはい列図",
+    checksum: "fb783a91014394ea51d1ac04c65b6d4f10bb5175eeb9aabe6e5b551ba97ea121", fileSizeBytes: 1301,
+    alt: "24かける3を、20こが3だんと4こが3だんに分け、60と12を合わせて72にする図", caption: "24を20と4に分けると、かけ算のひっ算のわけが見えます。",
+    lessonIds: ["elementary-grade-3-math-two-digit-times-one-digit", "elementary-grade-3-math-three-digit-times-one-digit"],
+  }),
+  waveTwoAsset({
+    id: "length-ruler-and-route", filename: "length-ruler-and-route.svg", title: "ものさしと道のりの図",
+    checksum: "0fde426f917ceb0d06fbf2debcee05b7fb5cb645d831ec63e10a741cf1a8d45f", fileSizeBytes: 1932,
+    alt: "ものさしの2cmから7cmまでが5cmになるれいと、家から店、学校へ進む道のりの図", caption: "長さは目もりのちがい、道のりは通った道の合計で考えます。",
+    lessonIds: ["elementary-grade-3-math-measure-length"],
+  }),
+  waveTwoAsset({
+    id: "weight-scale-and-time-line", filename: "weight-scale-and-time-line.svg", title: "重さのはかりと時間の線",
+    checksum: "e64b237fc373752938c04232419949b10bdf34c6ea7d3fbd48e291dec03a4911", fileSizeBytes: 1502,
+    alt: "0gから1kgまでのはかりと、10時50分から11時10分までを10分ずつに分けた時間の線", caption: "目もり1こ分と、60分の区切りをたしかめます。",
+    lessonIds: ["elementary-grade-3-math-measure-weight", "elementary-grade-3-math-time-and-duration"],
+  }),
+  waveTwoAsset({
+    id: "triangle-classification", filename: "triangle-classification.svg", title: "三角形のなかま分け",
+    checksum: "3027abcaa580d44f9e60223d2eac062aa9f3330a3ec42e8ff074dd5f453c089b", fileSizeBytes: 1140,
+    alt: "同じ長さのへんをしるしでしめした二等へん三角形と正三角形、まがった線をふくむ三角形ではない形", caption: "向きや色ではなく、へんの数と長さでなかまを見つけます。",
+    lessonIds: ["elementary-grade-3-math-classify-triangles"],
+  }),
+  waveTwoAsset({
+    id: "circle-sphere-structure", filename: "circle-sphere-structure.svg", title: "円と球の中心・半けい・直けい",
+    checksum: "7881db6fe8d372198c9a7ba79bf8ef554be202530f4157fc5932f3e52a90e3d0", fileSizeBytes: 1370,
+    alt: "平らな円の中心、半けい、直けいと、立体の球をくらべた図", caption: "直けいは中心を通る半けい2本分です。円は平ら、球は立体です。",
+    lessonIds: ["elementary-grade-3-math-circles-and-spheres"],
+  }),
+  waveTwoAsset({
+    id: "table-and-bar-graph", filename: "table-and-bar-graph.svg", title: "すきな遊びの表とぼうグラフ",
+    checksum: "a3226b29a77cb9d9d708cdf71d72def9551eeec0f3eeee369a6d42e16372e8ce", fileSizeBytes: 1918,
+    alt: "おにごっこ12人、なわとび8人、読書6人、おり紙4人を表とぼうグラフでしめした図", caption: "題名、たんい、目もりを見て、表とぼうグラフをくらべます。",
+    lessonIds: ["elementary-grade-3-math-tables-and-bar-graphs"], kind: "chart",
+  }),
+] as const;
+
 export const ELEMENTARY_VISUAL_ASSETS: readonly ElementaryVisualAsset[] = Object.freeze([
   divisionCookiesAsset,
   neighborhoodMapAsset,
   ...expansionAssets,
+  ...expansionWaveTwoAssets,
 ]);

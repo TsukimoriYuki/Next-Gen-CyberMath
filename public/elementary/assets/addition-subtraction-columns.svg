@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">たし算とひき算のくらいをそろえる図</title><desc id="desc">一、十、百、千の列をそろえたひっ算</desc>
+  <rect width="960" height="480" rx="28" fill="#f4fbff"/>
+  <text x="480" y="55" text-anchor="middle" font-size="30" font-weight="700" fill="#24324a">同じ くらいを たてに そろえる</text>
+  <g stroke="#64748b" stroke-width="2"><path d="M250 100v300M370 100v300M490 100v300M610 100v300M730 100v300"/><path d="M250 165h480M250 325h480"/></g>
+  <g text-anchor="middle" font-size="24" fill="#24324a"><text x="310" y="140">千</text><text x="430" y="140">百</text><text x="550" y="140">十</text><text x="670" y="140">一</text></g>
+  <g text-anchor="middle" font-size="44" font-weight="700" fill="#174f75"><text x="310" y="225">2</text><text x="430" y="225">3</text><text x="550" y="225">4</text><text x="670" y="225">5</text><text x="430" y="295">4</text><text x="550" y="295">0</text><text x="670" y="295">8</text></g>
+  <text x="205" y="295" font-size="42" fill="#24324a">＋</text><text x="480" y="382" text-anchor="middle" font-size="25" fill="#24324a">8は 一のくらい、0は 十のくらい</text>
+</svg>

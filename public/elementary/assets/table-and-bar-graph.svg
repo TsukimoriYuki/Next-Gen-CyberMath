@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">すきな遊びの表とぼうグラフ</title><desc id="desc">おにごっこ12人、なわとび8人、読書6人、おり紙4人の表とぼうグラフ</desc>
+  <rect width="960" height="480" rx="28" fill="#fffaf0"/>
+  <text x="480" y="48" text-anchor="middle" font-size="28" font-weight="700" fill="#24324a">すきな遊び（人）</text>
+  <g stroke="#24324a" stroke-width="2" fill="#ffffff"><rect x="40" y="85" width="330" height="300"/><path d="M40 145h330M40 205h330M40 265h330M40 325h330M205 85v300"/></g>
+  <g text-anchor="middle" font-size="20" fill="#24324a"><text x="122" y="123">こうもく</text><text x="288" y="123">人数</text><text x="122" y="183">おにごっこ</text><text x="288" y="183">12</text><text x="122" y="243">なわとび</text><text x="288" y="243">8</text><text x="122" y="303">読書</text><text x="288" y="303">6</text><text x="122" y="363">おり紙</text><text x="288" y="363">4</text></g>
+  <path d="M450 380H920M450 80V380" stroke="#24324a" stroke-width="4"/>
+  <g stroke="#cbd5e1" stroke-width="2"><path d="M450 330H920M450 280H920M450 230H920M450 180H920M450 130H920M450 80H920"/></g>
+  <g fill="#65b5c8" stroke="#174f75" stroke-width="3"><rect x="500" y="80" width="70" height="300"/><rect x="610" y="180" width="70" height="200"/><rect x="720" y="230" width="70" height="150"/><rect x="830" y="280" width="70" height="100"/></g>
+  <g text-anchor="middle" font-size="18" fill="#24324a"><text x="535" y="410">おに</text><text x="645" y="410">なわ</text><text x="755" y="410">読書</text><text x="865" y="410">おり紙</text><text x="425" y="336">2</text><text x="425" y="286">4</text><text x="425" y="236">6</text><text x="425" y="186">8</text><text x="425" y="136">10</text><text x="425" y="86">12</text></g>
+</svg>

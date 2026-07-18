@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">24かける3を20と4に分ける図</title><desc id="desc">20こが3だんと4こが3だんで72こになる配列図</desc>
+  <rect width="960" height="480" rx="28" fill="#fff8f3"/>
+  <text x="480" y="55" text-anchor="middle" font-size="30" font-weight="700" fill="#24324a">24×3を 20×3と 4×3に分ける</text>
+  <g fill="#f5b942" stroke="#6b4e16" stroke-width="2">
+    <rect x="90" y="110" width="520" height="70" rx="12"/><rect x="90" y="195" width="520" height="70" rx="12"/><rect x="90" y="280" width="520" height="70" rx="12"/>
+  </g>
+  <g fill="#8bd3dd" stroke="#174f75" stroke-width="2"><rect x="625" y="110" width="150" height="70" rx="12"/><rect x="625" y="195" width="150" height="70" rx="12"/><rect x="625" y="280" width="150" height="70" rx="12"/></g>
+  <g text-anchor="middle" font-size="23" fill="#24324a"><text x="350" y="155">20こ</text><text x="700" y="155">4こ</text><text x="350" y="240">20こ</text><text x="700" y="240">4こ</text><text x="350" y="325">20こ</text><text x="700" y="325">4こ</text></g>
+  <text x="480" y="420" text-anchor="middle" font-size="28" font-weight="700" fill="#24324a">60＋12＝72</text>
+</svg>

@@ -4,6 +4,7 @@ import { ELEMENTARY_JAPANESE_PROBLEMS } from "./japanese";
 import { ELEMENTARY_MATH_PROBLEMS } from "./math";
 import { ELEMENTARY_SOCIAL_STUDIES_PROBLEMS } from "./social-studies";
 import { ELEMENTARY_EXPANSION_WAVE_1_PROBLEMS } from "./expansion-wave-1";
+import { ELEMENTARY_EXPANSION_WAVE_2_PROBLEMS } from "./expansion-wave-2";
 
 // 小学生版 pilot 問題の集約 registry。
 // 詳細な整合性（件数・難易度内訳・正答の一意性など）は
@@ -14,6 +15,7 @@ export const ELEMENTARY_PROBLEMS: readonly ElementaryProblem[] = Object.freeze([
   ...ELEMENTARY_JAPANESE_PROBLEMS,
   ...ELEMENTARY_SOCIAL_STUDIES_PROBLEMS,
   ...ELEMENTARY_EXPANSION_WAVE_1_PROBLEMS,
+  ...ELEMENTARY_EXPANSION_WAVE_2_PROBLEMS,
 ]);
 
 assertUniqueRegistryKeys(
@@ -32,4 +34,5 @@ export {
   ELEMENTARY_MATH_PROBLEMS,
   ELEMENTARY_SOCIAL_STUDIES_PROBLEMS,
   ELEMENTARY_EXPANSION_WAVE_1_PROBLEMS,
+  ELEMENTARY_EXPANSION_WAVE_2_PROBLEMS,
 };

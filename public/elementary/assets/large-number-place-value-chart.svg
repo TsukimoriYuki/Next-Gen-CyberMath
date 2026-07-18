@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">大きな数のくらい表</title><desc id="desc">30005を万、千、百、十、一のくらいに分けた表</desc>
+  <rect width="960" height="480" rx="28" fill="#fffaf0"/>
+  <text x="480" y="58" text-anchor="middle" font-size="30" font-weight="700" fill="#24324a">30005を くらいに分けよう</text>
+  <g stroke="#334155" stroke-width="3" fill="#ffffff">
+    <rect x="80" y="110" width="160" height="230"/><rect x="240" y="110" width="160" height="230"/><rect x="400" y="110" width="160" height="230"/><rect x="560" y="110" width="160" height="230"/><rect x="720" y="110" width="160" height="230"/>
+  </g>
+  <g text-anchor="middle" fill="#24324a"><text x="160" y="160" font-size="26">万</text><text x="320" y="160" font-size="26">千</text><text x="480" y="160" font-size="26">百</text><text x="640" y="160" font-size="26">十</text><text x="800" y="160" font-size="26">一</text></g>
+  <g text-anchor="middle" font-size="68" font-weight="700" fill="#174f75"><text x="160" y="260">3</text><text x="320" y="260">0</text><text x="480" y="260">0</text><text x="640" y="260">0</text><text x="800" y="260">5</text></g>
+  <text x="480" y="402" text-anchor="middle" font-size="25" fill="#24324a">0も、くらいの ばしょを たもつ</text>
+</svg>

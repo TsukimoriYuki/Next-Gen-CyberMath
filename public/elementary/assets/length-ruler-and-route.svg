@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">ものさしと道のりの図</title><desc id="desc">2cmから7cmまでの長さと、家から店を通って学校へ進む道のり</desc>
+  <rect width="960" height="480" rx="28" fill="#f5fff7"/>
+  <text x="260" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="#24324a">ものさし</text><text x="730" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="#24324a">道のり</text>
+  <path d="M70 210H470" stroke="#24324a" stroke-width="6"/>
+  <g stroke="#24324a" stroke-width="3"><path d="M70 175v70M120 185v60M170 175v70M220 185v60M270 175v70M320 185v60M370 175v70M420 185v60M470 175v70"/></g>
+  <g text-anchor="middle" font-size="21" fill="#24324a"><text x="70" y="278">0</text><text x="170" y="278">2cm</text><text x="420" y="278">7cm</text></g>
+  <path d="M170 130H420" stroke="#d04f4f" stroke-width="10" stroke-linecap="round"/><text x="295" y="110" text-anchor="middle" font-size="24" fill="#24324a">7−2＝5cm</text>
+  <g fill="#ffffff" stroke="#174f75" stroke-width="3"><rect x="550" y="155" width="100" height="70" rx="12"/><rect x="700" y="155" width="100" height="70" rx="12"/><rect x="850" y="155" width="80" height="70" rx="12"/></g>
+  <g text-anchor="middle" font-size="22" fill="#24324a"><text x="600" y="198">家</text><text x="750" y="198">店</text><text x="890" y="198">学校</text><text x="675" y="290">400m</text><text x="825" y="290">350m</text></g>
+  <path d="M650 190H700M800 190H850" stroke="#24324a" stroke-width="5" marker-end="url(#arrow)"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0l10 5-10 5z" fill="#24324a"/></marker></defs>
+  <text x="730" y="400" text-anchor="middle" font-size="25" fill="#24324a">400＋350＝750m</text>
+</svg>
