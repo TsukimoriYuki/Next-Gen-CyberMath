@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">1本のテープを4等分した図</title>
+  <desc id="desc">同じ長さに4つへ分けたテープのうち、1つ分と3つ分を示しています。</desc>
+  <rect width="960" height="420" rx="28" fill="#f7fbf4"/>
+  <text x="48" y="68" font-family="sans-serif" font-size="30" font-weight="700" fill="#173321">1本を、同じ長さの4つに分ける</text>
+  <g stroke="#173321" stroke-width="5"><rect x="80" y="130" width="800" height="120" rx="8" fill="#fff"/><path d="M280 130v120M480 130v120M680 130v120"/></g>
+  <rect x="82" y="132" width="196" height="116" fill="#8bd3a6"/>
+  <text x="180" y="205" font-family="sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#173321">1/4</text>
+  <path d="M80 315h600" stroke="#f6c453" stroke-width="18" stroke-linecap="round"/>
+  <text x="720" y="326" font-family="sans-serif" font-size="30" font-weight="700" fill="#744c05">3つ分は 3/4</text>
+</svg>

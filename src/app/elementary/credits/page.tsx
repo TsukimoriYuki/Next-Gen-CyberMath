@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ElementaryText } from "@/components/elementary/ElementaryText";
 import { elementaryUiCopy } from "@/data/elementary/ui-copy";
-import { getAllApprovedCredits } from "@/lib/elementary-assets";
+import { getPublishedElementaryCredits } from "@/lib/elementary-assets";
 import { getElementaryLessonById } from "@/lib/elementary-lessons";
 import styles from "@/components/elementary/ElementaryVisualAsset.module.css";
 
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default function ElementaryCreditsPage() {
-  const credits = getAllApprovedCredits();
+  const credits = getPublishedElementaryCredits();
   const originalCount = credits.filter((credit) => credit.licenseDisplayName === "Cyber Math独自作成").length;
   return (
     <main className={styles.page} data-text-audience="developer" data-page-audience="guardian">

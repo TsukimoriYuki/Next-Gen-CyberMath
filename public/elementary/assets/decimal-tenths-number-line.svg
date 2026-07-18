@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">0から1までを10等分した数直線</title>
+  <desc id="desc">0と1の間を10の同じ長さに分け、0.1から0.9までを示しています。</desc>
+  <rect width="960" height="420" rx="28" fill="#f7fbf4"/>
+  <text x="48" y="68" font-family="sans-serif" font-size="30" font-weight="700" fill="#173321">1を10こに同じ大きさで分ける</text>
+  <line x1="80" y1="220" x2="880" y2="220" stroke="#173321" stroke-width="6"/>
+  <g stroke="#287a4d" stroke-width="5" font-family="sans-serif" font-size="22" text-anchor="middle" fill="#173321">
+    <path d="M80 190v60M160 200v40M240 200v40M320 200v40M400 200v40M480 190v60M560 200v40M640 200v40M720 200v40M800 200v40M880 190v60"/>
+    <text x="80" y="285">0</text><text x="160" y="285">0.1</text><text x="240" y="285">0.2</text><text x="320" y="285">0.3</text><text x="400" y="285">0.4</text><text x="480" y="285">0.5</text><text x="560" y="285">0.6</text><text x="640" y="285">0.7</text><text x="720" y="285">0.8</text><text x="800" y="285">0.9</text><text x="880" y="285">1</text>
+  </g>
+  <path d="M80 330h80" stroke="#b45309" stroke-width="12" stroke-linecap="round"/>
+  <text x="200" y="340" font-family="sans-serif" font-size="28" font-weight="700" fill="#744c05">この1つ分が 0.1</text>
+</svg>

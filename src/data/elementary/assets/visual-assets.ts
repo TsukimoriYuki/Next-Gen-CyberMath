@@ -91,7 +91,79 @@ const neighborhoodMapAsset: ElementaryVisualAsset = Object.freeze({
   }),
 });
 
+function expansionAsset(options: Readonly<{
+  id: string;
+  filename: string;
+  title: string;
+  checksum: string;
+  fileSizeBytes: number;
+  width: number;
+  height: number;
+  alt: string;
+  caption: string;
+  subject: "math" | "social-studies";
+  lessonId: string;
+}>): ElementaryVisualAsset {
+  return Object.freeze({
+    id: options.id,
+    kind: "diagram",
+    title: options.title,
+    creator: "Cyber Math",
+    source: Object.freeze({ sourceType: "original", downloadedFilename: options.filename }),
+    localPath: `/elementary/assets/${options.filename}`,
+    rightsStatus: "cyber-math-original",
+    licenseId: null,
+    licenseUrl: null,
+    attributionText: "Cyber Math独自作成",
+    shortCredit: plain("Cyber Mathが作った図"),
+    modification: Object.freeze({ modified: false }),
+    retrievedAt: "2026-07-18",
+    reviewedAt: "2026-07-18",
+    reviewStatus: "approved",
+    sourceVerified: true,
+    humanReviewNotes: "独自作成SVG。外部素材、外部参照、個人情報を含まないことを確認済み。公開可否は教材のrelease reviewで別に判断する。",
+    checksumSha256: options.checksum,
+    mimeType: "image/svg+xml",
+    width: options.width,
+    height: options.height,
+    fileSizeBytes: options.fileSizeBytes,
+    alt: plain(options.alt),
+    caption: plain(options.caption),
+    decorative: false,
+    usage: Object.freeze({
+      purpose: "concept-explanation",
+      gradeIds: Object.freeze(["grade-3"] as const),
+      subjectIds: Object.freeze([options.subject]),
+      lessonIds: Object.freeze([options.lessonId]),
+    }),
+  });
+}
+
+const expansionAssets = [
+  expansionAsset({
+    id: "division-remainders-14-into-4", filename: "division-remainders-14-into-4.svg", title: "14個を4個ずつ分ける図",
+    checksum: "ba7b9d7ec7015b8917b5381e11ad22cdf0c450fa5155bd16537c9bfb6cc97035", fileSizeBytes: 1588, width: 960, height: 480,
+    alt: "14こを4こずつに分けると、3つのまとまりと、あまり2こになる図", caption: "14÷4＝3あまり2を、まとまりとあまりで表します。", subject: "math", lessonId: "elementary-grade-3-math-division-with-remainders",
+  }),
+  expansionAsset({
+    id: "decimal-tenths-number-line", filename: "decimal-tenths-number-line.svg", title: "0から1までを10等分した数直線",
+    checksum: "056f93b15aa5c669e3662d83deca0c544e2e27ad08ae8152acefd08ef4a18e90", fileSizeBytes: 1414, width: 960, height: 420,
+    alt: "0から1までを10こに同じ大きさで分け、0.1ずつしめした数直線", caption: "1を10等分した一つ分が0.1です。", subject: "math", lessonId: "elementary-grade-3-math-tenths-and-decimals",
+  }),
+  expansionAsset({
+    id: "fraction-equal-parts-tape", filename: "fraction-equal-parts-tape.svg", title: "1本のテープを4等分した図",
+    checksum: "d9a06776d30102cf51801c577fa6495d6376e68ec41e95de4722be6d12adf5f0", fileSizeBytes: 1075, width: 960, height: 420,
+    alt: "1本のテープを同じ長さに4つへ分け、一つ分を4分の1としめす図", caption: "4分の1が3つ分なら、4分の3です。", subject: "math", lessonId: "elementary-grade-3-math-parts-of-a-whole",
+  }),
+  expansionAsset({
+    id: "goods-to-store-flow", filename: "goods-to-store-flow.svg", title: "品物がお店へ届くまでの流れ",
+    checksum: "3e3dd4361d543cae4c8b958f1eeae189ae9ddbd4e491a537434ecd4d877322ad", fileSizeBytes: 1668, width: 960, height: 480,
+    alt: "作る場所、そうこ、はいたつトラック、あおば店、家を矢じるしでつないだ学習用の図", caption: "ひかり市の学習用のれいです。品物や地いきで道すじはちがいます。", subject: "social-studies", lessonId: "elementary-grade-3-social-goods-to-store",
+  }),
+] as const;
+
 export const ELEMENTARY_VISUAL_ASSETS: readonly ElementaryVisualAsset[] = Object.freeze([
   divisionCookiesAsset,
   neighborhoodMapAsset,
+  ...expansionAssets,
 ]);

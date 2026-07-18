@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">14個を4個ずつ分ける図</title>
+  <desc id="desc">4個のまとまりが3つでき、2個余ることを丸で表しています。</desc>
+  <rect width="960" height="480" rx="28" fill="#f7fbf4"/>
+  <text x="48" y="64" font-family="sans-serif" font-size="30" font-weight="700" fill="#173321">14こを、4こずつ分けよう</text>
+  <g fill="#fff" stroke="#287a4d" stroke-width="4">
+    <rect x="48" y="104" width="250" height="210" rx="24"/><rect x="328" y="104" width="250" height="210" rx="24"/><rect x="608" y="104" width="250" height="210" rx="24"/>
+  </g>
+  <g fill="#f6c453" stroke="#744c05" stroke-width="3">
+    <circle cx="105" cy="170" r="27"/><circle cx="175" cy="170" r="27"/><circle cx="105" cy="250" r="27"/><circle cx="175" cy="250" r="27"/>
+    <circle cx="385" cy="170" r="27"/><circle cx="455" cy="170" r="27"/><circle cx="385" cy="250" r="27"/><circle cx="455" cy="250" r="27"/>
+    <circle cx="665" cy="170" r="27"/><circle cx="735" cy="170" r="27"/><circle cx="665" cy="250" r="27"/><circle cx="735" cy="250" r="27"/>
+  </g>
+  <text x="48" y="360" font-family="sans-serif" font-size="28" font-weight="700" fill="#173321">4このまとまりが 3つ</text>
+  <g fill="#f6c453" stroke="#b45309" stroke-width="4"><circle cx="670" cy="386" r="27"/><circle cx="744" cy="386" r="27"/></g>
+  <text x="785" y="397" font-family="sans-serif" font-size="28" font-weight="700" fill="#744c05">あまり 2こ</text>
+</svg>

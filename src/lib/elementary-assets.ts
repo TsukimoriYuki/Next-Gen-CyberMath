@@ -12,6 +12,7 @@ import type {
   ElementaryGradeId,
   ElementarySubjectId,
 } from "@/types/elementary";
+import { ELEMENTARY_LESSONS } from "@/data/elementary/lessons";
 
 function byAssetId(left: ElementaryVisualAsset, right: ElementaryVisualAsset): number {
   return left.id.localeCompare(right.id, "en");
@@ -98,6 +99,15 @@ export function getAllApprovedCredits(): readonly ElementaryAssetCredit[] {
       .sort(byAssetId)
       .map((asset) => getCreditsForAsset(asset.id))
       .filter((credit): credit is ElementaryAssetCredit => Boolean(credit)),
+  );
+}
+
+export function getPublishedElementaryCredits(): readonly ElementaryAssetCredit[] {
+  const publishedLessonIds = new Set(
+    ELEMENTARY_LESSONS.filter((lesson) => lesson.publicationStatus === "beta").map((lesson) => lesson.id),
+  );
+  return Object.freeze(
+    getAllApprovedCredits().filter((credit) => credit.lessonIds.some((lessonId) => publishedLessonIds.has(lessonId))),
   );
 }
 

@@ -34,7 +34,7 @@ export default async function ElementaryUnitPage({
   requireElementaryPageAccess({ status: unit.publicationStatus });
 
   const lessons = getElementaryLessonsForUnit(unit.id)
-    .filter((lesson) => lesson.publicationStatus === "beta");
+    .filter((lesson) => lesson.publicationStatus === unit.publicationStatus);
 
   return (
     <>
