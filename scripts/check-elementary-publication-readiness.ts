@@ -11,6 +11,7 @@ import {
   buildElementaryPublicationReadiness,
   normalizeElementaryReadinessStatus,
 } from "../src/lib/elementary-readiness";
+import { buildElementaryLimitedBetaRelease } from "../src/lib/elementary-release";
 import { buildCombinedContentInventory } from "./content-inventory-lib";
 
 type Issue = Readonly<{
@@ -45,6 +46,7 @@ async function main() {
     scripts?: Record<string, string>;
   };
   const readiness = buildElementaryPublicationReadiness();
+  const release = buildElementaryLimitedBetaRelease();
   const combined = buildCombinedContentInventory("phase-k-readiness", "2026-07-18T00:00:00.000Z");
   const guardianSource = read("src/app/elementary/for-guardians/page.tsx");
   const readinessPageSource = read("src/app/elementary/showcase/publication-readiness/page.tsx");
@@ -218,6 +220,32 @@ async function main() {
       source: "src/lib/elementary-readiness.ts",
     },
   );
+  check(
+    release.readiness === "ready" &&
+      release.explicitReleaseApproval === "pending" &&
+      release.automaticRelease === false &&
+      release.currentChannel === "hidden" &&
+      release.targetChannel === "limited-beta",
+    {
+      checkId: "limited-beta-release-state",
+      area: "publication",
+      ruleId: "explicit-release-required",
+      expected: "ready / pending / automatic false / hidden -> limited-beta",
+      actual: release,
+      source: "src/lib/elementary-release.ts",
+    },
+  );
+  check(
+    !(release.currentPublicationStatus === "beta" && release.explicitReleaseApproval === "pending"),
+    {
+      checkId: "pending-approval-cannot-be-live",
+      area: "publication",
+      ruleId: "pending-approval-blocks-live-beta",
+      expected: "publication is not beta while approval is pending",
+      actual: `${release.currentPublicationStatus} / ${release.explicitReleaseApproval}`,
+      source: "src/data/elementary/index.ts",
+    },
+  );
 
   const sitemapUrls = (await sitemap()).map((entry) => entry.url);
   check(!sitemapUrls.some((url) => url.includes("/elementary")), {
@@ -239,6 +267,7 @@ async function main() {
   for (const route of [
     "/elementary/for-guardians",
     "/elementary/showcase/publication-readiness",
+    "/elementary/showcase/limited-beta-release",
   ]) {
     check(hiddenSpecSource.includes(`\"${route}\"`), {
       checkId: route,

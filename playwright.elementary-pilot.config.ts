@@ -6,7 +6,7 @@ const READY_URL = `${BASE_URL}/elementary/grade-3/math/units/division/lessons/di
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: /elementary-(pilot-lessons|practice|content-inventory|readiness)\.spec\.ts/,
+  testMatch: /elementary-(pilot-lessons|practice|content-inventory|readiness|limited-beta-release)\.spec\.ts/,
   timeout: 45_000,
   expect: { timeout: 7_000 },
   fullyParallel: false,

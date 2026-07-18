@@ -171,6 +171,7 @@ export default function ElementaryPublicationReadinessPage() {
           </ul>
         ) : <p>未解決事項はありません。</p>}
         <p><Link className={styles.link} href="/elementary/for-guardians">保護者向け説明を確認する</Link></p>
+        <p><Link className={styles.link} href="/elementary/showcase/limited-beta-release">限定beta releaseの事前確認を見る</Link></p>
       </section>
     </div>
   );

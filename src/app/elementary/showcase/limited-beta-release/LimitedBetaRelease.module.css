@@ -1,0 +1,122 @@
+.page {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  color: #17352b;
+}
+
+.header {
+  max-width: 54rem;
+}
+
+.header h1 {
+  margin: 0.4rem 0 0.9rem;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.header p,
+.section p,
+.section li {
+  line-height: 1.75;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #486e60;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.section {
+  margin-top: 2.75rem;
+}
+
+.section h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+}
+
+.metrics,
+.columns,
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+}
+
+.metrics {
+  margin: 0;
+}
+
+.metrics > div,
+.columns article,
+.cards article,
+.preview {
+  min-width: 0;
+  border: 1px solid #c8ded4;
+  border-radius: 1rem;
+  background: #f8fcfa;
+  padding: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.metrics dt {
+  color: #48655a;
+}
+
+.metrics dd {
+  margin: 0.35rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.notice {
+  margin-top: 1rem;
+  border-left: 4px solid #d59a16;
+  background: #fff8df;
+  padding: 0.9rem 1rem;
+  font-weight: 700;
+}
+
+.preview {
+  max-width: 42rem;
+  background: #fffdf3;
+}
+
+.preview p {
+  margin-block: 0.55rem;
+}
+
+.badge {
+  display: inline-block;
+  border: 2px solid #225f49;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-weight: 850;
+}
+
+.columns h3,
+.cards h3 {
+  margin-top: 0;
+  overflow-wrap: anywhere;
+}
+
+.columns ul,
+.rollbackList {
+  padding-left: 1.35rem;
+}
+
+.cards code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 540px) {
+  .page {
+    padding-inline: 0.8rem;
+  }
+}

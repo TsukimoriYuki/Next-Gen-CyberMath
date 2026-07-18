@@ -14,6 +14,7 @@ const HIDDEN_ROUTES = [
   "/elementary/showcase/content-inventory",
   "/elementary/for-guardians",
   "/elementary/showcase/publication-readiness",
+  "/elementary/showcase/limited-beta-release",
 ];
 
 for (const route of HIDDEN_ROUTES) {
