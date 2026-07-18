@@ -30,7 +30,7 @@ const validPublicWave = {
   appearsInPublishedBeta: true,
   releaseStatus: "active",
   publishedProblemCount: 72,
-  registeredProblemCount: 72,
+  registeredProblemCount: 152,
   publishedCombinedProblemCount: 1420,
   publishedAssetCount: 6,
   externalAssetCount: 0,

@@ -81,11 +81,11 @@ check([...expansionAssetIds].every((id) => ELEMENTARY_VISUAL_ASSETS.some((asset)
 for (const [key, expected, actual] of [
   ["published-units", 7, published.unitCount], ["published-lessons", 9, published.lessonCount], ["published-problems", 72, published.problemCount],
   ["published-assets", 6, published.visualAssetCount],
-  ["hidden-units", 0, hidden.unitCount], ["hidden-lessons", 0, hidden.lessonCount], ["hidden-problems", 0, hidden.problemCount],
-  ["registered-units", 7, registered.unitCount], ["registered-lessons", 9, registered.lessonCount], ["registered-problems", 72, registered.problemCount],
+  ["hidden-units", 7, hidden.unitCount], ["hidden-lessons", 10, hidden.lessonCount], ["hidden-problems", 80, hidden.problemCount],
+  ["registered-units", 14, registered.unitCount], ["registered-lessons", 19, registered.lessonCount], ["registered-problems", 152, registered.problemCount],
 ] as const) check(actual === expected, issue("inventory", key, expected, actual, "src/lib/elementary-inventory.ts"));
 check(inventory.combinedProblemCounts.published === 1420, issue("inventory", "published-combined", 1420, inventory.combinedProblemCounts.published, "src/lib/elementary-inventory.ts"));
-check(inventory.combinedProblemCounts.registered === 1420, issue("inventory", "registered-combined", 1420, inventory.combinedProblemCounts.registered, "src/lib/elementary-inventory.ts"));
+check(inventory.combinedProblemCounts.registered === 1500, issue("inventory", "registered-combined", 1500, inventory.combinedProblemCounts.registered, "src/lib/elementary-inventory.ts"));
 check(ELEMENTARY_EXPANSION_WAVE_1.explicitReleaseApproval === "approved", issue("wave-1", "approval", "approved", ELEMENTARY_EXPANSION_WAVE_1.explicitReleaseApproval, "src/data/elementary/expansion-wave-1.ts"));
 check(ELEMENTARY_EXPANSION_WAVE_1.approvalSource === "user-explicit-approval", issue("wave-1", "approval-source", "user-explicit-approval", ELEMENTARY_EXPANSION_WAVE_1.approvalSource, "src/data/elementary/expansion-wave-1.ts"));
 check(ELEMENTARY_EXPANSION_WAVE_1.releaseApprovalSource === "user-explicit-approval", issue("wave-1", "release-approval-source", "user-explicit-approval", ELEMENTARY_EXPANSION_WAVE_1.releaseApprovalSource, "src/data/elementary/expansion-wave-1.ts"));
@@ -99,5 +99,5 @@ if (issues.length) {
   issues.forEach((value) => console.error(JSON.stringify(value)));
   process.exitCode = 1;
 } else {
-  console.log(`elementary expansion wave 1 QA passed: human-approved active beta wave with 4 units, 6 lessons, 48 problems and 4 assets; published/registered 7 units / 9 lessons / 72 problems; original Japanese texts ${textLength(libraryText)}/${textLength(hallwayText)} chars.`);
+  console.log(`elementary expansion wave 1 QA passed: human-approved active beta wave with 4 units, 6 lessons, 48 problems and 4 assets; published 7 units / 9 lessons / 72 problems; registered with hidden wave 2 is 14 / 19 / 152; original Japanese texts ${textLength(libraryText)}/${textLength(hallwayText)} chars.`);
 }

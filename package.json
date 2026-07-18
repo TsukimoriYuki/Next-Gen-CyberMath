@@ -55,6 +55,8 @@
     "qa:elementary:limited-beta-release": "tsx scripts/check-elementary-limited-beta-release.ts",
     "qa:elementary:expansion-wave-1": "tsx scripts/check-elementary-expansion-wave-1.ts",
     "qa:elementary:expansion-wave-1:test": "tsx scripts/check-elementary-expansion-wave-1.test.ts",
+    "qa:elementary:expansion-wave-2": "tsx scripts/check-elementary-expansion-wave-2.ts",
+    "qa:elementary:expansion-wave-2:test": "tsx scripts/check-elementary-expansion-wave-2.test.ts",
     "qa:elementary:limited-beta-release:e2e": "playwright test e2e/elementary-limited-beta-release.spec.ts --config playwright.elementary-pilot.config.ts",
     "qa:elementary:limited-beta:production:e2e": "playwright test --config playwright.elementary-limited-beta-production.config.ts",
     "qa:elementary:rollback:test": "tsx scripts/check-elementary-limited-beta-rollback.test.ts",

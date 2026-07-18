@@ -54,7 +54,7 @@ export function inspectElementaryExpansionFixture(
   }
   if (fixture.publicationStatus === "beta") {
     if (fixture.publishedProblemCount !== 72) add("published-problem-count", 72, fixture.publishedProblemCount);
-    if (fixture.registeredProblemCount !== 72) add("registered-problem-count", 72, fixture.registeredProblemCount);
+    if (fixture.registeredProblemCount !== 152) add("registered-problem-count", 152, fixture.registeredProblemCount);
     if (fixture.publishedCombinedProblemCount !== 1420) add("published-combined-count", 1420, fixture.publishedCombinedProblemCount);
     if (fixture.publishedAssetCount !== 6) add("published-asset-count", 6, fixture.publishedAssetCount);
     if (fixture.externalAssetCount !== 0) add("external-asset-count", 0, fixture.externalAssetCount);
