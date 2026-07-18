@@ -21,3 +21,5 @@
 ## Rollback
 
 緊急非公開は`ELEMENTARY_SITE.publicationStatus`を`beta`から`hidden`へ戻す1つのrelease-only変更で行う。対象QAとproduction buildを実行してcommit・pushし、その後、小学生版routeと保護者・creditsがproductionで404、`/learn`の小学生カードが非表示、高校版routeが正常であることを確認する。現在は学習履歴や個人情報を保存しないためDB rollbackは不要であり、高校版全体を停止しない。実行にgit reset、force push、DB操作は使わない。
+
+次期教材候補は`hidden`の別scopeとして管理し、現在の限定βを緊急非公開にする変更や、現在の公開件数・creditsへ混ぜない。

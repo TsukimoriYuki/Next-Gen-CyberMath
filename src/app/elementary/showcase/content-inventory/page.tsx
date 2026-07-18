@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import {
-  buildElementaryContentInventory,
+  buildElementarySegmentedContentInventory,
   getElementaryInventoryLabels,
 } from "@/lib/elementary-inventory";
 import styles from "./ContentInventory.module.css";
@@ -22,7 +22,8 @@ const TYPE_LABELS = [
 ] as const;
 
 export default function ElementaryContentInventoryPage() {
-  const inventory = buildElementaryContentInventory();
+  const segmented = buildElementarySegmentedContentInventory();
+  const inventory = segmented.publishedBeta;
   const labels = getElementaryInventoryLabels();
   const totals = inventory.totals;
 
@@ -41,9 +42,19 @@ export default function ElementaryContentInventoryPage() {
         <h2 id="inventory-total-heading">学校段階ごとの問題数</h2>
         <div className={styles.cardGrid}>
           <article className={styles.metricCard}><span>高校版</span><strong>1,348問</strong><p>従来の採点可能問題数</p></article>
-          <article className={styles.metricCard}><span>小学生版</span><strong>{totals.problemCount}問</strong><p>hiddenの小学3年生pilot</p></article>
-          <article className={styles.metricCard}><span>全体</span><strong>{(1_348 + totals.problemCount).toLocaleString("ja-JP")}問</strong><p>学校段階を分けた合計</p></article>
+          <article className={styles.metricCard}><span>小学生版・公開中</span><strong>{totals.problemCount}問</strong><p>限定βの小学3年生pilot</p></article>
+          <article className={styles.metricCard}><span>公開中の全体</span><strong>{segmented.combinedProblemCounts.published.toLocaleString("ja-JP")}問</strong><p>高校版と公開中の小学生版</p></article>
         </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="inventory-segments-heading">
+        <h2 id="inventory-segments-heading">公開範囲と登録範囲</h2>
+        <div className={styles.cardGrid}>
+          <article className={styles.metricCard}><span>publishedBeta</span><strong>{segmented.publishedBeta.totals.lessonCount}講座・{segmented.publishedBeta.totals.problemCount}問</strong><p>本番の限定βへ表示する範囲</p></article>
+          <article className={styles.metricCard}><span>hiddenPilot</span><strong>{segmented.hiddenPilot.totals.lessonCount}講座・{segmented.hiddenPilot.totals.problemCount}問</strong><p>人間レビュー前の非公開候補</p></article>
+          <article className={styles.metricCard}><span>registeredTotal</span><strong>{segmented.registeredTotal.totals.lessonCount}講座・{segmented.registeredTotal.totals.problemCount}問</strong><p>registryに登録された全体</p></article>
+        </div>
+        <p>登録ベースの高校版との合計は{segmented.combinedProblemCounts.registered.toLocaleString("ja-JP")}問です。公開中の合計とは分けて表示します。</p>
       </section>
 
       <section className={styles.section} aria-labelledby="inventory-grade-heading">

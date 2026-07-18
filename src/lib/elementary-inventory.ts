@@ -27,6 +27,7 @@ import type {
   ElementaryInventoryScope,
   ElementaryPublicationBreakdown,
   ElementaryReviewBreakdown,
+  ElementarySegmentedContentInventory,
 } from "@/types/elementary-inventory";
 import type { ElementaryProblem } from "@/types/elementary-problems";
 import type {
@@ -269,10 +270,9 @@ const DEFAULT_REGISTRIES: ElementaryInventoryRegistries = {
   curriculumEntries: ELEMENTARY_CURRICULUM_ENTRIES,
 };
 
-export function buildElementaryContentInventory(
-  registries: ElementaryInventoryRegistries = DEFAULT_REGISTRIES,
+function buildInventoryFromRegistries(
+  registries: ElementaryInventoryRegistries,
 ): ElementaryContentInventory {
-  validateRegistries(registries);
   const approvedAssetIds = new Set(
     registries.visualAssets.filter((asset) => asset.reviewStatus === "approved").map((asset) => asset.id),
   );
@@ -323,6 +323,55 @@ export function buildElementaryContentInventory(
     visualAssetIds: uniqueSorted(
       registries.lessons.flatMap((lesson) => lesson.visualAssetIds).filter((id) => approvedAssetIds.has(id)),
     ),
+  });
+}
+
+/** 公開中の限定betaだけを返す。既存の公開件数表示・release gateの正本。 */
+export function buildElementaryContentInventory(
+  registries: ElementaryInventoryRegistries = DEFAULT_REGISTRIES,
+): ElementaryContentInventory {
+  validateRegistries(registries);
+  const publishedLessonIds = new Set(
+    registries.lessons.filter((lesson) => lesson.publicationStatus === "beta").map((lesson) => lesson.id),
+  );
+  return buildInventoryFromRegistries({
+    ...registries,
+    units: registries.units.filter((unit) => unit.publicationStatus === "beta"),
+    lessons: registries.lessons.filter((lesson) => publishedLessonIds.has(lesson.id)),
+    problems: registries.problems.filter(
+      (problem) => problem.publicationStatus === "beta" && problem.lessonIds.some((id) => publishedLessonIds.has(id)),
+    ),
+  });
+}
+
+export function buildElementarySegmentedContentInventory(
+  registries: ElementaryInventoryRegistries = DEFAULT_REGISTRIES,
+): ElementarySegmentedContentInventory {
+  validateRegistries(registries);
+  const publishedLessonIds = new Set(registries.lessons.filter((lesson) => lesson.publicationStatus === "beta").map((lesson) => lesson.id));
+  const hiddenLessonIds = new Set(registries.lessons.filter((lesson) => lesson.publicationStatus === "hidden").map((lesson) => lesson.id));
+  const publishedBeta = buildInventoryFromRegistries({
+    ...registries,
+    units: registries.units.filter((unit) => unit.publicationStatus === "beta"),
+    lessons: registries.lessons.filter((lesson) => publishedLessonIds.has(lesson.id)),
+    problems: registries.problems.filter((problem) => problem.publicationStatus === "beta" && problem.lessonIds.some((id) => publishedLessonIds.has(id))),
+  });
+  const hiddenPilot = buildInventoryFromRegistries({
+    ...registries,
+    units: registries.units.filter((unit) => unit.publicationStatus === "hidden"),
+    lessons: registries.lessons.filter((lesson) => hiddenLessonIds.has(lesson.id)),
+    problems: registries.problems.filter((problem) => problem.publicationStatus === "hidden" && problem.lessonIds.some((id) => hiddenLessonIds.has(id))),
+  });
+  const registeredTotal = buildInventoryFromRegistries(registries);
+  return deepFreeze({
+    publishedBeta,
+    hiddenPilot,
+    registeredTotal,
+    combinedProblemCounts: {
+      highSchool: 1348 as const,
+      published: 1348 + publishedBeta.totals.problemCount,
+      registered: 1348 + registeredTotal.totals.problemCount,
+    },
   });
 }
 

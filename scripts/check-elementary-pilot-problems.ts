@@ -220,26 +220,28 @@ function countType(problems: readonly ElementaryProblem[], type: ElementaryProbl
 }
 
 function main() {
+  const publishedProblems = ELEMENTARY_PROBLEMS.filter((problem) => problem.publicationStatus === "beta");
+  const publishedLessons = ELEMENTARY_LESSONS.filter((lesson) => lesson.publicationStatus === "beta");
   check(Boolean(grade3Policy), "grade-3 kanji policy must resolve");
-  check(ELEMENTARY_PROBLEMS.length === 24, `pilot must ship 24 problems (found ${ELEMENTARY_PROBLEMS.length})`);
+  check(publishedProblems.length === 24, `limited beta must publish 24 problems (found ${publishedProblems.length})`);
   check(ELEMENTARY_MATH_PROBLEMS.length === 8, "math must have 8 problems");
   check(ELEMENTARY_JAPANESE_PROBLEMS.length === 8, "Japanese must have 8 problems");
   check(ELEMENTARY_SOCIAL_STUDIES_PROBLEMS.length === 8, "social studies must have 8 problems");
 
-  check(new Set(ELEMENTARY_PROBLEMS.map((p) => p.id)).size === 24, "problem IDs must be unique");
-  check(new Set(ELEMENTARY_PROBLEMS.map((p) => p.slug)).size === 24, "problem slugs must be unique");
+  check(new Set(publishedProblems.map((p) => p.id)).size === publishedProblems.length, "published problem IDs must be unique");
+  check(new Set(publishedProblems.map((p) => p.slug)).size === publishedProblems.length, "published problem slugs must be unique");
 
   // order は講座内で一意。
-  for (const lesson of ELEMENTARY_LESSONS) {
-    const orders = ELEMENTARY_PROBLEMS.filter((p) => p.lessonIds.includes(lesson.id)).map((p) => p.order);
+  for (const lesson of publishedLessons) {
+    const orders = publishedProblems.filter((p) => p.lessonIds.includes(lesson.id)).map((p) => p.order);
     check(orders.length === 8, `lesson "${lesson.id}" must have exactly 8 problems`);
     check(new Set(orders).size === orders.length, `lesson "${lesson.id}" problem orders must be unique`);
   }
 
   // 形式内訳。
-  check(countType(ELEMENTARY_PROBLEMS, "single-choice") === 17, "there must be 17 single-choice problems");
-  check(countType(ELEMENTARY_PROBLEMS, "multiple-choice") === 3, "there must be 3 multiple-choice problems");
-  check(countType(ELEMENTARY_PROBLEMS, "numeric-input") === 4, "there must be 4 numeric-input problems");
+  check(countType(publishedProblems, "single-choice") === 17, "there must be 17 published single-choice problems");
+  check(countType(publishedProblems, "multiple-choice") === 3, "there must be 3 published multiple-choice problems");
+  check(countType(publishedProblems, "numeric-input") === 4, "there must be 4 published numeric-input problems");
   check(countType(ELEMENTARY_MATH_PROBLEMS, "single-choice") === 4, "math must have 4 single-choice");
   check(countType(ELEMENTARY_MATH_PROBLEMS, "numeric-input") === 4, "math must have 4 numeric-input");
   check(countType(ELEMENTARY_JAPANESE_PROBLEMS, "single-choice") === 7, "Japanese must have 7 single-choice");
@@ -248,10 +250,10 @@ function main() {
   check(countType(ELEMENTARY_SOCIAL_STUDIES_PROBLEMS, "multiple-choice") === 2, "social must have 2 multiple-choice");
 
   // 難易度内訳。
-  check(ELEMENTARY_PROBLEMS.filter((p) => p.difficulty === "basic").length === 18, "there must be 18 basic problems");
-  check(ELEMENTARY_PROBLEMS.filter((p) => p.difficulty === "standard").length === 6, "there must be 6 standard problems");
+  check(publishedProblems.filter((p) => p.difficulty === "basic").length === 18, "there must be 18 published basic problems");
+  check(publishedProblems.filter((p) => p.difficulty === "standard").length === 6, "there must be 6 published standard problems");
 
-  for (const problem of ELEMENTARY_PROBLEMS) validateProblem(problem);
+  for (const problem of publishedProblems) validateProblem(problem);
 
   if (issues.length) {
     console.error(`elementary pilot-problem QA FAILED: ${issues.length} issue(s).`);

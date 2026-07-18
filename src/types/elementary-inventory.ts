@@ -70,6 +70,17 @@ export type ElementaryContentInventory = Readonly<{
   visualAssetIds: readonly string[];
 }>;
 
+export type ElementarySegmentedContentInventory = Readonly<{
+  publishedBeta: ElementaryContentInventory;
+  hiddenPilot: ElementaryContentInventory;
+  registeredTotal: ElementaryContentInventory;
+  combinedProblemCounts: Readonly<{
+    highSchool: 1348;
+    published: number;
+    registered: number;
+  }>;
+}>;
+
 export type ElementaryInventoryIntegrityIssue = Readonly<{
   axis: string;
   expected: unknown;

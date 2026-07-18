@@ -26,6 +26,17 @@ const HIDDEN_ROUTES = [
   "/elementary/showcase/lesson-blocks",
   "/elementary/showcase/visual-assets",
   "/elementary/showcase/division-dialogue",
+  "/elementary/showcase/expansion-wave-1",
+  "/elementary/grade-3/math/units/decimals",
+  "/elementary/grade-3/math/units/fractions",
+  "/elementary/grade-3/japanese/units/explanatory-text",
+  "/elementary/grade-3/social-studies/units/work-and-sales",
+  "/elementary/grade-3/math/units/division/lessons/division-with-remainders",
+  "/elementary/grade-3/math/units/decimals/lessons/tenths-and-decimals",
+  "/elementary/grade-3/math/units/fractions/lessons/parts-of-a-whole",
+  "/elementary/grade-3/japanese/units/explanatory-text/lessons/find-key-sentences",
+  "/elementary/grade-3/japanese/units/explanatory-text/lessons/connect-paragraphs",
+  "/elementary/grade-3/social-studies/units/work-and-sales/lessons/goods-to-store",
   "/elementary/grade-4",
   "/elementary/grade-5",
   "/elementary/grade-6",
@@ -90,7 +101,16 @@ test("elementary stays out of sitemap and global navigation", async ({ page, req
   expect(await sitemap.text()).not.toContain("/elementary");
 
   await page.goto("/elementary");
-  await expect(page.locator('nav[aria-label="主要ナビゲーション"] a[href^="/elementary"]')).toHaveCount(0);
+  await expect(page.getByTestId("site-header")).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: "小学生のページ" })).toBeVisible();
+});
+
+test("production credits and public counts exclude hidden expansion", async ({ page }) => {
+  await page.goto("/elementary/credits");
+  await expect(page.getByTestId("elementary-credit-list").locator("article")).toHaveCount(2);
+  await expect(page.getByText("現在使用中は2件", { exact: false })).toBeVisible();
+  await page.goto("/elementary/grade-3/math");
+  await expect(page.getByTestId("elementary-subject-problem-count")).toHaveText("算数では、いま8問。3教科合計24問です。");
 });
 
 for (const width of [375, 390, 768, 1280]) {

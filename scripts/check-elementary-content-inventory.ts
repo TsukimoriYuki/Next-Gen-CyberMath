@@ -9,6 +9,7 @@ import { ELEMENTARY_DIVISION_DIALOGUE_SHOWCASE } from "../src/data/elementary/sh
 import { ELEMENTARY_UNITS } from "../src/data/elementary/units";
 import {
   buildElementaryContentInventory,
+  buildElementarySegmentedContentInventory,
   ElementaryInventoryIntegrityError,
 } from "../src/lib/elementary-inventory";
 import { buildContentInventory } from "./content-inventory-lib";
@@ -37,6 +38,7 @@ try {
 }
 
 if (inventory) {
+  const segmented = buildElementarySegmentedContentInventory();
   const totals = inventory.totals;
   check("unitCount", 3, totals.unitCount, "ELEMENTARY_UNITS", "src/data/elementary/units/index.ts");
   check("lessonCount", 3, totals.lessonCount, "ELEMENTARY_LESSONS", "src/data/elementary/lessons/index.ts");
@@ -105,6 +107,14 @@ if (inventory) {
   const highSchool = buildContentInventory("inventory-qa", "2026-01-01T00:00:00.000Z");
   check("highSchool problemCount", 1348, highSchool.totals.scorableQuestionCount, "highSchool", "scripts/content-inventory-lib.ts");
   check("combined problemCount", 1372, highSchool.totals.scorableQuestionCount + totals.problemCount, "combined", "scripts/content-inventory-lib.ts");
+  check("hidden unitCount", 4, segmented.hiddenPilot.totals.unitCount, "hiddenPilot", "src/lib/elementary-inventory.ts");
+  check("hidden lessonCount", 6, segmented.hiddenPilot.totals.lessonCount, "hiddenPilot", "src/lib/elementary-inventory.ts");
+  check("hidden problemCount", 48, segmented.hiddenPilot.totals.problemCount, "hiddenPilot", "src/lib/elementary-inventory.ts");
+  check("registered unitCount", 7, segmented.registeredTotal.totals.unitCount, "registeredTotal", "src/lib/elementary-inventory.ts");
+  check("registered lessonCount", 9, segmented.registeredTotal.totals.lessonCount, "registeredTotal", "src/lib/elementary-inventory.ts");
+  check("registered problemCount", 72, segmented.registeredTotal.totals.problemCount, "registeredTotal", "src/lib/elementary-inventory.ts");
+  check("published combined problemCount", 1372, segmented.combinedProblemCounts.published, "combined", "src/lib/elementary-inventory.ts");
+  check("registered combined problemCount", 1420, segmented.combinedProblemCounts.registered, "combined", "src/lib/elementary-inventory.ts");
 
   let failClosed = false;
   try {
@@ -133,6 +143,6 @@ if (issues.length) {
   process.exitCode = 1;
 } else if (inventory) {
   console.log(
-    `elementary content inventory QA passed: ${inventory.totals.unitCount} units, ${inventory.totals.lessonCount} lessons, ${inventory.totals.problemCount} problems, 2 assets; high school 1348 / combined 1372`,
+    `elementary content inventory QA passed: published 3 units / 3 lessons / 24 problems / 2 assets; hidden 4 units / 6 lessons / 48 problems; registered 7 / 9 / 72; high school 1348 / published combined 1372 / registered combined 1420`,
   );
 }
