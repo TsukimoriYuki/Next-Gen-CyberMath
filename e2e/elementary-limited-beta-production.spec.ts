@@ -38,6 +38,7 @@ const HIDDEN_ROUTES = [
   "/elementary/showcase/division-dialogue",
   "/elementary/showcase/expansion-wave-1",
   "/elementary/showcase/expansion-wave-2",
+  "/elementary/showcase/expansion-wave-2-review",
   "/elementary/grade-3/math/units/large-numbers",
   "/elementary/grade-3/math/units/addition-subtraction",
   "/elementary/grade-3/math/units/written-multiplication",
