@@ -137,7 +137,7 @@ function createMathLesson(seed: MathLessonSeed): ElementaryLesson {
 const LESSON_SEEDS: readonly MathLessonSeed[] = [
   {
     id: "elementary-grade-3-math-read-large-numbers", slug: "read-large-numbers", unitId: "g3-math-large-numbers-unit", order: 1,
-    title: "10000より大きい数は、どう読むの？", description: "万までの数を、くらいと0のやくわりに気をつけて読み書きします。",
+    title: "10000より大きい数は、どう読むの？", description: "万のくらいまでの数を、くらいと0のやくわりに気をつけて読み書きします。",
     goals: ["万までの数を読んだり書いたりする", "数字のくらいとねうちを見つける", "数直線や10ばいで大きさを考える"],
     entryId: "g3-math-whole-numbers", objectiveIds: ["g3-math-whole-numbers-knowledge", "g3-math-whole-numbers-thinking"], assetId: "large-number-place-value-chart",
     opening: "30005の0には、どんなやくわりがあるのかな。", misconception: "0は読まないから、30005は305でいいのかな。", misconceptionReason: "声に出さない0は、書かなくてもよいと考えた。",

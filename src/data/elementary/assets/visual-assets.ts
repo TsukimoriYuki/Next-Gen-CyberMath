@@ -235,19 +235,19 @@ const expansionWaveTwoAssets = [
   }),
   waveTwoAsset({
     id: "weight-scale-and-time-line", filename: "weight-scale-and-time-line.svg", title: "重さのはかりと時間の線",
-    checksum: "e64b237fc373752938c04232419949b10bdf34c6ea7d3fbd48e291dec03a4911", fileSizeBytes: 1502,
-    alt: "0gから1kgまでのはかりと、10時50分から11時10分までを10分ずつに分けた時間の線", caption: "目もり1こ分と、60分の区切りをたしかめます。",
+    checksum: "9069bfe82e06cac8de50aeae83ad3d17491e5f98e6cd13b5d289cc78adc9841b", fileSizeBytes: 1702,
+    alt: "50gずつの目もりで350gをしめすはかりと、10時50分から11時10分までを10分ずつに分けた時間の線", caption: "目もり1こ分と、60分の区切りをたしかめます。",
     lessonIds: ["elementary-grade-3-math-measure-weight", "elementary-grade-3-math-time-and-duration"],
   }),
   waveTwoAsset({
     id: "triangle-classification", filename: "triangle-classification.svg", title: "三角形のなかま分け",
-    checksum: "3027abcaa580d44f9e60223d2eac062aa9f3330a3ec42e8ff074dd5f453c089b", fileSizeBytes: 1140,
+    checksum: "bf674d888964fe73b893899d2db02206737e597fdef4311faefbc8d38693fd77", fileSizeBytes: 1192,
     alt: "同じ長さのへんをしるしでしめした二等へん三角形と正三角形、まがった線をふくむ三角形ではない形", caption: "向きや色ではなく、へんの数と長さでなかまを見つけます。",
     lessonIds: ["elementary-grade-3-math-classify-triangles"],
   }),
   waveTwoAsset({
     id: "circle-sphere-structure", filename: "circle-sphere-structure.svg", title: "円と球の中心・半けい・直けい",
-    checksum: "7881db6fe8d372198c9a7ba79bf8ef554be202530f4157fc5932f3e52a90e3d0", fileSizeBytes: 1370,
+    checksum: "e62d91f0b1ad91d2291581b9479551d304d2e9902d9d67fa789f3e0eda398f3b", fileSizeBytes: 1403,
     alt: "平らな円の中心、半けい、直けいと、立体の球をくらべた図", caption: "直けいは中心を通る半けい2本分です。円は平ら、球は立体です。",
     lessonIds: ["elementary-grade-3-math-circles-and-spheres"],
   }),

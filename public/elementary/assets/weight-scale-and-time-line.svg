@@ -1,11 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
-  <title id="title">重さのはかりと時間の線</title><desc id="desc">50gずつのはかりと、10時50分から11時10分までの時間の線</desc>
+  <title id="title">重さのはかりと時間の線</title><desc id="desc">50gずつの目もりで350gをしめすはかりと、10時50分から11時10分までの時間の線</desc>
   <rect width="960" height="480" rx="28" fill="#f7f7ff"/>
   <text x="250" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="#24324a">はかりの目もり</text><text x="720" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="#24324a">時間の線</text>
-  <path d="M90 310a160 160 0 0 1 320 0" fill="none" stroke="#24324a" stroke-width="6"/>
-  <g stroke="#24324a" stroke-width="3"><path d="M90 310l28-5M120 220l24 14M190 165l12 26M280 150v30M370 165l-12 26M440 220l-24 14M410 310l-28-5"/></g>
-  <path d="M250 310L360 205" stroke="#d04f4f" stroke-width="7" stroke-linecap="round"/><circle cx="250" cy="310" r="12" fill="#24324a"/>
-  <g text-anchor="middle" font-size="20" fill="#24324a"><text x="90" y="345">0g</text><text x="250" y="130">500g</text><text x="410" y="345">1kg</text></g>
+  <g data-scale-step-grams="50" data-pointer-grams="350">
+    <path d="M90 310a160 160 0 0 1 320 0" fill="none" stroke="#24324a" stroke-width="6"/>
+    <g stroke="#24324a" stroke-width="3">
+      <path d="M90 310l24-4M98 261l23 4M121 216l21 10M156 179l17 16M201 157l8 22M250 150v30M299 157l-8 22M344 179l-17 16M379 216l-21 10M402 261l-23 4M410 310l-24-4"/>
+    </g>
+    <path d="M250 310L379 216" stroke="#d04f4f" stroke-width="7" stroke-linecap="round"/><circle cx="250" cy="310" r="12" fill="#24324a"/>
+    <g text-anchor="middle" font-size="20" fill="#24324a"><text x="90" y="345">0g</text><text x="250" y="130">250g</text><text x="410" y="345">500g</text><text x="365" y="195">350g</text></g>
+  </g>
   <path d="M540 230H900" stroke="#24324a" stroke-width="7"/><g stroke="#24324a" stroke-width="4"><path d="M540 200v60M720 190v80M900 200v60"/></g>
   <g text-anchor="middle" font-size="21" fill="#24324a"><text x="540" y="305">10時50分</text><text x="720" y="305">11時</text><text x="900" y="305">11時10分</text><text x="630" y="180">10分</text><text x="810" y="180">10分</text></g>
 </svg>
