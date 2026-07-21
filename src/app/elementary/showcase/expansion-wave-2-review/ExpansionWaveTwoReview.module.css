@@ -1,0 +1,44 @@
+.statusNote {
+  padding: 1rem;
+  border: 2px solid #80651a;
+  border-radius: 1rem;
+  background: #fff9df;
+  line-height: 1.7;
+}
+
+.checkList,
+.noteList {
+  padding-left: 1.25rem;
+  line-height: 1.7;
+}
+
+.checkList li::marker {
+  content: "□  ";
+}
+
+.lessonLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  margin-top: 0.5rem;
+  color: #174f75;
+  font-weight: 800;
+  text-underline-offset: 0.2em;
+}
+
+.lessonLink:focus-visible {
+  outline: 3px solid #174f75;
+  outline-offset: 3px;
+}
+
+.responseTemplate {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  padding: 1rem;
+  border: 1px solid #c8ded4;
+  border-radius: 1rem;
+  background: #f8fcfa;
+  font: inherit;
+  line-height: 1.8;
+}

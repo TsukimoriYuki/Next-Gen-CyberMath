@@ -3,12 +3,27 @@ export type ElementaryExpansionHumanReviewStatus =
   | "changes-requested"
   | "approved";
 
+export type ElementaryExpansionTechnicalAudit = Readonly<{
+  status: "complete";
+  auditedAt: string;
+  auditedLessonCount: number;
+  auditedProblemCount: number;
+  auditedAssetCount: number;
+  correctedIssueCount: number;
+  correctedProblemCount: number;
+  correctedLessonTextCount: number;
+  correctedAssetCount: number;
+  remainingTechnicalIssueCount: number;
+  remainingBlockingIssueCount: number;
+}>;
+
 export type ElementaryExpansionWave = Readonly<{
   id: "grade-3-expansion-wave-1" | "grade-3-math-expansion-wave-2";
   publicationStatus: "hidden" | "beta";
   releaseStatus: "candidate" | "ready-for-review" | "active";
   implementationStatus: "complete";
   technicalQaStatus: "ready-for-review" | "complete";
+  finalTechnicalAudit?: ElementaryExpansionTechnicalAudit;
   explicitReleaseApproval: "pending" | "approved";
   approvalSource: "none" | "user-explicit-approval";
   releaseApprovalSource: "none" | "user-explicit-approval";
